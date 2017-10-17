@@ -5,7 +5,7 @@ The Concurrent Design Platform Software Development Kit is an C# SDK that that i
   - CDP4JsonSerializer
   - CDP4Dal
 
-The license file is provided with each of these libraries in their respective. Please note that additional permission under GNU GPL version 3 section 7 are provided. The CDP4 Community Edition makes use of proprietary libraries 
+The license file is provided with each of these libraries in their respective. Please note that additional permission under GNU GPL version 3 section 7 are provided.
   
 ## CDP4Common
 
