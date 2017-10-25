@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard1.6</TargetFrameworks>
+    <Company>RHEA System S.A.</Company>
+	  <Title>CDP4JsonSerializer Community Edition</Title>
+    <Version>1.0.0-rc2</Version>
+    <Description>CDP4 JSON Serialization Library</Description>
+    <Copyright>Copyright © RHEA System S.A.</Copyright>
+	  <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
+    <PackageId>CDP4JsonSerializer-CE</PackageId>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/RHEAGROUP/CDP4-SDK-Community-Edition/master/docs/cdp4-icon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
+    <releaseNotes>Initial community release</releaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CDP4Common-CE" Version="1.0.0-rc2" />
+    <!---
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+	-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="NLog" Version="5.0.0-beta11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AutoGenDtoDeserializer\" />
+    <Folder Include="AutoGenDtoSerializer\" />
+    <Folder Include="DtoSerializer\" />
+    <Folder Include="Helper\" />
+    <Folder Include="JsonConverter\" />
+  </ItemGroup>
+</Project>

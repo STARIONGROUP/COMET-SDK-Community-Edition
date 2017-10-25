@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
+    <Company>RHEA System S.A.</Company>
+	  <Title>CDP4Dal Community Edition</Title>
+    <Version>1.0.0-rc2</Version>
+    <Description>CDP4 Data Access Layer library</Description>
+    <Copyright>Copyright © RHEA System S.A.</Copyright>
+	  <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
+    <PackageId>CDP4Dal-CE</PackageId>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/RHEAGROUP/CDP4-SDK-Community-Edition/master/docs/cdp4-icon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
+    <releaseNotes>Initial community release</releaseNotes>
+  </PropertyGroup>
+
+    <ItemGroup>
+    
+    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.0-rc2" />
+    <!--
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+    -->
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Composition\" />
+    <Folder Include="DAL\Helpers\" />
+    <Folder Include="DAL\Protocol\" />
+  </ItemGroup>
+
+  <ItemGroup>    
+    <PackageReference Include="NLog" Version="5.0.0-beta11" />
+    <PackageReference Include="CommonServiceLocator" version="1.3" />
+    <PackageReference Include="Rx-Core" version="2.2.5" />
+    <PackageReference Include="Rx-Interfaces" version="2.2.5" />
+    <PackageReference Include="Rx-Linq" version="2.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.Composition" />
+  </ItemGroup>
+
+</Project>

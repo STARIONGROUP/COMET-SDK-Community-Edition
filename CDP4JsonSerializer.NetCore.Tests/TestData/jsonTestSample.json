@@ -1,0 +1,45 @@
+[
+	{
+		"iid" : "049abaf8-d550-44b1-b32b-aa4b358f5d73",
+		"revisionNumber" : 2679,
+		"classKind" : "ParameterSubscriptionValueSet",
+		"valueSwitch" : "MANUAL",
+		"manual" : "[\"123\",\"456\",\"789\"]",
+		"subscribedValueSet" : "049abaf8-d550-44b1-b32b-c74b308f5d73"
+	},
+	{
+		"iid" : "049abaf8-d550-44b1-b32b-c74b158f5d73",
+		"revisionNumber" : 2679,
+		"classKind" : "PossibleFiniteStateList",
+		"name" : "test",
+		"shortName" : "test1",
+		"alias" : [],
+		"definition" : [],
+		"hyperLink" : ["049abaf8-d550-44b1-b32b-c74b333f5d73"],
+		"category" : [],
+		"owner" : "049abaf8-d550-44b1-3333-c74b358f5d73",
+		"defaultState" : null,
+		"possibleState" :
+			[
+				{"k" : 123,"v" : "049abaf8-9850-44b1-b32b-c74b358f5d73"},
+				{"k" : 456,"v" : "04978af8-d550-44b1-b32b-c74b358f5d73"}
+			]
+	},
+	{
+		"iid" : "049abaf8-d550-44b1-b32b-c74b358a5d73",
+		"revisionNumber" : 2679,
+		"classKind" : "ArrayParameterType",
+		"name" : "array",
+		"shortName" : "array1",
+		"alias" : [],
+		"definition" : [],
+		"hyperLink" : [],
+		"isDeprecated" : false,
+		"category" : ["049abaf8-d550-44b1-b32b-c74ab58f5d73", "0cdabaf8-d550-44b1-b32b-c74b358f5d73"],
+		"symbol" : "symbol",
+		"component" : [{"k" : 123,"v" : "049ab098-d550-44b1-b32b-c74b358f5d73"}],
+		"isFinalized" : false,
+		"dimension" : [{"k" : 1, "v" : "1"}, {"k" : 2, "v" : "2"}, {"k" : 3, "v" : "3"}],
+		"isTensor" : true
+	}
+]
