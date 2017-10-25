@@ -1,0 +1,165 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ParameterBase.cs" company="RHEA System S.A.">
+//   Copyright (c) 2017 RHEA System S.A.
+// </copyright>
+// <summary>
+//   This is an auto-generated POCO Class. Any manual changes to this file will be overwritten!
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace CDP4Common.EngineeringModelData
+{
+    using System;
+    using System.Collections;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using CDP4Common.CommonData;
+    using CDP4Common.DiagramData;
+    using CDP4Common.EngineeringModelData;
+    using CDP4Common.Helpers;
+    using CDP4Common.ReportingData;
+    using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
+
+    /// <summary>
+    /// abstract superclass that enables a common referencing mechanism for Parameter, ParameterOverride and ParameterSubscription
+    /// </summary>
+    public abstract partial class ParameterBase : Thing, IOwnedThing
+    {
+        /// <summary>
+        /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
+        /// </summary>
+        public new const PersonAccessRightKind DefaultPersonAccess = PersonAccessRightKind.NOT_APPLICABLE;
+
+        /// <summary>
+        /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
+        /// </summary>
+        public new const ParticipantAccessRightKind DefaultParticipantAccess = ParticipantAccessRightKind.NOT_APPLICABLE;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterBase"/> class.
+        /// </summary>
+        protected ParameterBase()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterBase"/> class.
+        /// </summary>
+        /// <param name="iid">
+        /// The unique identifier.
+        /// </param>
+        /// <param name="cache">
+        /// The <see cref="ConcurrentDictionary{T, U}"/> where the current thing is stored.
+        /// The <see cref="Tuple{T}"/> of <see cref="Guid"/> and <see cref="Nullable{Guid}"/> is the key used to store this thing.
+        /// The key is a combination of this thing's identifier and the identifier of its <see cref="Iteration"/> container if applicable or null.
+        /// </param>
+        /// <param name="iDalUri">
+        /// The <see cref="Uri"/> of this thing
+        /// </param>
+        protected ParameterBase(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        {
+        }
+
+        /// <summary>
+        /// Gets or sets the Group.
+        /// </summary>
+        /// <remarks>
+        /// optional reference to the ParameterGroup to which this ParameterBase belongs
+        /// </remarks>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual ParameterGroup Group { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsOptionDependent.
+        /// </summary>
+        /// <remarks>
+        /// assertion whether the values of this ParameterBase depend on the Options defined in the associated Iteration or not
+        /// Note 1: When <i>isOptionDependent</i> is true, a ParameterValueSet (or ParameterOverrideValueSet or ParameterSubscriptionValueSet respectively) for each Option in the associated Iteration will be created. Values can then be specified for each Option. When <i>isOptionDependent</i> is false, the value of this ParameterBase is the same for all Options.
+        /// Note 2: When a new Option is added to an Iteration, automatically new ParameterValueSets (and where applicable ParameterOverrideValueSets and ParameterSubscriptionValueSets) shall be created for that Option for all Parameters and ParameterOverrides that have <i>isOptionDependent</i> is true. When an Option is removed from an Iteration, automatically the option dependent ParameterValueSets (and where applicable ParameterOverrideValueSets and ParameterSubscriptionValueSets) shall be deleted.
+        /// </remarks>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual bool IsOptionDependent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Owner.
+        /// </summary>
+        /// <remarks>
+        /// reference to a DomainOfExpertise that is the owner of this OwnedThing
+        /// Note: Ownership in this data model implies the responsibility for the presence and content of this OwnedThing. The owner is always a DomainOfExpertise. The Participant or Participants representing an owner DomainOfExpertise are thus responsible for (i.e. take ownership of) a coherent set of concerns in a concurrent engineering activity.
+        /// </remarks>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual DomainOfExpertise Owner { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ParameterType.
+        /// </summary>
+        /// <remarks>
+        /// reference to the ParameterType of this ParameterBase
+        /// </remarks>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual ParameterType ParameterType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Scale.
+        /// </summary>
+        /// <remarks>
+        /// reference to the MeasurementScale applicable to this ParameterBase
+        /// Note: The <i>scale</i> is mandatory for parameters of a numerical type, i.e. for which the <i>parameterType</i> is a QuantityKind, otherwise it is not assigned.
+        /// </remarks>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual MeasurementScale Scale { get; set; }
+
+        /// <summary>
+        /// Gets or sets the StateDependence.
+        /// </summary>
+        /// <remarks>
+        /// optional reference to an ActualFiniteStateList that defines the ActualFiniteStates that this ParameterBase depends on
+        /// </remarks>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual ActualFiniteStateList StateDependence { get; set; }
+
+        /// <summary>
+        /// Creates and returns a copy of this <see cref="ParameterBase"/> for edit purpose.
+        /// </summary>
+        /// <param name="cloneContainedThings">A value that indicates whether the contained <see cref="Thing"/>s should be cloned or not.</param>
+        /// <returns>
+        /// A cloned instance of <see cref="ParameterBase"/>.
+        /// </returns>
+        public new ParameterBase Clone(bool cloneContainedThings)
+        {
+            this.ChangeKind = ChangeKind.Update;
+            return (ParameterBase)this.GenericClone(cloneContainedThings);
+        }
+
+        /// <summary>
+        /// Validates the cardinalities of the properties of this <see cref="ParameterBase"/>.
+        /// </summary>
+        /// <returns>
+        /// A list of potential errors.
+        /// </returns>
+        protected override IEnumerable<string> ValidatePocoCardinality()
+        {
+            var errorList = new List<string>(base.ValidatePocoCardinality());
+
+            if (this.Owner == null || this.Owner.Iid == Guid.Empty)
+            {
+                errorList.Add("The property Owner is null.");
+                this.Owner = SentinelThingProvider.GetSentinel<DomainOfExpertise>();
+                this.sentinelResetMap["Owner"] = () => this.Owner = null;
+            }
+
+            if (this.ParameterType == null || this.ParameterType.Iid == Guid.Empty)
+            {
+                errorList.Add("The property ParameterType is null.");
+                this.ParameterType = SentinelThingProvider.GetSentinel<ParameterType>();
+                this.sentinelResetMap["ParameterType"] = () => this.ParameterType = null;
+            }
+
+            return errorList;
+        }
+    }
+}
