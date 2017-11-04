@@ -184,6 +184,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Category", "1.1.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },

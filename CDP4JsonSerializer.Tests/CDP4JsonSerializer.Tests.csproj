@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CDP4Common-CE" Version="1.0.0-rc2" />
+    <PackageReference Include="CDP4Common-CE" Version="1.0.0-rc3" />
     <!---
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
 	-->

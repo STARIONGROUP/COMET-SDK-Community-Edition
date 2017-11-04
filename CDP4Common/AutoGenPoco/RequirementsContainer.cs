@@ -77,6 +77,7 @@ namespace CDP4Common.EngineeringModelData
         /// <remarks>
         /// reference to zero or more Categories of which this CategorizableThing is a member
         /// </remarks>
+        [CDPVersion("1.1.0")]
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         public virtual List<Category> Category { get; set; }
 

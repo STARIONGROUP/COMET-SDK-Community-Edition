@@ -56,6 +56,7 @@ namespace CDP4Common.DTO
         /// <summary>
         /// Gets or sets the list of unique identifiers of the referenced Category instances.
         /// </summary>
+        [CDPVersion("1.1.0")]
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual List<Guid> Category { get; set; }
