@@ -44,7 +44,6 @@ namespace CDP4JsonSerializer
             { "password", password => new JValue(password) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "role", role => new JValue(role) },
-            { "salt", salt => new JValue(salt) },
             { "shortName", shortName => new JValue(shortName) },
             { "surname", surname => new JValue(surname) },
             { "telephoneNumber", telephoneNumber => new JArray(telephoneNumber) },
@@ -76,7 +75,6 @@ namespace CDP4JsonSerializer
             jsonObject.Add("password", this.PropertySerializerMap["password"](person.Password));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](person.RevisionNumber));
             jsonObject.Add("role", this.PropertySerializerMap["role"](person.Role));
-            jsonObject.Add("salt", this.PropertySerializerMap["salt"](person.Salt));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](person.ShortName));
             jsonObject.Add("surname", this.PropertySerializerMap["surname"](person.Surname));
             jsonObject.Add("telephoneNumber", this.PropertySerializerMap["telephoneNumber"](person.TelephoneNumber));

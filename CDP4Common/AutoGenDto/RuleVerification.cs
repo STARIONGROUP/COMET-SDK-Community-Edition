@@ -94,8 +94,7 @@ namespace CDP4Common.DTO
         /// <summary>
         /// Gets or sets the unique identifiers of the contained Violation instances.
         /// </summary>
-        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        [DataMember]
+        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: false)]
         public virtual List<Guid> Violation { get; set; }
 
         /// <summary>

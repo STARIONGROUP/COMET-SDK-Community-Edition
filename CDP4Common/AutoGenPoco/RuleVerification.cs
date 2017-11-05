@@ -128,7 +128,7 @@ namespace CDP4Common.EngineeringModelData
         /// set of violations, if any, of rules having been verified
         /// Note: A RuleViolation provides explanatory information to help the user correct the EngineeringModel so that the associated rule will be satisfied.
         /// </remarks>
-        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: false)]
         public virtual ContainerList<RuleViolation> Violation { get; protected set; }
 
         /// <summary>

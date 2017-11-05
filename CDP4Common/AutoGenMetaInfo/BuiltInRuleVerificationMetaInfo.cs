@@ -182,7 +182,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Violation", new PropertyMetaInfo("Violation", "RuleViolation", PropertyKind.List, AggregationKind.Composite, false, false, false, 0, "*", true) },
+            { "Violation", new PropertyMetaInfo("Violation", "RuleViolation", PropertyKind.List, AggregationKind.Composite, false, false, false, 0, "*", false) },
         };
 
         /// <summary>

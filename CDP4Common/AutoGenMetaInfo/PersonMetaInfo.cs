@@ -234,7 +234,6 @@ namespace CDP4Common.MetaInfo
             { "Password", thing => thing.Password },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "Role", thing => thing.Role },
-            { "Salt", thing => thing.Salt },
             { "ShortName", thing => thing.ShortName },
             { "Surname", thing => thing.Surname },
             { "TelephoneNumber", thing => thing.TelephoneNumber },
@@ -266,7 +265,6 @@ namespace CDP4Common.MetaInfo
             { "Password", new PropertyMetaInfo("Password", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Role", new PropertyMetaInfo("Role", "PersonRole", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "Salt", new PropertyMetaInfo("Salt", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Surname", new PropertyMetaInfo("Surname", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
@@ -300,7 +298,6 @@ namespace CDP4Common.MetaInfo
             { "OrganizationalUnit", (person, value) => person.OrganizationalUnit = value == null ? (string)null : value.ToString() },
             { "Password", (person, value) => person.Password = value == null ? (string)null : value.ToString() },
             { "Role", (person, value) => person.Role = value == null ? (Guid?)null : (Guid)value },
-            { "Salt", (person, value) => person.Salt = value == null ? (string)null : value.ToString() },
             { "ShortName", (person, value) => person.ShortName = value.ToString() },
             { "Surname", (person, value) => person.Surname = value.ToString() },
         };

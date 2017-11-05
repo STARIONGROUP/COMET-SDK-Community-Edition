@@ -205,20 +205,6 @@ namespace CDP4Common.DTO
         {
             var hasChanges = false;
 
-            var copyParameterType = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == this.ParameterType);
-            if (copyParameterType.Key != null)
-            {
-                this.ParameterType = copyParameterType.Value.Iid;
-                hasChanges = true;
-            }
-
-            var copyScale = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == this.Scale);
-            if (copyScale.Key != null)
-            {
-                this.Scale = copyScale.Value.Iid;
-                hasChanges = true;
-            }
-
             return hasChanges;
         }
     }

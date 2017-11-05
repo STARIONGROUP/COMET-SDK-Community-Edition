@@ -37,7 +37,6 @@ namespace CDP4JsonSerializer
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "rule", rule => new JValue(rule) },
             { "status", status => new JValue(status.ToString()) },
-            { "violation", violation => new JArray(violation) },
         };
 
         /// <summary>
@@ -58,7 +57,6 @@ namespace CDP4JsonSerializer
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](userRuleVerification.RevisionNumber));
             jsonObject.Add("rule", this.PropertySerializerMap["rule"](userRuleVerification.Rule));
             jsonObject.Add("status", this.PropertySerializerMap["status"](Enum.GetName(typeof(CDP4Common.EngineeringModelData.RuleVerificationStatusKind), userRuleVerification.Status)));
-            jsonObject.Add("violation", this.PropertySerializerMap["violation"](userRuleVerification.Violation));
             return jsonObject;
         }
 

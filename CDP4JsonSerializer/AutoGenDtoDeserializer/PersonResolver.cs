@@ -106,11 +106,6 @@ namespace CDP4JsonSerializer
                 person.Role = jObject["role"].ToObject<Guid?>();
             }
 
-            if (!jObject["salt"].IsNullOrEmpty())
-            {
-                person.Salt = jObject["salt"].ToObject<string>();
-            }
-
             if (!jObject["shortName"].IsNullOrEmpty())
             {
                 person.ShortName = jObject["shortName"].ToObject<string>();

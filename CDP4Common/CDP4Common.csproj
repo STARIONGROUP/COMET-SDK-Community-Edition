@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard1.6</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <Version>1.0.0-rc3</Version>
+    <Version>1.0.0-rc4</Version>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs, Operation and OperationContainer</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
-    <releaseNotes>[Fix] RequirementsContainer and subclasses. Add CDPVersion attribute to Category property</releaseNotes>
+    <releaseNotes>[Remove] salt property from Person related classes; [Fix] ResolveCopyReference method of ParmeterOverride and ParameterSubscription</releaseNotes>
   </PropertyGroup>
   
   <ItemGroup>

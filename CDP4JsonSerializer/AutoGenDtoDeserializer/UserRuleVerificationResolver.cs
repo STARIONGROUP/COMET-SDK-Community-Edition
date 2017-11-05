@@ -71,11 +71,6 @@ namespace CDP4JsonSerializer
                 userRuleVerification.Status = jObject["status"].ToObject<RuleVerificationStatusKind>();
             }
 
-            if (!jObject["violation"].IsNullOrEmpty())
-            {
-                userRuleVerification.Violation.AddRange(jObject["violation"].ToObject<IEnumerable<Guid>>());
-            }
-
             return userRuleVerification;
         }
     }

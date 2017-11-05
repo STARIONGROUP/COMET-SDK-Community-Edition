@@ -256,8 +256,8 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "BuiltInRuleVerification", new PropertyMetaInfo("Violation", "RuleViolation", PropertyKind.List, AggregationKind.Composite, false, false, false, 0, "*", true) },
-            { "UserRuleVerification", new PropertyMetaInfo("Violation", "RuleViolation", PropertyKind.List, AggregationKind.Composite, false, false, false, 0, "*", true) },
+            { "BuiltInRuleVerification", new PropertyMetaInfo("Violation", "RuleViolation", PropertyKind.List, AggregationKind.Composite, false, false, false, 0, "*", false) },
+            { "UserRuleVerification", new PropertyMetaInfo("Violation", "RuleViolation", PropertyKind.List, AggregationKind.Composite, false, false, false, 0, "*", false) },
         };
 
         /// <summary>

@@ -196,17 +196,6 @@ namespace CDP4Common.SiteDirectoryData
         public PersonRole Role { get; set; }
 
         /// <summary>
-        /// Gets or sets the Salt.
-        /// </summary>
-        /// <remarks>
-        /// optional definition of a "salt" to assist with secure authentication handling
-        /// Note 1: See <a href="http://en.wikipedia.org/wiki/Salt_%28cryptography%29">explanation of salt</a> on Wikipedia for more details.
-        /// Note 2: For security reasons values of this property will only be stored and handled server-side.
-        /// </remarks>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public string Salt { get; set; }
-
-        /// <summary>
         /// Gets or sets the ShortName.
         /// </summary>
         /// <remarks>
@@ -365,7 +354,6 @@ namespace CDP4Common.SiteDirectoryData
             this.Password = dto.Password;
             this.RevisionNumber = dto.RevisionNumber;
             this.Role = (dto.Role.HasValue) ? this.Cache.Get<PersonRole>(dto.Role.Value, dto.IterationContainerId) : null;
-            this.Salt = dto.Salt;
             this.ShortName = dto.ShortName;
             this.Surname = dto.Surname;
             this.TelephoneNumber.ResolveList(dto.TelephoneNumber, dto.IterationContainerId, this.Cache);
@@ -396,7 +384,6 @@ namespace CDP4Common.SiteDirectoryData
             dto.Password = this.Password;
             dto.RevisionNumber = this.RevisionNumber;
             dto.Role = this.Role != null ? (Guid?)this.Role.Iid : null;
-            dto.Salt = this.Salt;
             dto.ShortName = this.ShortName;
             dto.Surname = this.Surname;
             dto.TelephoneNumber.AddRange(this.TelephoneNumber.Select(x => x.Iid));

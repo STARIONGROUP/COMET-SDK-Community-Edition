@@ -145,13 +145,6 @@ namespace CDP4Common.DTO
         public Guid? Role { get; set; }
 
         /// <summary>
-        /// Gets or sets the Salt.
-        /// </summary>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        [DataMember]
-        public string Salt { get; set; }
-
-        /// <summary>
         /// Gets or sets the ShortName.
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
@@ -275,8 +268,6 @@ namespace CDP4Common.DTO
 
             var copyRole = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.Role);
             this.Role = copyRole.Value == null ? original.Role : copyRole.Value.Iid;
-
-            this.Salt = original.Salt;
 
             this.ShortName = original.ShortName;
 
