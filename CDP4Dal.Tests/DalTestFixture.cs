@@ -109,29 +109,7 @@ namespace CDP4Dal.Tests
         {
             return base.CleanUriFinalSlash(uri);
         }
-
-        public override IEnumerable<Thing> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s.
-        /// </summary>
-        /// <param name="operationContainers">
-        /// The provided list of <see cref="OperationContainer"/>s to write
-        /// </param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
-        /// </returns>
-        public override IEnumerable<Thing> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> files = null)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s asynchronously.
         /// </summary>
@@ -144,12 +122,12 @@ namespace CDP4Dal.Tests
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
-        public override Task<IEnumerable<Thing>> WriteAsync(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null)
+        public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null)
         {
             throw new NotImplementedException();
         }
 
-        public override Task<IEnumerable<Thing>> WriteAsync(OperationContainer operationContainer, IEnumerable<string> files = null)
+        public override Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
         {
             throw new NotImplementedException();
         }

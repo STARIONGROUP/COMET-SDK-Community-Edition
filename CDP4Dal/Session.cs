@@ -409,7 +409,7 @@ namespace CDP4Dal
         public async Task Write(OperationContainer operationContainer)
         {
             this.Dal.Session = this;
-            var dtoThings = await this.Dal.WriteAsync(operationContainer);
+            var dtoThings = await this.Dal.Write(operationContainer);
 
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
             if (!enumerable.Any())

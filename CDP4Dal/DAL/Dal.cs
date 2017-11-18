@@ -20,7 +20,6 @@ namespace CDP4Dal.DAL
     using CDP4Common.Operations;
     using CDP4Dal.Composition;
     using CDP4Dal.Exceptions;
-    using NLog;
     using Iteration = CDP4Common.DTO.Iteration;
     using Thing = CDP4Common.DTO.Thing;
 
@@ -31,12 +30,7 @@ namespace CDP4Dal.DAL
     {
         //TODO: the EngineeringModelKinds property should be generated from the model, the risk by coding it here is that 
         // we forget to update this when we update the uml data-model. -> T1459
-
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Dal"/> class
         /// </summary>
@@ -45,15 +39,7 @@ namespace CDP4Dal.DAL
             this.MetaDataProvider = StaticMetadataProvider.GetMetaDataProvider;
             this.SetCdpVersion();
         }
-
-        /// <summary>
-        /// Gets the current <see cref="Logger"/>
-        /// </summary>
-        protected static Logger Logger
-        {
-            get { return logger; }
-        }
-
+        
         /// <summary>
         /// Gets the supported version of the data-model
         /// </summary>
@@ -80,34 +66,6 @@ namespace CDP4Dal.DAL
         public abstract bool IsReadOnly { get; }
 
         /// <summary>
-        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/>.
-        /// </summary>
-        /// <param name="operationContainers">
-        /// The provided <see cref="OperationContainer"/> to write
-        /// </param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="CDP4Common.DTO.Thing"/>s that has been created or updated since the last Read or Write operation.
-        /// </returns>
-        public abstract IEnumerable<Thing> Write(OperationContainer operationContainers, IEnumerable<string> files = null);
-
-        /// <summary>
-        /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s.
-        /// </summary>
-        /// <param name="operationContainers">
-        /// The provided list of <see cref="OperationContainer"/>s to write
-        /// </param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
-        /// </returns>
-        public abstract IEnumerable<Thing> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> files = null);
-
-        /// <summary>
         /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s asynchronously.
         /// </summary>
         /// <param name="operationContainer">
@@ -119,7 +77,7 @@ namespace CDP4Dal.DAL
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
-        public abstract Task<IEnumerable<Thing>> WriteAsync(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null);
+        public abstract Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null);
         
         /// <summary>
         /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
@@ -133,7 +91,7 @@ namespace CDP4Dal.DAL
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
-        public abstract Task<IEnumerable<Thing>> WriteAsync(OperationContainer operationContainer, IEnumerable<string> files = null);
+        public abstract Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null);
 
         /// <summary>
         /// Reads the data related to the provided <see cref="Thing"/> from the data-source

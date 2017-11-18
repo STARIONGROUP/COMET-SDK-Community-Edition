@@ -37,18 +37,6 @@ namespace CDP4Dal.Tests.DAL
         {
             var testdal = new TestDal();
             
-            //var siteDirectoryUri = new Uri("http://www.rheagroup.com/SiteDirectory/00B1FD7E-BE0F-4512-A406-02FCBD63E06A");
-            //var siteDirectoryContext = testdal.QueryRequestContext(siteDirectoryUri);
-            //Assert.AreEqual("/SiteDirectory/00B1FD7E-BE0F-4512-A406-02FCBD63E06A", siteDirectoryContext);
-             
-            //var parameterTypeUri = new Uri("http://www.rheagroup.com/SiteDirectory/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/parameterType/73EC05B0-FF55-4182-AD3C-59ABC28B945F");
-            //var parameterTypeContext = testdal.QueryRequestContext(parameterTypeUri);
-            //Assert.AreEqual("/SiteDirectory/00B1FD7E-BE0F-4512-A406-02FCBD63E06A", parameterTypeContext);
-
-            //var iterationUri = new Uri("http://www.rheagroup.com/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1");
-            //var iterationContext = testdal.QueryRequestContext(iterationUri);
-            //Assert.AreEqual("/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1", iterationContext);
-
             var elementDefinitionUri = new Uri("http://www.rheagroup.com/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1/element/E9E8E386-B8BB-44F1-80B9-2C30761EE688");
             var elementDefinitionContext = testdal.QueryRequestContext(elementDefinitionUri);
             Assert.AreEqual("/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1", elementDefinitionContext);
@@ -59,41 +47,7 @@ namespace CDP4Dal.Tests.DAL
     internal class TestDal : Dal
     {
         public override bool IsReadOnly { get { return false; } }
-
-        /// <summary>
-        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/>.
-        /// </summary>
-        /// <param name="operationContainer">
-        /// The provided <see cref="OperationContainer"/> to write
-        /// </param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="CDP4Common.DTO.Thing"/>s that has been created or updated since the last Read or Write operation.
-        /// </returns>
-        public override IEnumerable<Thing> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s.
-        /// </summary>
-        /// <param name="operationContainers">
-        /// The provided list of <see cref="OperationContainer"/>s to write
-        /// </param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
-        /// </returns>
-        public override IEnumerable<Thing> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> files = null)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s asynchronously.
         /// </summary>
@@ -106,7 +60,7 @@ namespace CDP4Dal.Tests.DAL
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
-        public override Task<IEnumerable<Thing>> WriteAsync(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null)
+        public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null)
         {
             throw new NotImplementedException();
         }
@@ -123,7 +77,7 @@ namespace CDP4Dal.Tests.DAL
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
-        public override Task<IEnumerable<Thing>> WriteAsync(OperationContainer operationContainer, IEnumerable<string> files = null)
+        public override Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
         {
             throw new System.NotImplementedException();
         }
