@@ -9,12 +9,6 @@
   </PropertyGroup>
 
     <ItemGroup>
-    
-    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.0-rc5" />
-    <!--
-    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />    
-	  -->
     <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
   </ItemGroup>
   

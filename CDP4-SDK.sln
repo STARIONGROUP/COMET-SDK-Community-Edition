@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4JsonFileDal", "CDP4Json
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4JsonFileDal.Tests", "CDP4JsonFileDal.Tests\CDP4JsonFileDal.Tests.csproj", "{81F3A560-BC12-4B2A-B60B-E64533E9AC99}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4ServicesDal", "CDP4ServicesDal\CDP4ServicesDal.csproj", "{6F9030E9-C774-4247-BA84-4CBF288A844D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4ServicesDal.Tests", "CDP4ServicesDal.Tests\CDP4ServicesDal.Tests.csproj", "{2FF7ED2F-F866-40B9-9FCC-D151404242F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{81F3A560-BC12-4B2A-B60B-E64533E9AC99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81F3A560-BC12-4B2A-B60B-E64533E9AC99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81F3A560-BC12-4B2A-B60B-E64533E9AC99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F9030E9-C774-4247-BA84-4CBF288A844D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F9030E9-C774-4247-BA84-4CBF288A844D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F9030E9-C774-4247-BA84-4CBF288A844D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F9030E9-C774-4247-BA84-4CBF288A844D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FF7ED2F-F866-40B9-9FCC-D151404242F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FF7ED2F-F866-40B9-9FCC-D151404242F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FF7ED2F-F866-40B9-9FCC-D151404242F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FF7ED2F-F866-40B9-9FCC-D151404242F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

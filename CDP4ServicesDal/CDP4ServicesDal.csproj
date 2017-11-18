@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
-    <Title>CDP4JsonFileDal Community Edition</Title>
+    <Title>CDP4ServicesDal Community Edition</Title>
     <Version>1.0.0-rc6</Version>
-    <Description>CDP4 Json File Dal Plugin</Description>
+    <Description>CDP4ServicesDal Dal Plugin</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
-    <PackageId>CDP4JsonFileDal-CE</PackageId>
+    <PackageId>CDP4ServicesDal-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/RHEAGROUP/CDP4-SDK-Community-Edition/master/docs/cdp4-icon.png</PackageIconUrl>
@@ -17,31 +17,19 @@
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
     <releaseNotes>[Update] to CDP4Dal-CE 1.0.0-rc6</releaseNotes>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    
+
     <PackageReference Include="CDP4Dal-CE" Version="1.0.0-rc6" />
+
     <!--
     <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
-    -->    
+    -->
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="DotNetZip" Version="1.10.1" />
-    <PackageReference Include="NLog" Version="5.0.0-beta11" />
-    <PackageReference Include="Rx-Core" version="2.2.5" />
-    <PackageReference Include="Rx-Interfaces" version="2.2.5" />
-    <PackageReference Include="Rx-Linq" version="2.2.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.Composition" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Json\ExchangeDateTime.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-  </ItemGroup>
+  
+    <ItemGroup>
+      <Reference Include="System.Net" />
+      <Reference Include="System.Net.Http" />
+    </ItemGroup>
 
 </Project>
