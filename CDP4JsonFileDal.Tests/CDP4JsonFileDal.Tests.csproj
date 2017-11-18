@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
+    <Company>RHEA System S.A.</Company>
+    <Description>CDP4JsonFileDal Unit tests</Description>
+    <Copyright>Copyright © RHEA System S.A.</Copyright>
+    <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommonServiceLocator" version="1.3" />
+    <PackageReference Include="DotNetZip" Version="1.10.1" />
+    <PackageReference Include="NLog" Version="5.0.0-beta11" />
+    <PackageReference Include="Rx-Core" version="2.2.5" />
+    <PackageReference Include="Rx-Interfaces" version="2.2.5" />
+    <PackageReference Include="Rx-Linq" version="2.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="NUnit" Version="3.8.1" />
+    <PackageReference Include="NUnit.Console" Version="3.7.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0" />
+    <PackageReference Include="Moq" Version="4.7.142" />
+  </ItemGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="CDP4JsonFileDal-CE" Version="1.0.0-rc5" />
+    <!--    
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+    <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
+    <ProjectReference Include="..\CDP4JsonFileDal\CDP4JsonFileDal.csproj" />
+    -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="files\LOFT_ECSS-E-TM-10-25_AnnexC.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="files\minimalcontent.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+</Project>

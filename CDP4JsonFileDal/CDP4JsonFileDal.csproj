@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
+    <Company>RHEA System S.A.</Company>
+    <Title>CDP4JsonFileDal Community Edition</Title>
+    <Version>1.0.0-rc5</Version>
+    <Description>CDP4 Json File Dal Plugin</Description>
+    <Copyright>Copyright © RHEA System S.A.</Copyright>
+    <Authors>Sam, Merlin, Alex, Naron</Authors>
+    <PackageId>CDP4JsonFileDal-CE</PackageId>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/RHEAGROUP/CDP4-SDK-Community-Edition/master/docs/cdp4-icon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
+    <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
+    <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
+    <releaseNotes>[Initial] Commit</releaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="CDP4Dal-EE" Version="1.0.0-rc5" />
+
+    <!--
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+    -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetZip" Version="1.10.1" />
+    <PackageReference Include="NLog" Version="5.0.0-beta11" />
+    <PackageReference Include="Rx-Core" version="2.2.5" />
+    <PackageReference Include="Rx-Interfaces" version="2.2.5" />
+    <PackageReference Include="Rx-Linq" version="2.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.Composition" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Json\ExchangeDateTime.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+</Project>
