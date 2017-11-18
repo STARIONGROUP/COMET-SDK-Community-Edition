@@ -33,3 +33,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("CDP4ServicesDal.Tests")]
 [assembly: InternalsVisibleTo("CDP4JsonSerializer")]
 [assembly: InternalsVisibleTo("CDP4OfficeInfrastructure")]
+[assembly: InternalsVisibleTo("CDP4Tools.Tests")]
