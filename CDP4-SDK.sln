@@ -27,6 +27,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4ServicesDal", "CDP4Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4ServicesDal.Tests", "CDP4ServicesDal.Tests\CDP4ServicesDal.Tests.csproj", "{2FF7ED2F-F866-40B9-9FCC-D151404242F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4WspDal", "CDP4WspDal\CDP4WspDal.csproj", "{73547666-55AA-4364-9A5E-1A50693D1576}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4WspDal.Tests", "CDP4WspDal.Tests\CDP4WspDal.Tests.csproj", "{88D4A523-C0DA-49C4-94DE-8E3BF93856BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{2FF7ED2F-F866-40B9-9FCC-D151404242F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FF7ED2F-F866-40B9-9FCC-D151404242F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FF7ED2F-F866-40B9-9FCC-D151404242F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73547666-55AA-4364-9A5E-1A50693D1576}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73547666-55AA-4364-9A5E-1A50693D1576}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73547666-55AA-4364-9A5E-1A50693D1576}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73547666-55AA-4364-9A5E-1A50693D1576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88D4A523-C0DA-49C4-94DE-8E3BF93856BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88D4A523-C0DA-49C4-94DE-8E3BF93856BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88D4A523-C0DA-49C4-94DE-8E3BF93856BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88D4A523-C0DA-49C4-94DE-8E3BF93856BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
