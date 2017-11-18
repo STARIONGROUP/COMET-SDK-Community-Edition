@@ -6,6 +6,8 @@ The Concurrent Design Platform Software Development Kit is an C# SDK that that i
   - CDP4JsonSerializer
   - CDP4Dal
   - CDP4JsonFileDal
+  - CDP4ServicesDal
+  - CDP4WspDal
 
 ## CDP4Common
 
@@ -24,6 +26,14 @@ The CDP4Dal library is a library that provides the basis to implement ECSS-E-TM-
 ## CDP4JsonFileDal
 
 The CDP4JsonFileDal library is a C# library that provides an implementation of ECSS-E-TM-10-25A Annex C.3, the JSON Exchange File Format. This file format is a ZIP archive in which a number of files are stored that each contain one or more ECSS-E-TM-10-25 objects that are serialized in the form of a JSON array of JSON objects. The CDP4JsonFileDal library can be used to read from such a ZIP archive, and to create such a ZIP archive. The ZIP archive is typically used to exchange complete models between organizations.
+
+## CDP4ServicesDal
+
+The CDP4ServicesDal library is a C# library that provides an implementation of ECSS-E-TM-10-25A Annex C.2, the JSON REST API, which includes concepts that are specific to the CDP4. These CDP4 specific items are pure extensions of ECSS-E-TM-10-25A. The CDP4ServicesDal library can only be used to communicate with a CDP4 Services instance, dedicated HTTP headers are used to verify that the REST API is indeed a CDP4 Services instance.
+
+## CDP4WspDal
+
+The CDP4WspDal library is a C# library that provides an implementation of ECSS-E-TM-10-25A Annex C.2, the JSON REST API. The CDP4WspDal can be used to communicate with any ECSS-E-TM-10-25A Annex C.2 implementation, including the CDP4 Services.
 
 # License
 
