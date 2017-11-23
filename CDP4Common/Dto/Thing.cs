@@ -13,6 +13,7 @@ namespace CDP4Common.DTO
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using CDP4Common.Polyfills;
     using CDP4Common.Types;
     using CommonData;
@@ -130,6 +131,7 @@ namespace CDP4Common.DTO
         /// <exception cref="InvalidOperationException">
         /// Thrown when the <see cref="ContainerLevelKind"/> is fixed and may not be updated.
         /// </exception>
+        [XmlIgnore]
         public virtual ContainerLevelKind ContainerLevelKind
         {
             get { return ContainerLevelKind.Invalid; }
