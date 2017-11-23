@@ -27,10 +27,10 @@
 
   <ItemGroup>
     <!--
-    <PackageReference Include="CDP4JsonFileDal-CE" Version="1.0.0-rc6" />
+    <PackageReference Include="CDP4JsonFileDal-CE" Version="1.0.0-rc7" />
     -->
     <ProjectReference Include="..\CDP4JsonFileDal\CDP4JsonFileDal.csproj" />
-
+	
   </ItemGroup>
 
   <ItemGroup>
