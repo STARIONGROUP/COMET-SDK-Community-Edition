@@ -15,6 +15,7 @@ namespace CDP4Common.DTO
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;

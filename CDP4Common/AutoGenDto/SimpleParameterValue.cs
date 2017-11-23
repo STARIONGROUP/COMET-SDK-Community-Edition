@@ -15,6 +15,7 @@ namespace CDP4Common.DTO
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
@@ -57,6 +58,7 @@ namespace CDP4Common.DTO
         /// The Owner property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: false, isNullable: false, isPersistent: false)]
+        [XmlIgnore]
         public Guid Owner
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property SimpleParameterValue.Owner"); }

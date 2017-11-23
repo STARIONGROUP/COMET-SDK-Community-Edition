@@ -15,6 +15,7 @@ namespace CDP4Common.DTO
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
@@ -57,6 +58,7 @@ namespace CDP4Common.DTO
         /// The Group property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: false, isNullable: true, isPersistent: false)]
+        [XmlIgnore]
         public override Guid? Group
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscription.Group"); }
@@ -70,6 +72,7 @@ namespace CDP4Common.DTO
         /// The IsOptionDependent property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: false, isNullable: false, isPersistent: false)]
+        [XmlIgnore]
         public override bool IsOptionDependent
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscription.IsOptionDependent"); }
@@ -83,6 +86,7 @@ namespace CDP4Common.DTO
         /// The ParameterType property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: false, isNullable: false, isPersistent: false)]
+        [XmlIgnore]
         public override Guid ParameterType
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscription.ParameterType"); }
@@ -96,6 +100,7 @@ namespace CDP4Common.DTO
         /// The Scale property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: false, isNullable: true, isPersistent: false)]
+        [XmlIgnore]
         public override Guid? Scale
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscription.Scale"); }
@@ -109,6 +114,7 @@ namespace CDP4Common.DTO
         /// The StateDependence property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: false, isNullable: true, isPersistent: false)]
+        [XmlIgnore]
         public override Guid? StateDependence
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscription.StateDependence"); }

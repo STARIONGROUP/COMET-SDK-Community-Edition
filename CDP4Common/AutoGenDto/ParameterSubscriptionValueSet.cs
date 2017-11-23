@@ -15,6 +15,7 @@ namespace CDP4Common.DTO
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
@@ -57,6 +58,7 @@ namespace CDP4Common.DTO
         /// The ActualOption property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: false, isNullable: true, isPersistent: false)]
+        [XmlIgnore]
         public Guid? ActualOption
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscriptionValueSet.ActualOption"); }
@@ -70,6 +72,7 @@ namespace CDP4Common.DTO
         /// The ActualState property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: false, isNullable: true, isPersistent: false)]
+        [XmlIgnore]
         public Guid? ActualState
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscriptionValueSet.ActualState"); }
@@ -83,6 +86,7 @@ namespace CDP4Common.DTO
         /// The ActualValue property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: true, isNullable: false, isPersistent: false)]
+        [XmlIgnore]
         public ValueArray<string> ActualValue
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscriptionValueSet.ActualValue"); }
@@ -96,6 +100,7 @@ namespace CDP4Common.DTO
         /// The Computed property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: true, isNullable: false, isPersistent: false)]
+        [XmlIgnore]
         public ValueArray<string> Computed
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscriptionValueSet.Computed"); }
@@ -116,6 +121,7 @@ namespace CDP4Common.DTO
         /// The Owner property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: false, isNullable: false, isPersistent: false)]
+        [XmlIgnore]
         public Guid Owner
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscriptionValueSet.Owner"); }
@@ -129,6 +135,7 @@ namespace CDP4Common.DTO
         /// The Reference property is a derived property; when the getter and setter are invoked an InvalidOperationException will be thrown.
         /// </exception>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: true, isOrdered: true, isNullable: false, isPersistent: false)]
+        [XmlIgnore]
         public ValueArray<string> Reference
         {
             get { throw new InvalidOperationException("Forbidden Get value for the derived property ParameterSubscriptionValueSet.Reference"); }

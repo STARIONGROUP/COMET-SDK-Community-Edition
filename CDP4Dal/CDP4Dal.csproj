@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
 	  <Title>CDP4Dal Community Edition</Title>
-    <Version>1.0.0-rc6</Version>
+    <Version>1.0.0-rc7</Version>
     <Description>CDP4 Data Access Layer library</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
 	  <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
-    <releaseNotes>[Update] to CDP4JsonSerializer-CE 1.0.0-rc6</releaseNotes>
+    <releaseNotes>[Update] to CDP4JsonSerializer-CE 1.0.0-rc7</releaseNotes>
   </PropertyGroup>
   
   <ItemGroup>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.0-rc6" />
+    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.0-rc7" />
   </ItemGroup>
   
   <ItemGroup>    

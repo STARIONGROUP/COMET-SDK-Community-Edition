@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <!--
-    <PackageReference Include="CDP4ServicesDal-EE" Version="1.0.0-rc6" />
+    <PackageReference Include="CDP4ServicesDal-EE" Version="1.0.0-rc7" />
     -->
     <ProjectReference Include="..\CDP4ServicesDal\CDP4ServicesDal.csproj" />
 
