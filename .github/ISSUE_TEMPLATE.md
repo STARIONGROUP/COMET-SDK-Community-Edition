@@ -21,8 +21,6 @@
   - [ ] CDP4ServicesDal:    
   - [ ] CDP4WspDal:         
   - [ ] Other:              
-
-  - [ ] Other:
 - Environment (Operating system, version and so on):
 - .NET Framework version:
 - Additional information:
