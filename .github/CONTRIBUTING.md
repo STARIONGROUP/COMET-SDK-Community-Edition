@@ -1,6 +1,6 @@
 # How to contribute
 
-We would like to start with saying thank you for wanting to contribute to CDP4 codebasde. We want to keep it as easy as possible to contribute changes that get things working in your environment. There are a few guidelines that we need contributors to follow so that we have a chance of keeping on top of things.
+We would like to start with saying thank you for wanting to contribute to CDP4-SDK codebase. We want to keep it as easy as possible to contribute changes that get things working in your environment. There are a few guidelines that we need contributors to follow so that we have a chance of keeping on top of things.
 
 - [Making Changes](#making-changes)
   - [Handling Updates from Upstream/Development](#handling-updates-from-upstreamdevelopment)
@@ -43,7 +43,7 @@ While working on your feature you may well create several branches, which is fin
 When you're ready to go you should confirm that you are up to date and rebased with upstream/development (see "Handling Updates from Upstream/development" above), and then:
 
 1. `git push origin myBranch`
-1. Send a descriptive [Pull Request](http://help.github.com/pull-requests/) on GitHub - making sure you have selected the correct branch in the GitHub UI!
+1. Send a descriptive [Pull Request](https://help.github.com/articles/creating-a-pull-request/) on GitHub - making sure you have selected the correct branch in the GitHub UI!
 1. Wait for @samatrhea to merge your changes in.
 
 And remember; **A pull-request with tests is a pull-request that's likely to be pulled in.** :grin: Bonus points if you document your feature in our [wiki](https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/wiki) once it has been pulled in
@@ -55,7 +55,7 @@ And remember; **A pull-request with tests is a pull-request that's likely to be 
 - Use `this` when accessing instance members, e.g. `this.Name = "CDP4";`.
 - Use the `var` keyword unless the inferred type is not obvious.
 - Use the C# type aliases for types that have them, e.g. `int` instead of `Int32`, `string` instead of `String` etc.
-- Use meaningful names (no hungarian notation).
+- Use meaningful names (no hungarian notation), we like long descriptive names of methods, variables and parameters.
 - Wrap `if`, `else` and `using` blocks (or blocks in general, really) in curly braces, even if it's a single line.
 - Put `using` statements inside namespace.
 - Pay attention to whitespace and extra blank lines
