@@ -9,13 +9,12 @@ namespace CDP4Common
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="CDPVersion"/> attribute is to decorated Classes and properties
-    /// that constiute CDP4 extensions to the ECSS-E-TM-10-25 class library
+    /// The purpose of the <see cref="CDPVersion"/> attribute is to decorate Classes and properties
+    /// that constitute CDP4 extensions to the ECSS-E-TM-10-25A Annex A master model. 
     /// </summary>
     /// <remarks>
-    /// A POCO or DTO Class or Property that is not decorated with this class
-    /// is a vanila ECSS-E-TM-10-25 class or property. Valinla ECSS-E-TM-10-25 class may have
-    /// properties decorated with this attribute.
+    /// A POCO or DTO Class or Property that is not decorated with this class is a vanila ECSS-E-TM-10-25 class or property.
+    /// A vanila ECSS-E-TM-10-25A Annex Alass may have properties decorated with this attribute.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = false)]
     public class CDPVersionAttribute : Attribute
