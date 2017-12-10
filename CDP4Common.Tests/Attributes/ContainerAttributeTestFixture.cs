@@ -4,22 +4,27 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Tests.Attributes
+namespace CDP4Common.Tests
 {
-    using System;
+    using CDP4Common;
+    using CDP4Common.Helpers;
+    using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
 
     /// <summary>
-    /// Suite of tests for hte <see cref="ContainerAttribute"/> class.
+    /// Test fixture for the <see cref="ContainerAttribute"/> class
     /// </summary>
     [TestFixture]
     public class ContainerAttributeTestFixture
     {
         [Test]
-        public void Verify_That_Properties_Are_Set()
+        public void VerifyThatConstructorSetsProperties()
         {
-            Assert.Inconclusive("Implement test");
-            //var containerAttribute = new ContainerAttribute("1.2", "");            
+            var propertyName = "EmailAddress";
+            var containerPropertyNameAttribute = new ContainerAttribute(typeof(Person), propertyName);
+
+            Assert.AreEqual(propertyName, containerPropertyNameAttribute.PropertyName);
+            Assert.AreEqual(typeof(Person), containerPropertyNameAttribute.ClassType);
         }
     }
 }
