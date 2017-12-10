@@ -120,26 +120,40 @@ namespace CDP4Dal
         IEnumerable<ReferenceDataLibrary> GetEngineeringModelSetupRdlChain(EngineeringModelSetup engineeringModelSetup);
 
         /// <summary>
-        /// Open the underlying <see cref="IDal"/>
+        /// Open the underlying <see cref="IDal"/> and update the Cache with the retrieved objects.
         /// </summary>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
+        /// <remarks>
+        /// The <see cref="CDPMessageBus"/> is used to send messages to notify listeners of <see cref="Thing"/>s that
+        /// have been added to the cache.
+        /// </remarks>
         Task Open();
 
         /// <summary>
-        /// Read an <see cref="Iteration"/> in the associated <see cref="IDal"/> along the active <see cref="DomainOfExpertise"/> for it
+        /// Read an <see cref="Iteration"/> from the underlying <see cref="IDal"/> and set the active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/>.
         /// </summary>
         /// <param name="iteration">The <see cref="Iteration"/> to read</param>
         /// <param name="domain">The active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/></param>
-        /// <returns>a <see cref="Task"/> that can be used with await</returns>
+        /// <returns>
+        /// an await-able <see cref="Task"/>
+        /// </returns>
+        /// <remarks>
+        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/> is used to send messages to notify listeners of updates to the Cache
+        /// </remarks>
         Task Read(Iteration iteration, DomainOfExpertise domain);
 
         /// <summary>
-        /// Read <see cref="ReferenceDataLibrary"/> in the associated <see cref="IDal"/>
+        /// Read a <see cref="ReferenceDataLibrary"/> from the underlying <see cref="IDal"/>
         /// </summary>
         /// <param name="rdl">The <see cref="ReferenceDataLibrary"/> to read</param>
-        /// <returns>a <see cref="Task"/> that can be used with await</returns>
+        /// <returns>
+        /// an await-able <see cref="Task"/>
+        /// </returns>
+        /// <remarks>
+        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/> is used to send messages to notify listeners of updates to the Cache
+        /// </remarks>
         Task Read(ReferenceDataLibrary rdl);
 
         /// <summary>
@@ -158,7 +172,7 @@ namespace CDP4Dal
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
         /// <returns>
-        /// a <see cref="Task"/> that can be used with await
+        /// an await-able <see cref="Task"/>
         /// </returns>
         Task Write(OperationContainer operationContainer);
 
@@ -166,7 +180,7 @@ namespace CDP4Dal
         /// Refreshes all the <see cref="TopContainer"/>s in the cache
         /// </summary>
         /// /// <returns>
-        /// a <see cref="Task"/> that can be used with await
+        /// an await-able <see cref="Task"/>
         /// </returns>
         Task Refresh();
 
@@ -174,7 +188,7 @@ namespace CDP4Dal
         /// Reloads all the <see cref="TopContainer"/>s the in cache
         /// </summary>
         /// <returns>
-        /// a <see cref="Task"/> that can be used with await
+        /// an await-able <see cref="Task"/>
         /// </returns>
         Task Reload();
 

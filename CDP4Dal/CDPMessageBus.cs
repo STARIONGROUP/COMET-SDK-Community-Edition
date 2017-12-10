@@ -179,7 +179,7 @@ namespace CDP4Dal
             // send the object message
             this.SendMessage(new ObjectChangedEvent(thing, eventKind), thing);
 
-            // end the typeof messages
+            // send the typeof messages
             this.SendTypedObjectChangeEvent(thing, eventKind);
         }
 
