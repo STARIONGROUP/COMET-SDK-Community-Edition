@@ -12,7 +12,7 @@ namespace CDP4Dal.DAL
     using System.Threading.Tasks;
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
-    using CDP4Common.Operations;
+    using CDP4Dal.Operations;
 
     /// <summary>
     /// The Data Access Layer interface.

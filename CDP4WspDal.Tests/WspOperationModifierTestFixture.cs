@@ -10,9 +10,8 @@ namespace CDP4WspDal.Tests
     using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Operations;
-
     using CDP4Dal;
+    using CDP4Dal.Operations;
     using Moq;
     using NUnit.Framework;
 

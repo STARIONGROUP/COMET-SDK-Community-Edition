@@ -9,11 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--
-    <PackageReference Include="CDP4ServicesDal-EE" Version="1.0.0-rc7" />
-    -->
     <ProjectReference Include="..\CDP4ServicesDal\CDP4ServicesDal.csproj" />
-
 </ItemGroup>
   
   <ItemGroup>
@@ -27,6 +23,12 @@
   <ItemGroup>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="TestData\PostOperation.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   
 </Project>

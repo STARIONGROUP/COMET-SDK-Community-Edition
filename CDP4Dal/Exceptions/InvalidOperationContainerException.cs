@@ -8,7 +8,7 @@ namespace CDP4Dal.Exceptions
 {
     using System;
     using System.Runtime.Serialization;
-    using CDP4Common.Operations;
+    using CDP4Dal.Operations;
 
     /// <summary>
     /// A <see cref="InvalidOperationContainerException"/> is thrown when an <see cref="OperationContainer"/> is invalid or incomplete,

@@ -16,7 +16,6 @@ namespace CDP4JsonSerializer.Tests
     using CDP4Common.DTO;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.MetaInfo;
-    using CDP4Common.Operations;
     using CDP4Common.Types;
     using CDP4JsonSerializer.Tests.Helper;
     using CDP4JsonSerializer;
@@ -182,48 +181,6 @@ namespace CDP4JsonSerializer.Tests
             Assert.AreEqual(arrayPt.Dimension[1].V, "2");
             Assert.AreEqual(arrayPt.Dimension[0].V, "1");
             Assert.AreEqual(arrayPt.Dimension[2].V, "3");
-        }
-
-        [Test]
-        public void Verify_that_deserialization_of_Post_Operation_does_not_throw_an_exception()
-        {
-            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/PostOperation.json"));
-            using (var stream = StreamHelper.GenerateStreamFromString(response))
-            {
-                Assert.DoesNotThrow(() => this.serializer.Deserialize<TestPostOperation2>(stream));
-            }
-        }
-
-        private class TestPostOperation2 : PostOperation
-        {
-            public override void ConstructFromOperation(Operation operation)
-            {
-                throw new NotImplementedException();
-            }
-
-            /// <summary>
-            /// Gets or sets the collection of DTOs to delete.
-            /// </summary>
-            [JsonProperty("_delete")]
-            public override List<ClasslessDTO> Delete { get; set; }
-
-            /// <summary>
-            /// Gets or sets the collection of DTOs to create.
-            /// </summary>
-            [JsonProperty("_create")]
-            public override List<CDP4Common.DTO.Thing> Create { get; set; }
-
-            /// <summary>
-            /// Gets or sets the collection of DTOs to update.
-            /// </summary>
-            [JsonProperty("_update")]
-            public override List<ClasslessDTO> Update { get; set; }
-
-            /// <summary>
-            /// Gets or sets the collection of DTOs to update.
-            /// </summary>
-            [JsonProperty("_copy")]
-            public override List<ClasslessDTO> Copy { get; set; }
         }
     }
 }

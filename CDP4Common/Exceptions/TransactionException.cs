@@ -11,7 +11,6 @@ namespace CDP4Common.Exceptions
     using System.Runtime.Serialization;
 #endif
     using CDP4Common.CommonData;
-    using CDP4Common.Operations;
 
     /// <summary>
     /// A <see cref="TransactionException"/> is thrown by the <see cref="ThingTransaction"/> whenever the transaction is in an

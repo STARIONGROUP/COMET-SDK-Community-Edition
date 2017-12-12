@@ -20,12 +20,12 @@ namespace CDP4WspDal
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.DTO;
-    using CDP4Common.Operations;
     using CDP4Dal;
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Exceptions;
+    using CDP4Dal.Operations;
     using CDP4JsonSerializer;
     using NLog;
     using Operations;
@@ -90,7 +90,7 @@ namespace CDP4WspDal
 
             var watch = Stopwatch.StartNew();
 
-            var hasCopyValuesOperations = operationContainer.Operations.Any(op => CDP4Common.Helpers.Utils.IsCopyKeepOriginalValuesOperation(op.OperationKind));
+            var hasCopyValuesOperations = operationContainer.Operations.Any(op => CDP4Dal.Utils.IsCopyKeepOriginalValuesOperation(op.OperationKind));
 
             var modifier = new WspOperationModifier(this.Session);
             var copyHandler = new WspCopyOperationHandler(this.Session);
@@ -98,7 +98,7 @@ namespace CDP4WspDal
             copyHandler.ModifiedCopyOperation(operationContainer);
             modifier.ModifyOperationContainer(operationContainer);
 
-            var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || CDP4Common.Helpers.Utils.IsCopyOperation(operation.OperationKind));
+            var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || CDP4Dal.Utils.IsCopyOperation(operation.OperationKind));
             if (invalidOperationKind)
             {
                 throw new InvalidOperationKindException("The WSP DAL does not support Copy or Move operations");

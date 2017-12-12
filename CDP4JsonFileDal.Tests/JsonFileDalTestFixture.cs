@@ -14,9 +14,9 @@ namespace CDP4JsonFileDal.Tests
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
-    using CDP4Common.Operations;
     using CDP4Dal;
     using CDP4Dal.DAL;
+    using CDP4Dal.Operations;
     using CDP4JsonFileDal;
     using CDP4JsonFileDal.Json;
     using Ionic.Zip;

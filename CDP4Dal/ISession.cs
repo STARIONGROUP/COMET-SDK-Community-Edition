@@ -10,7 +10,7 @@ namespace CDP4Dal
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Operations;
+    using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
 
     using CDP4Dal.DAL;
@@ -161,7 +161,7 @@ namespace CDP4Dal
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to read</param>
         /// <returns>
-        /// a <see cref="Task"/> that can be used with await
+        /// an await-able <see cref="Task"/>
         /// </returns>
         Task Read(Thing thing);
 

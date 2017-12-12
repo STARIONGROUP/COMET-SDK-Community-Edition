@@ -14,7 +14,7 @@ namespace CDP4Dal
 
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Operations;
+    using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
 
     using DAL;
@@ -377,7 +377,7 @@ namespace CDP4Dal
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to read</param>
         /// <returns>
-        /// a <see cref="Task"/> that can be used with await
+        /// an await-able <see cref="Task"/>
         /// </returns>
         public async Task Read(Thing thing)
         {
@@ -418,7 +418,7 @@ namespace CDP4Dal
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
         /// <returns>
-        /// a <see cref="Task"/> that can be used with await
+        /// an await-able <see cref="Task"/>
         /// </returns>
         public async Task Write(OperationContainer operationContainer)
         {

@@ -31,4 +31,10 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   
+  <ItemGroup>
+    <None Update="TestData\PostOperation.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
 </Project>

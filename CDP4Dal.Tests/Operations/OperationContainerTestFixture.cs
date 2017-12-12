@@ -4,18 +4,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Tests
+namespace CDP4Dal.Tests
 {
     using System;
     using System.Linq;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DTO;
-    using CDP4Common.Operations;
-    using CDP4Common.Types;
-
+    using CDP4Common.DTO;    
+    using CDP4Dal.Operations;
     using NUnit.Framework;
-    using Operations;
     
     [TestFixture]
     public class OperationContainerTestFixture

@@ -13,7 +13,7 @@ namespace CDP4Dal.Tests.DAL
     using CDP4Common;
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
-    using CDP4Common.Operations;
+    using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using Microsoft.Practices.ServiceLocation;
     using Moq;

@@ -10,6 +10,7 @@
 namespace CDP4Dal
 {
     using System;
+    using CDP4Dal.Operations;
 
     /// <summary>
     /// The static helper class that provides utilities to assist the Data Access Layer
@@ -131,6 +132,41 @@ namespace CDP4Dal
 
             // Return char and concat substring.
             return char.ToLower(input[0]) + input.Substring(1);
+        }
+
+        /// <summary>
+        /// Assert whether an <see cref="OperationKind"/> is a copy operation
+        /// </summary>
+        /// <param name="operationKind">The <see cref="OperationKind"/></param>
+        /// <returns>A value indicating whether it is a copy operation</returns>
+        public static bool IsCopyOperation(this OperationKind operationKind)
+        {
+            return operationKind == OperationKind.Copy ||
+                   operationKind == OperationKind.CopyDefaultValuesChangeOwner ||
+                   operationKind == OperationKind.CopyKeepValues ||
+                   operationKind == OperationKind.CopyKeepValuesChangeOwner;
+        }
+
+        /// <summary>
+        /// Assert whether an <see cref="OperationKind"/> is a copy operation that changes the owner of a <see cref="IOwnedThing"/>
+        /// </summary>
+        /// <param name="operationKind">The <see cref="OperationKind"/></param>
+        /// <returns>A value indicating whether it is a copy operation that changes the owner</returns>
+        public static bool IsCopyChangeOwnerOperation(this OperationKind operationKind)
+        {
+            return operationKind == OperationKind.CopyDefaultValuesChangeOwner ||
+                   operationKind == OperationKind.CopyKeepValuesChangeOwner;
+        }
+
+        /// <summary>
+        /// Assert whether an <see cref="OperationKind"/> is a copy operation that keeps the original values of a <see cref="ParameterBase"/>
+        /// </summary>
+        /// <param name="operationKind">The <see cref="OperationKind"/></param>
+        /// <returns>A value indicating whether it is a copy operation that keeps the original values of a <see cref="ParameterBase"/></returns>
+        public static bool IsCopyKeepOriginalValuesOperation(this OperationKind operationKind)
+        {
+            return operationKind == OperationKind.CopyKeepValues ||
+                   operationKind == OperationKind.CopyKeepValuesChangeOwner;
         }
     }
 }

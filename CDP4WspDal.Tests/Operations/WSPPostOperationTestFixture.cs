@@ -11,9 +11,9 @@ namespace CDP4WspDal.Tests.Operations
     using System.Collections.Generic;
     using System.Linq;
     using CDP4Common.DTO;
-    using CDP4Common.MetaInfo;
-    using CDP4Common.Operations;
+    using CDP4Common.MetaInfo;    
     using CDP4Common.Types;
+    using CDP4Dal.Operations;
     using CDP4WspDal.Operations;
 
     using NUnit.Framework;

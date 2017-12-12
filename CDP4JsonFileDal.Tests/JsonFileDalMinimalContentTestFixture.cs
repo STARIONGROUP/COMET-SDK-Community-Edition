@@ -17,10 +17,11 @@ namespace CDP4JsonFileDal.Tests
 
     using CDP4Common.CommonData;
     using CDP4Common.MetaInfo;
-    using CDP4Common.Operations;
+
     using CDP4Dal;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
+    using CDP4Dal.Operations;
 
     using CDP4JsonFileDal;
     using CDP4JsonFileDal.Json;

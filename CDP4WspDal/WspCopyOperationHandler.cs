@@ -13,8 +13,8 @@ namespace CDP4WspDal
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Helpers;
-    using CDP4Common.Operations;
     using CDP4Dal;
+    using CDP4Dal.Operations;
     using CDP4Dal.Permission;
     using Poco = CDP4Common.CommonData.Thing;
 

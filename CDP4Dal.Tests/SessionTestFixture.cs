@@ -16,7 +16,7 @@ namespace CDP4Dal.Tests
     using CDP4Common.DTO;
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
-    using CDP4Common.Operations;
+    using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
 
     using CDP4Dal.Composition;

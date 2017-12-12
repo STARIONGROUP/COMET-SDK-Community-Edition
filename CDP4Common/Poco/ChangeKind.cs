@@ -6,8 +6,6 @@
 
 namespace CDP4Common
 {
-    using CDP4Common.CommonData;
-
     /// <summary>
     /// Enum to specify the edit status of a <see cref="Thing"/>
     /// </summary>

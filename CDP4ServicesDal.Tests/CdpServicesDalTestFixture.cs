@@ -14,14 +14,14 @@ namespace CDP4ServicesDal.Tests
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.Operations;
+    using CDP4Common.EngineeringModelData;    
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;    
     using CDP4Dal;
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Exceptions;
+    using CDP4Dal.Operations;
     using NUnit.Framework;
     
     /// <summary>

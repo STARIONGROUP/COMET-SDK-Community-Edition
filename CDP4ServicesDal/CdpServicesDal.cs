@@ -21,7 +21,7 @@ namespace CDP4ServicesDal
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.DTO;
-    using CDP4Common.Operations;
+    using CDP4Dal.Operations;
     using CDP4Dal;
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;
@@ -88,7 +88,7 @@ namespace CDP4ServicesDal
 
             var watch = Stopwatch.StartNew();
 
-            var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || CDP4Common.Helpers.Utils.IsCopyOperation(operation.OperationKind));
+            var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || CDP4Dal.Utils.IsCopyOperation(operation.OperationKind));
 
             if (invalidOperationKind)
             {

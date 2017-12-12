@@ -17,7 +17,7 @@ namespace CDP4Dal.DAL
     using CDP4Common.CommonData;
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
-    using CDP4Common.Operations;
+    using CDP4Dal.Operations;
     using CDP4Dal.Composition;
     using CDP4Dal.Exceptions;
     using Iteration = CDP4Common.DTO.Iteration;

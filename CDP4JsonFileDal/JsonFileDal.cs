@@ -16,7 +16,7 @@ namespace CDP4JsonFileDal
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
-    using CDP4Common.Operations;
+    using CDP4Dal.Operations;
     using CDP4Dal;
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;

@@ -4,10 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Tests
+namespace CDP4Dal.Tests
 {
     using CDP4Common.DTO;
-    using CDP4Common.Operations;
+    using CDP4Dal.Operations;
     using NUnit.Framework;
 
     [TestFixture]

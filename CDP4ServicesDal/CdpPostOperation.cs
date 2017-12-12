@@ -12,10 +12,10 @@ namespace CDP4ServicesDal
     using System.Linq;
     using CDP4Common;
     using CDP4Common.CommonData;
-    using CDP4Common.MetaInfo;
-    using CDP4Common.Operations;
+    using CDP4Common.MetaInfo;    
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+    using CDP4Dal.Operations;
     using Newtonsoft.Json;
 
     /// <summary>
