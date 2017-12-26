@@ -258,7 +258,7 @@ namespace CDP4JsonFileDal
                     }
 
                     // read engineeringmodel
-                    var engineeringModelFilePath = string.Format("{0}.json", engineeringModelSetup.EngineeringModelIid);
+                    var engineeringModelFilePath = $"{engineeringModelSetup.EngineeringModelIid}.json";
                     var engineeringModelZipEntry =
                         zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(engineeringModelFilePath));
                     var returned =
@@ -432,16 +432,15 @@ namespace CDP4JsonFileDal
             {
                 var returned = await this.ReadSiteDirectoryJson(filePath, credentials, cancellationToken);
 
+                var log = $"The Sitedirectory contains {returned.Count()} Things";
+                Logger.Debug(log);
+
                 // check for credentials in the return to see if person is authorised to look into this SiteDirectory
-                var person =
-                    returned.SingleOrDefault(
-                        p =>
-                        p.ClassKind == ClassKind.Person
-                        && ((CDP4Common.DTO.Person)p).ShortName == credentials.UserName) as CDP4Common.DTO.Person;
+                var person = returned.SingleOrDefault(p => p.ClassKind == ClassKind.Person && ((CDP4Common.DTO.Person)p).ShortName == credentials.UserName) as CDP4Common.DTO.Person;
 
                 if (person == null)
                 {
-                    var msg = "Unauthorized";
+                    var msg = $"{credentials.UserName} is unauthorized";
                     Logger.Error(msg);
 
                     throw new UnauthorizedAccessException(msg);
@@ -451,7 +450,6 @@ namespace CDP4JsonFileDal
                 this.Credentials = credentials;
 
                 return returned;
-
             }
             catch (Exception ex)
             {
@@ -803,10 +801,10 @@ namespace CDP4JsonFileDal
                     this.Serializer.SerializeToStream(siteRdlMDtoDefinition, modelMemStream);
                     modelMemStream.Position = 0;
 
-                    var modelFilename = string.Format("{0}\\{1}.json", SiteRdlZipLocation, siteRdl.Iid);
+                    var modelFilename = $"{SiteRdlZipLocation}\\{siteRdl.Iid}.json";
 
                     var me = zip.AddEntry(modelFilename, modelMemStream);
-                    me.Comment = string.Format("The {0} for this file based source", modelFilename);
+                    me.Comment = $"The {modelFilename} for this file based source";
 
                     zip.Save(path);
                 }
@@ -864,7 +862,7 @@ namespace CDP4JsonFileDal
                     var modelFilename = $"{ModelRdlZipLocation}\\{modelRdl.Iid}.json";
 
                     var me = zip.AddEntry(modelFilename, modelMemStream);
-                    me.Comment = string.Format("The {0} for this file based source", modelFilename);
+                    me.Comment = $"The {modelFilename} for this file based source";
 
                     zip.Save(path);
                 }
@@ -920,20 +918,13 @@ namespace CDP4JsonFileDal
                     this.Serializer.SerializeToStream(modelDtoDefinition, modelMemStream);
                     modelMemStream.Position = 0;
 
-                    var modelFilename = string.Format(
-                        "{0}\\{1}\\{1}.json",
-                        EngineeringModelZipLocation,
-                        engineeringModel.Iid);
+                    var modelFilename = $"{EngineeringModelZipLocation}\\{engineeringModel.Iid}\\{engineeringModel.Iid}.json";
 
                     var me = zip.AddEntry(modelFilename, modelMemStream);
-                    me.Comment = string.Format("The {0} for this file based source", modelFilename);
+                    me.Comment = $"The {modelFilename} for this file based source";
 
                     // Create a directory for the FileRevisions
-                    var fileRevisionDirectoryPath = string.Format(
-                        "{0}\\{1}\\{2}",
-                        EngineeringModelZipLocation,
-                        engineeringModel.Iid,
-                        FileRevisionZipLocation);
+                    var fileRevisionDirectoryPath = $"{EngineeringModelZipLocation}\\{engineeringModel.Iid}\\{FileRevisionZipLocation}";
                     zip.AddDirectoryByName(fileRevisionDirectoryPath);
 
                     zip.Save(path);
@@ -952,15 +943,10 @@ namespace CDP4JsonFileDal
                         this.Serializer.SerializeToStream(iterationDtoDefinition, iterationMemStream);
                         iterationMemStream.Position = 0;
 
-                        var iterationFilename = string.Format(
-                            "{0}\\{1}\\{2}\\{3}.json",
-                            EngineeringModelZipLocation,
-                            engineeringModel.Iid,
-                            IterationZipLocation,
-                            iteration.Iid);
+                        var iterationFilename = $"{EngineeringModelZipLocation}\\{engineeringModel.Iid}\\{IterationZipLocation}\\{iteration.Iid}.json";
 
                         var me = zip.AddEntry(iterationFilename, iterationMemStream);
-                        me.Comment = string.Format("The {0} for this file based source", iterationFilename);
+                        me.Comment = $"The {iterationFilename} for this file based source";
 
                         zip.Save(path);
                     }
@@ -995,7 +981,7 @@ namespace CDP4JsonFileDal
             {
                 if (operationContainer.Operations.Any(operation => operation.ModifiedThing.GetType() != typeof(CDP4Common.DTO.Iteration)))
                 {
-                    throw new ArgumentException(string.Format("Only instances of Things of type {0} are eligible for export", typeof(CDP4Common.DTO.Iteration).Name), "operationContainer");
+                    throw new ArgumentException($"Only instances of Things of type {typeof(CDP4Common.DTO.Iteration).Name} are eligible for export", "operationContainer");
                 }
             }
         }
@@ -1083,14 +1069,9 @@ namespace CDP4JsonFileDal
 
                     using (var outputStream = new MemoryStream(memoryStream.ToArray()))
                     {
-                        var siteReferenceDataLibraryFilename = string.Format(
-                            "{0}\\{1}.json",
-                            SiteRdlZipLocation,
-                            siteReferenceDataLibrary.Iid);
+                        var siteReferenceDataLibraryFilename = $"{SiteRdlZipLocation}\\{siteReferenceDataLibrary.Iid}.json";
                         var zipEntry = zipFile.AddEntry(siteReferenceDataLibraryFilename, outputStream);
-                        zipEntry.Comment = string.Format(
-                            "The {0} SiteReferenceDataLibrary",
-                            siteReferenceDataLibrary.ShortName);
+                        zipEntry.Comment = $"The {siteReferenceDataLibrary.ShortName} SiteReferenceDataLibrary";
                         zipFile.Save(filePath);
                     }
                 }
@@ -1126,14 +1107,9 @@ namespace CDP4JsonFileDal
                     this.Serializer.SerializeToStream(dtos, memoryStream);
                     using (var outputStream = new MemoryStream(memoryStream.ToArray()))
                     {
-                        var modelReferenceDataLibraryFilename = string.Format(
-                            "{0}\\{1}.json",
-                            ModelRdlZipLocation,
-                            modelReferenceDataLibrary.Iid);
+                        var modelReferenceDataLibraryFilename = $"{ModelRdlZipLocation}\\{modelReferenceDataLibrary.Iid}.json";
                         var zipEntry = zipFile.AddEntry(modelReferenceDataLibraryFilename, outputStream);
-                        zipEntry.Comment = string.Format(
-                            "The {0} ModelReferenceDataLibrary",
-                            modelReferenceDataLibrary.ShortName);
+                        zipEntry.Comment = $"The {modelReferenceDataLibrary.ShortName} ModelReferenceDataLibrary";
                         zipFile.Save(filePath);
                     }
                 }
@@ -1169,14 +1145,9 @@ namespace CDP4JsonFileDal
 
                         using (var outputStream = new MemoryStream(engineeringModelMemoryStream.ToArray()))
                         {
-                            var engineeringModelFilename = string.Format(
-                                @"{0}\{1}\{1}.json",
-                                EngineeringModelZipLocation,
-                                engineeringModelDto.Iid);
+                            var engineeringModelFilename = $@"{EngineeringModelZipLocation}\{engineeringModelDto.Iid}\{engineeringModelDto.Iid}.json";
                             var engineeringModelZipEntry = zipFile.AddEntry(engineeringModelFilename, outputStream);
-                            engineeringModelZipEntry.Comment = string.Format(
-                                "The {0} EngineeringModel",
-                                engineeringModel.EngineeringModelSetup.ShortName);
+                            engineeringModelZipEntry.Comment = $"The {engineeringModel.EngineeringModelSetup.ShortName} EngineeringModel";
                             zipFile.Save(filePath);
                         }
                     }
@@ -1193,16 +1164,9 @@ namespace CDP4JsonFileDal
 
                     using (var outputStream = new MemoryStream(iterationMemoryStream.ToArray()))
                     {
-                        var iterationFilename = string.Format(
-                            @"{0}\{1}\{2}\{3}.json",
-                            EngineeringModelZipLocation,
-                            engineeringModelDto.Iid,
-                            IterationZipLocation,
-                            iteration.Iid);
+                        var iterationFilename = $@"{EngineeringModelZipLocation}\{engineeringModelDto.Iid}\{IterationZipLocation}\{iteration.Iid}.json";
                         var iterationZipEntry = zipFile.AddEntry(iterationFilename, outputStream);
-                        iterationZipEntry.Comment = string.Format(
-                            "The {0} Iteration",
-                            iteration.IterationSetup.IsDeleted);
+                        iterationZipEntry.Comment = $"The {iteration.IterationSetup.IsDeleted} Iteration";
                         zipFile.Save(filePath);
                     }
                 }
@@ -1213,13 +1177,10 @@ namespace CDP4JsonFileDal
         {
             using (var zip = ZipFile.Read(filePath))
             {
-
                 // read SiteDirectory
                 var siteDirectoryFilePath = "SiteDirectory.json";
                 var siteDirectoryZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteDirectoryFilePath));
-                var returned =
-                    await
-                    this.ReadInfoFromArchiveEntry(siteDirectoryZipEntry, credentials.ArchivePassword, cancellationToken);
+                var returned = await this.ReadInfoFromArchiveEntry(siteDirectoryZipEntry, credentials.ArchivePassword, cancellationToken);
 
                 return returned;
             }
@@ -1287,14 +1248,14 @@ namespace CDP4JsonFileDal
             }
             catch (Exception ex)
             {
-                var msg = string.Format("{0}: {1}", "Failed to open file. Error", ex.Message);
+                var msg = $"{"Failed to open file. Error"}: {ex.Message}";
                 Logger.Error(msg);
 
                 throw new FileLoadException(msg);
             }
-
+            
             watch.Stop();
-            Logger.Info("JSONFile GET completed in {0} ", watch.Elapsed);
+            Logger.Info("ZipEntry {0} retrieved {1} ", zipEntry.FileName, watch.Elapsed);
 
             watch = Stopwatch.StartNew();
 
@@ -1306,7 +1267,7 @@ namespace CDP4JsonFileDal
             reinitStream.Dispose();
             extractStream.Dispose();
             watch.Stop();
-            Logger.Info("JSON Deserializer completed in {0} ", watch.Elapsed);
+            Logger.Info("JSON Deserializer of {0} completed in {1} ", zipEntry.FileName, watch.Elapsed);
             return returned;
         }
     }

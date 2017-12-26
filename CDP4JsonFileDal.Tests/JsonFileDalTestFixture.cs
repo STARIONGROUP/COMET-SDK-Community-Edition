@@ -21,6 +21,9 @@ namespace CDP4JsonFileDal.Tests
     using CDP4JsonFileDal.Json;
     using Ionic.Zip;
     using Moq;
+    using NLog;
+    using NLog.Config;
+    using NLog.Targets;
     using NUnit.Framework;
 
     using EngineeringModel = CDP4Common.EngineeringModelData.EngineeringModel;
@@ -61,6 +64,20 @@ namespace CDP4JsonFileDal.Tests
         private SiteDirectory siteDirectoryData;
         
         private string iterationContext = "/EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b/iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d";
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            var config = new LoggingConfiguration();
+            var fileTarget = new FileTarget();
+            config.AddTarget("file", fileTarget);
+            fileTarget.FileName = Path.Combine(TestContext.CurrentContext.TestDirectory, "file.txt");
+            fileTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
+            var fileRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
+            config.LoggingRules.Add(fileRule);
+            
+            LogManager.Configuration = config;
+        }
 
         [SetUp]
         public void SetUp()
