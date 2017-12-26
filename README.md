@@ -8,6 +8,15 @@ The Concurrent Design Platform Software Development Kit is an C# SDK that that i
   - CDP4JsonFileDal
   - CDP4ServicesDal
   - CDP4WspDal
+  
+## Build status
+
+AppVeyor is used to build and test the C# CDP4-SDK
+
+Branch | Build Status
+------- | :------------
+Master |  [![Build Status](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6/branch/master?svg=true)](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6)
+Development |  [![Build Status](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6/branch/development?svg=true)](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6)
 
 ## CDP4Common
 
