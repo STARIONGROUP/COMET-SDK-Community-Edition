@@ -17,10 +17,15 @@
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
     <releaseNotes>[Reorganize] Operation namespace</releaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DAL\Helpers\**" />
+    <EmbeddedResource Remove="DAL\Helpers\**" />
+    <None Remove="DAL\Helpers\**" />
+  </ItemGroup>
   
   <ItemGroup>
     <Folder Include="Composition\" />
-    <Folder Include="DAL\Helpers\" />
     <Folder Include="DAL\Protocol\" />
     <Folder Include="Operations\" />
   </ItemGroup>
