@@ -63,8 +63,6 @@ namespace CDP4JsonFileDal.Tests
         /// </summary>
         private SiteDirectory siteDirectoryData;
         
-        private string iterationContext = "/EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b/iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d";
-
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -129,6 +127,7 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
+        [Category("AppVeyorExclusion")]
         public async Task VerifyThatOpenCreatesAConnection()
         {
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
@@ -158,6 +157,7 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
+        [Category("AppVeyorExclusion")]
         public async Task VerifyThatReadReturnsCorrectDTO()
         {
             var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();
@@ -193,7 +193,7 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
-        public async Task VerifyNonExportableItems()
+        public void VerifyNonExportableItems()
         {
             // setup engineeringmodelsetup with 2 iterationsetup instances and 2 active domains
             var iterationSetupData1 = new CDP4Common.SiteDirectoryData.IterationSetup { Iid = Guid.NewGuid() };

@@ -241,7 +241,7 @@ namespace CDP4JsonFileDal
             {
                 // re-read the to extract the reference data libraries that have not yet been fully dereferenced
                 // and that are part of the required RDL's
-                var siteDirectoryData = await this.ReadSiteDirectoryJson(filePath, this.Credentials, cancellationToken);
+                var siteDirectoryData = this.ReadSiteDirectoryJson(filePath, this.Credentials);
 
                 // read file, SiteDirectory first.
                 using (var zip = ZipFile.Read(filePath))
@@ -261,12 +261,7 @@ namespace CDP4JsonFileDal
                     var engineeringModelFilePath = $"{engineeringModelSetup.EngineeringModelIid}.json";
                     var engineeringModelZipEntry =
                         zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(engineeringModelFilePath));
-                    var returned =
-                        await
-                        this.ReadInfoFromArchiveEntry(
-                            engineeringModelZipEntry,
-                            this.Credentials.Password,
-                            cancellationToken);
+                    var returned = this.ReadInfoFromArchiveEntry(engineeringModelZipEntry, this.Credentials.Password);
 
                     var iterationFilePath = $"{iteration.Iid}.json";
                     var iterationZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(iterationFilePath));
@@ -287,7 +282,7 @@ namespace CDP4JsonFileDal
                     // based on engineering model setup load rdl chain
                     var modelRdlFilePath = $"{modelRdl.Iid}.json";
                     var modelRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(modelRdlFilePath));
-                    var modelRdlItems = await this.ReadInfoFromArchiveEntry(modelRdlZipEntry, this.Credentials.ArchivePassword, cancellationToken);
+                    var modelRdlItems = this.ReadInfoFromArchiveEntry(modelRdlZipEntry, this.Credentials.ArchivePassword);
                     returned.AddRange(modelRdlItems);
 
                     // load the reference data libraries as per the containment chain
@@ -300,12 +295,7 @@ namespace CDP4JsonFileDal
 
                         var siteRdlFilePath = $"{requiredRdl.Iid}.json";
                         var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteRdlFilePath));
-                        var siteRdlItems =
-                            await
-                            this.ReadInfoFromArchiveEntry(
-                                siteRdlZipEntry,
-                                this.Credentials.ArchivePassword,
-                                cancellationToken);
+                        var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry,this.Credentials.ArchivePassword);
                         returned.AddRange(siteRdlItems);
 
                         // set the requiredRdl for the next iteration
@@ -430,13 +420,16 @@ namespace CDP4JsonFileDal
 
             try
             {
-                var returned = await this.ReadSiteDirectoryJson(filePath, credentials, cancellationToken);
-
+                var returned = this.ReadSiteDirectoryJson(filePath, credentials).ToList();
+                
                 var log = $"The Sitedirectory contains {returned.Count()} Things";
                 Logger.Debug(log);
-
-                // check for credentials in the return to see if person is authorised to look into this SiteDirectory
-                var person = returned.SingleOrDefault(p => p.ClassKind == ClassKind.Person && ((CDP4Common.DTO.Person)p).ShortName == credentials.UserName) as CDP4Common.DTO.Person;
+                
+                // check for credentials in the returned DTO's to see if the current Person is authorised to look into this SiteDirectory
+                var person = returned.SingleOrDefault(p =>
+                        p.ClassKind == ClassKind.Person &&
+                        ((CDP4Common.DTO.Person) p).ShortName == credentials.UserName) as
+                    CDP4Common.DTO.Person;
 
                 if (person == null)
                 {
@@ -451,17 +444,20 @@ namespace CDP4JsonFileDal
 
                 return returned;
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                Logger.Error(ex);
+                this.CloseSession();
+                throw;
+            }
             catch (Exception ex)
             {
+                this.CloseSession();
+
                 var msg = $"Failed to load file. Error: {ex.Message}";
                 Logger.Error(msg);
-
-                if (this.Credentials != null)
-                {
-                    this.Close();
-                }
-
-                throw new FileLoadException(msg);
+                
+                throw new FileLoadException(msg, ex);
             }
         }
         
@@ -1173,14 +1169,14 @@ namespace CDP4JsonFileDal
             }
         }
 
-        private async Task<IEnumerable<Thing>> ReadSiteDirectoryJson(string filePath, Credentials credentials, CancellationToken cancellationToken)
+        private IEnumerable<Thing> ReadSiteDirectoryJson(string filePath, Credentials credentials)
         {
             using (var zip = ZipFile.Read(filePath))
             {
                 // read SiteDirectory
                 var siteDirectoryFilePath = "SiteDirectory.json";
                 var siteDirectoryZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteDirectoryFilePath));
-                var returned = await this.ReadInfoFromArchiveEntry(siteDirectoryZipEntry, credentials.ArchivePassword, cancellationToken);
+                var returned = this.ReadInfoFromArchiveEntry(siteDirectoryZipEntry, credentials.ArchivePassword);
 
                 return returned;
             }
@@ -1203,7 +1199,7 @@ namespace CDP4JsonFileDal
         /// </returns>
         private async Task<List<Thing>> ReadIterationArchiveEntry(ZipEntry zipEntry, string archivePassword, CancellationToken cancellationToken)
         {
-            var returned = await this.ReadInfoFromArchiveEntry(zipEntry, archivePassword, cancellationToken);
+            var returned = this.ReadInfoFromArchiveEntry(zipEntry, archivePassword);
 
             // set the iteration id for returned objects
             var iterationId = returned.First().Iid;
@@ -1230,7 +1226,7 @@ namespace CDP4JsonFileDal
         /// <exception cref="Exception">
         /// throws exception if the file failed to open
         /// </exception>
-        private async Task<List<Thing>> ReadInfoFromArchiveEntry(ZipEntry zipEntry, string archivePassword, CancellationToken cancellationToken)
+        private List<Thing> ReadInfoFromArchiveEntry(ZipEntry zipEntry, string archivePassword)
         {
             if (zipEntry == null)
             {
@@ -1239,12 +1235,12 @@ namespace CDP4JsonFileDal
 
             var watch = Stopwatch.StartNew();
 
-            var extractStream = new MemoryStream();
+            var stream = new MemoryStream();
 
             try
             {
                 zipEntry.Password = archivePassword;
-                zipEntry.Extract(extractStream);
+                zipEntry.Extract(stream);
             }
             catch (Exception ex)
             {
@@ -1258,14 +1254,11 @@ namespace CDP4JsonFileDal
             Logger.Info("ZipEntry {0} retrieved {1} ", zipEntry.FileName, watch.Elapsed);
 
             watch = Stopwatch.StartNew();
-
-            // the extracted stream is closed thus needs to be reinitialized from the buffer of the old one
-            var reinitStream = new MemoryStream(extractStream.ToArray());
-
-            var returned = this.Serializer.Deserialize(reinitStream).ToList();
-
-            reinitStream.Dispose();
-            extractStream.Dispose();
+            
+            stream.Position = 0;
+            var returned = this.Serializer.Deserialize(stream).ToList();
+            
+            stream.Dispose();
             watch.Stop();
             Logger.Info("JSON Deserializer of {0} completed in {1} ", zipEntry.FileName, watch.Elapsed);
             return returned;
