@@ -265,9 +265,7 @@ namespace CDP4JsonFileDal
 
                     var iterationFilePath = $"{iteration.Iid}.json";
                     var iterationZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(iterationFilePath));
-                    returned.AddRange(
-                        await
-                        this.ReadIterationArchiveEntry(iterationZipEntry, this.Credentials.Password, cancellationToken));
+                    returned.AddRange(this.ReadIterationArchiveEntry(iterationZipEntry, this.Credentials.Password));
 
                     // use the loaded sitedirectory information to determine the required model reference data library
                     var modelRdl = engineeringModelSetup.RequiredRdl.Single();
@@ -282,7 +280,7 @@ namespace CDP4JsonFileDal
                     // based on engineering model setup load rdl chain
                     var modelRdlFilePath = $"{modelRdl.Iid}.json";
                     var modelRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(modelRdlFilePath));
-                    var modelRdlItems = this.ReadInfoFromArchiveEntry(modelRdlZipEntry, this.Credentials.ArchivePassword);
+                    var modelRdlItems = this.ReadInfoFromArchiveEntry(modelRdlZipEntry, this.Credentials.Password);
                     returned.AddRange(modelRdlItems);
 
                     // load the reference data libraries as per the containment chain
@@ -295,7 +293,7 @@ namespace CDP4JsonFileDal
 
                         var siteRdlFilePath = $"{requiredRdl.Iid}.json";
                         var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteRdlFilePath));
-                        var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry,this.Credentials.ArchivePassword);
+                        var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry, this.Credentials.Password);
                         returned.AddRange(siteRdlItems);
 
                         // set the requiredRdl for the next iteration
@@ -421,14 +419,14 @@ namespace CDP4JsonFileDal
             try
             {
                 var returned = this.ReadSiteDirectoryJson(filePath, credentials).ToList();
-                
+
                 var log = $"The Sitedirectory contains {returned.Count()} Things";
                 Logger.Debug(log);
-                
+
                 // check for credentials in the returned DTO's to see if the current Person is authorised to look into this SiteDirectory
                 var person = returned.SingleOrDefault(p =>
                         p.ClassKind == ClassKind.Person &&
-                        ((CDP4Common.DTO.Person) p).ShortName == credentials.UserName) as
+                        ((CDP4Common.DTO.Person)p).ShortName == credentials.UserName) as
                     CDP4Common.DTO.Person;
 
                 if (person == null)
@@ -456,11 +454,11 @@ namespace CDP4JsonFileDal
 
                 var msg = $"Failed to load file. Error: {ex.Message}";
                 Logger.Error(msg);
-                
+
                 throw new FileLoadException(msg, ex);
             }
         }
-        
+
         /// <summary>
         /// Closes the connection to an active File source
         /// </summary>
@@ -614,7 +612,7 @@ namespace CDP4JsonFileDal
                 Iid = exportPerson.Iid,
                 GivenName = exportPerson.GivenName,
                 Surname = exportPerson.Surname,
-                Email = exportPerson.DefaultEmailAddress != null  ? exportPerson.DefaultEmailAddress.Value : null
+                Email = exportPerson.DefaultEmailAddress != null ? exportPerson.DefaultEmailAddress.Value : null
             };
 
             var organization = exportPerson.Organization != null
@@ -884,7 +882,7 @@ namespace CDP4JsonFileDal
         {
             if (!engineeringModelItems.Any() && engineeringModelItems.All(x => x.Any()))
             {
-                throw new ArgumentException(                    "The engineeringmodel item collection must not be empty.", "engineeringModelItems");
+                throw new ArgumentException("The engineeringmodel item collection must not be empty.", "engineeringModelItems");
             }
 
             if (!iterationItems.Any() && iterationItems.All(x => x.Any()))
@@ -1176,7 +1174,7 @@ namespace CDP4JsonFileDal
                 // read SiteDirectory
                 var siteDirectoryFilePath = "SiteDirectory.json";
                 var siteDirectoryZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteDirectoryFilePath));
-                var returned = this.ReadInfoFromArchiveEntry(siteDirectoryZipEntry, credentials.ArchivePassword);
+                var returned = this.ReadInfoFromArchiveEntry(siteDirectoryZipEntry, credentials.Password);
 
                 return returned;
             }
@@ -1191,13 +1189,10 @@ namespace CDP4JsonFileDal
         /// <param name="archivePassword">
         /// The password of the archive.
         /// </param>
-        /// <param name="cancellationToken">
-        /// The cancellation token used to cancel the async read.
-        /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        private async Task<List<Thing>> ReadIterationArchiveEntry(ZipEntry zipEntry, string archivePassword, CancellationToken cancellationToken)
+        private List<Thing> ReadIterationArchiveEntry(ZipEntry zipEntry, string archivePassword)
         {
             var returned = this.ReadInfoFromArchiveEntry(zipEntry, archivePassword);
 
@@ -1249,15 +1244,15 @@ namespace CDP4JsonFileDal
 
                 throw new FileLoadException(msg);
             }
-            
+
             watch.Stop();
             Logger.Info("ZipEntry {0} retrieved {1} ", zipEntry.FileName, watch.Elapsed);
 
             watch = Stopwatch.StartNew();
-            
+
             stream.Position = 0;
             var returned = this.Serializer.Deserialize(stream).ToList();
-            
+
             stream.Dispose();
             watch.Stop();
             Logger.Info("JSON Deserializer of {0} completed in {1} ", zipEntry.FileName, watch.Elapsed);

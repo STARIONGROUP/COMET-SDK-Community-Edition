@@ -170,7 +170,7 @@ namespace CDP4JsonSerializer.JsonConverter
         {
             var metainfo = this.metaDataProvider.GetMetaInfo(dto.ClassKind.ToString());
 
-            var classlessDto = new ClasslessDTO(this.metaDataProvider);
+            var classlessDto = new ClasslessDTO();
             foreach (var property in jsonObject.Properties())
             {
                 var propertyName = Utils.CapitalizeFirstLetter(property.Name);

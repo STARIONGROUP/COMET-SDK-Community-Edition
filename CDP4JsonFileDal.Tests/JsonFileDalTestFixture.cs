@@ -62,7 +62,7 @@ namespace CDP4JsonFileDal.Tests
         /// An instance of site directory data used to be returned from the mocked session.
         /// </summary>
         private SiteDirectory siteDirectoryData;
-        
+
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -73,7 +73,7 @@ namespace CDP4JsonFileDal.Tests
             fileTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
             var fileRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
             config.LoggingRules.Add(fileRule);
-            
+
             LogManager.Configuration = config;
         }
 
@@ -81,9 +81,9 @@ namespace CDP4JsonFileDal.Tests
         public void SetUp()
         {
             var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "LOFT_ECSS-E-TM-10-25_AnnexC.zip");
-            
+
             this.cancelationTokenSource = new CancellationTokenSource();
-            this.credentials = new Credentials("admin", "pass", new Uri(path), "pass");
+            this.credentials = new Credentials("admin", "pass", new Uri(path));
             this.session = new Mock<ISession>();
             this.dal = new JsonFileDal();
             this.dal.Session = this.session.Object;
@@ -99,16 +99,16 @@ namespace CDP4JsonFileDal.Tests
             this.credentials = null;
             this.dal = null;
         }
-        
+
         [Test]
         public void VerifyCacheIsPresentOnOperationThing()
         {
             var iterationPoco = new CDP4Common.EngineeringModelData.Iteration
-                                    {
-                                        Iid = Guid.NewGuid(),
-                                        Cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>(),
-                                        Container = new EngineeringModel() {Iid = Guid.NewGuid()}
-                                    };
+            {
+                Iid = Guid.NewGuid(),
+                Cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>(),
+                Container = new EngineeringModel() { Iid = Guid.NewGuid() }
+            };
             var iterationDto = iterationPoco.ToDto();
 
             Assert.NotNull(iterationDto.QuerySourceThing());
@@ -127,7 +127,6 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
-        [Category("AppVeyorExclusion")]
         public async Task VerifyThatOpenCreatesAConnection()
         {
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
@@ -157,14 +156,13 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
-        [Category("AppVeyorExclusion")]
         public async Task VerifyThatReadReturnsCorrectDTO()
         {
             var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();
-            
+
             Assert.NotNull(returned);
             Assert.IsNotEmpty(returned);
-            
+
             // read info from the open call
             var engineeringModelSetupDto = returned.Single(d => d.ClassKind == ClassKind.EngineeringModelSetup) as EngineeringModelSetup;
             var iterationSetupDto = returned.First(d => d.ClassKind == ClassKind.IterationSetup) as IterationSetup;
@@ -174,13 +172,13 @@ namespace CDP4JsonFileDal.Tests
 
             // setup expected SiteDirectory instance
             var iterationSetupData = new CDP4Common.SiteDirectoryData.IterationSetup { IterationIid = iterationSetupDto.IterationIid };
-            var modelRdlData = new CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary  { Iid = engineeringModelSetupDto.RequiredRdl.Single() };
+            var modelRdlData = new CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary { Iid = engineeringModelSetupDto.RequiredRdl.Single() };
             var engineeringModelSetupData = new CDP4Common.SiteDirectoryData.EngineeringModelSetup { EngineeringModelIid = engineeringModelSetupDto.EngineeringModelIid };
             engineeringModelSetupData.RequiredRdl.Add(modelRdlData);
             engineeringModelSetupData.IterationSetup.Add(iterationSetupData);
             this.siteDirectoryData.Model.Add(engineeringModelSetupData);
-            
-            var iterObject = new Iteration { Iid = iterationSetupDto.IterationIid};
+
+            var iterObject = new Iteration { Iid = iterationSetupDto.IterationIid };
 
             var readResult = (await this.dal.Read(iterObject, this.cancelationTokenSource.Token)).ToList();
 
@@ -219,7 +217,7 @@ namespace CDP4JsonFileDal.Tests
 
             // determine all Thing instances that should not be included in the export
             var nonExportables = JsonFileDal.DetermineNonExportableItems(
-                this.siteDirectoryData, new List<SiteReferenceDataLibrary>(),  new[] { iterationSetupData1 }.ToList());
+                this.siteDirectoryData, new List<SiteReferenceDataLibrary>(), new[] { iterationSetupData1 }.ToList());
 
             // the container engineeringmodel of iterationsetupdata 1 should be in the export, so not returned here
             CollectionAssert.DoesNotContain(nonExportables, engineeringModelSetupData1);
@@ -246,7 +244,7 @@ namespace CDP4JsonFileDal.Tests
             var exchangeFileHeader = new ExchangeFileHeader();
             var zipFile = new ZipFile();
             const string FilePath = "test";
-            
+
             Assert.Throws<ArgumentNullException>(() => this.dal.WriteHeaderFile(null, exchangeFileHeader, zipFile, FilePath));
             Assert.Throws<ArgumentNullException>(() => this.dal.WriteHeaderFile(person, null, zipFile, FilePath));
             Assert.Throws<ArgumentNullException>(() => this.dal.WriteHeaderFile(person, exchangeFileHeader, null, FilePath));
@@ -261,17 +259,17 @@ namespace CDP4JsonFileDal.Tests
             var engineeringModelSetups = new List<CDP4Common.SiteDirectoryData.EngineeringModelSetup> { new CDP4Common.SiteDirectoryData.EngineeringModelSetup() };
             var referencedIterationSetups = new List<CDP4Common.SiteDirectoryData.IterationSetup> { new CDP4Common.SiteDirectoryData.IterationSetup() };
             var zipFile = new ZipFile();
-            
+
             // assert in reverse method variable order assignment to trip the proper variable exception
             Assert.Throws<ArgumentNullException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, zipFile, null));
             Assert.Throws<ArgumentNullException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, null, null));
-            
+
             referencedIterationSetups.Clear();
             Assert.Throws<ArgumentException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, null, null));
 
             engineeringModelSetups.Clear();
             Assert.Throws<ArgumentException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, null, null));
-            
+
             referencedSiteRdls.Clear();
             Assert.Throws<ArgumentException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, null, null));
 
@@ -288,7 +286,7 @@ namespace CDP4JsonFileDal.Tests
             // assert in reverse method variable order assignment to trip the proper variable exception
             Assert.Throws<ArgumentNullException>(() => this.dal.WriteSiteReferenceDataLibraryFiles(siteReferenceDataLibraryItems, zipFile, null));
             Assert.Throws<ArgumentNullException>(() => this.dal.WriteSiteReferenceDataLibraryFiles(siteReferenceDataLibraryItems, null, null));
-            
+
             siteReferenceDataLibraryItems.Clear();
             Assert.Throws<ArgumentException>(() => this.dal.WriteSiteReferenceDataLibraryFiles(siteReferenceDataLibraryItems, null, null));
         }
@@ -317,10 +315,10 @@ namespace CDP4JsonFileDal.Tests
             // assert in reverse method variable order assignment to trip the proper variable exception
             Assert.Throws<ArgumentNullException>(() => this.dal.WriteEngineeringModelFiles(engineeringModelItems, iterationItems, zipFile, null));
             Assert.Throws<ArgumentNullException>(() => this.dal.WriteEngineeringModelFiles(engineeringModelItems, iterationItems, null, null));
-            
+
             iterationItems.Clear();
             Assert.Throws<ArgumentException>(() => this.dal.WriteEngineeringModelFiles(engineeringModelItems, iterationItems, null, null));
-            
+
             engineeringModelItems.Clear();
             Assert.Throws<ArgumentException>(() => this.dal.WriteEngineeringModelFiles(engineeringModelItems, iterationItems, null, null));
         }
@@ -332,12 +330,12 @@ namespace CDP4JsonFileDal.Tests
 
             Assert.That(async () => await this.dal.Read(alias, new CancellationToken()), Throws.TypeOf<NotSupportedException>());
         }
-        
+
         [Test]
         public async Task VerifyThatWriteAsyncOperationContainerThrowsException()
         {
             var operationContainer = new OperationContainer("/SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650", 1);
-            
+
             Assert.That(async () => await this.dal.Write(operationContainer, It.IsAny<IEnumerable<string>>()), Throws.TypeOf<NotSupportedException>());
         }
 
@@ -367,14 +365,14 @@ namespace CDP4JsonFileDal.Tests
             var iterationIid = new Guid("b58ea73d-350d-4520-b9d9-a52c75ac2b5d");
             var iterationSetup = new IterationSetup(Guid.NewGuid(), 0);
             var iterationSetupPoco = new CDP4Common.SiteDirectoryData.IterationSetup(iterationSetup.Iid, cache, this.credentials.Uri);
-            var model= new EngineeringModel(Guid.NewGuid(), cache, this.credentials.Uri);
+            var model = new EngineeringModel(Guid.NewGuid(), cache, this.credentials.Uri);
             var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup();
             var requiredRdl = new CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary();
             var person = new Person { ShortName = "admin" };
             var lazyPerson = new Lazy<Thing>(() => person);
             var iterationPoco = new CDP4Common.EngineeringModelData.Iteration(iterationIid, cache, this.credentials.Uri) { IterationSetup = iterationSetupPoco };
             model.Iteration.Add(iterationPoco);
-            var iteration =  (Iteration)iterationPoco.ToDto();
+            var iteration = (Iteration)iterationPoco.ToDto();
             model.EngineeringModelSetup = modelSetup;
             this.siteDirectoryData.Model.Add(modelSetup);
             modelSetup.RequiredRdl.Add(requiredRdl);
@@ -384,10 +382,10 @@ namespace CDP4JsonFileDal.Tests
             iteration.IterationSetup = iterationSetup.Iid;
             var clone1 = iteration.DeepClone<Iteration>();
             operation = new Operation(iteration, clone1, OperationKind.Update);
-            operationContainers = new[] { new OperationContainer("/EngineeringModel/"+model.Iid+"/iteration/"+iteration.Iid, 0) };
+            operationContainers = new[] { new OperationContainer("/EngineeringModel/" + model.Iid + "/iteration/" + iteration.Iid, 0) };
             operationContainers.Single().AddOperation(operation);
 
-           Assert.IsEmpty(await this.dal.Write(operationContainers, files));
+            Assert.IsEmpty(await this.dal.Write(operationContainers, files));
         }
     }
 }

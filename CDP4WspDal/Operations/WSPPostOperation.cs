@@ -87,7 +87,7 @@ namespace CDP4WspDal.Operations
                     this.Create.Add(operation.ModifiedThing);
                     break;
                 case OperationKind.Delete:
-                    this.Delete.Add(new ClasslessDTO(this.metaDataProvider).FromThing(operation.ModifiedThing));
+                    this.Delete.Add(ClasslessDtoFactory.FromThing(this.metaDataProvider, operation.ModifiedThing));
                     break;
                 case OperationKind.Update:
                     this.ResolveUpdate(operation);
@@ -107,9 +107,9 @@ namespace CDP4WspDal.Operations
         /// </param>
         private void ResolveUpdate(Operation operation)
         {
-            var original = new ClasslessDTO(this.metaDataProvider).FullFromThing(operation.OriginalThing);
-            var modifiedFull = new ClasslessDTO(this.metaDataProvider).FullFromThing(operation.ModifiedThing);
-            var modified = new ClasslessDTO(this.metaDataProvider).FullFromThing(operation.ModifiedThing);
+            var original = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, operation.OriginalThing);
+            var modifiedFull = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, operation.ModifiedThing);
+            var modified = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, operation.ModifiedThing);
 
             var listsToDelete = new Dictionary<string, IEnumerable<object>>();
             var listsToAdd = new Dictionary<string, IEnumerable<object>>();
@@ -222,7 +222,7 @@ namespace CDP4WspDal.Operations
 
             if (listsToDelete.Count > 0)
             {
-                var deleteDto = new ClasslessDTO(this.metaDataProvider).FromThing(operation.ModifiedThing);
+                var deleteDto = ClasslessDtoFactory.FromThing(this.metaDataProvider, operation.ModifiedThing);
 
                 foreach (var kvp in listsToDelete)
                 {

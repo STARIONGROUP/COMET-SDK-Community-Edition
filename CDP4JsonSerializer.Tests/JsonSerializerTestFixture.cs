@@ -329,10 +329,10 @@ namespace CDP4JsonSerializer.Tests
             parameter.ParameterSubscription.Add(parameterSubscription);
             parameterSubscription.ValueSet.Add(subscriptionValueset);
 
-            postoperation.Update.Add(new ClasslessDTO(this.metadataprovider).FullFromThing(subscriptionValueset.ToDto()));
-            postoperation.Update.Add(new ClasslessDTO(this.metadataprovider).FullFromThing(parameterSubscription.ToDto()));
+            postoperation.Update.Add(ClasslessDtoFactory.FullFromThing(this.metadataprovider,subscriptionValueset.ToDto()));
+            postoperation.Update.Add(ClasslessDtoFactory.FullFromThing(this.metadataprovider,parameterSubscription.ToDto()));
             postoperation.Create.Add(valueset.ToDto());
-            postoperation.Delete.Add(new ClasslessDTO(this.metadataprovider).FullFromThing(ed.ToDto()));
+            postoperation.Delete.Add(ClasslessDtoFactory.FullFromThing(this.metadataprovider,ed.ToDto()));
 
             using (var memoryStream = new MemoryStream())
             {

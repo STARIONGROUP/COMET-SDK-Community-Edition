@@ -47,7 +47,7 @@ namespace CDP4JsonFileDal.Tests
         {
             var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "minimalcontent.zip");
             
-            this.credentials = new Credentials("admin", "pass", new Uri(path), "pass");
+            this.credentials = new Credentials("admin", "pass", new Uri(path));
             this.dal = new JsonFileDal();
 
             this.session = new Session(this.dal, this.credentials);

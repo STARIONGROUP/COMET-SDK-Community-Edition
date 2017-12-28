@@ -18,12 +18,7 @@ namespace CDP4Dal.DAL
         /// Backing field of the <see cref="Password"/> property where the password is stored
         /// </summary>
         private readonly string password;
-
-        /// <summary>
-        /// Backing field of the <see cref="ArchivePassword"/> property where the password of the file-based archive is stored
-        /// </summary>
-        private readonly string archivePassword;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Credentials"/> class. 
         /// </summary>
@@ -37,7 +32,7 @@ namespace CDP4Dal.DAL
         /// the <see cref="Uri"/> of the data-store
         /// </param>
         /// <param name="archivepassword">The password of the archive, to be set if the </param>
-        public Credentials(string username, string password, Uri uri, string archivepassword = "")
+        public Credentials(string username, string password, Uri uri)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -57,8 +52,6 @@ namespace CDP4Dal.DAL
             this.UserName = username;
             this.password = password;
             this.Uri = uri;
-
-            this.archivePassword = archivepassword;
         }
 
         /// <summary>
@@ -81,13 +74,5 @@ namespace CDP4Dal.DAL
         /// Gets the <see cref="Uri"/> of the data-store 
         /// </summary>
         public Uri Uri { get; private set; }
-
-        /// <summary>
-        /// Gets the password that is used to open filebased data-stores
-        /// </summary>
-        public string ArchivePassword
-        {
-            get { return this.archivePassword; }
-        }
     }
 }

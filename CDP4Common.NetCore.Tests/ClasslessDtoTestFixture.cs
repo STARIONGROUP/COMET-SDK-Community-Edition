@@ -15,12 +15,12 @@ namespace CDP4Common.Tests
     [TestFixture]
     public class ClasslessDtoTestFixture
     {
-        private ClasslessDTO classless;
+        private MetaDataProvider metaDataProvider;
 
         [SetUp]
         public void Setup()
         {
-            this.classless = new ClasslessDTO(new MetaDataProvider());
+            this.metaDataProvider = new MetaDataProvider();
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace CDP4Common.Tests
 
             var properties = new List<string> {"DefaultPersonRole", "Iid"};
 
-            var returned = this.classless.FromThing(siteDir, properties);
+            var returned = ClasslessDtoFactory.FromThing(this.metaDataProvider, siteDir, properties);
 
             Assert.AreEqual(3, returned.Count);
             object guid;
@@ -45,7 +45,7 @@ namespace CDP4Common.Tests
             var siteDir = new SiteDirectory(Guid.NewGuid(), 2);
             siteDir.DefaultPersonRole = Guid.NewGuid();
             
-            var returned = this.classless.FullFromThing(siteDir);
+            var returned = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, siteDir);
 
             Assert.IsTrue(returned.ContainsKey("ClassKind"));
             Assert.IsTrue(returned.ContainsKey("Iid"));
@@ -82,21 +82,21 @@ namespace CDP4Common.Tests
         public void TestNullThing()
         {
             Thing thing = null;
-           Assert.Throws<ArgumentNullException>(() => this.classless.FromThing(thing));
+           Assert.Throws<ArgumentNullException>(() => ClasslessDtoFactory.FromThing(this.metaDataProvider, thing));
         }
 
         [Test]
         public void TestNullThing2()
         {
             Thing thing = null;
-            Assert.Throws<ArgumentNullException>(() => this.classless.FullFromThing(thing));
+            Assert.Throws<ArgumentNullException>(() => ClasslessDtoFactory.FullFromThing(this.metaDataProvider, thing));
         }
 
         [Test]
         public void VerifyThatNullableIsTakenIntoAccount()
         {
             Thing thing = new ParameterGroup();
-            var classlessDTO = this.classless.FullFromThing(thing);
+            var classlessDTO = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, thing);
             object containingGroup;
             classlessDTO.TryGetValue("ContainingGroup", out containingGroup);
             Assert.IsNull(containingGroup);
