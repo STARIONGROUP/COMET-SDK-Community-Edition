@@ -2,6 +2,8 @@ image: Visual Studio 2017
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+configuration:
+  - Debug
 before_build:
   - cmd: nuget install NUnit.Console -Version 3.7.0 -OutputDirectory tools
   - cmd: nuget install OpenCover -Version 4.6.519 -OutputDirectory tools
