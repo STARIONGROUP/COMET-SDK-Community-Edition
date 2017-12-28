@@ -127,6 +127,7 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
+        [Category("AppVeyorExclusion")]
         public async Task VerifyThatOpenCreatesAConnection()
         {
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
@@ -156,6 +157,7 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
+        [Category("AppVeyorExclusion")]
         public async Task VerifyThatReadReturnsCorrectDTO()
         {
             var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();
