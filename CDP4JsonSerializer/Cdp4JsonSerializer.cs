@@ -8,6 +8,7 @@ namespace CDP4JsonSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using CDP4Common.MetaInfo;
@@ -76,62 +77,115 @@ namespace CDP4JsonSerializer
         /// The collection source.
         /// </param>
         /// <param name="outputStream">
-        /// The output stream.
+        /// The output stream to which the serialized JSON objects are written
         /// </param>
         public void SerializeToStream(object collectionSource, Stream outputStream)
         {
+            if (outputStream == null)
+            {
+                throw new ArgumentNullException("outputStream", "outputstream may not be null");
+            }
+
             if (this.RequestDataModelVersion == null || this.MetaInfoProvider == null)
             {
                 throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
             }
 
-            var serializer = new JsonSerializer
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Include
-            };
+            var sw = new Stopwatch();
+            sw.Start();
 
-            // register converters
-            serializer.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
-            serializer.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
+            var serializer = this.CreateJsonSerializer();
 
+            Logger.Trace("initializing JsonTextWriter");
             var jsonWriter = new JsonTextWriter(new StreamWriter(outputStream));
 
             serializer.Serialize(jsonWriter, collectionSource);
             jsonWriter.Flush();
+
+            sw.Stop();
+            Logger.Debug("SerializeToStream in {0} [ms]", sw.Elapsed);
+        }
+
+        /// <summary>
+        /// Serialize the <see cref="CDP4Common.CommonData.Thing"/> to a JSON stream
+        /// </summary>
+        /// <param name="source">
+        /// The <see cref="CDP4Common.CommonData.Thing"/>
+        /// </param>
+        /// <param name="outputStream">
+        /// The output stream to which the serialized JSON objects are written
+        /// </param>
+        /// <param name="isExtentDeep">
+        /// A value indicating whether the contained <see cref="CDP4Common.CommonData.Thing"/> shall be included in the JSON stream
+        /// </param>
+        /// <returns>A JSON stream</returns>
+        public void SerializeToStream(CDP4Common.CommonData.Thing source, Stream outputStream, bool isExtentDeep)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source", "the source Thing may not be null");
+            }
+
+            if (outputStream == null)
+            {
+                throw new ArgumentNullException("outputStream", "outputstream may not be null");
+            }
+
+            if (this.RequestDataModelVersion == null || this.MetaInfoProvider == null)
+            {
+                throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
+            }
+
+            var dtos = new List<Thing>();
+            if (isExtentDeep)
+            {
+                var pocos = source.QueryContainedThingsDeep();
+                foreach (var poco in pocos)
+                {
+                    dtos.Add(poco.ToDto());
+                }
+            }
+            else
+            {
+                dtos.Add(source.ToDto());
+            }
+
+            Logger.Debug("serializing {0} DTO's", dtos.Count);
+
+            this.SerializeToStream(dtos, outputStream);
         }
 
         /// <summary>
         /// Serialize the <see cref="CDP4Common.CommonData.Thing"/> to a JSON string
         /// </summary>
         /// <param name="source">The <see cref="CDP4Common.CommonData.Thing"/></param>
-        /// <param name="extendDeep">A value indicating whether the contained <see cref="CDP4Common.CommonData.Thing"/> shall be processed</param>
+        /// <param name="isExtentDeep">A value indicating whether the contained <see cref="CDP4Common.CommonData.Thing"/> shall be processed</param>
         /// <returns>The JSON string</returns>
-        public string SerializeToString(CDP4Common.CommonData.Thing source, bool extendDeep)
+        public string SerializeToString(CDP4Common.CommonData.Thing source, bool isExtentDeep)
         {
             if (this.RequestDataModelVersion == null || this.MetaInfoProvider == null)
             {
                 throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
             }
-
-            var dtoCollection = new List<Thing>();
-            if (extendDeep)
-            {
-                dtoCollection.AddRange(this.GetThingsDeep(source));
-            }
-            else
-            {
-                dtoCollection.Add(source.ToDto());
-            }
-
+            
             string jsonString;
+            Logger.Trace("initializing MemoryStream");
+
             using (var stream = new MemoryStream())
             {
-                this.SerializeToStream(dtoCollection, stream);
+                this.SerializeToStream(source, stream, isExtentDeep);
+
+                Logger.Trace("rewind MemoryStream");
                 stream.Position = 0;
+
+                Logger.Trace("initializing StreamReader");
                 using (var reader = new StreamReader(stream))
                 {
+                    var sw = new Stopwatch();
+                    sw.Start();
                     jsonString = reader.ReadToEnd();
+                    sw.Stop();
+                    Logger.Trace("write json stream to json string in {0} [ms]", sw.ElapsedMilliseconds);
                 }
             }
 
@@ -171,16 +225,8 @@ namespace CDP4JsonSerializer
                 throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
             }
 
-            var serializer = new JsonSerializer
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
-            };
-
-            // register converters
-            serializer.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
-            serializer.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
-
+            var serializer = this.CreateJsonSerializer();
+            
             T data;
             using (var streamReader = new StreamReader(contentStream))
             using (var jsonTextReader = new JsonTextReader(streamReader))
@@ -192,23 +238,25 @@ namespace CDP4JsonSerializer
         }
 
         /// <summary>
-        /// Gets the <see cref="Thing"/> and all its contained <see cref="Thing"/>
+        /// Create a <see cref="JsonSerializer"/>
         /// </summary>
-        /// <param name="source">the <see cref="CDP4Common.CommonData.Thing"/></param>
-        /// <returns>The collection of <see cref="Thing"/></returns>
-        private IEnumerable<Thing> GetThingsDeep(CDP4Common.CommonData.Thing source)
+        /// <returns>
+        /// an instance of <see cref="JsonSerializer"/>
+        /// </returns>
+        private JsonSerializer CreateJsonSerializer()
         {
-            var things = new List<Thing> { source.ToDto() };
-            foreach (var containerList in source.ContainerLists)
+            Logger.Trace("initializing JsonSerializer");
+            var serializer = new JsonSerializer
             {
-                var subThingsList = containerList.Cast<CDP4Common.CommonData.Thing>().ToList();
-                foreach (var thing in subThingsList)
-                {
-                    things.AddRange(this.GetThingsDeep(thing));
-                }
-            }
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            
+            Logger.Trace("register converters");
+            serializer.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
+            serializer.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
 
-            return things;
+            return serializer;
         }
     }
 }

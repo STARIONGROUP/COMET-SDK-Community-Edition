@@ -46,12 +46,27 @@ namespace CDP4JsonSerializer
         void SerializeToStream(object collectionSource, Stream outputStream);
 
         /// <summary>
+        /// Serialize the <see cref="CDP4Common.CommonData.Thing"/> to a JSON stream
+        /// </summary>
+        /// <param name="source">
+        /// The <see cref="CDP4Common.CommonData.Thing"/>
+        /// </param>
+        /// <param name="outputStream">
+        /// The output stream to which the serialized JSON objects are written
+        /// </param>
+        /// <param name="isExtentDeep">
+        /// A value indicating whether the contained <see cref="CDP4Common.CommonData.Thing"/> shall be included in the JSON stream
+        /// </param>
+        /// <returns>A JSON stream</returns>
+        void SerializeToStream(CDP4Common.CommonData.Thing source, Stream outputStream, bool isExtentDeep);
+
+        /// <summary>
         /// Serialize the <see cref="CDP4Common.CommonData.Thing"/> to a JSON string
         /// </summary>
         /// <param name="source">The <see cref="CDP4Common.CommonData.Thing"/></param>
-        /// <param name="extendDeep">A value indicating whether the contained <see cref="CDP4Common.CommonData.Thing"/> shall be processed</param>
+        /// <param name="isExtentDeep">A value indicating whether the contained <see cref="CDP4Common.CommonData.Thing"/> shall be processed</param>
         /// <returns>The JSON string</returns>
-        string SerializeToString(CDP4Common.CommonData.Thing source, bool extendDeep);
+        string SerializeToString(CDP4Common.CommonData.Thing source, bool isExtentDeep);
 
         /// <summary>
         /// Convenience method that deserializes the passed in JSON content stream

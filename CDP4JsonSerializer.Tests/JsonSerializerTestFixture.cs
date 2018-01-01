@@ -23,7 +23,6 @@ namespace CDP4JsonSerializer.Tests
     using Newtonsoft.Json;
     using NUnit.Framework;
 
-
     using Dto = CDP4Common.DTO;
     using File = System.IO.File;
 
@@ -37,17 +36,14 @@ namespace CDP4JsonSerializer.Tests
         private readonly Uri uri = new Uri("http://www.rheagroup.com");
         private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
         private IMetaDataProvider metadataprovider = new MetaDataProvider();
-
         private Cdp4JsonSerializer serializer;
 
         [SetUp]
         public void Setup()
         {
-            var metadataprovider = new MetaDataProvider();
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-
         }
-
+        
         [Test]
         public void VerifyThatNullDatetimeSerializationWorks()
         {
@@ -72,8 +68,7 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatSerializeTimeCorrectly()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-
-
+            
             var sitedir = new Dto.SiteDirectory(Guid.NewGuid(), 1);
 
             sitedir.LastModifiedOn = DateTime.Parse("2222-02-02T22:22:22.222222");
@@ -95,8 +90,7 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatSpecialStringcharAreSerializedCorrectly()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-
-
+            
             var definition = new Dto.Definition(Guid.NewGuid(), 1);
 
             definition.Content = "abc \"hello world\"";
@@ -117,8 +111,7 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatValueArrayAreSerializedCorrectly()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-
-
+            
             var parameterValueSet = new Dto.ParameterValueSet(Guid.NewGuid(), 1);
             var valuearray = new [] {"123", "abc"};
 
@@ -145,8 +138,7 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatEnumAreSeserializeCorrectly()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-
-
+            
             var email = new Dto.EmailAddress(Guid.NewGuid(), 1);
             email.Value = "test";
             email.VcardType = 0;
@@ -168,8 +160,7 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatEnumAreSeserializeCorrectly2()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-
-
+            
             var email = new Dto.EmailAddress(Guid.NewGuid(), 1);
             email.Value = "test";
             email.VcardType = VcardEmailAddressKind.HOME;
@@ -191,8 +182,7 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatEnumAreSeserializeCorrectly3()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-
-
+            
             var email = new Dto.TelephoneNumber(Guid.NewGuid(), 1);
             email.Value = "test";
             email.VcardType.Add((VcardTelephoneNumberKind)5);
