@@ -14,7 +14,7 @@ build:
 test:
   assemblies:
     only:
-      - '**\*.Tests.dll'
+      - '**\*.dll'
   categories:
     except:
       - AppVeyorExclusion
