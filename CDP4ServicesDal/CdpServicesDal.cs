@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDal.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+//   Copyright (c) 2015-2018 RHEA System S.A.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ namespace CDP4ServicesDal
         /// <summary>
         /// The <see cref="HttpClient"/> that is reused for each HTTP request by the current <see cref="Dal"/>.
         /// </summary>
-        private HttpClient httpClient;
+        private readonly HttpClient httpClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CdpServicesDal"/> class.

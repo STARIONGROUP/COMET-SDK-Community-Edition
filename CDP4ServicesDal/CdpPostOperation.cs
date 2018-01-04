@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpPostOperation.cs" company="RHEA S.A.">
-//   Copyright (c) 2015 RHEA S.A.
+//   Copyright (c) 2015-2018 RHEA S.A.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ namespace CDP4ServicesDal
     /// The CDP POST operation
     /// </summary>
     /// <seealso cref="PostOperation" />
-    public class CdpPostOperation : PostOperation
+    internal class CdpPostOperation : PostOperation
     {
         /// <summary>
         /// The <see cref="IMetaDataProvider"/> used in the application
@@ -33,7 +33,7 @@ namespace CDP4ServicesDal
         /// Initializes a new instance of the <see cref="CdpPostOperation"/> class.
         /// </summary>
         /// <param name="metaDataProvider">The <see cref="IMetaDataProvider"/></param>
-        public CdpPostOperation(IMetaDataProvider metaDataProvider)
+        internal CdpPostOperation(IMetaDataProvider metaDataProvider)
         {
             this.metaDataProvider = metaDataProvider;
         }
@@ -103,9 +103,9 @@ namespace CDP4ServicesDal
         /// </param>
         private void ResolveUpdate(Operation operation)
         {
-            var original = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, operation.OriginalThing); // new ClasslessDTO(this.metaDataProvider).FullFromThing(operation.OriginalThing);
-            var modifiedFull = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, operation.ModifiedThing); // new ClasslessDTO(this.metaDataProvider).FullFromThing(operation.ModifiedThing);
-            var modified = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, operation.ModifiedThing); //new ClasslessDTO(this.metaDataProvider).FullFromThing(operation.ModifiedThing);
+            var original = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, operation.OriginalThing);
+            var modifiedFull = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, operation.ModifiedThing);
+            var modified = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, operation.ModifiedThing);
 
             var listsToDelete = new Dictionary<string, IEnumerable<object>>();
             var listsToAdd = new Dictionary<string, IEnumerable<object>>();
