@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4JsonFileDal Community Edition</Title>
-    <Version>1.0.0-rc9</Version>
+    <Version>1.0.0-rc10</Version>
     <Description>CDP4 Json File Dal Plugin</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
@@ -15,12 +15,11 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
-    <releaseNotes>[Update] to CDP4Dal-CE and CDP4JsonSerializer-CE 1.0.0-rc9</releaseNotes>
+    <releaseNotes>[Update] to CDP4Dal-CE and CDP4JsonSerializer-CE 1.0.0-rc10</releaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="DotNetZip" Version="1.10.1" />
-    <PackageReference Include="NLog" Version="5.0.0-beta11" />
     <PackageReference Include="Rx-Core" version="2.2.5" />
     <PackageReference Include="Rx-Interfaces" version="2.2.5" />
     <PackageReference Include="Rx-Linq" version="2.2.5" />
@@ -28,12 +27,13 @@
 
   <ItemGroup>
 
-    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.0-rc9" />
-    <PackageReference Include="CDP4Dal-CE" Version="1.0.0-rc9" />
+    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.0-rc10" />
+    <PackageReference Include="CDP4Dal-CE" Version="1.0.0-rc10" />
     <!--
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
     <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
     <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
+    <PackageReference Include="NLog" Version="4.5.0-rc03" />
     -->
   </ItemGroup>
 

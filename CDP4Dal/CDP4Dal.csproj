@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Dal Community Edition</Title>
-    <Version>1.0.0-rc9</Version>
+    <Version>1.0.0-rc10</Version>
     <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
-    <releaseNotes>[Remove] ArchivePassword from Credentials class</releaseNotes>
+    <releaseNotes>[Update] to CDP4Common-CE 1.0.0-rc10</releaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,14 +32,14 @@
 
   <ItemGroup>
 
-    <PackageReference Include="CDP4Common-CE" Version="1.0.0-rc9" />
+    <PackageReference Include="CDP4Common-CE" Version="1.0.0-rc10" />
     <!--
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <PackageReference Include="NLog" Version="4.5.0-rc03" />
     -->
   </ItemGroup>
   
-  <ItemGroup>    
-    <PackageReference Include="NLog" Version="5.0.0-beta11" />
+  <ItemGroup>
     <PackageReference Include="CommonServiceLocator" version="1.3" />
     <PackageReference Include="Rx-Core" version="2.2.5" />
     <PackageReference Include="Rx-Interfaces" version="2.2.5" />

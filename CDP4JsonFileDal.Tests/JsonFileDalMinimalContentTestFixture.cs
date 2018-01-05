@@ -27,7 +27,7 @@ namespace CDP4JsonFileDal.Tests
     using CDP4JsonFileDal.Json;
 
     using Ionic.Zip;
-    using Microsoft.Practices.ServiceLocation;
+    
     using Moq;
     using NUnit.Framework;
 

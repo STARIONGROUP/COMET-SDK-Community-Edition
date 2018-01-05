@@ -14,10 +14,10 @@ namespace CDP4Dal.Tests
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Dal.Operations;
-    using CDP4Dal.DAL;
-    using Microsoft.Practices.ServiceLocation;
+    using CDP4Dal.DAL;    
     using Moq;
     using NUnit.Framework;
+    using Microsoft.Practices.ServiceLocation;
     
     /// <summary>
     /// suite of tests for the abstract <see cref="Dal"/> class
