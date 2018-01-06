@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WspDal.cs" company="RHEA System S.A.">
-//   Copyright (c) 2016 RHEA S.A. All rights reserved.
+//   Copyright (c) 2016-2018 RHEA S.A. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,26 +12,14 @@ namespace CDP4Dal.Tests.DAL
     using System.Threading.Tasks;
     using CDP4Common;
     using CDP4Common.DTO;
-    using CDP4Common.MetaInfo;
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
-    using Microsoft.Practices.ServiceLocation;
     using Moq;
     using NUnit.Framework;
 
     [TestFixture]
     public class DalTestFixture
     {
-        private Mock<IServiceLocator> serviceLocator;
-
-        [SetUp]
-        public void Setup()
-        {
-            this.serviceLocator = new Mock<IServiceLocator>();
-            ServiceLocator.SetLocatorProvider(new ServiceLocatorProvider(() => this.serviceLocator.Object));
-            this.serviceLocator.Setup(x => x.GetInstance<IMetaDataProvider>()).Returns(new MetaDataProvider());
-        }
-
         [Test]
         public void VerifyThatQueryRequestContextReturnsExpectedResult()
         {

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DalTestFixture.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+//   Copyright (c) 2017-2018 RHEA System S.A.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,12 +12,10 @@ namespace CDP4Dal.Tests
     using System.Threading.Tasks;
     using CDP4Common;
     using CDP4Common.DTO;
-    using CDP4Common.MetaInfo;
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;    
     using Moq;
     using NUnit.Framework;
-    using Microsoft.Practices.ServiceLocation;
     
     /// <summary>
     /// suite of tests for the abstract <see cref="Dal"/> class
@@ -26,15 +24,11 @@ namespace CDP4Dal.Tests
     public class DalTestFixture
     {
         private Credentials credentials;
-        private Mock<IServiceLocator> serviceLocator;
         private string someuri = "http://someuri";
 
         [SetUp]
         public void SetUp()
         {
-            this.serviceLocator = new Mock<IServiceLocator>();
-            ServiceLocator.SetLocatorProvider(new ServiceLocatorProvider(() => this.serviceLocator.Object));
-            this.serviceLocator.Setup(x => x.GetInstance<IMetaDataProvider>()).Returns(new MetaDataProvider());
             this.credentials = new Credentials("John", "Doe", new Uri(this.someuri));
         }
 

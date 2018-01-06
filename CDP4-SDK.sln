@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Common", "CDP4Common\CDP4Common.csproj", "{66BB2677-B6D6-43F2-A56C-884FADF6ABF9}"
 EndProject
@@ -19,17 +19,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Common.NetCore.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer.NetCore.Tests", "CDP4JsonSerializer.NetCore.Tests\CDP4JsonSerializer.NetCore.Tests.csproj", "{8C50DC9F-10D4-4BC1-9A49-4FC03AC78767}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4JsonFileDal", "CDP4JsonFileDal\CDP4JsonFileDal.csproj", "{3CE04A57-83EE-4E31-8AC7-D99628C848E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonFileDal", "CDP4JsonFileDal\CDP4JsonFileDal.csproj", "{3CE04A57-83EE-4E31-8AC7-D99628C848E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4JsonFileDal.Tests", "CDP4JsonFileDal.Tests\CDP4JsonFileDal.Tests.csproj", "{81F3A560-BC12-4B2A-B60B-E64533E9AC99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonFileDal.Tests", "CDP4JsonFileDal.Tests\CDP4JsonFileDal.Tests.csproj", "{81F3A560-BC12-4B2A-B60B-E64533E9AC99}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4ServicesDal", "CDP4ServicesDal\CDP4ServicesDal.csproj", "{6F9030E9-C774-4247-BA84-4CBF288A844D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4ServicesDal.Tests", "CDP4ServicesDal.Tests\CDP4ServicesDal.Tests.csproj", "{2FF7ED2F-F866-40B9-9FCC-D151404242F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4WspDal", "CDP4WspDal\CDP4WspDal.csproj", "{73547666-55AA-4364-9A5E-1A50693D1576}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4WspDal", "CDP4WspDal\CDP4WspDal.csproj", "{73547666-55AA-4364-9A5E-1A50693D1576}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4WspDal.Tests", "CDP4WspDal.Tests\CDP4WspDal.Tests.csproj", "{88D4A523-C0DA-49C4-94DE-8E3BF93856BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4WspDal.Tests", "CDP4WspDal.Tests\CDP4WspDal.Tests.csproj", "{88D4A523-C0DA-49C4-94DE-8E3BF93856BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -9,13 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-
-    <!--
-    <PackageReference Include="CDP4WspDal-EE" Version="1.0.0-rc10" />
-    -->
-
-    <ProjectReference Include="..\CDP4WspDal\CDP4WspDal.csproj" />
     
+    <PackageReference Include="CDP4WspDal-CE" Version="1.0.1-rc01" />
+   
+    <!--
+    <ProjectReference Include="..\CDP4WspDal\CDP4WspDal.csproj" />
+    -->
   </ItemGroup>
 
   <ItemGroup>

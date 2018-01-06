@@ -17,7 +17,6 @@ namespace CDP4WspDal.Tests
     using CDP4Common.MetaInfo;
     using CDP4Dal;
     using CDP4Dal.DAL;
-    using Microsoft.Practices.ServiceLocation;
     using Moq;
     using NUnit.Framework;
     

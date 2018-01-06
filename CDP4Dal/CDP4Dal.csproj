@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Dal Community Edition</Title>
-    <Version>1.0.0-rc10</Version>
+    <Version>1.0.1-rc01</Version>
     <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
-    <releaseNotes>[Update] to CDP4Common-CE 1.0.0-rc10</releaseNotes>
+    <releaseNotes>[Remove] CommonServiceLocator dependency</releaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,7 +40,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="CommonServiceLocator" version="1.3" />
     <PackageReference Include="Rx-Core" version="2.2.5" />
     <PackageReference Include="Rx-Interfaces" version="2.2.5" />
     <PackageReference Include="Rx-Linq" version="2.2.5" />
