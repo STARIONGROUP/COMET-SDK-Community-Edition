@@ -7,16 +7,12 @@
 namespace CDP4Dal.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// A <see cref="DeSerializationException"/> is thrown the when a deserialization exception is encountered.
     /// </summary>
-    [Serializable]
     public class DeSerializationException : Exception
     {
-        #region Constructors and Destructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DeSerializationException"/> class.
         /// </summary>
@@ -48,21 +44,5 @@ namespace CDP4Dal.Exceptions
             : base(message, innerException)
         {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeSerializationException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected DeSerializationException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-
-        #endregion
     }
 }

@@ -7,17 +7,13 @@
 namespace CDP4Dal.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// A <see cref="DalWriteException"/> is thrown the when a during a Write operation the data-source
     /// returns an exception
     /// </summary>
-    [Serializable]
     public class DalWriteException : Exception
     {
-        #region Constructors and Destructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DalWriteException"/> class.
         /// </summary>
@@ -49,21 +45,5 @@ namespace CDP4Dal.Exceptions
             : base(message, innerException)
         {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DalWriteException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected DalWriteException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-
-        #endregion
     }
 }

@@ -8,8 +8,8 @@ namespace CDP4Dal
 {
     using System;
     using System.Linq;
-    using System.Management.Instrumentation;
     using CDP4Common.DTO;
+    using CDP4Dal.Exceptions;
     using System.Collections.Generic;
     using Poco = CDP4Common.CommonData.Thing;
 

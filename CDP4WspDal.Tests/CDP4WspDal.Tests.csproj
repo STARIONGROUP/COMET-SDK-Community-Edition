@@ -6,12 +6,12 @@
     <Description>CDP4WspDal unit tests</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
+    <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
-    
-    <PackageReference Include="CDP4WspDal-CE" Version="1.0.1-rc01" />
-   
+
+    <PackageReference Include="CDP4WspDal-CE" Version="1.0.1-rc02" />
     <!--
     <ProjectReference Include="..\CDP4WspDal\CDP4WspDal.csproj" />
     -->

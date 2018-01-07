@@ -7,3 +7,4 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("CDP4WspDal.Tests")]
+[assembly: InternalsVisibleTo("CDP4WspDal.NetCore.Tests")]

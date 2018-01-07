@@ -9,13 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+
+    <PackageReference Include="CDP4Common-CE" Version="1.0.1-rc02" />
+    <!--
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <PackageReference Include="NLog" Version="4.5.0-rc03" />
+    -->
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Moq" Version="4.8.0" />
-    <PackageReference Include="NLog" Version="4.5.0-rc03" />
     <PackageReference Include="NUnit" Version="3.9.0" />
     <PackageReference Include="NUnit.Console" Version="3.7.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />

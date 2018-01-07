@@ -6,29 +6,30 @@
     <Description>CDP4 DAL Unit tests</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
+    <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
 
-    <ItemGroup>
-    <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
-  </ItemGroup>
-  
   <ItemGroup>
+
+    <PackageReference Include="CDP4Dal-CE" Version="1.0.1-rc02" />
+    <!--
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
     <PackageReference Include="NLog" Version="4.5.0-rc03" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Rx-Core" version="2.2.5" />
     <PackageReference Include="Rx-Interfaces" version="2.2.5" />
     <PackageReference Include="Rx-Linq" version="2.2.5" />
-  </ItemGroup>
-
+    <Reference Include="System.ComponentModel.Composition" />
+    -->
+  </ItemGroup>  
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="NUnit" Version="3.9.0" />
     <PackageReference Include="NUnit.Console" Version="3.7.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
     <PackageReference Include="Moq" Version="4.8.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
   
 </Project>

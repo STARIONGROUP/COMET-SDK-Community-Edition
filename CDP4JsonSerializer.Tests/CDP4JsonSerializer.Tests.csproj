@@ -6,16 +6,17 @@
     <Description>CDP4JsonSerializer unit tests</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
+    <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
-	  <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.1-rc02" />
     <!--
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
     <PackageReference Include="NLog" Version="4.5.0-rc03" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     -->
   </ItemGroup>
 

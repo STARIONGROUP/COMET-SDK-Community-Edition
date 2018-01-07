@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard1.6;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4JsonSerializer Community Edition</Title>
-    <Version>1.0.0-rc10</Version>
+    <Version>1.0.1-rc02</Version>
     <Description>CDP4 JSON Serialization Library</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
@@ -15,12 +15,13 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25 JSON</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
-    <releaseNotes>[Update] to CDP4Common-CE 1.0.0-rc10</releaseNotes>
+    <Configurations>Debug;Release;Dev</Configurations>
+    <releaseNotes>[Add] support for netstandard2.0</releaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
 
-    <PackageReference Include="CDP4Common-CE" Version="1.0.0-rc10" />
+    <PackageReference Include="CDP4Common-CE" Version="1.0.1-rc02" />
     <!--
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
     <PackageReference Include="NLog" Version="4.5.0-rc03" />

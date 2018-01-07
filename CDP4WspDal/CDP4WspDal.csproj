@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4WspDal Community Edition</Title>
-    <Version>1.0.1-rc01</Version>
+    <Version>1.0.1-rc02</Version>
     <Description>CDP4 WSP Dal Plugin</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
@@ -15,13 +15,14 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
-    <releaseNotes>[Update] to CDP4Dal-CE and CDP4Dal-CE 1.0.1-rc01</releaseNotes>
+    <Configurations>Debug;Release;Dev</Configurations>
+    <releaseNotes>[Update] to CDP4Dal-CE and CDP4Dal-CE 1.0.1-rc02</releaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
 
-    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.0-rc10" />
-    <PackageReference Include="CDP4Dal-CE" Version="1.0.1-rc01" />
+    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.1-rc02" />
+    <PackageReference Include="CDP4Dal-CE" Version="1.0.1-rc02" />
     <!--
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
     <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
@@ -29,10 +30,14 @@
     -->
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47'">
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
   </ItemGroup>
   
 </Project>

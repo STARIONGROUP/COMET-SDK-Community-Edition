@@ -7,13 +7,12 @@
 namespace CDP4Dal.Tests.Helpers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Management.Instrumentation;
+    using System.Collections.Generic;    
     using CDP4Common.DTO;
     using CDP4Common.Types;
+    using CDP4Dal.Exceptions;
     using Moq;
     using NUnit.Framework;
-
     using Poco = CDP4Common.EngineeringModelData;
 
     [TestFixture]

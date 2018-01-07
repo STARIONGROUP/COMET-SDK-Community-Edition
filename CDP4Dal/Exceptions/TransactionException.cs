@@ -7,9 +7,6 @@
 namespace CDP4Common.Exceptions
 {
     using System;
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
-    using System.Runtime.Serialization;
-#endif
     using CDP4Common.CommonData;
     using CDP4Dal.Operations;
 
@@ -50,21 +47,5 @@ namespace CDP4Common.Exceptions
             : base(message, innerException)
         {
         }
-
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TransactionException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected TransactionException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
     }
 }

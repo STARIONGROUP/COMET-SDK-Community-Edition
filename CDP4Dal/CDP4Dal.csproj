@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Dal Community Edition</Title>
-    <Version>1.0.1-rc01</Version>
+    <Version>1.0.1-rc02</Version>
     <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
@@ -15,8 +15,18 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
-    <releaseNotes>[Remove] CommonServiceLocator dependency</releaseNotes>
+    <Configurations>Debug;Release;Dev</Configurations>
+    <releaseNotes>[Add] support for netstandard2.0</releaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="CDP4Common-CE" Version="1.0.1-rc02" />
+    <!--
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <PackageReference Include="NLog" Version="4.5.0-rc03" />
+    -->  
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="DAL\Helpers\**" />
@@ -30,23 +40,14 @@
     <Folder Include="Operations\" />
   </ItemGroup>
 
-  <ItemGroup>
-
-    <PackageReference Include="CDP4Common-CE" Version="1.0.0-rc10" />
-    <!--
-    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-    <PackageReference Include="NLog" Version="4.5.0-rc03" />
-    -->
-  </ItemGroup>
-  
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47'">
+    <Reference Include="System.ComponentModel.Composition" />    
     <PackageReference Include="Rx-Core" version="2.2.5" />
     <PackageReference Include="Rx-Interfaces" version="2.2.5" />
-    <PackageReference Include="Rx-Linq" version="2.2.5" />
+    <PackageReference Include="Rx-Linq" version="2.2.5" />    
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.Composition" />
+    
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Reactive" Version="3.1.1" />
   </ItemGroup>
-
 </Project>

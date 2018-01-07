@@ -410,7 +410,7 @@ namespace CDP4Dal.DAL
         /// In case the <paramref name="dal"/> is not decorated with <see cref="DalExportAttribute"/> then
         /// the <see cref="Version"/> is set to "1.0.0.0"
         /// </remarks>
-        private void SetCdpVersion()
+        protected virtual void SetCdpVersion()
         {
             var dalType = this.GetType();
             var dalExportAttribute = (DalExportAttribute)Attribute.GetCustomAttribute(dalType, typeof(DalExportAttribute));
