@@ -123,7 +123,7 @@ namespace CDP4ServicesDal
             };
 
             var postToken = this.RandomWebRequestToken();
-            var resourcePath = string.Format("{0}{1}", operationContainer.Context, attribute);
+            var resourcePath = $"{operationContainer.Context}{attribute}";
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
             Logger.Debug("CDP4 Services POST: {0}", postToken, uriBuilder);
             
@@ -135,7 +135,8 @@ namespace CDP4ServicesDal
             {
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    var msg = string.Format("The CDP4 Services replied with code {0}: {1}", httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase);
+                    var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
+                    var msg = $"The CDP4 Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
                     Logger.Error(msg);
                     throw new DalWriteException(msg);
                 }
@@ -446,6 +447,8 @@ namespace CDP4ServicesDal
         {
             var requestBody = this.ConstructPostRequestBody(operationContainer);
             var jsonContent = new StringContent(requestBody);
+            jsonContent.Headers.Clear();
+            jsonContent.Headers.Add("content-type", "application/json");
 
             if (files == null)
             {

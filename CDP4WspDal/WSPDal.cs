@@ -134,11 +134,13 @@ namespace CDP4WspDal
             };
 
             var postToken = this.RandomWebRequestToken();
-            var resourcePath = string.Format("{0}{1}", operationContainer.Context, attribute);
+            var resourcePath = $"{operationContainer.Context}{attribute}";
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
             Logger.Debug("WSP POST: {0}", uriBuilder);
             
             Logger.Trace("POST JSON BODY {0} /r/n {1}", postToken, requestBody);
+
+            Console.WriteLine(requestBody);
 
             var requestContent = this.CreateHttpContent(operationContainer, files);
 
@@ -146,7 +148,8 @@ namespace CDP4WspDal
             {
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    var msg = string.Format("The CDP4 Services replied with code {0}: {1}", httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase);
+                    var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
+                    var msg = $"The ECSS-E-TM-10-25A Annex C Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
                     Logger.Error(msg);
                     throw new DalWriteException(msg);
                 }
@@ -461,6 +464,8 @@ namespace CDP4WspDal
         {
             var requestBody = this.ConstructPostRequestBody(operationContainer);
             var jsonContent = new StringContent(requestBody);
+            jsonContent.Headers.Clear();
+            jsonContent.Headers.Add("content-type", "application/json");
 
             if (files == null)
             {

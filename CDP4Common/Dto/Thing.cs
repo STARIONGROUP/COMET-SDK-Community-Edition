@@ -361,6 +361,11 @@ namespace CDP4Common.DTO
                 return this.ComputedRoute();
             }
 
+            if (!this.PartialRoutes.Any())
+            {
+                throw new InvalidOperationException(string.Format("No valid top container found for DTO: {0}.", this.Iid));
+            }
+
             if (temporaryList[0].Contains("SiteDirectory"))
             {
                 return string.Format("/{0}", temporaryList[0]);

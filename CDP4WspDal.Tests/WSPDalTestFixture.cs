@@ -475,7 +475,43 @@ namespace CDP4WspDal.Tests
 
             Assert.Throws<NotSupportedException>(() => dal.Write(operationContainers));            
         }
-        
+
+        [Test]
+        [Category("WSP_dependent")]
+        public async Task Verify_that_person_can_be_Posted()
+        {
+            var uri = new Uri("http://ocdt-dev.rheagroup.com");
+            var credentials = new Credentials("admin", "Dahubo12", uri);
+
+            var wspdal = new WspDal();
+            var dtos = await wspdal.Open(credentials, this.cancelationTokenSource.Token);
+
+            var siteDirectory = (CDP4Common.DTO.SiteDirectory)dtos.Single(x => x.ClassKind == ClassKind.SiteDirectory);
+
+            var context = siteDirectory.Route;
+            var operationContainer = new OperationContainer(context, siteDirectory.RevisionNumber);
+
+            var person = new CDP4Common.DTO.Person(Guid.NewGuid(), 1);
+            person.ShortName = Guid.NewGuid().ToString();
+            person.Surname = Guid.NewGuid().ToString();
+            person.GivenName = Guid.NewGuid().ToString();
+            person.AddContainer(ClassKind.SiteDirectory, Guid.Parse("eb77f3e1-a0f3-412d-8ed6-b8ce881c0145"));
+
+            var operation1 = new Operation(null, person, OperationKind.Create);
+            operationContainer.AddOperation(operation1);
+
+            var siteDirectoryClone = siteDirectory.DeepClone<CDP4Common.DTO.SiteDirectory>();
+            siteDirectoryClone.Person.Add(person.Iid);
+            var operation2 = new Operation(siteDirectory, siteDirectoryClone, OperationKind.Update);
+            operationContainer.AddOperation(operation2);
+
+            var result = await wspdal.Write(operationContainer);
+
+            var resultPerson = (CDP4Common.DTO.Person)result.Single(x => x.Iid == person.Iid);
+            
+            Assert.NotNull(resultPerson);
+        }
+
         /// <summary>
         /// Set the credentials property so DAL appears to be open
         /// </summary>
