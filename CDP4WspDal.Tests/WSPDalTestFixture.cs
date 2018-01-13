@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WSPDalTestFixture.cs" company="RHEA S.A.">
-//   Copyright (c) 2015 RHEA S.A.
+// <copyright file="WSPDalTestFixture.cs" company="RHEA System S.A.">
+//   Copyright (c) 2015-2018 RHEA System S.A.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -347,7 +347,7 @@ namespace CDP4WspDal.Tests
             
             var returned = await dal.Open(credentials, this.cancelationTokenSource.Token);
 
-            session.Assembler.Synchronize(returned);
+            await session.Assembler.Synchronize(returned);
             
             var siteDir = session.Assembler.RetrieveSiteDirectory();
             var modelSetup = siteDir.Model.Single(x => x.ShortName == "LOFT");

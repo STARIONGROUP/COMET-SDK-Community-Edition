@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDalTestFixture.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+//   Copyright (c) 2017-2018 RHEA System S.A.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -312,7 +312,7 @@ namespace CDP4ServicesDal.Tests
 
             var readresult = await dal.Read(siteDirectory, new CancellationToken());
         }
-
+            
         /// <summary>
         /// Set the credentials property so DAL appears to be open
         /// </summary>

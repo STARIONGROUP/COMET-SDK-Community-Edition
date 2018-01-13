@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WSPDalTestFixture.cs" company="RHEA S.A.">
-//   Copyright (c) 2015 RHEA S.A.
+// <copyright file="WSPDalTestFixture.cs" company="RHEA System S.A.">
+//   Copyright (c) 2015-2018 RHEA System S.A.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ namespace CDP4WspDal.Tests
     using CDP4Dal.Operations;
     using CDP4WspDal;
     using NUnit.Framework;
-    
+
     using File = System.IO.File;
     using Thing = CDP4Common.CommonData.Thing;
 
@@ -48,7 +48,7 @@ namespace CDP4WspDal.Tests
         private IterationSetup iterationSetup;
         private SiteReferenceDataLibrary siteReferenceDataLibrary;
         private ModelReferenceDataLibrary modelReferenceDataLibrary;
-        
+
         [SetUp]
         public void SetUp()
         {
@@ -62,7 +62,7 @@ namespace CDP4WspDal.Tests
             this.siteDirectory = new SiteDirectory(Guid.Parse("f13de6f8-b03a-46e7-a492-53b2f260f294"), this.session.Assembler.Cache, this.uri);
             var lazySiteDirectory = new Lazy<Thing>(() => this.siteDirectory);
             lazySiteDirectory.Value.Cache.TryAdd(new Tuple<Guid, Guid?>(lazySiteDirectory.Value.Iid, null), lazySiteDirectory);
-            
+
             this.PopulateSiteDirectory();
         }
 
@@ -115,7 +115,7 @@ namespace CDP4WspDal.Tests
 
             Assert.AreEqual(60, amountOfDtos);
         }
-        
+
         [Test]
         public async Task VerifThatAClosedDalCannotBeClosedAgain()
         {
@@ -131,7 +131,7 @@ namespace CDP4WspDal.Tests
         public async Task VerifyThatIfCredentialsAreNullExceptionIsThrown()
         {
             var dal = new WspDal();
-            
+
             Assert.That(async () => await dal.Open(null, new CancellationToken()), Throws.TypeOf<NullReferenceException>());
         }
 
@@ -142,10 +142,10 @@ namespace CDP4WspDal.Tests
             var invalidCredentials = new Credentials("John", "a password", uri);
 
             var dal = new WspDal();
-            
+
             Assert.That(async () => await dal.Open(invalidCredentials, new CancellationToken()), Throws.TypeOf<ArgumentException>());
         }
-        
+
         [Test]
         public async Task VerifyThatIfCredentialsAreNullOnReadExceptionIsThrown()
         {
@@ -154,10 +154,10 @@ namespace CDP4WspDal.Tests
             organizationDto.AddContainer(ClassKind.SiteDirectory, Guid.Parse("eb77f3e1-a0f3-412d-8ed6-b8ce881c0145"));
 
             var dal = new WspDal();
-            
+
             Assert.That(async () => await dal.Read(organizationDto, new CancellationToken()), Throws.TypeOf<InvalidOperationException>());
         }
-        
+
         [Test]
         public void VerifyThatWriteThrowsException()
         {
@@ -238,7 +238,7 @@ namespace CDP4WspDal.Tests
 
             foreach (var container in topcontainers)
             {
-                returned = await this.dal.Read(container.Value.ToDto(),this.cancelationTokenSource.Token, attributes);
+                returned = await this.dal.Read(container.Value.ToDto(), this.cancelationTokenSource.Token, attributes);
                 await assembler.Synchronize(returned);
             }
         }
@@ -251,7 +251,7 @@ namespace CDP4WspDal.Tests
 
             var context = "/SiteDirectory/f289023d-41e8-4aaf-aae5-1be1ecf24bac";
             var operationContainer = new OperationContainer(context);
-            
+
             var testDtoOriginal = new CDP4Common.DTO.Alias(iid: Guid.NewGuid(), rev: 1)
             {
                 Content = "content",
@@ -260,7 +260,7 @@ namespace CDP4WspDal.Tests
             };
             testDtoOriginal.AddContainer(ClassKind.DomainOfExpertise, domainOfExpertiseIid);
             testDtoOriginal.AddContainer(ClassKind.SiteDirectory, siteDirecortoryIid);
-            
+
             var testDtoModified = new CDP4Common.DTO.Alias(iid: testDtoOriginal.Iid, rev: 1)
             {
                 Content = "content2",
@@ -341,14 +341,14 @@ namespace CDP4WspDal.Tests
         [Category("WSP_dependent")]
         public async Task VerifyThatReadIterationWorks()
         {
-            var dal = new WspDal { Session = this.session};
-            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.rheagroup.com"));            
+            var dal = new WspDal { Session = this.session };
+            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.rheagroup.com"));
             var session = new Session(dal, credentials);
-            
+
             var returned = await dal.Open(credentials, this.cancelationTokenSource.Token);
 
-            session.Assembler.Synchronize(returned);
-            
+            await session.Assembler.Synchronize(returned);
+
             var siteDir = session.Assembler.RetrieveSiteDirectory();
             var modelSetup = siteDir.Model.Single(x => x.ShortName == "LOFT");
             var iterationSetup = modelSetup.IterationSetup.First();
@@ -426,13 +426,13 @@ namespace CDP4WspDal.Tests
             var commonFileStoreModified = new CDP4Common.DTO.CommonFileStore(commonFileStoreIid, 0);
             commonFileStoreModified.File.Add(fileIid);
             commonFileStoreModified.AddContainer(ClassKind.EngineeringModel, engineeringModeliid);
-            
+
             var file = new CDP4Common.DTO.File(Guid.NewGuid(), 0);
             file.Owner = domainOfExpertiseIid;
             file.FileRevision.Add(fileRevisionIid);
             file.AddContainer(ClassKind.CommonFileStore, commonFileStoreIid);
             file.AddContainer(ClassKind.EngineeringModel, engineeringModeliid);
-            
+
             var fileRevision = new CDP4Common.DTO.FileRevision(Guid.NewGuid(), 0);
             fileRevision.Name = "testfile";
             fileRevision.ContentHash = contentHash;
@@ -441,10 +441,10 @@ namespace CDP4WspDal.Tests
             fileRevision.AddContainer(ClassKind.File, fileIid);
             fileRevision.AddContainer(ClassKind.CommonFileStore, commonFileStoreIid);
             fileRevision.AddContainer(ClassKind.EngineeringModel, engineeringModeliid);
-            
+
             var context = string.Format("/EngineeringModel/{0}/iteration/{1}", engineeringModeliid, iterationiid);
             var operationContainer = new OperationContainer(context);
-            
+
             var updateCommonFileStoreOperation = new Operation(commonFileStoreOriginal, commonFileStoreModified, OperationKind.Update);
             operationContainer.AddOperation(updateCommonFileStoreOperation);
 
@@ -473,9 +473,45 @@ namespace CDP4WspDal.Tests
 
             Assert.Throws<NotSupportedException>(() => dal.Write(operationContainers));
 
-            Assert.Throws<NotSupportedException>(() => dal.Write(operationContainers));            
+            Assert.Throws<NotSupportedException>(() => dal.Write(operationContainers));
         }
-        
+
+        [Test]
+        [Category("WSP_dependent")]
+        public async Task Verify_that_person_can_be_Posted()
+        {
+            var uri = new Uri("http://ocdt-dev.rheagroup.com");
+            var credentials = new Credentials("admin", "Dahubo12", uri);
+
+            var wspdal = new WspDal();
+            var dtos = await wspdal.Open(credentials, this.cancelationTokenSource.Token);
+
+            var siteDirectory = (CDP4Common.DTO.SiteDirectory)dtos.Single(x => x.ClassKind == ClassKind.SiteDirectory);
+
+            var context = siteDirectory.Route;
+            var operationContainer = new OperationContainer(context, siteDirectory.RevisionNumber);
+
+            var person = new CDP4Common.DTO.Person(Guid.NewGuid(), 1);
+            person.ShortName = Guid.NewGuid().ToString();
+            person.Surname = Guid.NewGuid().ToString();
+            person.GivenName = Guid.NewGuid().ToString();
+            person.AddContainer(ClassKind.SiteDirectory, Guid.Parse("eb77f3e1-a0f3-412d-8ed6-b8ce881c0145"));
+
+            var operation1 = new Operation(null, person, OperationKind.Create);
+            operationContainer.AddOperation(operation1);
+
+            var siteDirectoryClone = siteDirectory.DeepClone<CDP4Common.DTO.SiteDirectory>();
+            siteDirectoryClone.Person.Add(person.Iid);
+            var operation2 = new Operation(siteDirectory, siteDirectoryClone, OperationKind.Update);
+            operationContainer.AddOperation(operation2);
+
+            var result = await wspdal.Write(operationContainer);
+
+            var resultPerson = (CDP4Common.DTO.Person)result.Single(x => x.Iid == person.Iid);
+
+            Assert.NotNull(resultPerson);
+        }
+
         /// <summary>
         /// Set the credentials property so DAL appears to be open
         /// </summary>

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WspOperationModifierTestFixture.cs" company="RHEA S.A.">
-//   Copyright (c) 2015 RHEA S.A.
+// <copyright file="WspOperationModifierTestFixture.cs" company="RHEA System S.A.">
+//   Copyright (c) 2015-2018 RHEA System S.A.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
