@@ -11,6 +11,7 @@ namespace CDP4Common.Helpers
     using System.Linq;    
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+    using NLog;
     
     /// <summary>
     /// The purpose of the <see cref="NestedElementTreeGenerator"/> class is to generate the <see cref="NestedElement"/>s
@@ -24,6 +25,11 @@ namespace CDP4Common.Helpers
     /// </remarks>
     public class NestedElementTreeGenerator
     {
+        /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Generates the <see cref="NestedElement"/>s and <see cref="NestedParameter"/>s for the specified <see cref="Option"/>
         /// </summary>
@@ -60,6 +66,8 @@ namespace CDP4Common.Helpers
             {
                 throw new NestedElementTreeException(string.Format("The container Iteration of Option {0} does not have a TopElement specified", option.ShortName));
             }
+
+            Logger.Debug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise.ShortName}");
 
             var createNestedElements = this.GenerateNestedElements(option, domainOfExpertise, rootElement);
             return createNestedElements;
@@ -147,8 +155,10 @@ namespace CDP4Common.Helpers
 
             foreach (var elementUsage in elementDefinition.ContainedElement)
             {
-                if (elementUsage.ExcludeOption.Contains(option))
+                // comparison is done based on unique identifiers, not on object level. The provided option may be a clone
+                if (elementUsage.ExcludeOption.Any(x => x.Iid == option.Iid))
                 {
+                    Logger.Debug($"ElementUsage {elementUsage.Iid}:{elementUsage.ShortName} is excluded from the Nested Elements.");
                     continue;
                 }
 

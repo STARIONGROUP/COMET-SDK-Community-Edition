@@ -11,7 +11,7 @@
 
   <ItemGroup>
 
-    <PackageReference Include="CDP4ServicesDal-CE" Version="1.0.2" />
+    <PackageReference Include="CDP4ServicesDal-CE" Version="1.0.3" />
     <!--
     <ProjectReference Include="..\CDP4ServicesDal\CDP4ServicesDal.csproj" />
     <PackageReference Include="NLog" Version="4.5.0-rc03" />

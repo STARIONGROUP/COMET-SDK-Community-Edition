@@ -10,7 +10,7 @@
 
   <ItemGroup>
 
-    <PackageReference Include="CDP4Common-CE" Version="1.0.2" />
+    <PackageReference Include="CDP4Common-CE" Version="1.0.3" />
     <!--
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
     <PackageReference Include="NLog" Version="4.5.0-rc03" />
