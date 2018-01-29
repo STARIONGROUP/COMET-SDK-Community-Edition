@@ -10,6 +10,8 @@ namespace CDP4Common.EngineeringModelData
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.CompilerServices;
+
+    using CDP4Common.Exceptions;
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
 

@@ -9,6 +9,7 @@ namespace CDP4Common.MetaInfo
     using System;
     using System.Collections.Generic;
     using CDP4Common.DTO;
+    using CDP4Common.Exceptions;
     using CDP4Common.Types;
     
     /// <summary>

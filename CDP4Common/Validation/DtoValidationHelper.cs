@@ -10,6 +10,7 @@ namespace CDP4Common.Validation
     using System.Collections.Generic;
 
     using CDP4Common.DTO;
+    using CDP4Common.Exceptions;
 
     /// <summary>
     /// The validation helper.

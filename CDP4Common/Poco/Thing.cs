@@ -15,6 +15,7 @@ namespace CDP4Common.CommonData
     using System.Reflection;
     using System.Runtime.Serialization;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.Poco;
     using CDP4Common.Polyfills;
     using CDP4Common.SiteDirectoryData;

@@ -9,6 +9,8 @@ namespace CDP4Common.EngineeringModelData
     using System;
     using System.Linq;
 
+    using CDP4Common.Exceptions;
+
     /// <summary>
     /// Extension for the <see cref="ElementUsage"/> class
     /// </summary>
