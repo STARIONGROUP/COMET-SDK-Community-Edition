@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common
+namespace CDP4Common.Exceptions
 {
     using System;
 #if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47

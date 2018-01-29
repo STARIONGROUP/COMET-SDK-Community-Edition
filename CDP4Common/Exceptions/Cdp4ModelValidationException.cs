@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common
+namespace CDP4Common.Exceptions
 {
     using System;
 
