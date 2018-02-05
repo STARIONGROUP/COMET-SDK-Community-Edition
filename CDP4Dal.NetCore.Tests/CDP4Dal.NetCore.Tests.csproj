@@ -10,10 +10,10 @@
 
   <ItemGroup>
 
-    <PackageReference Include="CDP4Dal-CE" Version="1.0.3" />
+    <PackageReference Include="CDP4Dal-CE" Version="1.0.4" />
     <!--
     <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
-    <PackageReference Include="NLog" Version="4.5.0-rc03" />
+    <PackageReference Include="NLog" Version="4.5.0-rc04" />
     <PackageReference Include="System.Reactive" Version="3.1.1" />
     -->
   </ItemGroup>

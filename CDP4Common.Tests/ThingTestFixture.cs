@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTestFixture.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+//   Copyright (c) 2017-2018 RHEA System S.A.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,13 +9,11 @@ namespace CDP4Common.Tests
     using System;
     using System.Collections.Concurrent;
     using System.Linq;
-
     using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Poco;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
-
     using NUnit.Framework;
 
     /// <summary>

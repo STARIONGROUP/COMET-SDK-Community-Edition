@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard1.6;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
@@ -16,7 +16,7 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
     <Configurations>Debug;Release</Configurations>
-    <PackageReleaseNotes>[Refactor] NestedElementTreeGenerator to compare options based on unique identifier</PackageReleaseNotes>
+    <PackageReleaseNotes>[Update] namespace of NotThing, Cdp4ModelValidationException, ContainmentException, NestedElementTreeException. [Update] nlog 4.5.0-rc04</PackageReleaseNotes>
   </PropertyGroup>
   
   <ItemGroup>
@@ -37,7 +37,7 @@
   </ItemGroup>
   
   <ItemGroup>    
-    <PackageReference Include="NLog" Version="4.5.0-rc03" />  
+    <PackageReference Include="NLog" Version="4.5.0-rc04" />  
 	  <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard1.6'" />
   </ItemGroup>

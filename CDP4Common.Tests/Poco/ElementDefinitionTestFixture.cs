@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ElementDefinitionTestFixture.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+//   Copyright (c) 2017-2018 RHEA System S.A.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,6 +9,7 @@ namespace CDP4Common.Tests.Poco
     using System;
     using System.Linq;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
     using System.Collections.Concurrent;

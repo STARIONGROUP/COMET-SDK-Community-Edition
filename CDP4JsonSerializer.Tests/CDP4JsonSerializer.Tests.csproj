@@ -11,11 +11,11 @@
 
   <ItemGroup>
 
-    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.3" />
+    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.4" />
     <!--
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
     <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
-    <PackageReference Include="NLog" Version="4.5.0-rc03" />
+    <PackageReference Include="NLog" Version="4.5.0-rc04" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     -->
   </ItemGroup>

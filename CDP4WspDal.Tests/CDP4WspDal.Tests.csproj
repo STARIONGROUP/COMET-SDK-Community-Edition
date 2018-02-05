@@ -11,7 +11,7 @@
 
   <ItemGroup>
 
-    <PackageReference Include="CDP4WspDal-CE" Version="1.0.3" />
+    <PackageReference Include="CDP4WspDal-CE" Version="1.0.4" />
     <!--
     <ProjectReference Include="..\CDP4WspDal\CDP4WspDal.csproj" />
     -->

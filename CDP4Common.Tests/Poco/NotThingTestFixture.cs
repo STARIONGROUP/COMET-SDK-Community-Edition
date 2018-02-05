@@ -1,16 +1,13 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="NotThingTestFixture.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+//   Copyright (c) 2017-2018 RHEA System S.A.
 // </copyright>
 // -------------------------------------------------------------------------------------------------
 
 namespace CDP4Common.Tests.Poco
 {
     using System;
-
     using CDP4Common.CommonData;
-    using CDP4Common.Poco;
-
     using NUnit.Framework;
 
     /// <summary>

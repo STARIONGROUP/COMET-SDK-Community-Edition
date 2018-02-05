@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4WspDal Community Edition</Title>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <Description>CDP4 WSP Dal Plugin</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
@@ -16,13 +16,13 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
     <Configurations>Debug;Release;Dev</Configurations>
-    <PackageReleaseNotes>[Update] to CDP4JsonSerializer-CE and CDP4Dal-CE version 1.0.3</PackageReleaseNotes>
+    <PackageReleaseNotes>[Update] to CDP4JsonSerializer-CE and CDP4Dal-CE version 1.0.4</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
 
-    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.3" />
-    <PackageReference Include="CDP4Dal-CE" Version="1.0.3" />
+    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.4" />
+    <PackageReference Include="CDP4Dal-CE" Version="1.0.4" />
     <!--
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
     <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
