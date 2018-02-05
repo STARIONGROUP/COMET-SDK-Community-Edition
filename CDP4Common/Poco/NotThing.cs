@@ -1,10 +1,10 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="NotThing.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+//   Copyright (c) 2017-2018 RHEA System S.A.
 // </copyright>
 // -------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Poco
+namespace CDP4Common
 {
     using System;
     using CDP4Common.CommonData;
