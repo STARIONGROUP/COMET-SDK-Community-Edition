@@ -6,18 +6,27 @@
     <Description>CDP4WspDal netcore unit tests</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
-    <Configurations>Debug;Release</Configurations>
+    <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
 
-  <ItemGroup>
+  <Choose>
+    <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
+      <ItemGroup>
+        <PackageReference Include="CDP4WspDal-CE" Version="1.0.4" />
+      </ItemGroup>
+    </When>
 
-    <PackageReference Include="CDP4WspDal-CE" Version="1.0.4" />
-    <!--
-    <ProjectReference Include="..\CDP4WspDal\CDP4WspDal.csproj" />
-    <PackageReference Include="NLog" Version="4.5.0-rc04" />
-    <PackageReference Include="System.Reactive" Version="3.1.1" />
-    -->
-  </ItemGroup>
+    <When Condition="'$(Configuration)'=='Dev'">
+      <ItemGroup>
+        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+        <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+        <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
+        <ProjectReference Include="..\CDP4WspDal\CDP4WspDal.csproj" />
+        <PackageReference Include="NLog" Version="4.5.0-rc04" />
+        <PackageReference Include="System.Reactive" Version="3.1.1" />
+      </ItemGroup>
+    </When>
+  </Choose>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />

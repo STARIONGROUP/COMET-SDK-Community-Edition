@@ -454,7 +454,7 @@ namespace CDP4WspDal.Tests
             var createFileRevisionOperation = new Operation(null, fileRevision, OperationKind.Create);
             operationContainer.AddOperation(createFileRevisionOperation);
 
-            dal.Write(operationContainer, files);
+            await dal.Write(operationContainer, files);
         }
 
         [Test]
@@ -516,7 +516,7 @@ namespace CDP4WspDal.Tests
         /// Set the credentials property so DAL appears to be open
         /// </summary>
         /// <param name="dal">
-        /// The <see cref="CdpServicesDal"/> that is to be opened
+        /// The <see cref="WspDal"/> that is to be opened
         /// </param>
         private void SetDalToBeOpen(WspDal dal)
         {

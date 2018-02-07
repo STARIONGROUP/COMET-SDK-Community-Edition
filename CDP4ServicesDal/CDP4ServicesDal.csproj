@@ -15,20 +15,27 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
-    <Configurations>Debug;Release;Dev</Configurations>
     <PackageReleaseNotes>[Update] to CDP4JsonSerializer-CE and CDP4Dal-CE version 1.0.4</PackageReleaseNotes>
+    <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
-  
-  <ItemGroup>
 
-    <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.4" />
-    <PackageReference Include="CDP4Dal-CE" Version="1.0.4" />
-    <!--    
-    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
-    <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
-    -->
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
+      <ItemGroup>
+        <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.4" />
+        <PackageReference Include="CDP4Dal-CE" Version="1.0.4" />
+      </ItemGroup>
+    </When>
+
+    <When Condition="'$(Configuration)'=='Dev'">
+      <ItemGroup>
+        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+        <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+        <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
+        <PackageReference Include="NLog" Version="4.5.0-rc04" />
+      </ItemGroup>
+    </When>
+  </Choose>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47'">
     <Reference Include="System.ComponentModel.Composition" />

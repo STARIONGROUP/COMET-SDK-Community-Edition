@@ -9,13 +9,26 @@
     <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
 
-  <ItemGroup>
+  <Choose>
+    <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
+      <ItemGroup>
+        <PackageReference Include="CDP4WspDal-CE" Version="1.0.4" />
+      </ItemGroup>
+    </When>
 
-    <PackageReference Include="CDP4WspDal-CE" Version="1.0.4" />
-    <!--
-    <ProjectReference Include="..\CDP4WspDal\CDP4WspDal.csproj" />
-    -->
-  </ItemGroup>
+    <When Condition="'$(Configuration)'=='Dev'">
+      <ItemGroup>
+        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+        <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+        <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
+        <ProjectReference Include="..\CDP4WspDal\CDP4WspDal.csproj" />
+        <PackageReference Include="NLog" Version="4.5.0-rc04" />
+        <PackageReference Include="Rx-Core" version="2.2.5" />
+        <PackageReference Include="Rx-Interfaces" version="2.2.5" />
+        <PackageReference Include="Rx-Linq" version="2.2.5" />
+      </ItemGroup>
+    </When>
+  </Choose>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />

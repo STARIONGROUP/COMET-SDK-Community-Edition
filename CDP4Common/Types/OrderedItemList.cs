@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OrderedItemList.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+//   Copyright (c) 2017-2018 RHEA System S.A.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ namespace CDP4Common.Types
     using System.Linq;
     using System.Runtime.CompilerServices;
     using CDP4Common.CommonData;
-
+    
     /// <summary>
     /// A CDP4 Ordered List
     /// </summary>
@@ -105,11 +105,14 @@ namespace CDP4Common.Types
         /// </summary>
         /// <param name="match">The <see cref="Predicate{T}"/></param>
         /// <returns>The index of the item if there is a match, else -1</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when match is null.
+        /// </exception>
         public int FindIndex(Predicate<T> match)
         {
             if (match == null)
             {
-                throw new ArgumentNullException("match");
+                throw new ArgumentNullException(nameof(match));
             }
 
             foreach (T item in this)
@@ -136,7 +139,7 @@ namespace CDP4Common.Types
         /// </summary>
         public bool IsReadOnly
         {
-            get { return this.sortedItems.Values.IsReadOnly; }
+            get { return false; }
         }
 
         /// <summary>
@@ -156,6 +159,15 @@ namespace CDP4Common.Types
         /// <returns>
         /// The value of the item with the specified index (getter).
         /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when an invalid index is specified.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the provided value is null
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the provided value is a <see cref="Thing"/> that already exists in the <see cref="OrderedItemList{T}"/>
+        /// </exception>
         [IndexerName("Item")]
         public T this[int index]
         {
@@ -163,8 +175,7 @@ namespace CDP4Common.Types
             {
                 if (index < 0 || index >= this.sortedItems.Count)
                 {
-                    throw new ArgumentOutOfRangeException(
-                        "index", string.Format("index is {0}, valid range is 0 to {1}", index, this.sortedItems.Count - 1));
+                    throw new ArgumentOutOfRangeException(nameof(index), $"index is {index}, valid range is 0 to {this.sortedItems.Count - 1}");
                 }
 
                 return this.sortedItems.Values[index];
@@ -174,28 +185,28 @@ namespace CDP4Common.Types
             {
                 if (index < 0 || index >= this.sortedItems.Count)
                 {
-                    throw new ArgumentOutOfRangeException(
-                        "index", string.Format("index is {0}, valid range is 0 to {1}", index, this.sortedItems.Count - 1));
+                    throw new ArgumentOutOfRangeException(nameof(index), $"index is {index}, valid range is 0 to {this.sortedItems.Count - 1}");
                 }
 
                 if (value == null)
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
-
-                if (value as Thing != null && this.isComposite)
-                {
-                    (value as Thing).Container = this.container;
-                }
-
-                if (typeof(T) == typeof(Thing))
+                
+                var pocoThing = value as Thing;
+                if (pocoThing != null)
                 {
                     if (this.sortedItems.Values.Contains(value))
                     {
-                        throw new InvalidOperationException(string.Format("The sorted list already contains the item {0}", (value as Thing).Iid));
+                        throw new InvalidOperationException($"The sorted list already contains the item {(value as Thing).Iid}");
                     }
                 }
 
+                if (pocoThing != null && this.isComposite)
+                {
+                    pocoThing.Container = this.container;
+                }
+                
                 var sortKey = this.sortedItems.ElementAt(index).Key;
                 this.sortedItems[sortKey] = value;
             }
@@ -232,27 +243,36 @@ namespace CDP4Common.Types
         /// <exception cref="ArgumentNullException">
         /// Thrown when <see cref="item"/> is null.
         /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the item is a Thing and is already in the List
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the item is null.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the provided value is a <see cref="Thing"/> that already exists in the <see cref="OrderedItemList{T}"/>
+        /// </exception>
         public void Add(T item)
         {
             if (item == null)
             {
-                throw new ArgumentNullException("item");
+                throw new ArgumentNullException(nameof(item));
             }
-
-            if (typeof(T) == typeof(Thing))
+            
+            var pocoThing = item as Thing;
+            if (pocoThing != null)
             {
                 if (this.sortedItems.Values.Contains(item))
                 {
-                    throw new InvalidOperationException("The added object already exists");
+                    throw new InvalidOperationException($"The sorted list already contains the item {(item as Thing).Iid}");
                 }
             }
 
-            var pocoThing = item as Thing;
             if (pocoThing != null && this.isComposite)
             {
                 pocoThing.Container = this.container;
             }
-
+            
             var newSortKey = this.ComputeSortKey(this.highestKey, this.highestKey + (2L * DefaultKeyInterval));
             this.sortedItems.Add(newSortKey, item);
             this.highestKey = newSortKey;
@@ -342,12 +362,12 @@ namespace CDP4Common.Types
         {
             if (index >= this.sortedItems.Count || index < 0)
             {
-                throw new KeyNotFoundException(string.Format("The Key {0} does not exist in the ordered item list", index));
+                throw new ArgumentOutOfRangeException($"The Key {index} does not exist in the ordered item list");
             }
 
             if (destinationIndex >= this.sortedItems.Count || destinationIndex < 0)
             {
-                throw new KeyNotFoundException(string.Format("The Key {0} does not exist in the ordered item list", destinationIndex));
+                throw new ArgumentOutOfRangeException("The Key {destinationIndex} does not exist in the ordered item list");
             }
 
             var minIndex = Math.Min(index, destinationIndex);
@@ -512,15 +532,21 @@ namespace CDP4Common.Types
 
             if (this.sortedItems.ContainsKey(sortKey))
             {
-                throw new ArgumentException("The key already exists", "sortKey");
+                throw new ArgumentException("The key already exists", nameof(sortKey));
             }
 
-            if (typeof(T) == typeof(Thing))
+            var pocoThing = item as Thing;
+            if (pocoThing != null)
             {
                 if (this.sortedItems.Values.Contains(item))
                 {
-                    return;
+                    throw new InvalidOperationException($"The sorted list already contains the item {(item as Thing).Iid}");
                 }
+            }
+
+            if (pocoThing != null && this.isComposite)
+            {
+                pocoThing.Container = this.container;
             }
 
             this.sortedItems.Add(sortKey, item);
