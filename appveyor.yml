@@ -2,17 +2,15 @@ image: Visual Studio 2017
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-
+configuration:
 # configuration for "master" branch
 # build in Release mode and deploy to Azure
--
   branches:
     only:
       - master
   configuration: Release
 # configuration for all branches starting from "dev-"
 # build in Debug mode and deploy locally for testing
--
   branches:
     only:
       - development
@@ -20,7 +18,6 @@ environment:
 # "fall back" configuration for all other branches
 # no "branches" section defined
 # do not deploy at all
--
   configuration: Debug
 before_build:
   - cmd: nuget install NUnit.Console -Version 3.7.0 -OutputDirectory tools
