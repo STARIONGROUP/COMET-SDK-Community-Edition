@@ -1,6 +1,6 @@
 <img src="https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/raw/master/CDP-Community-Edition.png" width="250">
 
-The Concurrent Design Platform Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the Concurrent Design Platform (CDP4) to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/RHEAGROUP/CDP4-WebServices-Community-Edition) and the [Desktop Application](https://github.com/RHEAGROUP/CDP4-IME-Community-Edition). The following libraries are made avaiable in the Community Edition under the [GNU AGPL](https://www.gnu.org/licenses/agpl-3.0.nl.html):
+The Concurrent Design Platform Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the Concurrent Design Platform (CDP4) to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/RHEAGROUP/CDP4-WebServices-Community-Edition) and the [Desktop Application](https://github.com/RHEAGROUP/CDP4-IME-Community-Edition). The following libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
 
   - CDP4Common 
   - CDP4JsonSerializer
@@ -46,7 +46,7 @@ The CDP4WspDal library is a C# library that provides an implementation of ECSS-E
 
 # License
 
-The libraries contained in the CDP4-SDK Community Edition are provided to the community under the GNU Affero General Public License. The CDP4 Community Edition, which makes use of the CDP4-SDK Community Edition, relies on open source and proprietary licensed components. Some of these components have a license that is not compatible with the GPL or AGPL. For these components Additional permission under GNU GPL version 3 section 7 are granted. See the license files for the details. The license can be found [here](LICENSE).
+The libraries contained in the CDP4-SDK Community Edition are provided to the community under the GNU Lesser General Public License. Because we make the software available with the LGPL, it can be used in both open source and proprietary software without being required to release the source code of your own components.
 
 # Contributions
 
