@@ -4,32 +4,32 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard1.6;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4JsonSerializer Community Edition</Title>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <Description>CDP4 JSON Serialization Library</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
+    <Authors>Sam, Merlin, Alex, Naron</Authors>
     <PackageId>CDP4JsonSerializer-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/RHEAGROUP/CDP4-SDK-Community-Edition/master/docs/cdp4-icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25 JSON</PackageTags>
-    <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageReleaseNotes>[Update] to CDP4Common-CE version 1.0.4</PackageReleaseNotes>
+    <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LES1SER</PackageLicenseUrl>
+    <PackageReleaseNotes>[Update] to CDP4Common-CE version 1.0.5</PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
 
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4Common-CE" Version="1.0.4" />
+        <PackageReference Include="CDP4Common-CE" Version="1.0.5" />
       </ItemGroup>
     </When>
 
     <When Condition="'$(Configuration)'=='Dev'">
       <ItemGroup>
         <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-        <PackageReference Include="NLog" Version="4.5.0-rc04" />
+        <PackageReference Include="NLog" Version="4.5.0-rc05" />
       </ItemGroup>
     </When>
   </Choose>

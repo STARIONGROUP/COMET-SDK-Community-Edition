@@ -11,7 +11,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4Dal-CE" Version="1.0.4" />
+        <PackageReference Include="CDP4Dal-CE" Version="1.0.5" />
       </ItemGroup>
     </When>
 
@@ -19,7 +19,7 @@
       <ItemGroup>
         <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
         <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
-        <PackageReference Include="NLog" Version="4.5.0-rc04" />
+        <PackageReference Include="NLog" Version="4.5.0-rc05" />
         <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
         <PackageReference Include="Rx-Core" version="2.2.5" />
         <PackageReference Include="Rx-Interfaces" version="2.2.5" />

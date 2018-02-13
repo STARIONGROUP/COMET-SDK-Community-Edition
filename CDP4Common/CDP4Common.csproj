@@ -14,8 +14,8 @@
     <PackageIconUrl>https://raw.githubusercontent.com/RHEAGROUP/CDP4-SDK-Community-Edition/master/docs/cdp4-icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
-    <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
-    <PackageReleaseNotes>[Update] namespace of NotThing, Cdp4ModelValidationException, ContainmentException, NestedElementTreeException. [Update] nlog 4.5.0-rc04</PackageReleaseNotes>
+    <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LES1SER</PackageLicenseUrl>
+    <PackageReleaseNotes>[Update] from GPL to LGPL  [Update] nlog 4.5.0-rc05</PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
   
@@ -37,7 +37,7 @@
   </ItemGroup>
   
   <ItemGroup>    
-    <PackageReference Include="NLog" Version="4.5.0-rc04" />  
+    <PackageReference Include="NLog" Version="4.5.0-rc05" />  
 	  <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard1.6'" />
   </ItemGroup>

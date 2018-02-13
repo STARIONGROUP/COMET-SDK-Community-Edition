@@ -59,7 +59,7 @@ namespace CDP4Common.Validation
         /// <summary>
         /// Valid <see cref="Boolean"/> values
         /// </summary>
-        public static readonly string[] ValidBoolan = { "-", "true", "false", "True", "False", "1", "0" };
+        public static readonly string[] ValidBoolean = { "-", "true", "false", "True", "False", "1", "0" };
 
         /// <summary>
         /// Validates the  to check whether the <paramref name="value"/> is valid with respect to the <paramref name="parameterType"/>
@@ -132,8 +132,8 @@ namespace CDP4Common.Validation
             {
                 return timeOfDayParameterType.Validate(value);
             }
-            
-            throw new NotSupportedException(string.Format("The Validate method is not suported for parameterType: {0}", parameterType));
+
+            throw new NotSupportedException(string.Format("The Validate method is not supported for parameterType: {0}", parameterType));
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace CDP4Common.Validation
             {
                 var lowerCaseValue = valueString.ToLower();
 
-                if (ValidBoolan.Contains(lowerCaseValue))
+                if (ValidBoolean.Contains(lowerCaseValue))
                 {
                     result.ResultKind = ValidationResultKind.Valid;
                     result.Message = string.Empty;
@@ -194,7 +194,7 @@ namespace CDP4Common.Validation
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
-            result.Message = string.Format("{0} is not a valid boolean, valid values are: {1}", value, string.Join(",", ValidBoolan));
+            result.Message = string.Format("{0} is not a valid boolean, valid values are: {1}", value, string.Join(",", ValidBoolean));
             return result;
         }
 
