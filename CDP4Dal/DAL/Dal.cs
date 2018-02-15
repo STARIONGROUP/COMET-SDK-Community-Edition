@@ -364,20 +364,17 @@ namespace CDP4Dal.DAL
         {
             foreach (var file in files)
             {
-                string utf8EconcodedHAsh = string.Empty;
+                var hash = string.Empty;
                 using (var fileStream = new FileStream(file, FileMode.Open, FileAccess.Read))
                 {
-                    using (var cryptoProvider = new SHA1CryptoServiceProvider())
-                    {
-                        utf8EconcodedHAsh = BitConverter.ToString(cryptoProvider.ComputeHash(fileStream)).Replace("-", "").ToLower();
-                    }
+                    hash = StreamToHashComputer.CalculateSha1HashFromStream(fileStream);
                 }
 
                 var contentFoundInAnOperation = false;
                 foreach (var operation in operationContainer.Operations)
                 {
                     var fileRevision = operation.ModifiedThing as CDP4Common.DTO.FileRevision;
-                    if (fileRevision != null && fileRevision.ContentHash == utf8EconcodedHAsh)
+                    if (fileRevision != null && fileRevision.ContentHash == hash)
                     {
                         contentFoundInAnOperation = true;
                         break;
@@ -386,40 +383,11 @@ namespace CDP4Dal.DAL
 
                 if (!contentFoundInAnOperation)
                 {
-                    throw new InvalidOperationContainerException(string.Format("The hash of the specified file {0} could not be found in the operation", file));
+                    throw new InvalidOperationContainerException($"The hash of the specified file {file} could not be found in the operation");
                 }
             }
         }
-
-        /// <summary>
-        /// Generate a stream from a string
-        /// </summary>
-        /// <param name="s">The string input</param>
-        /// <returns>The stream</returns>
-        protected Stream GenerateStreamFromString(string s)
-        {
-            MemoryStream stream = new MemoryStream();
-            StreamWriter writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
-
-        /// <summary>
-        /// Generate a string for the <see cref="MemoryStream"/>
-        /// </summary>
-        /// <param name="memoryStream">The source <see cref="MemoryStream"/></param>
-        /// <returns>The string content</returns>
-        protected string MemoryStreamToString(MemoryStream memoryStream)
-        {
-            memoryStream.Position = 0;
-            var sr = new StreamReader(memoryStream);
-            var result = sr.ReadToEnd();
-            memoryStream.Position = 0;
-            return result;
-        }
-
+        
         /// <summary>
         /// Sets the CDP Version data model version that is supported by the current <see cref="CDP4Dal.Session"/>
         /// </summary>

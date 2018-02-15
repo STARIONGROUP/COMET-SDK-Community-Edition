@@ -244,9 +244,11 @@ namespace CDP4JsonFileDal
                 throw new NotSupportedException("The JSONFileDal only supports Read on Iteration instances.");
             }
 
-            // make sure the uri is not null
-            Utils.AssertArgumentNotNull(this.Credentials.Uri);
-
+            if (this.Credentials.Uri  == null)
+            {
+                throw new ArgumentNullException(nameof(this.Credentials.Uri), $"The Credentials URI may not be null");
+            }
+            
             // make sure that the uri is of the correct format
             Utils.AssertUriIsFileSchema(this.Credentials.Uri);
 
@@ -424,7 +426,10 @@ namespace CDP4JsonFileDal
         public override async Task<IEnumerable<Thing>> Open(Credentials credentials, CancellationToken cancellationToken)
         {
             // make sure the uri is not null
-            Utils.AssertArgumentNotNull(credentials.Uri);
+            if (credentials == null)
+            {
+                throw new ArgumentNullException(nameof(this.Credentials.Uri), $"The Credentials URI may not be null");
+            }
 
             // make sure that the uri is of the correct format
             Utils.AssertUriIsFileSchema(credentials.Uri);

@@ -34,13 +34,6 @@ namespace CDP4Dal.Tests
     public class UtilsTestFixture
     {
         [Test]
-        public void AssertThatArgumentNotNullWorks()
-        {
-            Utils.AssertArgumentNotNull(new SiteDirectory());
-            Assert.Throws<ArgumentNullException>(() => Utils.AssertArgumentNotNull(null));
-        }
-
-        [Test]
         public void AssertThatUriSchemaAssertionWorksForHttpAndHttps()
         {
             Utils.AssertUriIsHttpOrHttpsSchema(new Uri("http://somehost.com:23/"));
@@ -66,15 +59,6 @@ namespace CDP4Dal.Tests
         {
             Assert.Throws<ArgumentException>(() => Utils.AssertUriIsFileSchema(new Uri("http://somehost.com")));
             Assert.Throws<ArgumentException>(() => Utils.AssertUriIsFileSchema(new Uri("ftp://somehost.com")));
-        }
-
-        [Test]
-        public void VerifyThatTheNullIsAsserted()
-        {
-            var x = new object();
-            Assert.DoesNotThrow(() => Utils.AssertNotNull(x));
-
-            Assert.Throws<NullReferenceException>(() => Utils.AssertNotNull(null));
         }
 
         [Test]

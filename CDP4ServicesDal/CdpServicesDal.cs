@@ -109,7 +109,10 @@ namespace CDP4ServicesDal
         /// </returns>
         public override async Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
         {
-            Utils.AssertNotNull(operationContainer);
+            if (operationContainer == null)
+            {
+                throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
+            }
 
             var watch = Stopwatch.StartNew();
 
@@ -125,18 +128,13 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
 
-            var requestBody = this.ConstructPostRequestBody(operationContainer);
+            var result = new List<Thing>();
 
             if (files != null && files.Any())
             {
                 this.OperationContainerFileVerification(operationContainer, files);
             }
-
-            if (requestBody == null)
-            {
-                throw new InvalidOperationException(string.Format("Attempt to serialize the operation container failed."));
-            }
-
+            
             var attribute = new QueryAttributes
             {
                 RevisionNumber = operationContainer.TopContainerRevisionNumber
@@ -145,11 +143,9 @@ namespace CDP4ServicesDal
             var postToken = this.RandomWebRequestToken();
             var resourcePath = $"{operationContainer.Context}{attribute}";
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
-            Logger.Debug("CDP4 Services POST: {0}", postToken, uriBuilder);
-            
-            Logger.Trace("POST JSON BODY {0} /r/n {1}", postToken, requestBody);
+            Logger.Debug("CDP4 Services POST: {0} - {1}", postToken, uriBuilder);
 
-            var requestContent = this.CreateHttpContent(operationContainer, files);
+            var requestContent = this.CreateHttpContent(postToken, operationContainer, files);
 
             using (var httpResponseMessage = await this.httpClient.PostAsync(resourcePath, requestContent))
             {
@@ -165,7 +161,7 @@ namespace CDP4ServicesDal
 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
-                    var result = this.Serializer.Deserialize(resultStream);
+                    result.AddRange(this.Serializer.Deserialize(resultStream));
 
                     Guid iterationId;
                     if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
@@ -275,7 +271,10 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The CdpServicesDal is not open.");
             }
 
-            Utils.AssertNotNull(thing);
+            if (thing == null)
+            {
+                throw new ArgumentNullException(nameof(thing), $"The {nameof(thing)} may not be null");
+            }
 
             var watch = Stopwatch.StartNew();
 
@@ -388,10 +387,16 @@ namespace CDP4ServicesDal
         /// </returns>
         public override async Task<IEnumerable<Thing>> Open(Credentials credentials, CancellationToken cancellationToken)
         {
-            Utils.AssertNotNull(credentials);
-            
-            Utils.AssertNotNull(credentials.Uri);
-            
+            if (credentials == null)
+            {
+                throw new ArgumentNullException(nameof(credentials), $"The {nameof(credentials)} may not be null");
+            }
+
+            if (credentials == null)
+            {
+                throw new ArgumentNullException(nameof(this.Credentials.Uri), $"The Credentials URI may not be null");
+            }
+
             Utils.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
 
             var queryAttributes = new QueryAttributes
@@ -453,6 +458,9 @@ namespace CDP4ServicesDal
         /// <summary>
         /// Creates <see cref="HttpContent"/> that is added to a POST request
         /// </summary>
+        /// <param name="token">
+        /// The POST token that is used to track the POST request in a logger
+        /// </param>
         /// <param name="operationContainer">
         /// The <see cref="OperationContainer"/> that contains the <see cref="Operation"/>s that are part of 
         /// the transaction that is sent to the DAL
@@ -463,12 +471,12 @@ namespace CDP4ServicesDal
         /// <returns>
         /// An instance of <see cref="StringContent"/> or <see cref="MultipartFormDataContent"/>
         /// </returns>
-        private HttpContent CreateHttpContent(OperationContainer operationContainer, IEnumerable<string> files = null)
+        private HttpContent CreateHttpContent(string token, OperationContainer operationContainer, IEnumerable<string> files = null)
         {
-            var requestBody = this.ConstructPostRequestBody(operationContainer);
-            var jsonContent = new StringContent(requestBody);
-            jsonContent.Headers.Clear();
-            jsonContent.Headers.Add("content-type", "application/json");
+            var stream = new MemoryStream();
+            this.ConstructPostRequestBodyStream(token, operationContainer, stream);
+            var jsonContent = new StreamContent(stream);
+            jsonContent.Headers.Add("Content-Type", "application/json");
 
             if (files == null)
             {
@@ -481,12 +489,59 @@ namespace CDP4ServicesDal
 
                 foreach (var file in files)
                 {
-                    var byteArray = System.IO.File.ReadAllBytes(file);
-                    var fileContent = new ByteArrayContent(byteArray);
-                    multipartContent.Add(fileContent);
+                    var fileName = Path.GetFileName(file);
+
+                    using (var filestream = System.IO.File.OpenRead(file))
+                    {
+                        var contentStream = new MemoryStream();
+                        filestream.CopyTo(contentStream);
+                        contentStream.Position = 0;
+
+                        var fileContent = new StreamContent(contentStream);
+                        fileContent.Headers.Add("Content-Type", "application/octet-stream");
+                        fileContent.Headers.Add("Content-Disposition", $"attachment; filename=\"{fileName}\"");
+                        multipartContent.Add(fileContent);
+                    }
                 }
 
                 return multipartContent;
+            }
+        }
+
+        /// <summary>
+        /// Constructs the JSON stream containing the full POST body of the given <see cref="OperationContainer"/>
+        /// </summary>
+        /// <param name="token">
+        /// The POST token that is used to track the POST request in a logger
+        /// </param>
+        /// <param name="operationContainer">
+        /// The <see cref="OperationContainer"/> that is serialized to a JSON stream
+        /// </param>
+        /// <param name="outputStream">
+        /// The stream to which is written
+        /// </param>
+        internal void ConstructPostRequestBodyStream(string token, OperationContainer operationContainer, Stream outputStream)
+        {
+            var postOperation = new CdpPostOperation(this.MetaDataProvider);
+
+            // add the simple operations to the WSP container
+            foreach (var operation in operationContainer.Operations)
+            {
+                postOperation.ConstructFromOperation(operation);
+            }
+
+            this.Serializer.SerializeToStream(postOperation, outputStream);
+            outputStream.Position = 0;
+
+            if (Logger.IsTraceEnabled)
+            {
+                using (var streamReader = new StreamReader(outputStream))
+                {
+                    var postBody = streamReader.ReadToEnd();
+                    Logger.Trace("POST JSON BODY {0} /r/n {1}", token, postBody);
+                }
+
+                outputStream.Position = 0;
             }
         }
 
@@ -567,35 +622,6 @@ namespace CDP4ServicesDal
             {
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Constructs the JSON string containing the full POST body of the given <see cref="OperationContainer"/>
-        /// </summary>
-        /// /// <param name="operationContainer">
-        /// The <see cref="OperationContainer"/>
-        /// </param>
-        /// <returns>The complete JSON string POST request body ready for the CDP4Services</returns>
-        public string ConstructPostRequestBody(OperationContainer operationContainer)
-        {
-            var postOperation = new CdpPostOperation(this.MetaDataProvider);
-
-            foreach (var operation in operationContainer.Operations)
-            {
-                postOperation.ConstructFromOperation(operation);
-            }
-
-            string postBody;
-            using (var stream = new MemoryStream())
-            {
-                this.Serializer.SerializeToStream(postOperation, stream);
-                stream.Position = 0;
-
-                var streamReader = new StreamReader(stream);
-                postBody = streamReader.ReadToEnd();
-            }
-
-            return postBody;
         }
 
         /// <summary>

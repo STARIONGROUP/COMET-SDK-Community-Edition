@@ -34,18 +34,6 @@
     </When>
   </Choose>
 
-  <ItemGroup>
-    <Compile Remove="DAL\Helpers\**" />
-    <EmbeddedResource Remove="DAL\Helpers\**" />
-    <None Remove="DAL\Helpers\**" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Composition\" />
-    <Folder Include="DAL\Protocol\" />
-    <Folder Include="Operations\" />
-  </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47'">
     <Reference Include="System.ComponentModel.Composition" />    
     <PackageReference Include="Rx-Core" version="2.2.5" />

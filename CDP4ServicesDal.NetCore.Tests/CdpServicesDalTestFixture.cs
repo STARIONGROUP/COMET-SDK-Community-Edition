@@ -28,22 +28,25 @@ namespace CDP4ServicesDal.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Net.Http;
-    using System.Reflection;
+    using System.Net.Http.Headers;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
-    using CDP4Common.EngineeringModelData;    
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
-    using CDP4Common.Types;    
+    using CDP4Common.Types;
     using CDP4Dal;
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
     using NUnit.Framework;
-    
+
     /// <summary>
     /// Suite of tests for the <see cref="CdpServicesDal"/> class
     /// </summary>
@@ -57,7 +60,7 @@ namespace CDP4ServicesDal.Tests
 
         private readonly Uri uri = new Uri("https://cdp4services-test.rheagroup.com");
         private CancellationTokenSource cancelationTokenSource;
-        
+
         private SiteDirectory siteDirectory;
         private EngineeringModel engineeringModel;
         private EngineeringModelSetup engineeringModelSetup;
@@ -70,16 +73,16 @@ namespace CDP4ServicesDal.Tests
         public void Setup()
         {
             this.cancelationTokenSource = new CancellationTokenSource();
-            
+
             this.credentials = new Credentials("admin", "pass", this.uri);
             this.dal = new CdpServicesDal();
             this.session = new Session(this.dal, this.credentials);
-            
+
             // Add SiteDirectory to cache
             this.siteDirectory = new SiteDirectory(Guid.Parse("f13de6f8-b03a-46e7-a492-53b2f260f294"), this.session.Assembler.Cache, this.uri);
             var lazySiteDirectory = new Lazy<Thing>(() => this.siteDirectory);
             lazySiteDirectory.Value.Cache.TryAdd(new Tuple<Guid, Guid?>(lazySiteDirectory.Value.Iid, null), lazySiteDirectory);
-            
+
             this.PopulateSiteDirectory();
         }
 
@@ -122,16 +125,154 @@ namespace CDP4ServicesDal.Tests
             var dal = new CdpServicesDal();
             Assert.IsNotNull(dal);
         }
-        
+
         [Test]
-        public void VerifyThatCDPPostBodyIsCorrectlyResolves()
+        public async Task VerifyThatOpenReturnsDTOs()
+        {
+            var uriBuilder = new UriBuilder(this.credentials.Uri) { Path = "/Data/Restore" };
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
+            await httpClient.PostAsync(uriBuilder.Uri, null);
+
+            var dal = new CdpServicesDal();
+            var result = await dal.Open(this.credentials, new CancellationToken());
+
+            var amountOfDtos = result.ToList().Count;
+
+            Assert.AreEqual(60, amountOfDtos);
+        }
+
+        [Test]
+        public async Task VerifThatAClosedDalCannotBeClosedAgain()
+        {
+            var dal = new CdpServicesDal();
+            await dal.Open(this.credentials, new CancellationToken());
+
+            dal.Close();
+
+            Assert.Throws<InvalidOperationException>(() => dal.Close());
+        }
+
+        [Test]
+        public async Task VerifyThatIfCredentialsAreNullExceptionIsThrown()
+        {
+            var dal = new CdpServicesDal();
+
+            Assert.That(async () => await dal.Open(null, new CancellationToken()), Throws.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
+        public async Task VerifyThatIfNotHttpOrHttpsExceptionIsThrown()
+        {
+            var uri = new Uri("https://cdp4services-test.rheagroup.com");
+            var invalidCredentials = new Credentials("John", "a password", uri);
+
+            Assert.That(async () => await dal.Open(invalidCredentials, new CancellationToken()), Throws.TypeOf<DalReadException>());
+        }
+
+        [Test]
+        public async Task VerifyThatIfCredentialsAreNullOnReadExceptionIsThrown()
+        {
+            var organizationIid = Guid.Parse("44d1ff16-8195-47d0-abfa-163bbba9bf39");
+            var organizationDto = new CDP4Common.DTO.Organization(organizationIid, 0);
+            organizationDto.AddContainer(ClassKind.SiteDirectory, Guid.Parse("eb77f3e1-a0f3-412d-8ed6-b8ce881c0145"));
+
+            var dal = new CdpServicesDal();
+
+            Assert.That(async () => await dal.Read(organizationDto, new CancellationToken()), Throws.TypeOf<InvalidOperationException>());
+        }
+
+        [Test]
+        public void VerifyThatWriteCreateException()
+        {
+            var alias = new CDP4Common.DTO.Alias();
+            Assert.Throws<NotImplementedException>(() => this.dal.Create(alias));
+        }
+
+        [Test]
+        public void VerifyThatUpdateThrowsException()
+        {
+            var alias = new CDP4Common.DTO.Alias();
+            Assert.Throws<NotImplementedException>(() => this.dal.Update(alias));
+        }
+
+        [Test]
+        public void VerifyThatDeleteThrowsException()
+        {
+            var alias = new CDP4Common.DTO.Alias();
+            Assert.Throws<NotImplementedException>(() => this.dal.Delete(alias));
+        }
+
+        [Test]
+        public void VerifyThatDalThatIsNotOpenCannotBeClosed()
+        {
+            Assert.IsNull(this.dal.Credentials);
+            Assert.Throws<InvalidOperationException>(() => this.dal.Close());
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
+        public async Task VerifyThatReadReturnsCorrectDTO()
+        {
+            this.dal = new CdpServicesDal();
+
+            var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();
+            Assert.NotNull(returned);
+            Assert.IsNotEmpty(returned);
+
+            var sd = returned.First();
+
+            var attributes = new QueryAttributes();
+            var readResult = await dal.Read(sd, this.cancelationTokenSource.Token, attributes);
+
+            // General assertions for any kind of Thing we read
+            Assert.NotNull(readResult);
+            Assert.IsTrue(readResult.Count() == 1);
+            var sd1 = readResult.Single();
+            Assert.IsTrue(sd.ClassKind == sd1.ClassKind);
+            Assert.IsTrue(sd.Iid == sd1.Iid);
+            Assert.IsTrue(sd.Route == sd1.Route);
+
+            // Specific assertions for Sitedirectory ClassKind
+            var castedSd = sd as CDP4Common.DTO.SiteDirectory;
+            var castedSd1 = sd as CDP4Common.DTO.SiteDirectory;
+            Assert.NotNull(castedSd);
+            Assert.NotNull(castedSd1);
+            Assert.IsTrue(castedSd.Name == castedSd1.Name);
+            Assert.IsTrue(castedSd.Domain.Count == castedSd1.Domain.Count);
+            Assert.IsTrue(castedSd.SiteReferenceDataLibrary == castedSd1.SiteReferenceDataLibrary);
+            Assert.IsTrue(castedSd.Model == castedSd1.Model);
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
+        public async Task IntegrationTest()
+        {
+            this.dal = new CdpServicesDal();
+            var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
+            var assembler = new Assembler(this.credentials.Uri);
+
+            await assembler.Synchronize(returned);
+
+            var attributes = new DalQueryAttributes { RevisionNumber = 0 };
+            var topcontainers = assembler.Cache.Select(x => x.Value).Where(x => x.Value is CDP4Common.CommonData.TopContainer).ToList();
+
+            foreach (var container in topcontainers)
+            {
+                returned = await this.dal.Read(container.Value.ToDto(), this.cancelationTokenSource.Token, attributes);
+                await assembler.Synchronize(returned);
+            }
+        }
+
+        [Test]
+        public void VerifyThatPostBodyIsCorrectlyResolves()
         {
             var siteDirecortoryIid = Guid.Parse("f289023d-41e8-4aaf-aae5-1be1ecf24bac");
             var domainOfExpertiseIid = Guid.NewGuid();
 
             var context = "/SiteDirectory/f289023d-41e8-4aaf-aae5-1be1ecf24bac";
             var operationContainer = new OperationContainer(context);
-            
+
             var testDtoOriginal = new CDP4Common.DTO.Alias(iid: Guid.NewGuid(), rev: 1)
             {
                 Content = "content",
@@ -149,7 +290,7 @@ namespace CDP4ServicesDal.Tests
             };
             testDtoModified.AddContainer(ClassKind.DomainOfExpertise, domainOfExpertiseIid);
             testDtoModified.AddContainer(ClassKind.SiteDirectory, siteDirecortoryIid);
-            
+
             var testDtoOriginal2 = new CDP4Common.DTO.Definition(iid: Guid.NewGuid(), rev: 1)
             {
                 Content = "somecontent",
@@ -212,31 +353,134 @@ namespace CDP4ServicesDal.Tests
             operationContainer.AddOperation(operation3);
             operationContainer.AddOperation(operation4);
 
-            var request = this.dal.ConstructPostRequestBody(operationContainer);
+            var stream = new MemoryStream();
+            this.dal.ConstructPostRequestBodyStream(string.Empty, operationContainer, stream);
 
-            Assert.NotNull(request);
+            Assert.AreNotEqual(0, stream.Length);
         }
 
         [Test]
-        public async Task VerifyThatOpenReturnsDTOs()
+        [Category("WebServicesDependent")]
+        public async Task VerifyThatReadIterationWorks()
         {
-            var dal = new CdpServicesDal();
-            var result = await dal.Open(this.credentials, new CancellationToken());
+            var dal = new CdpServicesDal { Session = this.session };
+            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.rheagroup.com"));
+            var session = new Session(dal, credentials);
 
-            var amountOfDtos = result.ToList().Count;
+            var returned = await dal.Open(credentials, this.cancelationTokenSource.Token);
 
-            Assert.AreEqual(60, amountOfDtos);
+            await session.Assembler.Synchronize(returned);
+
+            var siteDir = session.Assembler.RetrieveSiteDirectory();
+            var modelSetup = siteDir.Model.Single(x => x.ShortName == "LOFT");
+            var iterationSetup = modelSetup.IterationSetup.First();
+
+            var openCount = session.Assembler.Cache.Count;
+
+            var model = new EngineeringModel(modelSetup.EngineeringModelIid, null, null);
+            var iteration = new Iteration(iterationSetup.IterationIid, null, null);
+            iteration.Container = model;
+
+            var modelDtos = await dal.Read((CDP4Common.DTO.Iteration)iteration.ToDto(), this.cancelationTokenSource.Token);
+            await session.Assembler.Synchronize(modelDtos);
+
+            var readCount = session.Assembler.Cache.Count;
+            Assert.IsTrue(readCount > openCount);
         }
 
         [Test]
-        public async Task VerifThatAClosedDalCannotBeClosedAgain()
+        [Category("WebServicesDependent")]
+        [Category("Performance")]
+        public async Task AssemblerSynchronizePerformanceTest()
         {
-            var dal = new CdpServicesDal();
-            await dal.Open(this.credentials, new CancellationToken());
+            this.dal = new CdpServicesDal();
 
-            dal.Close();
+            var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
+            var returnedlist = returned.ToList();
+            const int iterationNumber = 1000;
+            var elapsedTimes = new List<long>();
 
-            Assert.Throws<InvalidOperationException>(() => dal.Close());
+            for (int i = 0; i < iterationNumber; i++)
+            {
+                var assemble = new Assembler(this.uri);
+                var stopwatch = Stopwatch.StartNew();
+                await assemble.Synchronize(returnedlist);
+                elapsedTimes.Add(stopwatch.ElapsedMilliseconds);
+                await assemble.Clear();
+            }
+
+            var synchronizeMeanElapsedTime = elapsedTimes.Average();
+            var maxElapsedTime = elapsedTimes.Max();
+            var minElapsedTime = elapsedTimes.Min();
+            // 204.64 | 181 | 458 ms
+            // refactor: 31.61 | 26 | 283
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
+        public async Task VerifyThatFileCanBeUploaded()
+        {
+            this.dal = new CdpServicesDal { Session = this.session };
+
+            var filename = @"TestData\testfile.pdf";
+            var directory = TestContext.CurrentContext.TestDirectory;
+            var filepath = Path.Combine(directory, filename);
+            var files = new List<string> { filepath };
+
+            var contentHash = "F73747371CFD9473C19A0A7F99BCAB008474C4CA";
+            //var uri = new Uri("https://cdp4services-test.rheagroup.com");
+            var uri = new Uri("http://localhost:5000");
+            this.credentials = new Credentials("admin", "pass", uri);
+
+            var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
+
+            var engineeringModeliid = Guid.Parse("9ec982e4-ef72-4953-aa85-b158a95d8d56");
+            var iterationiid = Guid.Parse("e163c5ad-f32b-4387-b805-f4b34600bc2c");
+            var domainFileStoreIid = Guid.Parse("da7dddaa-02aa-4897-9935-e8d66c811a96");
+            var fileIid = Guid.NewGuid();
+            var fileRevisionIid = Guid.NewGuid();
+            var domainOfExpertiseIid = Guid.Parse("0e92edde-fdff-41db-9b1d-f2e484f12535");
+            var fileTypeIid = Guid.Parse("b16894e4-acb5-4e81-a118-16c00eb86d8f"); //PDF
+            var participantIid = Guid.Parse("284334dd-e8e5-42d6-bc8a-715c507a7f02");
+
+            var originalDomainFileStore = new CDP4Common.DTO.DomainFileStore(domainFileStoreIid, 0);
+            originalDomainFileStore.AddContainer(ClassKind.Iteration, iterationiid);
+            originalDomainFileStore.AddContainer(ClassKind.EngineeringModel, engineeringModeliid);
+
+            var modifiedDomainFileStore = new CDP4Common.DTO.DomainFileStore(domainFileStoreIid, 0);
+            modifiedDomainFileStore.File.Add(fileIid);
+            modifiedDomainFileStore.AddContainer(ClassKind.Iteration, iterationiid);
+            modifiedDomainFileStore.AddContainer(ClassKind.EngineeringModel, engineeringModeliid);
+
+            var file = new CDP4Common.DTO.File(fileIid, 0) { Owner = domainOfExpertiseIid };
+            file.FileRevision.Add(fileRevisionIid);
+            file.AddContainer(ClassKind.DomainFileStore, domainFileStoreIid);
+            file.AddContainer(ClassKind.Iteration, iterationiid);
+            file.AddContainer(ClassKind.EngineeringModel, engineeringModeliid);
+
+            var fileRevision = new CDP4Common.DTO.FileRevision(fileRevisionIid, 0);
+            fileRevision.Name = "testfile";
+            fileRevision.ContentHash = contentHash;
+            fileRevision.FileType.Add(new OrderedItem() { K = 1, V = fileTypeIid });
+            fileRevision.Creator = participantIid;
+            fileRevision.AddContainer(ClassKind.File, fileIid);
+            fileRevision.AddContainer(ClassKind.DomainFileStore, domainFileStoreIid);
+            fileRevision.AddContainer(ClassKind.Iteration, iterationiid);
+            fileRevision.AddContainer(ClassKind.EngineeringModel, engineeringModeliid);
+
+            var context = string.Format("/EngineeringModel/{0}/iteration/{1}", engineeringModeliid, iterationiid);
+            var operationContainer = new OperationContainer(context);
+
+            var updateCommonFileStoreOperation = new Operation(originalDomainFileStore, modifiedDomainFileStore, OperationKind.Update);
+            operationContainer.AddOperation(updateCommonFileStoreOperation);
+
+            var createFileOperation = new Operation(null, file, OperationKind.Create);
+            operationContainer.AddOperation(createFileOperation);
+
+            var createFileRevisionOperation = new Operation(null, fileRevision, OperationKind.Create);
+            operationContainer.AddOperation(createFileRevisionOperation);
+
+            Assert.DoesNotThrowAsync(async () => await dal.Write(operationContainer, files));
         }
 
         [Test]
@@ -249,23 +493,6 @@ namespace CDP4ServicesDal.Tests
             Assert.IsFalse(dal.IsValidUri("file://some file"));
         }
 
-        [Test]        
-        public async Task VerifyThatIfCredentialsAreNullExceptionIsThrown()
-        {
-            var dal = new CdpServicesDal();
-
-            Assert.That(async () => await dal.Open(null, new CancellationToken()), Throws.TypeOf<NullReferenceException>());
-        }
-
-        [Test]
-        public async Task VerifyThatIfNotHttpOrHttpsExceptionIsThrown()
-        {
-            var uri = new Uri("https://cdp4services-test.rheagroup.com");
-            var invalidCredentials = new Credentials("John", "a password", uri);
-
-            Assert.That(async () => await dal.Open(invalidCredentials, new CancellationToken()), Throws.TypeOf<DalReadException>());
-        }
-        
         [Test]
         public async Task VerifyThatSessionMustBeSetToReadIteration()
         {
@@ -303,8 +530,8 @@ namespace CDP4ServicesDal.Tests
 
             var dal = new CdpServicesDal();
             var result = await dal.Open(this.credentials, new CancellationToken());
-            
-            Assert.NotNull(result);            
+
+            Assert.NotNull(result);
         }
 
         ///EngineeringModel/9ec982e4-ef72-4953-aa85-b158a95d8d56/iteration
@@ -315,15 +542,15 @@ namespace CDP4ServicesDal.Tests
             var uri = new Uri("https://cdp4services-test.rheagroup.com");
             var credentials = new Credentials("admin", "pass", uri);
             var assembler = new Assembler(this.uri);
-            
+
             var dal = new CdpServicesDal();
             var session = new Session(dal, credentials);
-            
+
             var result = await dal.Open(credentials, new CancellationToken());
 
             var siteDirectory = result.OfType<CDP4Common.DTO.SiteDirectory>().Single();
 
-            var queryAttributes = new QueryAttributes {Extent = ExtentQueryAttribute.deep};
+            var queryAttributes = new QueryAttributes { Extent = ExtentQueryAttribute.deep };
 
             for (int i = 0; i < 9; i++)
             {
@@ -331,6 +558,40 @@ namespace CDP4ServicesDal.Tests
             }
 
             var readresult = await dal.Read(siteDirectory, new CancellationToken());
+        }
+
+
+        [Test]
+        [Category("WebServicesDependent")]
+        public async Task Verify_that_person_can_be_Posted()
+        {
+            var wspdal = new CdpServicesDal();
+            var dtos = await wspdal.Open(this.credentials, this.cancelationTokenSource.Token);
+
+            var siteDirectory = (CDP4Common.DTO.SiteDirectory)dtos.Single(x => x.ClassKind == ClassKind.SiteDirectory);
+
+            var context = siteDirectory.Route;
+            var operationContainer = new OperationContainer(context, siteDirectory.RevisionNumber);
+
+            var person = new CDP4Common.DTO.Person(Guid.NewGuid(), 1);
+            person.ShortName = Guid.NewGuid().ToString();
+            person.Surname = Guid.NewGuid().ToString();
+            person.GivenName = Guid.NewGuid().ToString();
+            person.AddContainer(ClassKind.SiteDirectory, siteDirectory.Iid);
+
+            var operation1 = new Operation(null, person, OperationKind.Create);
+            operationContainer.AddOperation(operation1);
+
+            var siteDirectoryClone = siteDirectory.DeepClone<CDP4Common.DTO.SiteDirectory>();
+            siteDirectoryClone.Person.Add(person.Iid);
+            var operation2 = new Operation(siteDirectory, siteDirectoryClone, OperationKind.Update);
+            operationContainer.AddOperation(operation2);
+
+            var result = await wspdal.Write(operationContainer);
+
+            var resultPerson = (CDP4Common.DTO.Person)result.Single(x => x.Iid == person.Iid);
+
+            Assert.NotNull(resultPerson);
         }
 
         /// <summary>
@@ -341,7 +602,7 @@ namespace CDP4ServicesDal.Tests
         /// </param>
         private void SetDalToBeOpen(CdpServicesDal dal)
         {
-            var credentialsProperty = typeof(CdpServicesDal).GetProperty("Credentials");             
+            var credentialsProperty = typeof(CdpServicesDal).GetProperty("Credentials");
             credentialsProperty.SetValue(dal, this.credentials);
         }
     }

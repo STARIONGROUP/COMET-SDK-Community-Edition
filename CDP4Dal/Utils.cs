@@ -47,7 +47,7 @@ namespace CDP4Dal
         {
             if (!(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
             {
-                throw new ArgumentException(string.Format("Invalid URI scheme for: {0}", uri));
+                throw new ArgumentException($"Invalid URI scheme for: {uri}");
             }
         }
 
@@ -64,31 +64,7 @@ namespace CDP4Dal
         {
             if (uri.Scheme != Uri.UriSchemeFile)
             {
-                throw new ArgumentException(string.Format("Invalid URI scheme for: {0}", uri));
-            }
-        }
-
-        /// <summary>
-        /// Asserts that the supplied <see cref="object"/> is not null and throws a <see cref="NullReferenceException"/> if it is.
-        /// </summary>
-        /// <param name="thing">The object which should not be null</param>
-        public static void AssertNotNull(object thing)
-        {
-            if (thing == null)
-            {
-                throw new NullReferenceException("The object cannot be null");
-            }
-        }
-
-        /// <summary>
-        /// Asserts that the supplied <see cref="object"/> is not null and throws a <see cref="ArgumentNullException"/> if it is.
-        /// </summary>
-        /// <param name="thing">The object which should not be null </param>
-        public static void AssertArgumentNotNull(object thing)
-        {
-            if (thing == null)
-            {
-                throw new ArgumentNullException("The argument cannot be null");
+                throw new ArgumentException($"Invalid URI scheme for: {uri}");
             }
         }
 
