@@ -29,7 +29,7 @@ namespace CDP4Common.Tests.Extensions
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-
+    using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;    
     using CDP4Common.SiteDirectoryData;
@@ -108,6 +108,24 @@ namespace CDP4Common.Tests.Extensions
             elementUsage.ElementDefinition = this.elementDefinition;
 
             var categories = elementUsage.GetAllCategories();
+
+            CollectionAssert.Contains(categories, this.productCategory);
+            CollectionAssert.Contains(categories, this.equipmentCategory);
+        }
+
+        [Test]
+        public void VerifyThatIfCategorizableThingIsElementUsageTheCategoriesOfTheReferencedElementDefinitionAreReturnedAsWell_and_that_duplicates_are_filtered_out()
+        {
+            this.elementDefinition.Category.Add(this.equipmentCategory);
+
+            var elementUsage = new ElementUsage(Guid.NewGuid(), this.cache, this.uri);
+            elementUsage.ElementDefinition = this.elementDefinition;
+
+            elementUsage.Category.Add(this.productCategory);
+
+            var categories = elementUsage.GetAllCategories();
+
+            Assert.AreEqual(2, categories.Count());
 
             CollectionAssert.Contains(categories, this.productCategory);
             CollectionAssert.Contains(categories, this.equipmentCategory);

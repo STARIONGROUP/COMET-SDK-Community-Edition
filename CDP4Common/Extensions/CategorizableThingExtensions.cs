@@ -72,17 +72,18 @@ namespace CDP4Common.SiteDirectoryData
 
         /// <summary>
         /// Queries all the super categories of the categories of an <see cref="ICategorizableThing"/>
-        /// and returns the categories and all the super categories up the inheritance chain.
+        /// and returns the categories and all the super categories up the inheritance chain. Duplicate categories
+        /// are removed from the result.
         /// </summary>
         /// <param name="categorizableThing">
         /// The <see cref="ICategorizableThing"/> that is to be queried for all its categories and its super categories.
         /// </param>
         /// <returns>
-        /// an <see cref="IEnumerable{Category}"/> that contains all the categories
+        /// an <see cref="IEnumerable{Category}"/> that contains all the categories, duplicates are removed.
         /// </returns>
         /// <remarks>
         /// If the <paramref name="categorizableThing"/> is an <see cref="ElementUsage"/> the returned <see cref="Category"/> instances
-        /// include those of the referenced <see cref="ElementDefinition"/>
+        /// include those of the referenced <see cref="ElementDefinition"/>.
         /// </remarks>
         public static IEnumerable<Category> GetAllCategories(this ICategorizableThing categorizableThing)
         {
@@ -94,21 +95,25 @@ namespace CDP4Common.SiteDirectoryData
                 var elementDefinition = elementUsage.ElementDefinition;
                 if (elementDefinition != null)
                 {
-                    allCategories.AddRange(elementDefinition.Category); 
+                    allCategories.AddRange(elementDefinition.Category);
                 }
             }
 
             allCategories.AddRange(categorizableThing.Category);
 
+            var result = new List<Category>();
+
             foreach (var category in allCategories)
             {
                 foreach (var c in category.AllSuperCategories())
                 {
-                    yield return c;
+                    result.Add(c);
                 }
 
-                yield return category;
+                result.Add(category);
             }
+
+            return result.Distinct();
         }
 
         /// <summary>
