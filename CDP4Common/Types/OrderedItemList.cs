@@ -33,7 +33,7 @@ namespace CDP4Common.Types
     using System.Linq;
     using System.Runtime.CompilerServices;
     using CDP4Common.CommonData;
-    
+
     /// <summary>
     /// A CDP4 Ordered List
     /// </summary>
@@ -212,7 +212,7 @@ namespace CDP4Common.Types
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
-                
+
                 var pocoThing = value as Thing;
                 if (pocoThing != null)
                 {
@@ -226,7 +226,7 @@ namespace CDP4Common.Types
                 {
                     pocoThing.Container = this.container;
                 }
-                
+
                 var sortKey = this.sortedItems.ElementAt(index).Key;
                 this.sortedItems[sortKey] = value;
             }
@@ -278,7 +278,7 @@ namespace CDP4Common.Types
             {
                 throw new ArgumentNullException(nameof(item));
             }
-            
+
             var pocoThing = item as Thing;
             if (pocoThing != null)
             {
@@ -292,7 +292,7 @@ namespace CDP4Common.Types
             {
                 pocoThing.Container = this.container;
             }
-            
+
             var newSortKey = this.ComputeSortKey(this.highestKey, this.highestKey + (2L * DefaultKeyInterval));
             this.sortedItems.Add(newSortKey, item);
             this.highestKey = newSortKey;
@@ -562,6 +562,11 @@ namespace CDP4Common.Types
                 {
                     throw new InvalidOperationException($"The sorted list already contains the item {(item as Thing).Iid}");
                 }
+            }
+
+            if (pocoThing != null && this.isComposite)
+            {
+                pocoThing.Container = this.container;
             }
 
             if (pocoThing != null && this.isComposite)

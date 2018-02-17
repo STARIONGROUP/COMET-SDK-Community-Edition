@@ -535,10 +535,15 @@ namespace CDP4ServicesDal
 
             if (Logger.IsTraceEnabled)
             {
-                using (var streamReader = new StreamReader(outputStream))
+                using (var memoryStream = new MemoryStream())
                 {
-                    var postBody = streamReader.ReadToEnd();
-                    Logger.Trace("POST JSON BODY {0} /r/n {1}", token, postBody);
+                    outputStream.CopyTo(memoryStream);
+                    memoryStream.Position = 0;
+                    using (var streamReader = new StreamReader(memoryStream))
+                    {
+                        var postBody = streamReader.ReadToEnd();
+                        Logger.Trace("POST JSON BODY {0} /r/n {1}", token, postBody);
+                    }
                 }
 
                 outputStream.Position = 0;

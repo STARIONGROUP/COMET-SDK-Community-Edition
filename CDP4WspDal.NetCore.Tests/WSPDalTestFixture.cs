@@ -427,8 +427,7 @@ namespace CDP4WspDal.Tests
             var files = new List<string> { filepath };
 
             var contentHash = "F73747371CFD9473C19A0A7F99BCAB008474C4CA";
-            //var uri = new Uri("https://cdp4services-test.rheagroup.com");
-            var uri = new Uri("http://localhost:5000");
+            var uri = new Uri("https://cdp4services-test.rheagroup.com");
             this.credentials = new Credentials("admin", "pass", uri);
 
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);

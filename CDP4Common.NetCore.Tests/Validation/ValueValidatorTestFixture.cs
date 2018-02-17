@@ -245,7 +245,7 @@ namespace CDP4Common.Tests.Validation
 
             result = ValueValidator.Validate(this.enumerationParameterType, "high");
             Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("The test Enumeration Parametertype does not contain the following value definition high, allowed valuse are: low, medium", result.Message);
+            Assert.AreEqual("The test Enumeration ParameterType does not contain the following value definition high, allowed valuse are: low, medium", result.Message);
 
             this.enumerationParameterType.AllowMultiSelect = true;
             result = ValueValidator.Validate(this.enumerationParameterType, "low | medium");

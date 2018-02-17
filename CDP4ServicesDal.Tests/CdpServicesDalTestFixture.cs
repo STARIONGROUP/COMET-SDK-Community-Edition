@@ -428,8 +428,7 @@ namespace CDP4ServicesDal.Tests
             var files = new List<string> { filepath };
 
             var contentHash = "F73747371CFD9473C19A0A7F99BCAB008474C4CA";
-            //var uri = new Uri("https://cdp4services-test.rheagroup.com");
-            var uri = new Uri("http://localhost:5000");
+            var uri = new Uri("https://cdp4services-test.rheagroup.com");            
             this.credentials = new Credentials("admin", "pass", uri);
 
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
@@ -565,8 +564,8 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task Verify_that_person_can_be_Posted()
         {
-            var wspdal = new CdpServicesDal();
-            var dtos = await wspdal.Open(this.credentials, this.cancelationTokenSource.Token);
+            var cdpServicesDal = new CdpServicesDal();
+            var dtos = await cdpServicesDal.Open(this.credentials, this.cancelationTokenSource.Token);
 
             var siteDirectory = (CDP4Common.DTO.SiteDirectory)dtos.Single(x => x.ClassKind == ClassKind.SiteDirectory);
 
@@ -587,7 +586,7 @@ namespace CDP4ServicesDal.Tests
             var operation2 = new Operation(siteDirectory, siteDirectoryClone, OperationKind.Update);
             operationContainer.AddOperation(operation2);
 
-            var result = await wspdal.Write(operationContainer);
+            var result = await cdpServicesDal.Write(operationContainer);
 
             var resultPerson = (CDP4Common.DTO.Person)result.Single(x => x.Iid == person.Iid);
 
