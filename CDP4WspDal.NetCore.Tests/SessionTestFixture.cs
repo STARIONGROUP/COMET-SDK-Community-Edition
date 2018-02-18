@@ -83,7 +83,7 @@ namespace CDP4WspDal.Tests
         /// The <see cref="Task"/>.
         /// </returns>
         [Test]
-        [Category("WSP_dependent")]
+        [Category("WebServicesDependent")]
         public async Task Verify_That_Session_Open_Populates_cache()
         {
             var dal = new WspDal();

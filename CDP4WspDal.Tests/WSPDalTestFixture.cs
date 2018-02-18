@@ -128,6 +128,7 @@ namespace CDP4WspDal.Tests
         }
         
         [Test]
+        [Category("WebServicesDependent")]
         public async Task VerifyThatOpenReturnsDTOs()
         {
             var uriBuilder = new UriBuilder(this.credentials.Uri) { Path = "/Data/Restore" };
@@ -144,6 +145,7 @@ namespace CDP4WspDal.Tests
         }
         
         [Test]
+        [Category("WebServicesDependent")]
         public async Task VerifThatAClosedDalCannotBeClosedAgain()
         {
             var dal = new WspDal();

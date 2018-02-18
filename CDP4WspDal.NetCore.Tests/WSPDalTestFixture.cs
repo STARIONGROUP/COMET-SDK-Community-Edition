@@ -31,7 +31,9 @@ namespace CDP4WspDal.Tests
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
@@ -126,8 +128,14 @@ namespace CDP4WspDal.Tests
         }
 
         [Test]
+        [Category("WebServicesDependent")]
         public async Task VerifyThatOpenReturnsDTOs()
         {
+            var uriBuilder = new UriBuilder(this.credentials.Uri) { Path = "/Data/Restore" };
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
+            await httpClient.PostAsync(uriBuilder.Uri, null);
+
             var dal = new WspDal();
             var result = await dal.Open(this.credentials, new CancellationToken());
 
@@ -137,6 +145,7 @@ namespace CDP4WspDal.Tests
         }
 
         [Test]
+        [Category("WebServicesDependent")]
         public async Task VerifThatAClosedDalCannotBeClosedAgain()
         {
             var dal = new WspDal();
@@ -207,7 +216,7 @@ namespace CDP4WspDal.Tests
         }
 
         [Test]
-        [Category("WSP_dependent")]
+        [Category("WebServicesDependent")]
         public async Task VerifyThatReadReturnsCorrectDTO()
         {
             this.dal = new WspDal();
@@ -244,7 +253,7 @@ namespace CDP4WspDal.Tests
         /// Verify that the App does not crash
         /// </summary>
         [Test]
-        [Category("WSP_dependent")]
+        [Category("WebServicesDependent")]
         public async Task IntegrationTest()
         {
             this.dal = new WspDal();
@@ -359,7 +368,7 @@ namespace CDP4WspDal.Tests
         }
 
         [Test]
-        [Category("WSP_dependent")]
+        [Category("WebServicesDependent")]
         public async Task VerifyThatReadIterationWorks()
         {
             var dal = new WspDal { Session = this.session };
@@ -388,7 +397,7 @@ namespace CDP4WspDal.Tests
         }
 
         [Test]
-        [Category("WSP_dependent")]
+        [Category("WebServicesDependent")]
         [Category("Performance")]
         public async Task AssemblerSynchronizePerformanceTest()
         {
@@ -501,7 +510,7 @@ namespace CDP4WspDal.Tests
         }
 
         [Test]
-        [Category("WSP_dependent")]
+        [Category("WebServicesDependent")]
         public async Task Verify_that_person_can_be_Posted()
         {
             var uri = new Uri("http://ocdt-dev.rheagroup.com");
@@ -546,19 +555,6 @@ namespace CDP4WspDal.Tests
         {
             var credentialsProperty = typeof(WspDal).GetProperty("Credentials");
             credentialsProperty.SetValue(dal, this.credentials);
-        }
-
-        /// <summary>
-        /// Gets the directory of the executing assembly
-        /// </summary>
-        /// <returns></returns>
-        private string GetAssemblyDirectory()
-        {
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
-            var directory = Path.GetDirectoryName(path);
-            return directory;
         }
     }
 }

@@ -127,6 +127,7 @@ namespace CDP4ServicesDal.Tests
         }
 
         [Test]
+        [Category("WebServicesDependent")]
         public async Task VerifyThatOpenReturnsDTOs()
         {
             var uriBuilder = new UriBuilder(this.credentials.Uri) { Path = "/Data/Restore" };
@@ -143,6 +144,7 @@ namespace CDP4ServicesDal.Tests
         }
 
         [Test]
+        [Category("WebServicesDependent")]
         public async Task VerifThatAClosedDalCannotBeClosedAgain()
         {
             var dal = new CdpServicesDal();
@@ -522,6 +524,7 @@ namespace CDP4ServicesDal.Tests
         }
 
         [Test]
+        [Category("WebServicesDependent")]
         public async Task Verify_that_opens_returns_expected_result()
         {
             var uri = new Uri("https://cdp4services-test.rheagroup.com");
@@ -532,10 +535,9 @@ namespace CDP4ServicesDal.Tests
             
             Assert.NotNull(result);            
         }
-
-        ///EngineeringModel/9ec982e4-ef72-4953-aa85-b158a95d8d56/iteration
-
+        
         [Test]
+        [Category("WebServicesDependent")]
         public async Task Verify_that_multiple_read_requests_can_be_made_in_parallel()
         {
             var uri = new Uri("https://cdp4services-test.rheagroup.com");
