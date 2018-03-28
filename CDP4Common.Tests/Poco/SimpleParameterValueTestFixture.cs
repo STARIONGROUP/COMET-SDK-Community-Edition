@@ -28,6 +28,7 @@ namespace CDP4Common.Tests.Poco
 {
     using System;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
 
@@ -50,7 +51,7 @@ namespace CDP4Common.Tests.Poco
         {
             var simpleParameterValue = new SimpleParameterValue();
 
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 Console.WriteLine(simpleParameterValue.Owner);
             });

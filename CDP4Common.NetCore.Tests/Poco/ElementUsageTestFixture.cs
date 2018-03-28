@@ -28,8 +28,8 @@ namespace CDP4Common.Tests.Poco
 {
     using System;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Exceptions;
     using NUnit.Framework;
+    using CDP4Common.Exceptions;
 
     /// <summary>
     /// Suite of tests for the <see cref="ElementUsage"/> class.

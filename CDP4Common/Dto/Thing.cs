@@ -145,7 +145,7 @@ namespace CDP4Common.DTO
         public Guid? IterationContainerId { get; set; }
 
         /// <summary>
-        /// Gets or sete the <see cref="ContainerLevelKind"/> that determines where in the containment tree
+        /// Gets or sets the <see cref="ContainerLevelKind"/> that determines where in the containment tree
         /// the DTO is situated.
         /// </summary>
         /// <exception cref="InvalidOperationException">
@@ -260,11 +260,11 @@ namespace CDP4Common.DTO
         /// </param>
         public virtual void AddContainer(ClassKind classKind, Guid iid)
         {
-            var lastRouteClasskind = this.partialClassKindRoute.Any()
+            var lastRouteClassKind = this.partialClassKindRoute.Any()
                 ? this.partialClassKindRoute.Last()
                 : this.ClassKind;
 
-            switch (lastRouteClasskind)
+            switch (lastRouteClassKind)
             {
                 case ClassKind.SiteDirectory:
                     throw new InvalidOperationException("Cannot add another container, SiteDirectory is a top container");
@@ -272,7 +272,7 @@ namespace CDP4Common.DTO
                     throw new InvalidOperationException("Cannot add another container, EngineeringModel is a top container");
                 default:
                     {
-                        if (this.IsAuthorizedRoute(lastRouteClasskind, classKind))
+                        if (this.IsAuthorizedRoute(lastRouteClassKind, classKind))
                         {
                             var containerPropertyName = ContainerPropertyHelper.ContainerPropertyName(classKind);
                             var partialRoute = string.Format("{0}/{1}", containerPropertyName, iid);
@@ -281,7 +281,7 @@ namespace CDP4Common.DTO
                             break;
                         }
 
-                        throw new InvalidOperationException(string.Format("the added container of classkind: {0} is not consistent with the existing route", classKind));
+                        throw new InvalidOperationException(string.Format("the added container of classKind: {0} is not consistent with the existing route", classKind));
                     }
             }
         }
@@ -451,13 +451,13 @@ namespace CDP4Common.DTO
         /// Resolves the properties of a copied <see cref="Thing"/> based on the original and a collection of copied <see cref="Thing"/>
         /// </summary>
         /// <param name="originalThing">The original <see cref="Thing"/></param>
-        /// <param name="originalCopyMap">The map containig all instance of copied <see cref="Thing"/>s with their original</param>
+        /// <param name="originalCopyMap">The map containing all instance of copied <see cref="Thing"/>s with their original</param>
         public abstract void ResolveCopy(Thing originalThing, IReadOnlyDictionary<Thing, Thing> originalCopyMap);
 
         /// <summary>
         /// Resolves the references of a copied <see cref="Thing"/> based on a original to copy map
         /// </summary>
-        /// <param name="originalCopyMap">The map containig all instance of copied <see cref="Thing"/>s with their original</param>
+        /// <param name="originalCopyMap">The map containing all instance of copied <see cref="Thing"/>s with their original</param>
         /// <returns>True if a modification was done in the process of this method</returns>
         public abstract bool ResolveCopyReference(IReadOnlyDictionary<Thing, Thing> originalCopyMap);
     }

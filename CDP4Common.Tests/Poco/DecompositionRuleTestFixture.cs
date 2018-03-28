@@ -112,7 +112,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VeriftyThatNullIterationThrowsArgumenException()
+        public void VerifyThatNullIterationThrowsArgumentException()
         {
             var rule = new DecompositionRule(Guid.NewGuid(), this.cache, this.uri);
             Assert.Throws<ArgumentNullException>(() => rule.Verify(null));
@@ -270,7 +270,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VrifyThatIfNoDecompositionRuleIsViolatedNoViolationsAreReturned()
+        public void VerifyThatIfNoDecompositionRuleIsViolatedNoViolationsAreReturned()
         {
             var rule = new DecompositionRule(Guid.NewGuid(), this.cache, this.uri);
             rule.ContainingCategory = this.systemCategory;

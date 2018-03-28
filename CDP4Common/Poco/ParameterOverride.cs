@@ -93,7 +93,7 @@ namespace CDP4Common.EngineeringModelData
         /// <remarks>
         /// The model code is derived as follows:
         /// <code>
-        /// #ElementDefinition.ShortName#.#ElementUsage.Shortname#.#Component.ParameterType.ShortName#
+        /// #ElementDefinition.ShortName#.#ElementUsage.ShortName#.#Component.ParameterType.ShortName#
         /// </code>
         /// </remarks>
         /// <returns>
@@ -101,7 +101,7 @@ namespace CDP4Common.EngineeringModelData
         /// </returns>
         public override string ModelCode(int? componentIndex = null)
         {
-            var elementUsage = (ElementUsage)this.Container;
+            var elementUsage = this.Container as ElementUsage;
 
             if (elementUsage == null)
             {
@@ -116,7 +116,7 @@ namespace CDP4Common.EngineeringModelData
 
             if (compoundParameterType != null && componentIndex != null)
             {
-                var component = Utils.FormatComponentShortname(compoundParameterType.Component[componentIndex.Value].ShortName);
+                var component = Utils.FormatComponentShortName(compoundParameterType.Component[componentIndex.Value].ShortName);
                 return string.Format("{0}.{1}.{2}", elementUsage.ModelCode(), compoundParameterType.ShortName, component);
             }
 
@@ -147,8 +147,8 @@ namespace CDP4Common.EngineeringModelData
                     {
                         foreach (var actualState in this.StateDependence.ActualState.Where(x => x.Kind == ActualFiniteStateKind.MANDATORY))
                         {
-                            var valuesets = this.ValueSet.Where(vs => vs.ActualOption == option && vs.ActualState == actualState).ToList();
-                            errorList.AddRange(this.ValidateValueSets(valuesets, option, actualState));
+                            var valueSets = this.ValueSet.Where(vs => vs.ActualOption == option && vs.ActualState == actualState).ToList();
+                            errorList.AddRange(this.ValidateValueSets(valueSets, option, actualState));
                         }
                     }
                 }
@@ -156,8 +156,8 @@ namespace CDP4Common.EngineeringModelData
                 {
                     foreach (Option option in iteration.Option)
                     {
-                        var valuesets = this.ValueSet.Where(vs => vs.ActualOption == option).ToList();
-                        errorList.AddRange(this.ValidateValueSets(valuesets, option, null));
+                        var valueSets = this.ValueSet.Where(vs => vs.ActualOption == option).ToList();
+                        errorList.AddRange(this.ValidateValueSets(valueSets, option, null));
                     }
                 }
             }
@@ -167,14 +167,14 @@ namespace CDP4Common.EngineeringModelData
                 {
                     foreach (var actualState in this.StateDependence.ActualState.Where(x => x.Kind == ActualFiniteStateKind.MANDATORY))
                     {
-                        var valuesets = this.ValueSet.Where(vs => vs.ActualState == actualState).ToList();
-                        errorList.AddRange(this.ValidateValueSets(valuesets, null, actualState));
+                        var valueSets = this.ValueSet.Where(vs => vs.ActualState == actualState).ToList();
+                        errorList.AddRange(this.ValidateValueSets(valueSets, null, actualState));
                     }
                 }
                 else
                 {
-                    var valuesets = this.ValueSet.ToList();
-                    errorList.AddRange(this.ValidateValueSets(valuesets, null, null));
+                    var valueSets = this.ValueSet.ToList();
+                    errorList.AddRange(this.ValidateValueSets(valueSets, null, null));
                 }
             }
 

@@ -40,7 +40,7 @@ namespace CDP4Common.Tests.Poco
     public class IterationTestFixture
     {
         [Test]
-        public void VerifyThatRequriedRdlsReturnsExpectedResult()
+        public void VerifyThatRequiredRdlRdlsReturnsExpectedResult()
         {
             var genericRdl = new SiteReferenceDataLibrary();
             var familyofRdl = new SiteReferenceDataLibrary();

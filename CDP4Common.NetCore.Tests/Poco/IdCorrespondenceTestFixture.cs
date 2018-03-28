@@ -28,6 +28,7 @@ namespace CDP4Common.Tests.Poco
 {
     using System;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
 
@@ -51,7 +52,7 @@ namespace CDP4Common.Tests.Poco
         {
             var thing = new IdCorrespondence(Guid.NewGuid(), null, null);
 
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 Console.WriteLine(thing.Owner);
             });

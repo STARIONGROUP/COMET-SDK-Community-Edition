@@ -157,14 +157,14 @@ namespace CDP4Common.SiteDirectoryData
         /// <param name="violations">The collection of <see cref="RuleViolation"/> to update</param>
         private void VerifySpecification(Iteration iteration, List<RuleViolation> violations)
         {
-            foreach (var specificaton in iteration.RequirementsSpecification)
+            foreach (var specification in iteration.RequirementsSpecification)
             {
-                if (specificaton.IsMemberOfCategory(this.Category))
+                if (specification.IsMemberOfCategory(this.Category))
                 {
                     var missingParameterTypes = new List<ParameterType>();
                     foreach (var parameterType in this.ParameterType)
                     {
-                        var parameter = specificaton.ParameterValue.SingleOrDefault(p => p.ParameterType == parameterType);
+                        var parameter = specification.ParameterValue.SingleOrDefault(p => p.ParameterType == parameterType);
                         if (parameter == null)
                         {
                             missingParameterTypes.Add(parameterType);
@@ -177,16 +177,16 @@ namespace CDP4Common.SiteDirectoryData
                         var shortnames = string.Join(",", missingParameterTypes.Select(x => x.ShortName));
 
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
-                        violation.RuleViolatedClassKind.Add(specificaton.ClassKind);
-                        violation.ViolatingThing.Add(specificaton.Iid);
-                        violation.Description = string.Format("The RequirementsSpecification {0} does not contain parameters that reference the following parameter types {1} with shortnames: {2}", specificaton.Name, iids, shortnames);
+                        violation.RuleViolatedClassKind.Add(specification.ClassKind);
+                        violation.ViolatingThing.Add(specification.Iid);
+                        violation.Description = string.Format("The RequirementsSpecification {0} does not contain parameters that reference the following parameter types {1} with shortnames: {2}", specification.Name, iids, shortnames);
 
                         violations.Add(violation);
                     }
                 }
 
-                this.VerifyGroup(specificaton, violations);
-                this.VerifyRequirement(specificaton, violations);
+                this.VerifyGroup(specification, violations);
+                this.VerifyRequirement(specification, violations);
             }
         }
 

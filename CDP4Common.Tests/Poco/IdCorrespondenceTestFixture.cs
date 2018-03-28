@@ -27,8 +27,11 @@
 namespace CDP4Common.Tests.Poco
 {
     using System;
+
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -46,15 +49,12 @@ namespace CDP4Common.Tests.Poco
             Assert.IsTrue(ReferenceEquals(thing.Owner, externalIdentifierMap.Owner));
         }
 
-        [Test]        
+        [Test]
         public void VerifyGetOwnerThrowException()
         {
             var thing = new IdCorrespondence(Guid.NewGuid(), null, null);
 
-            Assert.Throws<NullReferenceException>(() =>
-            {
-                Console.WriteLine(thing.Owner);
-            });
+            Assert.Throws<ContainmentException>(() => { Console.WriteLine(thing.Owner); });
         }
     }
 }

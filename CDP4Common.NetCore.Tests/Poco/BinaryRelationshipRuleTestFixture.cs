@@ -89,7 +89,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VeriftyThatNullIterationThrowsArgumenException()
+        public void VerifyThatNullIterationThrowsArgumentException()
         {
             var rule = new BinaryRelationshipRule(Guid.NewGuid(), this.cache, this.uri);
             Assert.Throws<ArgumentNullException>(() => rule.Verify(null));

@@ -37,7 +37,7 @@ namespace CDP4Common.Tests.Poco
     public class ParameterGroupTestFixture
     {
         [Test]
-        public void VerifytThatIfContainerIsNullReturnsEmptyGroupIEnumerable()
+        public void VerifyThatIfContainerIsNullReturnsEmptyGroupIEnumerable()
         {
             var parameterGroup = new ParameterGroup(Guid.NewGuid(), null, null);
             Assert.IsEmpty(parameterGroup.ContainedGroup());
@@ -114,7 +114,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VerifytThatIfContainerIsNullReturnsEmptyParameterIEnumerable()
+        public void VerifyThatIfContainerIsNullReturnsEmptyParameterIEnumerable()
         {
             var parameterGroup = new ParameterGroup(Guid.NewGuid(), null, null);
             Assert.IsEmpty(parameterGroup.ContainedParameter());
@@ -158,7 +158,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VerfiyThatLevelReturnsExpectedResult()
+        public void VerifyThatLevelReturnsExpectedResult()
         {
             var elementDefinition = new ElementDefinition(Guid.NewGuid(), null, null);
 

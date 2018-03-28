@@ -38,7 +38,7 @@ namespace CDP4Common.Tests.Poco
     public class ParameterBaseTestFixture
     {
         [Test]
-        public void VerifyThatLevelReturnsTheExpectedResuly()
+        public void VerifyThatLevelReturnsTheExpectedResult()
         {
             var elementDefinition = new ElementDefinition(Guid.NewGuid(), null, null);
 

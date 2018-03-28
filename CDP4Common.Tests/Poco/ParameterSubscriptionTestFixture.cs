@@ -32,6 +32,7 @@ namespace CDP4Common.Tests.Poco
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using NUnit.Framework;
+    using CDP4Common.Exceptions;
 
     [TestFixture]
     internal class ParameterSubscriptionTestFixture
@@ -129,7 +130,7 @@ namespace CDP4Common.Tests.Poco
         {
             this.parameterSubscription = new ParameterSubscription();
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 Console.WriteLine(this.parameterSubscription.ParameterType);    
             });

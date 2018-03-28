@@ -189,7 +189,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VerifyThatCloneWithcloneValueArrayReturnsCloneWithNewValueArrays()
+        public void VerifyThatCloneWithCloneValueArrayReturnsCloneWithNewValueArrays()
         {
             var parameterOverrideValueSet = new ParameterOverrideValueSet();
 

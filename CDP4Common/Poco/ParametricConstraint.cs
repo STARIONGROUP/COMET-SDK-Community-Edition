@@ -27,7 +27,9 @@
 namespace CDP4Common.EngineeringModelData
 {
     using System;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
+    using Exceptions;
 
     /// <summary>
     /// Extended part for the auto-generated <see cref="ParametricConstraint"/>
@@ -38,12 +40,11 @@ namespace CDP4Common.EngineeringModelData
         /// Returns the derived <see cref="Owner"/> value
         /// </summary>
         /// <returns>The <see cref="Owner"/> value</returns>
-        protected DomainOfExpertise GetDerivedOwner()
+        private DomainOfExpertise GetDerivedOwner()
         {
-            var container = this.Container as Requirement;
-            if (container == null)
+            if (!(this.Container is Requirement container))
             {
-                throw new NullReferenceException("The container of ParametricConstraint is null");
+                throw new ContainmentException("The container of ParametricConstraint is null");
             }
 
             return container.Owner;

@@ -306,7 +306,8 @@ namespace CDP4Dal.Permission
         private bool CanWriteEngineeringModelContainedThing(Thing thing, Type thingType)
         {
             var engineeringModel = thing.TopContainer;
-            var iteration = thing.GetContainerOfType<Iteration>();
+
+            var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
             if (iteration!= null && iteration.IterationSetup.FrozenOn != null)
             {
                 return false;
@@ -370,7 +371,9 @@ namespace CDP4Dal.Permission
         private bool CanWriteEngineeringModelContainedThing(ClassKind classKind, Thing containerThing, ClassKind thingType)
         {
             var engineeringModel = containerThing.TopContainer as EngineeringModel;
-            var iteration = containerThing.GetContainerOfType<Iteration>();
+
+            var iteration = containerThing is Iteration it ? it : containerThing.GetContainerOfType<Iteration>();
+            
             if (iteration != null && iteration.IterationSetup.FrozenOn != null)
             {
                 return false;

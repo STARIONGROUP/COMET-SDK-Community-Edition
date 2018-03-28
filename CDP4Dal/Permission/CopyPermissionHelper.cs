@@ -155,7 +155,7 @@ namespace CDP4Dal.Permission
                 throw new InvalidOperationException("The container is invalid for the thing to copy.");
             }
 
-            if (thingToCopy.GetContainerOfType<ElementDefinition>() == null)
+            if (!(thingToCopy is ElementDefinition) && thingToCopy.GetContainerOfType<ElementDefinition>() == null)
             {
                 throw new NotImplementedException("The method is only implemented for things contained by ElementDefinition. The RequiredRdls property needs to be implemented in all things.");
             }
@@ -165,7 +165,7 @@ namespace CDP4Dal.Permission
             result.copyableThings = new List<Thing>();
 
             var model = targetContainer.TopContainer as EngineeringModel;
-            var iteration = targetContainer.GetContainerOfType<Iteration>();
+            var iteration = targetContainer is Iteration it ? it : targetContainer.GetContainerOfType<Iteration>();
             this.changedOwner = this.session.OpenIterations.Single(x => x.Key.Iid == iteration.Iid).Value.Item1;
 
             if (model != null)

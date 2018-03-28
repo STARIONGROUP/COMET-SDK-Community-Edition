@@ -32,7 +32,8 @@ namespace CDP4Common.Tests.Poco
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using NUnit.Framework;
-    
+    using CDP4Common.Exceptions;
+
     [TestFixture]
     internal class ParameterSubscriptionValueSetTestFixture
     {
@@ -127,7 +128,7 @@ namespace CDP4Common.Tests.Poco
         {
             this.parameterSubscriptionValueSet = new ParameterSubscriptionValueSet();
 
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 Console.WriteLine(this.parameterSubscriptionValueSet.Owner);
             });
@@ -173,7 +174,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VerifyThatCloneWithcloneValueArrayReturnsCloneWithNewValueArrays()
+        public void VerifyThatCloneWithCloneValueArrayReturnsCloneWithNewValueArrays()
         {
             var manualValue = "manual";
             var newManualValue = "new manual";

@@ -62,13 +62,13 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VerifyThatGetNAmeWorks()
+        public void VerifyThatGetNameWorks()
         {
             Assert.AreEqual("ElementUsage2", this.nestedElement.Name);
         }
 
         [Test]
-        public void VerifyThatGetNAmeWorks2()
+        public void VerifyThatGetNameWorks2()
         {
             this.nestedElement.ElementUsage.Clear();
             Assert.AreEqual("ElementDef", this.nestedElement.Name);

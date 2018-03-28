@@ -30,6 +30,7 @@ namespace CDP4Common.Tests.Poco
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
+    using CDP4Common.Exceptions;
 
     [TestFixture]
     internal class ParameterValueSetBaseTestFixture
@@ -81,7 +82,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetOwnerThrowsEx()
         {
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 Console.WriteLine(this.parameterValueSetBase.Owner);    
             });

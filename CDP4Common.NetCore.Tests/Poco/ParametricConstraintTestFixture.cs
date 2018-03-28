@@ -28,6 +28,7 @@ namespace CDP4Common.Tests.Poco
 {
     using System;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
 
@@ -37,12 +38,12 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetOwner()
         {
-            var thuing = new ParametricConstraint();
+            var thing = new ParametricConstraint();
             var req = new Requirement();
             req.Owner = new DomainOfExpertise();
-            req.ParametricConstraint.Add(thuing);
+            req.ParametricConstraint.Add(thing);
 
-            Assert.IsTrue(ReferenceEquals(req.Owner, thuing.Owner));
+            Assert.IsTrue(ReferenceEquals(req.Owner, thing.Owner));
         }
 
         [Test]        
@@ -50,7 +51,7 @@ namespace CDP4Common.Tests.Poco
         {
             var parametricConstraint = new ParametricConstraint();
 
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 Console.WriteLine(parametricConstraint.Owner);    
             });

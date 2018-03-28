@@ -30,6 +30,7 @@ namespace CDP4Common.Tests.Poco
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
+    using CDP4Common.Exceptions;
 
     [TestFixture]
     internal class PossibleFiniteStateTestFixture
@@ -49,7 +50,7 @@ namespace CDP4Common.Tests.Poco
         public void TestGetOwnerThrowEx()
         {
             var thing = new PossibleFiniteState();
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 var d = thing.Owner;
             });

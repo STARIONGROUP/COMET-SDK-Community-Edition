@@ -30,6 +30,7 @@ namespace CDP4Common.Tests.Poco
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
+    using CDP4Common.Exceptions;
 
     [TestFixture]
     public class ActualFiniteStateTestFixture
@@ -105,7 +106,7 @@ namespace CDP4Common.Tests.Poco
         {
             this.actualFiniteState = new ActualFiniteState(Guid.NewGuid(), null, null);
             
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 Console.WriteLine(this.actualFiniteState.Name);
             });
@@ -116,7 +117,7 @@ namespace CDP4Common.Tests.Poco
         {
             this.actualFiniteState = new ActualFiniteState(Guid.NewGuid(), null, null);
 
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 Console.WriteLine(this.actualFiniteState.ShortName);
             });
@@ -126,7 +127,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatNullContainerThrowException3()
         {
             this.actualFiniteState = new ActualFiniteState(Guid.NewGuid(), null, null);
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 Console.WriteLine(this.actualFiniteState.Owner);
             });

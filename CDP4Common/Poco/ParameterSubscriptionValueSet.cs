@@ -29,6 +29,7 @@ namespace CDP4Common.EngineeringModelData
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
@@ -73,7 +74,7 @@ namespace CDP4Common.EngineeringModelData
                     return this.Reference;
 
                 default:
-                    throw new InvalidOperationException("Unkown ParameterKindSwitch");
+                    throw new InvalidOperationException("Unknown ParameterKindSwitch");
             }
         }
 
@@ -104,7 +105,7 @@ namespace CDP4Common.EngineeringModelData
             var container = this.Container as ParameterSubscription;
             if (container == null)
             {
-                throw new NullReferenceException("The container of ParameterSubscriptionValueSet is null");
+                throw new ContainmentException("The container of ParameterSubscriptionValueSet is null");
             }
 
             return container.Owner;
@@ -119,7 +120,7 @@ namespace CDP4Common.EngineeringModelData
         /// <remarks>
         /// The model code is derived as follows:
         /// <code>
-        /// #ElementDefinition.ShortName#.#ParameterType.Shortname#.#Component.ParameterType.ShortName#\#Option.ShortName#\#ActualState.ShortName#
+        /// #ElementDefinition.ShortName#.#ParameterType.ShortName#.#Component.ParameterType.ShortName#\#Option.ShortName#\#ActualState.ShortName#
         /// </code>
         /// </remarks>
         /// <returns>
@@ -180,7 +181,7 @@ namespace CDP4Common.EngineeringModelData
         /// Gets the formula assigned by the owner <see cref="DomainOfExpertise"/> of the associated <see cref="Parameter"/> or <see cref="ParameterOverride"/> 
         /// </summary>
         /// <remarks>
-        /// Member of the <see cref="IValueSet"/> interface added for convenience which will always resturn a <see cref="ValueArray{String}"/> where all the components are null
+        /// Member of the <see cref="IValueSet"/> interface added for convenience which will always return a <see cref="ValueArray{String}"/> where all the components are null
         /// </remarks>
         public ValueArray<string> Formula
         {

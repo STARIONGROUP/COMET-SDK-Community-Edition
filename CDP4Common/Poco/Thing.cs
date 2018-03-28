@@ -578,19 +578,14 @@ namespace CDP4Common.CommonData
         /// </returns>
         public T GetContainerOfType<T>() where T : Thing
         {
-            if (this.GetType() == typeof(T))
-            {
-                return (T)this;
-            }
-
             if (this.Container == null)
             {
                 return null;
             }
 
-            if (this.Container.GetType() == typeof(T))
+            if (this.Container is T TContainer)
             {
-                return (T)this.Container;
+                return TContainer;
             }
 
             return this.Container.GetContainerOfType<T>();

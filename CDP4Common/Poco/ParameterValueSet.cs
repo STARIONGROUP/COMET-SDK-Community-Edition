@@ -43,7 +43,7 @@ namespace CDP4Common.EngineeringModelData
         /// <remarks>
         /// The model code is derived as follows:
         /// <code>
-        /// #ElementDefinition.ShortName#.#ParameterType.Shortname#.#Component.ParameterType.ShortName#\#Option.ShortName#\#ActualState.ShortName#
+        /// #ElementDefinition.ShortName#.#ParameterType.ShortName#.#Component.ParameterType.ShortName#\#Option.ShortName#\#ActualState.ShortName#
         /// </code>
         /// </remarks>
         /// <returns>

@@ -27,6 +27,7 @@
 namespace CDP4Common.EngineeringModelData
 {
     using System;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
 
     /// <summary>
@@ -43,7 +44,7 @@ namespace CDP4Common.EngineeringModelData
             var container = this.Container as ExternalIdentifierMap;
             if (container == null)
             {
-                throw new NullReferenceException("The container of IdCorrespondence is null");
+                throw new ContainmentException("The container of IdCorrespondence is null");
             }
 
             return container.Owner;

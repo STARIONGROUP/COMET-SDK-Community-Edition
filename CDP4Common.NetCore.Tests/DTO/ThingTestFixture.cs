@@ -43,7 +43,7 @@ namespace CDP4Common.Tests.DTO
     public class ThingTestFixture
     {
         [Test]
-        public void VerifityThatContainersCanBeAddedAndTheRouteIsGenerated()
+        public void VerifyThatContainersCanBeAddedAndTheRouteIsGenerated()
         {
             BooleanParameterType booleanParameterType;
             string expectedRoute = string.Empty;
@@ -95,37 +95,37 @@ namespace CDP4Common.Tests.DTO
         [Test]
         public void VerifyThatContainersCantBeAddedAfterEngineeringModel()
         {
-            ElementDefinition elementDefenition;
+            ElementDefinition elementDefinition;
 
             var elementDefinitionId = Guid.NewGuid();
             var iterationId = Guid.NewGuid();
             var engineeringModelId = Guid.NewGuid();
 
-            elementDefenition = new ElementDefinition(elementDefinitionId, 1);
-            elementDefenition.AddContainer(ClassKind.Iteration, iterationId);
-            elementDefenition.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
+            elementDefinition = new ElementDefinition(elementDefinitionId, 1);
+            elementDefinition.AddContainer(ClassKind.Iteration, iterationId);
+            elementDefinition.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
 
-            Assert.Throws<InvalidOperationException>(() => elementDefenition.AddContainer(ClassKind.Person, Guid.NewGuid()));
+            Assert.Throws<InvalidOperationException>(() => elementDefinition.AddContainer(ClassKind.Person, Guid.NewGuid()));
         }
 
         [Test]
         public void VerifyThatContainmentCanBeResolved()
         {
-            ElementDefinition elementDefenition;
-            ElementDefinition elementDefenition2;
+            ElementDefinition elementDefinition;
+            ElementDefinition elementDefinition2;
             Iteration iteration;
 
             var elementDefinitionId = Guid.NewGuid();
             var elementDefinitionId2 = Guid.NewGuid();
             var iterationId = Guid.NewGuid();
             
-            elementDefenition = new ElementDefinition(elementDefinitionId, 1);
-            elementDefenition2 = new ElementDefinition(elementDefinitionId2, 1);
+            elementDefinition = new ElementDefinition(elementDefinitionId, 1);
+            elementDefinition2 = new ElementDefinition(elementDefinitionId2, 1);
             iteration = new Iteration(iterationId,1);
             iteration.Element.Add(elementDefinitionId);
             
-            Assert.IsTrue(iteration.Contains(elementDefenition));
-            Assert.IsFalse(iteration.Contains(elementDefenition2));
+            Assert.IsTrue(iteration.Contains(elementDefinition));
+            Assert.IsFalse(iteration.Contains(elementDefinition2));
 
             // check ordered items
             PossibleFiniteState state1 = new PossibleFiniteState(Guid.NewGuid(), 1);
@@ -145,17 +145,17 @@ namespace CDP4Common.Tests.DTO
         public void VerifyThatTopContainerRouteIsCorrect()
         {
             // iteration thing
-            ElementDefinition elementDefenition;
+            ElementDefinition elementDefinition;
 
             var elementDefinitionId = Guid.NewGuid();
             var iterationId = Guid.NewGuid();
             var engineeringModelId = Guid.NewGuid();
 
-            elementDefenition = new ElementDefinition(elementDefinitionId, 1);
-            elementDefenition.AddContainer(ClassKind.Iteration, iterationId);
-            elementDefenition.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
+            elementDefinition = new ElementDefinition(elementDefinitionId, 1);
+            elementDefinition.AddContainer(ClassKind.Iteration, iterationId);
+            elementDefinition.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
 
-            Assert.AreEqual(string.Format("/EngineeringModel/{0}/iteration/{1}", engineeringModelId, iterationId), elementDefenition.GetTopContainerRoute());
+            Assert.AreEqual(string.Format("/EngineeringModel/{0}/iteration/{1}", engineeringModelId, iterationId), elementDefinition.GetTopContainerRoute());
 
             // engineering model thing
             Book book;
@@ -242,7 +242,7 @@ namespace CDP4Common.Tests.DTO
         }
 
         [Test]
-        public void VerifyThatDeepCloneWorksWithActualFinteStateList()
+        public void VerifyThatDeepCloneWorksWithActualFiniteStateList()
         {
             var actualList = new ActualFiniteStateList(Guid.NewGuid(), 0);
             var item = new OrderedItem {K = 1, V = Guid.NewGuid()};

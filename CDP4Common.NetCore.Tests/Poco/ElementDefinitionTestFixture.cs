@@ -29,11 +29,11 @@ namespace CDP4Common.Tests.Poco
     using System;
     using System.Linq;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
     using System.Collections.Concurrent;
     using CDP4Common.CommonData;
+    using CDP4Common.Exceptions;
 
     [TestFixture]
     public class ElementDefinitionTestFixture

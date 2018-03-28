@@ -61,7 +61,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <returns>The <see cref="QuantityDimensionExponent"/> value</returns>
         protected OrderedItemList<string> GetDerivedQuantityDimensionExponent()
         {
-            throw new NotSupportedException("The QuantityDimensionExponent computation is not supported ny the CDP");
+            throw new NotSupportedException("The QuantityDimensionExponent computation is not supported by the CDP");
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <returns>The <see cref="QuantityDimensionExpression"/> value</returns>
         protected string GetDerivedQuantityDimensionExpression()
         {
-            throw new NotSupportedException("The QuantityDimensionExpression computation is not supported ny the CDP");
+            throw new NotSupportedException("The QuantityDimensionExpression computation is not supported by the CDP");
         }
     }
 }

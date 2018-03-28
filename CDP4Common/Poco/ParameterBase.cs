@@ -44,7 +44,7 @@ namespace CDP4Common.EngineeringModelData
         }
 
         /// <summary>
-        /// Gets the user-friendly shortname
+        /// Gets the user-friendly shortName
         /// </summary>
         public override string UserFriendlyShortName
         {
@@ -89,7 +89,7 @@ namespace CDP4Common.EngineeringModelData
         /// </summary>
         /// <remarks>
         /// This is a convenience property that simply returns the actual value-sets of the concrete <see cref="ParameterBase"/>
-        /// ie, <see cref="Parameter.ValueSet"/>, <see cref="ParameterOverride.ValueSet"/> or <see cref="Parameter.ValueSet"/>
+        /// ie, <see cref="Parameter.ValueSet"/>, <see cref="ParameterOverride.ValueSet"/> or <see cref="ParameterSubscription.ValueSet"/>
         /// </remarks>
         public IEnumerable<IValueSet> ValueSets
         {

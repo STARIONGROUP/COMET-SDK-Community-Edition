@@ -29,11 +29,12 @@ namespace CDP4Common.Tests.Poco
     using System;
     using System.Collections.Generic;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Exceptions;
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using NUnit.Framework;
+    using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+    using CDP4Common.Exceptions;
 
     /// <summary>
     /// Suite of tests for the <see cref="Parameter"/> class
@@ -185,7 +186,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatParameterHasErrorWhenNoValueSet()
         {
-            // no topion, no state
+            // no option, no state
             this.scalarParameter.ValidatePoco();
             Assert.IsNotEmpty(this.scalarParameter.ValidationErrors);
         }
@@ -273,7 +274,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VerifyThatWhenParameterIsNotPublishableGetToBePublishedRetursFalse()
+        public void VerifyThatWhenParameterIsNotPublishableGetToBePublishedReturnsFalse()
         {
             var valueset = new ParameterValueSet(Guid.NewGuid(), null, null);
             var data = new List<string> { "-" };            
@@ -292,7 +293,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VerifyThatWhenParameterIsPublishableGetToBePublishedRetursTrue()
+        public void VerifyThatWhenParameterIsPublishableGetToBePublishedReturnsTrue()
         {
             var valueset = new ParameterValueSet(Guid.NewGuid(), null, null);
             var data = new List<string> { "-" };

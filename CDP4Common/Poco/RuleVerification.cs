@@ -26,7 +26,7 @@
 
 namespace CDP4Common.EngineeringModelData
 {
-    using System;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
 
     /// <summary>
@@ -43,7 +43,7 @@ namespace CDP4Common.EngineeringModelData
             var container = this.Container as RuleVerificationList;
             if (container == null)
             {
-                throw new NullReferenceException("Container of ActualFiniteState is null");
+                throw new ContainmentException("Container of RuleVerification is null");
             }
 
             return container.Owner;

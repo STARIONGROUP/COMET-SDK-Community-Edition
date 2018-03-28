@@ -28,6 +28,8 @@ namespace CDP4Common.EngineeringModelData
 {
     using System;
     using System.Linq;
+
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
 
     /// <summary>
@@ -60,7 +62,7 @@ namespace CDP4Common.EngineeringModelData
             var container = this.Container as ActualFiniteStateList;
             if (container == null)
             {
-                throw new NullReferenceException("Container of ActualFiniteState is null");
+                throw new ContainmentException("Container of ActualFiniteState is null");
             }
 
             // Get the names of the possible states in the same order as the possible state lists of the container actualfinitestatelist
@@ -89,7 +91,7 @@ namespace CDP4Common.EngineeringModelData
             var container = this.Container as ActualFiniteStateList;
             if (container == null)
             {
-                throw new NullReferenceException("Container of ActualFiniteState is null");
+                throw new ContainmentException("Container of ActualFiniteState is null");
             }
 
             // Get the short names of the possible states in the same order as the possible state lists of the container actualfinitestatelist
@@ -118,7 +120,7 @@ namespace CDP4Common.EngineeringModelData
             var container = this.Container as ActualFiniteStateList;
             if (container == null)
             {
-                throw new NullReferenceException("Container of ActualFiniteState is null");
+                throw new ContainmentException("Container of ActualFiniteState is null");
             }
 
             return container.Owner;

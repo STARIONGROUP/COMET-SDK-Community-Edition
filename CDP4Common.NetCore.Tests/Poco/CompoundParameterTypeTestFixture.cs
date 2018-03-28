@@ -40,19 +40,15 @@ namespace CDP4Common.Tests.Poco
             var compound2 = new CompoundParameterType();
             var scalar = new EnumerationParameterType();
 
-            var scalarc1 = new ParameterTypeComponent { ParameterType = scalar };
-            var scalarc2 = new ParameterTypeComponent { ParameterType = scalar };
-            var scalarc3 = new ParameterTypeComponent { ParameterType = scalar };
+            var scalarc1 = new ParameterTypeComponent() {ParameterType = scalar};
             compound2.Component.Add(scalarc1);
-            compound2.Component.Add(scalarc2);
-            compound2.Component.Add(scalarc3);
 
-            var compound2Component = new ParameterTypeComponent { ParameterType = compound2 };
+            var compound2Component = new ParameterTypeComponent() {ParameterType = compound2};
 
             compound.Component.Add(compound2Component);
             compound.Component.Add(scalarc1);
 
-            Assert.AreEqual(4, compound.NumberOfValues);
+            Assert.AreEqual(2, compound.NumberOfValues);
         }
     }
 }

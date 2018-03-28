@@ -178,15 +178,15 @@ namespace CDP4Common.Tests.Validation
 
             result = ValueValidator.Validate(this.dateParameterType, "1976-08-20Z");
             Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("1976-08-20Z is not a valid Date, valid dates are specified in  ISO 8601 YYYY-MM-DD", result.Message);
+            Assert.AreEqual("1976-08-20Z is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD", result.Message);
 
             result = ValueValidator.Validate(this.dateParameterType, "some text");
             Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("some text is not a valid Date, valid dates are specified in  ISO 8601 YYYY-MM-DD", result.Message);
+            Assert.AreEqual("some text is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD", result.Message);
 
             result = ValueValidator.Validate(this.dateParameterType, "2012-13-13");
             Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("2012-13-13 is not a valid Date, valid dates are specified in  ISO 8601 YYYY-MM-DD", result.Message);
+            Assert.AreEqual("2012-13-13 is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD", result.Message);
 
             var date = new DateTime(2002, 12, 1);
             result = ValueValidator.Validate(this.dateParameterType, date);
@@ -244,7 +244,7 @@ namespace CDP4Common.Tests.Validation
 
             result = ValueValidator.Validate(this.enumerationParameterType, "high");
             Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("The test Enumeration ParameterType does not contain the following value definition high, allowed valuse are: low, medium", result.Message);
+            Assert.AreEqual("The test Enumeration Parametertype does not contain the following value definition high, allowed values are: low, medium", result.Message);
 
             this.enumerationParameterType.AllowMultiSelect = true;
             result = ValueValidator.Validate(this.enumerationParameterType, "low | medium");
@@ -440,6 +440,18 @@ namespace CDP4Common.Tests.Validation
             result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453Z");
             Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
             Assert.IsEmpty(result.Message);
+
+            result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453+01:00");
+            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.IsEmpty(result.Message);
+
+            result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453+01");
+            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.IsEmpty(result.Message);
+
+            result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453Z+01:00");
+            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.IsNotEmpty(result.Message);
 
             result = ValueValidator.Validate(this.timeOfDayParameterType, "25:23");
             Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);

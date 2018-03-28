@@ -104,24 +104,24 @@ namespace CDP4Common.EngineeringModelData
         /// <summary>
         /// Assert whether this <see cref="ElementDefinition"/> contains in its usage tree a usage of the given <see cref="ElementDefinition"/>
         /// </summary>
-        /// <param name="elementdefinition">The given <see cref="ElementDefinition"/></param>
+        /// <param name="elementDefinition">The given <see cref="ElementDefinition"/></param>
         /// <returns>True if it does or if the given <see cref="ElementDefinition"/> is the current one. False otherwise</returns>
-        public bool HasUsageOf(ElementDefinition elementdefinition)
+        public bool HasUsageOf(ElementDefinition elementDefinition)
         {
-            if (elementdefinition == null)
+            if (elementDefinition == null)
             {
-                throw new ArgumentNullException("elementdefinition");
+                throw new ArgumentNullException("elementDefinition");
             }
 
-            if (this == elementdefinition)
+            if (this == elementDefinition)
             {
                 return true;
             }
 
             foreach (var elementUsage in this.ContainedElement)
             {
-                var result = (elementUsage.ElementDefinition == elementdefinition) 
-                                || elementUsage.ElementDefinition.HasUsageOf(elementdefinition);
+                var result = (elementUsage.ElementDefinition == elementDefinition) 
+                                || elementUsage.ElementDefinition.HasUsageOf(elementDefinition);
                 if (result)
                 {
                     return true;

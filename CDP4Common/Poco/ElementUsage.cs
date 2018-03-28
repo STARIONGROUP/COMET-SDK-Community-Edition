@@ -45,7 +45,7 @@ namespace CDP4Common.EngineeringModelData
         /// <remarks>
         /// The model code is derived as follows:
         /// <code>
-        /// #ElementDefinition.ShortName#.#ElementUsage.shortname#
+        /// #ElementDefinition.ShortName#.#ElementUsage.ShortName#
         /// </code>
         /// </remarks>
         /// <returns>

@@ -28,6 +28,7 @@ namespace CDP4Common.Tests.Poco
 {
     using System;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
 
@@ -37,19 +38,19 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetOwner()
         {
-            var thuing = new UserRuleVerification();
+            var thing = new UserRuleVerification();
             var list = new RuleVerificationList();
             list.Owner = new DomainOfExpertise();
-            list.RuleVerification.Add(thuing);
+            list.RuleVerification.Add(thing);
 
-            Assert.IsTrue(ReferenceEquals(list.Owner, thuing.Owner));
+            Assert.IsTrue(ReferenceEquals(list.Owner, thing.Owner));
         }
 
         [Test]        
         public void TestGetOwnerThrowEx()
         {
             var userRuleVerification = new UserRuleVerification();
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ContainmentException>(() =>
             {
                 Console.WriteLine(userRuleVerification.Owner);
             });            

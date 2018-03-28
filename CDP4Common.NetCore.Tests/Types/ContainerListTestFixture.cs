@@ -37,19 +37,19 @@ namespace CDP4Common.Tests.Types
     public class ContainerListTestFixture
     {
         private Person person;
-        private ContainerList<EmailAddress> emailAdresses; 
+        private ContainerList<EmailAddress> emailAddresses; 
             
         [SetUp]
         public void Setup()
         {
             this.person = new Person(Guid.NewGuid(), null, null);
-            this.emailAdresses = new ContainerList<EmailAddress>(this.person);
+            this.emailAddresses = new ContainerList<EmailAddress>(this.person);
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.emailAdresses.Clear();
+            this.emailAddresses.Clear();
         }
 
         [Test]
@@ -57,10 +57,10 @@ namespace CDP4Common.Tests.Types
         {
             var email = new EmailAddress(Guid.NewGuid(), null, null);
 
-            this.emailAdresses.Add(email);
+            this.emailAddresses.Add(email);
 
-            Assert.AreEqual(1, this.emailAdresses.Count);
-            Assert.AreEqual(this.person, this.emailAdresses.Single().Container);
+            Assert.AreEqual(1, this.emailAddresses.Count);
+            Assert.AreEqual(this.person, this.emailAddresses.Single().Container);
         }
 
         [Test]
@@ -73,10 +73,10 @@ namespace CDP4Common.Tests.Types
                 new EmailAddress(Guid.NewGuid(), null, null)
             };
 
-            this.emailAdresses.AddRange(emails);
+            this.emailAddresses.AddRange(emails);
 
-            Assert.AreEqual(3, this.emailAdresses.Count);
-            foreach (var email in this.emailAdresses)
+            Assert.AreEqual(3, this.emailAddresses.Count);
+            foreach (var email in this.emailAddresses)
             {
                 Assert.AreEqual(this.person, email.Container);
             }
@@ -85,12 +85,12 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatGetSetAtIndexWorks()
         {
-            this.emailAdresses.Add(new EmailAddress(Guid.NewGuid(), null, null));
+            this.emailAddresses.Add(new EmailAddress(Guid.NewGuid(), null, null));
 
             var email = new EmailAddress(Guid.NewGuid(), null, null);
-            this.emailAdresses[0] = email;
+            this.emailAddresses[0] = email;
 
-            var returnedEmail = this.emailAdresses[0];
+            var returnedEmail = this.emailAddresses[0];
 
             Assert.AreEqual(this.person, returnedEmail.Container);
             Assert.AreEqual(email.Iid, returnedEmail.Iid);

@@ -51,9 +51,9 @@ namespace CDP4Common.EngineeringModelData
 
             var nestedElementPath = nestedElement.ShortName;
             var parameterShortName = this.QueryParameterShortName();            
-            var actualFiniteStateShortname = this.ActualState == null ? string.Empty : this.ActualState.ShortName;
+            var actualFiniteStateShortName = this.ActualState == null ? string.Empty : this.ActualState.ShortName;
 
-            var result = string.Format("{0}\\{1}\\{2}\\{3}", nestedElementPath, parameterShortName, option.ShortName, actualFiniteStateShortname);
+            var result = string.Format("{0}\\{1}\\{2}\\{3}", nestedElementPath, parameterShortName, option.ShortName, actualFiniteStateShortName);
 
             return result;
         }

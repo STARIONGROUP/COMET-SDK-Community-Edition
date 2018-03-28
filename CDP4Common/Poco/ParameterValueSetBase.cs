@@ -29,6 +29,7 @@ namespace CDP4Common.EngineeringModelData
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     
@@ -55,7 +56,7 @@ namespace CDP4Common.EngineeringModelData
                     return this.Reference;
 
                 default:
-                    throw new InvalidOperationException(string.Format("Unkown ParameterKindSwitch: {0}", this.ValueSwitch));
+                    throw new InvalidOperationException(string.Format("Unknown ParameterKindSwitch: {0}", this.ValueSwitch));
             }
         }
 
@@ -71,13 +72,13 @@ namespace CDP4Common.EngineeringModelData
                 return parameter.Owner;
             }
 
-            var parameteroverride = this.Container as ParameterOverride;
-            if (parameteroverride != null)
+            var parameterOverride = this.Container as ParameterOverride;
+            if (parameterOverride != null)
             {
-                return parameteroverride.Owner;
+                return parameterOverride.Owner;
             }
 
-            throw new NullReferenceException("The Container of ParameterValueSetBase is not the right type or is null");
+            throw new ContainmentException("The Container of ParameterValueSetBase is not the right type or is null");
         }
 
         /// <summary>

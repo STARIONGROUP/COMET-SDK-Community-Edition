@@ -72,7 +72,7 @@ namespace CDP4Common.EngineeringModelData
 
             if (compoundParameterType != null && componentIndex != null)
             {
-                var component = Utils.FormatComponentShortname(compoundParameterType.Component[componentIndex.Value].ShortName);
+                var component = Utils.FormatComponentShortName(compoundParameterType.Component[componentIndex.Value].ShortName);
                 return string.Format("{0}.{1}.{2}", elementDefinition.ShortName, compoundParameterType.ShortName, component);
             }
 

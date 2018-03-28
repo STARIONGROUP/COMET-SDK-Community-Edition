@@ -59,7 +59,7 @@ namespace CDP4Common.Validation
         /// <summary>
         /// Valid <see cref="Boolean"/> values
         /// </summary>
-        public static readonly string[] ValidBoolean = { "-", "true", "false", "True", "False", "1", "0" };
+        public static readonly string[] ValidBoolan = { "-", "true", "false", "True", "False", "1", "0" };
 
         /// <summary>
         /// Validates the  to check whether the <paramref name="value"/> is valid with respect to the <paramref name="parameterType"/>
@@ -132,8 +132,8 @@ namespace CDP4Common.Validation
             {
                 return timeOfDayParameterType.Validate(value);
             }
-
-            throw new NotSupportedException(string.Format("The Validate method is not supported for parameterType: {0}", parameterType));
+            
+            throw new NotSupportedException(string.Format("The Validate method is not suported for parameterType: {0}", parameterType));
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace CDP4Common.Validation
             {
                 var lowerCaseValue = valueString.ToLower();
 
-                if (ValidBoolean.Contains(lowerCaseValue))
+                if (ValidBoolan.Contains(lowerCaseValue))
                 {
                     result.ResultKind = ValidationResultKind.Valid;
                     result.Message = string.Empty;
@@ -194,7 +194,7 @@ namespace CDP4Common.Validation
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
-            result.Message = string.Format("{0} is not a valid boolean, valid values are: {1}", value, string.Join(",", ValidBoolean));
+            result.Message = string.Format("{0} is not a valid boolean, valid values are: {1}", value, string.Join(",", ValidBoolan));
             return result;
         }
 
@@ -251,7 +251,7 @@ namespace CDP4Common.Validation
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
-            result.Message = string.Format("{0} is not a valid Date, valid dates are specified in  ISO 8601 YYYY-MM-DD", value);
+            result.Message = string.Format("{0} is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD", value);
             return result;
         }
 
@@ -350,7 +350,7 @@ namespace CDP4Common.Validation
                 if (!parameterType.AllowMultiSelect && values.Count() > 1)
                 {
                     result.ResultKind = ValidationResultKind.Invalid;
-                    result.Message = string.Format("The {0} Enumeration ParameterType does not allow multi-selection, multiple values seem to be selected", parameterType.Name);
+                    result.Message = string.Format("The {0} Enumeration Parametertype does not allow multi-selection, multiple values seem to be selected", parameterType.Name);
                     return result;
                 }
 
@@ -359,22 +359,22 @@ namespace CDP4Common.Validation
                     var any = parameterType.ValueDefinition.Any(x => x.ShortName == enumerationValue.Trim());
                     if (!any)
                     {
-                        var joinedShortNames = string.Empty;
+                        var joinedShortnames = string.Empty;
                         var sortedItems = parameterType.ValueDefinition.SortedItems.Values;
                         foreach (var enumerationValueDefinition in sortedItems)
                         {
-                            if (joinedShortNames == string.Empty)
+                            if (joinedShortnames == string.Empty)
                             {
-                                joinedShortNames = enumerationValueDefinition.ShortName;
+                                joinedShortnames = enumerationValueDefinition.ShortName;
                             }
                             else
                             {
-                                joinedShortNames = joinedShortNames + ", " + enumerationValueDefinition.ShortName;
+                                joinedShortnames = joinedShortnames + ", " + enumerationValueDefinition.ShortName;
                             }
                         }
 
                         result.ResultKind = ValidationResultKind.Invalid;
-                        result.Message = string.Format("The {0} Enumeration ParameterType does not contain the following value definition {1}, allowed valuse are: {2}", parameterType.Name, enumerationValue, joinedShortNames);
+                        result.Message = string.Format("The {0} Enumeration Parametertype does not contain the following value definition {1}, allowed values are: {2}", parameterType.Name, enumerationValue, joinedShortnames);
                         return result;
                     }
                 }
@@ -385,7 +385,7 @@ namespace CDP4Common.Validation
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
-            result.Message = string.Format("The {0} Enumeration ParameterType does not contain the following value definition {1}", parameterType.Name, value);
+            result.Message = string.Format("The {0} Enumeration Parametertype does not contain the following value definition {1}", parameterType.Name, value);
             return result;
         }
 
@@ -487,7 +487,7 @@ namespace CDP4Common.Validation
                     return result;
                 }
 
-                //// when DateTimeStyles.NoCurrentDateDefault is specified and no date part is specified, the date is assumed to be 1-1-1. If the
+                //// when DateTimeStyles.NoCurrentDateDefault is specified an no date part is specified, the date is assumed to be 1-1-1. If the
                 //// date of the dateTime variable is not 1-1-1 the user provided an invalid date. The loophole here is that when a user provides a
                 //// value that includes 1-1-1, it will be validated as being valid.
 
@@ -500,6 +500,21 @@ namespace CDP4Common.Validation
                     result.Message = string.Empty;
                     return result;
                 }
+            }
+
+            try
+            {
+                var timeOfDayValue = Convert.ToDateTime(value);
+                if (timeOfDayValue.Year == 1 && timeOfDayValue.Month == 1 && timeOfDayValue.Day == 1)
+                {
+                    result.ResultKind = ValidationResultKind.Valid;
+                    result.Message = string.Empty;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Trace(ex);
             }
 
             try
@@ -560,7 +575,7 @@ namespace CDP4Common.Validation
                     }
 
                     // the value parameter may be passed as a double, provided it has no digits after
-                    // the decimal separator, we consider it may be an integer number
+                    // the decimal separator, we consider it may be a integer number
                     if (value is double)
                     {
                         var d = (double)value;
@@ -592,14 +607,14 @@ namespace CDP4Common.Validation
                             if (measurementScale.IsMaximumInclusive && integer > intMaximumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is greater than the maximum permissible value of \"{1}\"", integer, intMaximumPermissibleValue);
+                                result.Message = string.Format("The value \"{0}\" is greater than the maximium permissible value of \"{1}\"", integer, intMaximumPermissibleValue);
                                 return result;
                             }
 
                             if (!measurementScale.IsMaximumInclusive && integer >= intMaximumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is greater than or equal to the maximum permissible value of \"{1}\"", integer, intMaximumPermissibleValue);
+                                result.Message = string.Format("The value \"{0}\" is greater than or equal to the maximium permissible value of \"{1}\"", integer, intMaximumPermissibleValue);
                                 return result;
                             }
                         }
@@ -703,7 +718,7 @@ namespace CDP4Common.Validation
                         }
                         else
                         {
-                            Logger.Warn("The MaximumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the NATURAL NUMBER SET", measurementScale.MaximumPermissibleValue, measurementScale.Iid);
+                            Logger.Warn("The MaximumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MaximumPermissibleValue, measurementScale.Iid);
                         }
                     }
 
@@ -729,7 +744,7 @@ namespace CDP4Common.Validation
                         }
                         else
                         {
-                            Logger.Warn("The MinimumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the NATURAL NUMBER SET", measurementScale.MinimumPermissibleValue, measurementScale.Iid);
+                            Logger.Warn("The MinimumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MinimumPermissibleValue, measurementScale.Iid);
                         }
                     }
 
@@ -802,7 +817,7 @@ namespace CDP4Common.Validation
                         }
                         else
                         {
-                            Logger.Warn("The MaximumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the REAL NUMBER SET", measurementScale.MaximumPermissibleValue, measurementScale.Iid);
+                            Logger.Warn("The MaximumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MaximumPermissibleValue, measurementScale.Iid);
                         }
                     }
 
@@ -828,7 +843,7 @@ namespace CDP4Common.Validation
                         }
                         else
                         {
-                            Logger.Warn("The MinimumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the REAL NUMBER SET", measurementScale.MinimumPermissibleValue, measurementScale.Iid);
+                            Logger.Warn("The MinimumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MinimumPermissibleValue, measurementScale.Iid);
                         }
                     }
 

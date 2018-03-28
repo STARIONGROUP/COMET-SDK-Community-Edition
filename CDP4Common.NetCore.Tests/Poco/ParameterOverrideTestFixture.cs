@@ -29,10 +29,10 @@ namespace CDP4Common.Tests.Poco
     using System;
     using System.Collections.Generic;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using NUnit.Framework;
+    using CDP4Common.Exceptions;
 
     [TestFixture]
     internal class ParameterOverrideTestFixture
@@ -186,7 +186,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatParameterHasErrorWhenNoValueSet()
         {
-            // no topion, no state
+            // no option, no state
             this.parameterOverride.ValidatePoco();
             Assert.IsNotEmpty(this.parameterOverride.ValidationErrors);
         }

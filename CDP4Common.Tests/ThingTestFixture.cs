@@ -97,7 +97,7 @@ namespace CDP4Common.Tests
         }
 
         [Test]
-        public void VerifyTopcontainerOfEmailOfPerson()
+        public void VerifyTopContainerOfEmailOfPerson()
         {
             var siteDirectory = new SiteDirectory();
 
@@ -225,7 +225,7 @@ namespace CDP4Common.Tests
         }
 
         [Test]
-        public void VerifyIscontainedByWorks()
+        public void VerifyIsContainedByWorks()
         {
             var model = new EngineeringModel(Guid.NewGuid(), null, null);
             var sitedir = new SiteDirectory(Guid.NewGuid(), null, null);
@@ -258,7 +258,7 @@ namespace CDP4Common.Tests
         }
 
         [Test]
-        public void VerifyIscontainedByIidWorks()
+        public void VerifyIsContainedByIidWorks()
         {
             var model = new EngineeringModel(Guid.NewGuid(), null, null);
             var sitedir = new SiteDirectory(Guid.NewGuid(), null, null);
@@ -316,13 +316,14 @@ namespace CDP4Common.Tests
             Assert.AreSame(siterdl, unit.GetContainerOfType<SiteReferenceDataLibrary>());
             Assert.AreSame(sitedir, unit.GetContainerOfType<SiteDirectory>());
             Assert.IsNull(unit.GetContainerOfType<ModelReferenceDataLibrary>());
-            Assert.IsNull(unit.GetContainerOfType<ReferenceDataLibrary>());
+            Assert.AreSame(siterdl, unit.GetContainerOfType<ReferenceDataLibrary>());
 
             var requirementsgroup1 = new RequirementsGroup(Guid.NewGuid(), null, null);
             var requirementsgroup2 = new RequirementsGroup(Guid.NewGuid(), null, null);
             requirementsgroup1.Group.Add(requirementsgroup2);
 
-            Assert.AreSame(requirementsgroup2, requirementsgroup2.GetContainerOfType<RequirementsGroup>());
+            Assert.AreSame(requirementsgroup1, requirementsgroup2.GetContainerOfType<RequirementsGroup>());
+            Assert.AreSame(requirementsgroup1, requirementsgroup2.GetContainerOfType(typeof(RequirementsGroup)));
         }
 
         [Test]

@@ -106,7 +106,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VerifytThatOptionDependenStateDependentParameterValueSetReturnsExpectedModelCode()
+        public void VerifyThatOptionDependentStateDependentParameterValueSetReturnsExpectedModelCode()
         {
             var option = new Option(Guid.NewGuid(), null, null);
             option.ShortName = "option_1";
@@ -132,7 +132,7 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
-        public void VerifyThatCloneWithcloneValueArrayReturnsCloneWithNewValueArrays()
+        public void VerifyThatCloneWithCloneValueArrayReturnsCloneWithNewValueArrays()
         {
             var manualValue = "manual";
             var newManualValue = "new manual";

@@ -28,6 +28,7 @@ namespace CDP4Common.Tests.Types
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
     using CDP4Common.EngineeringModelData;
     using CommonData;
@@ -38,7 +39,7 @@ namespace CDP4Common.Tests.Types
     [TestFixture]
     public class OrderedItemListTestFixture
     {
-        private OrderedItemList<EmailAddress> testList;
+        private OrderedItemList<Thing> testList;
         
         private Person person;
 
@@ -46,7 +47,7 @@ namespace CDP4Common.Tests.Types
         public void Setup()
         {
             this.person = new Person(Guid.NewGuid(), null, null);
-            this.testList = new OrderedItemList<EmailAddress>(container: null);
+            this.testList = new OrderedItemList<Thing>(container: null);
         }
 
         [TearDown]
@@ -74,7 +75,7 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatAddWorks_NotCompositeList()
         {
-            this.testList = new OrderedItemList<EmailAddress>(this.person) { new EmailAddress(Guid.NewGuid(), null, null) };
+            this.testList = new OrderedItemList<Thing>(this.person) { new EmailAddress(Guid.NewGuid(), null, null) };
 
             Assert.AreEqual(1, this.testList.Count);
             Assert.IsNull(this.testList[0].Container);
@@ -83,7 +84,7 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatAddWorks_CompositeList()
         {
-            this.testList = new OrderedItemList<EmailAddress>(this.person, true) { new EmailAddress(Guid.NewGuid(), null, null) };
+            this.testList = new OrderedItemList<Thing>(this.person, true) { new EmailAddress(Guid.NewGuid(), null, null) };
 
             Assert.AreEqual(1, this.testList.Count);
             Assert.AreEqual(this.person, this.testList[0].Container);
@@ -94,7 +95,7 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatGetEnumeratorWork()
         {
-            this.testList = new OrderedItemList<EmailAddress>(this.person, true) { new EmailAddress(Guid.NewGuid(), null, null) };
+            this.testList = new OrderedItemList<Thing>(this.person, true) { new EmailAddress(Guid.NewGuid(), null, null) };
             foreach (var item in this.testList)
             {
                 Assert.IsNotNull(item);
@@ -105,7 +106,7 @@ namespace CDP4Common.Tests.Types
         public void VerifyThatRemoveWorks()
         {
             var email = new EmailAddress(Guid.NewGuid(), null, null);
-            this.testList = new OrderedItemList<EmailAddress>(this.person, true) { email };
+            this.testList = new OrderedItemList<Thing>(this.person, true) { email };
 
             this.testList.Remove(email);
 
@@ -115,7 +116,7 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatClearWorks()
         {
-            this.testList = new OrderedItemList<EmailAddress>(this.person, true);
+            this.testList = new OrderedItemList<Thing>(this.person, true);
             this.testList.Add(new EmailAddress(Guid.NewGuid(), null, null));
             this.testList.Add(new EmailAddress(Guid.NewGuid(), null, null));
 
@@ -131,48 +132,48 @@ namespace CDP4Common.Tests.Types
             listOrderedItem.Add(new OrderedItem() { K = 500000, V = new Person(Guid.NewGuid(), null, null) });
             listOrderedItem.Add(new OrderedItem() { K = 10000000, V = new TelephoneNumber(Guid.NewGuid(), null, null) });
 
-            var thingTestList = new OrderedItemList<Thing>(this.person, true);
+            this.testList = new OrderedItemList<Thing>(this.person, true);
 
-            thingTestList.AddOrderedItems(listOrderedItem);
-            Assert.AreEqual(3, thingTestList.Count);
+            this.testList.AddOrderedItems(listOrderedItem);
+            Assert.AreEqual(3, this.testList.Count);
         }
 
         [Test]
         public void VerifyThatAddRangeWorks()
         {
-            var thingTestList = new OrderedItemList<Thing>(this.person, true);
+            this.testList = new OrderedItemList<Thing>(this.person, true);
 
             var listItemToAdd = new List<Thing>();
             listItemToAdd.Add(new EmailAddress(Guid.NewGuid(), null, null));
             listItemToAdd.Add(new TelephoneNumber(Guid.NewGuid(), null, null));
 
-            thingTestList.AddRange(listItemToAdd);
-            Assert.AreEqual(listItemToAdd.Count, thingTestList.Count);
+            this.testList.AddRange(listItemToAdd);
+            Assert.AreEqual(listItemToAdd.Count, this.testList.Count);
         }
 
         [Test]
         public void VerifyThatInsertWorks()
         {
-            var thingTestList = new OrderedItemList<Thing>(this.person, true);
+            this.testList = new OrderedItemList<Thing>(this.person, true);
 
             var listItemToAdd = new List<Thing>();
             listItemToAdd.Add(new EmailAddress(Guid.NewGuid(), null, null));
             listItemToAdd.Add(new TelephoneNumber(Guid.NewGuid(), null, null));
 
-            thingTestList.AddRange(listItemToAdd);
+            this.testList.AddRange(listItemToAdd);
 
             var inserted = new Person(Guid.NewGuid(), null, null);
-            thingTestList.Insert(1, inserted);
+            this.testList.Insert(1, inserted);
 
-            Assert.AreEqual(inserted, thingTestList[1]);
-            Assert.IsTrue(thingTestList.SortedItems.Keys[1] > thingTestList.SortedItems.Keys[0] && thingTestList.SortedItems.Keys[2] > thingTestList.SortedItems.Keys[1]);
+            Assert.AreEqual(inserted, this.testList[1]);
+            Assert.IsTrue(this.testList.SortedItems.Keys[1] > this.testList.SortedItems.Keys[0] && this.testList.SortedItems.Keys[2] > this.testList.SortedItems.Keys[1]);
         }
 
         [Test]
         public void VerifyThatContainsWorks()
         {
-            this.testList = new OrderedItemList<EmailAddress>(this.person, true);
-            var inserted = new EmailAddress(Guid.NewGuid(), null, null);
+            this.testList = new OrderedItemList<Thing>(this.person, true);
+            var inserted = new Person(Guid.NewGuid(), null, null);
 
             testList.Add(inserted);
 
@@ -182,12 +183,12 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatCopyToWorks()
         {
-            this.testList = new OrderedItemList<EmailAddress>(this.person, true);
-            var inserted = new EmailAddress(Guid.NewGuid(), null, null);
+            this.testList = new OrderedItemList<Thing>(this.person, true);
+            var inserted = new Person(Guid.NewGuid(), null, null);
 
             testList.Add(inserted);
 
-            var array = new EmailAddress[1];
+            var array = new Thing[1];
             this.testList.CopyTo(array, 0);
 
             Assert.IsNotNull(array[0]);
@@ -196,25 +197,25 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatToDtoListOrderedItemWorks()
         {
-            var thingTestList = new OrderedItemList<Thing>(this.person, true);
+            this.testList = new OrderedItemList<Thing>(this.person, true);
 
             var email = new EmailAddress(Guid.NewGuid(), null, null);
             var tel = new TelephoneNumber(Guid.NewGuid(), null, null);
 
-            thingTestList.Add(email);
-            thingTestList.Add(tel);
+            this.testList.Add(email);
+            this.testList.Add(tel);
 
-            var dtoOrderedList = thingTestList.ToDtoOrderedItemList().ToList();
-            Assert.AreEqual(thingTestList.Count, dtoOrderedList.Count());
-            Assert.AreEqual(thingTestList.SortedItems.Keys[0], dtoOrderedList[0].K);
-            Assert.AreEqual(thingTestList.SortedItems.Keys[1], dtoOrderedList[1].K);
+            var dtoOrderedList = this.testList.ToDtoOrderedItemList().ToList();
+            Assert.AreEqual(this.testList.Count, dtoOrderedList.Count());
+            Assert.AreEqual(this.testList.SortedItems.Keys[0], dtoOrderedList[0].K);
+            Assert.AreEqual(this.testList.SortedItems.Keys[1], dtoOrderedList[1].K);
 
-            Assert.AreEqual(thingTestList.SortedItems.Values[0].Iid, dtoOrderedList[0].V);
-            Assert.AreEqual(thingTestList.SortedItems.Values[1].Iid, dtoOrderedList[1].V);
+            Assert.AreEqual(this.testList.SortedItems.Values[0].Iid, dtoOrderedList[0].V);
+            Assert.AreEqual(this.testList.SortedItems.Values[1].Iid, dtoOrderedList[1].V);
         }
 
         [Test]
-        public void VerifyThzatOrderedItemWithPrimitiveVTypeMayBeAdded()
+        public void VerifyThatOrderedItemWithPrimitiveVTypeMayBeAdded()
         {
             var orderedList = new OrderedItemList<int>(container:null);
 
@@ -227,7 +228,7 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatAddNullThrowsException()
         {
-            this.testList = new OrderedItemList<EmailAddress>(this.person, true);
+            this.testList = new OrderedItemList<Thing>(this.person, true);
             
             Assert.Throws<ArgumentNullException>(() => this.testList.Add(null));
         }
@@ -240,15 +241,15 @@ namespace CDP4Common.Tests.Types
             listOrderedItem.Add(new OrderedItem() { K = 500000, V = new Person(Guid.NewGuid(), null, null) });
             listOrderedItem.Add(new OrderedItem() { K = 10000000, V = "hello" });
 
-            var thingTestList = new OrderedItemList<Thing>(this.person, true);
+            this.testList = new OrderedItemList<Thing>(this.person, true);
 
-            Assert.Throws<NotSupportedException>(() => thingTestList.AddOrderedItems(listOrderedItem));
+            Assert.Throws<NotSupportedException>(() => this.testList.AddOrderedItems(listOrderedItem));
         }
 
         [Test]
         public void VerifyThatIndexOfReturnsTheExpectpedIndex()
         {
-            this.testList = new OrderedItemList<EmailAddress>(this.person, true);
+            this.testList = new OrderedItemList<Thing>(this.person, true);
             var email_0 = new EmailAddress(Guid.NewGuid(), null, null);
             var email_1 = new EmailAddress(Guid.NewGuid(), null, null);
             var email_2 = new EmailAddress(Guid.NewGuid(), null, null);
@@ -279,7 +280,7 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatArgumentOutOfRangeIsThrownWhenIndexIsOutOfRange()
         {
-            var list = new OrderedItemList<EmailAddress>(this.person, false);
+            var list = new OrderedItemList<Thing>(this.person, false);
             EmailAddress email;
             Assert.Throws<ArgumentOutOfRangeException>(() => email = (EmailAddress)list[-1]);
 
@@ -295,7 +296,7 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatArgumentNullExceptionWhenNullIsSet()
         {
-            var list = new OrderedItemList<EmailAddress>(this.person, false);
+            var list = new OrderedItemList<Thing>(this.person, false);
             var email = new EmailAddress(Guid.NewGuid(), null, null);
             list.Add(email);
             Assert.Throws<ArgumentNullException>(() => list[0] = null);
@@ -304,14 +305,14 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatNullCannotBeInserted()
         {
-            var list = new OrderedItemList<EmailAddress>(this.person, false);
+            var list = new OrderedItemList<Thing>(this.person, false);
             Assert.Throws<ArgumentNullException>(() =>list.Insert(1, null));
         }
 
         [Test]
         public void VerifyThatIfInsertAtIndexGreaterThatCountItemIsAppendedToList()
         {
-            var list = new OrderedItemList<EmailAddress>(this.person, false);
+            var list = new OrderedItemList<Thing>(this.person, false);
             var email1 = new EmailAddress(Guid.NewGuid(), null, null);
             list.Add(email1);
 
@@ -326,7 +327,7 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatSameItemCannotBeAddedTwiceBis()
         {
-            var list = new OrderedItemList<EmailAddress>(this.person, true);
+            var list = new OrderedItemList<Thing>(this.person, true);
             var email_0 = new EmailAddress(Guid.NewGuid(), null, null);
             var email_1 = new EmailAddress(Guid.NewGuid(), null, null);
 
@@ -339,7 +340,7 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatMoveWorks()
         {
-            var testlist = new OrderedItemList<EmailAddress>(this.person, true);
+            var testlist = new OrderedItemList<Thing>(this.person, true);
             var email0 = new EmailAddress(Guid.NewGuid(), null, null);
             var email1 = new EmailAddress(Guid.NewGuid(), null, null);
             var email2 = new EmailAddress(Guid.NewGuid(), null, null);
@@ -386,59 +387,59 @@ namespace CDP4Common.Tests.Types
         [Test]
         public void VerifyThatMoveThrowsException()
         {
-            var testlist = new OrderedItemList<EmailAddress>(this.person, true);
+            var testlist = new OrderedItemList<Thing>(this.person, true);
             var email0 = new EmailAddress(Guid.NewGuid(), null, null);
             var email1 = new EmailAddress(Guid.NewGuid(), null, null);
 
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(-1, 1));
+            Assert.Throws<KeyNotFoundException>(() => testlist.Move(-1, 1));
         }
 
         [Test]
         public void VerifyThatMoveThrowsException2()
         {
-            var testlist = new OrderedItemList<EmailAddress>(this.person, true);
+            var testlist = new OrderedItemList<Thing>(this.person, true);
             var email0 = new EmailAddress(Guid.NewGuid(), null, null);
             var email1 = new EmailAddress(Guid.NewGuid(), null, null);
 
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(2, 1));
+            Assert.Throws<KeyNotFoundException>(() => testlist.Move(2, 1));
         }
 
         [Test]
         public void VerifyThatMoveThrowsException3()
         {
-            var testlist = new OrderedItemList<EmailAddress>(this.person, true);
+            var testlist = new OrderedItemList<Thing>(this.person, true);
             var email0 = new EmailAddress(Guid.NewGuid(), null, null);
             var email1 = new EmailAddress(Guid.NewGuid(), null, null);
 
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(0, -1));
+            Assert.Throws<KeyNotFoundException>(() => testlist.Move(0, -1));
         }
 
         [Test]
         public void VerifyThatMoveThrowsException4()
         {
-            var testlist = new OrderedItemList<EmailAddress>(this.person, true);
+            var testlist = new OrderedItemList<Thing>(this.person, true);
             var email0 = new EmailAddress(Guid.NewGuid(), null, null);
             var email1 = new EmailAddress(Guid.NewGuid(), null, null);
 
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(0, 3));
+            Assert.Throws<KeyNotFoundException>(() => testlist.Move(0, 3));
         }
 
         [Test]
         public void VerifyThatFindIndexWorks()
         {
-            var testlist = new OrderedItemList<EmailAddress>(this.person, true);
+            var testlist = new OrderedItemList<Thing>(this.person, true);
             var email0 = new EmailAddress(Guid.NewGuid(), null, null);
             var email1 = new EmailAddress(Guid.NewGuid(), null, null);
 
@@ -448,75 +449,6 @@ namespace CDP4Common.Tests.Types
             Assert.AreEqual(0, testlist.FindIndex(x => x.Iid == email0.Iid));
             Assert.AreEqual(-1, testlist.FindIndex(x => x.Iid == Guid.NewGuid()));
             Assert.Throws<ArgumentNullException>(() => testlist.FindIndex(null));
-        }
-
-        [Test]
-        public void Verify_that_when_duplicate_Thing_is_added_exception_is_thrown()
-        {
-            var derivedUnit = new DerivedUnit(Guid.NewGuid(), null, null);
-
-            var unitFactorOrderedItemList = new OrderedItemList<UnitFactor>(derivedUnit, true);
-
-            var unitFactor = new UnitFactor(Guid.NewGuid(), null, null);
-
-            unitFactorOrderedItemList.Add(unitFactor);
-            
-            Assert.Throws<InvalidOperationException>(() => unitFactorOrderedItemList.Add(unitFactor));
-        }
-
-        [Test]
-        public void Verify_that_when_duplicate_Thing_is_set_by_index_exception_is_thrown()
-        {
-            var derivedUnit = new DerivedUnit(Guid.NewGuid(), null, null);
-
-            var unitFactorOrderedItemList = new OrderedItemList<UnitFactor>(derivedUnit, true);
-
-            var unitFactor_1 = new UnitFactor(Guid.NewGuid(), null, null);
-            var unitFactor_2 = new UnitFactor(Guid.NewGuid(), null, null);
-
-            unitFactorOrderedItemList.Add(unitFactor_1);
-            unitFactorOrderedItemList.Add(unitFactor_2);
-
-            Assert.Throws<InvalidOperationException>(() => unitFactorOrderedItemList[1] = unitFactor_1);
-        }
-
-        [Test]
-        public void Verify_that_when_Thing_is_set_by_index_container_is_set_and_item_is_added()
-        {
-            var derivedUnit = new DerivedUnit(Guid.NewGuid(), null, null);
-
-            var unitFactorOrderedItemList = new OrderedItemList<UnitFactor>(derivedUnit, true);
-
-            var unitFactor_1 = new UnitFactor(Guid.NewGuid(), null, null);
-            var unitFactor_2 = new UnitFactor(Guid.NewGuid(), null, null);
-            var unitFactor_3 = new UnitFactor(Guid.NewGuid(), null, null);
-
-            unitFactorOrderedItemList.Add(unitFactor_1);
-            unitFactorOrderedItemList.Add(unitFactor_2);
-
-            unitFactorOrderedItemList[1] = unitFactor_3;
-
-            Assert.AreEqual(derivedUnit, unitFactor_3.Container);
-
-            CollectionAssert.Contains(unitFactorOrderedItemList, unitFactor_3);
-
-            CollectionAssert.DoesNotContain(unitFactorOrderedItemList, unitFactor_2);
-        }
-
-        [Test]
-        public void Verify_that_isreadonly_returns_expected_results()
-        {
-            var derivedUnit = new DerivedUnit(Guid.NewGuid(), null, null);
-
-            var unitFactorOrderedItemList = new OrderedItemList<UnitFactor>(derivedUnit, true);
-
-            var unitFactor_1 = new UnitFactor(Guid.NewGuid(), null, null);
-            var unitFactor_2 = new UnitFactor(Guid.NewGuid(), null, null);
-
-            unitFactorOrderedItemList.Add(unitFactor_1);
-            unitFactorOrderedItemList.Add(unitFactor_2);
-
-            Assert.IsFalse(unitFactorOrderedItemList.IsReadOnly);
         }
     }
 }

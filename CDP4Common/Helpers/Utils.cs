@@ -57,14 +57,14 @@ namespace CDP4Common.Helpers
         /// <summary>
         /// Format a string using only the alpha numerical characters and underscore
         /// </summary>
-        /// <param name="shortname">The string to format</param>
+        /// <param name="shortName">The string to format</param>
         /// <returns>The formatted string</returns>
         /// <remarks>
         /// This is used to format the <see cref="ParameterTypeComponent"/>'s short-name for a better readability
         /// </remarks>
-        public static string FormatComponentShortname(string shortname)
+        public static string FormatComponentShortName(string shortName)
         {
-            if (string.IsNullOrWhiteSpace(shortname))
+            if (string.IsNullOrWhiteSpace(shortName))
             {
                 return string.Empty;
             }
@@ -72,10 +72,10 @@ namespace CDP4Common.Helpers
             var regex = new Regex("[^a-zA-Z0-9]+");
 
             // Replace all non alpha-numerical character by underscore
-            var formatstring = regex.Replace(shortname, "_");
+            var formatString = regex.Replace(shortName, "_");
 
             // remove the formatted string from its potential leading and trailing underscore
-            return Regex.Replace(formatstring, "^_+|_+$", string.Empty);
+            return Regex.Replace(formatString, "^_+|_+$", string.Empty);
         }
     }
 }

@@ -29,6 +29,7 @@ namespace CDP4Common.EngineeringModelData
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     
     /// <summary>
@@ -54,7 +55,7 @@ namespace CDP4Common.EngineeringModelData
                 return parameterOverride.ParameterType;
             }
 
-            throw new InvalidOperationException(
+            throw new ContainmentException(
                 string.Format("{0} is not contained by a valid Parameter or ParameterOverride", this));
         }
 
@@ -131,8 +132,8 @@ namespace CDP4Common.EngineeringModelData
                     {
                         foreach (var actualState in this.StateDependence.ActualState.Where(x => x.Kind == ActualFiniteStateKind.MANDATORY))
                         {
-                            var valuesets = this.ValueSet.Where(vs => vs.ActualOption == option && vs.ActualState == actualState).ToList();
-                            errorList.AddRange(this.ValidateValueSets(valuesets, option, actualState));
+                            var valueSets = this.ValueSet.Where(vs => vs.ActualOption == option && vs.ActualState == actualState).ToList();
+                            errorList.AddRange(this.ValidateValueSets(valueSets, option, actualState));
                         }
                     }
                 }
@@ -140,8 +141,8 @@ namespace CDP4Common.EngineeringModelData
                 {
                     foreach (Option option in iteration.Option)
                     {
-                        var valuesets = this.ValueSet.Where(vs => vs.ActualOption == option).ToList();
-                        errorList.AddRange(this.ValidateValueSets(valuesets, option, null));
+                        var valueSets = this.ValueSet.Where(vs => vs.ActualOption == option).ToList();
+                        errorList.AddRange(this.ValidateValueSets(valueSets, option, null));
                     }
                 }
             }
@@ -151,8 +152,8 @@ namespace CDP4Common.EngineeringModelData
                 {
                     foreach (var actualState in this.StateDependence.ActualState.Where(x => x.Kind == ActualFiniteStateKind.MANDATORY))
                     {
-                        var valuesets = this.ValueSet.Where(vs => vs.ActualState == actualState).ToList();
-                        errorList.AddRange(this.ValidateValueSets(valuesets, null, actualState));
+                        var valueSets = this.ValueSet.Where(vs => vs.ActualState == actualState).ToList();
+                        errorList.AddRange(this.ValidateValueSets(valueSets, null, actualState));
                     }
                 }
                 else
