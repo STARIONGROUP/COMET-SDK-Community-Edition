@@ -561,7 +561,7 @@ namespace CDP4Dal.Permission
         {                        
             var thing = (Thing)ownedThing;
 
-            var iteration = thing.GetContainerOfType<Iteration>();
+            var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
 
             //Check if the iteration domain is null
             if (iteration != null && this.Session.OpenIterations.Single(x => x.Key == iteration).Value.Item1 == null)
