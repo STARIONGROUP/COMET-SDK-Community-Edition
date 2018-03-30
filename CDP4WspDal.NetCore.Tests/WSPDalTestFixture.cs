@@ -514,7 +514,7 @@ namespace CDP4WspDal.Tests
         public async Task Verify_that_person_can_be_Posted()
         {
             var uri = new Uri("http://ocdt-dev.rheagroup.com");
-            var credentials = new Credentials("admin", "Dahubo12", uri);
+            var credentials = new Credentials("admin", "pass", uri);
 
             var wspdal = new WspDal();
             var dtos = await wspdal.Open(credentials, this.cancelationTokenSource.Token);

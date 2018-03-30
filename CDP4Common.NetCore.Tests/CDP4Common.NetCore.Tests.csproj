@@ -12,14 +12,14 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4Common-CE" Version="1.0.6" />
+        <PackageReference Include="CDP4Common-CE" Version="1.0.7-rc1" />
       </ItemGroup>
     </When>
 
     <When Condition="'$(Configuration)'=='Dev'">
       <ItemGroup>
         <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-        <PackageReference Include="NLog" Version="4.5.0-rc05" />
+        <PackageReference Include="NLog" Version="4.5.0" />
       </ItemGroup>
     </When>
   </Choose>

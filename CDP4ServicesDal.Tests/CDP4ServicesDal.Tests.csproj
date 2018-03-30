@@ -12,7 +12,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4ServicesDal-CE" Version="1.0.6" />
+        <PackageReference Include="CDP4ServicesDal-CE" Version="1.0.7-rc1" />
       </ItemGroup>
     </When>
 
@@ -22,7 +22,7 @@
         <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
         <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
         <ProjectReference Include="..\CDP4ServicesDal\CDP4ServicesDal.csproj" />
-        <PackageReference Include="NLog" Version="4.5.0-rc05" />
+        <PackageReference Include="NLog" Version="4.5.0" />
         <PackageReference Include="Rx-Core" version="2.2.5" />
         <PackageReference Include="Rx-Interfaces" version="2.2.5" />
         <PackageReference Include="Rx-Linq" version="2.2.5" />
