@@ -1,6 +1,6 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WspCopyOperationHandler.cs" company="RHEA System S.A.">
+// <copyright file="CopyOperationHandler.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
@@ -32,7 +32,6 @@ namespace CDP4WspDal
     using System.Reflection;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Helpers;
     using CDP4Dal;
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
@@ -41,7 +40,7 @@ namespace CDP4WspDal
     /// <summary>
     /// The class that modify a copy <see cref="Operation"/> into multiple create <see cref="Operation"/>s
     /// </summary>
-    internal class WspCopyOperationHandler
+    internal class CopyOperationHandler
     {
         /// <summary>
         /// The <see cref="Enumerable"/>'s cast method
@@ -69,10 +68,10 @@ namespace CDP4WspDal
         private List<Operation> operations;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WspCopyOperationHandler"/> class
+        /// Initializes a new instance of the <see cref="CopyOperationHandler"/> class
         /// </summary>
         /// <param name="session">The <see cref="ISession"/></param>
-        public WspCopyOperationHandler(ISession session)
+        public CopyOperationHandler(ISession session)
         {
             this.session = session;
         }

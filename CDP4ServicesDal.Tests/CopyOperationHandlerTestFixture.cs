@@ -1,6 +1,6 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WspCopyOperationHandlerTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="CopyOperationHandlerTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
@@ -24,7 +24,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 #endregion
 
-namespace CDP4WspDal.Tests
+namespace CDP4ServicesDal.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -40,11 +40,11 @@ namespace CDP4WspDal.Tests
     using Dto = CDP4Common.DTO;
 
     [TestFixture]
-    internal class WspCopyOperationHandlerTestFixture
+    internal class CopyOperationHandlerTestFixture
     {
         private Mock<ISession> session;
         private Mock<IPermissionService> permissionService;
-        private Uri uri = new Uri("http://www.rheagroup.com");
+        private Uri uri = new Uri("https://cdp4services-public.rheagroup.com");
         private Assembler assembler;
 
         private SiteDirectory siteDir;
@@ -255,7 +255,7 @@ namespace CDP4WspDal.Tests
             operationContainer.AddOperation(new Operation(this.iteration2.ToDto(), iteration2Clone.ToDto(), OperationKind.Update));
             operationContainer.AddOperation(new Operation(this.rootDef.ToDto(), defClone.ToDto(), OperationKind.Copy));
 
-            var copyHandler = new WspCopyOperationHandler(this.session.Object);
+            var copyHandler = new CopyOperationHandler(this.session.Object);
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();
@@ -291,7 +291,7 @@ namespace CDP4WspDal.Tests
             operationContainer.AddOperation(new Operation(this.iteration2.ToDto(), iteration2Clone.ToDto(), OperationKind.Update));
             operationContainer.AddOperation(new Operation(this.rootDef.ToDto(), defClone.ToDto(), OperationKind.Copy));
 
-            var copyHandler = new WspCopyOperationHandler(this.session.Object);
+            var copyHandler = new CopyOperationHandler(this.session.Object);
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();
@@ -322,7 +322,7 @@ namespace CDP4WspDal.Tests
             operationContainer.AddOperation(new Operation(this.iteration2.ToDto(), iteration2Clone.ToDto(), OperationKind.Update));
             operationContainer.AddOperation(new Operation(this.rootDef.ToDto(), defClone.ToDto(), OperationKind.CopyDefaultValuesChangeOwner));
 
-            var copyHandler = new WspCopyOperationHandler(this.session.Object);
+            var copyHandler = new CopyOperationHandler(this.session.Object);
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();
@@ -367,7 +367,7 @@ namespace CDP4WspDal.Tests
             operationContainer.AddOperation(new Operation(this.iteration2.ToDto(), iteration2Clone.ToDto(), OperationKind.Update));
             operationContainer.AddOperation(new Operation(this.rootDef.ToDto(), defClone.ToDto(), OperationKind.CopyDefaultValuesChangeOwner));
 
-            var copyHandler = new WspCopyOperationHandler(this.session.Object);
+            var copyHandler = new CopyOperationHandler(this.session.Object);
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();
@@ -413,7 +413,7 @@ namespace CDP4WspDal.Tests
             operationContainer.AddOperation(new Operation(this.iteration2.ToDto(), iteration2Clone.ToDto(), OperationKind.Update));
             operationContainer.AddOperation(new Operation(this.rootDef.ToDto(), defClone.ToDto(), OperationKind.CopyDefaultValuesChangeOwner));
 
-            var copyHandler = new WspCopyOperationHandler(this.session.Object);
+            var copyHandler = new CopyOperationHandler(this.session.Object);
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();

@@ -24,7 +24,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 #endregion
 
-namespace CDP4WspDal.Tests
+namespace CDP4ServicesDal.Tests
 {
     using System;
     using System.Linq;
@@ -36,7 +36,7 @@ namespace CDP4WspDal.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    internal class WspOperationModifierTestFixture
+    internal class OperationModifierTestFixture
     {
         private Uri uri = new Uri("https://cdp4services-public.rheagroup.com");
         private Mock<ISession> session;
@@ -98,7 +98,7 @@ namespace CDP4WspDal.Tests
             operationContainer.AddOperation(new Operation(null, parameterOverride.ToDto(), OperationKind.Create));
             operationContainer.AddOperation(new Operation(usage.ToDto(), usage.ToDto(), OperationKind.Update));
 
-            var modifier = new WspOperationModifier(this.session.Object);
+            var modifier = new OperationModifier(this.session.Object);
             modifier.ModifyOperationContainer(operationContainer);
 
             Assert.AreEqual(3, operationContainer.Operations.Count());
@@ -146,7 +146,7 @@ namespace CDP4WspDal.Tests
             var operationContainer = new OperationContainer(context, model.RevisionNumber);
             operationContainer.AddOperation(new Operation(null, parameterOverride.ToDto(), OperationKind.Create));
 
-            var modifier = new WspOperationModifier(this.session.Object);
+            var modifier = new OperationModifier(this.session.Object);
             modifier.ModifyOperationContainer(operationContainer);
 
             Assert.AreEqual(1, operationContainer.Operations.Count());
@@ -266,7 +266,7 @@ namespace CDP4WspDal.Tests
 
             Assert.AreEqual(1, operationContainer.Operations.Count());
 
-            var modifier = new WspOperationModifier(this.session.Object);
+            var modifier = new OperationModifier(this.session.Object);
             modifier.ModifyOperationContainer(operationContainer);
 
             Assert.AreEqual(2, operationContainer.Operations.Count());

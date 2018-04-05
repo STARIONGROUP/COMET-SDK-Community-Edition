@@ -1,6 +1,6 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WspValueSetOperationCreator.cs" company="RHEA System S.A.">
+// <copyright file="ValueSetOperationCreator.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
@@ -33,31 +33,25 @@ namespace CDP4WspDal
     using CDP4Common.EngineeringModelData;    
     using CDP4Dal;
     using CDP4Dal.Operations;
-
     using Dto = CDP4Common.DTO;
 
     /// <summary>
     /// The class that compensate operations non performed directly by the WSP
     /// </summary>
-    internal class WspValueSetOperationCreator
+    internal class ValueSetOperationCreator
     {
         /// <summary>
         /// The <see cref="ISession"/> associated
         /// </summary>
         private readonly ISession session;
-
+        
         /// <summary>
-        /// 
-        /// </summary>
-        private readonly string context;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WspValueSetOperationCreator"/> class
+        /// Initializes a new instance of the <see cref="ValueSetOperationCreator"/> class
         /// </summary>
         /// <param name="session">The <see cref="ISession"/>
         /// The 
         /// </param>
-        public WspValueSetOperationCreator(ISession session)
+        public ValueSetOperationCreator(ISession session)
         {
             this.session = session;
         }

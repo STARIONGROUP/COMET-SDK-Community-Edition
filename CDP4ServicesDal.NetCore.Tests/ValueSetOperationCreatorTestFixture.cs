@@ -1,6 +1,6 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WspValueSetOperationCreatorTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="ValueSetOperationCreatorTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
@@ -24,7 +24,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 #endregion
 
-namespace CDP4WspDal.Tests
+namespace CDP4ServicesDal.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -41,11 +41,11 @@ namespace CDP4WspDal.Tests
     using Dto = CDP4Common.DTO;
 
     [TestFixture]
-    internal class WspValueSetOperationCreatorTestFixture
+    internal class ValueSetOperationCreatorTestFixture
     {
         private Mock<ISession> session;
         private Mock<IPermissionService> permissionService;
-        private Uri uri = new Uri("http://test.com");
+        private Uri uri = new Uri("https://cdp4services-public.rheagroup.com");
         private Assembler assembler;
 
         private SiteDirectory siteDir;
@@ -315,7 +315,7 @@ namespace CDP4WspDal.Tests
             var transactionContext = TransactionContextResolver.ResolveContext(this.iteration2);
             var context = transactionContext.ContextRoute();
 
-            var operationCreator = new WspValueSetOperationCreator(this.session.Object);
+            var operationCreator = new ValueSetOperationCreator(this.session.Object);
             var operationContainer = operationCreator.CreateValueSetsUpdateOperations(context, returnedDto, this.map);
 
             Assert.AreEqual(2, operationContainer.Operations.Count());
@@ -365,7 +365,7 @@ namespace CDP4WspDal.Tests
             var transactionContext = TransactionContextResolver.ResolveContext(this.iteration2);
             var context = transactionContext.ContextRoute();
 
-            var operationCreator = new WspValueSetOperationCreator(this.session.Object);
+            var operationCreator = new ValueSetOperationCreator(this.session.Object);
             var operationContainer = operationCreator.CreateValueSetsUpdateOperations(context, returnedDto, this.map);
 
             var operation = operationContainer.Operations.Single();
@@ -410,7 +410,7 @@ namespace CDP4WspDal.Tests
             var transactionContext = TransactionContextResolver.ResolveContext(this.iteration2);
             var context = transactionContext.ContextRoute();
 
-            var operationCreator = new WspValueSetOperationCreator(this.session.Object);
+            var operationCreator = new ValueSetOperationCreator(this.session.Object);
             var operationContainer = operationCreator.CreateValueSetsUpdateOperations(context, returnedDto, this.map);
 
             var operation = operationContainer.Operations.Single();
@@ -462,7 +462,7 @@ namespace CDP4WspDal.Tests
             var transactionContext = TransactionContextResolver.ResolveContext(this.iteration2);
             var context = transactionContext.ContextRoute();
 
-            var operationCreator = new WspValueSetOperationCreator(this.session.Object);
+            var operationCreator = new ValueSetOperationCreator(this.session.Object);
             var operationContainer = operationCreator.CreateValueSetsUpdateOperations(context, returnedDto, this.map);
 
             var operation = operationContainer.Operations.Single();
@@ -503,7 +503,7 @@ namespace CDP4WspDal.Tests
             var transactionContext = TransactionContextResolver.ResolveContext(this.iteration2);
             var context = transactionContext.ContextRoute();
 
-            var operationCreator = new WspValueSetOperationCreator(this.session.Object);
+            var operationCreator = new ValueSetOperationCreator(this.session.Object);
 
             Assert.Throws<InvalidOperationException>(() => operationCreator.CreateValueSetsUpdateOperations(context, returnedDto, this.map));
         }

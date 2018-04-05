@@ -1,6 +1,6 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WspOperationModifier.cs" company="RHEA System S.A.">
+// <copyright file="OperationModifier.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
@@ -43,7 +43,7 @@ namespace CDP4WspDal
     /// <summary>
     /// The class that compensate operations non performed directly by the WSP
     /// </summary>
-    internal class WspOperationModifier
+    internal class OperationModifier
     {
         /// <summary>
         /// The <see cref="ISession"/> associated
@@ -51,10 +51,10 @@ namespace CDP4WspDal
         private readonly ISession session;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WspOperationModifier"/> class
+        /// Initializes a new instance of the <see cref="OperationModifier"/> class
         /// </summary>
         /// <param name="session">The <see cref="ISession"/></param>
-        public WspOperationModifier(ISession session)
+        public OperationModifier(ISession session)
         {
             this.session = session;
         }

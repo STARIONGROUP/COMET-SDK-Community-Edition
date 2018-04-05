@@ -34,7 +34,7 @@ namespace CDP4WspDal.Tests.Operations
     using CDP4Common.MetaInfo;    
     using CDP4Common.Types;
     using CDP4Dal.Operations;
-    using CDP4WspDal.Operations;
+    using CDP4WspDal;
 
     using NUnit.Framework;
 

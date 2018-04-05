@@ -37,7 +37,7 @@ namespace CDP4WspDal
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;    
+    using System.Net.Http.Headers;
     using System.Security.Cryptography;
     using System.Text;
     using System.Threading;
@@ -51,7 +51,6 @@ namespace CDP4WspDal
     using CDP4Dal.Operations;
     using CDP4JsonSerializer;
     using NLog;
-    using Operations;
 
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
     using Thing = CDP4Common.DTO.Thing;
@@ -73,14 +72,11 @@ namespace CDP4WspDal
         /// <summary>
         /// The <see cref="HttpClient"/> that is reused for each HTTP request by the current <see cref="Dal"/>.
         /// </summary>
-        private HttpClient httpClient;
+        private readonly HttpClient httpClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WspDal"/> class.
         /// </summary>
-        /// <exception cref="ActivationException">
-        /// Thrown when the <see cref="IRestClientFactory"/> cannot be resolved
-        /// </exception>
         public WspDal()
         {
             this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
@@ -115,13 +111,13 @@ namespace CDP4WspDal
             {
                 throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
             }
-            
+
             var watch = Stopwatch.StartNew();
 
             var hasCopyValuesOperations = operationContainer.Operations.Any(op => CDP4Dal.Utils.IsCopyKeepOriginalValuesOperation(op.OperationKind));
-            
-            var modifier = new WspOperationModifier(this.Session);
-            var copyHandler = new WspCopyOperationHandler(this.Session);
+
+            var modifier = new OperationModifier(this.Session);
+            var copyHandler = new CopyOperationHandler(this.Session);
 
             copyHandler.ModifiedCopyOperation(operationContainer);
             modifier.ModifyOperationContainer(operationContainer);
@@ -136,9 +132,9 @@ namespace CDP4WspDal
             {
                 throw new InvalidOperationException("The WSPDal is not open.");
             }
-            
+
             var result = new List<Thing>();
-            
+
             if (files != null && files.Any())
             {
                 this.OperationContainerFileVerification(operationContainer, files);
@@ -155,7 +151,7 @@ namespace CDP4WspDal
             Logger.Debug("WSP Dal POST: {0} - {1}", postToken, uriBuilder);
 
             var requestContent = this.CreateHttpContent(postToken, operationContainer, files);
-            
+
             using (var httpResponseMessage = await this.httpClient.PostAsync(resourcePath, requestContent))
             {
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
@@ -180,11 +176,11 @@ namespace CDP4WspDal
                     Logger.Info("JSON Deserializer completed in {0} ", watch.Elapsed);
                 }
             }
-            
+
             // Update value-sets
             if (hasCopyValuesOperations)
             {
-                var valueSetCopyHandler = new WspValueSetOperationCreator(this.Session);
+                var valueSetCopyHandler = new ValueSetOperationCreator(this.Session);
                 var valueSetOperationContainer = valueSetCopyHandler.CreateValueSetsUpdateOperations(operationContainer.Context, result, copyHandler.CopyThingMap);
                 var valueSetResult = await this.Write(valueSetOperationContainer);
 
@@ -218,7 +214,7 @@ namespace CDP4WspDal
         {
             throw new NotSupportedException("Writing multiple OperationContainers to the data-source is not supported");
         }
-        
+
         /// <summary>
         /// Reads the data related to the provided <see cref="Iteration"/> from the data-source
         /// </summary>
@@ -235,8 +231,16 @@ namespace CDP4WspDal
         /// A list of <see cref="Thing"/> that are contained by the provided <see cref="CDP4Common.EngineeringModelData.EngineeringModel"/> including the Reference-Data.
         /// All the <see cref="Thing"/>s that have been updated since the last read will be returned.
         /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the <see cref="Session"/> property has not been set
+        /// </exception>
         public override async Task<IEnumerable<Thing>> Read(CDP4Common.DTO.Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
         {
+            if (this.Session == null)
+            {
+                throw new InvalidOperationException("The Session may not be null and must be set prior to reading an Iteration");
+            }
+
             // Get the RequiredRdl to load
             var siteDirectory = this.Session.Assembler.RetrieveSiteDirectory();
             var iterationSetup = siteDirectory.Model.SelectMany(mod => mod.IterationSetup).SingleOrDefault(it => it.IterationIid == iteration.Iid);
@@ -246,17 +250,17 @@ namespace CDP4WspDal
             }
 
             var modelSetup = (EngineeringModelSetup)iterationSetup.Container;
-            var mrdl = modelSetup.RequiredRdl.SingleOrDefault();
+            var modelReferenceDataLibrary = modelSetup.RequiredRdl.SingleOrDefault();
 
-            if (mrdl == null)
+            if (modelReferenceDataLibrary == null)
             {
                 throw new InvalidOperationException("The model to open does not have a Required Reference-Data-Library.");
             }
 
-            var mrdlDto = mrdl.ToDto();
+            var modelReferenceDataLibraryDto = modelReferenceDataLibrary.ToDto();
 
             var tasks = new List<Task<IEnumerable<Thing>>>();
-            tasks.Add(this.Read(mrdlDto, cancellationToken));
+            tasks.Add(this.Read(modelReferenceDataLibraryDto, cancellationToken));
             tasks.Add(this.Read((Thing)iteration, cancellationToken));
 
             var returned = await Task.WhenAll(tasks);
@@ -275,10 +279,10 @@ namespace CDP4WspDal
         /// An instance of <see cref="Thing"/> that needs to be read from the data-source
         /// </param>
         /// <param name="cancellationToken">
-        /// The token.
+        /// The <see cref="CancellationToken"/>
         /// </param>
         /// <param name="attributes">
-        /// An instance of <see cref="IQueryAttributes"/> to be passed along with the uri
+        /// An instance of <see cref="IQueryAttributes"/> to be passed along with the request
         /// </param>
         /// <returns>
         /// a list of <see cref="Thing"/> that are contained by the provided <see cref="Thing"/> including the <see cref="Thing"/> itself
@@ -309,8 +313,8 @@ namespace CDP4WspDal
             var resourcePath = $"{thingRoute}{attributes.ToString()}";
 
             var readToken = this.RandomWebRequestToken();
-            var uri = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
-            Logger.Debug("WSP GET {0}: {1}", readToken, uri);
+            var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
+            Logger.Debug("WSP GET {0}: {1}", readToken, uriBuilder);
 
             using (var httpResponseMessage = await this.httpClient.GetAsync(resourcePath, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
@@ -391,7 +395,7 @@ namespace CDP4WspDal
         }
 
         /// <summary>
-        /// Opens a connection to a data source <see cref="Uri"/>
+        /// Opens a connection to a data source <see cref="Uri"/> speci1fied by the provided <see cref="Credentials"/>
         /// </summary>
         /// <param name="credentials">
         /// The <see cref="Credentials"/> that are used to connect to the data source such as username, password and <see cref="Uri"/>
@@ -413,7 +417,7 @@ namespace CDP4WspDal
             {
                 throw new ArgumentNullException(nameof(this.Credentials.Uri), $"The Credentials URI may not be null");
             }
-            
+
             Utils.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
 
             var queryAttributes = new QueryAttributes
@@ -499,7 +503,7 @@ namespace CDP4WspDal
             {
                 var multipartContent = new MultipartFormDataContent();
                 multipartContent.Add(jsonContent);
-                
+
                 foreach (var file in files)
                 {
                     var fileName = Path.GetFileName(file);
@@ -581,14 +585,17 @@ namespace CDP4WspDal
 
         /// <summary>
         /// Assertion that the provided string is a valid <see cref="Uri"/> to connect to
-        /// a data-source with the current implementation of the <see cref="IDal"/>
+        /// a data-source with the current implementation of the <see cref="IDal"/>.
         /// </summary>
         /// <param name="uri">
-        /// a string representing a <see cref="Uri"/>
+        /// a string representing a <see cref="Uri"/>.
         /// </param>
         /// <returns>
-        /// true when valid, false when invalid
+        /// true when valid, false when invalid.
         /// </returns>
+        /// <remarks>
+        /// Only HTTP and HTTPS are valid.
+        /// </remarks>
         public override bool IsValidUri(string uri)
         {
             try

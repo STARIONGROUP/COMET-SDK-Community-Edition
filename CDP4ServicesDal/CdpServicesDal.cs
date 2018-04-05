@@ -44,12 +44,12 @@ namespace CDP4ServicesDal
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.DTO;
-    using CDP4Dal.Operations;
     using CDP4Dal;
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Exceptions;
+    using CDP4Dal.Operations;
     using CDP4JsonSerializer;
     using NLog;
 
@@ -116,11 +116,18 @@ namespace CDP4ServicesDal
 
             var watch = Stopwatch.StartNew();
 
-            var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || CDP4Dal.Utils.IsCopyOperation(operation.OperationKind));
+            var hasCopyValuesOperations = operationContainer.Operations.Any(op => CDP4Dal.Utils.IsCopyKeepOriginalValuesOperation(op.OperationKind));
 
+            var modifier = new OperationModifier(this.Session);
+            var copyHandler = new CopyOperationHandler(this.Session);
+
+            copyHandler.ModifiedCopyOperation(operationContainer);
+            modifier.ModifyOperationContainer(operationContainer);
+
+            var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || CDP4Dal.Utils.IsCopyOperation(operation.OperationKind));
             if (invalidOperationKind)
             {
-                throw new InvalidOperationKindException("The CDP4 DAL does not support Copy or Move operations");
+                throw new InvalidOperationKindException("The WSP DAL does not support Copy or Move operations");
             }
 
             if (this.Credentials == null || this.Credentials.Uri == null)
@@ -171,10 +178,28 @@ namespace CDP4ServicesDal
 
                     watch.Stop();
                     Logger.Info("JSON Deserializer completed in {0} ", watch.Elapsed);
-
-                    return result;
                 }
             }
+
+            // Update value-sets
+            if (hasCopyValuesOperations)
+            {
+                var valueSetCopyHandler = new ValueSetOperationCreator(this.Session);
+                var valueSetOperationContainer = valueSetCopyHandler.CreateValueSetsUpdateOperations(operationContainer.Context, result, copyHandler.CopyThingMap);
+                var valueSetResult = await this.Write(valueSetOperationContainer);
+
+                // merge dtos
+                foreach (var valueSetDto in valueSetResult)
+                {
+                    var index = result.FindIndex(x => x.Iid == valueSetDto.Iid);
+                    if (index >= 0)
+                    {
+                        result[index] = valueSetDto;
+                    }
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -238,12 +263,14 @@ namespace CDP4ServicesDal
 
             var modelReferenceDataLibraryDto = modelReferenceDataLibrary.ToDto();
 
-            var result = new List<Thing>();
-            var referenceData = await this.Read(modelReferenceDataLibraryDto, cancellationToken);
-            result.AddRange(referenceData);
-            var engineeringModelData = await this.Read((Thing)iteration, cancellationToken);
-            result.AddRange(engineeringModelData);
-            return result;
+            var tasks = new List<Task<IEnumerable<Thing>>>();
+            tasks.Add(this.Read(modelReferenceDataLibraryDto, cancellationToken));
+            tasks.Add(this.Read((Thing)iteration, cancellationToken));
+
+            var returned = await Task.WhenAll(tasks);
+            var returnedDto = returned.SelectMany(x => x.ToList()).ToList();
+
+            return returnedDto;
         }
 
         /// <summary>
@@ -287,7 +314,7 @@ namespace CDP4ServicesDal
                 attributes = this.GetIUriQueryAttribute(inlcudeReferenData);
             }
 
-            var resourcePath = string.Format("{0}{1}", thingRoute, attributes.ToString());
+            var resourcePath = $"{thingRoute}{attributes.ToString()}";
 
             var readToken = this.RandomWebRequestToken();
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
@@ -297,7 +324,7 @@ namespace CDP4ServicesDal
             {
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    var msg = string.Format("The data-source replied with code {0}: {1}", httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase);
+                    var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
                     Logger.Error(msg);
                     throw new DalReadException(msg);
                 }
@@ -374,7 +401,7 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
-        /// Opens a connection to a data source <see cref="Uri"/> specofied by the provided <see cref="Credentials"/>
+        /// Opens a connection to a data source <see cref="Uri"/> speci1fied by the provided <see cref="Credentials"/>
         /// </summary>
         /// <param name="credentials">
         /// The <see cref="Dal.Credentials"/> that are used to connect to the data source such as username, password and <see cref="Uri"/>
@@ -405,8 +432,8 @@ namespace CDP4ServicesDal
                 IncludeReferenceData = false
             };
             
-            var resourcePath = string.Format("SiteDirectory{0}", queryAttributes);        
-            
+            var resourcePath = $"SiteDirectory{queryAttributes}";
+
             this.httpClient.BaseAddress = credentials.Uri;
             
             this.httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -423,7 +450,7 @@ namespace CDP4ServicesDal
             {
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    var msg = string.Format("The data-source replied with code {0}: {1}", httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase);
+                    var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
                     Logger.Error(msg);
                     throw new DalReadException(msg);
                 }
@@ -447,7 +474,7 @@ namespace CDP4ServicesDal
                     {
                         throw new InvalidOperationException("User not found.");
                     }
-          
+
                     this.Credentials = credentials;
 
                     return returned;

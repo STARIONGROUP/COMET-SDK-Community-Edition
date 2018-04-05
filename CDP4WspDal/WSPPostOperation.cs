@@ -24,7 +24,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 #endregion
 
-namespace CDP4WspDal.Operations
+namespace CDP4WspDal
 {
     using System;
     using System.Collections;

@@ -1,6 +1,6 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WSPUriQueryAttributeTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="UriQueryAttributeTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
@@ -31,7 +31,7 @@ namespace CDP4WspDal.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public class WspUriQueryAttributeTestFixture
+    public class UriQueryAttributeTestFixture
     {
         private QueryAttributes attributes;
 
