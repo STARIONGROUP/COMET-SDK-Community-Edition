@@ -19,7 +19,7 @@ for:
 # no "branches" section defined
 configuration: Debug
 before_build:
-  - cmd: nuget install NUnit.Console -Version 3.7.0 -OutputDirectory tools
+  - cmd: nuget install NUnit.Console -Version 3.8.0 -OutputDirectory tools
   - cmd: nuget install OpenCover -Version 4.6.519 -OutputDirectory tools
   - cmd: nuget restore
   - cmd: choco install codecov
