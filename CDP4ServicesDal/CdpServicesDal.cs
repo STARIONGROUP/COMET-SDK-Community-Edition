@@ -74,7 +74,7 @@ namespace CDP4ServicesDal
         /// <summary>
         /// The <see cref="HttpClient"/> that is reused for each HTTP request by the current <see cref="Dal"/>.
         /// </summary>
-        private readonly HttpClient httpClient;
+        private HttpClient httpClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CdpServicesDal"/> class.
@@ -82,7 +82,6 @@ namespace CDP4ServicesDal
         public CdpServicesDal()
         {
             this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
-            this.httpClient = new HttpClient();
         }
 
         /// <summary>
@@ -91,7 +90,7 @@ namespace CDP4ServicesDal
         public Cdp4JsonSerializer Serializer { get; private set; }
 
         /// <summary>
-        /// Gets the value indicating whether this <see cref="IDal"/> is read only
+        /// Gets the value indicating whether this <see cref="IDal"/> is read only.
         /// </summary>
         public override bool IsReadOnly
         {
@@ -109,6 +108,11 @@ namespace CDP4ServicesDal
         /// </returns>
         public override async Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
         {
+            if (this.Credentials == null || this.Credentials.Uri == null)
+            {
+                throw new InvalidOperationException("The CDP4 DAL is not open.");
+            }
+
             if (operationContainer == null)
             {
                 throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
@@ -129,12 +133,7 @@ namespace CDP4ServicesDal
             {
                 throw new InvalidOperationKindException("The WSP DAL does not support Copy or Move operations");
             }
-
-            if (this.Credentials == null || this.Credentials.Uri == null)
-            {
-                throw new InvalidOperationException("The CDP4 DAL is not open.");
-            }
-
+            
             var result = new List<Thing>();
 
             if (files != null && files.Any())
@@ -295,7 +294,7 @@ namespace CDP4ServicesDal
         {
             if (this.Credentials == null || this.Credentials.Uri == null)
             {
-                throw new InvalidOperationException("The CdpServicesDal is not open.");
+                throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
 
             if (thing == null)
@@ -419,9 +418,9 @@ namespace CDP4ServicesDal
                 throw new ArgumentNullException(nameof(credentials), $"The {nameof(credentials)} may not be null");
             }
 
-            if (credentials == null)
+            if (credentials.Uri == null)
             {
-                throw new ArgumentNullException(nameof(this.Credentials.Uri), $"The Credentials URI may not be null");
+                throw new ArgumentNullException(nameof(credentials.Uri), $"The Credentials URI may not be null");
             }
 
             Utils.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
@@ -434,8 +433,22 @@ namespace CDP4ServicesDal
             
             var resourcePath = $"SiteDirectory{queryAttributes}";
 
-            this.httpClient.BaseAddress = credentials.Uri;
+            if (credentials.Proxy == null)
+            {
+                this.httpClient = new HttpClient();
+            }
+            else
+            {
+                var httpClientHandler = new HttpClientHandler()
+                {
+                    Proxy = new WebProxy(credentials.Proxy),
+                    UseProxy = true
+                };
+
+                this.httpClient = new HttpClient(httpClientHandler);
+            }
             
+            this.httpClient.BaseAddress = credentials.Uri;            
             this.httpClient.DefaultRequestHeaders.Accept.Clear();
             this.httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", credentials.UserName, credentials.Password))));
@@ -619,11 +632,20 @@ namespace CDP4ServicesDal
         /// <exception cref="InvalidOperationException">
         /// If the Data Access Layer is already closed 
         /// </exception>
+        /// <remarks>
+        /// Disposes of the underlying <see cref="HttpClient"/>
+        /// </remarks>
         public override void Close()
         {
             if (this.Credentials == null)
             {
                 throw new InvalidOperationException("An already closed Data Access Layer may not be closed again.");
+            }
+
+            if (this.httpClient != null)
+            {
+                this.httpClient.Dispose();
+                this.httpClient = null;
             }
             
             this.CloseSession();

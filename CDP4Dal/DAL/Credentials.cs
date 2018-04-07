@@ -52,7 +52,7 @@ namespace CDP4Dal.DAL
         /// the <see cref="Uri"/> of the data-store
         /// </param>
         /// <param name="archivepassword">The password of the archive, to be set if the </param>
-        public Credentials(string username, string password, Uri uri)
+        public Credentials(string username, string password, Uri uri, Uri proxy = null)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -72,6 +72,7 @@ namespace CDP4Dal.DAL
             this.UserName = username;
             this.password = password;
             this.Uri = uri;
+            this.Proxy = proxy;
         }
 
         /// <summary>
@@ -94,5 +95,13 @@ namespace CDP4Dal.DAL
         /// Gets the <see cref="Uri"/> of the data-store 
         /// </summary>
         public Uri Uri { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="Uri"/> of the proxy server
+        /// </summary>
+        /// <remarks>
+        /// This may be null if no proxy server is required.
+        /// </remarks>
+        public Uri Proxy { get; private set; }
     }
 }
