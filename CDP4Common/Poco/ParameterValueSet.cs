@@ -27,6 +27,7 @@
 namespace CDP4Common.EngineeringModelData
 {
     using CDP4Common.Exceptions;
+    using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
     /// <summary>
@@ -55,7 +56,7 @@ namespace CDP4Common.EngineeringModelData
 
             if (parameter == null)
             {
-                throw new ContainmentException(string.Format("The container Parameter of ParameterValueSet with iid {0} is null, the model code cannot be computed.", this.Iid));
+                throw new ContainmentException($"The container Parameter of ParameterValueSet with iid {this.Iid} is null, the model code cannot be computed.");
             }
 
             if (!parameter.IsOptionDependent && parameter.StateDependence == null)
@@ -65,15 +66,30 @@ namespace CDP4Common.EngineeringModelData
 
             if (parameter.IsOptionDependent && parameter.StateDependence == null)
             {
-                return string.Format("{0}\\{1}", parameter.ModelCode(componentIndex), this.ActualOption.ShortName);
+                return $"{parameter.ModelCode(componentIndex)}\\{this.ActualOption.ShortName}";
             }
 
             if (!parameter.IsOptionDependent && parameter.StateDependence != null)
             {
-                return string.Format("{0}\\{1}", parameter.ModelCode(componentIndex), this.ActualState.ShortName);
+                return $"{parameter.ModelCode(componentIndex)}\\{this.ActualState.ShortName}";
             }
 
-            return string.Format("{0}\\{1}\\{2}", parameter.ModelCode(componentIndex), this.ActualOption.ShortName, this.ActualState.ShortName);
+            return $"{parameter.ModelCode(componentIndex)}\\{this.ActualOption.ShortName}\\{this.ActualState.ShortName}";
+        }
+
+        /// <summary>
+        /// Queries the <see cref="ParameterType"/> of the container <see cref="Parameter"/>
+        /// </summary>
+        public ParameterType QueryParameterType()
+        {
+            var parameter = (Parameter)this.Container;
+
+            if (parameter == null)
+            {
+                throw new ContainmentException($"The container Parameter of ParameterValueSet with iid {this.Iid} is null, the ParameterTye code cannot be queried.");
+            }
+
+            return parameter.ParameterType;
         }
     }
 }
