@@ -20,8 +20,6 @@
       <ItemGroup>
         <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
         <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
-        <PackageReference Include="NLog" Version="4.5.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
       </ItemGroup>
     </When>
   </Choose>

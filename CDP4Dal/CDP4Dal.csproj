@@ -29,7 +29,6 @@
     <When Condition="'$(Configuration)'=='Dev'">
       <ItemGroup>
         <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-        <PackageReference Include="NLog" Version="4.5.0" />
       </ItemGroup>
     </When>
   </Choose>
