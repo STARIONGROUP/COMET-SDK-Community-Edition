@@ -20,9 +20,6 @@
       <ItemGroup>
         <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
         <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
-        <PackageReference Include="Rx-Core" version="2.2.5" />
-        <PackageReference Include="Rx-Interfaces" version="2.2.5" />
-        <PackageReference Include="Rx-Linq" version="2.2.5" />
         <Reference Include="System.ComponentModel.Composition" />
       </ItemGroup>
     </When>
