@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4ServicesDal Community Edition</Title>
-    <Version>1.0.7-rc1</Version>
+    <Version>1.1.0-rc1</Version>
     <Description>CDP4ServicesDal Dal Plugin</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
@@ -15,15 +15,18 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
-    <PackageReleaseNotes>[Update] to CDP4JsonSerializer-CE and CDP4Dal-CE version 1.0.7-rc1. [Fix] Multi-Part Post file upload</PackageReleaseNotes>
+    <PackageReleaseNotes>
+      [Update] to CDP4JsonSerializer-CE and CDP4Dal-CE version 1.1.0-rc1.
+      [Add] cross model copy capability
+    </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
 
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4JsonSerializer-CE" Version="1.0.7-rc1" />
-        <PackageReference Include="CDP4Dal-CE" Version="1.0.7-rc1" />
+        <PackageReference Include="CDP4JsonSerializer-CE" Version="1.1.0-rc1" />
+        <PackageReference Include="CDP4Dal-CE" Version="1.1.0-rc1" />
       </ItemGroup>
     </When>
 
