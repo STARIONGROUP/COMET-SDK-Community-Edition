@@ -151,8 +151,13 @@ namespace CDP4WspDal
 
             var requestContent = this.CreateHttpContent(postToken, operationContainer, files);
 
+            var requestsw = Stopwatch.StartNew();
+
             using (var httpResponseMessage = await this.httpClient.PostAsync(resourcePath, requestContent))
             {
+                Logger.Info("The ECSS-E-TM-10-25A Annex C Services responded in {0} [ms] to POST {1}", requestsw.ElapsedMilliseconds, postToken);
+                requestsw.Stop();
+
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
@@ -170,9 +175,6 @@ namespace CDP4WspDal
                     {
                         this.SetIterationContainer(result, iterationId);
                     }
-
-                    watch.Stop();
-                    Logger.Info("JSON Deserializer completed in {0} ", watch.Elapsed);
                 }
             }
 
@@ -193,6 +195,9 @@ namespace CDP4WspDal
                     }
                 }
             }
+
+            watch.Stop();
+            Logger.Info("Write Operation completed in {0} [ms]", watch.ElapsedMilliseconds);
 
             return result;
         }
@@ -258,14 +263,12 @@ namespace CDP4WspDal
 
             var modelReferenceDataLibraryDto = modelReferenceDataLibrary.ToDto();
 
-            var tasks = new List<Task<IEnumerable<Thing>>>();
-            tasks.Add(this.Read(modelReferenceDataLibraryDto, cancellationToken));
-            tasks.Add(this.Read((Thing)iteration, cancellationToken));
-
-            var returned = await Task.WhenAll(tasks);
-            var returnedDto = returned.SelectMany(x => x.ToList()).ToList();
-
-            return returnedDto;
+            var result = new List<Thing>();
+            var referenceData = await this.Read(modelReferenceDataLibraryDto, cancellationToken);
+            result.AddRange(referenceData);
+            var engineeringModelData = await this.Read((Thing)iteration, cancellationToken);
+            result.AddRange(engineeringModelData);
+            return result;
         }
 
         /// <summary>
@@ -315,8 +318,13 @@ namespace CDP4WspDal
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
             Logger.Debug("WSP GET {0}: {1}", readToken, uriBuilder);
 
+            var requestsw = Stopwatch.StartNew();
+
             using (var httpResponseMessage = await this.httpClient.GetAsync(resourcePath, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
+                Logger.Info("The ECSS-E-TM-10-25A Annex C Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+                requestsw.Stop();
+
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
@@ -335,7 +343,7 @@ namespace CDP4WspDal
                     }
 
                     watch.Stop();
-                    Logger.Info("JSON Deserializer completed in {0} ", watch.Elapsed);
+                    Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
 
                     return returned;
                 }
@@ -452,8 +460,13 @@ namespace CDP4WspDal
             var uriBuilder = new UriBuilder(credentials.Uri) { Path = resourcePath };
             Logger.Debug("WSP Open {0}: {1}", openToken, uriBuilder);
 
+            var requestsw = Stopwatch.StartNew();
+
             using (var httpResponseMessage = await this.httpClient.GetAsync(resourcePath, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken))
             {
+                Logger.Info("The ECSS-E-TM-10-25A Annex C Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
+                requestsw.Stop();
+                
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
@@ -462,7 +475,7 @@ namespace CDP4WspDal
                 }
 
                 watch.Stop();
-                Logger.Info("WSP DAL Open {0} completed in {1} ", openToken, watch.Elapsed);
+                Logger.Info("WSP DAL Open {0} completed in {1} [ms]", openToken, watch.ElapsedMilliseconds);
                 
                 watch = Stopwatch.StartNew();
 
@@ -471,7 +484,7 @@ namespace CDP4WspDal
                     var returned = this.Serializer.Deserialize(resultStream);
 
                     watch.Stop();
-                    Logger.Info("JSON Deserializer completed in {0} ", watch.Elapsed);
+                    Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
 
                     var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
                     if (returnedPerson == null)

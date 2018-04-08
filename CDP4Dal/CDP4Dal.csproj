@@ -4,10 +4,10 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Dal Community Edition</Title>
-    <Version>1.1.0-rc1</Version>
+    <Version>1.1.1</Version>
     <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Patxi</Authors>
+    <Authors>Sam, Merlin, Alex, Naron</Authors>
     <PackageId>CDP4Dal-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
@@ -25,7 +25,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4Common-CE" Version="1.1.0-rc1" />
+        <PackageReference Include="CDP4Common-CE" Version="1.1.1" />
       </ItemGroup>
     </When>
 

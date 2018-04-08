@@ -28,6 +28,7 @@ namespace CDP4Dal
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -287,6 +288,8 @@ namespace CDP4Dal
         /// </remarks>
         public async Task Open()
         {
+            var sw = new Stopwatch();
+            sw.Start();
             logger.Info("Open request {0}", this.DataSourceUri);
 
             // Create the token source
@@ -312,12 +315,12 @@ namespace CDP4Dal
             await this.Assembler.Synchronize(dtoThings);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
 
-            logger.Info("Synchronization with the {0} server done", this.DataSourceUri);
+            logger.Info("Synchronization with the {0} server done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
             
             var sessionChange = new SessionEvent(this, SessionStatus.Open);
             CDPMessageBus.Current.SendMessage(sessionChange);
 
-            logger.Info("Session {0} opened successfully", this.DataSourceUri);
+            logger.Info("Session {0} opened successfully in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
         }
 
         /// <summary>

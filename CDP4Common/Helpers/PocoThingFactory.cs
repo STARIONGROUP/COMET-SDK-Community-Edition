@@ -227,7 +227,7 @@ namespace CDP4Common.Helpers
                 return cache.Get<T>(firstKey);
             }
 
-            logger.Error("The {0} was not found in the cache: {1}", typeof(T).Name, key.Item1);
+            logger.Debug("The {0} was not found in the cache: {1}", typeof(T).Name, key.Item1);
             return null;
         }
 

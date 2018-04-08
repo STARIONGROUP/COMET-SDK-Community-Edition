@@ -12,7 +12,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4Common-CE" Version="1.1.0-rc1" />
+        <PackageReference Include="CDP4Common-CE" Version="1.1.1" />
       </ItemGroup>
     </When>
 
@@ -30,5 +30,5 @@
     <PackageReference Include="NUnit.Console" Version="3.8.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
   </ItemGroup>
-  
+
 </Project>

@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4JsonFileDal Community Edition</Title>
-    <Version>1.1.0-rc1</Version>
+    <Version>1.1.1</Version>
     <Description>CDP4 Json File Dal Plugin</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
@@ -22,8 +22,8 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4JsonSerializer-CE" Version="1.1.0-rc1" />
-        <PackageReference Include="CDP4Dal-CE" Version="1.1.0-rc1" />
+        <PackageReference Include="CDP4JsonSerializer-CE" Version="1.1.1" />
+        <PackageReference Include="CDP4Dal-CE" Version="1.1.1" />
       </ItemGroup>
     </When>
 

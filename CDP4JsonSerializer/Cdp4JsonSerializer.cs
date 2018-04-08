@@ -119,11 +119,12 @@ namespace CDP4JsonSerializer
             Logger.Trace("initializing JsonTextWriter");
             var jsonWriter = new JsonTextWriter(new StreamWriter(outputStream));
 
+            Logger.Trace("Serialize to JsonTextWriter");
             serializer.Serialize(jsonWriter, collectionSource);
             jsonWriter.Flush();
 
             sw.Stop();
-            Logger.Debug("SerializeToStream in {0} [ms]", sw.Elapsed);
+            Logger.Debug("SerializeToStream in {0} [ms]", sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -251,7 +252,10 @@ namespace CDP4JsonSerializer
             using (var streamReader = new StreamReader(contentStream))
             using (var jsonTextReader = new JsonTextReader(streamReader))
             {
+                var sw = new Stopwatch();
+                sw.Start();
                 data = serializer.Deserialize<T>(jsonTextReader);
+                Logger.Trace("Deserialize to stream {0} [ms]", sw.ElapsedMilliseconds);
             }
 
             return data;

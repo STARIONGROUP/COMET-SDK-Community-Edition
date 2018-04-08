@@ -152,8 +152,7 @@ namespace CDP4Dal
 
                 // Add the unresolved thing to the things to resolved in case it is possible to fully resolve them with the current update
                 // an example would be Citation contained by SiteDirectory where its Source is contained by a Rdl that is not loaded yet
-                var unresolvedThingToUpdate =
-                    this.unresolvedDtos.Where(x => !this.DtoThingToUpdate.Select(y => y.Iid).Contains(x.Iid));
+                var unresolvedThingToUpdate = this.unresolvedDtos.Where(x => !this.DtoThingToUpdate.Select(y => y.Iid).Contains(x.Iid));
                 this.DtoThingToUpdate.AddRange(unresolvedThingToUpdate);
                 this.unresolvedDtos.Clear();
 
@@ -177,11 +176,38 @@ namespace CDP4Dal
                 startwatch.Stop();
                 logger.Trace("Resolving properties took {0} [ms]", startwatch.ElapsedMilliseconds);
 
+                // validate POCO's
+                logger.Trace("Start validating Things");
+                startwatch = Stopwatch.StartNew();
+                foreach (var dtoThing in this.DtoThingToUpdate)
+                {
+                    Lazy<Thing> updatedLazyThing;
+                    var cacheKey = new Tuple<Guid, Guid?>(dtoThing.Iid, dtoThing.IterationContainerId);
+                    var succeed = this.Cache.TryGetValue(cacheKey, out updatedLazyThing);
+
+                    if (succeed)
+                    {
+                        var thingObject = updatedLazyThing.Value;                     
+                        thingObject.ValidatePoco();
+
+                        // add to the list of unresolved dtos if there is an error
+                        if (thingObject.ValidationErrors.Any())
+                        {
+                            this.unresolvedDtos.Add(dtoThing);
+                        }
+                    }
+                }
+                startwatch.Stop();
+                logger.Trace("Validating {0} Things took {1} [ms]", this.DtoThingToUpdate.Count, startwatch.ElapsedMilliseconds);
+
+                // message added and updated POCO's
                 if (activeMessageBus)
                 {
                     logger.Trace("Start Messaging");
                     startwatch = Stopwatch.StartNew();
-                    
+
+                    var messageCounter = 0;
+
                     foreach (var dtoThing in this.DtoThingToUpdate)
                     {
                         Lazy<Thing> updatedLazyThing;
@@ -195,28 +221,19 @@ namespace CDP4Dal
                             if (!existentGuid.Select(x => x.Item1).Contains(cacheId))
                             {
                                 CDPMessageBus.Current.SendObjectChangeEvent(thingObject, EventKind.Added);
+                                messageCounter++;
                             }
                             else if (dtoThing.RevisionNumber > existentGuid.Single(x => x.Item1.Equals(cacheId)).Item2)
                             {
                                 // send event only if revision number has increased from the old cached version
                                 CDPMessageBus.Current.SendObjectChangeEvent(thingObject, EventKind.Updated);
-                            }
-
-                            var sw = new Stopwatch();
-                            sw.Start();
-                            // add to the list of unresolved dtos if there is an error
-                            thingObject.ValidatePoco();
-                            if (thingObject.ValidationErrors.Any())
-                            {
-                                this.unresolvedDtos.Add(dtoThing);
-                            }
-                            sw.Stop();
-                            logger.Trace("Validate Poco took {0} [ms]", startwatch.Elapsed);
+                                messageCounter++;
+                            }               
                         }
                     }
 
                     startwatch.Stop();
-                    logger.Trace("Messaging things took {0} [ms]", startwatch.ElapsedMilliseconds);
+                    logger.Trace("Messaging {0} Things took {1} [ms]", messageCounter, startwatch.ElapsedMilliseconds);
                 }
 
                 logger.Trace("Start Deleting things");

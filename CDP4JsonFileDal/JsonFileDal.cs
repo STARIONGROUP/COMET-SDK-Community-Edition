@@ -1271,7 +1271,7 @@ namespace CDP4JsonFileDal
             }
 
             watch.Stop();
-            Logger.Info("ZipEntry {0} retrieved {1} ", zipEntry.FileName, watch.Elapsed);
+            Logger.Info("ZipEntry {0} retrieved in {1} [ms]", zipEntry.FileName, watch.ElapsedMilliseconds);
 
             watch = Stopwatch.StartNew();
 
@@ -1280,7 +1280,7 @@ namespace CDP4JsonFileDal
 
             stream.Dispose();
             watch.Stop();
-            Logger.Info("JSON Deserializer of {0} completed in {1} ", zipEntry.FileName, watch.Elapsed);
+            Logger.Info("JSON Deserializer of {0} completed in {1} [ms]", zipEntry.FileName, watch.ElapsedMilliseconds);
             return returned;
         }
     }
