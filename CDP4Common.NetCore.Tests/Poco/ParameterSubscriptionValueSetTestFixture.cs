@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterSubscriptionValueSetTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,8 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
+
+using System.Linq;
 
 namespace CDP4Common.Tests.Poco
 {
@@ -37,6 +37,8 @@ namespace CDP4Common.Tests.Poco
     [TestFixture]
     internal class ParameterSubscriptionValueSetTestFixture
     {
+        private BooleanParameterType booleanParameterType;
+
         private ElementDefinition elementDefinition1;
         private ElementDefinition elementDefinition2;
         private ElementUsage elementUsage;
@@ -50,6 +52,8 @@ namespace CDP4Common.Tests.Poco
         [SetUp]
         public void Setup()
         {
+            this.booleanParameterType = new BooleanParameterType(Guid.NewGuid(), null, null) { ShortName = "bool" };
+
             this.elementDefinition1 = new ElementDefinition(Guid.NewGuid(), null, null) { ShortName = "Sat" };
             this.elementDefinition2 = new ElementDefinition(Guid.NewGuid(), null, null) { ShortName = "Bat" };
             this.elementUsage = new ElementUsage(Guid.NewGuid(), null, null)
@@ -59,7 +63,7 @@ namespace CDP4Common.Tests.Poco
             };
             this.elementDefinition1.ContainedElement.Add(this.elementUsage);
             this.parameter = new Parameter(Guid.NewGuid(), null, null);
-            this.parameter.ParameterType = new BooleanParameterType(Guid.NewGuid(), null, null) { ShortName = "bool" };
+            this.parameter.ParameterType = this.booleanParameterType;
             this.elementDefinition2.Parameter.Add(this.parameter);
             this.parameterOverride = new ParameterOverride(Guid.NewGuid(), null, null);
             this.parameterOverride.Parameter = this.parameter;
@@ -123,7 +127,7 @@ namespace CDP4Common.Tests.Poco
             Assert.IsTrue(ReferenceEquals(this.parameterSubscription.Owner, this.parameterSubscriptionValueSet.Owner));
         }
 
-        [Test]        
+        [Test]
         public void TestGetOwnerThrowsException()
         {
             this.parameterSubscriptionValueSet = new ParameterSubscriptionValueSet();
@@ -154,7 +158,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatParameterOverrideSubscriptionModelCodeReturnsExpectedResult()
         {
-            var parameterOverride = new ParameterOverride();            
+            var parameterOverride = new ParameterOverride();
             this.elementUsage.ParameterOverride.Add(parameterOverride);
 
             var parameterOverrideValueSet = new ParameterOverrideValueSet();
@@ -179,17 +183,49 @@ namespace CDP4Common.Tests.Poco
             var manualValue = "manual";
             var newManualValue = "new manual";
 
-            var manualValueArray = new ValueArray<string>(new List<string> { manualValue });            
-            
+            var manualValueArray = new ValueArray<string>(new List<string> { manualValue });
+
             this.parameterSubscriptionValueSet.Manual = manualValueArray;
 
             Assert.AreEqual(manualValue, this.parameterSubscriptionValueSet.Manual[0]);
 
             var clone = this.parameterSubscriptionValueSet.Clone(false);
-            clone.Manual[0] = newManualValue;            
-            
+            clone.Manual[0] = newManualValue;
+
             Assert.AreEqual(newManualValue, clone.Manual[0]);
             Assert.AreEqual(manualValue, this.parameterSubscriptionValueSet.Manual[0]);
+        }
+
+        [Test]
+        public void Verify_that_Validate_poco_returns_errors_when_size_of_valuearray_is_incorrect()
+        {
+            var component_1 = new ParameterTypeComponent(Guid.NewGuid(), null, null);
+            component_1.ParameterType = this.booleanParameterType;
+
+            var component_2 = new ParameterTypeComponent(Guid.NewGuid(), null, null);
+            component_2.ParameterType = this.booleanParameterType;
+
+            var compoundParameterType = new CompoundParameterType(Guid.NewGuid(), null, null);
+            compoundParameterType.Component.Add(component_1);
+            compoundParameterType.Component.Add(component_2);
+
+            var parameter = new Parameter(Guid.NewGuid(), null, null) { ParameterType = compoundParameterType };
+
+            var parameterSubscription = new ParameterSubscription(Guid.NewGuid(), null, null);
+            var parameterSubscriptionValueSet = new ParameterSubscriptionValueSet(Guid.NewGuid(), null, null);
+            parameterSubscriptionValueSet.Manual = new ValueArray<string>(new List<string> { "true", "false" });
+
+            parameterSubscriptionValueSet.SubscribedValueSet = new ParameterValueSet(Guid.NewGuid(), null, null);
+
+            parameterSubscription.ValueSet.Add(parameterSubscriptionValueSet);
+
+            parameter.ParameterSubscription.Add(parameterSubscription);
+
+            parameterSubscriptionValueSet.ValidatePoco();
+
+            var errors = parameterSubscriptionValueSet.ValidationErrors;
+
+            Assert.AreEqual(2, errors.Count());
         }
     }
 }
