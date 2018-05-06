@@ -29,9 +29,7 @@ namespace CDP4Common.Types
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Globalization;
-    using System.Reflection;
     using System.Text;
     using CDP4Common.CommonData;
     using CDP4Common.Polyfills;
@@ -44,8 +42,6 @@ namespace CDP4Common.Types
     /// </typeparam>
     public class ValueArray<T> : IEnumerable<T>
     {
-        #region Private Fields
-
         /// <summary>
         /// The underlying collection of items.
         /// </summary>
@@ -56,9 +52,6 @@ namespace CDP4Common.Types
         /// </summary>
         private Thing container;
 
-        #endregion Private Fields
-
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ValueArray{T}"/> class.
         /// </summary>
@@ -100,11 +93,7 @@ namespace CDP4Common.Types
             this.items = initializationCollection == null ? new List<T>() : new List<T>(initializationCollection);
             this.container = container;
         }
-
-        #endregion Constructors
-
-        #region Public Properties
-
+        
         /// <summary>
         /// Gets the type of the items of this collection.
         /// </summary>
@@ -150,8 +139,6 @@ namespace CDP4Common.Types
             return this.items.GetEnumerator();
         }
 
-        #endregion Public Properties
-
         /// <summary>
         /// Returns a string representation of the <see cref="ValueArray{T}"/>
         /// </summary>
@@ -186,6 +173,18 @@ namespace CDP4Common.Types
 
             sb.Append("}");
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Gets the number of elements contained in the <see cref="ValueArray{T}"/>
+        /// </summary>
+        public int Count {
+            get
+            {
+                {
+                    return this.items.Count;
+                }
+            }
         }
     }
 }
