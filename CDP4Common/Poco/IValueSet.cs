@@ -73,5 +73,25 @@ namespace CDP4Common.EngineeringModelData
         /// Gets or sets the <see cref="ParameterSwitchKind"/> that determines the actual value to use for this <see cref="IValueSet"/>
         /// </summary>
         ParameterSwitchKind ValueSwitch { get; set; }
+
+        /// <summary>
+        /// Resets the <see cref="ValueArray{T}"/> of the <see cref="Manual"/> to proper amount of slots and default value of "-"
+        /// </summary>
+        void ResetManual();
+
+        /// <summary>
+        /// Resets the <see cref="ValueArray{T}"/> of the <see cref="Computed"/> to proper amount of slots and default value of "-"
+        /// </summary>
+        void ResetComputed();
+
+        /// <summary>
+        /// Resets the <see cref="ValueArray{T}"/> of the <see cref="Reference"/> to proper amount of slots and default value of "-"
+        /// </summary>
+        void ResetReference();
+
+        /// <summary>
+        /// Resets the <see cref="ValueArray{T}"/> of the <see cref="Formula"/> to proper amount of slots and default value of "-"
+        /// </summary>
+        void ResetFormula();
     }
 }

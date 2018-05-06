@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterOverrideTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
@@ -57,17 +55,17 @@ namespace CDP4Common.Tests.Poco
         [SetUp]
         public void Setup()
         {
-            this.domain = new DomainOfExpertise(Guid.NewGuid(), null, null) { Name = "domain", ShortName = "d"};
+            this.domain = new DomainOfExpertise(Guid.NewGuid(), null, null) { Name = "domain", ShortName = "d" };
             this.elementDefinition1 = new ElementDefinition(Guid.NewGuid(), null, null) { Owner = this.domain, ShortName = "Sat" };
             this.elementDefinition2 = new ElementDefinition(Guid.NewGuid(), null, null) { Owner = this.domain, ShortName = "Bat" };
             this.elementUsage = new ElementUsage(Guid.NewGuid(), null, null)
-                                    {
-                                        ShortName = "battery_1",
-                                        ElementDefinition = this.elementDefinition2
-                                    };
+            {
+                ShortName = "battery_1",
+                ElementDefinition = this.elementDefinition2
+            };
             this.elementDefinition1.ContainedElement.Add(this.elementUsage);
 
-            this.parameterOverride = new ParameterOverride(Guid.NewGuid(), null, null) { Owner = this.domain};
+            this.parameterOverride = new ParameterOverride(Guid.NewGuid(), null, null) { Owner = this.domain };
             this.parameter = new Parameter(Guid.NewGuid(), null, null) { Owner = this.domain };
             this.parameter.ParameterType = new BooleanParameterType(Guid.NewGuid(), null, null) { ShortName = "bool" };
             this.parameter.IsOptionDependent = true;
@@ -85,7 +83,7 @@ namespace CDP4Common.Tests.Poco
 
             this.possibleList = new PossibleFiniteStateList(Guid.NewGuid(), null, null) { Name = "possible list", ShortName = "pl" };
             this.possibleState1 = new PossibleFiniteState(Guid.NewGuid(), null, null) { Name = "ps1", ShortName = "ps1" };
-            this.possibleState2 = new PossibleFiniteState(Guid.NewGuid(), null, null) { Name = "ps2", ShortName = "ps2"  };
+            this.possibleState2 = new PossibleFiniteState(Guid.NewGuid(), null, null) { Name = "ps2", ShortName = "ps2" };
             this.possibleList.PossibleState.Add(this.possibleState1);
             this.possibleList.PossibleState.Add(this.possibleState2);
 
@@ -286,7 +284,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatToBePublishedReturnsExpectedResult()
         {
             var valuesetoverriden = new ParameterValueSet(Guid.NewGuid(), null, null);
-            var valueset = new ParameterOverrideValueSet(Guid.NewGuid(), null, null) { ParameterValueSet = valuesetoverriden};
+            var valueset = new ParameterOverrideValueSet(Guid.NewGuid(), null, null) { ParameterValueSet = valuesetoverriden };
             var data = new List<string> { "-" };
             valueset.ValueSwitch = ParameterSwitchKind.MANUAL;
             valueset.Manual = new ValueArray<string>(data);
@@ -307,6 +305,66 @@ namespace CDP4Common.Tests.Poco
             valueset.Manual = new ValueArray<string>(updatedData);
 
             Assert.IsTrue(this.parameterOverride.ToBePublished);
+        }
+
+        [Test]
+        public void Verify_that_Manual_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
+            parameterOverride.ValueSet.Add(parameterOverrideValueSet);
+
+            parameterOverrideValueSet.ResetManual();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Manual);
+
+            parameterOverrideValueSet.ResetManual();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Manual);
+        }
+
+        [Test]
+        public void Verify_that_Computed_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
+            parameterOverride.ValueSet.Add(parameterOverrideValueSet);
+
+            parameterOverrideValueSet.ResetComputed();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Computed);
+
+            parameterOverrideValueSet.ResetComputed();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Computed);
+        }
+
+        [Test]
+        public void Verify_that_Formula_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
+            parameterOverride.ValueSet.Add(parameterOverrideValueSet);
+
+            parameterOverrideValueSet.ResetFormula();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Formula);
+
+            parameterOverrideValueSet.ResetFormula();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Formula);
+        }
+
+        [Test]
+        public void Verify_that_Reference_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
+            parameterOverride.ValueSet.Add(parameterOverrideValueSet);
+
+            parameterOverrideValueSet.ResetReference();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Reference);
+
+            parameterOverrideValueSet.ResetReference();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Reference);
         }
     }
 }

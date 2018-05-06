@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterSubscriptionValueSet.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
@@ -30,6 +28,7 @@ namespace CDP4Common.EngineeringModelData
     using System.Collections.Generic;
     using System.Linq;
     using CDP4Common.Exceptions;
+    using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
@@ -38,6 +37,11 @@ namespace CDP4Common.EngineeringModelData
     /// </summary>
     public partial class ParameterSubscriptionValueSet : IModelCode, IValueSet
     {
+        /// <summary>
+        /// the size of the <see cref="ValueArray{T}"/> that is determined by the numberOfValues of the referenced <see cref="ParameterType"/>
+        /// </summary>
+        private int valueArraySize = 0;
+
         /// <summary>
         /// Returns the derived <see cref="Computed"/> value
         /// </summary>
@@ -159,17 +163,17 @@ namespace CDP4Common.EngineeringModelData
             }
 
             var numberOfComponent = container.ParameterType.NumberOfValues;
-            if (this.Manual.Count() != numberOfComponent)
+            if (this.Manual.Count != numberOfComponent)
             {
                 errorList.Add(string.Format("Wrong number of values in the Manual set for the option: {0}, state: {1}", (this.ActualOption == null) ? "-" : this.ActualOption.Name, (this.ActualState == null) ? "-" : this.ActualState.Name));
             }
 
-            if (this.Computed.Count() != numberOfComponent)
+            if (this.Computed.Count != numberOfComponent)
             {
                 errorList.Add(string.Format("Wrong number of values in the Computed set for the option: {0}, state: {1}", (this.ActualOption == null) ? "-" : this.ActualOption.Name, (this.ActualState == null) ? "-" : this.ActualState.Name));
             }
 
-            if (this.Reference.Count() != numberOfComponent)
+            if (this.Reference.Count != numberOfComponent)
             {
                 errorList.Add(string.Format("Wrong number of values in the Reference set for the option: {0}, state: {1}", (this.ActualOption == null) ? "-" : this.ActualOption.Name, (this.ActualState == null) ? "-" : this.ActualState.Name));
             }
@@ -192,6 +196,59 @@ namespace CDP4Common.EngineeringModelData
                 var formula = new ValueArray<string>(valueArray, this);                
                 return formula;
             }
+        }
+
+        /// <summary>
+        /// Queries the <see cref="ParameterType"/> of the container <see cref="Parameter"/>
+        /// </summary>
+        public ParameterType QueryParameterType()
+        {
+            var parameterSubscription = (ParameterSubscription)this.Container;
+
+            if (parameterSubscription == null)
+            {
+                throw new ContainmentException($"The container ParameterSubscription of ParameterSubscriptionValueSet with iid {this.Iid} is null, the ParameterTye cannot be queried.");
+            }
+
+            return parameterSubscription.ParameterType;
+        }
+
+        /// <summary>
+        /// Resets the <see cref="ValueArray{T}"/> of the <see cref="Manual"/> to proper amount of slots and default value of "-"
+        /// </summary>
+        public void ResetManual()
+        {
+            if (this.valueArraySize == 0)
+            {
+                var parameterType = this.QueryParameterType();
+                this.valueArraySize = parameterType.NumberOfValues;
+            }
+
+            this.Manual = ValueArrayUtils.CreateDefaultValueArray(this.valueArraySize);
+        }
+
+        /// <summary>
+        /// Resets the <see cref="ValueArray{T}"/> of the <see cref="Computed"/> to proper amount of slots and default value of "-"
+        /// </summary>
+        public void ResetComputed()
+        {
+            throw new NotSupportedException("The ResetComputed operation may not be called on a ParameterSubscriptionValueSet");
+        }
+
+        /// <summary>
+        /// Resets the <see cref="ValueArray{T}"/> of the <see cref="Reference"/> to proper amount of slots and default value of "-"
+        /// </summary>
+        public void ResetReference()
+        {
+            throw new NotSupportedException("The ResetReference operation may not be called on a ParameterSubscriptionValueSet");
+        }
+
+        /// <summary>
+        /// Resets the <see cref="ValueArray{T}"/> of the <see cref="Formula"/> to proper amount of slots and default value of "-"
+        /// </summary>
+        public void ResetFormula()
+        {
+            throw new NotSupportedException("The ResetFormula operation may not be called on a ParameterSubscriptionValueSet");
         }
     }
 }

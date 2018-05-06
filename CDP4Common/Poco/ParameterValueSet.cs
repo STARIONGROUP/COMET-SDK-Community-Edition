@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterValueSet.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,13 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
     using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
-    using CDP4Common.Types;
 
     /// <summary>
     /// Extended part for the auto-generated <see cref="ParameterValueSet"/>
@@ -80,7 +77,7 @@ namespace CDP4Common.EngineeringModelData
         /// <summary>
         /// Queries the <see cref="ParameterType"/> of the container <see cref="Parameter"/>
         /// </summary>
-        public ParameterType QueryParameterType()
+        public override ParameterType QueryParameterType()
         {
             var parameter = (Parameter)this.Container;
 

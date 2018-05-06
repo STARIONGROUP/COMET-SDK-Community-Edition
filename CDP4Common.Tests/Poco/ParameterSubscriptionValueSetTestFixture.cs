@@ -22,12 +22,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Linq;
-
 namespace CDP4Common.Tests.Poco
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
@@ -226,6 +225,47 @@ namespace CDP4Common.Tests.Poco
             var errors = parameterSubscriptionValueSet.ValidationErrors;
 
             Assert.AreEqual(2, errors.Count());
+        }
+
+        [Test]
+        public void Verify_that_Manual_value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            var p = new Parameter(Guid.NewGuid(), null, null);
+            p.ParameterType = this.booleanParameterType;
+
+            var ps = new ParameterSubscription(Guid.NewGuid(), null, null);
+            var psvs = new ParameterSubscriptionValueSet(Guid.NewGuid(), null, null);
+            ps.ValueSet.Add(psvs);
+            p.ParameterSubscription.Add(ps);
+            
+            psvs.ResetManual();
+            Assert.AreEqual(defaultValueArray, psvs.Manual);
+
+            psvs.ResetManual();
+            Assert.AreEqual(defaultValueArray, psvs.Manual);
+        }
+
+        [Test]
+        public void Verify_that_ResetComputed_throws_exception()
+        {
+            var psvs = new ParameterSubscriptionValueSet(Guid.NewGuid(), null, null);
+            Assert.Throws<NotSupportedException>(() => psvs.ResetComputed());
+        }
+
+        [Test]
+        public void Verify_that_ResetReference_throws_exception()
+        {
+            var psvs = new ParameterSubscriptionValueSet(Guid.NewGuid(), null, null);
+            Assert.Throws<NotSupportedException>(() => psvs.ResetReference());
+        }
+
+        [Test]
+        public void Verify_that_ResetFormula_throws_exception()
+        {
+            var psvs = new ParameterSubscriptionValueSet(Guid.NewGuid(), null, null);
+            Assert.Throws<NotSupportedException>(() => psvs.ResetFormula());
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterOverrideTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
@@ -307,6 +305,74 @@ namespace CDP4Common.Tests.Poco
             valueset.Manual = new ValueArray<string>(updatedData);
 
             Assert.IsTrue(this.parameterOverride.ToBePublished);
+        }
+
+        [Test]
+        public void Verify_that_when_QueryParameterType_throws_exception_when_container_not_set()
+        {
+            var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
+
+            Assert.Throws<ContainmentException>(() => parameterOverrideValueSet.QueryParameterType());
+        }
+
+        [Test]
+        public void Verify_that_Manual_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
+            parameterOverride.ValueSet.Add(parameterOverrideValueSet);
+
+            parameterOverrideValueSet.ResetManual();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Manual);
+
+            parameterOverrideValueSet.ResetManual();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Manual);
+        }
+
+        [Test]
+        public void Verify_that_Computed_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+            
+            var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
+            parameterOverride.ValueSet.Add(parameterOverrideValueSet);
+
+            parameterOverrideValueSet.ResetComputed();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Computed);
+
+            parameterOverrideValueSet.ResetComputed();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Computed);
+        }
+
+        [Test]
+        public void Verify_that_Formula_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
+            parameterOverride.ValueSet.Add(parameterOverrideValueSet);
+
+            parameterOverrideValueSet.ResetFormula();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Formula);
+
+            parameterOverrideValueSet.ResetFormula();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Formula);
+        }
+
+        [Test]
+        public void Verify_that_Reference_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
+            parameterOverride.ValueSet.Add(parameterOverrideValueSet);
+
+            parameterOverrideValueSet.ResetReference();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Reference);
+
+            parameterOverrideValueSet.ResetReference();
+            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Reference);
         }
     }
 }

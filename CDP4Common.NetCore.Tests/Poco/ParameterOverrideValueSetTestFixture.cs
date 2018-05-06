@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterOverrideValueSetTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,18 +21,16 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-
     using NUnit.Framework;
 
     [TestFixture]
@@ -227,6 +224,14 @@ namespace CDP4Common.Tests.Poco
 
             Assert.AreEqual(newComputedValue, clone.Computed[0]);
             Assert.AreEqual(computedValue, parameterOverrideValueSet.Computed[0]);
+        }
+
+        [Test]
+        public void Verify_that_when_QueryParameterType_throws_exception_when_container_not_set()
+        {
+            var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
+
+            Assert.Throws<ContainmentException>(() => parameterOverrideValueSet.QueryParameterType());
         }
     }
 }

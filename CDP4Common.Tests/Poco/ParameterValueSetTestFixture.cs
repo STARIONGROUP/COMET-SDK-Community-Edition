@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterValueSetTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
@@ -190,6 +188,54 @@ namespace CDP4Common.Tests.Poco
         {
             var parameterValueSet = new ParameterValueSet(Guid.NewGuid(), null, null);
             Assert.Throws<ContainmentException>(() => parameterValueSet.QueryParameterType()) ;
+        }
+
+        [Test]
+        public void Verify_that_Manual_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            this.parameterValueSet.ResetManual();
+            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Manual);
+
+            this.parameterValueSet.ResetManual();
+            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Manual);
+        }
+
+        [Test]
+        public void Verify_that_Computed_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            this.parameterValueSet.ResetComputed();
+            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Computed);
+
+            this.parameterValueSet.ResetComputed();
+            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Computed);
+        }
+
+        [Test]
+        public void Verify_that_Formula_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            this.parameterValueSet.ResetFormula();
+            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Formula);
+
+            this.parameterValueSet.ResetFormula();
+            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Formula);
+        }
+
+        [Test]
+        public void Verify_that_Reference_Value_can_be_reset()
+        {
+            var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
+
+            this.parameterValueSet.ResetReference();
+            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Reference);
+
+            this.parameterValueSet.ResetReference();
+            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Reference);
         }
     }
 }

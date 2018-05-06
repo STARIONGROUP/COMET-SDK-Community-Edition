@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterOverrideValueSet.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,11 +21,12 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
     using CDP4Common.Exceptions;
+    using CDP4Common.Helpers;
+    using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
     /// <summary>
@@ -92,6 +92,21 @@ namespace CDP4Common.EngineeringModelData
             }
 
             return string.Format("{0}\\{1}\\{2}", parameterOverride.ModelCode(componentIndex), this.ActualOption.ShortName, this.ActualState.ShortName);
+        }
+
+        /// <summary>
+        /// Queries the <see cref="ParameterType"/> of the container <see cref="ParameterOverride"/>
+        /// </summary>
+        public override ParameterType QueryParameterType()
+        {
+            var parameterOverride = (ParameterOverride)this.Container;
+            
+            if (parameterOverride == null)
+            {
+                throw new ContainmentException($"The container ParameterOverride of ParameterOverrideValueSet with iid {this.Iid} is null, the ParameterTye cannot be queried.");
+            }
+
+            return parameterOverride.ParameterType;
         }
     }
 }
