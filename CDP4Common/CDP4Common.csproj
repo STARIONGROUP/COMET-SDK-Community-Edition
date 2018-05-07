@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;netstandard1.6;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <Version>1.1.1</Version>
+    <Version>1.2.0</Version>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
@@ -16,10 +16,10 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
-      [Refactor] Thing.GetContainerOfType and CopyPermissionHelper
-      [Refactor] OrderedItemList
-      [Add] QueryParameterType method to ParameterValueSet
-      [Update] nlog 4.5.2
+      [Add] Count property to ValueArray
+      [Add] ValueArrayUtils
+      [Extend] IValueSet with ResetManual, ResetComputed, ResetReference and ResetFormula methods
+      [Update] NLog 4.5.4
     </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
@@ -42,7 +42,7 @@
   </ItemGroup>
   
   <ItemGroup>    
-    <PackageReference Include="NLog" Version="4.5.2" />  
+    <PackageReference Include="NLog" Version="4.5.4" />  
 	  <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard1.6'" />
   </ItemGroup>
