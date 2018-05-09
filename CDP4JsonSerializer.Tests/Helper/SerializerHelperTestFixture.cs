@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SerializerHelperTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,11 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer.Tests.Helper
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using CDP4Common.Types;
     using NUnit.Framework;
@@ -65,5 +64,20 @@ namespace CDP4JsonSerializer.Tests.Helper
             Assert.IsNotNull(m);
         }
 
+        [Test]
+        public void Verify_that_a_ValueArray_is_serialized_and_deserialized()
+        {
+            var valueArray = new ValueArray<string>(new List<string> { "=2*(2+2)" });
+
+            var json = valueArray.ToJsonString();
+
+            var result = SerializerHelper.ToValueArray<string>(json);
+
+            Assert.AreEqual(valueArray, result);
+
+            var resultjson = result.ToJsonString();
+
+            Assert.AreEqual(json, resultjson);
+        }
     }
 }
