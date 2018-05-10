@@ -28,6 +28,7 @@ namespace CDP4JsonSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
     using CDP4Common.Types;
@@ -46,16 +47,23 @@ namespace CDP4JsonSerializer
         /// <returns>The <see cref="ValueArray{T}"/></returns>
         public static ValueArray<T> ToValueArray<T>(string valueArrayString)
         {
-            // remove the [ ]
-            var parsed = valueArrayString.Replace("[", string.Empty).Replace("]", string.Empty);
+            var extractArray = new Regex(@"^\[(.*)\]$");
+            var arrayExtractResult = extractArray.Match(valueArrayString);
+            var extractedArrayString = arrayExtractResult.Groups[1].Value;
 
-            // remove double quote
-            parsed = Regex.Replace(parsed, "[\\\"]", string.Empty);
+            // match within 2 unescape double-quote the following content:
+            // 1) (no special char \ or ") 0..* times
+            // 2) (a pattern that starts with \ followed by any character (special included) and 0..* "non special" characters) 0..* times
+            var valueExtractionRegex = new Regex(@"""([^""\\]*(\\.[^""\\]*)*)""");
+            var test = valueExtractionRegex.Matches(extractedArrayString);
 
-            // get the values
-            var values = parsed.Split(',').ToList();
+            var stringValues = new List<string>();
+            foreach (Match match in test)
+            {
+                stringValues.Add(match.Groups[1].Value);
+            }
 
-            var returned = values.Select(m => (T)Convert.ChangeType(m.Trim(), typeof(T))).ToList();
+            var returned = stringValues.Select(m => (T)Convert.ChangeType(m.Trim(), typeof(T))).ToList();
             return new ValueArray<T>(returned);
         }
 
@@ -69,7 +77,8 @@ namespace CDP4JsonSerializer
             var items = valueArray.ToList();
             for (var i = 0; i < items.Count; i++)
             {
-                items[i] = string.Format("\"{0}\"", items[i]);
+                // make sure to escape double quote and backslash as this has special meaning in the value-array syntax
+                items[i] = string.Format("\"{0}\"", items[i].Replace("\\", "\\\\").Replace("\"", "\\\""));
             }
 
             return string.Format("[{0}]", string.Join(",", items));

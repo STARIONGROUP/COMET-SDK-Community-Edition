@@ -145,6 +145,16 @@ namespace CDP4JsonSerializer.Tests
         }
 
         [Test]
+        public void VerifyThatValueArrayConverterWorksSpecialChar()
+        {
+            var returned = CDP4JsonSerializer.SerializerHelper.ToValueArray<string>("[\"\\\"1,,,\\\",()\\\\\", \"2\\\"\", \"\\\"3\", \"testsimple\"]");
+            Assert.AreEqual(returned[0], "\\\"1,,,\\\",()\\\\");
+            Assert.AreEqual(returned[1], "2\\\"");
+            Assert.AreEqual(returned[2], "\\\"3");
+            Assert.AreEqual(returned[3], "testsimple");
+        }
+
+        [Test]
         public void VerifyThatDeserializeWorksOnAnyType()
         {
             var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/jsonTestSample.json")).Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
