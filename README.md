@@ -31,6 +31,8 @@ Branch | Build Status
 Master |  [![Build Status](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6/branch/master?svg=true)](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6)
 Development |  [![Build Status](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6/branch/development?svg=true)](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6)
 
+[![Build history](https://buildstats.info/appveyor/chart/samatrhea/cdp4-sdk-community-edition)](https://ci.appveyor.com/project/samatrhea/cdp4-sdk-community-edition/history)
+
 ## CDP4Common
 
 The CDP4Common library is a C# implementation of the CDP4 UML master model. The CDP4 UML master model is based on the ECSS-E-TM-10-25A Annex A UML master model and extends it with CDP4 concepts to improve the use of ECSS-E-TM-10-25A Annex A for Concurrent Design of complex systems. The library contains both POCO and DTO implementations of the classes defined in the CDP4 UML master model. The POCO classes are used when a full object graph is required. The DTO's are used when a full object graph is not required, references to other class are represented by unique identifiers in the form of a GUID.
