@@ -60,7 +60,8 @@ namespace CDP4JsonSerializer
             var stringValues = new List<string>();
             foreach (Match match in test)
             {
-                stringValues.Add(match.Groups[1].Value);
+                // remove the extra backslash character added during serialization
+                stringValues.Add(match.Groups[1].Value.Replace("\\\"", "\"").Replace("\\\\", "\\"));
             }
 
             var returned = stringValues.Select(m => (T)Convert.ChangeType(m.Trim(), typeof(T))).ToList();
