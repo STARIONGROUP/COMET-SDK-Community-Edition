@@ -40,10 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="TestData\bigmodel.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

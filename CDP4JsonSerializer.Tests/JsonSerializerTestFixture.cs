@@ -150,6 +150,21 @@ namespace CDP4JsonSerializer.Tests
                     var txt = reader.ReadToEnd();
                     // output:  "manual":"[\"123\",\"abc\"]"
                     Assert.IsTrue(txt.Contains("\"manual\":\"[\\\"123\\\\\\\"(,)\\\\\\\"\\\",\\\"abc\\\\\\\\\\\"]\""));
+
+                    memoryStream.Position = 0;
+                    var thing = (Dto.ParameterValueSet)this.serializer.Deserialize(memoryStream).Single();
+                    Assert.AreEqual(thing.Manual[0], parameterValueSet.Manual[0]);
+                    Assert.AreEqual(thing.Manual[1], parameterValueSet.Manual[1]);
+
+                    Assert.AreEqual(thing.Computed[0], parameterValueSet.Computed[0]);
+                    Assert.AreEqual(thing.Computed[1], parameterValueSet.Computed[1]);
+
+                    Assert.AreEqual(thing.Reference[0], parameterValueSet.Reference[0]);
+                    Assert.AreEqual(thing.Reference[1], parameterValueSet.Reference[1]);
+
+                    Assert.AreEqual(thing.Published[0], parameterValueSet.Published[0]);
+                    Assert.AreEqual(thing.Published[1], parameterValueSet.Published[1]);
+
                 }
             }
         }

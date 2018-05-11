@@ -148,9 +148,9 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatValueArrayConverterWorksSpecialChar()
         {
             var returned = CDP4JsonSerializer.SerializerHelper.ToValueArray<string>("[\"\\\"1,,,\\\",()\\\\\", \"2\\\"\", \"\\\"3\", \"testsimple\"]");
-            Assert.AreEqual(returned[0], "\\\"1,,,\\\",()\\\\");
-            Assert.AreEqual(returned[1], "2\\\"");
-            Assert.AreEqual(returned[2], "\\\"3");
+            Assert.AreEqual(returned[0], "\"1,,,\",()\\");
+            Assert.AreEqual(returned[1], "2\"");
+            Assert.AreEqual(returned[2], "\"3");
             Assert.AreEqual(returned[3], "testsimple");
         }
 
