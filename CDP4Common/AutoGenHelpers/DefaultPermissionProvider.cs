@@ -1,28 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DefaultPermissionProvider.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public License
-//    along with this program; if not, write to the Free Software Foundation,
-//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+//   Copyright (c) 2017-2018 RHEA System S.A.
 // </copyright>
+// <summary>
+//   This is the auto-generated DefaultPermissionProvider. Any manual changes on this file will be overwritten!
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Helpers
 {
@@ -36,9 +19,192 @@ namespace CDP4Common.Helpers
     public class DefaultPermissionProvider : IDefaultPermissionProvider
     {
         /// <summary>
+        /// The ClassKind to default participant permission map.
+        /// </summary>
+        private readonly Dictionary<ClassKind, ParticipantAccessRightKind> classKindParticipantPermissionMap = new Dictionary<ClassKind, ParticipantAccessRightKind>
+        {
+            { ClassKind.ActionItem, ParticipantAccessRightKind.NONE },
+            { ClassKind.ActualFiniteState, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ActualFiniteStateList, ParticipantAccessRightKind.NONE },
+            { ClassKind.Alias, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.AndExpression, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Approval, ParticipantAccessRightKind.NONE },
+            { ClassKind.ArrayParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.BinaryNote, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.BinaryRelationship, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.BinaryRelationshipRule, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Book, ParticipantAccessRightKind.NONE },
+            { ClassKind.BooleanExpression, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.BooleanParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Bounds, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.BuiltInRuleVerification, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Category, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ChangeProposal, ParticipantAccessRightKind.NONE },
+            { ClassKind.ChangeRequest, ParticipantAccessRightKind.NONE },
+            { ClassKind.Citation, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Color, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.CommonFileStore, ParticipantAccessRightKind.NONE },
+            { ClassKind.CompoundParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Constant, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ContractChangeNotice, ParticipantAccessRightKind.NONE },
+            { ClassKind.ContractDeviation, ParticipantAccessRightKind.NONE },
+            { ClassKind.ConversionBasedUnit, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.CyclicRatioScale, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DateParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DateTimeParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DecompositionRule, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DefinedThing, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Definition, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.DerivedQuantityKind, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DerivedUnit, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DiagramCanvas, ParticipantAccessRightKind.NONE },
+            { ClassKind.DiagramEdge, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DiagramElementContainer, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagramElementThing, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.DiagrammingStyle, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagramObject, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DiagramShape, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DiagramThingBase, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiscussionItem, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DomainFileStore, ParticipantAccessRightKind.NONE },
+            { ClassKind.DomainOfExpertise, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DomainOfExpertiseGroup, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ElementBase, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ElementDefinition, ParticipantAccessRightKind.NONE },
+            { ClassKind.ElementUsage, ParticipantAccessRightKind.NONE },
+            { ClassKind.EmailAddress, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.EngineeringModel, ParticipantAccessRightKind.NONE },
+            { ClassKind.EngineeringModelDataAnnotation, ParticipantAccessRightKind.NONE },
+            { ClassKind.EngineeringModelDataDiscussionItem, ParticipantAccessRightKind.NONE },
+            { ClassKind.EngineeringModelDataNote, ParticipantAccessRightKind.NONE },
+            { ClassKind.EngineeringModelSetup, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.EnumerationParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.EnumerationValueDefinition, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ExclusiveOrExpression, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ExternalIdentifierMap, ParticipantAccessRightKind.NONE },
+            { ClassKind.File, ParticipantAccessRightKind.NONE },
+            { ClassKind.FileRevision, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.FileStore, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.FileType, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Folder, ParticipantAccessRightKind.NONE },
+            { ClassKind.GenericAnnotation, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Glossary, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Goal, ParticipantAccessRightKind.NONE },
+            { ClassKind.HyperLink, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.IdCorrespondence, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.IntervalScale, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Iteration, ParticipantAccessRightKind.NONE },
+            { ClassKind.IterationSetup, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.LinearConversionUnit, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.LogarithmicScale, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.MappingToReferenceScale, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.MeasurementScale, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.MeasurementUnit, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ModellingAnnotationItem, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ModellingThingReference, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ModelLogEntry, ParticipantAccessRightKind.NONE },
+            { ClassKind.ModelReferenceDataLibrary, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.MultiRelationship, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.MultiRelationshipRule, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.NaturalLanguage, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.NestedElement, ParticipantAccessRightKind.NONE },
+            { ClassKind.NestedParameter, ParticipantAccessRightKind.NONE },
+            { ClassKind.Note, ParticipantAccessRightKind.NONE },
+            { ClassKind.NotExpression, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Option, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.OrdinalScale, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.OrExpression, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Organization, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.OwnedStyle, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Page, ParticipantAccessRightKind.NONE },
+            { ClassKind.Parameter, ParticipantAccessRightKind.NONE },
+            { ClassKind.ParameterBase, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterGroup, ParticipantAccessRightKind.NONE },
+            { ClassKind.ParameterizedCategoryRule, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ParameterOrOverrideBase, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterOverride, ParticipantAccessRightKind.NONE },
+            { ClassKind.ParameterOverrideValueSet, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ParameterSubscription, ParticipantAccessRightKind.NONE },
+            { ClassKind.ParameterSubscriptionValueSet, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ParameterType, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ParameterTypeComponent, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ParameterValue, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterValueSet, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ParameterValueSetBase, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParametricConstraint, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Participant, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParticipantPermission, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParticipantRole, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Person, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.PersonPermission, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.PersonRole, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Point, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.PossibleFiniteState, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.PossibleFiniteStateList, ParticipantAccessRightKind.NONE },
+            { ClassKind.PrefixedUnit, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Publication, ParticipantAccessRightKind.NONE },
+            { ClassKind.QuantityKind, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.QuantityKindFactor, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.RatioScale, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ReferenceDataLibrary, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ReferencerRule, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ReferenceSource, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.RelationalExpression, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Relationship, ParticipantAccessRightKind.NONE },
+            { ClassKind.RelationshipParameterValue, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.RequestForDeviation, ParticipantAccessRightKind.NONE },
+            { ClassKind.RequestForWaiver, ParticipantAccessRightKind.NONE },
+            { ClassKind.Requirement, ParticipantAccessRightKind.NONE },
+            { ClassKind.RequirementsContainer, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.RequirementsContainerParameterValue, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.RequirementsGroup, ParticipantAccessRightKind.NONE },
+            { ClassKind.RequirementsSpecification, ParticipantAccessRightKind.NONE },
+            { ClassKind.ReviewItemDiscrepancy, ParticipantAccessRightKind.NONE },
+            { ClassKind.Rule, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.RuleVerification, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.RuleVerificationList, ParticipantAccessRightKind.NONE },
+            { ClassKind.RuleViolation, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ScalarParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ScaleReferenceQuantityValue, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ScaleValueDefinition, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Section, ParticipantAccessRightKind.NONE },
+            { ClassKind.SharedStyle, ParticipantAccessRightKind.NONE },
+            { ClassKind.SimpleParameterizableThing, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SimpleParameterValue, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.SimpleQuantityKind, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.SimpleUnit, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.SiteDirectory, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SiteDirectoryDataAnnotation, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SiteDirectoryDataDiscussionItem, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SiteDirectoryThingReference, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SiteLogEntry, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SiteReferenceDataLibrary, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Solution, ParticipantAccessRightKind.NONE },
+            { ClassKind.SpecializedQuantityKind, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Stakeholder, ParticipantAccessRightKind.NONE },
+            { ClassKind.StakeholderValue, ParticipantAccessRightKind.NONE },
+            { ClassKind.StakeHolderValueMap, ParticipantAccessRightKind.NONE },
+            { ClassKind.StakeHolderValueMapSettings, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.TelephoneNumber, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Term, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.TextParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.TextualNote, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Thing, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ThingReference, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.TimeOfDayParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.TopContainer, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.UnitFactor, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.UnitPrefix, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.UserPreference, ParticipantAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.UserRuleVerification, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ValueGroup, ParticipantAccessRightKind.NONE },
+            { ClassKind.NotThing, ParticipantAccessRightKind.NOT_APPLICABLE }
+        };
+
+        /// <summary>
         /// The type to default participant permission map.
         /// </summary>
-        private readonly Dictionary<string, ParticipantAccessRightKind> participantPermissionMap = new Dictionary<string, ParticipantAccessRightKind>
+        private readonly Dictionary<string, ParticipantAccessRightKind> typeNameParticipantPermissionMap = new Dictionary<string, ParticipantAccessRightKind>
         {
             { "ActionItem", ParticipantAccessRightKind.NONE },
             { "ActualFiniteState", ParticipantAccessRightKind.SAME_AS_CONTAINER },
@@ -215,12 +381,196 @@ namespace CDP4Common.Helpers
             { "UserPreference", ParticipantAccessRightKind.NOT_APPLICABLE },
             { "UserRuleVerification", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "ValueGroup", ParticipantAccessRightKind.NONE },
+            { "NotThing", ParticipantAccessRightKind.NOT_APPLICABLE }
         };
 
         /// <summary>
-        /// The type to default participant permission map.
+        /// The ClassKind to default person permission map.
         /// </summary>
-        private readonly Dictionary<string, PersonAccessRightKind> personPermissionMap = new Dictionary<string, PersonAccessRightKind>
+        private readonly Dictionary<ClassKind, PersonAccessRightKind> classKindPersonPermissionMap = new Dictionary<ClassKind, PersonAccessRightKind>
+        {
+            { ClassKind.ActionItem, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ActualFiniteState, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ActualFiniteStateList, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Alias, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.AndExpression, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Approval, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ArrayParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.BinaryNote, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.BinaryRelationship, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.BinaryRelationshipRule, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Book, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.BooleanExpression, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.BooleanParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Bounds, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.BuiltInRuleVerification, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Category, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ChangeProposal, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ChangeRequest, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Citation, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Color, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.CommonFileStore, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.CompoundParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Constant, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ContractChangeNotice, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ContractDeviation, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ConversionBasedUnit, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.CyclicRatioScale, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DateParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DateTimeParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DecompositionRule, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DefinedThing, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Definition, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.DerivedQuantityKind, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DerivedUnit, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DiagramCanvas, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagramEdge, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagramElementContainer, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagramElementThing, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagrammingStyle, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagramObject, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagramShape, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagramThingBase, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiscussionItem, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DomainFileStore, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DomainOfExpertise, PersonAccessRightKind.NONE },
+            { ClassKind.DomainOfExpertiseGroup, PersonAccessRightKind.NONE },
+            { ClassKind.ElementBase, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ElementDefinition, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ElementUsage, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.EmailAddress, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.EngineeringModel, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.EngineeringModelDataAnnotation, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.EngineeringModelDataDiscussionItem, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.EngineeringModelDataNote, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.EngineeringModelSetup, PersonAccessRightKind.NONE },
+            { ClassKind.EnumerationParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.EnumerationValueDefinition, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ExclusiveOrExpression, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ExternalIdentifierMap, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.File, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.FileRevision, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.FileStore, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.FileType, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Folder, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.GenericAnnotation, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Glossary, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Goal, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.HyperLink, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.IdCorrespondence, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.IntervalScale, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Iteration, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.IterationSetup, PersonAccessRightKind.NONE },
+            { ClassKind.LinearConversionUnit, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.LogarithmicScale, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.MappingToReferenceScale, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.MeasurementScale, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.MeasurementUnit, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ModellingAnnotationItem, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ModellingThingReference, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ModelLogEntry, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ModelReferenceDataLibrary, PersonAccessRightKind.NONE },
+            { ClassKind.MultiRelationship, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.MultiRelationshipRule, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.NaturalLanguage, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.NestedElement, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.NestedParameter, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Note, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.NotExpression, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Option, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.OrdinalScale, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.OrExpression, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Organization, PersonAccessRightKind.NONE },
+            { ClassKind.OwnedStyle, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Page, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Parameter, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterBase, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterGroup, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterizedCategoryRule, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ParameterOrOverrideBase, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterOverride, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterOverrideValueSet, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterSubscription, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterSubscriptionValueSet, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterType, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ParameterTypeComponent, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ParameterValue, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterValueSet, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParameterValueSetBase, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ParametricConstraint, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Participant, PersonAccessRightKind.NONE },
+            { ClassKind.ParticipantPermission, PersonAccessRightKind.NONE },
+            { ClassKind.ParticipantRole, PersonAccessRightKind.NONE },
+            { ClassKind.Person, PersonAccessRightKind.NONE },
+            { ClassKind.PersonPermission, PersonAccessRightKind.NONE },
+            { ClassKind.PersonRole, PersonAccessRightKind.NONE },
+            { ClassKind.Point, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.PossibleFiniteState, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.PossibleFiniteStateList, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.PrefixedUnit, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Publication, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.QuantityKind, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.QuantityKindFactor, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.RatioScale, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ReferenceDataLibrary, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ReferencerRule, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ReferenceSource, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.RelationalExpression, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Relationship, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.RelationshipParameterValue, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.RequestForDeviation, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.RequestForWaiver, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Requirement, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.RequirementsContainer, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.RequirementsContainerParameterValue, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.RequirementsGroup, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.RequirementsSpecification, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ReviewItemDiscrepancy, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Rule, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.RuleVerification, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.RuleVerificationList, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.RuleViolation, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ScalarParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ScaleReferenceQuantityValue, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.ScaleValueDefinition, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Section, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SharedStyle, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SimpleParameterizableThing, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SimpleParameterValue, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SimpleQuantityKind, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.SimpleUnit, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.SiteDirectory, PersonAccessRightKind.NONE },
+            { ClassKind.SiteDirectoryDataAnnotation, PersonAccessRightKind.NONE },
+            { ClassKind.SiteDirectoryDataDiscussionItem, PersonAccessRightKind.NONE },
+            { ClassKind.SiteDirectoryThingReference, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.SiteLogEntry, PersonAccessRightKind.NONE },
+            { ClassKind.SiteReferenceDataLibrary, PersonAccessRightKind.NONE },
+            { ClassKind.Solution, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.SpecializedQuantityKind, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Stakeholder, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.StakeholderValue, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.StakeHolderValueMap, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.StakeHolderValueMapSettings, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.TelephoneNumber, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.Term, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.TextParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.TextualNote, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.Thing, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ThingReference, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.TimeOfDayParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.TopContainer, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.UnitFactor, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.UnitPrefix, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.UserPreference, PersonAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.UserRuleVerification, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ValueGroup, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.NotThing, PersonAccessRightKind.NOT_APPLICABLE }
+        };
+
+        /// <summary>
+        /// The type to default person permission map.
+        /// </summary>
+        private readonly Dictionary<string, PersonAccessRightKind> typeNamePersonPermissionMap = new Dictionary<string, PersonAccessRightKind>
         {
             { "ActionItem", PersonAccessRightKind.NOT_APPLICABLE },
             { "ActualFiniteState", PersonAccessRightKind.NOT_APPLICABLE },
@@ -397,7 +747,30 @@ namespace CDP4Common.Helpers
             { "UserPreference", PersonAccessRightKind.SAME_AS_CONTAINER },
             { "UserRuleVerification", PersonAccessRightKind.NOT_APPLICABLE },
             { "ValueGroup", PersonAccessRightKind.NOT_APPLICABLE },
+            { "NotThing", PersonAccessRightKind.NOT_APPLICABLE }
         };
+
+        /// <summary>
+        /// Return the default <see cref="ParticipantAccessRightKind"/> for the supplied <see cref="ClassKind"/>.
+        /// </summary>
+        /// <param name="classKind">
+        /// The <see cref="ClassKind"/> for which the <see cref="ParticipantAccessRightKind"/> is to be returned.
+        /// </param>
+        /// <returns>
+        /// The default <see cref="ParticipantAccessRightKind"/>.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// If the <see cref="ClassKind"/> is not found, this should never happen
+        /// </exception>
+        public ParticipantAccessRightKind GetDefaultParticipantPermission(ClassKind classKind)
+        {
+            if (!this.classKindParticipantPermissionMap.ContainsKey(classKind))
+            {
+                throw new ArgumentException($"{classKind} does not have a default permission set");
+            }
+
+            return this.classKindParticipantPermissionMap[classKind];
+        }
 
         /// <summary>
         /// Return the default <see cref="ParticipantAccessRightKind"/> for the supplied type.
@@ -413,12 +786,34 @@ namespace CDP4Common.Helpers
         /// </exception>
         public ParticipantAccessRightKind GetDefaultParticipantPermission(string typeName)
         {
-            if (!this.participantPermissionMap.ContainsKey(typeName))
+            if (!this.typeNameParticipantPermissionMap.ContainsKey(typeName))
             {
-                throw new ArgumentException(string.Format("{0} does not have a default permission set", typeName));
+                throw new ArgumentException($"{typeName} does not have a default permission set");
             }
 
-            return this.participantPermissionMap[typeName];
+            return this.typeNameParticipantPermissionMap[typeName];
+        }
+
+        /// <summary>
+        /// Return the default <see cref="PersonAccessRightKind"/> for the supplied ClassKind.
+        /// </summary>
+        /// <param name="classKind">
+        /// The <see cref="ClassKind"/> for which the <see cref="PersonAccessRightKind"/> is to be returned.
+        /// </param>
+        /// <returns>
+        /// The default <see cref="PersonAccessRightKind"/>.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// If the <see cref="ClassKind"/> is not found, this should never happen
+        /// </exception>
+        public PersonAccessRightKind GetDefaultPersonPermission(ClassKind classKind)
+        {
+            if (!this.classKindPersonPermissionMap.ContainsKey(classKind))
+            {
+                throw new ArgumentException($"{classKind} does not have a default permission set");
+            }
+
+            return this.classKindPersonPermissionMap[classKind];
         }
 
         /// <summary>
@@ -435,12 +830,12 @@ namespace CDP4Common.Helpers
         /// </exception>
         public PersonAccessRightKind GetDefaultPersonPermission(string typeName)
         {
-            if (!this.personPermissionMap.ContainsKey(typeName))
+            if (!this.typeNamePersonPermissionMap.ContainsKey(typeName))
             {
-                throw new ArgumentException(string.Format("{0} does not have a default permission set", typeName));
+                throw new ArgumentException($"{typeName} does not have a default permission set");
             }
 
-            return this.personPermissionMap[typeName];
+            return this.typeNamePersonPermissionMap[typeName];
         }
     }
 }

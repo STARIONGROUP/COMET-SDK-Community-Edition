@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IDefaultPermissionProvider.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Helpers
 {
@@ -34,6 +32,20 @@ namespace CDP4Common.Helpers
     /// </summary>
     public interface IDefaultPermissionProvider
     {
+        /// <summary>
+        /// Return the default <see cref="ParticipantAccessRightKind"/> for the supplied <see cref="ClassKind"/>.
+        /// </summary>
+        /// <param name="classKind">
+        /// The <see cref="ClassKind"/> for which the <see cref="ParticipantAccessRightKind"/> is to be returned.
+        /// </param>
+        /// <returns>
+        /// The default <see cref="ParticipantAccessRightKind"/>.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// If the <see cref="ClassKind"/> is not found, this should never happen
+        /// </exception>
+        ParticipantAccessRightKind GetDefaultParticipantPermission(ClassKind classKind);
+
         /// <summary>
         /// Return the default <see cref="ParticipantAccessRightKind"/> for the supplied type.
         /// </summary>
@@ -47,6 +59,20 @@ namespace CDP4Common.Helpers
         /// If type not found, this should never happen
         /// </exception>
         ParticipantAccessRightKind GetDefaultParticipantPermission(string typeName);
+        
+        /// <summary>
+        /// Return the default <see cref="PersonAccessRightKind"/> for the supplied ClassKind.
+        /// </summary>
+        /// <param name="classKind">
+        /// The <see cref="ClassKind"/> for which the <see cref="PersonAccessRightKind"/> is to be returned.
+        /// </param>
+        /// <returns>
+        /// The default <see cref="PersonAccessRightKind"/>.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// If the <see cref="ClassKind"/> is not found, this should never happen
+        /// </exception>
+        PersonAccessRightKind GetDefaultPersonPermission(ClassKind classKind);
 
         /// <summary>
         /// Return the default <see cref="PersonAccessRightKind"/> for the supplied type.
