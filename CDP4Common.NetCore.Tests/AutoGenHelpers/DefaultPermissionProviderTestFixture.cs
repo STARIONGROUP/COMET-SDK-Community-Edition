@@ -53,6 +53,11 @@ namespace CDP4Common.Tests.AutoGenHelpers
             {
                 Assert.DoesNotThrow(() => this.defaultPermissionProvider.GetDefaultPersonPermission(classKind.ToString()));
             }
+
+            Assert.AreEqual(PersonAccessRightKind.NONE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.Person.ToString()));
+            Assert.AreEqual(PersonAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.NotThing.ToString()));
+
+            Assert.AreEqual(PersonAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.ElementDefinition.ToString()));
         }
 
         [Test]
@@ -70,6 +75,11 @@ namespace CDP4Common.Tests.AutoGenHelpers
             {
                 Assert.DoesNotThrow(() => this.defaultPermissionProvider.GetDefaultPersonPermission(classKind));
             }
+
+            Assert.AreEqual(PersonAccessRightKind.NONE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.Person));
+
+            Assert.AreEqual(PersonAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.NotThing));
+            Assert.AreEqual(PersonAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.ElementDefinition));
         }
 
         [Test]
@@ -81,6 +91,10 @@ namespace CDP4Common.Tests.AutoGenHelpers
             {
                 Assert.DoesNotThrow(() => this.defaultPermissionProvider.GetDefaultParticipantPermission(classKind.ToString()));
             }
+
+            Assert.AreEqual(ParticipantAccessRightKind.NONE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.ElementDefinition.ToString()));
+            Assert.AreEqual(ParticipantAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.Person.ToString()));
+            Assert.AreEqual(ParticipantAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.NotThing.ToString()));
         }
 
         [Test]
@@ -98,6 +112,10 @@ namespace CDP4Common.Tests.AutoGenHelpers
             {
                 Assert.DoesNotThrow(() => this.defaultPermissionProvider.GetDefaultParticipantPermission(classKind));
             }
+
+            Assert.AreEqual(ParticipantAccessRightKind.NONE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.ElementDefinition));
+            Assert.AreEqual(ParticipantAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.Person));
+            Assert.AreEqual(ParticipantAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.NotThing));
         }
     }
 }

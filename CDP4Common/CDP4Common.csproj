@@ -38,11 +38,15 @@
     <Folder Include="Types\" />
     <Folder Include="Poco\" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47'">
+    <Reference Include="System.ComponentModel.Composition" />
+  </ItemGroup>
   
   <ItemGroup>    
     <PackageReference Include="NLog" Version="4.5.4" />  
 	  <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard1.6'" />
   </ItemGroup>
-  
+
 </Project>
