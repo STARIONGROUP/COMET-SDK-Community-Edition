@@ -131,18 +131,16 @@ namespace CDP4Common.Helpers
             var flatNestedParameters = new List<NestedParameter>();
             var flatElementUsages = iteration.Element.SelectMany(ed => ed.ContainedElement);
 
-            foreach (var ElementUsage in flatElementUsages)
+            foreach (var elementUsage in flatElementUsages)
             {
-                if (ElementUsage.ExcludeOption.Contains(option))
+                if (elementUsage.ExcludeOption.Contains(option))
                 {
-                    Logger.Debug($"Option {option.Name}:{option.Iid} is excluded from the Element Usage {ElementUsage.Name}:{ElementUsage.Iid}");
+                    Logger.Debug($"Option {option.Name}:{option.Iid} is excluded from the Element Usage {elementUsage.Name}:{elementUsage.Iid}");
                     continue;
                 }
 
-                flatNestedParameters.AddRange(this.CreateNestedParameters(ElementUsage, domainOfExpertise, option));
+                flatNestedParameters.AddRange(this.CreateNestedParameters(elementUsage, domainOfExpertise, option));
             }
-
-            //iteration.Element.SelectMany(ed => ed.ContainedElement).SelectMany(eu => this.CreateNestedParameters(eu, domainOfExpertise, option));
 
             return flatNestedParameters.ToList();
         }

@@ -72,21 +72,18 @@ namespace CDP4Common.Tests.Helpers
                 Name = "Option A"
             };
             
-
             var option_B = new Option(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "OPT_B",
                 Name = "Option B"
             };
             
-
             var elementDefinition_1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "Sat",
                 Name = "Satellite"
             };
             
-
             var elementDefinition_2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "Bat",
@@ -100,7 +97,6 @@ namespace CDP4Common.Tests.Helpers
                 Name = "battery a"
             };
             
-            
             var elementUsage_2 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri)
             {
                 ElementDefinition = elementDefinition_2,
@@ -108,9 +104,11 @@ namespace CDP4Common.Tests.Helpers
                 Name = "battery b"                
             };
 
-            var simpleQuantityKind = new SimpleQuantityKind(Guid.NewGuid(), null, null);
-            simpleQuantityKind.ShortName = "m";
-
+            var simpleQuantityKind = new SimpleQuantityKind(Guid.NewGuid(), null, null)
+            {
+                ShortName = "m"
+            };
+            
             var parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
@@ -135,16 +133,8 @@ namespace CDP4Common.Tests.Helpers
                 Iid = Guid.NewGuid()
             };
 
-            var values_1 = new List<string>()
-            {
-                "2"
-            };
-
-            var values_2 = new List<string>()
-            {
-                "3"
-            };
-
+            var values_1 = new List<string>() {"2"};
+            var values_2 = new List<string>() {"3"};
 
             var overrideValueset = new ParameterOverrideValueSet()
             {
@@ -189,7 +179,6 @@ namespace CDP4Common.Tests.Helpers
             this.iteration.Element.Add(elementDefinition_1);
             this.iteration.Element.Add(elementDefinition_2);
             this.iteration.TopElement = elementDefinition_1;
-   
         }
 
         [Test]
@@ -258,7 +247,6 @@ namespace CDP4Common.Tests.Helpers
         public void Verify_that_the_function_returns_values()
         {
             var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
-
             var flatNestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise);
 
             Assert.IsNotEmpty(flatNestedParameters);
@@ -268,7 +256,6 @@ namespace CDP4Common.Tests.Helpers
         public void Verify_that_the_function_does_not_include_parameters_from_excluded_ElementUsages()
         {
             var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
-
             var flatNestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise);
 
             foreach (var nestedParameter in flatNestedParameters)
@@ -283,7 +270,6 @@ namespace CDP4Common.Tests.Helpers
         public void Verify_that_the_function_works_with_both_Parameters_and_ParametersOverride_return()
         {
             var option = this.iteration.Option.Single(x => x.ShortName == "OPT_B");
-
             var flatNestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise);
 
             Assert.AreEqual(3, flatNestedParameters.Count());
