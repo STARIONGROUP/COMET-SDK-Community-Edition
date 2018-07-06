@@ -98,15 +98,15 @@ namespace CDP4Common.Helpers
         /// Returns the <see cref="NestedParameter"/>s in a flat list
         /// </summary>
         /// <param name="option">
-        /// The <see cref="Option"/> for which the <see cref="NestedElement"/> tree is created. When the <see cref="Option"/>
+        /// The <see cref="Option"/> for which the <see cref="NestedParameters"/> flat list is created. When the <see cref="Option"/>
         /// is null then none of the <see cref="ElementUsage"/>s are filtered.
         /// </param>
         /// <param name="domainOfExpertise">
-        /// The <see cref="DomainOfExpertise"/> for which the <see cref="NestedElement"/> tree needs to be generated. Only the <see cref="Parameter"/>s, <see cref="ParameterOverride"/>s and
-        /// <see cref="ParameterSubscription"/>s that are owned by the <see cref="DomainOfExpertise"/> will be taken into account when generating <see cref="NestedParameter"/>s
+        /// The <see cref="DomainOfExpertise"/> for which the <see cref="NestedParameters"/> flat list needs to be generated. Only the <see cref="Parameter"/>s, <see cref="ParameterOverride"/>s and
+        /// <see cref="ParameterSubscription"/>s that are owned by the <see cref="DomainOfExpertise"/> will be taken into account.
         /// </param>
         /// <returns>
-        /// An <see cref="IEnumerable{NestedElement}"/> that contains the generated <see cref="NestedElement"/>s
+        /// An <see cref="IEnumerable{NestedParameter}"/> that contains the generated <see cref="NestedParameters"/>s
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when the <paramref name="domainOfExpertise"/> is null
@@ -126,9 +126,23 @@ namespace CDP4Common.Helpers
 
             var iteration = (Iteration)option.Container;
 
-            Logger.Debug($"Generating NestedParameter for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise.ShortName}");
+            Logger.Debug($"Generating NestedParameters for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise.ShortName}");
 
-            var flatNestedParameters = iteration.Element.SelectMany(ed => ed.ContainedElement).SelectMany(eu => CreateNestedParameters(eu, domainOfExpertise, option));
+            var flatNestedParameters = new List<NestedParameter>();
+            var flatElementUsages = iteration.Element.SelectMany(ed => ed.ContainedElement);
+
+            foreach (var ElementUsage in flatElementUsages)
+            {
+                if (ElementUsage.ExcludeOption.Contains(option))
+                {
+                    Logger.Debug($"Option {option.Name}:{option.Iid} is excluded from the Element Usage {ElementUsage.Name}:{ElementUsage.Iid}");
+                    continue;
+                }
+
+                flatNestedParameters.AddRange(this.CreateNestedParameters(ElementUsage, domainOfExpertise, option));
+            }
+
+            //iteration.Element.SelectMany(ed => ed.ContainedElement).SelectMany(eu => this.CreateNestedParameters(eu, domainOfExpertise, option));
 
             return flatNestedParameters.ToList();
         }
