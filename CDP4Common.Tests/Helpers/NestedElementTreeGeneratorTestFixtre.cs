@@ -251,28 +251,5 @@ namespace CDP4Common.Tests.Helpers
 
             Assert.IsNotEmpty(flatNestedParameters);
         }
-
-        [Test]
-        public void Verify_that_the_function_does_not_include_parameters_from_excluded_ElementUsages()
-        {
-            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
-            var flatNestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise);
-
-            foreach (var nestedParameter in flatNestedParameters)
-            {
-                Console.WriteLine(nestedParameter.UserFriendlyName);
-            }
-
-            Assert.AreEqual(2, flatNestedParameters.Count());
-        }
-
-        [Test]
-        public void Verify_that_the_function_works_with_both_Parameters_and_ParametersOverride_return()
-        {
-            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_B");
-            var flatNestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise);
-
-            Assert.AreEqual(3, flatNestedParameters.Count());
-        }
     }
 }
