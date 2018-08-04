@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AvailableDals.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,13 +21,12 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal
 {
     using System;
     using System.Collections.Generic;
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
     using System.ComponentModel.Composition;
 #endif
     using CDP4Dal.Composition;
@@ -37,7 +35,7 @@ namespace CDP4Dal
     /// <summary>
     /// Instantiated by MEF to provide a list of <see cref="IDal"/> available in the application
     /// </summary>
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
     [Export(typeof(AvailableDals))]
     [PartCreationPolicy(CreationPolicy.Shared)]
 #endif
@@ -47,7 +45,7 @@ namespace CDP4Dal
         /// Initializes a new instance of the <see cref="AvailableDals"/> class
         /// </summary>
         /// <param name="dataAccessLayerKinds">the list of <see cref="IDal"/> in the application</param>
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
         [ImportingConstructor]
         public AvailableDals([ImportMany] IEnumerable<Lazy<IDal, IDalMetaData>> dataAccessLayerKinds)
         {

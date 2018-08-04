@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WSPDal.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,11 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4WspDal
 {
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
     using System.ComponentModel.Composition;
 #endif
 
@@ -59,7 +57,7 @@ namespace CDP4WspDal
     /// Provides the Data Access Layer for OCDT's WSP 
     /// </summary>
     [DalExport("OCDT WSP", "An OCDT WSP Data Access Layer", "1.0.0", DalType.Web)]
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47  
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif
     public class WspDal : Dal

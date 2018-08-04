@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializationException.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,12 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
     using System;
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
     using System.Runtime.Serialization;
 #endif
 
@@ -67,7 +65,7 @@ namespace CDP4JsonSerializer
             : base(message, innerException)
         {
         }
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
         /// <summary>
         /// Initializes a new instance of the <see cref="DeSerializationException"/> class.
         /// </summary>

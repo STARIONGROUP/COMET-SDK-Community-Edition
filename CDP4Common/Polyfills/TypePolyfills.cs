@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TypePolyfills.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,15 +21,13 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Polyfills
 {
     using System;
-    using System.Linq;
     using System.Reflection;
 
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
 
     /// <summary>
     /// The purpose of the <see cref="TypePolyfills"/> class is to provide extension methods on the <see cref="Type"/>

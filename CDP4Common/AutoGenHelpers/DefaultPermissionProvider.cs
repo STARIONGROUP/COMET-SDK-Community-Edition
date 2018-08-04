@@ -11,7 +11,7 @@ namespace CDP4Common.Helpers
 {
     using System;
     using System.Collections.Generic;
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
     using System.ComponentModel.Composition;
 #endif
     using CDP4Common.CommonData;
@@ -19,7 +19,7 @@ namespace CDP4Common.Helpers
     /// <summary>
     /// A utility class that supplies common functionalities to the Service layer.
     /// </summary>
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
     [Export(typeof(IDefaultPermissionProvider))]
     [PartCreationPolicy(CreationPolicy.Shared)]
 #endif

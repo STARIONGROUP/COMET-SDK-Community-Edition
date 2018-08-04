@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,22 +21,14 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
-
-using System.Linq;
 
 namespace CDP4WspDal.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Net;
-    using System.Net.Http;
-    using CDP4Common.MetaInfo;
     using CDP4Dal;
     using CDP4Dal.DAL;
-    using Moq;
     using NUnit.Framework;
     
     using Thing = CDP4Common.DTO.Thing;

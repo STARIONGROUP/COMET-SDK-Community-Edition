@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Utils.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer.Helper
 {
@@ -54,7 +52,7 @@ namespace CDP4JsonSerializer.Helper
                 throw new ArgumentException("string can't be empty!");
             }
 
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
             return string.Format("{0}{1}", input.First().ToString(CultureInfo.InvariantCulture).ToUpper(), input.Substring(1));
 #else
             return string.Format("{0}{1}", input.First().ToString().ToUpper(), input.Substring(1));
@@ -80,7 +78,7 @@ namespace CDP4JsonSerializer.Helper
             {
                 throw new ArgumentException("string can't be empty!");
             }
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
             return string.Format("{0}{1}", input.First().ToString(CultureInfo.InvariantCulture).ToLower(), input.Substring(1));
 #else
             return string.Format("{0}{1}", input.First().ToString().ToLower(), input.Substring(1));

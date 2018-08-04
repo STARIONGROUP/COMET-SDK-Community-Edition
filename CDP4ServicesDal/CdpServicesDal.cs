@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDal.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,11 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4ServicesDal
 {
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
     using System.ComponentModel.Composition;
 #endif
 
@@ -61,7 +59,7 @@ namespace CDP4ServicesDal
     /// Annex C, REST API
     /// </summary>
     [DalExport("CDP4 Services", "A CDP4 Services Data Access Layer", "1.1.0", DalType.Web)]
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47  
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif
     public class CdpServicesDal : Dal

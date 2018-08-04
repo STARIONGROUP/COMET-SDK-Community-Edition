@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDalTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4ServicesDal.Tests
 {
@@ -140,7 +138,7 @@ namespace CDP4ServicesDal.Tests
 
             var amountOfDtos = result.ToList().Count;
 
-            Assert.AreEqual(60, amountOfDtos);
+            Assert.AreEqual(86, amountOfDtos);
         }
 
         [Test]
