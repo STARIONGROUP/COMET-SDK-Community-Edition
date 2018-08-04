@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDal.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonFileDal
 {
@@ -78,16 +76,6 @@ namespace CDP4JsonFileDal
         /// The FileRevisions zip location.
         /// </summary>
         private const string FileRevisionZipLocation = "FileRevisions";
-
-        /// <summary>
-        /// A remark to be included in the exchange header file.
-        /// </summary>
-        private const string ExchangeHeaderRemark = "This is an ECSS-E-TM-10-25 exchange file";
-
-        /// <summary>
-        /// The copyright text to be included in the exchange header file.
-        /// </summary>
-        private const string ExchangeHeaderCopyright = "Copyright 2016 © RHEA.";
 
         /// <summary>
         /// The NLog logger
