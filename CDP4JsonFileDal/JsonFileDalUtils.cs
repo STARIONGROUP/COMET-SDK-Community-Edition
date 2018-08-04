@@ -229,7 +229,10 @@ namespace CDP4JsonFileDal
                     siteDirectoryItem.GetContainerOfType<Person>() == null &&
                     siteDirectoryItem.GetContainerOfType<EngineeringModelSetup>() == null)
                 {
-                    dtos.Add(siteDirectoryItem.ToDto());
+                    if (!dtos.Any(x => x.Iid != siteDirectoryItem.Iid))
+                    {
+                        dtos.Add(siteDirectoryItem.ToDto());
+                    }
                 }
             }
 
@@ -238,8 +241,14 @@ namespace CDP4JsonFileDal
             foreach (var domainOfExpertise in domainOfExpertises)
             {
                 var pocos = domainOfExpertise.QueryContainedThingsDeep();
-                var domainOfExpertiseDtos = pocos.Select(poco => poco.ToDto());
-                dtos.AddRange(domainOfExpertiseDtos);
+
+                foreach (var thing in pocos)
+                {
+                    if (!dtos.Any(x => x.Iid == thing.Iid))
+                    {
+                        dtos.Add(thing.ToDto());
+                    }
+                }
 
                 siteDirectoryDto.Domain.Add(domainOfExpertise.Iid);
             }
@@ -249,8 +258,15 @@ namespace CDP4JsonFileDal
             foreach (var person in persons)
             {
                 var pocos = person.QueryContainedThingsDeep();
-                var personDtos = pocos.Select(poco => poco.ToDto());
-                dtos.AddRange(personDtos);
+
+                foreach (var thing in pocos)
+                {
+                    if (!dtos.Any(x => x.Iid == thing.Iid))
+                    {
+                        dtos.Add(thing.ToDto());
+                    }
+                }
+
                 siteDirectoryDto.Person.Add(person.Iid);
             }
 

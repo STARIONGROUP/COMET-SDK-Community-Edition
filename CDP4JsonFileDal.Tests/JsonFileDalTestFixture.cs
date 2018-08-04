@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDalTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,8 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
+
+using CDP4Common.SiteDirectoryData;
 
 namespace CDP4JsonFileDal.Tests
 {
@@ -364,12 +364,17 @@ namespace CDP4JsonFileDal.Tests
         [Test]
         public async Task VerifyWriteEnumerableOperationContainer()
         {
+            var cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+
             var files = new[] { "file1" };
             Assert.Throws<ArgumentNullException>(() => this.dal.Write((IEnumerable<OperationContainer>)null, files));
             Assert.Throws<ArgumentException>(() => this.dal.Write(new List<OperationContainer>(), files));
 
             var operationContainers = new[] { new OperationContainer("/SiteDirectory/00000000-0000-0000-0000-000000000000", 0) };
             Assert.Throws<ArgumentException>(() => this.dal.Write(operationContainers, files));
+
+            var domain = new DomainOfExpertise(Guid.NewGuid(), cache, this.credentials.Uri) { ShortName = "SYS" };
+            this.siteDirectoryData.Domain.Add(domain);
 
             var sitedirectoryDto = (CDP4Common.DTO.SiteDirectory)this.siteDirectoryData.ToDto();
             var clone = sitedirectoryDto.DeepClone<CDP4Common.DTO.SiteDirectory>();
@@ -383,14 +388,20 @@ namespace CDP4JsonFileDal.Tests
             operationContainers.Single().RemoveOperation(operation);
             Assert.AreEqual(0, operationContainers.Single().Operations.Count());
 
-            var cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
             var iterationIid = new Guid("b58ea73d-350d-4520-b9d9-a52c75ac2b5d");
             var iterationSetup = new IterationSetup(Guid.NewGuid(), 0);
             var iterationSetupPoco = new CDP4Common.SiteDirectoryData.IterationSetup(iterationSetup.Iid, cache, this.credentials.Uri);
             var model = new EngineeringModel(Guid.NewGuid(), cache, this.credentials.Uri);
             var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup();
+            modelSetup.ActiveDomain.Add(domain);
+
             var requiredRdl = new CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary();
+            
             var person = new Person { ShortName = "admin" };
+            var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) {Person = person};
+            participant.Domain.Add(domain);
+            modelSetup.Participant.Add(participant);
+
             var lazyPerson = new Lazy<Thing>(() => person);
             var iterationPoco = new CDP4Common.EngineeringModelData.Iteration(iterationIid, cache, this.credentials.Uri) { IterationSetup = iterationSetupPoco };
             model.Iteration.Add(iterationPoco);

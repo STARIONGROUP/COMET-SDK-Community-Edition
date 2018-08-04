@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47</TargetFrameworks>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Description>CDP4JsonFileDal Unit tests</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
@@ -12,7 +12,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4JsonFileDal-CE" Version="1.3.0" />
+        <PackageReference Include="CDP4JsonFileDal-CE" Version="1.4.0" />
       </ItemGroup>
     </When>
 

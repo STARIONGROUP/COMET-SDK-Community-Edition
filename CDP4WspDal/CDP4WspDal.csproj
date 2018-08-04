@@ -16,7 +16,9 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
-      [Update] to CDP4Common-CE version 1.4.0
+      [Update] to CDP4JsonSerializer-CE version 1.4.0
+      [Update] to CDP4Dal-CE version 1.4.0
+      [Add] Support for net471 and net472
     </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
