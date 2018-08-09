@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ISession.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal
 {
@@ -52,7 +50,7 @@ namespace CDP4Dal
         /// Gets all the <see cref="Participant"/>s that the active person is linked with.
         /// </summary>
         IEnumerable<Participant> ActivePersonParticipants { get; }
-            
+        
         /// <summary>
         /// Gets the <see cref="IDal"/> that the current <see cref="Session"/> communicates with
         /// </summary>
@@ -116,6 +114,17 @@ namespace CDP4Dal
         /// The instance <see cref="SiteDirectory"/> that is loaded in the <see cref="ISession"/>
         /// </returns>
         SiteDirectory RetrieveSiteDirectory();
+
+        /// <summary>
+        /// Queries the selected <see cref="DomainOfExpertise"/> from the session for provided current <see cref="Iteration"/>
+        /// </summary>
+        /// <param name="iteration">
+        /// The <see cref="Iteration"/> for which the selected <see cref="DomainOfExpertise"/> is queried.
+        /// </param>
+        /// <returns>
+        /// A <see cref="DomainOfExpertise"/> if has been selected for the <see cref="Iteration"/>, null otherwise.
+        /// </returns>
+        DomainOfExpertise QuerySelectedDomainOfExpertise(Iteration iteration);
 
         /// <summary>
         /// Convenience function to get the required reference data library chain for the passed in engineeringModel.

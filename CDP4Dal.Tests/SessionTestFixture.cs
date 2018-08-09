@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests
 {
@@ -524,6 +522,9 @@ namespace CDP4Dal.Tests
             await this.session.Read(iterationToOpen, activeDomain);
             pair = this.session.OpenIterations.Single();
             Assert.AreEqual(pair.Value.Item1, activeDomain);
+
+            var selectedDomain = this.session.QuerySelectedDomainOfExpertise(iterationToOpen);
+            Assert.AreEqual(activeDomain.Iid, selectedDomain.Iid);
 
             Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(iterationToOpen, null));
         }

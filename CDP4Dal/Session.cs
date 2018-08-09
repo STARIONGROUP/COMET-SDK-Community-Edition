@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Session.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal
 {
@@ -235,6 +233,26 @@ namespace CDP4Dal
         public SiteDirectory RetrieveSiteDirectory()
         {
             return this.Assembler.RetrieveSiteDirectory();
+        }
+
+        /// <summary>
+        /// Queries the selected <see cref="DomainOfExpertise"/> from the session for provided current <see cref="Iteration"/>
+        /// </summary>
+        /// <param name="iteration">
+        /// The <see cref="Iteration"/> for which the selected <see cref="DomainOfExpertise"/> is queried.
+        /// </param>
+        /// <returns>
+        /// A <see cref="DomainOfExpertise"/> if has been selected for the <see cref="Iteration"/>, null otherwise.
+        /// </returns>
+        public DomainOfExpertise QuerySelectedDomainOfExpertise(Iteration iteration)
+        {
+            var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => x.Key.Iid == iteration.Iid);
+            if (iterationDomainPair.Equals(default(KeyValuePair<Iteration, Tuple<DomainOfExpertise, Participant>>)))
+            {
+                return null;
+            }
+
+            return (iterationDomainPair.Value == null || iterationDomainPair.Value.Item1 == null) ? null : iterationDomainPair.Value.Item1;
         }
 
         /// <summary>
