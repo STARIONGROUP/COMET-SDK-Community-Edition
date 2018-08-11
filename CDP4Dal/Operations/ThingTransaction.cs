@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTransaction.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Operations
 {
@@ -41,6 +39,7 @@ namespace CDP4Dal.Operations
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.CommonData;
     using CDP4Common.Types;
+    using NLog;
 
     /// <summary>
     /// The Transaction class contains all requests for the creations, updates, deletions of things
@@ -78,6 +77,11 @@ namespace CDP4Dal.Operations
         private readonly Dictionary<Tuple<Thing, Thing>, OperationKind> copiedThing;
 
         /// <summary>
+        /// The current logger
+        /// </summary>
+        private static Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ThingTransaction"/> class
         /// </summary>
         /// <param name="transactionContext">
@@ -99,7 +103,7 @@ namespace CDP4Dal.Operations
         {
             if (transactionContext == null)
             {
-                throw new ArgumentNullException("transactionContext", "The transactionContext may not be null");
+                throw new ArgumentNullException(nameof(transactionContext), $"The {nameof(transactionContext)} may not be null");
             }
 
             this.TransactionContext = transactionContext;
@@ -143,7 +147,7 @@ namespace CDP4Dal.Operations
         {
             if (clone == null)
             {
-                throw new ArgumentNullException("clone", "The clone may not be null.");
+                throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null.");
             }
             
             this.TransactionContext = parentTransaction.TransactionContext;
@@ -165,14 +169,17 @@ namespace CDP4Dal.Operations
                 //TODO: figure out why this is unreacheable
                 if (containerClone == null)
                 {
-                    throw new ArgumentNullException("containerClone", "The containerClone may not be null");
+                    throw new ArgumentNullException(nameof(containerClone), $"The {nameof(containerClone)} may not be null");
                 }
 
                 this.CreateOrUpdate(containerClone);
                 this.UpdateContainer(clone, containerClone);
             }
         }
-        
+
+        /// <summary>
+        /// Gets the <see cref="TransactionContext"/>
+        /// </summary>
         public TransactionContext TransactionContext { get; private set; }
 
         /// <summary>
@@ -227,7 +234,7 @@ namespace CDP4Dal.Operations
         {
             if (clone == null)
             {
-                throw new ArgumentNullException("clone", "The clone may not be null");
+                throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null");
             }
 
             if (clone is TopContainer || clone is Iteration)
@@ -303,7 +310,7 @@ namespace CDP4Dal.Operations
         {
             if (clone == null)
             {
-                throw new ArgumentNullException("clone", "The clone may not be null");
+                throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null");
             }
 
             if(this.updatedThing.Values.Any(x => x == clone) || this.addedThing.Any(x => x == clone))
@@ -321,7 +328,7 @@ namespace CDP4Dal.Operations
             {
                 if (clone.Iid == Guid.Empty)
                 {
-                    throw new ArgumentOutOfRangeException("clone", "The iid cannot be null.");
+                    throw new ArgumentOutOfRangeException(nameof(clone), $"The Iid of the {nameof(clone)} cannot be null.");
                 }
 
                 clone.ChangeKind = ChangeKind.Update;
@@ -342,7 +349,7 @@ namespace CDP4Dal.Operations
         {
             if (clone == null)
             {
-                throw new ArgumentNullException("clone");
+                throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null.");
             }
             
             if (this.deletedThing.Any(x => x.Iid == clone.Iid))
@@ -362,7 +369,7 @@ namespace CDP4Dal.Operations
             {
                 if (containerClone == null)
                 {
-                    throw new ArgumentNullException("containerClone",
+                    throw new ArgumentNullException(nameof(containerClone),
                         "the clone of the container is mandatory in a dialog context.");
                 }
 
@@ -416,7 +423,7 @@ namespace CDP4Dal.Operations
 
             if (containerDestinationClone == null)
             {
-                throw new ArgumentNullException("containerDestinationClone", "The containerDestinationClone may not be null");
+                throw new ArgumentNullException(nameof(containerDestinationClone), $"The {nameof(containerDestinationClone)} may not be null");
             }
 
             this.Copy(clone, operationKind);
@@ -435,7 +442,7 @@ namespace CDP4Dal.Operations
         {
             if (clone == null)
             {
-                throw new ArgumentNullException("clone", "The clone may not be null");
+                throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null");
             }
 
             if (!operationKind.IsCopyOperation())
@@ -468,12 +475,12 @@ namespace CDP4Dal.Operations
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException(nameof(thing), $"The {nameof(thing)} may not be null.");
             }
 
             if (thing.Iid == Guid.Empty)
             {
-                throw new ArgumentOutOfRangeException("thing", "The iid cannot be null.");
+                throw new ArgumentOutOfRangeException(nameof(thing), $"The Iid of {nameof(thing)} may not be the empty Guid.");
             }
 
             var clone = this.updatedThing.Values.SingleOrDefault(x => x.Iid == thing.Iid);
@@ -500,12 +507,12 @@ namespace CDP4Dal.Operations
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing", "The thing may not be null");
+                throw new ArgumentNullException(nameof(thing), $"The {nameof(thing)} may not be null");
             }
 
             if (thing.Iid == Guid.Empty)
             {
-                throw new ArgumentOutOfRangeException("thing", "The iid may not be the empty Guid.");
+                throw new ArgumentOutOfRangeException(nameof(thing), $"The Iid of {nameof(thing)} may not be the empty Guid.");
             }
 
             var allAddedThing = this.GetAllAddedThings().ToList();
@@ -548,12 +555,12 @@ namespace CDP4Dal.Operations
             // to a thing which is not in the normal "chain of operations".
             if (clone == null)
             {
-                throw new ArgumentNullException("clone");
+                throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not null.");
             }
 
             if (containerclone == null)
             {
-                throw new ArgumentNullException("containerclone");
+                throw new ArgumentNullException(nameof(containerclone), $"The {nameof(containerclone)} may not be null.");
             }
 
             this.UpdateContainer(clone, containerclone, nextThing);
@@ -1175,12 +1182,44 @@ namespace CDP4Dal.Operations
         /// <summary>
         /// Create the <see cref="Operation"/>s related to the update of <see cref="Thing"/>s
         /// </summary>
-        /// <param name="operationContainer">The returned <see cref="OperationContainer"/></param>
+        /// <param name="operationContainer">
+        /// The returned <see cref="OperationContainer"/>
+        /// </param>
+        /// <remarks>
+        /// this function makes use of the original <see cref="Thing"/> as it is stored in the cache, and the cloned <see cref="Thing"/> to populate
+        /// the Update <see cref="Operation"/>. When the revision of the original <see cref="Thing"/> is higher than the revision of the cloned <see cref="Thing"/>, this
+        /// means that the original <see cref="Thing"/> has been updated by a roundtip to the data-source while the current <see cref="ThingTransaction"/> was open.
+        /// In this case the corresponding version of the 
+        /// </remarks>
         private void CreateUpdatedThingOperation(OperationContainer operationContainer)
         {
             foreach (var keyValue in this.updatedThing)
             {
-                operationContainer.AddOperation(new Operation(keyValue.Key.ToDto(), keyValue.Value.ToDto(), OperationKind.Update));
+                Thing originalThing = null;
+
+                // keyValue.Value - the clone that has been updated in the context of the transaction
+                // keyValue.Key   - the original that is present in the cache
+
+                if (keyValue.Value.RevisionNumber < keyValue.Key.RevisionNumber)
+                {
+                    Logger.Trace("A newer revision {0} than the expected {1} of {2}:{3} exists in the Cache", keyValue.Key.RevisionNumber, keyValue.Value.RevisionNumber, keyValue.Key.ClassKind, keyValue.Key.Iid);
+
+                    if (keyValue.Key.Revisions.TryGetValue(keyValue.Value.RevisionNumber, out originalThing))
+                    {
+                        Logger.Trace("The matching revision {0} of {1}:{2} is used for the Update Operation", keyValue.Value.RevisionNumber, keyValue.Value.ClassKind, keyValue.Value.Iid);
+                    }
+                    else
+                    {
+                        Logger.Warn("Revision {0} instead of revision {1} of {2}:{3} is used for the Update Operation", keyValue.Key.RevisionNumber, keyValue.Value.RevisionNumber, keyValue.Value.ClassKind, keyValue.Value.Iid);
+                        originalThing = keyValue.Key;
+                    }
+                }
+                else
+                {
+                    originalThing = keyValue.Key;
+                }
+
+                operationContainer.AddOperation(new Operation(originalThing.ToDto(), keyValue.Value.ToDto(), OperationKind.Update));
             }
         }
 

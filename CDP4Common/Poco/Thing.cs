@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Thing.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.CommonData
 {
@@ -80,6 +78,12 @@ namespace CDP4Common.CommonData
         /// The <see cref="Dictionary{string, Action}"/> that contains reset method for properties that were replaced by sentinels
         /// </summary>
         protected Dictionary<string, Action> sentinelResetMap = new Dictionary<string, Action>();
+
+        /// <summary>
+        /// Gets the revisions of the current <see cref="Thing"/> that have been returned by the data-source of the <see cref="Thing"/>
+        /// during it's lifetime. This may the complete history, but may be partial history as well.
+        /// </summary>
+        public readonly Dictionary<int, Thing> Revisions = new Dictionary<int, Thing>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Thing"/> class.
@@ -349,7 +353,7 @@ namespace CDP4Common.CommonData
                 if (container == null)
                 {
                     var typeName = this.GetType().Name;
-                    throw new ContainmentException(string.Format("The container of {0} with iid {1} is null, the TopContainer cannot be computed.", typeName, this.Iid));
+                    throw new ContainmentException($"The container of {typeName} with iid {this.Iid} is null, the TopContainer cannot be computed.");
                 }
 
                 if (container is TopContainer)
@@ -423,6 +427,7 @@ namespace CDP4Common.CommonData
                     // Clear all property values that maybe have been set
                     // when the class was instantiated
                     this.Cache = null;
+                    this.Revisions.Clear();
                 }
 
                 // Indicate that the instance has been disposed.

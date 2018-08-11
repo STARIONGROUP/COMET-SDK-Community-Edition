@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblerTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests
 {
@@ -173,6 +171,11 @@ namespace CDP4Dal.Tests
 
             // 2nd call with updated values, sRdl lost a category
             var newInput = this.testInput.GetRange(0, 3);
+            foreach (var thing in newInput)
+            {
+                thing.RevisionNumber++;
+            }
+
             await assembler.Synchronize(newInput);
 
             // checks that the removed category is no longer in the cache

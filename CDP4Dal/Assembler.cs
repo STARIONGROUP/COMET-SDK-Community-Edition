@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Assembler.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal
 {
@@ -52,7 +50,6 @@ namespace CDP4Dal
     /// </summary>
     public class Assembler
     {
-        #region Fields
         /// <summary>
         /// The <see cref="Uri"/> associated with this assembler
         /// </summary>
@@ -82,8 +79,7 @@ namespace CDP4Dal
         /// The <see cref="List{Dto}"/> not completely resolved that are in the cache
         /// </summary>
         private List<Dto> unresolvedDtos;
-        #endregion
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Assembler"/> class.
         /// </summary>
@@ -97,8 +93,6 @@ namespace CDP4Dal
             this.IDalUri = uri;
         }
 
-        #region Properties
-
         /// <summary>
         /// Gets the Cache that contains all the <see cref="Thing"/>s
         /// </summary>
@@ -108,10 +102,7 @@ namespace CDP4Dal
         /// Gets or sets the list of <see cref="CDP4Common.DTO.Thing"/> to update
         /// </summary>
         private List<CDP4Common.DTO.Thing> DtoThingToUpdate { get; set; }
-        #endregion Properties
-
-        #region Public Methods
-
+        
         /// <summary>
         /// Synchronize the Cache give an IEnumerable of DTO <see cref="Thing"/>
         /// </summary>
@@ -129,16 +120,19 @@ namespace CDP4Dal
         {
             if (dtoThings == null)
             {
-                throw new ArgumentNullException("dtoThings");
+                throw new ArgumentNullException(nameof(dtoThings), $"The {nameof(dtoThings)} may not be null");
             }
 
             await this.threadLock.WaitAsync().ConfigureAwait(false);
             try
             {
-                logger.Info("Start Synchronization of {0}", this.IDalUri);
-                this.thingsMarkedForDeletion = new List<Thing>();
-
                 var synchronizeStopWatch = Stopwatch.StartNew();
+
+                logger.Info("Start Synchronization of {0}", this.IDalUri);
+
+                this.UpdateThingRevisions(dtoThings);
+
+                this.thingsMarkedForDeletion = new List<Thing>();
 
                 logger.Trace("Starting Clean-up Unused references");
                 var startwatch = Stopwatch.StartNew();
@@ -285,6 +279,57 @@ namespace CDP4Dal
                 this.threadLock.Release();
                 logger.Trace("Assembler thread released");
             }
+        }
+
+        /// <summary>
+        /// For each DTO that is coming from the data-source, create a clone of the associated cached POCO
+        /// and store this clone in the <see cref="Thing.Revisions"/> dictionary
+        /// </summary>
+        /// <param name="dtoThings">
+        /// the DTO's coming from the data-source
+        /// </param>
+        /// <remarks>
+        /// If the revision of the DTO is smaller that the revision of the the cached POCO, it is a DTO that represents
+        /// the state of a DTO from the past.
+        /// </remarks>
+        private void UpdateThingRevisions(IEnumerable<CDP4Common.DTO.Thing> dtoThings)
+        {
+            // create and store a shallow clone of the a current cached Thing
+            var revisionCloneWatch = Stopwatch.StartNew();
+            foreach (var dto in dtoThings)
+            {
+                var cacheKey = new Tuple<Guid, Guid?>(dto.Iid, dto.IterationContainerId);
+
+                if (this.Cache.TryGetValue(cacheKey, out var currentCachedThing))
+                {
+                    if (dto.RevisionNumber > currentCachedThing.Value.RevisionNumber)
+                    {
+                        if (!currentCachedThing.Value.Revisions.ContainsKey(currentCachedThing.Value.RevisionNumber))
+                        {
+                            currentCachedThing.Value.Revisions.Add(currentCachedThing.Value.RevisionNumber, currentCachedThing.Value.Clone(false));
+                            logger.Trace("Revision {0} added to Revisions of {1}:{2}", currentCachedThing.Value.RevisionNumber, currentCachedThing.Value.ClassKind, currentCachedThing.Value.Iid);
+                        }
+                        else
+                        {
+                            logger.Warn("Revision {0} of Thing {1}:{2} already exists in the Thing.Revisions cache", currentCachedThing.Value.RevisionNumber, currentCachedThing.Value.ClassKind, currentCachedThing.Value.Iid);
+                        }
+                    }
+
+                    if (dto.RevisionNumber == currentCachedThing.Value.RevisionNumber)
+                    {
+                        logger.Debug("A DTO with revision {0} equal to the revision of the existing POCO {1}:{2} has been identified; The data-source has sent a revision of an object that is already present in the cache", 
+                            dto.RevisionNumber, currentCachedThing.Value.CacheId.Item1, currentCachedThing.Value.CacheId.Item2);
+                    }
+
+                    if (dto.RevisionNumber < currentCachedThing.Value.RevisionNumber)
+                    {
+                        logger.Debug("A DTO with revision {0} smaller than the revision {1} of the existing POCO {2}:{3} has been identified, the data; The data-source has sent a revision from the past",
+                            dto.RevisionNumber, currentCachedThing.Value.RevisionNumber, currentCachedThing.Value.CacheId.Item1, currentCachedThing.Value.CacheId.Item2);
+                    }
+                }
+            }
+
+            logger.Trace("Updating Thing.Revisions took {0} [ms]", revisionCloneWatch.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -503,10 +548,6 @@ namespace CDP4Dal
             return this.siteDirectory;
         }
         
-        #endregion Public Methods
-
-        #region Private Methods
-
         /// <summary>
         /// Checks the status of the updated <see cref="Dto"/>s in the Cache
         /// </summary>
@@ -670,7 +711,7 @@ namespace CDP4Dal
             {
                 if (dto.Iid == Guid.Empty)
                 {
-                    throw new ArgumentException(string.Format("Cannot add Dto with a Guid.Empty reference: {0}", dto.ClassKind));
+                    throw new ArgumentException($"Cannot add DTO with a Guid.Empty reference to the Cache: {dto.ClassKind}");
                 }
 
                 var cacheKey = new Tuple<Guid, Guid?>(dto.Iid, dto.IterationContainerId);
@@ -700,6 +741,5 @@ namespace CDP4Dal
                 this.thingsMarkedForDeletion.Clear();
             }
         }
-        #endregion Private Methods
     }
 }
