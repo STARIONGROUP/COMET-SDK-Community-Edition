@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SerializerHelper.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,12 +31,18 @@ namespace CDP4JsonSerializer
     using System.Text.RegularExpressions;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
     /// Utility method to convert a JSON token to a CDP4 type
     /// </summary>
     public static class SerializerHelper
     {
+        /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Convert a string to a <see cref="ValueArray{T}"/>
         /// </summary>
@@ -119,6 +123,12 @@ namespace CDP4JsonSerializer
                     K = token["k"].ToObject<long>(),
                     V = token["v"].ToString()
                 };
+
+                var move = token["m"];
+                if (move != null)
+                {
+                    orderedItem.M = move.ToObject<long>();
+                }
 
                 list.Add(orderedItem);
             }
