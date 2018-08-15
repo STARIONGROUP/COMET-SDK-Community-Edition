@@ -296,40 +296,47 @@ namespace CDP4Dal
         {
             // create and store a shallow clone of the a current cached Thing
             var revisionCloneWatch = Stopwatch.StartNew();
+
             foreach (var dto in dtoThings)
             {
                 var cacheKey = new Tuple<Guid, Guid?>(dto.Iid, dto.IterationContainerId);
 
                 if (this.Cache.TryGetValue(cacheKey, out var currentCachedThing))
                 {
-                    if (dto.RevisionNumber > currentCachedThing.Value.RevisionNumber)
+                    var currentThing = currentCachedThing.Value;
+
+                    if (dto.RevisionNumber > currentThing.RevisionNumber)
                     {
-                        if (!currentCachedThing.Value.Revisions.ContainsKey(currentCachedThing.Value.RevisionNumber))
+                        if (!currentThing.Revisions.ContainsKey(currentThing.RevisionNumber))
                         {
-                            currentCachedThing.Value.Revisions.Add(currentCachedThing.Value.RevisionNumber, currentCachedThing.Value.Clone(false));
-                            logger.Trace("Revision {0} added to Revisions of {1}:{2}", currentCachedThing.Value.RevisionNumber, currentCachedThing.Value.ClassKind, currentCachedThing.Value.Iid);
+                            currentThing.Revisions.Add(currentThing.RevisionNumber, currentThing.Clone(false));
+                            logger.Trace("Revision {0} added to Revisions of {1}:{2}", currentThing.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
                         }
                         else
                         {
-                            logger.Warn("Revision {0} of Thing {1}:{2} already exists in the Thing.Revisions cache", currentCachedThing.Value.RevisionNumber, currentCachedThing.Value.ClassKind, currentCachedThing.Value.Iid);
+                            logger.Trace("Revision {0} of Thing {1}:{2} already exists in the Thing.Revisions cache", currentThing.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
                         }
+
+                        continue;
                     }
 
-                    if (dto.RevisionNumber == currentCachedThing.Value.RevisionNumber)
+                    if (dto.RevisionNumber == currentThing.RevisionNumber)
                     {
-                        logger.Debug("A DTO with revision {0} equal to the revision of the existing POCO {1}:{2} has been identified; The data-source has sent a revision of an object that is already present in the cache", 
-                            dto.RevisionNumber, currentCachedThing.Value.CacheId.Item1, currentCachedThing.Value.CacheId.Item2);
+                        logger.Trace("A DTO with revision {0} equal to the revision of the existing POCO {1}:{2}:{3} has been identified; The data-source has sent a revision of an object that is already present in the cache", 
+                            dto.RevisionNumber, currentThing.ClassKind, currentThing.CacheId.Item1, currentThing.CacheId.Item2);
+
+                        continue;
                     }
 
-                    if (dto.RevisionNumber < currentCachedThing.Value.RevisionNumber)
+                    if (dto.RevisionNumber < currentThing.RevisionNumber)
                     {
-                        logger.Debug("A DTO with revision {0} smaller than the revision {1} of the existing POCO {2}:{3} has been identified, the data; The data-source has sent a revision from the past",
-                            dto.RevisionNumber, currentCachedThing.Value.RevisionNumber, currentCachedThing.Value.CacheId.Item1, currentCachedThing.Value.CacheId.Item2);
+                        logger.Trace("A DTO with revision {0} smaller than the revision {1} of the existing POCO {2}:{3} has been identified, the data; The data-source has sent a revision from the past",
+                            dto.RevisionNumber, currentThing.RevisionNumber, currentThing.CacheId.Item1, currentThing.CacheId.Item2);
                     }
                 }
             }
 
-            logger.Trace("Updating Thing.Revisions took {0} [ms]", revisionCloneWatch.ElapsedMilliseconds);
+            logger.Info("Updating Thing.Revisions took {0} [ms]", revisionCloneWatch.ElapsedMilliseconds);
         }
 
         /// <summary>
