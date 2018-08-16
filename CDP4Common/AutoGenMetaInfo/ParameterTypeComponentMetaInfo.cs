@@ -276,6 +276,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
+            { "ArrayParameterType", new PropertyMetaInfo("Component", "ParameterTypeComponent", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 1, "*", true) },
             { "CompoundParameterType", new PropertyMetaInfo("Component", "ParameterTypeComponent", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 1, "*", true) },
         };
 
