@@ -44,17 +44,9 @@ build:
 test:
   assemblies:
     only:
-      - CDP4Common.Tests.dll
-      - CDP4Common.NetCore.Tests.dll
-      - CDP4Dal.Tests.dll
-      - CDP4Dal.NetCore.Tests.dll
-      - CDP4JsonSerializer.Tests.dll
-      - CDP4JsonSerializer.NetCore.Tests.dll
-      - CDP4JsonFileDal.Tests.dll
-      - CDP4ServicesDal.Tests.dll
-      - CDP4ServicesDal.NetCore.Tests.dll
-      - CDP4WspDal.Tests.dll
-      - CDP4WspDal.NetCore.Tests.dll
+      - '**\bin\$(configuration)\net472\*.Tests.dll'
+      - '**\bin\$(configuration)\netstandard1.6\*.Tests.dll'
+      - '**\bin\$(configuration)\netstandard2.0\*.Tests.dll'
   categories:
     except:
       - WebServicesDependent
