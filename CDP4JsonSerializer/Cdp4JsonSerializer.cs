@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Cdp4JsonSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -103,7 +101,7 @@ namespace CDP4JsonSerializer
         {
             if (outputStream == null)
             {
-                throw new ArgumentNullException("outputStream", "outputstream may not be null");
+                throw new ArgumentNullException(nameof(outputStream), "outputstream may not be null");
             }
 
             if (this.RequestDataModelVersion == null || this.MetaInfoProvider == null)
@@ -111,9 +109,8 @@ namespace CDP4JsonSerializer
                 throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
             }
 
-            var sw = new Stopwatch();
-            sw.Start();
-
+            var sw = Stopwatch.StartNew();
+            
             var serializer = this.CreateJsonSerializer();
 
             Logger.Trace("initializing JsonTextWriter");
@@ -124,7 +121,7 @@ namespace CDP4JsonSerializer
             jsonWriter.Flush();
 
             sw.Stop();
-            Logger.Debug("SerializeToStream in {0} [ms]", sw.ElapsedMilliseconds);
+            Logger.Debug("SerializeToStream finished in {0} [ms]", sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -144,12 +141,12 @@ namespace CDP4JsonSerializer
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source", "the source Thing may not be null");
+                throw new ArgumentNullException(nameof(source), "the source Thing may not be null");
             }
 
             if (outputStream == null)
             {
-                throw new ArgumentNullException("outputStream", "outputstream may not be null");
+                throw new ArgumentNullException(nameof(outputStream), "outputstream may not be null");
             }
 
             if (this.RequestDataModelVersion == null || this.MetaInfoProvider == null)
@@ -255,7 +252,7 @@ namespace CDP4JsonSerializer
                 var sw = new Stopwatch();
                 sw.Start();
                 data = serializer.Deserialize<T>(jsonTextReader);
-                Logger.Trace("Deserialize to stream {0} [ms]", sw.ElapsedMilliseconds);
+                Logger.Trace("Deserialize from stream in {0} [ms]", sw.ElapsedMilliseconds);
             }
 
             return data;
