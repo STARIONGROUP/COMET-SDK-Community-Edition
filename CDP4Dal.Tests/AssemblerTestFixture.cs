@@ -30,7 +30,8 @@ namespace CDP4Dal.Tests
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.SiteDirectoryData;    
+    using CDP4Common.SiteDirectoryData;
+    using CDP4Dal.Events;
     using NUnit.Framework;
     using Dto = CDP4Common.DTO;
 
@@ -473,6 +474,63 @@ namespace CDP4Dal.Tests
             Assert.AreEqual(7, assembler.Cache.Count);
             await assembler.Synchronize(new List<Dto.Thing> { sitedirdto });
             Assert.AreEqual(1, assembler.Cache.Count);
+        }
+
+        [Test]
+        public async Task Verify_that_assembler_clear_empties_cache_and_sends_remove_messages()
+        {
+            var engineeringModelIid = Guid.NewGuid();
+            var engineeringModelSetupIid = Guid.NewGuid();
+            var iterationIid = Guid.NewGuid();            
+            var iterationSetupIid = Guid.NewGuid();
+            
+            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(EngineeringModel)).Subscribe(x =>
+            {
+                Assert.AreEqual(engineeringModelIid, x.ChangedThing.Iid);
+            });
+
+            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(EngineeringModelSetup)).Subscribe(x =>
+            {
+                Assert.AreEqual(engineeringModelSetupIid, x.ChangedThing.Iid);
+            });
+
+            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(Iteration)).Subscribe(x =>
+            {
+                Assert.AreEqual(iterationIid, x.ChangedThing.Iid);
+            });
+
+            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(IterationSetup)).Subscribe(x =>
+            {
+                Assert.AreEqual(iterationSetupIid, x.ChangedThing.Iid);
+            });
+
+            var assembler = new Assembler(this.uri);
+
+            var model = new EngineeringModel(engineeringModelIid, assembler.Cache, this.uri);
+            var iteration = new Iteration(iterationIid, assembler.Cache, this.uri);            
+            model.Iteration.Add(iteration);
+            
+            var sitedir = new SiteDirectory(Guid.NewGuid(), assembler.Cache, this.uri);
+            var modelsetup = new EngineeringModelSetup(engineeringModelSetupIid, assembler.Cache, this.uri) { EngineeringModelIid = model.Iid };
+            model.EngineeringModelSetup = modelsetup;
+            var iterationsetup = new IterationSetup(iterationSetupIid, assembler.Cache, this.uri) { IterationIid = iteration.Iid };
+            iteration.IterationSetup = iterationsetup;
+
+
+            sitedir.Model.Add(modelsetup);
+            modelsetup.IterationSetup.Add(iterationsetup);
+            
+            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(sitedir.Iid, null), new Lazy<Thing>(() => sitedir));
+            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(modelsetup.Iid, null), new Lazy<Thing>(() => modelsetup));
+            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(iterationsetup.Iid, null), new Lazy<Thing>(() => iterationsetup));            
+            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(model.Iid, null), new Lazy<Thing>(() => model));
+            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(iteration.Iid, null), new Lazy<Thing>(() => iteration));
+            
+            Assert.AreEqual(5, assembler.Cache.Count);
+
+            await assembler.Clear();
+
+            Assert.AreEqual(0, assembler.Cache.Count);
         }
     }
 }

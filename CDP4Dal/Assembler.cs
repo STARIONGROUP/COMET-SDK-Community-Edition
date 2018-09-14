@@ -340,7 +340,8 @@ namespace CDP4Dal
         }
 
         /// <summary>
-        /// Clears the cache and sends removed event for <see cref="Iteration"/>s 
+        /// Clears the cache and sends removed event for the following classes:
+        /// <see cref="EngineeringModel"/>, <see cref="EngineeringModelSetup"/>, <see cref="Iteration"/>, <see cref="IterationSetup"/>
         /// </summary>
         /// <returns>The <see cref="Task"/></returns>
         public async Task Clear()
@@ -356,8 +357,14 @@ namespace CDP4Dal
 
                 foreach (var iteration in iterations)
                 {
+                    if (iteration.IterationSetup != null)
+                    {
+                        CDPMessageBus.Current.SendObjectChangeEvent(iteration.IterationSetup, EventKind.Removed);
+                        logger.Trace("IterationSetup with iid {0} removed", iteration.IterationSetup.Iid);
+                    }
+
                     CDPMessageBus.Current.SendObjectChangeEvent(iteration, EventKind.Removed);
-                    logger.Trace("iteration with iid {0} removed", iteration.Iid);
+                    logger.Trace("Iteration with iid {0} removed", iteration.Iid);
                 }
 
                 var models =
@@ -368,8 +375,14 @@ namespace CDP4Dal
 
                 foreach (var model in models)
                 {
+                    if (model.EngineeringModelSetup != null)
+                    {
+                        CDPMessageBus.Current.SendObjectChangeEvent(model.EngineeringModelSetup, EventKind.Removed);
+                        logger.Trace("EngineeringModelSetup with iid {0} removed", model.EngineeringModelSetup.Iid);
+                    }
+
                     CDPMessageBus.Current.SendObjectChangeEvent(model, EventKind.Removed);
-                    logger.Trace("model with iid {0} removed", model.Iid);
+                    logger.Trace("Model with iid {0} removed", model.Iid);
                 }
 
                 this.siteDirectory = null;
