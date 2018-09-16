@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OperationContainerTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests
 {
@@ -46,6 +44,13 @@ namespace CDP4Dal.Tests
         {
             this.siteDirectoryContext = "/SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650";            
             this.iterationContext = "/EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b/iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d";
+        }
+
+        [Test]
+        public void Verify_that_token_is_set_when_constructed()
+        {
+            var operationContainer = new OperationContainer(this.siteDirectoryContext, 1);
+            Assert.IsNotEmpty(operationContainer.Token);
         }
 
         [Test]

@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OperationContainer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,18 +21,16 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Operations
 {
     using System;
-    using System.CodeDom;
-    using System.Collections.Generic;
-    using System.Linq;
+    using System.Collections.Generic;    
     using CDP4Common.DTO;
+    using CDP4Common.Helpers;
 
     /// <summary>
-    /// A container for the <see cref="Operation"/>s that need to be executed on a data source using an implementation of <see cref="IDal"/>
+    /// A container for the <see cref="Operation"/>s that need to be executed on a data source using an implementation of <see cref="DAL.IDal"/>
     /// </summary>
     public class OperationContainer
     {
@@ -53,13 +50,15 @@ namespace CDP4Dal.Operations
         {
             if (string.IsNullOrEmpty(context))
             {
-                throw new ArgumentNullException("The context may not be null or empty", context);
+                throw new ArgumentNullException(nameof(context), "The context may not be null or empty");
             }
 
             if (!TransactionContextResolver.ValidateRouteContext(context))
             {
-                throw new ArgumentException(string.Format("The context {0} is not a valid context", context),"context");
+                throw new ArgumentException($"The context {context} is not a valid context", nameof(context));
             }
+
+            this.Token = TokenGenerator.GenerateRandomToken();
 
             this.Context = context;
             
@@ -71,6 +70,12 @@ namespace CDP4Dal.Operations
         /// Gets the unique <see cref="TopContainer.RevisionNumber"/> in this <see cref="OperationContainer"/>
         /// </summary>
         public int? TopContainerRevisionNumber { get; internal set; }
+
+        /// <summary>
+        /// Gets a correlation token that can be used to correlate the current <see cref="OperationContainer"/> to
+        /// the operations executed on a data-source
+        /// </summary>
+        public string Token { get; private set; }
 
         /// <summary>
         /// Get the context in which the <see cref="OperationContainer"/> shall be executed.
@@ -113,7 +118,7 @@ namespace CDP4Dal.Operations
 
             if (!this.Context.Contains(topcontainerRoute))
             {
-                throw new ArgumentException(string.Format("The Thing contained by the Operation does not share the context of the current OperationContainer: thing route: {0} - context: {1}", topcontainerRoute, this.Context));
+                throw new ArgumentException(nameof(operation), $"The Thing contained by the Operation does not share the context of the current OperationContainer: thing route: {topcontainerRoute} - context: {this.Context}");
             }
         }
 
