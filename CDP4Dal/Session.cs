@@ -47,7 +47,6 @@ namespace CDP4Dal
     /// </summary>
     public class Session : ISession
     {
-        #region Fields
         /// <summary>
         /// The NLog logger
         /// </summary>
@@ -72,9 +71,7 @@ namespace CDP4Dal
         /// Contains the open <see cref="Iteration"/> along with the active <see cref="DomainOfExpertise"/> and <see cref="Participant"/>
         /// </summary>
         private readonly Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>> openIterations;
-        #endregion
 
-        #region Constructor
         /// <summary>
         /// Initializes a new instance of the <see cref="Session"/> class.
         /// </summary>
@@ -94,9 +91,7 @@ namespace CDP4Dal
             this.openReferenceDataLibraries = new List<ReferenceDataLibrary>();
             this.openIterations = new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the <see cref="Credentials"/> that are use to connect to the data source
         /// </summary>
@@ -203,7 +198,7 @@ namespace CDP4Dal
             get
             {
                 var personName = this.ActivePerson != null ? this.ActivePerson.Name : string.Empty;                
-                return string.Format("{0} - {1}", this.DataSourceUri, personName);
+                return $"{this.DataSourceUri} - {personName}";
             }
         }
 
@@ -222,7 +217,6 @@ namespace CDP4Dal
         {
             get { return this.openIterations; }
         }
-        #endregion
 
         /// <summary>
         /// Retrieves the <see cref="SiteDirectory"/> in the context of the current session
@@ -446,10 +440,12 @@ namespace CDP4Dal
                 logger.Warn("no data returned upon Read on {0}", this.DataSourceUri);
             }
 
+            var sw = new Stopwatch();
+            logger.Info("Synchronization of DTOs for Read from server {0} started", this.DataSourceUri);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
             await this.Assembler.Synchronize(enumerable);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
-            logger.Info("Synchronization with the {0} server done", this.DataSourceUri);
+            logger.Info("Synchronization of DTOs for Read from server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -472,10 +468,12 @@ namespace CDP4Dal
                 logger.Warn("no data returned upon Write on {0}", this.DataSourceUri);
             }
 
+            var sw = new Stopwatch();
+            logger.Info("Synchronization of DTOs for Write to server {0} started", this.DataSourceUri);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
             await this.Assembler.Synchronize(enumerable);
-            logger.Info("Write To the {0} server done", this.DataSourceUri);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            logger.Info("Synchronization of DTOs for Write to server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -518,13 +516,12 @@ namespace CDP4Dal
         }
 
         /// <summary>
-        /// Close the underlying <see cref="IDal"/>
+        /// Close the underlying <see cref="IDal"/> and clears the encapsulated <see cref="Assembler"/>
         /// </summary>
-        public void Close()
+        public async Task Close()
         {
-            // TODO: when the session object implements auto refresh, the Close method shall stop the auto refresh as well
             this.Dal.Close();
-            this.Assembler.Clear();
+            await this.Assembler.Clear();
 
             var sessionChange = new SessionEvent(this, SessionStatus.Closed);
             CDPMessageBus.Current.SendMessage(sessionChange);
@@ -616,10 +613,12 @@ namespace CDP4Dal
                 logger.Warn("no data returned upon Read on {0}", this.DataSourceUri);
             }
 
+            var sw = new Stopwatch();
+            logger.Info("Synchronization of DTOs for Update to server {0} started", this.DataSourceUri);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
             await this.Assembler.Synchronize(enumerable);
-            logger.Info("Synchronization with the {0} server done", this.DataSourceUri);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            logger.Info("Synchronization of DTOs for Update to server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
         }
 
         /// <summary>

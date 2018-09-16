@@ -273,7 +273,7 @@ namespace CDP4Dal.Tests
 
             Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count());
 
-            session2.Close();
+            await session2.Close();
             Assert.IsEmpty(session2.OpenReferenceDataLibraries);
         }
 

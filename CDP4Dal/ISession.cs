@@ -222,9 +222,9 @@ namespace CDP4Dal
         Task Reload();
 
         /// <summary>
-        /// Close the underlying <see cref="IDal"/>
+        /// Close the underlying <see cref="IDal"/> and clears the encapsulated <see cref="Assembler"/>
         /// </summary>
-        void Close();
+        Task Close();
 
         /// <summary>
         /// Cancel any Read or Open operation.
