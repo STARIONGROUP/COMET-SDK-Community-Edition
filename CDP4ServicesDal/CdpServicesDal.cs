@@ -144,7 +144,7 @@ namespace CDP4ServicesDal
                 RevisionNumber = operationContainer.TopContainerRevisionNumber
             };
 
-            var postToken = this.RandomWebRequestToken();
+            var postToken = operationContainer.Token;
             var resourcePath = $"{operationContainer.Context}{attribute}";
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
             Logger.Debug("CDP4 Services POST: {0} - {1}", postToken, uriBuilder);
@@ -316,13 +316,16 @@ namespace CDP4ServicesDal
 
             var resourcePath = $"{thingRoute}{attributes.ToString()}";
 
-            var readToken = this.RandomWebRequestToken();
+            var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
             Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
 
             var requestsw = Stopwatch.StartNew();
 
-            using (var httpResponseMessage = await this.httpClient.GetAsync(resourcePath, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, readToken);
+
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
                 requestsw.Stop();
@@ -439,35 +442,21 @@ namespace CDP4ServicesDal
             
             var resourcePath = $"SiteDirectory{queryAttributes}";
 
-            if (credentials.Proxy == null)
-            {
-                this.httpClient = new HttpClient();
-            }
-            else
-            {
-                var httpClientHandler = new HttpClientHandler()
-                {
-                    Proxy = new WebProxy(credentials.Proxy),
-                    UseProxy = true
-                };
+            var openToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
 
-                this.httpClient = new HttpClient(httpClientHandler);
-            }
-            
-            this.httpClient.BaseAddress = credentials.Uri;            
-            this.httpClient.DefaultRequestHeaders.Accept.Clear();
-            this.httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", credentials.UserName, credentials.Password))));
-            this.httpClient.DefaultRequestHeaders.Add(Headers.AcceptCdpVersion, Headers.AcceptCdpVersionValue);
-            
+            this.httpClient = this.CreateHttpClient(credentials);
+
             var watch = Stopwatch.StartNew();
-            var openToken = this.RandomWebRequestToken();
+            
             var uriBuilder = new UriBuilder(credentials.Uri) { Path = resourcePath };
             Logger.Debug("CDP4Services Open {0}: {1}", openToken, uriBuilder);
 
             var requestsw = Stopwatch.StartNew();
 
-            using (var httpResponseMessage = await this.httpClient.GetAsync(resourcePath, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken))            
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, openToken);
+
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken))            
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
                 requestsw.Stop();
@@ -507,6 +496,43 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
+        /// Create a new <see cref="HttpClient"/>
+        /// </summary>
+        /// <param name="credentials">
+        /// The <see cref="Credentials"/> used to set the connection and authentication settings
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="HttpClient"/> with the DefaultRequestHeaders set
+        /// </returns>
+        private HttpClient CreateHttpClient(Credentials credentials)
+        {
+            HttpClient result;
+
+            if (credentials.Proxy == null)
+            {
+                result = new HttpClient();
+            }
+            else
+            {
+                var httpClientHandler = new HttpClientHandler()
+                {
+                    Proxy = new WebProxy(credentials.Proxy),
+                    UseProxy = true
+                };
+
+                result = new HttpClient(httpClientHandler);
+            }
+
+            result.BaseAddress = credentials.Uri;
+            result.DefaultRequestHeaders.Accept.Clear();
+            result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", credentials.UserName, credentials.Password))));
+            result.DefaultRequestHeaders.Add(Headers.AcceptCdpVersion, Headers.AcceptCdpVersionValue);
+
+            return result;
+        }
+
+        /// <summary>
         /// Creates <see cref="HttpContent"/> that is added to a POST request
         /// </summary>
         /// <param name="token">
@@ -527,7 +553,8 @@ namespace CDP4ServicesDal
             var stream = new MemoryStream();
             this.ConstructPostRequestBodyStream(token, operationContainer, stream);
             var jsonContent = new StreamContent(stream);
-            jsonContent.Headers.Add("Content-Type", "application/json");
+            jsonContent.Headers.Add(Headers.ContentType, "application/json");
+            jsonContent.Headers.Add(Headers.CDPToken, token);
 
             if (files == null)
             {
@@ -614,13 +641,13 @@ namespace CDP4ServicesDal
             var cdpServerHeader = responseHeaders.SingleOrDefault(h => h.Key.ToLower(CultureInfo.InvariantCulture) == Headers.CDPServer.ToLower(CultureInfo.InvariantCulture));
             if (cdpServerHeader.Value == null)
             {
-                throw new HeaderException(string.Format("Header {0} not found", Headers.CDPServer));
+                throw new HeaderException($"Header {Headers.CDPServer} not found");
             }
 
             var cdpCommonHeader = responseHeaders.SingleOrDefault(h => h.Key.ToLower(CultureInfo.InvariantCulture) == Headers.CDPCommon.ToLower(CultureInfo.InvariantCulture));
             if (cdpCommonHeader.Value == null)
             {
-                throw new HeaderException(string.Format("Header {0} not found", Headers.CDPCommon));
+                throw new HeaderException($"Header {Headers.CDPCommon} not found");
             }
 
             var contentHeaders = httpResponseMessage.Content.Headers;
@@ -628,12 +655,12 @@ namespace CDP4ServicesDal
             var mediaTypeHeader = contentHeaders.SingleOrDefault(h => h.Key.ToLower(CultureInfo.InvariantCulture) == Headers.ContentType.ToLower(CultureInfo.InvariantCulture));
             if (mediaTypeHeader.Value == null)
             {
-                throw new HeaderException(string.Format("Header {0} not found", Headers.ContentType));
+                throw new HeaderException($"Header {Headers.ContentType} not found");
             }
             
             if (Convert.ToString(mediaTypeHeader.Value.FirstOrDefault()).ToLower(CultureInfo.InvariantCulture) != "application/json; ecss-e-tm-10-25; version=1.0.0")
             {
-                throw new HeaderException(string.Format("Header Media-Type has incompatible value: {0} ", mediaTypeHeader.Value));
+                throw new HeaderException($"Header Media-Type has incompatible value: {mediaTypeHeader.Value} ");
             }
         }
         
@@ -712,24 +739,6 @@ namespace CDP4ServicesDal
                     Extent = ExtentQueryAttribute.deep,
                     IncludeAllContainers = true
                 };
-        }
-
-        /// <summary>
-        /// Get a random string that is used to tag a POST so that for debugging purposes it is easy to find the POST and result of a POST
-        /// </summary>
-        /// <returns>
-        /// a random string of 5 characters
-        /// </returns>
-        private string RandomWebRequestToken()
-        {
-            using (var cryptoServiceProvider = new RNGCryptoServiceProvider())
-            {
-                // Buffer storage.
-                byte[] data = new byte[4];
-                cryptoServiceProvider.GetBytes(data);
-                var result = BitConverter.ToString(data).Replace("-", "");
-                return result;
-            }
         }
     }
 }

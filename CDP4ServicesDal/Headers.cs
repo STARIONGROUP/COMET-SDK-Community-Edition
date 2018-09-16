@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Headers.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4ServicesDal
 {
@@ -46,6 +44,12 @@ namespace CDP4ServicesDal
         /// The version is specified as a string with the following format: x.y.z
         /// </remarks>
         internal const string CDPCommon = "CDP4-Common";
+
+        /// <summary>
+        /// The header that is used to communicate the operation token that can be used on the server to correlate operations
+        /// executed on the server to a request
+        /// </summary>
+        internal const string CDPToken = "CDP4-Token";
 
         /// <summary>
         /// The header that specifies the ECCS-E-TM-10-25 protocol and it's version
