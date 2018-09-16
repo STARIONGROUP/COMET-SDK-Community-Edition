@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard1.6;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4JsonSerializer Community Edition</Title>
-    <Version>1.5.1</Version>
+    <Version>1.6.0</Version>
     <Description>CDP4 JSON Serialization Library</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
@@ -16,7 +16,7 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25 JSON</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
-      [Update] to CDP4Common-CE version 1.5.1
+      [Update] to CDP4Common-CE version 1.6.0
     </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
@@ -24,7 +24,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4Common-CE" Version="1.5.1" />
+        <PackageReference Include="CDP4Common-CE" Version="1.6.0" />
       </ItemGroup>
     </When>
 
