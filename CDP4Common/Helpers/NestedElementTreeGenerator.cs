@@ -245,6 +245,10 @@ namespace CDP4Common.Helpers
                 {
                     option.NestedElement.Add(nestedElement);
                 }
+                else
+                {
+                    nestedElement.Container = option;
+                }
 
                 var nestedParameters = this.CreateNestedParameters(elementUsage, domainOfExpertise, option);
                 foreach (var nestedParameter in nestedParameters)
@@ -306,6 +310,10 @@ namespace CDP4Common.Helpers
             if (updateOption)
             {
                 option.NestedElement.Add(nestedElement);
+            }
+            else
+            {
+                nestedElement.Container = option;
             }
 
             foreach (var parameter in rootElement.Parameter)

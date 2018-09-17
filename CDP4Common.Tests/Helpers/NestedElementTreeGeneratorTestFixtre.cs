@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedElementTreeGeneratorTestFixtre.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Helpers
 {
@@ -48,7 +46,6 @@ namespace CDP4Common.Tests.Helpers
         private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
         private Iteration iteration;
         private DomainOfExpertise domainOfExpertise;
-
 
         [SetUp]
         public void SetUp()
@@ -250,6 +247,21 @@ namespace CDP4Common.Tests.Helpers
             var flatNestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise);
 
             Assert.IsNotEmpty(flatNestedParameters);
+        }
+
+        [Test]
+        public void Verify_that_Path_returns_value_for_Each_NestedElement_and_NestedParameter()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
+            var flatNestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise);
+
+            foreach (var nestedParameter in flatNestedParameters)
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    var path = nestedParameter.Path;
+                });   
+            }
         }
     }
 }
