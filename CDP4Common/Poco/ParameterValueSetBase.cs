@@ -60,7 +60,7 @@ namespace CDP4Common.EngineeringModelData
                     return this.Reference;
 
                 default:
-                    throw new InvalidOperationException(string.Format("Unknown ParameterKindSwitch: {0}", this.ValueSwitch));
+                    throw new InvalidOperationException($"Unknown ParameterKindSwitch: {this.ValueSwitch}");
             }
         }
 
@@ -102,22 +102,22 @@ namespace CDP4Common.EngineeringModelData
             var numberOfComponent = container.ParameterType.NumberOfValues;
             if (this.Manual.Count != numberOfComponent)
             {
-                errorList.Add(string.Format("Wrong number of values in the Manual set for the option: {0}, state: {1}", (this.ActualOption == null) ? "-" : this.ActualOption.Name, (this.ActualState == null) ? "-" : this.ActualState.Name));
+                errorList.Add($"Wrong number of values in the Manual set for the option: {((this.ActualOption == null) ? "-" : this.ActualOption.Name)}, state: {((this.ActualState == null) ? "-" : this.ActualState.Name)}");
             }
 
             if (this.Computed.Count != numberOfComponent)
             {
-                errorList.Add(string.Format("Wrong number of values in the Computed set for the option: {0}, state: {1}", (this.ActualOption == null) ? "-" : this.ActualOption.Name, (this.ActualState == null) ? "-" : this.ActualState.Name));
+                errorList.Add($"Wrong number of values in the Computed set for the option: {((this.ActualOption == null) ? "-" : this.ActualOption.Name)}, state: {((this.ActualState == null) ? "-" : this.ActualState.Name)}");
             }
 
             if (this.Reference.Count != numberOfComponent)
             {
-                errorList.Add(string.Format("Wrong number of values in the Reference set for the option: {0}, state: {1}", (this.ActualOption == null) ? "-" : this.ActualOption.Name, (this.ActualState == null) ? "-" : this.ActualState.Name));
+                errorList.Add($"Wrong number of values in the Reference set for the option: {((this.ActualOption == null) ? "-" : this.ActualOption.Name)}, state: {((this.ActualState == null) ? "-" : this.ActualState.Name)}");
             }
 
             if (this.Published.Count != numberOfComponent)
             {
-                errorList.Add(string.Format("Wrong number of values in the Published set for the option: {0}, state: {1}", (this.ActualOption == null) ? "-" : this.ActualOption.Name, (this.ActualState == null) ? "-" : this.ActualState.Name));
+                errorList.Add($"Wrong number of values in the Published set for the option: {((this.ActualOption == null) ? "-" : this.ActualOption.Name)}, state: {((this.ActualState == null) ? "-" : this.ActualState.Name)}");
             }
 
             return errorList;
@@ -183,5 +183,22 @@ namespace CDP4Common.EngineeringModelData
 
             this.Formula = ValueArrayUtils.CreateDefaultValueArray(this.valueArraySize);
         }
+
+        /// <summary>
+        /// Queries the model code of the current <see cref="ParameterValueSetBase"/>
+        /// </summary>
+        /// <param name="componentIndex">
+        /// The component Index.
+        /// </param>
+        /// <remarks>
+        /// The model code is derived as follows:
+        /// <code>
+        /// #ElementDefinition.ShortName#.#ParameterType.ShortName#.#Component.ParameterType.ShortName#\#Option.ShortName#\#ActualState.ShortName#
+        /// </code>
+        /// </remarks>
+        /// <returns>
+        /// A string that represents the model code of the current <see cref="ParameterValueSetBase"/>
+        /// </returns>
+        public abstract string ModelCode(int? componentIndex = null);
     }
 }

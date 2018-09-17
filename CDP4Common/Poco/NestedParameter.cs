@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedParameter.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
@@ -53,7 +51,7 @@ namespace CDP4Common.EngineeringModelData
             var parameterShortName = this.QueryParameterShortName();            
             var actualFiniteStateShortName = this.ActualState == null ? string.Empty : this.ActualState.ShortName;
 
-            var result = string.Format("{0}\\{1}\\{2}\\{3}", nestedElementPath, parameterShortName, option.ShortName, actualFiniteStateShortName);
+            var result = $"{nestedElementPath}\\{parameterShortName}\\{option.ShortName}\\{actualFiniteStateShortName}";
 
             return result;
         }
@@ -66,6 +64,11 @@ namespace CDP4Common.EngineeringModelData
         /// In case the <see cref="ParameterType"/> is a <see cref="ScalarParameterType"/> then this property is null.
         /// </remarks>
         public ParameterTypeComponent Component { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the model-code of the associated <see cref="IValueSet"/>
+        /// </summary>
+        public string ModelCode { get; set; }
 
         /// <summary>
         /// Queries the short-name of the <see cref="ParameterType"/> of the associated <see cref="Parameter"/>
@@ -82,7 +85,7 @@ namespace CDP4Common.EngineeringModelData
             }
             else
             {
-                parameterShortName = string.Format("{0}.{1}", this.AssociatedParameter.ParameterType.ShortName, this.Component.ShortName);
+                parameterShortName = $"{this.AssociatedParameter.ParameterType.ShortName}.{this.Component.ShortName}";
             }
 
             return parameterShortName;

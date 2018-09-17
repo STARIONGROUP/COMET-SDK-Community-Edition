@@ -67,13 +67,13 @@ namespace CDP4Common.EngineeringModelData
         /// <returns>
         /// A string that represents the model code of the current <see cref="ParameterOverrideValueSet"/>
         /// </returns>
-        public string ModelCode(int? componentIndex = null)
+        public override string ModelCode(int? componentIndex = null)
         {
             var parameterOverride = (ParameterOverride)this.Container;
 
             if (parameterOverride == null)
             {
-                throw new ContainmentException(string.Format("The container ParameterOverride of ParameterOverrideValueSet with iid {0} is null, the model code cannot be computed.", this.Iid));
+                throw new ContainmentException($"The container ParameterOverride of ParameterOverrideValueSet with iid {this.Iid} is null, the model code cannot be computed.");
             }
 
             if (!parameterOverride.IsOptionDependent && parameterOverride.StateDependence == null)
@@ -83,15 +83,15 @@ namespace CDP4Common.EngineeringModelData
 
             if (parameterOverride.IsOptionDependent && parameterOverride.StateDependence == null)
             {
-                return string.Format("{0}\\{1}", parameterOverride.ModelCode(componentIndex), this.ActualOption.ShortName);
+                return $"{parameterOverride.ModelCode(componentIndex)}\\{this.ActualOption.ShortName}";
             }
 
             if (!parameterOverride.IsOptionDependent && parameterOverride.StateDependence != null)
             {
-                return string.Format("{0}\\{1}", parameterOverride.ModelCode(componentIndex), this.ActualState.ShortName);
+                return $"{parameterOverride.ModelCode(componentIndex)}\\{this.ActualState.ShortName}";
             }
 
-            return string.Format("{0}\\{1}\\{2}", parameterOverride.ModelCode(componentIndex), this.ActualOption.ShortName, this.ActualState.ShortName);
+            return $"{parameterOverride.ModelCode(componentIndex)}\\{this.ActualOption.ShortName}\\{this.ActualState.ShortName}";
         }
 
         /// <summary>

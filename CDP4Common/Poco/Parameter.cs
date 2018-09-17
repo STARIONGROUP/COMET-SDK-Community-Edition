@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Parameter.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
@@ -61,22 +59,22 @@ namespace CDP4Common.EngineeringModelData
 
             if (elementDefinition == null)
             {
-                throw new ContainmentException(string.Format("The container ElementDefinition of Parameter with iid {0} is null, the model code cannot be computed.", this.Iid));
+                throw new ContainmentException($"The container ElementDefinition of Parameter with iid {this.Iid} is null, the model code cannot be computed.");
             }
 
             var compoundParameterType = this.ParameterType as CompoundParameterType;
             if (compoundParameterType == null && componentIndex > 0)
             {
-                throw new ArgumentException("The value must be 0 if the ParameterType is not a CompoundParameterType", "componentIndex");
+                throw new ArgumentException("The value must be 0 if the ParameterType is not a CompoundParameterType", nameof(componentIndex));
             }
 
             if (compoundParameterType != null && componentIndex != null)
             {
                 var component = Utils.FormatComponentShortName(compoundParameterType.Component[componentIndex.Value].ShortName);
-                return string.Format("{0}.{1}.{2}", elementDefinition.ShortName, compoundParameterType.ShortName, component);
+                return $"{elementDefinition.ShortName}.{compoundParameterType.ShortName}.{component}";
             }
 
-            return string.Format("{0}.{1}", elementDefinition.ShortName, this.ParameterType.ShortName);
+            return $"{elementDefinition.ShortName}.{this.ParameterType.ShortName}";
         }
 
         /// <summary>
@@ -150,11 +148,11 @@ namespace CDP4Common.EngineeringModelData
             var valuesets = valueSets.ToList();
             if (valuesets.Count == 0)
             {
-                errorList.Add(string.Format("No value-set was found for the option {0} and state {1}", (option == null) ? "-" : option.Name, (state == null) ? "-" : state.Name));
+                errorList.Add($"No value-set was found for the option {((option == null) ? "-" : option.Name)} and state {((state == null) ? "-" : state.Name)}");
             }
             else if (valuesets.Count > 1)
             {
-                errorList.Add(string.Format("Duplicated value-sets were found for the option {0} and state {1}", (option == null) ? "-" : option.Name, (state == null) ? "-" : state.Name));
+                errorList.Add($"Duplicated value-sets were found for the option {((option == null) ? "-" : option.Name)} and state {((state == null) ? "-" : state.Name)}");
             }
             else
             {

@@ -516,6 +516,7 @@ namespace CDP4Common.Helpers
             var componentIndex = component == null ? 0 : component.Index;
             var actualValue = valueSet.ActualValue[componentIndex];
             var formula = valueSet.Formula[componentIndex];
+            var modelCode = valueSet.ModelCode(componentIndex);
 
             var nestedParameter = new NestedParameter(Guid.NewGuid(), parameter.Cache, parameter.IDalUri)
             {
@@ -525,7 +526,8 @@ namespace CDP4Common.Helpers
                 Component = component,
                 ActualState = valueSet.ActualState,
                 ActualValue = actualValue,
-                Formula = formula
+                Formula = formula,
+                ModelCode = modelCode
             };
 
             return nestedParameter;
@@ -553,7 +555,8 @@ namespace CDP4Common.Helpers
         {
             var componentIndex = component == null ? 0 : component.Index;
             var actualValue = valueSet.ActualValue[componentIndex];
-            
+            var modelCode = valueSet.ModelCode(componentIndex);
+
             var nestedParameter = new NestedParameter(Guid.NewGuid(), subscription.Cache, subscription.IDalUri)
             {
                 IsVolatile = true,
@@ -562,6 +565,7 @@ namespace CDP4Common.Helpers
                 Component = component,
                 ActualState = valueSet.ActualState,
                 ActualValue = actualValue,
+                ModelCode = modelCode
             };
 
             return nestedParameter;

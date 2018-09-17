@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
         /// <returns>
         /// A string that represents the model code of the current <see cref="ParameterValueSet"/>
         /// </returns>
-        public string ModelCode(int? componentIndex = null)
+        public override string ModelCode(int? componentIndex = null)
         {
             var parameter = (Parameter)this.Container;
 
