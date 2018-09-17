@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterOverride.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
@@ -105,7 +103,7 @@ namespace CDP4Common.EngineeringModelData
 
             if (elementUsage == null)
             {
-                throw new ContainmentException(string.Format("The container ElementUsage of ParameterOverride with iid {0} is null, the model code cannot be computed.", this.Iid));
+                throw new ContainmentException($"The container ElementUsage of ParameterOverride with iid {this.Iid} is null, the model code cannot be computed.");
             }
 
             var compoundParameterType = this.GetDerivedParameterType() as CompoundParameterType;
@@ -117,10 +115,10 @@ namespace CDP4Common.EngineeringModelData
             if (compoundParameterType != null && componentIndex != null)
             {
                 var component = Utils.FormatComponentShortName(compoundParameterType.Component[componentIndex.Value].ShortName);
-                return string.Format("{0}.{1}.{2}", elementUsage.ModelCode(), compoundParameterType.ShortName, component);
+                return $"{elementUsage.ModelCode()}.{compoundParameterType.ShortName}.{component}";
             }
 
-            return string.Format("{0}.{1}", elementUsage.ModelCode(), this.GetDerivedParameterType().ShortName);
+            return $"{elementUsage.ModelCode()}.{this.GetDerivedParameterType().ShortName}";
         }
 
         /// <summary>
@@ -194,11 +192,11 @@ namespace CDP4Common.EngineeringModelData
             var valuesets = valueSets.ToList();
             if (valuesets.Count == 0)
             {
-                errorList.Add(string.Format("No value-set was found for the option {0} and state {1}", (option == null) ? "-" : option.Name, (state == null) ? "-" : state.Name));
+                errorList.Add($"No value-set was found for the option {((option == null) ? "-" : option.Name)} and state {((state == null) ? "-" : state.Name)}");
             }
             else if (valuesets.Count > 1)
             {
-                errorList.Add(string.Format("Duplicated value-sets were found for the option {0} and state {1}", (option == null) ? "-" : option.Name, (state == null) ? "-" : state.Name));
+                errorList.Add($"Duplicated value-sets were found for the option {((option == null) ? "-" : option.Name)} and state {((state == null) ? "-" : state.Name)}");
             }
             else
             {

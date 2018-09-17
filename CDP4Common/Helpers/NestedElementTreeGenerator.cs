@@ -524,7 +524,7 @@ namespace CDP4Common.Helpers
             var componentIndex = component == null ? 0 : component.Index;
             var actualValue = valueSet.ActualValue[componentIndex];
             var formula = valueSet.Formula[componentIndex];
-            var modelCode = valueSet.ModelCode(componentIndex);
+            var modelCode = parameter.ModelCode(componentIndex);
 
             var nestedParameter = new NestedParameter(Guid.NewGuid(), parameter.Cache, parameter.IDalUri)
             {

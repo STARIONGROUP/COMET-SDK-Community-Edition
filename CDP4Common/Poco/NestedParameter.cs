@@ -39,8 +39,8 @@ namespace CDP4Common.EngineeringModelData
         /// The path is defined as the concatenation of:
         /// (1) path to the nestedElement,
         /// (2) short-name of <see cref="ParameterType"/>, and <see cref="ParameterTypeComponent"/> if applicable, of the associated <see cref="Parameter"/>,
-        /// (3) short name of the associated <see cref="Option"/>.
-        /// (4) short-name of the associated <see cref="ActualFiniteState"/> or empty string if it is null
+        /// (3) short-name of the associated <see cref="ActualFiniteState"/> or empty string if it is null
+        /// (4) short name of the associated <see cref="Option"/>.
         /// </remarks>
         protected string GetDerivedPath()
         {
@@ -51,7 +51,7 @@ namespace CDP4Common.EngineeringModelData
             var parameterShortName = this.QueryParameterShortName();            
             var actualFiniteStateShortName = this.ActualState == null ? string.Empty : this.ActualState.ShortName;
 
-            var result = $"{nestedElementPath}\\{parameterShortName}\\{option.ShortName}\\{actualFiniteStateShortName}";
+            var result = $"{nestedElementPath}\\{parameterShortName}\\{actualFiniteStateShortName}\\{option.ShortName}";
 
             return result;
         }

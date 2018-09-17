@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterSubscription.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
@@ -55,8 +53,7 @@ namespace CDP4Common.EngineeringModelData
                 return parameterOverride.ParameterType;
             }
 
-            throw new ContainmentException(
-                string.Format("{0} is not contained by a valid Parameter or ParameterOverride", this));
+            throw new ContainmentException($"{this} is not contained by a valid Parameter or ParameterOverride");
         }
 
         /// <summary>
@@ -179,11 +176,11 @@ namespace CDP4Common.EngineeringModelData
             var valuesets = valueSets.ToList();
             if (valuesets.Count == 0)
             {
-                errorList.Add(string.Format("No value-set was found for the option {0} and state {1}", (option == null) ? "-" : option.Name, (state == null) ? "-" : state.Name));
+                errorList.Add($"No value-set was found for the option {((option == null) ? "-" : option.Name)} and state {((state == null) ? "-" : state.Name)}");
             }
             else if (valuesets.Count > 1)
             {
-                errorList.Add(string.Format("Duplicated value-sets were found for the option {0} and state {1}", (option == null) ? "-" : option.Name, (state == null) ? "-" : state.Name));
+                errorList.Add($"Duplicated value-sets were found for the option {((option == null) ? "-" : option.Name)} and state {((state == null) ? "-" : state.Name)}");
             }
             else
             {
