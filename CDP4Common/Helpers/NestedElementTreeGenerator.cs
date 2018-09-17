@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedElementTreeGenerator.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Helpers
 {
@@ -62,34 +60,37 @@ namespace CDP4Common.Helpers
         /// The <see cref="DomainOfExpertise"/> for which the <see cref="NestedParameter"/>s flat list needs to be generated. Only the <see cref="Parameter"/>s, <see cref="ParameterOverride"/>s and
         /// <see cref="ParameterSubscription"/>s that are owned by the <see cref="DomainOfExpertise"/> will be taken into account.
         /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
         /// <returns>
-        /// An <see cref="IEnumerable{NestedParameter}"/> that contains the generated <see cref="NestedParameters"/>s
+        /// An <see cref="IEnumerable{NestedParameter}"/> that contains the generated <see cref="NestedParameter"/>s
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when the <paramref name="domainOfExpertise"/> is null
         /// thrown when the <paramref name="option"/> is null
         /// </exception>
-        public IEnumerable<NestedParameter> GetNestedParameters(Option option, DomainOfExpertise domainOfExpertise)
+        public IEnumerable<NestedParameter> GetNestedParameters(Option option, DomainOfExpertise domainOfExpertise, bool updateOption = false)
         {
             if (option == null)
             {
-                throw new ArgumentNullException("option", "The option may not be null");
+                throw new ArgumentNullException(nameof(option), "The option may not be null");
             }
 
             if (domainOfExpertise == null)
             {
-                throw new ArgumentNullException("domainOfExpertise", "The domainOfExpertise may not be null");
+                throw new ArgumentNullException(nameof(domainOfExpertise), "The domainOfExpertise may not be null");
             }
 
             var iteration = (Iteration)option.Container;
 
             Logger.Debug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise.ShortName}");
 
-            var NestedElements = this.Generate(option, domainOfExpertise);
+            var nestedElements = this.Generate(option, domainOfExpertise, updateOption);
 
             Logger.Debug($"Crearing NestedParameters Iteration: {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise.ShortName}");
 
-            var flatNestedParameters = NestedElements.SelectMany(np => np.NestedParameter);
+            var flatNestedParameters = nestedElements.SelectMany(np => np.NestedParameter);
 
             return flatNestedParameters.ToList();
         }
@@ -104,6 +105,9 @@ namespace CDP4Common.Helpers
         /// The <see cref="DomainOfExpertise"/> for which the <see cref="NestedElement"/> tree needs to be generated. Only the <see cref="Parameter"/>s, <see cref="ParameterOverride"/>s and
         /// <see cref="ParameterSubscription"/>s that are owned by the <see cref="DomainOfExpertise"/> will be taken into account when generating <see cref="NestedParameter"/>s
         /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
         /// <returns>
         /// An <see cref="IEnumerable{NestedElement}"/> that contains the generated <see cref="NestedElement"/>s filtered based on the provided <see cref="Option"/>
         /// </returns>
@@ -111,16 +115,16 @@ namespace CDP4Common.Helpers
         /// thrown when the <paramref name="domainOfExpertise"/> is null
         /// thrown when the <paramref name="option"/> is null
         /// </exception>
-        public IEnumerable<NestedElement> Generate(Option option, DomainOfExpertise domainOfExpertise)
+        public IEnumerable<NestedElement> Generate(Option option, DomainOfExpertise domainOfExpertise, bool updateOption = false)
         {
             if (option == null)
             {
-                throw new ArgumentNullException("option", "The option may not be null");
+                throw new ArgumentNullException(nameof(option), "The option may not be null");
             }
 
             if (domainOfExpertise == null)
             {
-                throw new ArgumentNullException("domainOfExpertise", "The domainOfExpertise may not be null");
+                throw new ArgumentNullException(nameof(domainOfExpertise), "The domainOfExpertise may not be null");
             }
 
             var iteration = (Iteration)option.Container;
@@ -128,12 +132,12 @@ namespace CDP4Common.Helpers
             
             if (rootElement == null)
             {
-                throw new NestedElementTreeException(string.Format("The container Iteration of Option {0} does not have a TopElement specified", option.ShortName));
+                throw new NestedElementTreeException($"The container Iteration of Option {option.ShortName} does not have a TopElement specified");
             }
 
             Logger.Debug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise.ShortName}");
 
-            var createNestedElements = this.GenerateNestedElements(option, domainOfExpertise, rootElement);
+            var createNestedElements = this.GenerateNestedElements(option, domainOfExpertise, rootElement, updateOption);
             return createNestedElements;
         }
 
@@ -151,6 +155,9 @@ namespace CDP4Common.Helpers
         /// <param name="rootElement">
         /// The <see cref="ElementDefinition"/> that serves as the root of the generated <see cref="NestedElement"/> tree.
         /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
         /// <returns>
         /// An <see cref="IEnumerable{NestedElement}"/> that contains the generated <see cref="NestedElement"/>s
         /// </returns>
@@ -159,30 +166,30 @@ namespace CDP4Common.Helpers
         /// thrown when the <paramref name="option"/> is null
         /// thrown when the <paramref name="rootElement"/> is null
         /// </exception>
-        public IEnumerable<NestedElement> GenerateNestedElements(Option option, DomainOfExpertise domainOfExpertise, ElementDefinition rootElement)
+        public IEnumerable<NestedElement> GenerateNestedElements(Option option, DomainOfExpertise domainOfExpertise, ElementDefinition rootElement, bool updateOption = false)
         {
             if (option == null)
             {
-                throw new ArgumentNullException("option", "The option may not be null");
+                throw new ArgumentNullException(nameof(option), "The option may not be null");
             }
 
             if (domainOfExpertise == null)
             {
-                throw new ArgumentNullException("domainOfExpertise", "The domainOfExpertise may not be null");
+                throw new ArgumentNullException(nameof(domainOfExpertise), "The domainOfExpertise may not be null");
             }
 
             if (rootElement == null)
             {
-                throw new ArgumentNullException("rootElement", "The rootElement may not be null");
+                throw new ArgumentNullException(nameof(rootElement), "The rootElement may not be null");
             }
 
             var nestedElements = new List<NestedElement>();
             
-            var rootNestedElement = this.CreateNestedElementAndNestedParametersForRootElement(rootElement, domainOfExpertise, option);            
+            var rootNestedElement = this.CreateNestedElementAndNestedParametersForRootElement(rootElement, domainOfExpertise, option, updateOption);
             nestedElements.Add(rootNestedElement);
             
             var elementUsages = new List<ElementUsage>();
-            var recursedNestedElements = this.RecursivelyCreateNestedElements(rootElement, rootElement, domainOfExpertise, elementUsages, option);
+            var recursedNestedElements = this.RecursivelyCreateNestedElements(rootElement, rootElement, domainOfExpertise, elementUsages, option, updateOption);
             nestedElements.AddRange(recursedNestedElements);
 
             return nestedElements;
@@ -209,10 +216,13 @@ namespace CDP4Common.Helpers
         /// The <see cref="Option"/> for which the <see cref="NestedElement"/> tree is created. When the <see cref="Option"/>
         /// is null then none of the <see cref="ElementUsage"/>s are filtered.
         /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{NestedElement}"/> that have been created.
         /// </returns>
-        private IEnumerable<NestedElement> RecursivelyCreateNestedElements(ElementDefinition elementDefinition, ElementDefinition rootElement, DomainOfExpertise domainOfExpertise, List<ElementUsage> elementUsages, Option option)
+        private IEnumerable<NestedElement> RecursivelyCreateNestedElements(ElementDefinition elementDefinition, ElementDefinition rootElement, DomainOfExpertise domainOfExpertise, List<ElementUsage> elementUsages, Option option, bool updateOption)
         {
             var cache = elementDefinition.Cache;
             var uri = elementDefinition.IDalUri;
@@ -231,7 +241,10 @@ namespace CDP4Common.Helpers
                                             RootElement = rootElement,
                                             IsVolatile = true
                                         };
-                option.NestedElement.Add(nestedElement);
+                if (updateOption)
+                {
+                    option.NestedElement.Add(nestedElement);
+                }
 
                 var nestedParameters = this.CreateNestedParameters(elementUsage, domainOfExpertise, option);
                 foreach (var nestedParameter in nestedParameters)
@@ -251,7 +264,7 @@ namespace CDP4Common.Helpers
 
                 var referencedElementDefinition = elementUsage.ElementDefinition;
 
-                var nestedElements = this.RecursivelyCreateNestedElements(referencedElementDefinition, rootElement, domainOfExpertise, containmentUsages, option);
+                var nestedElements = this.RecursivelyCreateNestedElements(referencedElementDefinition, rootElement, domainOfExpertise, containmentUsages, option, updateOption);
                 foreach (var element in nestedElements)
                 {
                     yield return element;
@@ -275,10 +288,13 @@ namespace CDP4Common.Helpers
         /// The <see cref="Option"/> for which the <see cref="NestedElement"/> tree is created. When the <see cref="Option"/>
         /// is null then none of the <see cref="ElementUsage"/>s are filtered.
         /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{NestedElement}"/> that have been created.
         /// </returns>
-        private NestedElement CreateNestedElementAndNestedParametersForRootElement(ElementDefinition rootElement, DomainOfExpertise domainOfExpertise, Option option)
+        private NestedElement CreateNestedElementAndNestedParametersForRootElement(ElementDefinition rootElement, DomainOfExpertise domainOfExpertise, Option option, bool updateOption)
         {
             var nestedElement = new NestedElement(Guid.NewGuid(), rootElement.Cache, rootElement.IDalUri)
             {
@@ -286,7 +302,11 @@ namespace CDP4Common.Helpers
                 IsVolatile = true,
                 IsRootElement = true
             };
-            option.NestedElement.Add(nestedElement);
+
+            if (updateOption)
+            {
+                option.NestedElement.Add(nestedElement);
+            }
 
             foreach (var parameter in rootElement.Parameter)
             {
