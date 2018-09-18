@@ -328,7 +328,7 @@ namespace CDP4Common.Helpers
                     {
                         if (compoundParameterType == null)
                         {
-                            var nestedParameter = this.CreatedNestedParameter(parameter, null, parameterValueSet);
+                            var nestedParameter = this.CreatedNestedParameter(parameter, null, parameterValueSet, option);
                             nestedElement.NestedParameter.Add(nestedParameter);
                         }
                         else
@@ -336,7 +336,7 @@ namespace CDP4Common.Helpers
                             foreach (var component in compoundParameterType.Component)
                             {
                                 var comp = (ParameterTypeComponent)component;
-                                var nestedParameter = this.CreatedNestedParameter(parameter, comp, parameterValueSet);
+                                var nestedParameter = this.CreatedNestedParameter(parameter, comp, parameterValueSet, option);
                                 nestedElement.NestedParameter.Add(nestedParameter);
                             }
                         }
@@ -396,7 +396,7 @@ namespace CDP4Common.Helpers
                         {
                             if (compoundParameterType == null)
                             {
-                                var nestedParameter = this.CreatedNestedParameter(parameter, null, parameterValueSet);
+                                var nestedParameter = this.CreatedNestedParameter(parameter, null, parameterValueSet, option);
                                 yield return nestedParameter;
                             }
                             else
@@ -404,7 +404,7 @@ namespace CDP4Common.Helpers
                                 foreach (var component in compoundParameterType.Component)
                                 {
                                     var comp = (ParameterTypeComponent)component;
-                                    var nestedParameter = this.CreatedNestedParameter(parameter, comp, parameterValueSet);
+                                    var nestedParameter = this.CreatedNestedParameter(parameter, comp, parameterValueSet, option);
                                     yield return nestedParameter;
                                 }
                             }
@@ -432,7 +432,7 @@ namespace CDP4Common.Helpers
                         {
                             if (compoundParameterType == null)
                             {
-                                var nestedParameter = this.CreatedNestedParameter(parameter, null, parameterOverrideValueSet);
+                                var nestedParameter = this.CreatedNestedParameter(parameter, null, parameterOverrideValueSet, option);
                                 yield return nestedParameter;
                             }
                             else
@@ -440,7 +440,7 @@ namespace CDP4Common.Helpers
                                 foreach (var component in compoundParameterType.Component)
                                 {
                                     var comp = (ParameterTypeComponent)component;
-                                    var nestedParameter = this.CreatedNestedParameter(parameter, comp, parameterOverrideValueSet);
+                                    var nestedParameter = this.CreatedNestedParameter(parameter, comp, parameterOverrideValueSet, option);
                                     yield return nestedParameter;
                                 }
                             }
@@ -486,7 +486,7 @@ namespace CDP4Common.Helpers
             {
                 if (compoundParameterType == null)
                 {
-                    var nestedParameter = this.CreateNestedParameter(subscription, null, parameterSubscriptionValueSet);
+                    var nestedParameter = this.CreateNestedParameter(subscription, null, parameterSubscriptionValueSet, option);
                     yield return nestedParameter;
                 }
                 else
@@ -494,7 +494,7 @@ namespace CDP4Common.Helpers
                     foreach (var component in compoundParameterType.Component)
                     {
                         var comp = (ParameterTypeComponent)component;
-                        var nestedParameter = this.CreateNestedParameter(subscription, comp, parameterSubscriptionValueSet);
+                        var nestedParameter = this.CreateNestedParameter(subscription, comp, parameterSubscriptionValueSet, option);
                         yield return nestedParameter;
                     }
                 }
@@ -519,13 +519,12 @@ namespace CDP4Common.Helpers
         /// <returns>
         /// An instance of a non-volatile <see cref="NestedParameter"/>
         /// </returns>
-        private NestedParameter CreatedNestedParameter(ParameterOrOverrideBase parameter, ParameterTypeComponent component, ParameterValueSetBase valueSet)
+        private NestedParameter CreatedNestedParameter(ParameterOrOverrideBase parameter, ParameterTypeComponent component, ParameterValueSetBase valueSet, Option option)
         {
             var componentIndex = component == null ? 0 : component.Index;
             var actualValue = valueSet.ActualValue[componentIndex];
             var formula = valueSet.Formula[componentIndex];
-            var modelCode = parameter.ModelCode(componentIndex);
-
+            
             var nestedParameter = new NestedParameter(Guid.NewGuid(), parameter.Cache, parameter.IDalUri)
             {
                 IsVolatile = true,
@@ -535,7 +534,8 @@ namespace CDP4Common.Helpers
                 ActualState = valueSet.ActualState,
                 ActualValue = actualValue,
                 Formula = formula,
-                ModelCode = modelCode
+                ValueSet = valueSet,
+                Option = option
             };
 
             return nestedParameter;
@@ -559,12 +559,11 @@ namespace CDP4Common.Helpers
         /// <returns>
         /// An instance of a non-volatile <see cref="NestedParameter"/>
         /// </returns>
-        private NestedParameter CreateNestedParameter(ParameterSubscription subscription, ParameterTypeComponent component, ParameterSubscriptionValueSet valueSet)
+        private NestedParameter CreateNestedParameter(ParameterSubscription subscription, ParameterTypeComponent component, ParameterSubscriptionValueSet valueSet, Option option)
         {
             var componentIndex = component == null ? 0 : component.Index;
             var actualValue = valueSet.ActualValue[componentIndex];
-            var modelCode = valueSet.ModelCode(componentIndex);
-
+            
             var nestedParameter = new NestedParameter(Guid.NewGuid(), subscription.Cache, subscription.IDalUri)
             {
                 IsVolatile = true,
@@ -573,7 +572,8 @@ namespace CDP4Common.Helpers
                 Component = component,
                 ActualState = valueSet.ActualState,
                 ActualValue = actualValue,
-                ModelCode = modelCode
+                ValueSet = valueSet,
+                Option = option
             };
 
             return nestedParameter;

@@ -263,5 +263,36 @@ namespace CDP4Common.Tests.Helpers
                 });
             }
         }
+
+        [Test]
+        public void Verify_that_Option_is_set_on_NestedElement_and_NestedParameter()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
+
+            var nestedElements = this.nestedElementTreeGenerator.Generate(option, this.domainOfExpertise);
+
+            foreach (var nestedElement in nestedElements)
+            {
+                Assert.AreEqual(option, nestedElement.Container);
+
+                foreach (var nestedParameter in nestedElement.NestedParameter)
+                {
+                    Assert.AreEqual(option, nestedParameter.Option);
+                }
+            }
+        }
+
+        [Test]
+        public void Verify_that_ValueSet_is_set_on_NestedElement_and_NestedParameter()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
+
+            var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise, false);
+
+            foreach (var nestedParameter in NestedParameters)
+            {
+                Assert.IsNotNull(nestedParameter.ValueSet);   
+            }
+        }
     }
 }

@@ -64,11 +64,16 @@ namespace CDP4Common.EngineeringModelData
         /// In case the <see cref="ParameterType"/> is a <see cref="ScalarParameterType"/> then this property is null.
         /// </remarks>
         public ParameterTypeComponent Component { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Option"/> the <see cref="NestedParameter"/> is valid for
+        /// </summary>
+        public Option Option { get; set; }
         
         /// <summary>
-        /// Gets or sets the model-code of the associated <see cref="IValueSet"/>
+        /// Gets or sets the associated <see cref="IValueSet"/>
         /// </summary>
-        public string ModelCode { get; set; }
+        public IValueSet ValueSet { get; set; }
 
         /// <summary>
         /// Queries the short-name of the <see cref="ParameterType"/> of the associated <see cref="Parameter"/>
