@@ -453,31 +453,7 @@ namespace CDP4JsonSerializer.Tests
                 }
             }
         }
-
-        [Test]
-        public void VerifyThatSerializeGiveSameInputBigModel()
-        {
-            Assert.Ignore("not sure why this is failing, model is too big to analyze");
-
-            var response = File.ReadAllText("TestData\\bigmodel.json").Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            IReadOnlyList<Dto.Thing> result;
-            using (var stream = StreamHelper.GenerateStreamFromString(response))
-            {
-                result = this.serializer.Deserialize(stream).ToList();
-            }
-
-            using (var stream = new MemoryStream())
-            {
-                this.serializer.SerializeToStream(result, stream);
-                stream.Position = 0;
-                using (var reader = new StreamReader(stream))
-                {
-                    var serializerResult = reader.ReadToEnd().Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-                    Assert.AreEqual(serializerResult.Length, response.Length);
-                }
-            }
-        }
-
+        
         [Test]
         [Category("Performance")]
         public void PerformanceTest()
