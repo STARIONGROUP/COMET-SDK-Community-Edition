@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValueValidatorTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Validation
 {
@@ -36,7 +34,7 @@ namespace CDP4Common.Tests.Validation
     using CDP4Common.Validation;
 
     using NUnit.Framework;
-    
+
     [TestFixture]
     public class ValueValidatorTestFixture
     {
@@ -83,7 +81,7 @@ namespace CDP4Common.Tests.Validation
             this.textParameterType = new TextParameterType(Guid.NewGuid(), this.cache, this.uri);
             this.timeOfDayParameterType = new TimeOfDayParameterType(Guid.NewGuid(), this.cache, this.uri);
         }
-        
+
         [Test]
         public void VerifyThatBooleanParameterTypeValidatesValue()
         {
@@ -165,6 +163,15 @@ namespace CDP4Common.Tests.Validation
         }
 
         [Test]
+        [Category("AppVeyorExclusion")]
+        public void VerifyThatDateParameterTypeValidatesValue_with_Z()
+        {
+            ValidationResult result = ValueValidator.Validate(this.dateParameterType, "1976-08-20Z");
+            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.AreEqual("1976-08-20Z is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD", result.Message);
+        }
+
+        [Test]
         public void VerifyThatDateParameterTypeValidatesValue()
         {
             ValidationResult result;
@@ -176,10 +183,6 @@ namespace CDP4Common.Tests.Validation
             result = ValueValidator.Validate(this.dateParameterType, "1976-08-20");
             Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
             Assert.IsEmpty(result.Message);
-
-            result = ValueValidator.Validate(this.dateParameterType, "1976-08-20Z");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("1976-08-20Z is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD", result.Message);
 
             result = ValueValidator.Validate(this.dateParameterType, "some text");
             Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
@@ -442,6 +445,18 @@ namespace CDP4Common.Tests.Validation
             result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453Z");
             Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
             Assert.IsEmpty(result.Message);
+
+            result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453+01:00");
+            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.IsEmpty(result.Message);
+
+            result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453+01");
+            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.IsEmpty(result.Message);
+
+            result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453Z+01:00");
+            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.IsNotEmpty(result.Message);
 
             result = ValueValidator.Validate(this.timeOfDayParameterType, "25:23");
             Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
