@@ -81,7 +81,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public PersonRole(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public PersonRole(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.PersonPermission = new ContainerList<PersonPermission>(this);
             this.PopulatePersonPermissions();
@@ -225,7 +225,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

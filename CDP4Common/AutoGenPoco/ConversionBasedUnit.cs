@@ -78,7 +78,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        protected ConversionBasedUnit(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        protected ConversionBasedUnit(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
         }
 

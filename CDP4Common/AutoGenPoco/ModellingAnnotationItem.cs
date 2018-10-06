@@ -82,7 +82,7 @@ namespace CDP4Common.ReportingData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        protected ModellingAnnotationItem(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        protected ModellingAnnotationItem(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.ApprovedBy = new ContainerList<Approval>(this);
             this.Category = new List<Category>();

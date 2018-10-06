@@ -79,7 +79,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public EnumerationParameterType(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public EnumerationParameterType(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.ValueDefinition = new OrderedItemList<EnumerationValueDefinition>(this, true);
         }
@@ -236,7 +236,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.Symbol = this.Symbol;
             dto.ValueDefinition.AddRange(this.ValueDefinition.ToDtoOrderedItemList());
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

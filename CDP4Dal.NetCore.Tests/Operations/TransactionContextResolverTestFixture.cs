@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TransactionContextResolverTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests
 {
@@ -34,6 +32,7 @@ namespace CDP4Dal.Tests
     using CDP4Common.Exceptions;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
     using CDP4Dal.Operations;
     using NUnit.Framework;
 
@@ -41,7 +40,7 @@ namespace CDP4Dal.Tests
     public class TransactionContextResolverTestFixture
     {
         private Uri uri;
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
+        private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache;
 
         private SiteDirectory siteDirectory;
         private TextParameterType textParameterType;
@@ -56,7 +55,7 @@ namespace CDP4Dal.Tests
         public void SetUp()
         {
             this.uri = new Uri("http://www.rheagroup.com");
-            this.cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.cache = new ConcurrentDictionary<CacheKey, Lazy<CDP4Common.CommonData.Thing>>();
 
             this.siteDirectory = new SiteDirectory(Guid.NewGuid(), this.cache, this.uri);
             var siteReferenceDataLibrary = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri);

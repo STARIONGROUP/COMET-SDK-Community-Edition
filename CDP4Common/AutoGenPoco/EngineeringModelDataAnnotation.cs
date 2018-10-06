@@ -80,7 +80,7 @@ namespace CDP4Common.ReportingData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        protected EngineeringModelDataAnnotation(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        protected EngineeringModelDataAnnotation(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Discussion = new ContainerList<EngineeringModelDataDiscussionItem>(this);
             this.RelatedThing = new ContainerList<ModellingThingReference>(this);

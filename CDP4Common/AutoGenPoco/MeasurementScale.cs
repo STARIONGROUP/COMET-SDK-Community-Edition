@@ -82,7 +82,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        protected MeasurementScale(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        protected MeasurementScale(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.MappingToReferenceScale = new ContainerList<MappingToReferenceScale>(this);
             this.ValueDefinition = new ContainerList<ScaleValueDefinition>(this);

@@ -81,7 +81,7 @@ namespace CDP4Common.EngineeringModelData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public Option(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public Option(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Category = new List<Category>();
             this.NestedElement = new ContainerList<NestedElement>(this);
@@ -227,7 +227,7 @@ namespace CDP4Common.EngineeringModelData
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

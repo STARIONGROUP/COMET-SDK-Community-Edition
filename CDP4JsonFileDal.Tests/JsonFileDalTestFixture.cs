@@ -22,8 +22,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using CDP4Common.SiteDirectoryData;
-
 namespace CDP4JsonFileDal.Tests
 {
     using System;
@@ -34,6 +32,8 @@ namespace CDP4JsonFileDal.Tests
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
+    using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
     using CDP4Dal;
     using CDP4Dal.DAL;
     using CDP4Dal.Operations;
@@ -126,7 +126,7 @@ namespace CDP4JsonFileDal.Tests
             var iterationPoco = new CDP4Common.EngineeringModelData.Iteration
             {
                 Iid = Guid.NewGuid(),
-                Cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>(),
+                Cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>(),
                 Container = new EngineeringModel() { Iid = Guid.NewGuid() }
             };
             var iterationDto = iterationPoco.ToDto();
@@ -364,7 +364,7 @@ namespace CDP4JsonFileDal.Tests
         [Test]
         public async Task VerifyWriteEnumerableOperationContainer()
         {
-            var cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            var cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
 
             var files = new[] { "file1" };
             Assert.Throws<ArgumentNullException>(() => this.dal.Write((IEnumerable<OperationContainer>)null, files));
@@ -410,7 +410,7 @@ namespace CDP4JsonFileDal.Tests
             this.siteDirectoryData.Model.Add(modelSetup);
             modelSetup.RequiredRdl.Add(requiredRdl);
             modelSetup.IterationSetup.Add(iterationSetupPoco);
-            cache.TryAdd(new Tuple<Guid, Guid?>(person.Iid, this.siteDirectoryData.Iid), lazyPerson);
+            cache.TryAdd(new CacheKey(person.Iid, this.siteDirectoryData.Iid), lazyPerson);
             this.siteDirectoryData.Cache = cache;
             iteration.IterationSetup = iterationSetup.Iid;
             var clone1 = iteration.DeepClone<Iteration>();

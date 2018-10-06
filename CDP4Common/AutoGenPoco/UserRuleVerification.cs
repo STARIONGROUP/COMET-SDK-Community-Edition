@@ -78,7 +78,7 @@ namespace CDP4Common.EngineeringModelData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public UserRuleVerification(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public UserRuleVerification(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
         }
 
@@ -209,7 +209,7 @@ namespace CDP4Common.EngineeringModelData
             dto.Status = this.Status;
             dto.Violation.AddRange(this.Violation.Select(x => x.Iid));
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

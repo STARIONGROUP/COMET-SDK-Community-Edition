@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OperationModifierTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4WspDal.Tests
 {
@@ -30,6 +28,7 @@ namespace CDP4WspDal.Tests
     using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Types;
     using CDP4Dal;
     using CDP4Dal.Operations;
     using Moq;
@@ -74,9 +73,9 @@ namespace CDP4WspDal.Tests
             var parameterSubscription = new ParameterSubscription(Guid.NewGuid(), this.assembler.Cache, this.uri) { Owner = domain2 };
             parameter.ParameterSubscription.Add(parameterSubscription);
 
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(parameter.Iid, iteration.Iid), new Lazy<Thing>(() => parameter));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(parameterSubscription.Iid, iteration.Iid), new Lazy<Thing>(() => parameterSubscription));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(usage.Iid, iteration.Iid), new Lazy<Thing>(() => usage));
+            this.assembler.Cache.TryAdd(new CacheKey(parameter.Iid, iteration.Iid), new Lazy<Thing>(() => parameter));
+            this.assembler.Cache.TryAdd(new CacheKey(parameterSubscription.Iid, iteration.Iid), new Lazy<Thing>(() => parameterSubscription));
+            this.assembler.Cache.TryAdd(new CacheKey(usage.Iid, iteration.Iid), new Lazy<Thing>(() => usage));
 
             var parameterOverride = new ParameterOverride(Guid.NewGuid(), this.assembler.Cache, this.uri)
             {
@@ -228,27 +227,27 @@ namespace CDP4WspDal.Tests
             iteration.ActualFiniteStateList.Add(actualList1);
             iteration.ActualFiniteStateList.Add(actualList2);
 
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(model.Iid, null), new Lazy<Thing>(() => model));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(iteration.Iid, null), new Lazy<Thing>(() => iteration));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(possibleList1.Iid, iteration.Iid), new Lazy<Thing>(() => possibleList1));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(possibleList2.Iid, iteration.Iid), new Lazy<Thing>(() => possibleList2));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(possibleList3.Iid, iteration.Iid), new Lazy<Thing>(() => possibleList3));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(ps11.Iid, iteration.Iid), new Lazy<Thing>(() => ps11));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(ps12.Iid, iteration.Iid), new Lazy<Thing>(() => ps12));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(ps21.Iid, iteration.Iid), new Lazy<Thing>(() => ps21));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(ps22.Iid, iteration.Iid), new Lazy<Thing>(() => ps22));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(ps31.Iid, iteration.Iid), new Lazy<Thing>(() => ps31));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(ps32.Iid, iteration.Iid), new Lazy<Thing>(() => ps32));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(actualList1.Iid, iteration.Iid), new Lazy<Thing>(() => actualList1));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(actualList2.Iid, iteration.Iid), new Lazy<Thing>(() => actualList2));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(as11.Iid, iteration.Iid), new Lazy<Thing>(() => as11));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(as12.Iid, iteration.Iid), new Lazy<Thing>(() => as12));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(as13.Iid, iteration.Iid), new Lazy<Thing>(() => as13));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(as14.Iid, iteration.Iid), new Lazy<Thing>(() => as14));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(as21.Iid, iteration.Iid), new Lazy<Thing>(() => as21));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(as22.Iid, iteration.Iid), new Lazy<Thing>(() => as22));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(as23.Iid, iteration.Iid), new Lazy<Thing>(() => as23));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(as24.Iid, iteration.Iid), new Lazy<Thing>(() => as24));
+            this.assembler.Cache.TryAdd(new CacheKey(model.Iid, null), new Lazy<Thing>(() => model));
+            this.assembler.Cache.TryAdd(new CacheKey(iteration.Iid, null), new Lazy<Thing>(() => iteration));
+            this.assembler.Cache.TryAdd(new CacheKey(possibleList1.Iid, iteration.Iid), new Lazy<Thing>(() => possibleList1));
+            this.assembler.Cache.TryAdd(new CacheKey(possibleList2.Iid, iteration.Iid), new Lazy<Thing>(() => possibleList2));
+            this.assembler.Cache.TryAdd(new CacheKey(possibleList3.Iid, iteration.Iid), new Lazy<Thing>(() => possibleList3));
+            this.assembler.Cache.TryAdd(new CacheKey(ps11.Iid, iteration.Iid), new Lazy<Thing>(() => ps11));
+            this.assembler.Cache.TryAdd(new CacheKey(ps12.Iid, iteration.Iid), new Lazy<Thing>(() => ps12));
+            this.assembler.Cache.TryAdd(new CacheKey(ps21.Iid, iteration.Iid), new Lazy<Thing>(() => ps21));
+            this.assembler.Cache.TryAdd(new CacheKey(ps22.Iid, iteration.Iid), new Lazy<Thing>(() => ps22));
+            this.assembler.Cache.TryAdd(new CacheKey(ps31.Iid, iteration.Iid), new Lazy<Thing>(() => ps31));
+            this.assembler.Cache.TryAdd(new CacheKey(ps32.Iid, iteration.Iid), new Lazy<Thing>(() => ps32));
+            this.assembler.Cache.TryAdd(new CacheKey(actualList1.Iid, iteration.Iid), new Lazy<Thing>(() => actualList1));
+            this.assembler.Cache.TryAdd(new CacheKey(actualList2.Iid, iteration.Iid), new Lazy<Thing>(() => actualList2));
+            this.assembler.Cache.TryAdd(new CacheKey(as11.Iid, iteration.Iid), new Lazy<Thing>(() => as11));
+            this.assembler.Cache.TryAdd(new CacheKey(as12.Iid, iteration.Iid), new Lazy<Thing>(() => as12));
+            this.assembler.Cache.TryAdd(new CacheKey(as13.Iid, iteration.Iid), new Lazy<Thing>(() => as13));
+            this.assembler.Cache.TryAdd(new CacheKey(as14.Iid, iteration.Iid), new Lazy<Thing>(() => as14));
+            this.assembler.Cache.TryAdd(new CacheKey(as21.Iid, iteration.Iid), new Lazy<Thing>(() => as21));
+            this.assembler.Cache.TryAdd(new CacheKey(as22.Iid, iteration.Iid), new Lazy<Thing>(() => as22));
+            this.assembler.Cache.TryAdd(new CacheKey(as23.Iid, iteration.Iid), new Lazy<Thing>(() => as23));
+            this.assembler.Cache.TryAdd(new CacheKey(as24.Iid, iteration.Iid), new Lazy<Thing>(() => as24));
 
             possibleList1.DefaultState = ps11;
             as11.Kind = ActualFiniteStateKind.FORBIDDEN;

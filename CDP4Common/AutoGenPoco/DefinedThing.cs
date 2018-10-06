@@ -80,7 +80,7 @@ namespace CDP4Common.CommonData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        protected DefinedThing(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        protected DefinedThing(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Alias = new ContainerList<Alias>(this);
             this.Definition = new ContainerList<Definition>(this);

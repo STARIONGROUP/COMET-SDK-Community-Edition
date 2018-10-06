@@ -81,7 +81,7 @@ namespace CDP4Common.ReportingData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public Page(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public Page(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Category = new List<Category>();
             this.Note = new OrderedItemList<Note>(this, true);
@@ -277,7 +277,7 @@ namespace CDP4Common.ReportingData
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

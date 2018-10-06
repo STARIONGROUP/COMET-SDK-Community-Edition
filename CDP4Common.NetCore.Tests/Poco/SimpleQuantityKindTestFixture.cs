@@ -41,13 +41,13 @@ namespace CDP4Common.Tests.Poco
     public class SimpleQuantityKindTestFixture
     {
         private Uri uri;
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
+        private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache;
 
         [SetUp]
         public void SetUp()
         {
             this.uri = new Uri("http://www.rheagroup.com");
-            this.cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
         }
 
         [Test]

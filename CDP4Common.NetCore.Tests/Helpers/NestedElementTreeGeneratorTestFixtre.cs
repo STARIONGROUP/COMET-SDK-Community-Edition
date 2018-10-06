@@ -43,7 +43,7 @@ namespace CDP4Common.Tests.Helpers
     {
         private NestedElementTreeGenerator nestedElementTreeGenerator;
         private Uri uri;
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
+        private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache;
         private Iteration iteration;
         private DomainOfExpertise domainOfExpertise;
         
@@ -53,7 +53,7 @@ namespace CDP4Common.Tests.Helpers
             this.nestedElementTreeGenerator = new NestedElementTreeGenerator();
             
             this.uri = new Uri("http://www.rheagroup.com");
-            this.cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
             this.domainOfExpertise = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.uri)
             {

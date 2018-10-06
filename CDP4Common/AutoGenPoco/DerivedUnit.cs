@@ -87,7 +87,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public DerivedUnit(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public DerivedUnit(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.UnitFactor = new OrderedItemList<UnitFactor>(this, true);
         }
@@ -227,7 +227,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ShortName = this.ShortName;
             dto.UnitFactor.AddRange(this.UnitFactor.ToDtoOrderedItemList());
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

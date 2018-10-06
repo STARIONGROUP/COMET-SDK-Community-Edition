@@ -81,7 +81,7 @@ namespace CDP4Common.EngineeringModelData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        protected Relationship(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        protected Relationship(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Category = new List<Category>();
             this.ParameterValue = new ContainerList<RelationshipParameterValue>(this);

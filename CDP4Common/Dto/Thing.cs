@@ -210,7 +210,7 @@ namespace CDP4Common.DTO
         /// <param name="cache">The cache that stores all the <see cref="CommonData.Thing"/></param>
         /// <param name="uri">The <see cref="Uri"/> of the <see cref="CommonData.Thing"/></param>
         /// <returns>A new <see cref="CommonData.Thing"/></returns>
-        public abstract CommonData.Thing InstantiatePoco(ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<CommonData.Thing>> cache, Uri uri);
+        public abstract CommonData.Thing InstantiatePoco(ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri uri);
 
         /// <summary>
         /// Check if the current <see cref="Thing"/> contains the <paramref name="thing"/>

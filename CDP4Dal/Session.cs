@@ -33,6 +33,7 @@ namespace CDP4Dal
 
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Types;
     using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
 
@@ -684,7 +685,7 @@ namespace CDP4Dal
         private void AddRdlToOpenList(Thing thing)
         {
             Lazy<Thing> lazyThing;
-            this.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(thing.Iid, null), out lazyThing);
+            this.Assembler.Cache.TryGetValue(new CacheKey(thing.Iid, null), out lazyThing);
             if (lazyThing == null)
             {
                 return;
@@ -716,7 +717,7 @@ namespace CDP4Dal
         private void AddIterationToOpenList(Guid iterationId, DomainOfExpertise activeDomain)
         {
             Lazy<Thing> lazyIteraion;
-            this.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(iterationId, null), out lazyIteraion);
+            this.Assembler.Cache.TryGetValue(new CacheKey(iterationId, null), out lazyIteraion);
             if (lazyIteraion == null)
             {
                 return;

@@ -38,7 +38,7 @@ namespace CDP4Common.Tests.RuleVerification
     [TestFixture]
     internal class ParameterizedCategoryRuleTestFixture
     {
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+        private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
         private SiteDirectory sitedir;
         private EngineeringModelSetup modelsetup;

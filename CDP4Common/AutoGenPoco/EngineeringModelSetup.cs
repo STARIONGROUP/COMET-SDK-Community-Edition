@@ -83,7 +83,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public EngineeringModelSetup(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public EngineeringModelSetup(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.ActiveDomain = new List<DomainOfExpertise>();
             this.IterationSetup = new ContainerList<IterationSetup>(this);
@@ -337,7 +337,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.SourceEngineeringModelSetupIid = this.SourceEngineeringModelSetupIid;
             dto.StudyPhase = this.StudyPhase;
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

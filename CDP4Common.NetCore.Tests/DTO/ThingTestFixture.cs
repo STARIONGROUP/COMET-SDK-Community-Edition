@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.DTO
 {
@@ -381,7 +379,7 @@ namespace CDP4Common.Tests.DTO
                 throw new NotImplementedException();
             }
 
-            public override Thing InstantiatePoco(ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri uri)
+            public override Thing InstantiatePoco(ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache, Uri uri)
             {
                 throw new NotImplementedException();
             }

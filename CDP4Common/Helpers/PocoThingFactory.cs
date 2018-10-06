@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PocoThingFactory.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Helpers
 {
@@ -53,11 +51,11 @@ namespace CDP4Common.Helpers
         /// </summary>
         /// <param name="dtoThings">the associated DTO <see cref="Thing"/>s with the data</param>
         /// <param name="cache">the cache containing the <see cref="Thing"/>s</param>
-        public static void ResolveDependencies(IEnumerable<DTO.Thing> dtoThings, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache)
+        public static void ResolveDependencies(IEnumerable<DTO.Thing> dtoThings, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache)
         {
             foreach (var dtoThing in dtoThings)
             {
-                var cacheKey = new Tuple<Guid, Guid?>(dtoThing.Iid, dtoThing.IterationContainerId);
+                var cacheKey = new CacheKey(dtoThing.Iid, dtoThing.IterationContainerId);
                 Lazy<Thing> associatedLazyPoco;
                 if (cache.TryGetValue(cacheKey, out associatedLazyPoco))
                 {
@@ -76,7 +74,7 @@ namespace CDP4Common.Helpers
         /// <param name="guidList">The source <see cref="IEnumerable{Guid}"/></param>
         /// <param name="iterationId">The potential <see cref="Iteration"/> container id of the contained <see cref="Thing"/>s</param>
         /// <param name="cache">The cache that stores the <see cref="Thing"/>s</param>
-        internal static void ResolveList<T>(this ContainerList<T> list, IEnumerable<Guid> guidList, Guid? iterationId, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache) where T : Thing
+        internal static void ResolveList<T>(this ContainerList<T> list, IEnumerable<Guid> guidList, Guid? iterationId, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache) where T : Thing
         {
             list.Clear();
             foreach (var guid in guidList)
@@ -98,7 +96,7 @@ namespace CDP4Common.Helpers
         /// <param name="orderedItemList">The source <see cref="IEnumerable{OrderedItem}"/></param>
         /// <param name="iterationId">The potential <see cref="Iteration"/>'id at the top of the containment tree</param>
         /// <param name="cache">The cache that stores the <see cref="Thing"/>s</param>
-        internal static void ResolveList<T>(this OrderedItemList<T> list, IEnumerable<OrderedItem> orderedItemList, Guid? iterationId, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache) where T : Thing
+        internal static void ResolveList<T>(this OrderedItemList<T> list, IEnumerable<OrderedItem> orderedItemList, Guid? iterationId, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache) where T : Thing
         {
             list.Clear();
             var orderedList = new List<OrderedItem>();
@@ -158,7 +156,7 @@ namespace CDP4Common.Helpers
         /// <param name="guidList">The <see cref="IEnumerable{Guid}"/> that contains the <see cref="Guid"/>s of the <see cref="Thing"/>s that shall be contained in <paramref name="list"/></param>
         /// <param name="iterationId">The <see cref="Iteration"/> <see cref="Guid"/> at the top of the containment tree</param>
         /// <param name="cache">The cache that stores the <see cref="Thing"/>s</param>
-        internal static void ResolveList<T>(this List<T> list, IEnumerable<Guid> guidList, Guid? iterationId, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache) where T : Thing
+        internal static void ResolveList<T>(this List<T> list, IEnumerable<Guid> guidList, Guid? iterationId, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache) where T : Thing
         {
             list.Clear();
             foreach (var guid in guidList)
@@ -180,7 +178,7 @@ namespace CDP4Common.Helpers
         /// <param name="iterationId">The potential iteration id the item to retrieve is contained in</param>
         /// <param name="thing">The returned <see cref="Thing"/> of type <see cref="T"/></param>
         /// <returns>True if the operation succeeds</returns>
-        internal static bool TryGet<T>(this ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Guid itemIid, Guid? iterationId, out T thing) where T : Thing
+        internal static bool TryGet<T>(this ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Guid itemIid, Guid? iterationId, out T thing) where T : Thing
         {
             thing = cache.Get<T>(itemIid, iterationId);
             return thing != null;
@@ -198,10 +196,10 @@ namespace CDP4Common.Helpers
         /// A 2 steps approach is necessary to retrieve a thing 
         /// as in some cases it is not possible to know if the <see cref="Thing"/> is contained in an iteration or not.
         /// </remarks>
-        internal static T Get<T>(this ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Guid itemIid, Guid? iterationId) where T : Thing
+        internal static T Get<T>(this ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Guid itemIid, Guid? iterationId) where T : Thing
         {
             // try with the iteration id
-            var key = new Tuple<Guid, Guid?>(itemIid, iterationId);
+            var key = new CacheKey(itemIid, iterationId);
             var thing = cache.Get<T>(key);
 
             if (thing != null)
@@ -209,10 +207,10 @@ namespace CDP4Common.Helpers
                 return thing;
             }
 
-            // try with iteration id
+            // try without iteration id
             if (iterationId != null)
             {
-                key = new Tuple<Guid, Guid?>(itemIid, null);
+                key = new CacheKey(itemIid, null);
                 thing = cache.Get<T>(key);
                 if (thing != null)
                 {
@@ -221,13 +219,14 @@ namespace CDP4Common.Helpers
             }
 
             // Get the first one if any whatever the iterationId might be
-            var firstKey = cache.Keys.FirstOrDefault(k => k.Item1 == itemIid);
-            if (firstKey != null)
+            var firstKey = cache.Keys.FirstOrDefault(k => k.Thing == itemIid);
+
+            if (firstKey.Thing != Guid.Empty && firstKey.Iteration != null)
             {
                 return cache.Get<T>(firstKey);
             }
 
-            logger.Debug("The {0} was not found in the cache: {1}", typeof(T).Name, key.Item1);
+            logger.Debug("The {0} was not found in the cache: {1}", typeof(T).Name, key.Thing);
             return null;
         }
 
@@ -238,7 +237,7 @@ namespace CDP4Common.Helpers
         /// <param name="cache">The cache that stores all the things</param>
         /// <param name="key">The key</param>
         /// <returns>The casted <see cref="Thing"/></returns>
-        private static T Get<T>(this ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Tuple<Guid, Guid?> key) where T : Thing
+        private static T Get<T>(this ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, CacheKey key) where T : Thing
         {
             Lazy<Thing> lazy;
             var result = cache.TryGetValue(key, out lazy);
@@ -250,7 +249,7 @@ namespace CDP4Common.Helpers
             var thing = lazy.Value;
             if (!(thing is T))
             {
-                logger.Error("The thing found in the cache with the key is not of the right type, cached id: {0}, {1}", thing.CacheId.Item1, thing.CacheId.Item2);
+                logger.Error("The thing found in the cache with the key is not of the right type, cached id: {0}, {1}", thing.CacheKey.Thing, thing.CacheKey.Iteration);
                 return null;
             }
 

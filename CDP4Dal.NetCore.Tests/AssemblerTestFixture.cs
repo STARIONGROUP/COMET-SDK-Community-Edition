@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblerTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests
 {
@@ -33,6 +31,7 @@ namespace CDP4Dal.Tests
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;    
+    using CDP4Common.Types;
     using NUnit.Framework;
     using Dto = CDP4Common.DTO;
 
@@ -96,7 +95,6 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        //[ExpectedException(typeof(NullReferenceException))]
         public void VerifyThatAssemblerThrowsNullReferenceExceptionWhenUriIsNull()
         {
             Assert.Throws<NullReferenceException>(() =>
@@ -112,25 +110,25 @@ namespace CDP4Dal.Tests
 
             // Check that the cache is empty
             Assert.IsFalse(assembler.Cache.Skip(0).Any());
-
+            
             var id = Guid.NewGuid();
             var testThing = new Lazy<Thing>(() => new Alias(id, assembler.Cache, this.uri));
-            testThing.Value.Cache.TryAdd(new Tuple<Guid, Guid?>(testThing.Value.Iid, null), testThing);
+            testThing.Value.Cache.TryAdd(new CacheKey(testThing.Value.Iid, null), testThing);
 
             // Check that the cache is not empty anymore
             Assert.IsTrue(assembler.Cache.Skip(0).Any());
 
             // Update the thing and the cache
             testThing = new Lazy<Thing>(() => new Alias(id, assembler.Cache, this.uri));
-            testThing.Value.Cache.AddOrUpdate(new Tuple<Guid, Guid?>(testThing.Value.Iid, null), testThing, (key, oldValue) => testThing);
+            testThing.Value.Cache.AddOrUpdate(new CacheKey(testThing.Value.Iid, null), testThing, (key, oldValue) => testThing);
 
             // Check that the thing retrieved from the cache has the updated value
             Lazy<Thing> updatedThing;
-            testThing.Value.Cache.TryGetValue(new Tuple<Guid, Guid?>(testThing.Value.Iid, null), out updatedThing);
+            testThing.Value.Cache.TryGetValue(new CacheKey(testThing.Value.Iid, null), out updatedThing);
             Assert.IsNotNull(updatedThing);
 
             // Check that we can remove things from the cache
-            testThing.Value.Cache.TryRemove(new Tuple<Guid, Guid?>(testThing.Value.Iid, null), out updatedThing);
+            testThing.Value.Cache.TryRemove(new CacheKey(testThing.Value.Iid, null), out updatedThing);
             Assert.IsFalse(assembler.Cache.Skip(0).Any());
             Assert.IsFalse(testThing.Value.Cache.Skip(0).Any());
         }
@@ -146,26 +144,26 @@ namespace CDP4Dal.Tests
             // Modification of the input Dtos
             Assert.IsNotEmpty(assembler.Cache);
             Assert.AreEqual(7, assembler.Cache.Count);
-
+            
             // check containerList Element
             var siteDirId = this.testInput[0].Iid;
             Lazy<Thing> lazySiteDir;
-            assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(siteDirId, null), out lazySiteDir);
+            assembler.Cache.TryGetValue(new CacheKey(siteDirId, null), out lazySiteDir);
             var siteDir = lazySiteDir.Value as SiteDirectory;
             Assert.AreEqual(siteDirId, siteDir.SiteReferenceDataLibrary[0].Container.Iid);
 
             // get category to removes
             var categoryToRemove = this.testInput[3] as Dto.Category;
-
+            
             // parametertype
             var parameterTypeId = this.testInput[6].Iid;
             Lazy<Thing> lazyPt;
-            assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(parameterTypeId, null), out lazyPt);
+            assembler.Cache.TryGetValue(new CacheKey(parameterTypeId, null), out lazyPt);
             Assert.AreEqual(2, (lazyPt.Value as ParameterType).Category.Count);
-
+            
             //Check that route works
             Lazy<Thing> lazyCat;
-            assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(categoryToRemove.Iid, null), out lazyCat);
+            assembler.Cache.TryGetValue(new CacheKey(categoryToRemove.Iid, null), out lazyCat);
             Assert.IsNotNull(lazyCat.Value.Route);
 
             var siteRdl = this.testInput[1] as Dto.SiteReferenceDataLibrary;
@@ -174,15 +172,10 @@ namespace CDP4Dal.Tests
             // 2nd call with updated values, sRdl lost a category
             var newInput = this.testInput.GetRange(0, 3);
             await assembler.Synchronize(newInput);
-
+            
             // checks that the removed category is no longer in the cache
             Assert.AreEqual(6, assembler.Cache.Count);
-            Assert.IsFalse(assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(categoryToRemove.Iid, null), out lazyCat));
-
-            // Obsolete part, the server should return the ParameterType - functionnaly impossible (deprecated thing)
-            // Check that the thing referencing the deleted Thing has been removed too
-            // assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(parameterTypeId, null), out lazyPt);
-            // Assert.AreEqual(1, (lazyPt.Value as ParameterType).Category.Count);
+            Assert.IsFalse(assembler.Cache.TryGetValue(new CacheKey(categoryToRemove.Iid, null), out lazyCat));
         }
 
         [Test]
@@ -260,11 +253,11 @@ namespace CDP4Dal.Tests
                 srdl1,
                 srdl2
             };
-
+            
             await assembler.Synchronize(movedDtos);
-            var srdl1poco = (SiteReferenceDataLibrary)assembler.Cache[new Tuple<Guid, Guid?>(srdl1.Iid, null)].Value;
-            var srdl2poco = (SiteReferenceDataLibrary)assembler.Cache[new Tuple<Guid, Guid?>(srdl2.Iid, null)].Value;
-            var catpoco = assembler.Cache[new Tuple<Guid, Guid?>(category.Iid, null)].Value;
+            var srdl1poco = (SiteReferenceDataLibrary)assembler.Cache[new CacheKey(srdl1.Iid, null)].Value;
+            var srdl2poco = (SiteReferenceDataLibrary)assembler.Cache[new CacheKey(srdl2.Iid, null)].Value;
+            var catpoco = assembler.Cache[new CacheKey(category.Iid, null)].Value;
 
             Assert.AreEqual(4, assembler.Cache.Count);
             Assert.IsEmpty(srdl1poco.DefinedCategory);
@@ -345,9 +338,9 @@ namespace CDP4Dal.Tests
             var assembler = new Assembler(this.uri);
             // 1st call of Synnchronize
             await assembler.Synchronize(this.testInput);
-
+            
             Lazy<Thing> lazyrdl;
-            assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(this.siteRdl.Iid, null), out lazyrdl);
+            assembler.Cache.TryGetValue(new CacheKey(this.siteRdl.Iid, null), out lazyrdl);
             var rdl = (ReferenceDataLibrary)lazyrdl.Value;
             await assembler.CloseRdl(rdl);
 
@@ -417,24 +410,24 @@ namespace CDP4Dal.Tests
             sitedir.Model.Add(modelsetup);
             modelsetup.IterationSetup.Add(iterationsetup1);
             modelsetup.IterationSetup.Add(iterationsetup2);
-
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(sitedir.Iid, null), new Lazy<Thing>(() => sitedir));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(modelsetup.Iid, null), new Lazy<Thing>(() => modelsetup));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(iterationsetup1.Iid, null), new Lazy<Thing>(() => iterationsetup1));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(iterationsetup2.Iid, null), new Lazy<Thing>(() => iterationsetup2));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(model.Iid, null), new Lazy<Thing>(() => model));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(it1.Iid, null), new Lazy<Thing>(() => it1));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(it2.Iid, null), new Lazy<Thing>(() => it2));
+            
+            assembler.Cache.TryAdd(new CacheKey(sitedir.Iid, null), new Lazy<Thing>(() => sitedir));
+            assembler.Cache.TryAdd(new CacheKey(modelsetup.Iid, null), new Lazy<Thing>(() => modelsetup));
+            assembler.Cache.TryAdd(new CacheKey(iterationsetup1.Iid, null), new Lazy<Thing>(() => iterationsetup1));
+            assembler.Cache.TryAdd(new CacheKey(iterationsetup2.Iid, null), new Lazy<Thing>(() => iterationsetup2));
+            assembler.Cache.TryAdd(new CacheKey(model.Iid, null), new Lazy<Thing>(() => model));
+            assembler.Cache.TryAdd(new CacheKey(it1.Iid, null), new Lazy<Thing>(() => it1));
+            assembler.Cache.TryAdd(new CacheKey(it2.Iid, null), new Lazy<Thing>(() => it2));
 
             var sitedirdto = new Dto.SiteDirectory(sitedir.Iid, 1);
             sitedirdto.Model.Add(modelsetup.Iid);
 
             var itdto = (Dto.IterationSetup)iterationsetup1.ToDto();
             itdto.IsDeleted = true;
-
-            Assert.IsTrue(assembler.Cache.ContainsKey(new Tuple<Guid, Guid?>(it1.Iid, null)));
+            
+            Assert.IsTrue(assembler.Cache.ContainsKey(new CacheKey(it1.Iid, null)));
             await assembler.Synchronize(new List<Dto.Thing> {sitedirdto, itdto});
-            Assert.IsFalse(assembler.Cache.ContainsKey(new Tuple<Guid, Guid?>(it1.Iid, null)));
+            Assert.IsFalse(assembler.Cache.ContainsKey(new CacheKey(it1.Iid, null)));
         }
 
         [Test]
@@ -456,14 +449,14 @@ namespace CDP4Dal.Tests
             sitedir.Model.Add(modelsetup);
             modelsetup.IterationSetup.Add(iterationsetup1);
             modelsetup.IterationSetup.Add(iterationsetup2);
-
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(sitedir.Iid, null), new Lazy<Thing>(() => sitedir));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(modelsetup.Iid, null), new Lazy<Thing>(() => modelsetup));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(iterationsetup1.Iid, null), new Lazy<Thing>(() => iterationsetup1));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(iterationsetup2.Iid, null), new Lazy<Thing>(() => iterationsetup2));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(model.Iid, null), new Lazy<Thing>(() => model));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(it1.Iid, null), new Lazy<Thing>(() => it1));
-            assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(it2.Iid, null), new Lazy<Thing>(() => it2));
+            
+            assembler.Cache.TryAdd(new CacheKey(sitedir.Iid, null), new Lazy<Thing>(() => sitedir));
+            assembler.Cache.TryAdd(new CacheKey(modelsetup.Iid, null), new Lazy<Thing>(() => modelsetup));
+            assembler.Cache.TryAdd(new CacheKey(iterationsetup1.Iid, null), new Lazy<Thing>(() => iterationsetup1));
+            assembler.Cache.TryAdd(new CacheKey(iterationsetup2.Iid, null), new Lazy<Thing>(() => iterationsetup2));
+            assembler.Cache.TryAdd(new CacheKey(model.Iid, null), new Lazy<Thing>(() => model));
+            assembler.Cache.TryAdd(new CacheKey(it1.Iid, null), new Lazy<Thing>(() => it1));
+            assembler.Cache.TryAdd(new CacheKey(it2.Iid, null), new Lazy<Thing>(() => it2));
 
             var sitedirdto = new Dto.SiteDirectory(sitedir.Iid, 1);
 

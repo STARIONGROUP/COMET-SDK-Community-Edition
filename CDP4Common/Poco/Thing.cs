@@ -57,7 +57,7 @@ namespace CDP4Common.CommonData
         /// <summary>
         /// Backing field for <see cref="CacheId"/> property.
         /// </summary>
-        private Tuple<Guid, Guid?> cacheId;
+        private CacheKey cacheKey;
 
         /// <summary>
         /// a value indicating whether the instance is disposed
@@ -109,7 +109,7 @@ namespace CDP4Common.CommonData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        protected Thing(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri)
+        protected Thing(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri)
         {
             this.Iid = iid;
             this.IDalUri = iDalUri;
@@ -178,7 +178,7 @@ namespace CDP4Common.CommonData
         /// <summary>
         /// Gets the Cache that contains the current <see cref="Thing"/>
         /// </summary>
-        public ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> Cache { get; set; }
+        public ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> Cache { get; set; }
 
         /// <summary>
         /// Gets or sets the Container of the current Thing
@@ -212,15 +212,15 @@ namespace CDP4Common.CommonData
         /// <summary>
         /// Gets the key with which the current <see cref="Thing"/> is stored in the cache
         /// </summary>
-        public Tuple<Guid, Guid?> CacheId
+        public CacheKey CacheKey
         {
             get
             {
-                if (this.cacheId != null)
+                if (this.cacheKey.Thing != Guid.Empty)
                 {
-                    return this.cacheId;
+                    return this.cacheKey;
                 }
-
+                
                 var iterationContainer = this.GetContainerOfType<Iteration>();
                 Guid? iterationId = null;
                 if (iterationContainer != null && this.ClassKind != ClassKind.Iteration)
@@ -228,8 +228,8 @@ namespace CDP4Common.CommonData
                     iterationId = iterationContainer.Iid;
                 }
 
-                this.cacheId = new Tuple<Guid, Guid?>(this.Iid, iterationId);
-                return this.cacheId;
+                this.cacheKey = new CacheKey(this.Iid, iterationId);
+                return this.cacheKey;
             }
         }
 
@@ -265,7 +265,7 @@ namespace CDP4Common.CommonData
                         return "/SiteDirectory/*";
                     }
 
-                    return string.Format("/{0}/{1}", typeName, this.Iid);
+                    return $"/{typeName}/{this.Iid}";
                 }
 
                 if (this is NotThing)
@@ -277,7 +277,7 @@ namespace CDP4Common.CommonData
 
                 if (container == null)
                 {
-                    throw new ContainmentException(string.Format("The container of {0} with iid {1} is null, the route cannot be computed.", typeName, this.Iid));
+                    throw new ContainmentException($"The container of {typeName} with iid {this.Iid} is null, the route cannot be computed.");
                 }
 
                 string containerPropertyName;
@@ -293,8 +293,8 @@ namespace CDP4Common.CommonData
 
                 var containerRoute = container.Route;
 
-                var route = string.Format("{0}/{1}/{2}", containerRoute, containerPropertyName, this.Iid);
-                return route;                
+                var route = $"{containerRoute}/{containerPropertyName}/{this.Iid}";
+                return route;
             }
         }
 
@@ -452,7 +452,7 @@ namespace CDP4Common.CommonData
         /// </summary>
         protected void ResetCacheId()
         {
-            this.cacheId = null;
+            this.cacheKey = new CacheKey(Guid.Empty, null);
         }
 
         /// <summary>
@@ -470,7 +470,7 @@ namespace CDP4Common.CommonData
                 return classKind;
             }
 
-            throw new InvalidOperationException(string.Format("The current Thing {0} does not have a corresponding ClassKind", type));
+            throw new InvalidOperationException($"The current Thing {type} does not have a corresponding ClassKind");
         }
 
         /// <summary>
@@ -512,10 +512,9 @@ namespace CDP4Common.CommonData
         /// <returns>True if this thing is contained within the container. False if not.</returns>
         public bool IsContainedBy(Thing container)
         {
-            // if the specified container is null throw execption
             if (container == null)
             {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container), $"The {nameof(container)} may not be null");
             }
 
             // If this thing is not contained i.e. top container, return false immediately
@@ -541,7 +540,7 @@ namespace CDP4Common.CommonData
         {
             if (matchPredicate == null)
             {
-                throw new ArgumentNullException("matchPredicate");
+                throw new ArgumentNullException(nameof(matchPredicate), $"The {nameof(matchPredicate)} may not be null");
             }
 
             if (this is TopContainer)
@@ -561,7 +560,7 @@ namespace CDP4Common.CommonData
         {
             if (iid == null || iid == Guid.Empty)
             {
-                throw new ArgumentNullException("iid");
+                throw new ArgumentNullException(nameof(iid), $"The {nameof(iid)} may not e null");
             }
 
             if (this is TopContainer)
@@ -693,7 +692,7 @@ namespace CDP4Common.CommonData
                 return false;
             }
 
-            return this.Cache.ContainsKey(this.CacheId);
+            return this.Cache.ContainsKey(this.CacheKey);
         }
         
         /// <summary>

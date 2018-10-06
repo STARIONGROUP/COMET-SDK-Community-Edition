@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTransactionTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests
 {
@@ -32,6 +30,7 @@ namespace CDP4Dal.Tests
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;    
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
     using CDP4Dal.Operations;
     using NUnit.Framework;
 
@@ -42,14 +41,15 @@ namespace CDP4Dal.Tests
         private EngineeringModel engineeringModel;
         private Iteration iteration;
 
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
+        private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache;
+        
         private Uri uri = new Uri("http://www.rheagroup.com");
         
 
         [SetUp]
         public void Setup()
         {
-            this.cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.cache = new ConcurrentDictionary<CacheKey, Lazy<CDP4Common.CommonData.Thing>>();
             this.siteDirectory = new SiteDirectory(Guid.NewGuid(), this.cache, this.uri);
             this.engineeringModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
 
@@ -59,10 +59,10 @@ namespace CDP4Dal.Tests
             iterationSetup.IterationIid = this.iteration.Iid;
 
             this.engineeringModel.Iteration.Add(this.iteration);
-
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.siteDirectory.Iid, null) , new Lazy<Thing>(() => this.siteDirectory));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.engineeringModel.Iid, null), new Lazy<Thing>(() => this.engineeringModel));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.iteration.Iid, null), new Lazy<Thing>(() => this.iteration));
+            
+            this.cache.TryAdd(new CacheKey(this.siteDirectory.Iid, null), new Lazy<Thing>(() => this.siteDirectory));
+            this.cache.TryAdd(new CacheKey(this.engineeringModel.Iid, null), new Lazy<Thing>(() => this.engineeringModel));
+            this.cache.TryAdd(new CacheKey(this.iteration.Iid, null), new Lazy<Thing>(() => this.iteration));
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace CDP4Dal.Tests
         public void VerifyThatCreateThingWorks()
         {
             var person = new Person(Guid.NewGuid(), this.cache, this.uri) {Container = this.siteDirectory};
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(person.Iid, null), new Lazy<Thing>(() => person));
+            this.cache.TryAdd(new CacheKey(person.Iid, null), new Lazy<Thing>(() => person));
 
             var clonePerson = person.Clone(false);
 
@@ -108,7 +108,7 @@ namespace CDP4Dal.Tests
             {
                 Container = this.siteDirectory
             };
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(siteRdl.Iid, null), new Lazy<Thing>(() => siteRdl));
+            this.cache.TryAdd(new CacheKey(siteRdl.Iid, null), new Lazy<Thing>(() => siteRdl));
 
             var cloneRdl = siteRdl.Clone(false);
 
@@ -166,8 +166,8 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatUpdateThingWorks()
         {
-            var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);            
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(phone.Iid, null), new Lazy<Thing>(() => phone));
+            var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);    
+            this.cache.TryAdd(new CacheKey(phone.Iid, null), new Lazy<Thing>(() => phone));
             
             var clone = phone.Clone(false);
 
@@ -181,8 +181,8 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatUpdateThingThrowsExceptionUponUpdatingExistingCloneWithAnotherClone()
         {
-            var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);            
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(phone.Iid, null), new Lazy<Thing>(() => phone));
+            var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);
+            this.cache.TryAdd(new CacheKey(phone.Iid, null), new Lazy<Thing>(() => phone));
             
             var clone1 = phone.Clone(false);
             var clone2 = phone.Clone(false);
@@ -204,9 +204,9 @@ namespace CDP4Dal.Tests
             var email = new EmailAddress(Guid.NewGuid(), this.cache, this.uri);
             this.siteDirectory.Person.Add(person);
             person.EmailAddress.Add(email);
-
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(person.Iid, null), new Lazy<Thing>(() => person));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(email.Iid, null), new Lazy<Thing>(() => email));
+            
+            this.cache.TryAdd(new CacheKey(person.Iid, null), new Lazy<Thing>(() => person));
+            this.cache.TryAdd(new CacheKey(email.Iid, null), new Lazy<Thing>(() => email));
 
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
             var transaction = new ThingTransaction(transactionContext, person.Clone(false));
@@ -245,9 +245,7 @@ namespace CDP4Dal.Tests
             Assert.AreEqual(0, this.iteration.Option.Count);
             Assert.AreEqual(2, clone.Option.Count);
         }
-
-        #region Functional Tests
-
+        
         /// <summary>
         /// Create a containment tree under site directory and update 
         /// </summary>
@@ -412,10 +410,10 @@ namespace CDP4Dal.Tests
 
             var unitFactor1 = new UnitFactor(Guid.NewGuid(), this.cache, this.uri);
             unit1.UnitFactor.Add(unitFactor1);
-
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(siterdl.Iid, null), new Lazy<Thing>(() => siterdl));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(unit1.Iid, null), new Lazy<Thing>(() => unit1));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(unitFactor1.Iid, null), new Lazy<Thing>(() => unitFactor1));
+            
+            this.cache.TryAdd(new CacheKey(siterdl.Iid, null), new Lazy<Thing>(() => siterdl));
+            this.cache.TryAdd(new CacheKey(unit1.Iid, null), new Lazy<Thing>(() => unit1));
+            this.cache.TryAdd(new CacheKey(unitFactor1.Iid, null), new Lazy<Thing>(() => unitFactor1));
 
             // *******************************************************************
             var siteDirClone = this.siteDirectory.Clone(false);
@@ -668,9 +666,9 @@ namespace CDP4Dal.Tests
             var email = new EmailAddress(Guid.NewGuid(), this.cache, this.uri);
             this.siteDirectory.Person.Add(person);
             person.EmailAddress.Add(email);
-
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(person.Iid, null), new Lazy<Thing>(() => person));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(email.Iid, null), new Lazy<Thing>(() => email));
+            
+            this.cache.TryAdd(new CacheKey(person.Iid, null), new Lazy<Thing>(() => person));
+            this.cache.TryAdd(new CacheKey(email.Iid, null), new Lazy<Thing>(() => email));
 
             var sitedir1 = this.siteDirectory.Clone(false);
 
@@ -704,8 +702,8 @@ namespace CDP4Dal.Tests
             this.siteDirectory.Person.Add(person);
             person.EmailAddress.Add(email);
 
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(person.Iid, null), new Lazy<Thing>(() => person));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(email.Iid, null), new Lazy<Thing>(() => email));
+            this.cache.TryAdd(new CacheKey(person.Iid, null), new Lazy<Thing>(() => person));
+            this.cache.TryAdd(new CacheKey(email.Iid, null), new Lazy<Thing>(() => email));
 
             var sitedir1 = this.siteDirectory.Clone(false);
 
@@ -745,8 +743,8 @@ namespace CDP4Dal.Tests
             this.siteDirectory.Person.Add(person);
             person.EmailAddress.Add(email);
 
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(person.Iid, null), new Lazy<Thing>(() => person));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(email.Iid, null), new Lazy<Thing>(() => email));
+            this.cache.TryAdd(new CacheKey(person.Iid, null), new Lazy<Thing>(() => person));
+            this.cache.TryAdd(new CacheKey(email.Iid, null), new Lazy<Thing>(() => email));
 
             var sitedir1 = this.siteDirectory.Clone(false);
 
@@ -821,11 +819,11 @@ namespace CDP4Dal.Tests
             targetModel.Iteration.Add(targetIteration);
             sourceIteration.Element.Add(elementDefinition);
 
-            this.cache.TryAdd(sourceModel.CacheId, new Lazy<Thing>(() => sourceModel));
-            this.cache.TryAdd(sourceIteration.CacheId, new Lazy<Thing>(() => sourceIteration));
-            this.cache.TryAdd(targetModel.CacheId, new Lazy<Thing>(() => targetModel));
-            this.cache.TryAdd(targetIteration.CacheId, new Lazy<Thing>(() => targetIteration));
-            this.cache.TryAdd(elementDefinition.CacheId, new Lazy<Thing>(() => elementDefinition));
+            this.cache.TryAdd(sourceModel.CacheKey, new Lazy<Thing>(() => sourceModel));
+            this.cache.TryAdd(sourceIteration.CacheKey, new Lazy<Thing>(() => sourceIteration));
+            this.cache.TryAdd(targetModel.CacheKey, new Lazy<Thing>(() => targetModel));
+            this.cache.TryAdd(targetIteration.CacheKey, new Lazy<Thing>(() => targetIteration));
+            this.cache.TryAdd(elementDefinition.CacheKey, new Lazy<Thing>(() => elementDefinition));
 
             var elementDefinitionClone = elementDefinition.Clone(false);
             var targetIterationClone = targetIteration.Clone(false);
@@ -855,11 +853,11 @@ namespace CDP4Dal.Tests
             targetModel.Iteration.Add(targetIteration);
             sourceIteration.Element.Add(elementDefinition);
 
-            this.cache.TryAdd(sourceModel.CacheId, new Lazy<Thing>(() => sourceModel));
-            this.cache.TryAdd(sourceIteration.CacheId, new Lazy<Thing>(() => sourceIteration));
-            this.cache.TryAdd(targetModel.CacheId, new Lazy<Thing>(() => targetModel));
-            this.cache.TryAdd(targetIteration.CacheId, new Lazy<Thing>(() => targetIteration));
-            this.cache.TryAdd(elementDefinition.CacheId, new Lazy<Thing>(() => elementDefinition));
+            this.cache.TryAdd(sourceModel.CacheKey, new Lazy<Thing>(() => sourceModel));
+            this.cache.TryAdd(sourceIteration.CacheKey, new Lazy<Thing>(() => sourceIteration));
+            this.cache.TryAdd(targetModel.CacheKey, new Lazy<Thing>(() => targetModel));
+            this.cache.TryAdd(targetIteration.CacheKey, new Lazy<Thing>(() => targetIteration));
+            this.cache.TryAdd(elementDefinition.CacheKey, new Lazy<Thing>(() => elementDefinition));
 
             var elementDefinitionClone = elementDefinition.Clone(false);
             var targetIterationClone = targetIteration.Clone(false);
@@ -889,11 +887,11 @@ namespace CDP4Dal.Tests
             targetModel.Iteration.Add(targetIteration);
             sourceIteration.Element.Add(sourceElementDefinition);
 
-            this.cache.TryAdd(sourceModel.CacheId, new Lazy<Thing>(() => sourceModel));
-            this.cache.TryAdd(sourceIteration.CacheId, new Lazy<Thing>(() => sourceIteration));
-            this.cache.TryAdd(targetModel.CacheId, new Lazy<Thing>(() => targetModel));
-            this.cache.TryAdd(targetIteration.CacheId, new Lazy<Thing>(() => targetIteration));
-            this.cache.TryAdd(sourceElementDefinition.CacheId, new Lazy<Thing>(() => sourceElementDefinition));
+            this.cache.TryAdd(sourceModel.CacheKey, new Lazy<Thing>(() => sourceModel));
+            this.cache.TryAdd(sourceIteration.CacheKey, new Lazy<Thing>(() => sourceIteration));
+            this.cache.TryAdd(targetModel.CacheKey, new Lazy<Thing>(() => targetModel));
+            this.cache.TryAdd(targetIteration.CacheKey, new Lazy<Thing>(() => targetIteration));
+            this.cache.TryAdd(sourceElementDefinition.CacheKey, new Lazy<Thing>(() => sourceElementDefinition));
 
             var elementDefinitionClone = sourceElementDefinition.Clone(false);
             var targetIterationClone = targetIteration.Clone(false);
@@ -923,11 +921,11 @@ namespace CDP4Dal.Tests
             targetModel.Iteration.Add(targetIteration);
             sourceIteration.Element.Add(elementDefinition);
 
-            this.cache.TryAdd(sourceModel.CacheId, new Lazy<Thing>(() => sourceModel));
-            this.cache.TryAdd(sourceIteration.CacheId, new Lazy<Thing>(() => sourceIteration));
-            this.cache.TryAdd(targetModel.CacheId, new Lazy<Thing>(() => targetModel));
-            this.cache.TryAdd(targetIteration.CacheId, new Lazy<Thing>(() => targetIteration));
-            this.cache.TryAdd(elementDefinition.CacheId, new Lazy<Thing>(() => elementDefinition));
+            this.cache.TryAdd(sourceModel.CacheKey, new Lazy<Thing>(() => sourceModel));
+            this.cache.TryAdd(sourceIteration.CacheKey, new Lazy<Thing>(() => sourceIteration));
+            this.cache.TryAdd(targetModel.CacheKey, new Lazy<Thing>(() => targetModel));
+            this.cache.TryAdd(targetIteration.CacheKey, new Lazy<Thing>(() => targetIteration));
+            this.cache.TryAdd(elementDefinition.CacheKey, new Lazy<Thing>(() => elementDefinition));
 
             var elementDefinitionClone = elementDefinition.Clone(false);
             var targetIterationClone = targetIteration.Clone(false);
@@ -957,11 +955,11 @@ namespace CDP4Dal.Tests
             targetModel.Iteration.Add(targetIteration);
             sourceIteration.Element.Add(elementDefinition);
 
-            this.cache.TryAdd(sourceModel.CacheId, new Lazy<Thing>(() => sourceModel));
-            this.cache.TryAdd(sourceIteration.CacheId, new Lazy<Thing>(() => sourceIteration));
-            this.cache.TryAdd(targetModel.CacheId, new Lazy<Thing>(() => targetModel));
-            this.cache.TryAdd(targetIteration.CacheId, new Lazy<Thing>(() => targetIteration));
-            this.cache.TryAdd(elementDefinition.CacheId, new Lazy<Thing>(() => elementDefinition));
+            this.cache.TryAdd(sourceModel.CacheKey, new Lazy<Thing>(() => sourceModel));
+            this.cache.TryAdd(sourceIteration.CacheKey, new Lazy<Thing>(() => sourceIteration));
+            this.cache.TryAdd(targetModel.CacheKey, new Lazy<Thing>(() => targetModel));
+            this.cache.TryAdd(targetIteration.CacheKey, new Lazy<Thing>(() => targetIteration));
+            this.cache.TryAdd(elementDefinition.CacheKey, new Lazy<Thing>(() => elementDefinition));
 
             var elementDefinitionClone = elementDefinition.Clone(false);
             var targetIterationClone = targetIteration.Clone(false);
@@ -984,11 +982,11 @@ namespace CDP4Dal.Tests
             targetModel.Iteration.Add(targetIteration);
             sourceIteration.Element.Add(elementDefinition);
 
-            this.cache.TryAdd(sourceModel.CacheId, new Lazy<Thing>(() => sourceModel));
-            this.cache.TryAdd(sourceIteration.CacheId, new Lazy<Thing>(() => sourceIteration));
-            this.cache.TryAdd(targetModel.CacheId, new Lazy<Thing>(() => targetModel));
-            this.cache.TryAdd(targetIteration.CacheId, new Lazy<Thing>(() => targetIteration));
-            this.cache.TryAdd(elementDefinition.CacheId, new Lazy<Thing>(() => elementDefinition));
+            this.cache.TryAdd(sourceModel.CacheKey, new Lazy<Thing>(() => sourceModel));
+            this.cache.TryAdd(sourceIteration.CacheKey, new Lazy<Thing>(() => sourceIteration));
+            this.cache.TryAdd(targetModel.CacheKey, new Lazy<Thing>(() => targetModel));
+            this.cache.TryAdd(targetIteration.CacheKey, new Lazy<Thing>(() => targetIteration));
+            this.cache.TryAdd(elementDefinition.CacheKey, new Lazy<Thing>(() => elementDefinition));
 
             var transactionContext = TransactionContextResolver.ResolveContext(targetIteration);
             var transaction = new ThingTransaction(transactionContext);
@@ -1009,11 +1007,11 @@ namespace CDP4Dal.Tests
             targetModel.Iteration.Add(targetIteration);
             sourceIteration.Element.Add(elementDefinition);
 
-            this.cache.TryAdd(sourceModel.CacheId, new Lazy<Thing>(() => sourceModel));
-            this.cache.TryAdd(sourceIteration.CacheId, new Lazy<Thing>(() => sourceIteration));
-            this.cache.TryAdd(targetModel.CacheId, new Lazy<Thing>(() => targetModel));
-            this.cache.TryAdd(targetIteration.CacheId, new Lazy<Thing>(() => targetIteration));
-            this.cache.TryAdd(elementDefinition.CacheId, new Lazy<Thing>(() => elementDefinition));
+            this.cache.TryAdd(sourceModel.CacheKey, new Lazy<Thing>(() => sourceModel));
+            this.cache.TryAdd(sourceIteration.CacheKey, new Lazy<Thing>(() => sourceIteration));
+            this.cache.TryAdd(targetModel.CacheKey, new Lazy<Thing>(() => targetModel));
+            this.cache.TryAdd(targetIteration.CacheKey, new Lazy<Thing>(() => targetIteration));
+            this.cache.TryAdd(elementDefinition.CacheKey, new Lazy<Thing>(() => elementDefinition));
 
             var elementDefinitionClone = elementDefinition.Clone(false);
 
@@ -1063,7 +1061,5 @@ namespace CDP4Dal.Tests
 
             Assert.Throws<ArgumentNullException>(() => new ThingTransaction(null, null, iterationClone));            
         }
-
-        #endregion
     }
 }

@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OperationModifier.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4WspDal
 {
@@ -31,6 +29,7 @@ namespace CDP4WspDal
     using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;    
+    using CDP4Common.Types;
     using CDP4Dal;
     using CDP4Dal.Operations;
 
@@ -105,7 +104,7 @@ namespace CDP4WspDal
             var parameterId = parameterOverride.Parameter;
             Lazy<Thing> lazyParameter;
             var operations = new List<Operation>();
-            if (!this.session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(parameterId, parameterOverride.IterationContainerId), out lazyParameter))
+            if (!this.session.Assembler.Cache.TryGetValue(new CacheKey(parameterId, parameterOverride.IterationContainerId), out lazyParameter))
             {
                 return operations;
             }
@@ -131,7 +130,7 @@ namespace CDP4WspDal
                 }
 
                 Lazy<Thing> lazyElementUsageContainer;
-                if (!this.session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(elementUsageContainer.Iid, elementUsageContainer.IterationContainerId), out lazyElementUsageContainer))
+                if (!this.session.Assembler.Cache.TryGetValue(new CacheKey(elementUsageContainer.Iid, elementUsageContainer.IterationContainerId), out lazyElementUsageContainer))
                 {
                     continue;
                 }

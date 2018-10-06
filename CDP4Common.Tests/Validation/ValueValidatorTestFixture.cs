@@ -39,7 +39,7 @@ namespace CDP4Common.Tests.Validation
     public class ValueValidatorTestFixture
     {
         private Uri uri;
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
+        private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache;
 
         private BooleanParameterType booleanParameterType;
         private DateParameterType dateParameterType;
@@ -56,7 +56,7 @@ namespace CDP4Common.Tests.Validation
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
             this.uri = new Uri("http://www.rheagroup.com");
-            this.cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
             this.ratioScale = new RatioScale(Guid.NewGuid(), this.cache, this.uri);
 

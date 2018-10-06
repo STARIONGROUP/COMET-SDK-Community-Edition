@@ -42,7 +42,7 @@ namespace CDP4Common.Tests.Poco
     public class DecompositionRuleTestFixture
     {
         private Uri uri;
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
+        private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache;
         private Iteration iteration;
 
         private Category systemCategory;
@@ -59,7 +59,7 @@ namespace CDP4Common.Tests.Poco
         public void SetUp()
         {
             this.uri = new Uri("http://www.rheagroup.com");
-            this.cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
             this.CreateCategories();
 
@@ -90,25 +90,25 @@ namespace CDP4Common.Tests.Poco
             this.functionCategory.SuperCategory.Add(this.systemCategory);
 
             var lazyProductCategory = new Lazy<Thing>(() => this.productCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.productCategory.Iid, null), lazyProductCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.productCategory.Iid, null), lazyProductCategory);
 
             var lazyEquipmentCategory = new Lazy<Thing>(() => this.equipmentCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.equipmentCategory.Iid, null), lazyEquipmentCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.equipmentCategory.Iid, null), lazyEquipmentCategory);
 
             var lazyBatteryCategory = new Lazy<Thing>(() => this.batteryCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.batteryCategory.Iid, null), lazyBatteryCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.batteryCategory.Iid, null), lazyBatteryCategory);
 
             var lazyLithiumBatteryCategory = new Lazy<Thing>(() => this.lithiumBatteryCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.lithiumBatteryCategory.Iid, null), lazyLithiumBatteryCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.lithiumBatteryCategory.Iid, null), lazyLithiumBatteryCategory);
 
             var lazyFunctionCategory = new Lazy<Thing>(() => this.functionCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.functionCategory.Iid, null), lazyFunctionCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.functionCategory.Iid, null), lazyFunctionCategory);
 
             var lazyPowerStorageCategory = new Lazy<Thing>(() => this.powerStorageCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.powerStorageCategory.Iid, null), lazyPowerStorageCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.powerStorageCategory.Iid, null), lazyPowerStorageCategory);
 
             var lazyElectricalPowerStorageCategory = new Lazy<Thing>(() => this.electricalPowerStorageCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.electricalPowerStorageCategory.Iid, null), lazyElectricalPowerStorageCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.electricalPowerStorageCategory.Iid, null), lazyElectricalPowerStorageCategory);
         }
 
         [Test]

@@ -54,7 +54,7 @@ namespace CDP4JsonSerializer.Tests
         private Book book2;
         private Section section1;
         private readonly Uri uri = new Uri("http://www.rheagroup.com");
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+        private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
         private IMetaDataProvider metadataprovider = new MetaDataProvider();
         private Cdp4JsonSerializer serializer;
 

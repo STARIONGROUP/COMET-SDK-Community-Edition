@@ -41,13 +41,13 @@ namespace CDP4Common.Tests.Poco
     public class CategoryTestFixture
     {
         private Uri uri;
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
+        private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache;
 
         [SetUp]
         public void SetUp()
         {
             this.uri = new Uri("http://www.rheagroup.com");
-            this.cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
         }
 
         [Test]
@@ -89,13 +89,13 @@ namespace CDP4Common.Tests.Poco
             aa.SuperCategory.Add(a);
 
             var lazyA = new Lazy<Thing>(() => a);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(a.Iid, null), lazyA);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(a.Iid, null), lazyA);
             var lazyAa = new Lazy<Thing>(() => aa);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(aa.Iid, null), lazyAa);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(aa.Iid, null), lazyAa);
             var lazyAaa = new Lazy<Thing>(() => aaa);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(aaa.Iid, null), lazyAaa);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(aaa.Iid, null), lazyAaa);
             var lazyAaaa = new Lazy<Thing>(() => aaaa);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(aaaa.Iid, null), lazyAaaa);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(aaaa.Iid, null), lazyAaaa);
 
             var b = new Category(Guid.NewGuid(), this.cache, this.uri) {ShortName = "B"};
             var bb = new Category(Guid.NewGuid(), this.cache, this.uri) {ShortName = "BB"};
@@ -103,13 +103,13 @@ namespace CDP4Common.Tests.Poco
             var bbbb = new Category(Guid.NewGuid(), this.cache, this.uri) {ShortName = "BBBB"};
 
             var lazyB = new Lazy<Thing>(() => b);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(b.Iid, null), lazyB);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(b.Iid, null), lazyB);
             var lazyBb = new Lazy<Thing>(() => bb);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(bb.Iid, null), lazyBb);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(bb.Iid, null), lazyBb);
             var lazyBbb = new Lazy<Thing>(() => bbb);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(bbb.Iid, null), lazyBbb);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(bbb.Iid, null), lazyBbb);
             var lazyBbbb = new Lazy<Thing>(() => bbbb);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(bbbb.Iid, null), lazyBbbb);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(bbbb.Iid, null), lazyBbbb);
 
             bbbb.SuperCategory.Add(bbb);
             bbb.SuperCategory.Add(bb);
@@ -154,42 +154,42 @@ namespace CDP4Common.Tests.Poco
         {
             var categorya1 = new Category(Guid.NewGuid(), this.cache, this.uri) {ShortName = "A1"};
             categorya1.PermissibleClass.Add(ClassKind.ElementDefinition);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(categorya1.Iid, null), new Lazy<Thing>(() => categorya1));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(categorya1.Iid, null), new Lazy<Thing>(() => categorya1));
 
             var categorya11 = new Category(Guid.NewGuid(), this.cache, this.uri) {ShortName = "A11"};
             categorya11.PermissibleClass.Add(ClassKind.ElementDefinition);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(categorya11.Iid, null), new Lazy<Thing>(() => categorya11));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(categorya11.Iid, null), new Lazy<Thing>(() => categorya11));
 
             var categorya111 = new Category(Guid.NewGuid(), this.cache, this.uri) {ShortName = "A111"};
             categorya111.PermissibleClass.Add(ClassKind.ElementDefinition);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(categorya111.Iid, null), new Lazy<Thing>(() => categorya111));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(categorya111.Iid, null), new Lazy<Thing>(() => categorya111));
 
             categorya111.SuperCategory.Add(categorya11);
             categorya11.SuperCategory.Add(categorya1);
 
             var categoryb1 = new Category(Guid.NewGuid(), this.cache, this.uri) {ShortName = "B1"};
             categoryb1.PermissibleClass.Add(ClassKind.ElementDefinition);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(categoryb1.Iid, null), new Lazy<Thing>(() => categoryb1));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(categoryb1.Iid, null), new Lazy<Thing>(() => categoryb1));
 
             var categoryb11 = new Category(Guid.NewGuid(), this.cache, this.uri) {ShortName = "B11"};
             categoryb11.PermissibleClass.Add(ClassKind.ElementDefinition);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(categoryb11.Iid, null), new Lazy<Thing>(() => categoryb11));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(categoryb11.Iid, null), new Lazy<Thing>(() => categoryb11));
 
             var categoryb111 = new Category(Guid.NewGuid(), this.cache, this.uri) {ShortName = "B111"};
             categoryb111.PermissibleClass.Add(ClassKind.ElementDefinition);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(categoryb111.Iid, null), new Lazy<Thing>(() => categoryb111));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(categoryb111.Iid, null), new Lazy<Thing>(() => categoryb111));
 
             categoryb111.SuperCategory.Add(categoryb11);
             categoryb11.SuperCategory.Add(categoryb1);
 
             var iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(iteration.Iid, null), new Lazy<Thing>(() => iteration));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(iteration.Iid, null), new Lazy<Thing>(() => iteration));
 
             var elementDefinitionA = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) {ShortName = "A"};
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(elementDefinitionA.Iid, iteration.Iid), new Lazy<Thing>(() => elementDefinitionA));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(elementDefinitionA.Iid, iteration.Iid), new Lazy<Thing>(() => elementDefinitionA));
 
             var elementDefinitionB = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) {ShortName = "B"};
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(elementDefinitionB.Iid, iteration.Iid), new Lazy<Thing>(() => elementDefinitionB));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(elementDefinitionB.Iid, iteration.Iid), new Lazy<Thing>(() => elementDefinitionB));
 
             iteration.Element.Add(elementDefinitionA);
             iteration.Element.Add(elementDefinitionB);
@@ -210,7 +210,7 @@ namespace CDP4Common.Tests.Poco
         {
             var categorya1 = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "A1" };
             categorya1.PermissibleClass.Add(ClassKind.ElementDefinition);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(categorya1.Iid, null), new Lazy<Thing>(() => categorya1));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(categorya1.Iid, null), new Lazy<Thing>(() => categorya1));
 
             CollectionAssert.IsEmpty(categorya1.CategorizedThings());
         }

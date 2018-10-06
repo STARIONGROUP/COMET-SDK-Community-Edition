@@ -82,7 +82,7 @@ namespace CDP4Common.CommonData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public Definition(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public Definition(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Citation = new ContainerList<Citation>(this);
             this.Example = new OrderedItemList<string>(this);
@@ -258,7 +258,7 @@ namespace CDP4Common.CommonData
             dto.Note.AddRange(this.Note.ToDtoOrderedItemList());
             dto.RevisionNumber = this.RevisionNumber;
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

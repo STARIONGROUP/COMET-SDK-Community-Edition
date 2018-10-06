@@ -381,7 +381,7 @@ namespace CDP4Common.Tests.DTO
                 throw new NotImplementedException();
             }
 
-            public override Thing InstantiatePoco(ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri uri)
+            public override Thing InstantiatePoco(ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache, Uri uri)
             {
                 throw new NotImplementedException();
             }

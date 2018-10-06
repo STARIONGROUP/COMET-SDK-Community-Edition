@@ -43,7 +43,7 @@ namespace CDP4Common.Tests.Extensions
     public class CategorizableThingExtensionsTestFixture
     {
         private Uri uri;
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
+        private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache;
 
         private Category productCategory;
         private Category equipmentCategory;
@@ -57,7 +57,7 @@ namespace CDP4Common.Tests.Extensions
         public void SetUp()
         {
             this.uri = new Uri("http://www.rheagroup.com");
-            this.cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
             this.productCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "PROD", Name = "Product" };
             this.equipmentCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "EQT", Name = "Equipment" };
@@ -71,19 +71,19 @@ namespace CDP4Common.Tests.Extensions
             this.equipmentCategory.SuperCategory.Add(this.productCategory);
 
             var lazyProductCategory = new Lazy<Thing>(() => this.productCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.productCategory.Iid, null), lazyProductCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.productCategory.Iid, null), lazyProductCategory);
 
             var lazyEquipmentCategory = new Lazy<Thing>(() => this.equipmentCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.equipmentCategory.Iid, null), lazyEquipmentCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.equipmentCategory.Iid, null), lazyEquipmentCategory);
 
             var lazyBatteryCategory = new Lazy<Thing>(() => this.batteryCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.batteryCategory.Iid, null), lazyBatteryCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.batteryCategory.Iid, null), lazyBatteryCategory);
 
             var lazyLithiumBatteryCategory = new Lazy<Thing>(() => this.lithiumBatteryCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.lithiumBatteryCategory.Iid, null), lazyLithiumBatteryCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.lithiumBatteryCategory.Iid, null), lazyLithiumBatteryCategory);
 
             var lazyTransmitterCategory = new Lazy<Thing>(() => this.transmitterCategory);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.transmitterCategory.Iid, null), lazyTransmitterCategory);
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.transmitterCategory.Iid, null), lazyTransmitterCategory);
 
             this.elementDefinition = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
         }

@@ -88,7 +88,7 @@ namespace CDP4Dal
         {
             Utils.AssertNotNull(uri, "The Uri may not be mull");
 
-            this.Cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.Cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
             this.unresolvedDtos = new List<Dto>();
             this.IDalUri = uri;
         }
@@ -96,7 +96,7 @@ namespace CDP4Dal
         /// <summary>
         /// Gets the Cache that contains all the <see cref="Thing"/>s
         /// </summary>
-        public ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> Cache { get; private set; }
+        public ConcurrentDictionary<CacheKey, Lazy<Thing>> Cache { get; private set; }
 
         /// <summary>
         /// Gets or sets the list of <see cref="CDP4Common.DTO.Thing"/> to update
@@ -139,7 +139,7 @@ namespace CDP4Dal
 
                 var existentGuid =
                     this.Cache.Select(
-                        x => new Tuple<Tuple<Guid, Guid?>, int>(x.Value.Value.CacheId, x.Value.Value.RevisionNumber))
+                        x => new Tuple<CacheKey, int>(x.Value.Value.CacheKey, x.Value.Value.RevisionNumber))
                         .ToList();
 
                 this.DtoThingToUpdate = dtoThings.ToList();
@@ -176,7 +176,7 @@ namespace CDP4Dal
                 foreach (var dtoThing in this.DtoThingToUpdate)
                 {
                     Lazy<Thing> updatedLazyThing;
-                    var cacheKey = new Tuple<Guid, Guid?>(dtoThing.Iid, dtoThing.IterationContainerId);
+                    var cacheKey = new CacheKey(dtoThing.Iid, dtoThing.IterationContainerId);
                     var succeed = this.Cache.TryGetValue(cacheKey, out updatedLazyThing);
 
                     if (succeed)
@@ -205,13 +205,13 @@ namespace CDP4Dal
                     foreach (var dtoThing in this.DtoThingToUpdate)
                     {
                         Lazy<Thing> updatedLazyThing;
-                        var cacheKey = new Tuple<Guid, Guid?>(dtoThing.Iid, dtoThing.IterationContainerId);
+                        var cacheKey = new CacheKey(dtoThing.Iid, dtoThing.IterationContainerId);
                         var succeed = this.Cache.TryGetValue(cacheKey, out updatedLazyThing);
                         
                         if (succeed)
                         {
                             var thingObject = updatedLazyThing.Value;
-                            var cacheId = new Tuple<Guid, Guid?>(dtoThing.Iid, dtoThing.IterationContainerId);
+                            var cacheId = new CacheKey(dtoThing.Iid, dtoThing.IterationContainerId);
                             if (!existentGuid.Select(x => x.Item1).Contains(cacheId))
                             {
                                 CDPMessageBus.Current.SendObjectChangeEvent(thingObject, EventKind.Added);
@@ -299,7 +299,7 @@ namespace CDP4Dal
 
             foreach (var dto in dtoThings)
             {
-                var cacheKey = new Tuple<Guid, Guid?>(dto.Iid, dto.IterationContainerId);
+                var cacheKey = new CacheKey(dto.Iid, dto.IterationContainerId);
 
                 if (this.Cache.TryGetValue(cacheKey, out var currentCachedThing))
                 {
@@ -323,7 +323,7 @@ namespace CDP4Dal
                     if (dto.RevisionNumber == currentThing.RevisionNumber)
                     {
                         logger.Trace("A DTO with revision {0} equal to the revision of the existing POCO {1}:{2}:{3} has been identified; The data-source has sent a revision of an object that is already present in the cache", 
-                            dto.RevisionNumber, currentThing.ClassKind, currentThing.CacheId.Item1, currentThing.CacheId.Item2);
+                            dto.RevisionNumber, currentThing.ClassKind, currentThing.CacheKey.Thing, currentThing.CacheKey.Iteration);
 
                         continue;
                     }
@@ -331,7 +331,7 @@ namespace CDP4Dal
                     if (dto.RevisionNumber < currentThing.RevisionNumber)
                     {
                         logger.Trace("A DTO with revision {0} smaller than the revision {1} of the existing POCO {2}:{3} has been identified, the data; The data-source has sent a revision from the past",
-                            dto.RevisionNumber, currentThing.RevisionNumber, currentThing.CacheId.Item1, currentThing.CacheId.Item2);
+                            dto.RevisionNumber, currentThing.RevisionNumber, currentThing.CacheKey.Thing, currentThing.CacheKey.Iteration);
                     }
                 }
             }
@@ -508,8 +508,9 @@ namespace CDP4Dal
             try
             {
                 Lazy<Thing> lazyIteration;
-                if (
-                    !this.Cache.TryGetValue(new Tuple<Guid, Guid?>(iterationSetup.IterationIid, null), out lazyIteration))
+                var cacheKey = new CacheKey(iterationSetup.IterationIid, null);
+
+                if (!this.Cache.TryGetValue(cacheKey, out lazyIteration))
                 {
                     this.threadLock.Release();
                     return;
@@ -586,7 +587,8 @@ namespace CDP4Dal
         private void ComputeThingsToRemove(Dto dtoThing)
         {
             Lazy<Thing> cachedLazyThing;
-            if (!this.Cache.TryGetValue(new Tuple<Guid, Guid?>(dtoThing.Iid, dtoThing.IterationContainerId), out cachedLazyThing))
+            var cacheKey = new CacheKey(dtoThing.Iid, dtoThing.IterationContainerId);
+            if (!this.Cache.TryGetValue(cacheKey, out cachedLazyThing))
             {
                 return;
             }
@@ -709,7 +711,7 @@ namespace CDP4Dal
         private bool RemoveThingFromCache(Thing thingToRemove)
         {
             Lazy<Thing> outLazy;
-            var succeed = this.Cache.TryRemove(thingToRemove.CacheId, out outLazy);
+            var succeed = this.Cache.TryRemove(thingToRemove.CacheKey, out outLazy);
             if (succeed)
             {
                 CDPMessageBus.Current.SendObjectChangeEvent(outLazy.Value, EventKind.Removed);
@@ -734,7 +736,7 @@ namespace CDP4Dal
                     throw new ArgumentException($"Cannot add DTO with a Guid.Empty reference to the Cache: {dto.ClassKind}");
                 }
 
-                var cacheKey = new Tuple<Guid, Guid?>(dto.Iid, dto.IterationContainerId);
+                var cacheKey = new CacheKey(dto.Iid, dto.IterationContainerId);
                 this.Cache.AddOrUpdate(cacheKey, new Lazy<Thing>(() => dto.InstantiatePoco(this.Cache, this.IDalUri)), (key, oldValue) => oldValue);
             }
         }
@@ -749,7 +751,7 @@ namespace CDP4Dal
         private void MarkAndDelete(Guid guid)
         {
             Lazy<Thing> lazy;
-            if (this.Cache.TryGetValue(new Tuple<Guid, Guid?>(guid, null), out lazy))
+            if (this.Cache.TryGetValue(new CacheKey(guid, null), out lazy))
             {
                 this.thingsMarkedForDeletion.Clear();
                 this.RecursivelyMarksForRemoval(lazy.Value);

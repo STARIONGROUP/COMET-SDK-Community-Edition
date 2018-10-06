@@ -244,7 +244,7 @@ namespace CDP4Dal.Operations
 
             if (clone.Cache != null)
             {
-                if (clone.Iid != Guid.Empty && clone.Cache.Any(x => Equals(x.Key, clone.CacheId)))
+                if (clone.Iid != Guid.Empty && clone.Cache.Any(x => Equals(x.Key, clone.CacheKey)))
                 {
                     throw new InvalidOperationException("The clone is an original thing present in the cache.");
                 }
@@ -682,7 +682,7 @@ namespace CDP4Dal.Operations
             }
 
             // case3: the cache does not contain the key, its a new
-            var lazy = clone.Cache.SingleOrDefault(x => Equals(x.Key, clone.CacheId)).Value;
+            var lazy = clone.Cache.SingleOrDefault(x => Equals(x.Key, clone.CacheKey)).Value;
             if (lazy == null)
             {
                 return null;
@@ -856,10 +856,10 @@ namespace CDP4Dal.Operations
             var thingType = thing.GetType();
 
             Thing originalThing = null;
-            if (thing.Cache != null && thing.Cache.ContainsKey(thing.CacheId))
+            if (thing.Cache != null && thing.Cache.ContainsKey(thing.CacheKey))
             {
                 Lazy<Thing> lazyThing;
-                var result = thing.Cache.TryGetValue(thing.CacheId, out lazyThing);
+                var result = thing.Cache.TryGetValue(thing.CacheKey, out lazyThing);
                 originalThing = (result)? lazyThing.Value : null;
             }
 

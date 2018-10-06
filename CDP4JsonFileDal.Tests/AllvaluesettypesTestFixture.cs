@@ -32,6 +32,7 @@ namespace CDP4JsonFileDal.Tests
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Helpers;
+    using CDP4Common.Types;
     using CDP4Dal;
     using CDP4Dal.DAL;
     using NUnit.Framework;
@@ -84,7 +85,7 @@ namespace CDP4JsonFileDal.Tests
             await session.Read(iteration, system);
 
             Lazy<Thing> lazyIteration;
-            session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(iteration.Iid, null), out lazyIteration);
+            session.Assembler.Cache.TryGetValue(new CacheKey(iteration.Iid, null), out lazyIteration);
 
             iteration = (Iteration)lazyIteration.Value;
             Assert.IsNotNull(iteration);

@@ -79,7 +79,7 @@ namespace CDP4ServicesDal.Tests
             // Add SiteDirectory to cache
             this.siteDirectory = new SiteDirectory(Guid.Parse("f13de6f8-b03a-46e7-a492-53b2f260f294"), this.session.Assembler.Cache, this.uri);
             var lazySiteDirectory = new Lazy<Thing>(() => this.siteDirectory);
-            lazySiteDirectory.Value.Cache.TryAdd(new Tuple<Guid, Guid?>(lazySiteDirectory.Value.Iid, null), lazySiteDirectory);
+            lazySiteDirectory.Value.Cache.TryAdd(new CacheKey(lazySiteDirectory.Value.Iid, null), lazySiteDirectory);
             
             this.PopulateSiteDirectory();
         }

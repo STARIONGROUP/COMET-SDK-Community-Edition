@@ -145,7 +145,7 @@ namespace CDP4Common.Tests
             var iid = Guid.NewGuid();
             var revisionNumber = 1;
             var uri = new Uri("http://someuri");
-            var cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            var cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
             var siteDirectory = new SiteDirectory(iid: iid, iDalUri:uri, cache:cache) { RevisionNumber = revisionNumber };
 
@@ -162,7 +162,7 @@ namespace CDP4Common.Tests
             var iid = Guid.NewGuid();
             var revisionNumber = 1;
             var uri = new Uri("http://someuri");
-            var cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            var cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
             var siteDirectory = new SiteDirectory(iid: iid, iDalUri: uri, cache: cache);
             Assert.IsNotNull(siteDirectory.Cache);

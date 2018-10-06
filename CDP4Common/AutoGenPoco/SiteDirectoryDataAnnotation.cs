@@ -80,7 +80,7 @@ namespace CDP4Common.ReportingData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public SiteDirectoryDataAnnotation(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public SiteDirectoryDataAnnotation(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Discussion = new ContainerList<SiteDirectoryDataDiscussionItem>(this);
             this.RelatedThing = new ContainerList<SiteDirectoryThingReference>(this);
@@ -259,7 +259,7 @@ namespace CDP4Common.ReportingData
             dto.RelatedThing.AddRange(this.RelatedThing.Select(x => x.Iid));
             dto.RevisionNumber = this.RevisionNumber;
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

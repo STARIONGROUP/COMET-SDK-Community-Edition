@@ -80,7 +80,7 @@ namespace CDP4Common.DiagramData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        protected DiagramElementContainer(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        protected DiagramElementContainer(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Bounds = new ContainerList<Bounds>(this);
             this.DiagramElement = new ContainerList<DiagramElementThing>(this);

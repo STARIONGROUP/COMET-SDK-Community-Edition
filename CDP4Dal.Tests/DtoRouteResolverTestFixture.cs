@@ -116,10 +116,10 @@ namespace CDP4Dal.Tests.Helpers
                 this.state
             };
 
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(this.model.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoModel));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(this.iteration.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoIt));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(this.statelist.Iid, this.iteration.Iid), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoStateList));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(this.state.Iid, this.iteration.Iid), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoState));
+            this.assembler.Cache.TryAdd(new CacheKey(this.model.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoModel));
+            this.assembler.Cache.TryAdd(new CacheKey(this.iteration.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoIt));
+            this.assembler.Cache.TryAdd(new CacheKey(this.statelist.Iid, this.iteration.Iid), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoStateList));
+            this.assembler.Cache.TryAdd(new CacheKey(this.state.Iid, this.iteration.Iid), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoState));
 
             this.state.ResolveRoute(list, this.session.Object);
             var route = this.state.Route;
@@ -135,9 +135,9 @@ namespace CDP4Dal.Tests.Helpers
                 this.state
             };
 
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(this.model.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoModel));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(this.iteration.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoIt));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(this.statelist.Iid, this.iteration.Iid), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoStateList));
+            this.assembler.Cache.TryAdd(new CacheKey(this.model.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoModel));
+            this.assembler.Cache.TryAdd(new CacheKey(this.iteration.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoIt));
+            this.assembler.Cache.TryAdd(new CacheKey(this.statelist.Iid, this.iteration.Iid), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoStateList));
 
             this.state.ResolveRoute(list, this.session.Object);
             var route = this.state.Route;
@@ -184,7 +184,7 @@ namespace CDP4Dal.Tests.Helpers
             };
 
             this.pocoState.Container = null;
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(this.state.Iid, this.iteration.Iid), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoState));
+            this.assembler.Cache.TryAdd(new CacheKey(this.state.Iid, this.iteration.Iid), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoState));
             
 
             Assert.Throws<NullReferenceException>(() =>
@@ -204,7 +204,7 @@ namespace CDP4Dal.Tests.Helpers
             };
 
             this.pocoStateList.Container = null;
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(this.statelist.Iid, this.iteration.Iid), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoStateList));
+            this.assembler.Cache.TryAdd(new CacheKey(this.statelist.Iid, this.iteration.Iid), new Lazy<CDP4Common.CommonData.Thing>(() => this.pocoStateList));
             
             Assert.Throws<NullReferenceException>(() =>
 

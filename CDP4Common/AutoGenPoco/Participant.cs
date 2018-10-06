@@ -79,7 +79,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public Participant(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public Participant(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Domain = new List<DomainOfExpertise>();
         }
@@ -259,7 +259,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.Role = this.Role != null ? this.Role.Iid : Guid.Empty;
             dto.SelectedDomain = this.SelectedDomain != null ? this.SelectedDomain.Iid : Guid.Empty;
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

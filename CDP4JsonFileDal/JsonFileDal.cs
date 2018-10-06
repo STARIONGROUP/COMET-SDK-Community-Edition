@@ -34,6 +34,7 @@ namespace CDP4JsonFileDal
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
+    using CDP4Common.Types;
     using CDP4Dal.Operations;
     using CDP4Dal;
     using CDP4Dal.Composition;
@@ -512,7 +513,7 @@ namespace CDP4JsonFileDal
         /// <returns>
         /// The associated cache of the Thing in the operation.
         /// </returns>
-        internal static ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<CDP4Common.CommonData.Thing>> GetAssociatedCache(
+        internal static ConcurrentDictionary<CacheKey, Lazy<CDP4Common.CommonData.Thing>> GetAssociatedCache(
             Operation operation)
         {
             var sourceThing = operation.OriginalThing.QuerySourceThing();

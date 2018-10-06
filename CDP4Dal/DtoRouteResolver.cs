@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DtoRouteResolver.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,13 +21,13 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal
 {
     using System;
     using System.Linq;
     using CDP4Common.DTO;
+    using CDP4Common.Types;
     using CDP4Dal.Exceptions;
     using System.Collections.Generic;
     using Poco = CDP4Common.CommonData.Thing;
@@ -71,7 +70,7 @@ namespace CDP4Dal
             {
                 // the container is not in the list of dtos, search in the current ISession
                 Lazy<Poco> lazyThing;
-                var res = session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(thing.Iid, thing.IterationContainerId), out lazyThing);
+                var res = session.Assembler.Cache.TryGetValue(new CacheKey(thing.Iid, thing.IterationContainerId), out lazyThing);
                 if (!res)
                 {
                     throw new InstanceNotFoundException(string.Format("The {0} with id {1} could not be found", thing.ClassKind, thing.Iid));
@@ -96,7 +95,7 @@ namespace CDP4Dal
 
                 // one of the container nnot be found in the list of dto => search in the current ISession and build the partial tree up to the topcontainer
                 Lazy<Poco> lazyThing;
-                var res = session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(previousContainer.Iid, previousContainer.IterationContainerId), out lazyThing);
+                var res = session.Assembler.Cache.TryGetValue(new CacheKey(previousContainer.Iid, previousContainer.IterationContainerId), out lazyThing);
                 if (!res)
                 {
                     throw new InstanceNotFoundException(string.Format("The {0} with id {1} could not be found", previousContainer.ClassKind, previousContainer.Iid));

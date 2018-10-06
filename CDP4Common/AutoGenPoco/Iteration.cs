@@ -97,7 +97,7 @@ namespace CDP4Common.EngineeringModelData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public Iteration(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public Iteration(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.ActualFiniteStateList = new ContainerList<ActualFiniteStateList>(this);
             this.DiagramCanvas = new ContainerList<DiagramCanvas>(this);
@@ -516,7 +516,7 @@ namespace CDP4Common.EngineeringModelData
             dto.TopElement = this.TopElement != null ? (Guid?)this.TopElement.Iid : null;
             dto.ValueGroup.AddRange(this.ValueGroup.Select(x => x.Iid));
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

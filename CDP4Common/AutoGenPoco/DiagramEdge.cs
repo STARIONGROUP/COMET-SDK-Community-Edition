@@ -81,7 +81,7 @@ namespace CDP4Common.DiagramData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public DiagramEdge(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public DiagramEdge(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Point = new OrderedItemList<Point>(this, true);
         }
@@ -251,7 +251,7 @@ namespace CDP4Common.DiagramData
             dto.Source = this.Source != null ? this.Source.Iid : Guid.Empty;
             dto.Target = this.Target != null ? this.Target.Iid : Guid.Empty;
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

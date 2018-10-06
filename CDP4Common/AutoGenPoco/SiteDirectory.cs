@@ -93,7 +93,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <param name="iDalUri">
         /// The <see cref="Uri"/> of this thing
         /// </param>
-        public SiteDirectory(Guid iid, ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
+        public SiteDirectory(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Annotation = new ContainerList<SiteDirectoryDataAnnotation>(this);
             this.Domain = new ContainerList<DomainOfExpertise>(this);
@@ -433,7 +433,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ShortName = this.ShortName;
             dto.SiteReferenceDataLibrary.AddRange(this.SiteReferenceDataLibrary.Select(x => x.Iid));
 
-            dto.IterationContainerId = this.CacheId.Item2;
+            dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);
             this.BuildDtoPartialRoutes(dto);
             return dto;

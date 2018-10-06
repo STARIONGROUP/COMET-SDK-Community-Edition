@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TransactionContextTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests
 {
@@ -32,6 +30,7 @@ namespace CDP4Dal.Tests
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
     using CDP4Dal.Operations;
     using NUnit.Framework;
 
@@ -41,7 +40,7 @@ namespace CDP4Dal.Tests
     [TestFixture]
     public class TransactionContextTestFixture
     {
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
+        private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache;
         private Uri uri = new Uri("http://www.rheagroup.com");
 
         private Guid siteDirectoryIid;
@@ -55,7 +54,7 @@ namespace CDP4Dal.Tests
         [SetUp]
         public void SetUp()
         {
-            this.cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.cache = new ConcurrentDictionary<CacheKey, Lazy<CDP4Common.CommonData.Thing>>();
 
             this.siteDirectoryIid = Guid.Parse("7D445137-5E73-41A1-B326-983DB7A4E9A2");
             this.engineeringModelIid = Guid.Parse("BDDFB6A4-76B3-4CAC-ACAB-5540126C47B6");
@@ -71,10 +70,10 @@ namespace CDP4Dal.Tests
 
             this.engineeringModel.Iteration.Add(this.iteration);
 
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.siteDirectory.Iid, null), new Lazy<Thing>(() => this.siteDirectory));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.engineeringModel.Iid, null), new Lazy<Thing>(() => this.engineeringModel));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.iteration.Iid, null), new Lazy<Thing>(() => this.iteration));
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(iterationSetup.Iid, null), new Lazy<Thing>(() => iterationSetup));
+            this.cache.TryAdd(new CacheKey(this.siteDirectory.Iid, null), new Lazy<Thing>(() => this.siteDirectory));
+            this.cache.TryAdd(new CacheKey(this.engineeringModel.Iid, null), new Lazy<Thing>(() => this.engineeringModel));
+            this.cache.TryAdd(new CacheKey(this.iteration.Iid, null), new Lazy<Thing>(() => this.iteration));
+            this.cache.TryAdd(new CacheKey(iterationSetup.Iid, null), new Lazy<Thing>(() => iterationSetup));
         }
 
         [Test]

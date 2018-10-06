@@ -36,6 +36,7 @@ namespace CDP4Dal.Tests
     using CDP4Common.MetaInfo;
     using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;
@@ -298,16 +299,16 @@ namespace CDP4Dal.Tests
             Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count());
 
             Lazy<CDP4Common.CommonData.Thing> rdlPocoToClose;
-            session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(rdlPoco.Iid, null), out rdlPocoToClose);
+            session.Assembler.Cache.TryGetValue(new CacheKey(rdlPoco.Iid, null), out rdlPocoToClose);
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)rdlPocoToClose.Value);
             Assert.AreEqual(1, session.OpenReferenceDataLibraries.ToList().Count());
 
             await session.Read(rdlPoco);
             Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count());
 
-            session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(rdlPoco.Iid, null), out rdlPocoToClose);
+            session.Assembler.Cache.TryGetValue(new CacheKey(rdlPoco.Iid, null), out rdlPocoToClose);
             Lazy<CDP4Common.CommonData.Thing> requiredRdlToClose;
-            session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(requiredSiteReferenceDataLibraryPoco.Iid, null), out requiredRdlToClose);
+            session.Assembler.Cache.TryGetValue(new CacheKey(requiredSiteReferenceDataLibraryPoco.Iid, null), out requiredRdlToClose);
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)requiredRdlToClose.Value);
             
             Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count());
@@ -369,7 +370,7 @@ namespace CDP4Dal.Tests
             Assert.AreEqual(2, this.session.OpenReferenceDataLibraries.Count());
 
             Lazy<CDP4Common.CommonData.Thing> requiredRdlToClose;
-            this.session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(requiredRdlDto.Iid, null), out requiredRdlToClose);
+            this.session.Assembler.Cache.TryGetValue(new CacheKey(requiredRdlDto.Iid, null), out requiredRdlToClose);
 
             await this.session.CloseRdl((SiteReferenceDataLibrary)requiredRdlToClose.Value);
             Assert.AreEqual(2, this.session.OpenReferenceDataLibraries.Count());
@@ -398,7 +399,7 @@ namespace CDP4Dal.Tests
             Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count());
 
             Lazy<CDP4Common.CommonData.Thing> rdlPocoToClose;
-            session2.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(modelRdlPoco.Iid, null), out rdlPocoToClose);
+            session2.Assembler.Cache.TryGetValue(new CacheKey(modelRdlPoco.Iid, null), out rdlPocoToClose);
             Assert.NotNull(rdlPocoToClose);
             await session2.CloseModelRdl((ModelReferenceDataLibrary)rdlPocoToClose.Value);
 
@@ -432,7 +433,7 @@ namespace CDP4Dal.Tests
             await session2.Assembler.Synchronize(thingsToAdd);
 
             var lazyiteration = new Lazy<CDP4Common.CommonData.Thing>(() => iteration);
-            session2.Assembler.Cache.GetOrAdd(new Tuple<Guid, Guid?>(iterationDto.Iid, null), lazyiteration);
+            session2.Assembler.Cache.GetOrAdd(new CacheKey(iterationDto.Iid, null), lazyiteration);
 
             CDP4Common.CommonData.Thing changedObject = null;
             CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(CDP4Common.EngineeringModelData.Iteration)).Subscribe(x => changedObject = x.ChangedThing);
@@ -444,7 +445,7 @@ namespace CDP4Dal.Tests
         public async Task VerifyThatReadRdlWorks()
         {
             var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
-            this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(siteDir.Iid, null),
+            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null),
                 new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
 
             var sitedirDto = new SiteDirectory(siteDir.Iid, 1);
@@ -486,12 +487,12 @@ namespace CDP4Dal.Tests
             siteDir.SiteReferenceDataLibrary.Add(srdl);
             siteDir.Domain.Add(activeDomain);
 
-            this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
-            this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(modelSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => modelSetup));
-            this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(mrdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => mrdl));
-            this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(srdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => srdl));
-            this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
-            this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(iterationSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => iterationSetup));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(modelSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => modelSetup));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(mrdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => mrdl));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(srdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => srdl));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(iterationSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => iterationSetup));
 
             var participant = new CDP4Common.SiteDirectoryData.Participant(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { Person = this.session.ActivePerson };
             modelSetup.Participant.Add(participant);

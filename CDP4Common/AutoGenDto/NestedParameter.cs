@@ -136,7 +136,7 @@ namespace CDP4Common.DTO
         /// <param name="cache">The cache that stores all the <see cref="CommonData.Thing"/>s</param>.
         /// <param name="uri">The <see cref="Uri"/> of the <see cref="CDP4Common.EngineeringModelData.NestedParameter"/></param>.
         /// <returns>A new <see cref="CommonData.Thing"/></returns>
-        public override CommonData.Thing InstantiatePoco(ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<CommonData.Thing>> cache, Uri uri)
+        public override CommonData.Thing InstantiatePoco(ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri uri)
         {
             return new CDP4Common.EngineeringModelData.NestedParameter(this.Iid, cache, uri);
         }

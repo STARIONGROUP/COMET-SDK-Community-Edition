@@ -40,18 +40,18 @@ namespace CDP4Common.Tests.Poco
     {
         private Guid iterationIid;
         private Iteration iteration;
-        private ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>> cache;
+        private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache;
         private Uri uri;
 
         [SetUp]
         public void SetUp()
         {
             this.uri = new Uri("http://www.rheagroup.com");
-            this.cache = new ConcurrentDictionary<Tuple<Guid, Guid?>, Lazy<Thing>>();
+            this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
             this.iterationIid = Guid.NewGuid();
             this.iteration = new Iteration(this.iterationIid, this.cache, this.uri);
-            this.cache.TryAdd(new Tuple<Guid, Guid?>(this.iterationIid, null), new Lazy<Thing>(() => this.iteration));
+            this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.iterationIid, null), new Lazy<Thing>(() => this.iteration));
         }
 
         [Test]
