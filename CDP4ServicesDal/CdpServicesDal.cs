@@ -129,7 +129,7 @@ namespace CDP4ServicesDal
             var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || CDP4Dal.Utils.IsCopyOperation(operation.OperationKind));
             if (invalidOperationKind)
             {
-                throw new InvalidOperationKindException("The WSP DAL does not support Copy or Move operations");
+                throw new InvalidOperationKindException("The CDP4 Services DAL does not support Copy or Move operations");
             }
             
             var result = new List<Thing>();
@@ -499,7 +499,7 @@ namespace CDP4ServicesDal
         /// Create a new <see cref="HttpClient"/>
         /// </summary>
         /// <param name="credentials">
-        /// The <see cref="Credentials"/> used to set the connection and authentication settings
+        /// The <see cref="Credentials"/> used to set the connection and authentication settings as well as the proxy server settings
         /// </param>
         /// <returns>
         /// An instance of <see cref="HttpClient"/> with the DefaultRequestHeaders set
@@ -508,18 +508,30 @@ namespace CDP4ServicesDal
         {
             HttpClient result;
 
-            if (credentials.Proxy == null)
+            if (credentials.ProxySettings == null)
             {
+                Logger.Debug("creating HttpClient without proxy");
+
                 result = new HttpClient();
             }
             else
             {
+                Logger.Debug("creating HttpClient with proxy: {0}", credentials.ProxySettings.Address);
+
+                var proxy = new WebProxy(credentials.ProxySettings.Address);
+                
+                if (!string.IsNullOrEmpty(credentials.ProxySettings.UserName))
+                {
+                    var proxyCredential = new NetworkCredential(credentials.ProxySettings.UserName, credentials.ProxySettings.Password);
+                    proxy.Credentials = proxyCredential;
+                }
+
                 var httpClientHandler = new HttpClientHandler()
                 {
-                    Proxy = new WebProxy(credentials.Proxy),
+                    Proxy = proxy,
                     UseProxy = true
                 };
-
+                
                 result = new HttpClient(httpClientHandler);
             }
 

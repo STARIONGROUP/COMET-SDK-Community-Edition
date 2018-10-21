@@ -511,6 +511,35 @@ namespace CDP4WspDal.Tests
 
         [Test]
         [Category("WebServicesDependent")]
+        public async Task Verify_that_opens_returns_expected_result()
+        {
+            var uri = new Uri("http://ocdt-dev.rheagroup.com");
+            this.credentials = new Credentials("admin", "pass", uri);
+
+            var wspdal = new WspDal();
+            var result = await wspdal.Open(this.credentials, new CancellationToken());
+
+            Assert.NotNull(result);
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
+        [Category("AppVeyorExclusion")]
+        public async Task Verify_that_open_with_proxy_returns_expected_result()
+        {
+            var proxySettings = new ProxySettings(new Uri("http://tinyproxy:8888"));
+            
+            var uri = new Uri("http://ocdt-dev.rheagroup.com");
+            this.credentials = new Credentials("admin", "pass", uri, proxySettings);
+
+            var wspdal = new WspDal();
+            var result = await wspdal.Open(this.credentials, new CancellationToken());
+            
+            Assert.NotNull(result);
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
         public async Task Verify_that_person_can_be_Posted()
         {
             var wspdal = new WspDal();

@@ -142,7 +142,7 @@ namespace CDP4WspDal
                 RevisionNumber = operationContainer.TopContainerRevisionNumber
             };
 
-            var postToken = this.RandomWebRequestToken();
+            var postToken = operationContainer.Token;
             var resourcePath = $"{operationContainer.Context}{attribute}";
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
             Logger.Debug("WSP Dal POST: {0} - {1}", postToken, uriBuilder);
@@ -312,7 +312,7 @@ namespace CDP4WspDal
 
             var resourcePath = $"{thingRoute}{attributes.ToString()}";
 
-            var readToken = this.RandomWebRequestToken();
+            var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
             Logger.Debug("WSP GET {0}: {1}", readToken, uriBuilder);
 
@@ -433,28 +433,12 @@ namespace CDP4WspDal
 
             var resourcePath = $"SiteDirectory{queryAttributes}";
 
-            if (credentials.Proxy == null)
-            {
-                this.httpClient = new HttpClient();
-            }
-            else
-            {
-                var httpClientHandler = new HttpClientHandler()
-                {
-                    Proxy = new WebProxy(credentials.Proxy),
-                    UseProxy = true
-                };
+            var openToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
 
-                this.httpClient = new HttpClient(httpClientHandler);
-            }
-
-            this.httpClient.BaseAddress = credentials.Uri;
-            this.httpClient.DefaultRequestHeaders.Accept.Clear();
-            this.httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
-
+            this.httpClient = this.CreateHttpClient(credentials);
+            
             var watch = Stopwatch.StartNew();
-            var openToken = this.RandomWebRequestToken();
+            
             var uriBuilder = new UriBuilder(credentials.Uri) { Path = resourcePath };
             Logger.Debug("WSP Open {0}: {1}", openToken, uriBuilder);
 
@@ -495,6 +479,54 @@ namespace CDP4WspDal
                     return returned;
                 }
             }
+        }
+
+        /// <summary>
+        /// Create a new <see cref="HttpClient"/>
+        /// </summary>
+        /// <param name="credentials">
+        /// The <see cref="Credentials"/> used to set the connection and authentication settings as well as the proxy server settings
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="HttpClient"/> with the DefaultRequestHeaders set
+        /// </returns>
+        private HttpClient CreateHttpClient(Credentials credentials)
+        {
+            HttpClient result;
+
+            if (credentials.ProxySettings == null)
+            {
+                Logger.Debug("creating HttpClient without proxy");
+
+                result = new HttpClient();
+            }
+            else
+            {
+                Logger.Debug("creating HttpClient with proxy: {0}", credentials.ProxySettings.Address);
+
+                var proxy = new WebProxy(credentials.ProxySettings.Address);
+
+                if (!string.IsNullOrEmpty(credentials.ProxySettings.UserName))
+                {
+                    var proxyCredential = new NetworkCredential(credentials.ProxySettings.UserName, credentials.ProxySettings.Password);
+                    proxy.Credentials = proxyCredential;
+                }
+
+                var httpClientHandler = new HttpClientHandler()
+                {
+                    Proxy = proxy,
+                    UseProxy = true
+                };
+
+                result = new HttpClient(httpClientHandler);
+            }
+
+            result.BaseAddress = credentials.Uri;
+            result.DefaultRequestHeaders.Accept.Clear();
+            result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
+
+            return result;
         }
 
         /// <summary>
@@ -671,24 +703,6 @@ namespace CDP4WspDal
                     Extent = ExtentQueryAttribute.deep,
                     IncludeAllContainers = true
                 };
-        }
-
-        /// <summary>
-        /// Get a random string that is used to tag a POST so that for debugging purposes it is easy to find the POST and result of a POST
-        /// </summary>
-        /// <returns>
-        /// a random string of 5 characters
-        /// </returns>
-        private string RandomWebRequestToken()
-        {
-            using (var cryptoServiceProvider = new RNGCryptoServiceProvider())
-            {
-                // Buffer storage.
-                byte[] data = new byte[4];
-                cryptoServiceProvider.GetBytes(data);
-                var result = BitConverter.ToString(data).Replace("-", "");
-                return result;
-            }
-        }
+        }     
     }
 }

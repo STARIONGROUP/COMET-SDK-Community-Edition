@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Credentials.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.DAL
 {
@@ -51,8 +49,7 @@ namespace CDP4Dal.DAL
         /// <param name="uri">
         /// the <see cref="Uri"/> of the data-store
         /// </param>
-        /// <param name="archivepassword">The password of the archive, to be set if the </param>
-        public Credentials(string username, string password, Uri uri, Uri proxy = null)
+        public Credentials(string username, string password, Uri uri, ProxySettings proxySettings = null)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -72,7 +69,7 @@ namespace CDP4Dal.DAL
             this.UserName = username;
             this.password = password;
             this.Uri = uri;
-            this.Proxy = proxy;
+            this.ProxySettings = proxySettings;
         }
 
         /// <summary>
@@ -97,11 +94,11 @@ namespace CDP4Dal.DAL
         public Uri Uri { get; private set; }
 
         /// <summary>
-        /// Gets the <see cref="Uri"/> of the proxy server
+        /// Gets the settings used to connect to a Proxy server
         /// </summary>
         /// <remarks>
-        /// This may be null if no proxy server is required.
+        /// The <see cref="ProxySettings"/> may be null, no proxy will be used in this case.
         /// </remarks>
-        public Uri Proxy { get; private set; }
+        public ProxySettings ProxySettings { get; private set; }
     }
 }

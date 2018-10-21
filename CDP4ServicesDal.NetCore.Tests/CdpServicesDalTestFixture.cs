@@ -533,6 +533,22 @@ namespace CDP4ServicesDal.Tests
 
             Assert.NotNull(result);
         }
+
+        [Test]
+        [Category("WebServicesDependent")]
+        [Category("AppVeyorExclusion")]
+        public async Task Verify_that_open_with_proxy_returns_expected_result()
+        {
+            var proxySettings = new ProxySettings(new Uri("http://tinyproxy:8888"));
+            
+            var uri = new Uri("https://cdp4services-test.rheagroup.com");
+            this.credentials = new Credentials("admin", "pass", uri, proxySettings);
+
+            var dal = new CdpServicesDal();
+            var result = await dal.Open(this.credentials, new CancellationToken());
+            
+            Assert.NotNull(result);
+        }
         
         [Test]
         [Category("WebServicesDependent")]
