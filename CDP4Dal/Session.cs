@@ -484,9 +484,9 @@ namespace CDP4Dal
         /// </returns>
         public async Task Refresh()
         {
-            foreach (var topContainer in this.GetSiteDirectoryAndIterations())
+            foreach (var topContainer in this.GetSiteDirectoryAndActiveIterations())
             {
-                await this.Update(topContainer.Value);
+                await this.Update(topContainer);
             }
         }
 
@@ -498,9 +498,9 @@ namespace CDP4Dal
         /// </returns>
         public async Task Reload()
         {
-            foreach (var topContainer in this.GetSiteDirectoryAndIterations())
+            foreach (var topContainer in this.GetSiteDirectoryAndActiveIterations())
             {
-                await this.Update(topContainer.Value, false);
+                await this.Update(topContainer, false);
             }
         }
 
@@ -661,12 +661,18 @@ namespace CDP4Dal
         }
 
         /// <summary>
-        /// Gets the <see cref="SiteDirectory"/> and all <see cref="Iteration"/>s from the Assembler's cache for this <see cref="Session"/>
+        /// Gets the <see cref="SiteDirectory"/> and all active <see cref="Iteration"/>s from the Assembler's cache for this <see cref="Session"/>
         /// </summary>
         /// <returns>the <see cref="List{T}"/> of the collected <see cref="SiteDirectory"/> and all <see cref="Iteration"/>s from the Assembler's cache for this <see cref="Session"/></returns>
-        private IEnumerable<Lazy<Thing>> GetSiteDirectoryAndIterations()
+        private IEnumerable<Thing> GetSiteDirectoryAndActiveIterations()
         {
-            return this.Assembler.Cache.Select(x => x.Value).Where(x => x.Value is SiteDirectory || x.Value is Iteration).ToList();
+            return this.Assembler.Cache
+                .Select(x => x.Value.Value)
+                .Where(x => 
+                    x is SiteDirectory 
+                    || (x is Iteration && ((Iteration)x).IterationSetup.FrozenOn == null && this.OpenIterations.ContainsKey((Iteration)x))
+                )
+                .ToList();
         }
 
         /// <summary>

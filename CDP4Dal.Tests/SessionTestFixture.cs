@@ -473,15 +473,17 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public async Task VerifyThatReadIterationWorks()
+        public void VerifyThatReadIterationWorks()
         {
             var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
             var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid()};
             var mrdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
             var srdl = new SiteReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
             var activeDomain = new DomainOfExpertise(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
             mrdl.RequiredRdl = srdl;
             modelSetup.RequiredRdl.Add(mrdl);
+            modelSetup.IterationSetup.Add(iterationSetup);
             siteDir.Model.Add(modelSetup);
             siteDir.SiteReferenceDataLibrary.Add(srdl);
             siteDir.Domain.Add(activeDomain);
@@ -491,12 +493,13 @@ namespace CDP4Dal.Tests
             this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(mrdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => mrdl));
             this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(srdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => srdl));
             this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
+            this.session.Assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(iterationSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => iterationSetup));
 
             var participant = new CDP4Common.SiteDirectoryData.Participant(Guid.NewGuid(),this.session.Assembler.Cache, this.uri) { Person = this.session.ActivePerson };
             modelSetup.Participant.Add(participant);
 
             var model = new EngineeringModel(Guid.NewGuid(), 1);
-            var iteration = new Iteration(Guid.NewGuid(), 1);
+            var iteration = new Iteration(iterationSetup.IterationIid, 1) { IterationSetup = iterationSetup.Iid };
             model.Iteration.Add(iteration.Iid);
             model.EngineeringModelSetup = modelSetup.Iid;
 
@@ -514,17 +517,20 @@ namespace CDP4Dal.Tests
             var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
             iterationToOpen.Container = modelToOpen;
 
-            await this.session.Read(iterationToOpen, activeDomain);
+            this.session.Read(iterationToOpen, activeDomain).Wait();
 
             var pair = this.session.OpenIterations.Single();
             Assert.AreEqual(pair.Value.Item1, activeDomain);
-
-            await this.session.Read(iterationToOpen, activeDomain);
+            
+            this.session.Read(iterationToOpen, activeDomain).Wait();
             pair = this.session.OpenIterations.Single();
             Assert.AreEqual(pair.Value.Item1, activeDomain);
 
             var selectedDomain = this.session.QuerySelectedDomainOfExpertise(iterationToOpen);
             Assert.AreEqual(activeDomain.Iid, selectedDomain.Iid);
+
+            this.session.Refresh().Wait();
+            this.mockedDal.Verify(x => x.Read<Thing>(It.IsAny<Thing>(), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>()), Times.Exactly(1));
 
             Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(iterationToOpen, null));
         }
