@@ -35,7 +35,7 @@ namespace CDP4Common.EngineeringModelData
     /// <summary>
     /// Extended part for the auto-generated <see cref="ParameterSubscriptionValueSet"/>
     /// </summary>
-    public partial class ParameterSubscriptionValueSet : IModelCode, IValueSet
+    public partial class ParameterSubscriptionValueSet : IValueSet
     {
         /// <summary>
         /// the size of the <see cref="ValueArray{T}"/> that is determined by the numberOfValues of the referenced <see cref="ParameterType"/>

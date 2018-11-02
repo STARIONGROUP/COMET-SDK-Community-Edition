@@ -298,12 +298,12 @@ namespace CDP4Dal.Tests.Permission
             var permission =
                 this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.EngineeringModel);
             var defpermission =
-               this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.ElementDefinition);
+                this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.ElementDefinition);
 
             permission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
             defpermission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
 
-            Assert.IsFalse(this.permissionService.CanRead(this.model));
+            Assert.IsTrue(this.permissionService.CanRead(this.model));
             Assert.IsFalse(this.permissionService.CanWrite(this.model));
 
             Assert.IsTrue(this.permissionService.CanWrite(this.elementDef));
@@ -314,7 +314,7 @@ namespace CDP4Dal.Tests.Permission
                 {this.iteration, new Tuple<DomainOfExpertise, Participant>(null,null)}
             });
 
-            Assert.IsTrue(this.permissionService.CanWrite(this.elementDef));
+            Assert.IsFalse(this.permissionService.CanWrite(this.elementDef));
             Assert.IsTrue(this.permissionService.CanRead(this.elementDef));
         }
 

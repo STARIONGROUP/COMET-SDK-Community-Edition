@@ -26,7 +26,9 @@
 
 namespace CDP4Common.EngineeringModelData
 {
+    using System.Collections.Generic;
     using System.Linq;
+    using Comparers;
 
     /// <summary>
     /// Extended part for the auto-generated <see cref="ActualFiniteStateList"/>

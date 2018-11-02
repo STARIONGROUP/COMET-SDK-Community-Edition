@@ -109,7 +109,7 @@ namespace CDP4Dal.Permission
         {
             var engineeringModel = thing.TopContainer;
             var participant =
-                this.Session.ActivePersonParticipants.SingleOrDefault(
+                this.Session.ActivePersonParticipants.FirstOrDefault(
                     p => ((EngineeringModelSetup)p.Container).EngineeringModelIid == engineeringModel.Iid);
 
             if (participant == null || participant.Role == null)
@@ -142,12 +142,7 @@ namespace CDP4Dal.Permission
                 case ParticipantAccessRightKind.MODIFY:
                     return true;
                 case ParticipantAccessRightKind.MODIFY_IF_OWNER:
-                    var ownedThing = thing as IOwnedThing;
-
-                    if (ownedThing != null)
-                    {
-                        return this.CanWriteIfParticipantOwned(ownedThing);
-                    }
+                    return true;
 
                     break;
                 default:
@@ -313,7 +308,7 @@ namespace CDP4Dal.Permission
                 return false;
             }
 
-            var participant = this.Session.ActivePersonParticipants.SingleOrDefault(p => ((EngineeringModelSetup)p.Container).EngineeringModelIid == engineeringModel.Iid);
+            var participant = this.Session.ActivePersonParticipants.FirstOrDefault(p => ((EngineeringModelSetup)p.Container).EngineeringModelIid == engineeringModel.Iid);
 
             if (participant == null || participant.Role == null)
             {
@@ -379,7 +374,7 @@ namespace CDP4Dal.Permission
                 return false;
             }
 
-            var participant = this.Session.ActivePersonParticipants.SingleOrDefault(p => ((EngineeringModelSetup)p.Container).EngineeringModelIid == engineeringModel.Iid);
+            var participant = this.Session.ActivePersonParticipants.FirstOrDefault(p => ((EngineeringModelSetup)p.Container).EngineeringModelIid == engineeringModel.Iid);
 
             if (participant == null || participant.Role == null)
             {
@@ -558,21 +553,26 @@ namespace CDP4Dal.Permission
         /// <param name="ownedThing">The <see cref="IOwnedThing"/> contained by an <see cref="EngineeringModel"/></param>
         /// <returns>True if write permission is granted</returns>
         private bool CanWriteIfParticipantOwned(IOwnedThing ownedThing)
-        {                        
+        {
             var thing = (Thing)ownedThing;
 
             var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
 
-            //Check if the iteration domain is null
-            if (iteration != null && this.Session.OpenIterations.Single(x => x.Key == iteration).Value.Item1 == null)
+            if (iteration == null || !this.Session.OpenIterations.TryGetValue(iteration, out var participation))
             {
-                return true;
+                return false;
+            }
+
+            //Check if the iteration domain is null
+            if (participation.Item1 == null)
+            {
+                return false;
             }
 
             //Check if the ownedThing domain is contained in the participant domains 
-            if (iteration != null && this.Session.OpenIterations.Single(x => x.Key == iteration).Value.Item2 != null)
+            if (participation.Item2 != null)
             {
-                Participant participant = this.Session.OpenIterations.Single(x => x.Key == iteration).Value.Item2;
+                var participant = participation.Item2;
                 if (participant.Domain.Contains(ownedThing.Owner))
                 {
                     return true;

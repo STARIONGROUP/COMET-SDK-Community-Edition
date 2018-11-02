@@ -30,7 +30,7 @@ namespace CDP4Common.EngineeringModelData
     /// <summary>
     /// The interface for the value-set of the <see cref="ParameterBase"/>
     /// </summary>
-    public interface IValueSet
+    public interface IValueSet : IModelCode
     {
         /// <summary>
         /// Gets the reference to the actual <see cref="ActualFiniteState"/> to which this <see cref="IValueSet"/> pertains
