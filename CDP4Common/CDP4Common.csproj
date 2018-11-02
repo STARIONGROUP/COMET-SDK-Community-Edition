@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard1.6;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <Version>1.7.5</Version>
+    <Version>1.8.0</Version>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
@@ -15,7 +15,10 @@
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
-    <PackageReleaseNotes>[fix] IValueSet to extends IModelCode</PackageReleaseNotes>
+    <PackageReleaseNotes>
+      [Add] ActualFiniteStateComparer
+      [fix] IValueSet to extends IModelCode
+    </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
   
