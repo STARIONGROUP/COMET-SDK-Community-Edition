@@ -71,15 +71,7 @@ namespace CDP4ServicesDal
 
             foreach (var operation in operationContainer.Operations)
             {
-                if (operation.OperationKind == OperationKind.Create)
-                {
-                    var parameterOverride = operation.ModifiedThing as ParameterOverride;
-                    if (parameterOverride != null)
-                    {
-                        operationsToAdd.AddRange(this.AddParameterSubscriptionCreateOperation(operationContainer, parameterOverride));
-                    }
-                }
-                else if (operation.OperationKind == OperationKind.Update)
+                if (operation.OperationKind == OperationKind.Update)
                 {
                     var possibleStateList = operation.ModifiedThing as PossibleFiniteStateList;
                     if (possibleStateList != null)
@@ -93,70 +85,6 @@ namespace CDP4ServicesDal
             {
                 operationContainer.AddOperation(operation);
             }
-        }
-
-        /// <summary>
-        /// Add <see cref="CDP4Common.DTO.ParameterSubscription"/> to the list of operation if a <see cref="ParameterOverride"/> is created
-        /// </summary>
-        /// <param name="operationContainer">The <see cref="OperationContainer"/> to modify</param>
-        /// <param name="parameterOverride">The <see cref="ParameterOverride"/> to create</param>
-        /// <returns>A <see cref="IEnumerable{T}"/> of new <see cref="Operation"/>s</returns>
-        private IEnumerable<Operation> AddParameterSubscriptionCreateOperation(OperationContainer operationContainer, ParameterOverride parameterOverride)
-        {
-            var parameterId = parameterOverride.Parameter;
-            Lazy<Thing> lazyParameter;
-            var operations = new List<Operation>();
-            if (!this.session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(parameterId, parameterOverride.IterationContainerId), out lazyParameter))
-            {
-                return operations;
-            }
-
-            var parameter = (Parameter)lazyParameter.Value;
-            foreach (var subscription in parameter.ParameterSubscription.Where(x => x.Owner.Iid != parameterOverride.Owner))
-            {
-                var parameterSubscription = new ParameterSubscription
-                {
-                    Iid = Guid.NewGuid(),
-                    Owner = subscription.Owner.Iid
-                };
-
-                // Build Route for this Parameter subscription
-                var elementUsageContainer =
-                    operationContainer.Operations.Select(x => x.ModifiedThing)
-                        .OfType<ElementUsage>()
-                        .SingleOrDefault(x => x.ParameterOverride.Contains(parameterOverride.Iid));
-
-                if (elementUsageContainer == null)
-                {
-                    continue;
-                }
-
-                Lazy<Thing> lazyElementUsageContainer;
-                if (!this.session.Assembler.Cache.TryGetValue(new Tuple<Guid, Guid?>(elementUsageContainer.Iid, elementUsageContainer.IterationContainerId), out lazyElementUsageContainer))
-                {
-                    continue;
-                }
-
-                var elementDef = lazyElementUsageContainer.Value.GetContainerOfType<ElementDefinition>();
-                var iteration = lazyElementUsageContainer.Value.GetContainerOfType<Iteration>();
-                var model = lazyElementUsageContainer.Value.GetContainerOfType<EngineeringModel>();
-
-                if (elementDef == null || iteration == null || model == null)
-                {
-                    continue;
-                }
-
-                parameterSubscription.AddContainer(ClassKind.ParameterOverride, parameterOverride.Iid);
-                parameterSubscription.AddContainer(ClassKind.ElementUsage, elementUsageContainer.Iid);
-                parameterSubscription.AddContainer(ClassKind.ElementDefinition, elementDef.Iid);
-                parameterSubscription.AddContainer(ClassKind.Iteration, iteration.Iid);
-                parameterSubscription.AddContainer(ClassKind.EngineeringModel, model.Iid);
-
-                parameterOverride.ParameterSubscription.Add(parameterSubscription.Iid);
-                operations.Add(new Operation(null, parameterSubscription, OperationKind.Create));
-            }
-
-            return operations;
         }
 
         /// <summary>
