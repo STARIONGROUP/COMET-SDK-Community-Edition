@@ -55,56 +55,6 @@ namespace CDP4ServicesDal.Tests
         { }
 
         [Test]
-        public void VerifyThatCreatingOverrideCreateSubscriptions()
-        {
-            var domain1 = new CDP4Common.SiteDirectoryData.DomainOfExpertise(Guid.NewGuid(), this.assembler.Cache,
-                this.uri);
-            var domain2 = new CDP4Common.SiteDirectoryData.DomainOfExpertise(Guid.NewGuid(), this.assembler.Cache,
-                this.uri);
-            var model = new EngineeringModel(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            var iteration = new Iteration(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            var elementDef = new ElementDefinition(Guid.NewGuid(), this.assembler.Cache, this.uri) { Owner = domain1 };
-            var defForUsage = new ElementDefinition(Guid.NewGuid(), this.assembler.Cache, this.uri) { Owner = domain1 };
-            var usage = new ElementUsage(Guid.NewGuid(), this.assembler.Cache, this.uri)
-            {
-                ElementDefinition = defForUsage
-            };
-
-            var parameter = new Parameter(Guid.NewGuid(), this.assembler.Cache, this.uri) { Owner = domain1 };
-            var parameterSubscription = new ParameterSubscription(Guid.NewGuid(), this.assembler.Cache, this.uri) { Owner = domain2 };
-            parameter.ParameterSubscription.Add(parameterSubscription);
-
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(parameter.Iid, iteration.Iid), new Lazy<Thing>(() => parameter));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(parameterSubscription.Iid, iteration.Iid), new Lazy<Thing>(() => parameterSubscription));
-            this.assembler.Cache.TryAdd(new Tuple<Guid, Guid?>(usage.Iid, iteration.Iid), new Lazy<Thing>(() => usage));
-
-            var parameterOverride = new ParameterOverride(Guid.NewGuid(), this.assembler.Cache, this.uri)
-            {
-                Owner = domain1,
-                Parameter = parameter
-            };
-            usage.ParameterOverride.Add(parameterOverride);
-
-            model.Iteration.Add(iteration);
-            iteration.Element.Add(elementDef);
-            iteration.Element.Add(defForUsage);
-            elementDef.ContainedElement.Add(usage);
-            defForUsage.Parameter.Add(parameter);
-
-            var transactionContext = TransactionContextResolver.ResolveContext(iteration);
-            var context = transactionContext.ContextRoute();
-
-            var operationContainer = new OperationContainer(context, model.RevisionNumber);
-            operationContainer.AddOperation(new Operation(null, parameterOverride.ToDto(), OperationKind.Create));
-            operationContainer.AddOperation(new Operation(usage.ToDto(), usage.ToDto(), OperationKind.Update));
-
-            var modifier = new OperationModifier(this.session.Object);
-            modifier.ModifyOperationContainer(operationContainer);
-
-            Assert.AreEqual(3, operationContainer.Operations.Count());
-        }
-
-        [Test]
         public void VerifyThatNoOperationAdded()
         {
             var domain1 = new CDP4Common.SiteDirectoryData.DomainOfExpertise(Guid.NewGuid(), this.assembler.Cache,
