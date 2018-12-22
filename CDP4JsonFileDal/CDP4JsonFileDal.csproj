@@ -40,7 +40,7 @@
   </Choose>
 
   <ItemGroup>
-    <PackageReference Include="DotNetZip" Version="1.11.0" />
+    <PackageReference Include="DotNetZip" Version="1.13.0" />
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
 
