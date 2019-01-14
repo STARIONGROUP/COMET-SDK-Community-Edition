@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CopyInfo.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,12 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Dto
 {
     using System;
-    using CommonData;
 
     /// <summary>
     /// The type used in the POST body to exchange data for copy operations
