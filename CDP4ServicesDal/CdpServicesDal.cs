@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -118,20 +118,6 @@ namespace CDP4ServicesDal
 
             var watch = Stopwatch.StartNew();
 
-            var hasCopyValuesOperations = operationContainer.Operations.Any(op => CDP4Dal.Utils.IsCopyKeepOriginalValuesOperation(op.OperationKind));
-
-            var modifier = new OperationModifier(this.Session);
-            var copyHandler = new CopyOperationHandler(this.Session);
-
-            copyHandler.ModifiedCopyOperation(operationContainer);
-            modifier.ModifyOperationContainer(operationContainer);
-
-            var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || CDP4Dal.Utils.IsCopyOperation(operation.OperationKind));
-            if (invalidOperationKind)
-            {
-                throw new InvalidOperationKindException("The CDP4 Services DAL does not support Copy or Move operations");
-            }
-            
             var result = new List<Thing>();
 
             if (files != null && files.Any())
@@ -176,24 +162,6 @@ namespace CDP4ServicesDal
                     if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
                     {
                         this.SetIterationContainer(result, iterationId);
-                    }
-                }
-            }
-
-            // Update value-sets
-            if (hasCopyValuesOperations)
-            {
-                var valueSetCopyHandler = new ValueSetOperationCreator(this.Session);
-                var valueSetOperationContainer = valueSetCopyHandler.CreateValueSetsUpdateOperations(operationContainer.Context, result, copyHandler.CopyThingMap);
-                var valueSetResult = await this.Write(valueSetOperationContainer);
-
-                // merge dtos
-                foreach (var valueSetDto in valueSetResult)
-                {
-                    var index = result.FindIndex(x => x.Iid == valueSetDto.Iid);
-                    if (index >= 0)
-                    {
-                        result[index] = valueSetDto;
                     }
                 }
             }
@@ -613,7 +581,7 @@ namespace CDP4ServicesDal
         /// </param>
         internal void ConstructPostRequestBodyStream(string token, OperationContainer operationContainer, Stream outputStream)
         {
-            var postOperation = new CdpPostOperation(this.MetaDataProvider);
+            var postOperation = new CdpPostOperation(this.MetaDataProvider, this.Session);
 
             // add the simple operations to the WSP container
             foreach (var operation in operationContainer.Operations)

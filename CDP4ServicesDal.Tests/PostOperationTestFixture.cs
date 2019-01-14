@@ -1,7 +1,7 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PostOperationTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -30,12 +30,15 @@ namespace CDP4ServicesDal.Tests
     using System.Collections.Generic;
     using System.IO;
     using CDP4Common;
+    using CDP4Common.Dto;
+    using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4JsonSerializer;
     using CDP4Dal.Operations;
     using CDP4ServicesDal.Tests.Helper;
     using Newtonsoft.Json;
     using NUnit.Framework;
+    using File = System.IO.File;
 
     [TestFixture]
     public class PostOperationTestFixture
@@ -55,7 +58,8 @@ namespace CDP4ServicesDal.Tests
             var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/PostOperation.json"));
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
-                Assert.DoesNotThrow(() => this.serializer.Deserialize<TestPostOperation>(stream));
+                var test = this.serializer.Deserialize<TestPostOperation>(stream);
+                Assert.AreEqual(1, test.Copy.Count);
             }
         }
 
@@ -88,7 +92,7 @@ namespace CDP4ServicesDal.Tests
             /// Gets or sets the collection of DTOs to update.
             /// </summary>
             [JsonProperty("_copy")]
-            public override List<ClasslessDTO> Copy { get; set; }
+            public override List<CopyInfo> Copy { get; set; }
         }
     }
 }

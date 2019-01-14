@@ -1,7 +1,7 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PostOperationTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -29,6 +29,7 @@ using CDP4Common;
 namespace CDP4Dal.Tests
 {
     using System.Collections.Generic;
+    using CDP4Common.Dto;
     using CDP4Common.DTO;
     using CDP4Dal.Operations;
     using NUnit.Framework;
@@ -52,7 +53,7 @@ namespace CDP4Dal.Tests
         public override List<ClasslessDTO> Delete { get; set; }
         public override List<Thing> Create { get; set; }
         public override List<ClasslessDTO> Update { get; set; }
-        public override List<ClasslessDTO> Copy { get; set; }
+        public override List<CopyInfo> Copy { get; set; }
         public override void ConstructFromOperation(Operation operation)
         {
             throw new System.NotImplementedException();

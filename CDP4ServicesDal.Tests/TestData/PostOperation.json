@@ -1,5 +1,25 @@
 ﻿{
-  "_copy": [],
+  "_copy": [
+      {
+        "options": {
+            "copyKind": "Deep",
+            "keepValues": true,
+            "keepOwner":  true 
+        },
+        "thing": {
+            "iid": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+            "classKind": "Person"
+        },
+        "owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+        "targetContainer": {
+            "iid": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+            "classKind": "Person"
+        },
+        "sourceTopContainer": {
+            "iid": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+            "classKind": "Person"
+        } 
+      }],
  "_delete": [],
  "_create": [{
   "classKind": "Person",

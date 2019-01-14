@@ -1,7 +1,7 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PostOperationTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -30,6 +30,7 @@ namespace CDP4WspDal.Tests
     using System.Collections.Generic;
     using System.IO;
     using CDP4Common;
+    using CDP4Common.Dto;
     using CDP4Common.MetaInfo;
     using CDP4JsonSerializer;
     using CDP4Dal.Operations;
@@ -88,7 +89,7 @@ namespace CDP4WspDal.Tests
             /// Gets or sets the collection of DTOs to update.
             /// </summary>
             [JsonProperty("_copy")]
-            public override List<ClasslessDTO> Copy { get; set; }
+            public override List<CopyInfo> Copy { get; set; }
         }
     }
 }

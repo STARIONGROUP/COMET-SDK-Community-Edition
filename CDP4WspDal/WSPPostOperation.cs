@@ -1,7 +1,7 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WSPPostOperation.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -31,12 +31,14 @@ namespace CDP4WspDal
     using System.Collections.Generic;
     using System.Linq;
     using CDP4Common;
-    using CDP4Common.CommonData;    
+    using CDP4Common.CommonData;
+    using CDP4Common.Dto;
     using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Dal.Operations;
     using Newtonsoft.Json;
+    using DomainOfExpertise = CDP4Common.DTO.DomainOfExpertise;
     using Thing = CDP4Common.DTO.Thing;
 
     /// <summary>
@@ -80,13 +82,13 @@ namespace CDP4WspDal
         /// Gets or sets the collection of DTOs to copy.
         /// </summary>
         [JsonIgnore]
-        public override List<ClasslessDTO> Copy { get; set; }
+        public override List<CopyInfo> Copy { get; set; }
 
         /// <summary>
         /// Populate this <see cref="WspPostOperation"/> with the correct setup for the OCDT protocol
         /// </summary>
         /// <param name="operation">
-        /// The operation.
+        ///     The operation.
         /// </param>
         public override void ConstructFromOperation(Operation operation)
         {

@@ -1,7 +1,7 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PostOperation.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -28,6 +28,7 @@ namespace CDP4Dal.Operations
 {
     using System.Collections.Generic;
     using CDP4Common;
+    using CDP4Common.Dto;
     using CDP4Common.DTO;
 
     /// <summary>
@@ -43,7 +44,7 @@ namespace CDP4Dal.Operations
             this.Delete = new List<ClasslessDTO>();
             this.Create = new List<Thing>();
             this.Update = new List<ClasslessDTO>();
-            this.Copy = new List<ClasslessDTO>();
+            this.Copy = new List<CopyInfo>();
         }
 
         /// <summary>
@@ -64,15 +65,15 @@ namespace CDP4Dal.Operations
         /// <summary>
         /// Gets or sets the collection of DTOs to copy.
         /// </summary>
-        public abstract List<ClasslessDTO> Copy { get; set; }
+        public abstract List<CopyInfo> Copy { get; set; }
 
         /// <summary>
         /// Populate the current <see cref="PostOperation"/> with the content based on the 
         /// provided <see cref="Operation"/>
         /// </summary>
         /// <param name="operation">
-        /// The <see cref="Operation"/> that contains all the <see cref="Thing"/>s that need to be
-        /// updated to the data-source
+        ///     The <see cref="Operation"/> that contains all the <see cref="Thing"/>s that need to be
+        ///     updated to the data-source
         /// </param>
         public abstract void ConstructFromOperation(Operation operation);
     }

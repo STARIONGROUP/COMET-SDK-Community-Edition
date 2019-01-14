@@ -1,7 +1,7 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpPostOperation.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -32,9 +32,12 @@ namespace CDP4ServicesDal
     using System.Linq;
     using CDP4Common;
     using CDP4Common.CommonData;
+    using CDP4Common.Dto;
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.MetaInfo;    
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+    using CDP4Dal;
     using CDP4Dal.Operations;
     using Newtonsoft.Json;
 
@@ -45,17 +48,34 @@ namespace CDP4ServicesDal
     internal class CdpPostOperation : PostOperation
     {
         /// <summary>
+        /// The property name that stores the unique identifier of a <see cref="Thing"/>
+        /// </summary>
+        private const string IID_KEY = "Iid";
+
+        /// <summary>
+        /// The property name that stores the classkind of a <see cref="Thing"/>
+        /// </summary>
+        private const string CLASSKIND_KEY = "ClassKind";
+
+        /// <summary>
         /// The <see cref="IMetaDataProvider"/> used in the application
         /// </summary>
         private readonly IMetaDataProvider metaDataProvider;
 
         /// <summary>
+        /// The <see cref="ISession"/>
+        /// </summary>
+        private readonly ISession session;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CdpPostOperation"/> class.
         /// </summary>
         /// <param name="metaDataProvider">The <see cref="IMetaDataProvider"/></param>
-        internal CdpPostOperation(IMetaDataProvider metaDataProvider)
+        /// <param name="session">The <see cref="ISession"/></param>
+        internal CdpPostOperation(IMetaDataProvider metaDataProvider, ISession session)
         {
             this.metaDataProvider = metaDataProvider;
+            this.session = session;
         }
 
         /// <summary>
@@ -80,15 +100,15 @@ namespace CDP4ServicesDal
         /// Gets or sets the collection of DTOs to copy.
         /// </summary>
         [JsonProperty("_copy")]
-        public override List<ClasslessDTO> Copy { get; set; }
+        public override List<CopyInfo> Copy { get; set; }
 
         /// <summary>
         /// Populate the current <see cref="PostOperation"/> with the content based on the 
         /// provided <see cref="Operation"/>
         /// </summary>
         /// <param name="operation">
-        /// The <see cref="Operation"/> that contains all the <see cref="Thing"/>s that need to be
-        /// updated to the data-source
+        ///     The <see cref="Operation"/> that contains all the <see cref="Thing"/>s that need to be
+        ///     updated to the data-source
         /// </param>
         public override void ConstructFromOperation(Operation operation)
         {
@@ -108,10 +128,12 @@ namespace CDP4ServicesDal
                 case OperationKind.Update:
                     this.ResolveUpdate(operation);
                     break;
-                case OperationKind.Copy:
-                    throw new NotImplementedException("Copy operation is not yet implemented");
                 case OperationKind.Move:
-                    throw new NotImplementedException("Move operation is not yet implemented");
+                    throw new NotImplementedException();
+                    break;
+                default:
+                    this.ResolveCopy(operation);
+                    break;
             }
         }
 
@@ -214,7 +236,7 @@ namespace CDP4ServicesDal
                 {
                     // whatever outputs here has to be an update
                     // remove the properties that have not changed
-                    if (key.Equals("Iid") || key.Equals("ClassKind"))
+                    if (key.Equals(IID_KEY) || key.Equals(CLASSKIND_KEY))
                     {
                         continue;
                     }
@@ -265,6 +287,64 @@ namespace CDP4ServicesDal
             {
                 this.Update.Add(modified);
             }
+        }
+
+        /// <summary>
+        /// Resolves the copy operations
+        /// </summary>
+        /// <param name="operation">The <see cref="Operation"/></param>
+        private void ResolveCopy(Operation operation)
+        {
+            if (!operation.OperationKind.IsCopyOperation())
+            {
+                return;
+            }
+
+            var options = new CopyInfoOptions
+            {
+                CopyKind = CopyKind.Deep,
+                KeepOwner = operation.OperationKind == OperationKind.Copy || operation.OperationKind == OperationKind.CopyKeepValues,
+                KeepValues = operation.OperationKind == OperationKind.CopyKeepValues || operation.OperationKind == OperationKind.CopyKeepValuesChangeOwner
+            };
+
+            var sourcepoco = operation.OriginalThing.QuerySourceThing();
+            var sourceIteration = sourcepoco.GetContainerOfType<Iteration>();
+
+            var source = new CopySource
+            {
+                Thing = new CopyReference {Iid = operation.OriginalThing.Iid, Type = operation.OriginalThing.ClassKind},
+                TopContainer = new CopyReference {Iid = sourcepoco.TopContainer.Iid, Type = sourcepoco.TopContainer.ClassKind},
+                IterationId = sourceIteration?.Iid
+            };
+
+            var poco = operation.ModifiedThing.QuerySourceThing();
+            if (poco.Container == null)
+            {
+                throw new InvalidOperationException("The container cannot be null.");
+            }
+
+            var targetIteration = poco.GetContainerOfType<Iteration>();
+            var target = new CopyTarget
+            {
+                Container = new CopyReference { Iid = poco.Container.Iid, Type = poco.Container.ClassKind },
+                TopContainer = new CopyReference { Iid = poco.TopContainer.Iid, Type = poco.TopContainer.ClassKind },
+                IterationId = targetIteration?.Iid
+            };
+
+            var copyInfo = new CopyInfo
+            {
+                Source = source,
+                Target = target,
+                Options = options
+            };
+
+            if (targetIteration != null)
+            {
+                var participation = this.session.OpenIterations.FirstOrDefault(x => x.Key.Iid == targetIteration.Iid).Value;
+                copyInfo.ActiveOwner = participation.Item1?.Iid ?? Guid.Empty;
+            }
+
+            this.Copy.Add(copyInfo);
         }
     }
 }
