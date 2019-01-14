@@ -19,8 +19,8 @@
       [Add] CopyInfo
 </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
-    <AssemblyVersion>1.9.0.0</AssemblyVersion>
-    <FileVersion>1.9.0.0</FileVersion>
+    <AssemblyVersion>1.9.0</AssemblyVersion>
+    <FileVersion>1.9.0</FileVersion>
   </PropertyGroup>
   
   <ItemGroup>
