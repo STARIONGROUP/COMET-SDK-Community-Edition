@@ -115,6 +115,12 @@ namespace CDP4ServicesDal.Tests
             this.credentials = null;
             this.dal = null;
             this.session = null;
+            this.siteDirectory = null;
+            this.siteReferenceDataLibrary = null;
+            this.modelReferenceDataLibrary = null;
+            this.iterationSetup = null;
+            this.engineeringModelSetup = null;
+            this.engineeringModel = null;
         }
 
         [Test]
@@ -532,6 +538,42 @@ namespace CDP4ServicesDal.Tests
             var result = await dal.Open(this.credentials, new CancellationToken());
             
             Assert.NotNull(result);
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
+        [Category("AppVeyorExclusion")]
+        public async Task Verify_that_opens_and_close_removes_items_from_cache()
+        {
+            this.dal = new CdpServicesDal { Session = this.session };
+            this.credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.rheagroup.com"));
+            
+            this.session = new Session(dal, credentials);
+            await this.session.Open();
+
+            this.siteDirectory = session.Assembler.RetrieveSiteDirectory();
+            this.engineeringModelSetup = this.siteDirectory.Model.Single(x => x.ShortName == "LOFT");
+            this.iterationSetup = this.engineeringModelSetup.IterationSetup.First();
+            var domainOfExpertise = this.engineeringModelSetup.ActiveDomain.First(x => x.ShortName == "SYS");
+
+            var openCount = this.session.Assembler.Cache.Count;
+
+            var cache = this.session.Assembler.Cache;
+
+            var model = new EngineeringModel(this.engineeringModelSetup.EngineeringModelIid, null, null);
+            this.iteration = new Iteration(this.iterationSetup.IterationIid, null, null);
+            this.iteration.Container = model;
+
+            await this.session.Read(iteration, domainOfExpertise);
+
+            var readCount = this.session.Assembler.Cache.Count;
+            Assert.IsTrue(readCount > openCount);
+
+            await this.session.CloseIterationSetup(this.iterationSetup);
+
+            var closeCount = this.session.Assembler.Cache.Count;
+
+            Assert.IsTrue(closeCount < readCount);
         }
 
         [Test]
