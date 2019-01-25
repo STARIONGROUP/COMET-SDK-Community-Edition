@@ -84,5 +84,26 @@ namespace CDP4Common.EngineeringModelData
                 return appliedRules;
             }
         }
+
+        /// <summary>
+        /// Perform extra operations on a <see cref="BinaryRelationship"/>
+        /// </summary>
+        protected override void ResolveExtraProperties()
+        {
+            if (this.Source != null && this.Target != null)
+            {
+                this.Source.Relationships.Add(this);
+                this.Target.Relationships.Add(this);
+            }
+        }
+
+        /// <summary>
+        /// Clean the referenced Thing list of <see cref="Relationship"/> of this <see cref="Relationship"/>
+        /// </summary>
+        public override void CleanReferencedThingRelationship()
+        {
+            this.Source?.Relationships.Remove(this);
+            this.Target?.Relationships.Remove(this);
+        }
     }
 }

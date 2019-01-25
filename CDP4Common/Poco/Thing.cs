@@ -93,6 +93,7 @@ namespace CDP4Common.CommonData
             this.ClassKind = this.ComputeCurrentClassKind();
             this.ExcludedDomain = new List<DomainOfExpertise>();
             this.ExcludedPerson = new List<Person>();
+            this.Relationships = new List<Relationship>();
         }
 
         /// <summary>
@@ -118,8 +119,24 @@ namespace CDP4Common.CommonData
             this.ClassKind = this.ComputeCurrentClassKind();
             this.ExcludedDomain = new List<DomainOfExpertise>();
             this.ExcludedPerson = new List<Person>();
+            this.Relationships = new List<Relationship>();
         }
-        
+
+        /// <summary>
+        /// Gets a value indicating whether the current <see cref="Thing"/> is referenced by a <see cref="Relationship"/>
+        /// </summary>
+        public bool HasRelationship => this.Relationships.Count > 0;
+
+        /// <summary>
+        /// Gets the lit of relationship that references the current <see cref="Thing"/>
+        /// </summary>
+        public IReadOnlyList<Relationship> QueryRelationships => this.Relationships;
+
+        /// <summary>
+        /// Gets the lit of relationship that references the current <see cref="Thing"/>
+        /// </summary>
+        internal List<Relationship> Relationships { get; }
+
         /// <summary>
         /// assertion of the ClassKind of this Thing, denoting its actual class
         /// Note: Typically this is used internally by the implementing software to improve classification of instances and optimise performance when moving data between different programming environments. In an object-oriented software engineering environment that supports reflection such information would be redundant.

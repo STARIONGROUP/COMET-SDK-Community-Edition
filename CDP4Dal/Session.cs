@@ -337,6 +337,23 @@ namespace CDP4Dal
         }
 
         /// <summary>
+        /// Switches the current domain for an iteration
+        /// </summary>
+        /// <param name="iterationId">The iteration identifier</param>
+        /// <param name="domain">The domain</param>
+        public void SwitchDomain(Guid iterationId, DomainOfExpertise domain)
+        {
+            var iterationPair = this.openIterations.SingleOrDefault(x => x.Key.Iid == iterationId);
+            if (iterationPair.Key != null && iterationPair.Value.Item1 != domain)
+            {
+                var selectedParticipation = new Tuple<DomainOfExpertise, Participant>(domain, iterationPair.Value.Item2);
+                this.openIterations.Remove(iterationPair.Key);
+                this.openIterations.Add(iterationPair.Key, selectedParticipation);
+                CDPMessageBus.Current.SendMessage(new DomainChangedEvent(iterationPair.Key, domain));
+            }
+        }
+
+        /// <summary>
         /// Read an <see cref="Iteration"/> from the underlying <see cref="IDal"/> and set the active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/>.
         /// </summary>
         /// <param name="iteration">The <see cref="Iteration"/> to read</param>

@@ -127,6 +127,13 @@ namespace CDP4Dal
         DomainOfExpertise QuerySelectedDomainOfExpertise(Iteration iteration);
 
         /// <summary>
+        /// Switches the current domain for an iteration
+        /// </summary>
+        /// <param name="iterationId">The iteration identifier</param>
+        /// <param name="domain">The domain</param>
+        void SwitchDomain(Guid iterationId, DomainOfExpertise domain);
+
+        /// <summary>
         /// Convenience function to get the required reference data library chain for the passed in engineeringModel.
         /// </summary>
         /// <param name="engineeringModel">

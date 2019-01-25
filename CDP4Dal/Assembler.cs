@@ -714,6 +714,11 @@ namespace CDP4Dal
             var succeed = this.Cache.TryRemove(thingToRemove.CacheKey, out outLazy);
             if (succeed)
             {
+                if (outLazy.Value is Relationship relationship)
+                {
+                    relationship.CleanReferencedThingRelationship();
+                }
+
                 CDPMessageBus.Current.SendObjectChangeEvent(outLazy.Value, EventKind.Removed);
             }
 
