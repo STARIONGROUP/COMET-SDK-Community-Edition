@@ -11,7 +11,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4Dal-CE" Version="4.0.0" />
+        <PackageReference Include="CDP4Dal-CE" Version="4.1.0" />
       </ItemGroup>
     </When>
 

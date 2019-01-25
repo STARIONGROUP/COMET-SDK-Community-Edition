@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4ServicesDal Community Edition</Title>
-    <Version>4.0.0</Version>
+    <Version>4.0.1</Version>
     <Description>CDP4ServicesDal Dal Plugin</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
@@ -16,8 +16,8 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
-      [Update] to CDP4JsonSerializer-CE version 2.0.0
-      [Update] to CDP4Dal-CE version 4.0.0
+      [Update] to CDP4JsonSerializer-CE version 2.0.1
+      [Update] to CDP4Dal-CE version 4.1.0
     </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
@@ -25,8 +25,8 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4JsonSerializer-CE" Version="2.0.0" />
-        <PackageReference Include="CDP4Dal-CE" Version="4.0.0" />
+        <PackageReference Include="CDP4JsonSerializer-CE" Version="2.0.1" />
+        <PackageReference Include="CDP4Dal-CE" Version="4.1.0" />
       </ItemGroup>
     </When>
 
