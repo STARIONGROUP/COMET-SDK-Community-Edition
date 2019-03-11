@@ -36,5 +36,5 @@ test:
       - WebServicesDependent
       - AppVeyorExclusion
 after_test:
-  - OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test --configuration Dev --no-build --filter \"TestCategory!=WebServicesDependent&TestCategory!=AppVeyorExclusion\"" -filter:"-[*.Tests*]*" -output:".\cdp4sdk_coverage.xml" -oldstyle -log:Error
+  - OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test --filter \"TestCategory!=WebServicesDependent&TestCategory!=AppVeyorExclusion\"" -filter:"-[*.Tests*]*" -output:".\cdp4sdk_coverage.xml" -oldstyle -log:Error
   - codecov -f "cdp4sdk_coverage.xml" -t b8924a0f-355e-4a9a-b304-f403231a6bcb
