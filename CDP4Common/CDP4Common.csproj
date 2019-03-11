@@ -19,6 +19,7 @@
       [Add] Relationships to Thing class that contains the relationships that the Thing is a member of; fixes #40
     </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   
   <ItemGroup>

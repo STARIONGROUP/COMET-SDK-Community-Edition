@@ -20,6 +20,7 @@
       [Update] to DotNetZip version 1.13.2
     </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <Choose>

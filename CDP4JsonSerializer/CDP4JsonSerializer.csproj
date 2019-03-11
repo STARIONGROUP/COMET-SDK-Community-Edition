@@ -19,6 +19,7 @@
       [Update] to CDP4Common-CE version 2.1.0 (fixed)
     </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <Choose>

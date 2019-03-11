@@ -19,6 +19,7 @@
       [Update] to CDP4JsonSerializer-CE version 2.0.2
     </PackageReleaseNotes>
     <Configurations>Debug;Release;Dev</Configurations>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <Choose>
