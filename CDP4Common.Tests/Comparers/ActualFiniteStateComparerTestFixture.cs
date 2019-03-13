@@ -122,7 +122,7 @@ namespace CDP4Common.Tests.Comparers
         }
 
         [Test]
-        public void Verify_that_when_actualstate1_is_smaller_than_actualustate2_a_negative_number_is_returned()
+        public void Verify_that_when_actualstate1_is_smaller_than_actualstate2_a_negative_number_is_returned()
         {
             var result = this.comparer.Compare(this.actualFiniteState_1, this.actualFiniteState_2);
 
