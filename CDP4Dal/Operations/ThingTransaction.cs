@@ -14,7 +14,7 @@
 //    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
+//    Lesser General Public License for more details.copy
 //
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
@@ -427,8 +427,7 @@ namespace CDP4Dal.Operations
             }
 
             this.Copy(clone, operationKind);
-            this.AddCloneToContainer(clone, containerDestinationClone);
-            this.CreateOrUpdate(containerDestinationClone);
+            clone.Container = containerDestinationClone;
         }
 
         /// <summary>
@@ -1274,6 +1273,7 @@ namespace CDP4Dal.Operations
             var things = new List<Thing>(this.addedThing);
             things.AddRange(this.updatedThing.Keys);
             things.AddRange(this.deletedThing);
+            things.AddRange(this.copiedThing.Select(x => x.Key.Item2));
 
             var distinctTopContainer = things.Select(x => x.TopContainer).DistinctBy(t => t.Iid).ToList();            
             if (distinctTopContainer.Count != 1)

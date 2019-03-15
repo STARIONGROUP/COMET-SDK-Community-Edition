@@ -837,7 +837,7 @@ namespace CDP4Dal.Tests
 
             var operationContainer = transaction.FinalizeTransaction();
             Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.CopyDefaultValuesChangeOwner));
-            Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
+            Assert.AreEqual(0, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
         }
 
         [Test]
@@ -871,7 +871,7 @@ namespace CDP4Dal.Tests
 
             var operationContainer = transaction.FinalizeTransaction();
             Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.CopyKeepValuesChangeOwner));
-            Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
+            Assert.AreEqual(0, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
         }
 
         [Test]
@@ -905,7 +905,7 @@ namespace CDP4Dal.Tests
 
             var operationContainer = transaction.FinalizeTransaction();
             Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Copy));
-            Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
+            Assert.AreEqual(0, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
         }
 
         [Test]
@@ -939,7 +939,8 @@ namespace CDP4Dal.Tests
 
             var operationContainer = transaction.FinalizeTransaction();
             Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.CopyKeepValues));
-            Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
+            Assert.AreEqual(0, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
+            Assert.IsTrue(operationContainer.Context.Contains(typeof(Iteration).Name.ToLower()));
         }
 
         [Test]

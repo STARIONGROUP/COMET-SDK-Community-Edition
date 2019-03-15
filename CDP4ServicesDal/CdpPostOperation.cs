@@ -312,8 +312,8 @@ namespace CDP4ServicesDal
 
             var source = new CopySource
             {
-                Thing = new CopyReference {Iid = operation.OriginalThing.Iid, Type = operation.OriginalThing.ClassKind},
-                TopContainer = new CopyReference {Iid = sourcepoco.TopContainer.Iid, Type = sourcepoco.TopContainer.ClassKind},
+                Thing = new CopyReference {Iid = operation.OriginalThing.Iid, ClassKind = operation.OriginalThing.ClassKind},
+                TopContainer = new CopyReference {Iid = sourcepoco.TopContainer.Iid, ClassKind = sourcepoco.TopContainer.ClassKind},
                 IterationId = sourceIteration?.Iid
             };
 
@@ -326,8 +326,8 @@ namespace CDP4ServicesDal
             var targetIteration = poco.GetContainerOfType<Iteration>();
             var target = new CopyTarget
             {
-                Container = new CopyReference { Iid = poco.Container.Iid, Type = poco.Container.ClassKind },
-                TopContainer = new CopyReference { Iid = poco.TopContainer.Iid, Type = poco.TopContainer.ClassKind },
+                Container = new CopyReference { Iid = poco.Container.Iid, ClassKind = poco.Container.ClassKind },
+                TopContainer = new CopyReference { Iid = poco.TopContainer.Iid, ClassKind = poco.TopContainer.ClassKind },
                 IterationId = targetIteration?.Iid
             };
 

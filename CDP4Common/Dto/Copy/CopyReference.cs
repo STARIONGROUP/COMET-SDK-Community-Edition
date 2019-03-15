@@ -35,7 +35,7 @@ namespace CDP4Common.Dto
         /// <summary>
         /// Gets or sets the type of the reference
         /// </summary>
-        public ClassKind Type { get; set; }
+        public ClassKind ClassKind { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier of the copy-reference
