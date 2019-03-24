@@ -37,7 +37,6 @@ namespace CDP4Common.CommonData
     using CDP4Common.Polyfills;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    using NLog;
 
     /// <summary>
     /// top level abstract superclass from which all domain concept classes in the model inherit
@@ -45,12 +44,12 @@ namespace CDP4Common.CommonData
     public abstract partial class Thing : IDisposable
     {
         /// <summary>
-        /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
+        /// Representation of the default value for the accessRight property of a <see cref="PersonPermission"/> for the affected class
         /// </summary>
         public const PersonAccessRightKind DefaultPersonAccess = PersonAccessRightKind.NOT_APPLICABLE;
 
         /// <summary>
-        /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
+        /// Representation of the default value for the accessRight property of a <see cref="PersonPermission"/> for the affected class
         /// </summary>
         public const ParticipantAccessRightKind DefaultParticipantAccess = ParticipantAccessRightKind.NOT_APPLICABLE;
 
@@ -69,11 +68,6 @@ namespace CDP4Common.CommonData
         /// </summary>
         private readonly List<string> validationErrorList = new List<string>();
 
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        protected static Logger logger = LogManager.GetCurrentClassLogger();
-        
         /// <summary>
         /// The <see cref="Dictionary{string, Action}"/> that contains reset method for properties that were replaced by sentinels
         /// </summary>
@@ -128,17 +122,17 @@ namespace CDP4Common.CommonData
         public bool HasRelationship => this.Relationships.Count > 0;
 
         /// <summary>
-        /// Gets the lit of relationship that references the current <see cref="Thing"/>
+        /// Gets the lit of <see cref="Relationship"/>s that references the current <see cref="Thing"/>
         /// </summary>
         public IReadOnlyList<Relationship> QueryRelationships => this.Relationships;
 
         /// <summary>
-        /// Gets the lit of relationship that references the current <see cref="Thing"/>
+        /// Gets the lit of <see cref="Relationship"/>s that references the current <see cref="Thing"/>
         /// </summary>
         internal List<Relationship> Relationships { get; }
 
         /// <summary>
-        /// assertion of the ClassKind of this Thing, denoting its actual class
+        /// assertion of the <see cref="ClassKind"/> of this <see cref="Thing"/>, denoting its actual class
         /// Note: Typically this is used internally by the implementing software to improve classification of instances and optimise performance when moving data between different programming environments. In an object-oriented software engineering environment that supports reflection such information would be redundant.
         /// </summary>
         [Browsable(true)]
@@ -147,23 +141,29 @@ namespace CDP4Common.CommonData
         public ClassKind ClassKind { get; internal set; }
 
         /// <summary>
-        /// Gets or sets a list of DomainOfExpertise.
+        /// Gets or sets a list of <see cref="DomainOfExpertise"/> that are excluded for this instance.
         /// </summary>
+        /// <remarks>
+        /// Excluded <see cref="DomainOfExpertise"/> do not have access to the instance
+        /// </remarks>
         [CDPVersion("1.1.0")]
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual List<DomainOfExpertise> ExcludedDomain { get; set; }
         
         /// <summary>
-        /// Gets or sets a list of Person.
+        /// Gets or sets a list of <see cref="Person"/> that are excluded for this instance.
         /// </summary>
+        /// <remarks>
+        /// Excluded <see cref="Person"/> do not have access to the instance
+        /// </remarks>
         [CDPVersion("1.1.0")]
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual List<Person> ExcludedPerson { get; set; }
 
         /// <summary>
-        /// Gets or sets the Universally Unique Identifier (UUID) that uniquely identifies an instance of Thing
+        /// Gets or sets the Universally Unique Identifier (UUID) that uniquely identifies an instance of <see cref="Thing"/>
         /// </summary>
         [Browsable(true)]
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
@@ -171,7 +171,7 @@ namespace CDP4Common.CommonData
         public Guid Iid { get; set; }
 
         /// <summary>
-        /// Gets or sets the ModifiedOn.
+        /// Gets or sets the <see cref="DateTime"/> the <see cref="Thing"/> was last modified on.
         /// </summary>
         [CDPVersion("1.1.0")]
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
@@ -179,7 +179,7 @@ namespace CDP4Common.CommonData
         public virtual DateTime ModifiedOn { get; set; }
 
         /// <summary>
-        /// revision number of this Thing
+        /// revision number of this <see cref=""/>
         /// Note: In this data model a revision numbering approach similar to Subversion is used, see <a href="http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.basic">http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.basic</a>. Therefore the revision number is actually a change set number. At any time that an update to a Thing is made and committed to a persistent data store, the <i>revisionNumber</i> of its TopContainer is incremented by one, and then the <i>revisionNumber</i> of the updated Thing is set to the new TopContainer's <i>revisionNumber</i>. See also TopContainer. When a Thing is first created (in a client application) its <i>revisionNumber</i> is set to zero, implying it has not yet been persisted.
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
