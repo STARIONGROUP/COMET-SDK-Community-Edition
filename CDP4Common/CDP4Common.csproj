@@ -18,7 +18,7 @@
     <PackageReleaseNotes>
       [Refactor] CopyReference class Type property to ClassKind to be inline with type information handling of 10-25)
     </PackageReleaseNotes>
-    <Configurations>Debug;Release;Dev</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup>    

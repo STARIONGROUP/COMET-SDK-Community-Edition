@@ -6,17 +6,17 @@
     <Description>CDP4JsonSerializer netcore unit tests</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
-    <Configurations>Debug;Release;Dev</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <Choose>
-    <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
+    <When Condition="'$(Configuration)'=='Release'">
       <ItemGroup>
         <PackageReference Include="CDP4JsonSerializer-CE" Version="3.0.0" />
       </ItemGroup>
     </When>
 
-    <When Condition="'$(Configuration)'=='Dev'">
+    <When Condition="'$(Configuration)'=='Debug'">
       <ItemGroup>
         <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
         <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />

@@ -19,7 +19,7 @@
       [Update] to CDP4Common-CE version 3.0.0
       [Fix] ThingTransaction.Copy algorithm
     </PackageReleaseNotes>
-    <Configurations>Debug;Release;Dev</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
   
   <PropertyGroup>    
@@ -28,13 +28,13 @@
   </PropertyGroup>
 
   <Choose>
-    <When Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
+    <When Condition="'$(Configuration)'=='Release'">
       <ItemGroup>
         <PackageReference Include="CDP4Common-CE" Version="3.0.0" />
       </ItemGroup>
     </When>
 
-    <When Condition="'$(Configuration)'=='Dev'">
+    <When Condition="'$(Configuration)'=='Debug'">
       <ItemGroup>
         <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
       </ItemGroup>
