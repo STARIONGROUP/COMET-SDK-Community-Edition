@@ -28,12 +28,12 @@ for:
     only:
       - master
   configuration: Release
-# configuration for "development" branch, build in Dev mode
+# configuration for "development" branch, build in Debug mode
 -
   branches:
     only:
       - development
-  configuration: Dev
+  configuration: Debug
 # "fall back" configuration for all other branches
 # no "branches" section defined
 configuration: Debug
