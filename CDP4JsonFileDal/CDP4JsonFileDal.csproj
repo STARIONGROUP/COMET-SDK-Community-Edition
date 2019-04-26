@@ -44,7 +44,7 @@
   </Choose>
 
   <ItemGroup>
-    <PackageReference Include="DotNetZip" Version="1.13.2" />
+    <PackageReference Include="DotNetZip" Version="1.13.3" />
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
 
