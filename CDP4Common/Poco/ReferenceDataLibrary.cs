@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReferenceDataLibrary.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.SiteDirectoryData
 {
@@ -53,14 +51,12 @@ namespace CDP4Common.SiteDirectoryData
         {
             get
             {
-                var requiredRdls = new HashSet<ReferenceDataLibrary>(base.RequiredRdls);
-                requiredRdls.UnionWith(this.GetRequiredRdls());
-                return requiredRdls;
+                return this.GetRequiredRdls();
             }
         }
 
         /// <summary>
-        /// Gets the aggragation of all required <see cref="ReferenceDataLibrary"/> besides the current one
+        /// Gets the aggragation of all required <see cref="ReferenceDataLibrary"/> including the current one
         /// </summary>
         public IEnumerable<ReferenceDataLibrary> AggregatedReferenceDataLibrary
         {
@@ -70,6 +66,206 @@ namespace CDP4Common.SiteDirectoryData
                 foreach (var rdl in this.GetRequiredRdls())
                 {
                     yield return rdl;
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Queries the <see cref="Category"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
+        /// current <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{Category}"/>
+        /// </returns>
+        public IEnumerable<Category> QueryCategoriesFromChainOfRdls()
+        {
+            var chainOfRdls = this.AggregatedReferenceDataLibrary;
+
+            foreach (var rdl in chainOfRdls)
+            {
+                foreach (var category in rdl.DefinedCategory)
+                {
+                    yield return category;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Queries the <see cref="Category"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
+        /// current <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{Category}"/>
+        /// </returns>
+        public IEnumerable<ParameterType> QueryParameterTypesFromChainOfRdls()
+        {
+            var chainOfRdls = this.AggregatedReferenceDataLibrary;
+
+            foreach (var rdl in chainOfRdls)
+            {
+                foreach (var parameterType in rdl.ParameterType)
+                {
+                    yield return parameterType;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Queries the <see cref="MeasurementScale"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
+        /// current <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{MeasurementScale}"/>
+        /// </returns>
+        public IEnumerable<MeasurementScale> QueryMeasurementScalesFromChainOfRdls()
+        {
+            var chainOfRdls = this.AggregatedReferenceDataLibrary;
+
+            foreach (var rdl in chainOfRdls)
+            {
+                foreach (var measurementScale in rdl.Scale)
+                {
+                    yield return measurementScale;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Queries the <see cref="UnitPrefix"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
+        /// current <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{UnitPrefix}"/>
+        /// </returns>
+        public IEnumerable<UnitPrefix> QueryUnitPrefixesFromChainOfRdls()
+        {
+            var chainOfRdls = this.AggregatedReferenceDataLibrary;
+
+            foreach (var rdl in chainOfRdls)
+            {
+                foreach (var unitPrefix in rdl.UnitPrefix)
+                {
+                    yield return unitPrefix;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Queries the <see cref="MeasurementUnit"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
+        /// current <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{MeasurementUnit}"/>
+        /// </returns>
+        public IEnumerable<MeasurementUnit> QueryMeasurementUnitsFromChainOfRdls()
+        {
+            var chainOfRdls = this.AggregatedReferenceDataLibrary;
+
+            foreach (var rdl in chainOfRdls)
+            {
+                foreach (var measurementUnit in rdl.Unit)
+                {
+                    yield return measurementUnit;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Queries the <see cref="FileType"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
+        /// current <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{FileType}"/>
+        /// </returns>
+        public IEnumerable<FileType> QueryFileTypesFromChainOfRdls()
+        {
+            var chainOfRdls = this.AggregatedReferenceDataLibrary;
+
+            foreach (var rdl in chainOfRdls)
+            {
+                foreach (var fileType in rdl.FileType)
+                {
+                    yield return fileType;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Queries the <see cref="Glossary"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
+        /// current <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{Glossary}"/>
+        /// </returns>
+        public IEnumerable<Glossary> QueryGlossariesFromChainOfRdls()
+        {
+            var chainOfRdls = this.AggregatedReferenceDataLibrary;
+
+            foreach (var rdl in chainOfRdls)
+            {
+                foreach (var glossary in rdl.Glossary)
+                {
+                    yield return glossary;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Queries the <see cref="ReferenceSource"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
+        /// current <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{ReferenceSource}"/>
+        /// </returns>
+        public IEnumerable<ReferenceSource> QueryReferenceSourcesFromChainOfRdls()
+        {
+            var chainOfRdls = this.AggregatedReferenceDataLibrary;
+
+            foreach (var rdl in chainOfRdls)
+            {
+                foreach (var referenceSource in rdl.ReferenceSource)
+                {
+                    yield return referenceSource;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Queries the <see cref="Rule"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
+        /// current <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{Rule}"/>
+        /// </returns>
+        public IEnumerable<Rule> QueryRulesFromChainOfRdls()
+        {
+            var chainOfRdls = this.AggregatedReferenceDataLibrary;
+
+            foreach (var rdl in chainOfRdls)
+            {
+                foreach (var rule in rdl.Rule)
+                {
+                    yield return rule;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Queries the <see cref="Constant"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
+        /// current <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{Constant}"/>
+        /// </returns>
+        public IEnumerable<Constant> QueryConstantsFromChainOfRdls()
+        {
+            var chainOfRdls = this.AggregatedReferenceDataLibrary;
+
+            foreach (var rdl in chainOfRdls)
+            {
+                foreach (var constant in rdl.Constant)
+                {
+                    yield return constant;
                 }
             }
         }
