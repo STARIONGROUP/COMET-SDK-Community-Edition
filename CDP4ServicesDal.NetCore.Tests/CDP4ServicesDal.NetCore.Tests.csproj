@@ -12,7 +12,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4ServicesDal-CE" Version="5.0.0" />
+        <PackageReference Include="CDP4ServicesDal-CE" Version="5.0.1" />
       </ItemGroup>
     </When>
 
