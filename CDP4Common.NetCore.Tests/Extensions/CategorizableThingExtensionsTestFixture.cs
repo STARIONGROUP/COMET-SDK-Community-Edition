@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CategorizableThingExtensionsTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Extensions
 {
@@ -45,11 +43,17 @@ namespace CDP4Common.Tests.Extensions
         private Uri uri;
         private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache;
 
+        private SiteReferenceDataLibrary siteRdl_A;
+        private SiteReferenceDataLibrary siteRdl_A_A;
+        private SiteReferenceDataLibrary siteRdl_A_B;
+        private SiteReferenceDataLibrary siteRdl_B;
+
         private Category productCategory;
         private Category equipmentCategory;
         private Category batteryCategory;
         private Category lithiumBatteryCategory;
         private Category transmitterCategory;
+        private Category functionCategory;
 
         private ElementDefinition elementDefinition;
 
@@ -59,11 +63,48 @@ namespace CDP4Common.Tests.Extensions
             this.uri = new Uri("http://www.rheagroup.com");
             this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
-            this.productCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "PROD", Name = "Product" };
-            this.equipmentCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "EQT", Name = "Equipment" };
-            this.batteryCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "BAT", Name = "Battery" };
-            this.lithiumBatteryCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "LITBAT", Name = "Lithium Battery" };
-            this.transmitterCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "TX", Name = "Transmitter" };
+            var siteDirectory = new SiteDirectory(Guid.NewGuid(), this.cache, this.uri);
+            this.siteRdl_A = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri);
+            this.siteRdl_A_A = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri) {RequiredRdl = this.siteRdl_A};
+            this.siteRdl_A_B = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri) {RequiredRdl = this.siteRdl_A};
+            this.siteRdl_B = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri);
+            var modelRdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri) {RequiredRdl = this.siteRdl_A_A};
+            var engineeringModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);            
+            var engineeringModelSetup = new EngineeringModelSetup(Guid.NewGuid(), this.cache, this.uri);
+            engineeringModelSetup.RequiredRdl.Add(modelRdl);
+            engineeringModel.EngineeringModelSetup = engineeringModelSetup;
+            engineeringModelSetup.EngineeringModelIid = engineeringModel.Iid;
+            siteDirectory.Model.Add(engineeringModelSetup);
+            siteDirectory.SiteReferenceDataLibrary.Add(siteRdl_A);
+            siteDirectory.SiteReferenceDataLibrary.Add(siteRdl_A_A);
+            siteDirectory.SiteReferenceDataLibrary.Add(siteRdl_A_B);
+            siteDirectory.SiteReferenceDataLibrary.Add(siteRdl_B);
+            var iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
+            engineeringModel.Iteration.Add(iteration);
+
+            this.productCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "PROD", Name = "Products" };
+            this.productCategory.PermissibleClass.Add(ClassKind.ElementDefinition);
+            this.siteRdl_A.DefinedCategory.Add(this.productCategory);
+
+            this.equipmentCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "EQT", Name = "Equipments" };
+            this.equipmentCategory.PermissibleClass.Add(ClassKind.ElementDefinition);
+            this.siteRdl_A.DefinedCategory.Add(this.equipmentCategory);
+
+            this.batteryCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "BAT", Name = "Batteries" };
+            this.batteryCategory.PermissibleClass.Add(ClassKind.ElementDefinition);
+            this.siteRdl_A.DefinedCategory.Add(this.batteryCategory);
+
+            this.lithiumBatteryCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "LITBAT", Name = "Lithium Batteries" };
+            this.lithiumBatteryCategory.PermissibleClass.Add(ClassKind.ElementDefinition);
+            this.siteRdl_A_A.DefinedCategory.Add(this.lithiumBatteryCategory);
+
+            this.transmitterCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "TX", Name = "Transmitters" };
+            this.transmitterCategory.PermissibleClass.Add(ClassKind.ElementDefinition);
+            this.siteRdl_A_B.DefinedCategory.Add(this.transmitterCategory);
+
+            this.functionCategory = new Category(Guid.NewGuid(), this.cache, this.uri) { ShortName = "FUNCT", Name = "Functions" };
+            this.functionCategory.PermissibleClass.Add(ClassKind.ElementDefinition);
+            this.siteRdl_B.DefinedCategory.Add(this.functionCategory);
 
             this.lithiumBatteryCategory.SuperCategory.Add(this.batteryCategory);
             this.batteryCategory.SuperCategory.Add(this.equipmentCategory);
@@ -86,6 +127,7 @@ namespace CDP4Common.Tests.Extensions
             this.cache.TryAdd(new CDP4Common.Types.CacheKey(this.transmitterCategory.Iid, null), lazyTransmitterCategory);
 
             this.elementDefinition = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
+            iteration.Element.Add(this.elementDefinition);
         }
 
         [Test]
@@ -140,6 +182,53 @@ namespace CDP4Common.Tests.Extensions
 
             Assert.IsFalse(battery.IsMemberOfCategory(this.lithiumBatteryCategory));
             Assert.IsFalse(battery.IsMemberOfCategory(this.transmitterCategory));
+        }
+
+        [Test]
+        public void Verif_that_IsCategoryInChainOfRdls_returns_true_for_DomainOfExpertise()
+        {
+            var category = new Category();
+
+            var domainOfExpertise = new DomainOfExpertise();
+
+            Assert.That(domainOfExpertise.IsCategoryInChainOfRdls(category), Is.True);
+        }
+
+        [Test]
+        public void Verif_that_IsCategoryInChainOfRdls_returns_true_for_SiteLogEntry()
+        {
+            var category = new Category();
+
+            var siteLogEntry = new SiteLogEntry();
+
+            Assert.That(siteLogEntry.IsCategoryInChainOfRdls(category), Is.True);
+        }
+
+        [Test]
+        public void Verify_that_IsCategoryInChainOfRdls_returns_true_when_category_is_in_same_chain_of_rdls_as_ElementDefinition_and_false_otherwise()
+        {
+            Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.productCategory), Is.True);
+            Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.equipmentCategory), Is.True);
+            Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.lithiumBatteryCategory), Is.True);
+
+            Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.transmitterCategory), Is.False);
+
+            Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.functionCategory), Is.False);            
+        }
+
+        [Test]
+        public void Verify_that_IsCategoryInChainOfRdls_returns_true_when_category_is_in_same_chain_of_rdls_as_ParameterType_and_false_otherwise()
+        {
+            var parameterType = new TextParameterType(Guid.NewGuid(), this.cache, this.uri);
+            this.siteRdl_A_A.ParameterType.Add(parameterType);
+
+            Assert.That(parameterType.IsCategoryInChainOfRdls(this.productCategory), Is.True);
+            Assert.That(parameterType.IsCategoryInChainOfRdls(this.equipmentCategory), Is.True);
+            Assert.That(parameterType.IsCategoryInChainOfRdls(this.lithiumBatteryCategory), Is.True);
+
+            Assert.That(parameterType.IsCategoryInChainOfRdls(this.transmitterCategory), Is.False);
+
+            Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.functionCategory), Is.False);            
         }
     }
 }

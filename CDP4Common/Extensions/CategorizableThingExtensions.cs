@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CategorizableThingExtensions.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,20 +21,22 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.SiteDirectoryData
 {
     using System.Collections.Generic;
     using System.Linq;
-
+    using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+    using NLog;
 
     /// <summary>
     /// Extension methods for <see cref="ICategorizableThing"/>
     /// </summary>
     public static class CategorizableThingExtensions
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Queries the <see cref="ICategorizableThing"/> and checks whether it is a member of the 
         /// supplied <see cref="Category"/>, this includes membership of the sub <see cref="Category"/> instances
@@ -129,7 +130,48 @@ namespace CDP4Common.SiteDirectoryData
         public static string GetAllCategoryShortNames(this ICategorizableThing categorizableThing)
         {
             var allCategories = categorizableThing.GetAllCategories();
-            return allCategories.Aggregate(string.Empty, (current, cat) => string.Format("{0} {1}", current, cat.ShortName)).Trim();
+            return allCategories.Aggregate(string.Empty, (current, cat) => $"{current} {cat.ShortName}").Trim();
+        }
+        
+        /// <summary>
+        /// Determines whether the provided <see cref="Category"/> is in the chain of <see cref="ReferenceDataLibrary"/>
+        /// of the <see cref="ICategorizableThing"/>
+        /// </summary>
+        /// <param name="categorizableThing">
+        /// The <see cref="ICategorizableThing"/> for which is being determined whether it may be categorized using the provided <see cref="Category"/>
+        /// </param>
+        /// <param name="category">
+        /// The <see cref="Category"/> that may or may not be in the chain-of-rdls of the <see cref="ICategorizableThing"/>
+        /// </param>
+        /// <returns>
+        /// returns true when the <see cref="Category"/> is in the chain-of-rdls of the <see cref="ICategorizableThing"/>
+        /// </returns>
+        /// <remarks>
+        /// even though <see cref="DomainOfExpertise"/> and <see cref="SiteLogEntry"/> are <see cref="ICategorizableThing"/> these 
+        /// classes are outside the scope of any chain-of-rdls. For these two types true is always returned.
+        /// </remarks>
+        public static bool IsCategoryInChainOfRdls(this ICategorizableThing categorizableThing, Category category)
+        {
+            if (categorizableThing is DomainOfExpertise)
+            {
+                return true;
+            }
+
+            if (categorizableThing is SiteLogEntry)
+            {
+                return true;
+            }
+
+            var thing = categorizableThing as Thing;
+                        
+            if (thing.TopContainer is EngineeringModel engineeringModel)
+            {
+                var requiredRdl = engineeringModel.EngineeringModelSetup.RequiredRdl.Single();
+                return requiredRdl.QueryCategoriesFromChainOfRdls().Contains(category);                
+            }
+
+            var containerRdl = thing.GetContainerOfType<ReferenceDataLibrary>();
+            return containerRdl.QueryCategoriesFromChainOfRdls().Contains(category);
         }
     }
 }
