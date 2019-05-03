@@ -281,14 +281,11 @@ namespace CDP4Dal.DAL
         /// The uri route of the iteration contained resource.
         /// </param>
         /// <param name="iterationId">
-        /// The iteration Id.
+        /// The unique identifier of the Iteration as out parameter.
         /// </param>
         /// <returns>
         /// true if iteration id was extracted from the uri, otherwise false
         /// </returns>
-        /// <exception cref="ApplicationException">
-        /// If uri is not a valid iteration containment route
-        /// </exception>
         public bool TryExtractIterationIdfromUri(Uri uri, out Guid iterationId)
         {
             try
