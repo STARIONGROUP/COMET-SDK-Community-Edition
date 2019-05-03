@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="RHEA System S.A.">
+// <copyright file="FileIOTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
@@ -22,7 +22,23 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Runtime.CompilerServices;
+namespace CDP4JsonFileDal.NetCore.Tests.Json
+{
+    using CDP4JsonFileDal.Json;
 
-[assembly: InternalsVisibleTo("CDP4JsonFileDal.Tests")]
-[assembly: InternalsVisibleTo("CDP4JsonFileDal.NetCore.Tests")]
+    using NUnit.Framework;
+
+    [TestFixture]
+    public class FileIOTestFixture
+    {
+        [Test]
+        public void VerifyThatMemoryStreamIsGeneratedFromString()
+        {
+            var someString = "[somejsonstring]";
+
+            var stream = FileIO.GenerateStreamFromString(someString);
+            Assert.NotNull(stream);
+            Assert.AreNotEqual(0, stream.Length);
+        }
+    }
+}

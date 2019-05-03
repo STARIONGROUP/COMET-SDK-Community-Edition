@@ -1,0 +1,737 @@
+[
+  {
+    "revisionNumber": 2,
+    "classKind": "DomainOfExpertise",
+    "isDeprecated": false,
+    "category": [],
+    "alias": [],
+    "definition": [],
+    "hyperLink": [],
+    "name": "System Engineering",
+    "shortName": "SYS",
+    "iid": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 2038,
+    "classKind": "EngineeringModelSetup",
+    "participant": [
+      "905175f3-d7aa-43b3-b130-742778b4fd50"
+    ],
+    "activeDomain": [
+      "8790fe92-d1fa-42ea-9520-e0ddac52f1ad"
+    ],
+    "kind": "STUDY_MODEL",
+    "studyPhase": "PREPARATION_PHASE",
+    "requiredRdl": [
+      "b0831937-0474-45d5-826e-6ec59a51764b"
+    ],
+    "engineeringModelIid": "56a03444-d7ad-47fc-a432-fa573f240e23",
+    "iterationSetup": [
+      "67a0dde5-0c20-417a-a83f-c80fbc93e394",
+	  "11111111-0c20-417a-a83f-c80fbc93e394"
+    ],
+    "sourceEngineeringModelSetupIid": null,
+    "alias": [],
+    "definition": [],
+    "hyperLink": [],
+    "name": "Minimal Content",
+    "shortName": "MiminalContent",
+    "iid": "8c5769f5-1c7d-4c2f-a179-25025e3e2db2",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 2038,
+    "classKind": "ModelReferenceDataLibrary",
+    "definedCategory": [],
+    "parameterType": [],
+    "baseQuantityKind": [],
+    "scale": [],
+    "unitPrefix": [],
+    "unit": [],
+    "baseUnit": [],
+    "fileType": [],
+    "glossary": [],
+    "referenceSource": [],
+    "rule": [],
+    "requiredRdl": "bff9f871-3b7f-4e57-ac82-5ab499f9baf5",
+    "constant": [],
+    "alias": [],
+    "definition": [],
+    "hyperLink": [],
+    "name": "RDL specific to Minimal Content",
+    "shortName": "RDL_MiminalContent",
+    "iid": "b0831937-0474-45d5-826e-6ec59a51764b",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "iterationNumber": 1,
+    "revisionNumber": 2038,
+    "classKind": "IterationSetup",
+    "iterationIid": "e07b6963-3622-4cf3-87ae-835f2b6479c9",
+    "description": "First Iteration Description",
+    "sourceIterationSetup": null,
+    "frozenOn": null,
+    "isDeleted": false,
+    "createdOn": "2016-04-21T07:31:31.441Z",
+    "iid": "67a0dde5-0c20-417a-a83f-c80fbc93e394",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+    {
+    "iterationNumber": 2,
+    "revisionNumber": 3000,
+    "classKind": "IterationSetup",
+    "iterationIid": "11111111-3622-4cf3-87ae-835f2b6479c1",
+    "description": "Second Iteration Description",
+    "sourceIterationSetup": null,
+    "frozenOn": null,
+    "isDeleted": false,
+    "createdOn": "2016-04-21T07:31:31.441Z",
+    "iid": "11111111-0c20-417a-a83f-c80fbc93e394",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ParticipantPermission",
+    "isDeprecated": false,
+    "iid": "bf45fc53-9a87-4881-a317-4fb4dd5c03ee",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "PossibleFiniteStateList",
+    "isDeprecated": false,
+    "iid": "42aa90bd-e949-4391-9f4a-f9efdd2f99d5",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ParameterSubscription",
+    "isDeprecated": false,
+    "iid": "42aa90bd-e949-4391-9f4a-f9efdd2f99d6",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "PersonPermission",
+    "isDeprecated": false,
+    "iid": "af0ab5ba-d7a0-4bfb-b7b2-3de64a3114b4",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Folder",
+    "isDeprecated": false,
+    "iid": "a1dc4016-5a04-4687-abdd-0de657a6c9a0",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "RuleVerificationList",
+    "isDeprecated": false,
+    "iid": "b7a7cca1-9ffa-404d-b46f-a5717151fa94",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Person",
+    "isDeprecated": false,
+    "iid": "4ca0b8ac-e478-4107-819f-ec192c797de6",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "DomainFileStore",
+    "isDeprecated": false,
+    "iid": "a25f3d7f-1394-4c4d-938e-245a2000724d",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "IterationSetup",
+    "isDeprecated": false,
+    "iid": "b63d3331-20e4-402e-8dbf-9216b5cf92b6",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "EngineeringModel",
+    "isDeprecated": false,
+    "iid": "95e7261d-80e6-44c0-9b30-605224f42e53",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1995,
+    "classKind": "Person",
+    "organization": null,
+    "givenName": "The",
+    "surname": "Administrator",
+    "organizationalUnit": "",
+    "emailAddress": [
+      "5e9b7cb0-ff0f-474c-8893-fbb9b3556d03"
+    ],
+    "telephoneNumber": [],
+    "defaultDomain": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+    "isActive": true,
+    "role": "e3b2f0f5-3e29-4ba3-94ba-05738e5b3307",
+    "password": null,
+    "defaultEmailAddress": null,
+    "defaultTelephoneNumber": null,
+    "userPreference": [],
+    "shortName": "admin",
+    "isDeprecated": false,
+    "iid": "1c2466ed-ddb9-4546-b458-5b3dbcb58924",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantRole",
+    "participantPermission": [
+      "64483a28-c1cd-4efa-b756-bda3a1d3158b",
+      "e3949540-0cf8-4db1-873a-8cf6bf0ac0c0",
+      "a25f3d7f-1394-4c4d-938e-245a2000724d",
+      "3782981c-6a58-474b-8107-10471b4f3244",
+      "e7aed574-3815-4c15-b1da-bd3f02cdc9d7",
+      "95e7261d-80e6-44c0-9b30-605224f42e53",
+      "8258f4ae-dce7-4afa-801b-2bbee052590c",
+      "7803ff78-db6a-4b7e-bb19-fc070566f017",
+      "a1dc4016-5a04-4687-abdd-0de657a6c9a0",
+      "aade6164-7121-4216-a355-765ddc9bd9e6",
+      "21df7082-ce30-4da2-8f2b-752dec2118bb",
+      "37585a0f-2a2f-4913-9504-3389a0721de6",
+      "03741db1-0008-4360-8aeb-58fd45b64d61",
+      "5a07d0fd-7548-4b4d-8038-999723a94a0c",
+      "d0799978-53a0-495c-80d1-67f95a9d827d",
+      "16e76f5f-b0ef-41a3-9fa5-a6469cf85c08",
+      "42aa90bd-e949-4391-9f4a-f9efdd2f99d6",
+      "42aa90bd-e949-4391-9f4a-f9efdd2f99d5",
+      "a0c5e6b0-cf0a-4631-9eee-85af74b930c1",
+      "ea5cd7f0-2e58-45cb-ba8d-5aa6da9bf6c1",
+      "b5a27c34-f912-4629-a7a0-73b14ae445ae",
+      "35af49d4-8a54-45b3-adb5-85db6c6e633a",
+      "974306cf-7dae-432a-a77e-65906b51c955",
+      "b7a7cca1-9ffa-404d-b46f-a5717151fa94",
+	  "7803ff78-db6a-4b7e-bb19-fc070566f888",
+	  "78038878-db6a-4b7e-bb19-fc070566f017",
+	  "7803ff78-db6a-4b7e-bbaa-fc070566f888",
+	  "7803ff78-abca-4b7e-bb19-fc070566f888",
+	  "12345678-c1cd-4efa-b756-bda3a1d3158b",
+	  "64483a28-9876-4efa-b756-bda3a1d3158b",
+	  "64483a28-c1cd-4efa-4567-bda3a1d3158b",
+	  "64483a28-c1cd-2589-b756-bda3a1d3158b",
+	  "64483a28-9632-4efa-b756-bda3a1d3158b",
+	  "64483a28-c1cd-7536-b756-bda3a1d3158b",
+	  "15963574-c1cd-7536-b756-bda3a1d3158b"
+    ],
+    "isDeprecated": false,
+    "alias": [],
+    "definition": [],
+    "hyperLink": [],
+    "name": "Model Administrator",
+    "shortName": "ModelAdmin",
+    "iid": "34585c65-d20c-41de-b17c-40d611618eb8",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ContractDeviation",
+    "isDeprecated": false,
+    "iid": "78038878-db6a-4b7e-bb19-fc070566f017",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ReviewItemDiscrepancy",
+    "isDeprecated": false,
+    "iid": "7803ff78-db6a-4b7e-bb19-fc070566f888",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "EngineeringModelDataDiscussionItem",
+    "isDeprecated": false,
+    "iid": "7803ff78-db6a-4b7e-bbaa-fc070566f888",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Solution",
+    "isDeprecated": false,
+    "iid": "7803ff78-abca-4b7e-bb19-fc070566f888",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "File",
+    "isDeprecated": false,
+    "iid": "7803ff78-db6a-4b7e-bb19-fc070566f017",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "EngineeringModelSetup",
+    "isDeprecated": false,
+    "iid": "6e8bb952-76d1-499e-94d0-4ffe2b4d8b3d",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Parameter",
+    "isDeprecated": false,
+    "iid": "5a07d0fd-7548-4b4d-8038-999723a94a0c",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 2038,
+    "classKind": "SiteDirectory",
+    "organization": [],
+    "person": [
+      "1c2466ed-ddb9-4546-b458-5b3dbcb58924"
+    ],
+    "participantRole": [
+      "34585c65-d20c-41de-b17c-40d611618eb8"      
+    ],
+    "defaultParticipantRole": "34585c65-d20c-41de-b17c-40d611618eb8",
+    "siteReferenceDataLibrary": [
+      "bff9f871-3b7f-4e57-ac82-5ab499f9baf5"
+    ],
+    "model": [
+      "8c5769f5-1c7d-4c2f-a179-25025e3e2db2"
+    ],
+    "personRole": [
+      "e3b2f0f5-3e29-4ba3-94ba-05738e5b3307"      
+    ],
+    "defaultPersonRole": "e3b2f0f5-3e29-4ba3-94ba-05738e5b3307",
+    "logEntry": [],
+    "domainGroup": [],
+    "domain": [
+      "8790fe92-d1fa-42ea-9520-e0ddac52f1ad"
+    ],
+    "naturalLanguage": [],
+    "createdOn": "2013-04-10T07:14:45.461Z",
+    "name": "ESA CDF OCDT Site Directory",
+    "shortName": "ESA-CDF-OCDT-SiteDir",
+    "lastModifiedOn": "2016-04-21T07:31:31.441Z",
+    "iid": "eb77f3e1-a0f3-412d-8ed6-b8ce881c0145",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Relationship",
+    "isDeprecated": false,
+    "iid": "ea5cd7f0-2e58-45cb-ba8d-5aa6da9bf6c1",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "SiteReferenceDataLibrary",
+    "isDeprecated": false,
+    "iid": "cb27b250-e2d7-4da3-a95c-9a64708c7939",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 2011,
+    "classKind": "SiteReferenceDataLibrary",
+    "isDeprecated": false,
+    "definedCategory": [ ],
+    "parameterType": [
+	  "66766f44-0a0b-4e0a-9bc7-8ae027c2da5c"	  
+    ],
+    "baseQuantityKind": [      
+      {
+        "k": 105807105,
+        "v": "66766f44-0a0b-4e0a-9bc7-8ae027c2da5c"
+      }
+    ],
+    "scale": [      
+      "3d5bddb6-640f-4d79-9c35-64a554946884"
+    ],
+    "unitPrefix": [ ],
+    "unit": [
+		"3d5bddb6-640f-4d79-9c35-64a55494649c"
+    ],
+    "baseUnit": [      
+      "3d5bddb6-640f-4d79-9c35-64a55494649c"
+    ],
+    "fileType": [],
+    "glossary": [],
+    "referenceSource": [],
+    "rule": [],
+    "requiredRdl": null,
+    "constant": [],
+    "alias": [],
+    "definition": [],
+    "hyperLink": [],
+    "name": "Generic ECSS-E-TM-10-25 Reference Data Library",
+    "shortName": "Generic_RDL",
+    "iid": "bff9f871-3b7f-4e57-ac82-5ab499f9baf5",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ModelLogEntry",
+    "isDeprecated": false,
+    "iid": "21df7082-ce30-4da2-8f2b-752dec2118bb",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Iteration",
+    "isDeprecated": false,
+    "iid": "aade6164-7121-4216-a355-765ddc9bd9e6",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "DomainOfExpertise",
+    "isDeprecated": false,
+    "iid": "b378c46e-b51f-48d7-b2ee-ddd310f55fa6",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Organization",
+    "isDeprecated": false,
+    "iid": "a3fc7ece-2460-4a5d-9fdd-3225940fb2c4",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ParticipantRole",
+    "isDeprecated": false,
+    "iid": "b34952cf-fb64-4767-a90c-833965fa2219",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ElementUsage",
+    "isDeprecated": false,
+    "iid": "e7aed574-3815-4c15-b1da-bd3f02cdc9d7",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "PersonRole",
+    "isDeprecated": false,
+    "iid": "b911fcad-706d-40de-b2ec-cc98d2801121",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "RequirementsSpecification",
+    "isDeprecated": false,
+    "iid": "974306cf-7dae-432a-a77e-65906b51c955",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "SiteLogEntry",
+    "isDeprecated": false,
+    "iid": "be77e495-c766-4285-9fba-125d38a455e5",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ParameterGroup",
+    "isDeprecated": false,
+    "iid": "d0799978-53a0-495c-80d1-67f95a9d827d",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonRole",
+    "personPermission": [
+      "b378c46e-b51f-48d7-b2ee-ddd310f55fa6",
+      "85f4c40d-13ab-4975-aae5-5e68d8ef5996",
+      "6e8bb952-76d1-499e-94d0-4ffe2b4d8b3d",
+      "b63d3331-20e4-402e-8dbf-9216b5cf92b6",
+      "ed1c8da1-53fa-41eb-8bf0-de055698b528",
+      "a3fc7ece-2460-4a5d-9fdd-3225940fb2c4",
+      "4c773603-7759-408b-8896-7d07d322003f",
+      "bf45fc53-9a87-4881-a317-4fb4dd5c03ee",
+      "b34952cf-fb64-4767-a90c-833965fa2219",
+      "4ca0b8ac-e478-4107-819f-ec192c797de6",
+      "af0ab5ba-d7a0-4bfb-b7b2-3de64a3114b4",
+      "b911fcad-706d-40de-b2ec-cc98d2801121",
+      "b92bad4d-e3bb-4222-a8c4-4f23d25e3d03",
+      "be77e495-c766-4285-9fba-125d38a455e5",
+      "cb27b250-e2d7-4da3-a95c-9a64708c7939"
+    ],
+    "isDeprecated": false,
+    "alias": [],
+    "definition": [],
+    "hyperLink": [],
+    "name": "Site Administrator",
+    "shortName": "SiteAdmin",
+    "iid": "e3b2f0f5-3e29-4ba3-94ba-05738e5b3307",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ExternalIdentifierMap",
+    "isDeprecated": false,
+    "iid": "8258f4ae-dce7-4afa-801b-2bbee052590c",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "RequirementsGroup",
+    "isDeprecated": false,
+    "iid": "35af49d4-8a54-45b3-adb5-85db6c6e633a",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ModelReferenceDataLibrary",
+    "isDeprecated": false,
+    "iid": "ed1c8da1-53fa-41eb-8bf0-de055698b528",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "DomainOfExpertiseGroup",
+    "isDeprecated": false,
+    "iid": "85f4c40d-13ab-4975-aae5-5e68d8ef5996",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ElementDefinition",
+    "isDeprecated": false,
+    "iid": "3782981c-6a58-474b-8107-10471b4f3244",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Participant",
+    "isDeprecated": false,
+    "iid": "4c773603-7759-408b-8896-7d07d322003f",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1995,
+    "classKind": "EmailAddress",
+    "vcardType": "WORK",
+    "value": "admin@rheagroup.com",
+    "iid": "5e9b7cb0-ff0f-474c-8893-fbb9b3556d03",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ParameterOverride",
+    "isDeprecated": false,
+    "iid": "16e76f5f-b0ef-41a3-9fa5-a6469cf85c08",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "NestedElement",
+    "isDeprecated": false,
+    "iid": "37585a0f-2a2f-4913-9504-3389a0721de6",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Requirement",
+    "isDeprecated": false,
+    "iid": "b5a27c34-f912-4629-a7a0-73b14ae445ae",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Publication",
+    "isDeprecated": false,
+    "iid": "a0c5e6b0-cf0a-4631-9eee-85af74b930c1",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "NestedParameter",
+    "isDeprecated": false,
+    "iid": "03741db1-0008-4360-8aeb-58fd45b64d61",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "PersonPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "SiteDirectory",
+    "isDeprecated": false,
+    "iid": "b92bad4d-e3bb-4222-a8c4-4f23d25e3d03",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "CommonFileStore",
+    "isDeprecated": false,
+    "iid": "e3949540-0cf8-4db1-873a-8cf6bf0ac0c0",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ActualFiniteStateList",
+    "isDeprecated": false,
+    "iid": "64483a28-c1cd-4efa-b756-bda3a1d3158b",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ActionItem",
+    "isDeprecated": false,
+    "iid": "12345678-c1cd-4efa-b756-bda3a1d3158b",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "RequestForDeviation",
+    "isDeprecated": false,
+    "iid": "64483a28-9876-4efa-b756-bda3a1d3158b",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "RequestForWaiver",
+    "isDeprecated": false,
+    "iid": "64483a28-c1cd-4efa-4567-bda3a1d3158b",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ChangeRequest",
+    "isDeprecated": false,
+    "iid": "64483a28-c1cd-2589-b756-bda3a1d3158b",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ChangeProposal",
+    "isDeprecated": false,
+    "iid": "64483a28-9632-4efa-b756-bda3a1d3158b",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "ContractChangeNotice",
+    "isDeprecated": false,
+    "iid": "64483a28-c1cd-7536-b756-bda3a1d3158b",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "ParticipantPermission",
+    "accessRight": "MODIFY",
+    "objectClass": "Approval",
+    "isDeprecated": false,
+    "iid": "15963574-c1cd-7536-b756-bda3a1d3158b",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 2038,
+    "classKind": "Participant",
+    "isActive": true,
+    "person": "1c2466ed-ddb9-4546-b458-5b3dbcb58924",
+    "role": "34585c65-d20c-41de-b17c-40d611618eb8",
+    "domain": [
+      "8790fe92-d1fa-42ea-9520-e0ddac52f1ad"
+    ],
+    "selectedDomain": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+    "iid": "905175f3-d7aa-43b3-b130-742778b4fd50",
+    "modifiedOn": "0001-01-01T00:00:00"
+  }
+]

@@ -1,0 +1,143 @@
+[
+  {
+    "revisionNumber": 3,
+    "classKind": "Iteration",
+    "iterationSetup": "11111111-0c20-417a-a83f-c80fbc93e394",
+    "sourceIterationIid": null,
+    "option": [
+      {
+        "k": 1,
+        "v": "cea77a00-ffeb-473c-bf9a-2974f7386073"
+      }
+    ],
+	"diagramCanvas": [
+		"92e0b85b-bdaf-4d51-800e-6240b42f3f95"
+	],
+	"stakeholderValueMap": [ "53349815-b24a-428d-b352-638d98c11dc7" ],
+	"stakeholderValue": [],
+	"valueGroup": [],
+	"goal": [],
+	"stakeholder": [],
+    "publication": [],
+    "possibleFiniteStateList": [],
+    "topElement": "aa71b961-1fa0-43b2-96a6-127d989b11d6",
+    "element": [
+      "aa71b961-1fa0-43b2-96a6-127d989b11d6"
+    ],
+    "relationship": [],
+    "externalIdentifierMap": [],
+    "requirementsSpecification": [],
+    "domainFileStore": [
+      "4fd65c80-8b61-406b-a7aa-5ad5c53f17eb"
+    ],
+    "actualFiniteStateList": [],
+    "defaultOption": "cea77a00-ffeb-473c-bf9a-2974f7386073",
+    "ruleVerificationList": [],
+    "iid": "11111111-3622-4cf3-87ae-835f2b6479c1",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "DomainFileStore",
+    "isHidden": false,
+    "folder": [],
+    "file": [],
+    "name": "Domain File Store",
+    "createdOn": "2016-04-21T07:31:32.641Z",
+    "owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+    "iid": "4fd65c80-8b61-406b-a7aa-5ad5c53f17eb",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 1,
+    "classKind": "Option",
+    "nestedElement": [],
+    "category": [],
+    "alias": [],
+    "definition": [],
+    "hyperLink": [],
+    "name": "Default Option",
+    "shortName": "default",
+    "iid": "cea77a00-ffeb-473c-bf9a-2974f7386073",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 3,
+    "classKind": "Parameter",
+    "requestedBy": null,
+    "valueSet": [
+      "355833b0-b621-4f29-a865-a0e7ac2a4c2f"
+    ],
+    "allowDifferentOwnerOfOverride": false,
+    "expectsOverride": false,
+    "parameterSubscription": [],
+    "parameterType": "66766f44-0a0b-4e0a-9bc7-8ae027c2da5c",
+    "scale": "3d5bddb6-640f-4d79-9c35-64a554946884",
+    "stateDependence": null,
+    "group": null,
+    "isOptionDependent": false,
+    "owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+    "iid": "250b54d1-fc34-4825-84b8-6999830755fe",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 3,
+    "classKind": "ElementDefinition",
+    "containedElement": [],
+    "parameter": [
+      "250b54d1-fc34-4825-84b8-6999830755fe"
+    ],
+    "parameterGroup": [],
+    "referencedElement": [],
+    "category": [],
+    "owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+    "alias": [],
+    "definition": [],
+    "hyperLink": [],
+    "name": "Satellite",
+    "shortName": "Sat",
+    "iid": "aa71b961-1fa0-43b2-96a6-127d989b11d6",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 3,
+    "classKind": "ParameterValueSet",
+    "valueSwitch": "MANUAL",
+    "published": "[\"-\"]",
+    "formula": "[\"-\"]",
+    "computed": "[\"-\"]",
+    "manual": "[\"-\"]",
+    "reference": "[\"-\"]",
+    "actualState": null,
+    "actualOption": null,
+    "iid": "355833b0-b621-4f29-a865-a0e7ac2a4c2f",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+	{
+	"revisionNumber": 3,
+	"classKind": "DiagramCanvas",
+	"name": "Diagram 1",
+	"iid": "92e0b85b-bdaf-4d51-800e-6240b42f3f95",
+	"modifiedOn": "0001-01-01T00:00:00",
+	"createdOn": "2016-04-21T13:13:00",
+	"diagramElement": [],
+	"bounds": null,
+	},
+	{
+	"revisionNumber": 3,
+	"classKind": "StakeHolderValueMap",
+	"name": "StakeHolder Value Map 1",
+	"shortName": "StakeHolderValueMap1",
+	"iid": "53349815-b24a-428d-b352-638d98c11dc7",
+	"modifiedOn": "2016-07-14T16:33:00",
+	"settings": [ "4ab7ae7c-d801-433c-ba1e-222a1e1cc55a" ]
+	},
+	{
+	"revisionNumber": 3,
+	"classKind": "StakeHolderValueMapSettings",
+	"iid": "4ab7ae7c-d801-433c-ba1e-222a1e1cc55a",
+	"stakeholderValueToRequirementRelationship": null,
+	"valueGroupToStakeholderValueRelationship": null,
+	"goalToValueGroupRelationship": null	
+	}
+]

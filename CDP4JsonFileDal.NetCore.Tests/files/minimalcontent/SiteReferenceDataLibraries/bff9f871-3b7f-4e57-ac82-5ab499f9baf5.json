@@ -1,0 +1,53 @@
+[
+  {
+    "revisionNumber": 2,
+    "classKind": "RatioScale",
+    "unit": "3d5bddb6-640f-4d79-9c35-64a55494649c",
+    "valueDefinition": [],
+    "numberSet": "REAL_NUMBER_SET",
+    "minimumPermissibleValue": "",
+    "isMinimumInclusive": true,
+    "maximumPermissibleValue": "",
+    "isMaximumInclusive": true,
+    "positiveValueConnotation": "",
+    "negativeValueConnotation": "",
+    "mappingToReferenceScale": [],
+    "isDeprecated": false,
+    "alias": [],
+    "definition": [],
+    "hyperLink": [],
+    "name": "metre",
+    "shortName": "m",
+    "iid": "3d5bddb6-640f-4d79-9c35-64a554946884",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 2,
+    "classKind": "SimpleQuantityKind",
+    "possibleScale": [ "3d5bddb6-640f-4d79-9c35-64a554946884" ],
+    "defaultScale": "3d5bddb6-640f-4d79-9c35-64a554946884",
+    "quantityDimensionSymbol": "",
+    "symbol": "l",
+    "isDeprecated": false,
+    "category": [],
+    "alias": [],
+    "definition": [ ],
+    "hyperLink": [],
+    "name": "length",
+    "shortName": "l",
+    "iid": "66766f44-0a0b-4e0a-9bc7-8ae027c2da5c",
+    "modifiedOn": "0001-01-01T00:00:00"
+  },
+  {
+    "revisionNumber": 2,
+    "classKind": "SimpleUnit",
+    "isDeprecated": false,
+    "alias": [],
+    "definition": [],
+    "hyperLink": [],
+    "name": "metre",
+    "shortName": "m",
+    "iid": "3d5bddb6-640f-4d79-9c35-64a55494649c",
+    "modifiedOn": "0001-01-01T00:00:00"
+  }
+]

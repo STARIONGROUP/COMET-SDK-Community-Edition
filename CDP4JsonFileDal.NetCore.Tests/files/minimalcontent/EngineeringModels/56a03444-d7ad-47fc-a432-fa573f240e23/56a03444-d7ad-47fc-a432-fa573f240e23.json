@@ -1,0 +1,257 @@
+[
+  {
+    "revisionNumber": 3,
+    "classKind": "EngineeringModel",
+    "engineeringModelSetup": "8c5769f5-1c7d-4c2f-a179-25025e3e2db2",
+    "commonFileStore": ["a07b6963-3622-4cf3-87ae-835f2b6479c9"],
+    "logEntry": [],
+    "iteration": [
+      "e07b6963-3622-4cf3-87ae-835f2b6479c9",
+	  "11111111-3622-4cf3-87ae-835f2b6479c1"
+    ],
+    "book": [
+		{
+			"k": 1,
+			"v": "92e0b85b-bdaf-4d51-800e-6240b42f3f94"
+		},
+		{
+			"k": 2,
+			"v": "18015c39-0a57-472f-a14c-7adc7460c373"
+		}		
+	],
+    "lastModifiedOn": "2016-04-21T07:58:06.88Z",
+    "iid": "56a03444-d7ad-47fc-a432-fa573f240e23",
+    "modifiedOn": "0001-01-01T00:00:00",
+	"modellingAnnotation": ["abcdb961-1fa0-43b2-96a6-127d989b11d6", "abcdb961-1fa0-43b2-96a6-abcd989b11d6"]
+  },
+  {
+	"iid": "a07b6963-3622-4cf3-87ae-835f2b6479c9",
+	"revisionNumber": 3,
+	"classKind": "CommonFileStore",
+	"name": "Common File Store",
+	"createdOn": "2016-04-21T13:13:00",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"folder": ["c07b6963-3622-4cf3-87ae-835f2b6479c9","d07b6963-3622-4cf3-87ae-835f2b6479c9"],
+	"file": []
+  },
+  {
+	"iid": "c07b6963-3622-4cf3-87ae-835f2b6479c9",
+	"revisionNumber": 3,
+	"classKind": "Folder",
+	"name": "Some Folder",
+	"createdOn": "2016-04-21T13:13:00",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"creator": "905175f3-d7aa-43b3-b130-742778b4fd50"
+  },
+  {
+	"iid": "d07b6963-3622-4cf3-87ae-835f2b6479c9",
+	"revisionNumber": 3,
+	"classKind": "Folder",
+	"name": "Another Folder",
+	"createdOn": "2016-04-21T13:13:00",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"creator": "905175f3-d7aa-43b3-b130-742778b4fd50"
+  },
+  {
+	"revisionNumber": 3,
+	"classKind": "Book",
+	"name": "Sample Book 1",
+	"shortName": "SampleBook1",
+	"iid": "92e0b85b-bdaf-4d51-800e-6240b42f3f94",
+	"modifiedOn": "0001-01-01T00:00:00",
+	"createdOn": "2016-04-21T13:13:00",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"section": [
+		{
+			"k": 1,
+			"v": "67995bce-cba3-468f-8d7a-48489f8d345a"
+		},
+		{
+			"k": 2,
+			"v": "781fb1b4-0271-436b-95e6-a35df77640dc"
+		}		],
+	"category": []
+  },
+  {
+	"revisionNumber": 3,
+	"classKind": "Book",
+	"name": "Sample Book 2",
+	"shortName": "SampleBook2",
+	"iid": "18015c39-0a57-472f-a14c-7adc7460c373",
+	"modifiedOn": "0001-01-01T00:00:00",
+	"createdOn": "2016-04-21T13:13:00",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"section": [],
+	"category": []
+  },
+  {
+	"revisionNumber": 3,
+	"classKind": "Section",
+	"name": "Section 1 of Book 1",
+	"shortName": "Section1_1",
+	"iid": "67995bce-cba3-468f-8d7a-48489f8d345a",
+	"modifiedOn": "0001-01-01T00:00:00",
+	"createdOn": "2016-04-21T13:13:00",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"page": [],
+	"category": []
+	},
+    {
+	"revisionNumber": 3,
+	"classKind": "Section",
+	"name": "Section 2 of Book 1",
+	"shortName": "Section2_1",
+	"iid": "781fb1b4-0271-436b-95e6-a35df77640dc",
+	"modifiedOn": "0001-01-01T00:00:00",
+	"createdOn": "2016-04-21T13:13:00",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"page": [
+		{
+			"k": 1,
+			"v": "a336459a-dc00-4e06-84d6-9d0577912322"
+		}],
+	"category": []
+	},
+    {
+	"revisionNumber": 3,
+	"classKind": "Page",
+	"name": "Page 1",
+	"shortName": "Page_1",
+	"iid": "a336459a-dc00-4e06-84d6-9d0577912322",
+	"modifiedOn": "0001-01-01T00:00:00",
+	"createdOn": "2016-04-21T13:13:00",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"note": [
+		{
+			"k": 1,
+			"v": "3fe5b4da-a296-4a6c-9d38-4d462f8595cf"
+		},
+		{
+			"k": 2,
+			"v": "cb3bfd0e-4000-48fb-a24e-97de3571a85b"
+		}
+		],
+	"category": []
+	},
+    {
+	"revisionNumber": 3,
+	"classKind": "TextualNote",
+	"name": "Note 1",
+	"shortName": "Note_1",
+	"iid": "3fe5b4da-a296-4a6c-9d38-4d462f8595cf",
+	"modifiedOn": "0001-01-01T00:00:00",
+	"createdOn": "2016-04-21T13:13:00",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"category": [],
+	"content": "This is the content of the first note",
+	"languageCode": "en"
+	},
+	{
+	"revisionNumber": 3,
+	"classKind": "TextualNote",
+	"name": "Note 2",
+	"shortName": "Note_2",
+	"iid": "cb3bfd0e-4000-48fb-a24e-97de3571a85b",
+	"modifiedOn": "0001-01-01T00:00:00",
+	"createdOn": "2016-04-21T13:13:00",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"category": [],
+	"content": "This is the content of the second note",
+	"languageCode": "en"
+	},
+	{
+	"revisionNumber": 1,
+	"classKind": "ReviewItemDiscrepancy",
+	"iid": "abcdb961-1fa0-43b2-96a6-127d989b11d6",
+	"solution": ["abcdef61-1234-43b2-96a6-127d989b11d6"],
+	"discussion": ["abcdeffe-1fa0-43b2-96a6-127d989b11d6", "abcdeffe-1fa0-43b2-96a6-127d989b11d7", "abcdeffe-1fa0-43b2-96a6-127d989b11d9"],
+	"status": "OPEN",
+	"author": "905175f3-d7aa-43b3-b130-742778b4fd50",
+	"title": "review item",
+	"classification": "MINOR",
+	"relatedThing": ["abcdef61-1fa0-43b2-96a6-127d989b11d6"],
+	"languageCode": "en",
+	"content": "This is a Review item discrepancy (RID).",
+	"createdOn": "2016-10-01T00:45:32",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"modifiedOn": "2016-10-05T00:00:00",
+	"shortName": "RID_0001",
+	"primaryAnnotatedThing": "abcdef61-1fa0-43b2-96a6-127d989b11d6"
+	},
+	{
+	"revisionNumber": 1,
+	"classKind": "ReviewItemDiscrepancy",
+	"iid": "abcdb961-1fa0-43b2-96a6-abcd989b11d6",
+	"solution": [],
+	"discussion": [],
+	"status": "OPEN",
+	"author": "905175f3-d7aa-43b3-b130-742778b4fd50",
+	"title": "review item 2",
+	"classification": "MAJOR",
+	"relatedThing": ["abcdef61-1fa0-43b2-96a6-127d989b1abc"],
+	"languageCode": "en",
+	"content": "This is a Review item discrepancy 2 (RID).",
+	"createdOn": "2016-10-01T00:45:32",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad",
+	"modifiedOn": "2016-10-05T00:00:00",
+	"shortName": "RID_0002",
+	"primaryAnnotatedThing": "abcdef61-1fa0-43b2-96a6-127d989b1abc"
+	},
+	{
+	"revisionNumber": 1,
+	"classKind": "ModellingThingReference",
+	"iid": "abcdef61-1fa0-43b2-96a6-127d989b11d6",
+	"modifiedOn": "2016-10-05T00:00:00",
+	"referencedThing": "aa71b961-1fa0-43b2-96a6-127d989b11d6",
+	"iterationId": "e07b6963-3622-4cf3-87ae-835f2b6479c9"
+	},
+	{
+	"revisionNumber": 1,
+	"classKind": "ModellingThingReference",
+	"iid": "abcdef61-1fa0-43b2-96a6-127d989b1abc",
+	"modifiedOn": "2016-10-05T00:00:00",
+	"referencedThing": "aa71b961-1fa0-43b2-96a6-127d989b11d6",
+	"iterationId": "e07b6963-3622-4cf3-87ae-835f2b6479c9"
+	},
+	{
+	"revisionNumber": 1,
+	"classKind": "EngineeringModelDataDiscussionItem",
+	"iid": "abcdeffe-1fa0-43b2-96a6-127d989b11d6",
+	"createdOn": "2016-10-16T12:00:01",
+	"modifiedOn": "2016-10-16T12:00:01",
+	"languageCode": "en",
+	"content": "This is reply 0.",
+	"author": "905175f3-d7aa-43b3-b130-742778b4fd50"
+	},
+	{
+	"revisionNumber": 1,
+	"classKind": "EngineeringModelDataDiscussionItem",
+	"iid": "abcdeffe-1fa0-43b2-96a6-127d989b11d7",
+	"createdOn": "2016-10-16T12:00:03",
+	"modifiedOn": "2016-10-16T13:00:01",
+	"languageCode": "en",
+	"content": "This is reply 1.",
+	"author": "905175f3-d7aa-43b3-b130-742778b4fd50"
+	},
+	{
+	"revisionNumber": 1,
+	"classKind": "EngineeringModelDataDiscussionItem",
+	"iid": "abcdeffe-1fa0-43b2-96a6-127d989b11d9",
+	"createdOn": "2016-10-16T12:00:05",
+	"modifiedOn": "2016-10-16T13:00:10",
+	"languageCode": "en",
+	"content": "This is reply 2",
+	"author": "905175f3-d7aa-43b3-b130-742778b4fd50"
+	},
+	{
+	"revisionNumber": 1,
+	"classKind": "Solution",
+	"iid": "abcdef61-1234-43b2-96a6-127d989b11d6",
+	"createdOn": "2016-10-16T12:00:01",
+	"modifiedOn": "2016-10-16T13:00:00",
+	"languageCode": "en",
+	"content": "This is the solution.",
+	"author": "905175f3-d7aa-43b3-b130-742778b4fd50",
+	"owner": "8790fe92-d1fa-42ea-9520-e0ddac52f1ad"
+	}
+]
