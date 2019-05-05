@@ -28,7 +28,6 @@ namespace CDP4Dal.DAL
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Security.Cryptography;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
@@ -38,6 +37,7 @@ namespace CDP4Dal.DAL
     using CDP4Dal.Operations;
     using CDP4Dal.Composition;
     using CDP4Dal.Exceptions;
+    using NLog;
     using Iteration = CDP4Common.DTO.Iteration;
     using Thing = CDP4Common.DTO.Thing;
 
@@ -48,7 +48,12 @@ namespace CDP4Dal.DAL
     {
         //TODO: the EngineeringModelKinds property should be generated from the model, the risk by coding it here is that 
         // we forget to update this when we update the uml data-model. -> T1459
-        
+     
+        /// <summary>
+        /// The current logger
+        /// </summary>
+        private static Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Dal"/> class
         /// </summary>
@@ -305,8 +310,10 @@ namespace CDP4Dal.DAL
                 iterationId = new Guid(id);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.Warn(ex,"The Iteration identifier could not be exracted from {0}", uri);
+
                 iterationId = Guid.Empty;
                 return false;
             }
@@ -342,7 +349,7 @@ namespace CDP4Dal.DAL
         }
 
         /// <summary>
-        /// Verifies that the hash of the provided files machtches the hashes of the <see cref="CDP4Common.DTO.FileRevision"/>
+        /// Verifies that the hash of the provided files matches the hashes of the <see cref="CDP4Common.DTO.FileRevision"/>
         /// objects in the <see cref="OperationContainer"/>.
         /// </summary>
         /// <param name="operationContainer">
@@ -353,7 +360,7 @@ namespace CDP4Dal.DAL
         /// </param>
         /// <exception cref="InvalidOperationContainerException">
         /// An <see cref="InvalidOperationContainerException"/> is thrown when the <see cref="OperationContainer"/> does not contain an <see cref="Operation"/>
-        /// that contains a <see cref="CDP4Common.DTO.FileRevision"/> instant whose contenthash matches the hash of the provided <paramref name="files"/>.
+        /// that contains a <see cref="CDP4Common.DTO.FileRevision"/> instant whose content-hash matches the hash of the provided <paramref name="files"/>.
         /// </exception>        
         protected void OperationContainerFileVerification(OperationContainer operationContainer, IEnumerable<string> files)
         {
