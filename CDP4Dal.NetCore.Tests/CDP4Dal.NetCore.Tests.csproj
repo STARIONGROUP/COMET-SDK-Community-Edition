@@ -31,4 +31,10 @@
     <PackageReference Include="NUnit.Console" Version="3.10.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DAL\files\SiteDirectory.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

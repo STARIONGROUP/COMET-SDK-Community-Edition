@@ -26,11 +26,13 @@ namespace CDP4Dal.Tests.DAL
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common;
     using CDP4Common.DTO;
     using CDP4Dal.Composition;
+    using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using NUnit.Framework;
@@ -40,10 +42,12 @@ namespace CDP4Dal.Tests.DAL
     {
         private Credentials credentials;
         private string someURI = "http://someURI";
+        private string filePath;
 
         [SetUp]
         public void SetUp()
         {
+            this.filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "DAL", "files", "SiteDirectory.json");
             this.credentials = new Credentials("John", "Doe", new Uri(this.someURI));
         }
 
@@ -133,6 +137,86 @@ namespace CDP4Dal.Tests.DAL
             var dal = new DecoratedDal();
             Assert.That(dal.DalVersion,  Is.EqualTo(new Version(1,1,0)));
         }
+
+        [Test]
+        public void Verify_that_OperationContainerFileVerification_throws_an_exception_when_data_is_incomplete()
+        {
+            var siteDirectory = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), null, null);
+            var engineeringModelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), null, null);
+            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), null, null);
+
+            siteDirectory.Model.Add(engineeringModelSetup);
+            engineeringModelSetup.IterationSetup.Add(iterationSetup);
+
+            var engineeringModel = new CDP4Common.EngineeringModelData.EngineeringModel(Guid.NewGuid(), null, null);
+            engineeringModel.EngineeringModelSetup = engineeringModelSetup;
+
+            var iteration = new CDP4Common.EngineeringModelData.Iteration(Guid.NewGuid(), null, null);
+            iteration.IterationSetup = iterationSetup;
+
+            var commonFileStore = new CDP4Common.EngineeringModelData.CommonFileStore(Guid.NewGuid(), null, null);
+            engineeringModel.Iteration.Add(iteration);
+            engineeringModel.CommonFileStore.Add(commonFileStore);
+            
+            var context = TransactionContextResolver.ResolveContext(commonFileStore);
+            var transaction = new ThingTransaction(context);
+
+            var commonFileStoreClone = commonFileStore.Clone(false);
+
+            var file = new CDP4Common.EngineeringModelData.File(Guid.NewGuid(), null, null);
+            var fileRevision = new CDP4Common.EngineeringModelData.FileRevision(Guid.NewGuid(), null, null);
+            
+            transaction.Create(file, commonFileStoreClone);
+            transaction.Create(fileRevision, file);
+
+            var operationContainer = transaction.FinalizeTransaction();
+
+            var files = new List<string> {this.filePath};
+
+            var testDal = new TestDal(this.credentials);
+            Assert.Throws<InvalidOperationContainerException>(() => testDal.TestOperationContainerFileVerification(operationContainer, files));
+        }
+
+        [Test]
+        public void Verify_that_OperationContainerFileVerification_throws_no_exception_when_data_is_complete()
+        {
+            var siteDirectory = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), null, null);
+            var engineeringModelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), null, null);
+            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), null, null);
+
+            siteDirectory.Model.Add(engineeringModelSetup);
+            engineeringModelSetup.IterationSetup.Add(iterationSetup);
+
+            var engineeringModel = new CDP4Common.EngineeringModelData.EngineeringModel(Guid.NewGuid(), null, null);
+            engineeringModel.EngineeringModelSetup = engineeringModelSetup;
+
+            var iteration = new CDP4Common.EngineeringModelData.Iteration(Guid.NewGuid(), null, null);
+            iteration.IterationSetup = iterationSetup;
+
+            var commonFileStore = new CDP4Common.EngineeringModelData.CommonFileStore(Guid.NewGuid(), null, null);
+            engineeringModel.Iteration.Add(iteration);
+            engineeringModel.CommonFileStore.Add(commonFileStore);
+            
+            var context = TransactionContextResolver.ResolveContext(commonFileStore);
+            var transaction = new ThingTransaction(context);
+
+            var commonFileStoreClone = commonFileStore.Clone(false);
+
+            var file = new CDP4Common.EngineeringModelData.File(Guid.NewGuid(), null, null);
+            var fileRevision = new CDP4Common.EngineeringModelData.FileRevision(Guid.NewGuid(), null, null);
+            fileRevision.ContentHash = "1B686ADFA2CAE870A96E5885087337C032781BE6";
+            
+            transaction.Create(file, commonFileStoreClone);
+            transaction.Create(fileRevision, file);
+
+            var operationContainer = transaction.FinalizeTransaction();
+
+            var files = new List<string> {this.filePath};
+
+            var testDal = new TestDal(this.credentials);
+
+            Assert.DoesNotThrow(() => testDal.TestOperationContainerFileVerification(operationContainer, files));
+        }
     }
 
     [CDPVersion("1.1.0")]    
@@ -149,6 +233,11 @@ namespace CDP4Dal.Tests.DAL
         public string CleanSlashes(string uri)
         {
             return base.CleanUriFinalSlash(uri);
+        }
+
+        internal void TestOperationContainerFileVerification(OperationContainer operationContainer, IEnumerable<string> files)
+        {
+            this.OperationContainerFileVerification(operationContainer, files);
         }
 
         public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null)

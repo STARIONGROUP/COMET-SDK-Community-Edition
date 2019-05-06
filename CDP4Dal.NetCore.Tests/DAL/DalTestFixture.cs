@@ -26,11 +26,13 @@ namespace CDP4Dal.Tests.DAL
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common;
     using CDP4Common.DTO;
     using CDP4Dal.Composition;
+    using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using NUnit.Framework;
@@ -40,10 +42,12 @@ namespace CDP4Dal.Tests.DAL
     {
         private Credentials credentials;
         private string someURI = "http://someURI";
+        private string filePath;
 
         [SetUp]
         public void SetUp()
         {
+            this.filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "DAL", "files", "SiteDirectory.json");
             this.credentials = new Credentials("John", "Doe", new Uri(this.someURI));
         }
 
@@ -133,6 +137,86 @@ namespace CDP4Dal.Tests.DAL
             var dal = new DecoratedDal();
             Assert.That(dal.DalVersion,  Is.EqualTo(new Version(1,1,0)));
         }
+
+        [Test]
+        public void Verify_that_OperationContainerFileVerification_throws_an_exception_when_data_is_incomplete()
+        {
+            var siteDirectory = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), null, null);
+            var engineeringModelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), null, null);
+            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), null, null);
+
+            siteDirectory.Model.Add(engineeringModelSetup);
+            engineeringModelSetup.IterationSetup.Add(iterationSetup);
+
+            var engineeringModel = new CDP4Common.EngineeringModelData.EngineeringModel(Guid.NewGuid(), null, null);
+            engineeringModel.EngineeringModelSetup = engineeringModelSetup;
+
+            var iteration = new CDP4Common.EngineeringModelData.Iteration(Guid.NewGuid(), null, null);
+            iteration.IterationSetup = iterationSetup;
+
+            var commonFileStore = new CDP4Common.EngineeringModelData.CommonFileStore(Guid.NewGuid(), null, null);
+            engineeringModel.Iteration.Add(iteration);
+            engineeringModel.CommonFileStore.Add(commonFileStore);
+            
+            var context = TransactionContextResolver.ResolveContext(commonFileStore);
+            var transaction = new ThingTransaction(context);
+
+            var commonFileStoreClone = commonFileStore.Clone(false);
+
+            var file = new CDP4Common.EngineeringModelData.File(Guid.NewGuid(), null, null);
+            var fileRevision = new CDP4Common.EngineeringModelData.FileRevision(Guid.NewGuid(), null, null);
+            
+            transaction.Create(file, commonFileStoreClone);
+            transaction.Create(fileRevision, file);
+
+            var operationContainer = transaction.FinalizeTransaction();
+
+            var files = new List<string> {this.filePath};
+
+            var testDal = new TestDal(this.credentials);
+            Assert.Throws<InvalidOperationContainerException>(() => testDal.TestOperationContainerFileVerification(operationContainer, files));
+        }
+
+        [Test]
+        public void Verify_that_OperationContainerFileVerification_throws_no_exception_when_data_is_complete()
+        {
+            var siteDirectory = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), null, null);
+            var engineeringModelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), null, null);
+            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), null, null);
+
+            siteDirectory.Model.Add(engineeringModelSetup);
+            engineeringModelSetup.IterationSetup.Add(iterationSetup);
+
+            var engineeringModel = new CDP4Common.EngineeringModelData.EngineeringModel(Guid.NewGuid(), null, null);
+            engineeringModel.EngineeringModelSetup = engineeringModelSetup;
+
+            var iteration = new CDP4Common.EngineeringModelData.Iteration(Guid.NewGuid(), null, null);
+            iteration.IterationSetup = iterationSetup;
+
+            var commonFileStore = new CDP4Common.EngineeringModelData.CommonFileStore(Guid.NewGuid(), null, null);
+            engineeringModel.Iteration.Add(iteration);
+            engineeringModel.CommonFileStore.Add(commonFileStore);
+            
+            var context = TransactionContextResolver.ResolveContext(commonFileStore);
+            var transaction = new ThingTransaction(context);
+
+            var commonFileStoreClone = commonFileStore.Clone(false);
+
+            var file = new CDP4Common.EngineeringModelData.File(Guid.NewGuid(), null, null);
+            var fileRevision = new CDP4Common.EngineeringModelData.FileRevision(Guid.NewGuid(), null, null);
+            fileRevision.ContentHash = "1B686ADFA2CAE870A96E5885087337C032781BE6";
+            
+            transaction.Create(file, commonFileStoreClone);
+            transaction.Create(fileRevision, file);
+
+            var operationContainer = transaction.FinalizeTransaction();
+
+            var files = new List<string> {this.filePath};
+
+            var testDal = new TestDal(this.credentials);
+
+            Assert.DoesNotThrow(() => testDal.TestOperationContainerFileVerification(operationContainer, files));
+        }
     }
 
     [CDPVersion("1.1.0")]
@@ -151,170 +235,56 @@ namespace CDP4Dal.Tests.DAL
             return base.CleanUriFinalSlash(uri);
         }
 
-        /// <summary>
-        /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s asynchronously.
-        /// </summary>
-        /// <param name="operationContainer">
-        /// The provided <see cref="OperationContainer"/> to write
-        /// </param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
-        /// </returns>
+        internal void TestOperationContainerFileVerification(OperationContainer operationContainer, IEnumerable<string> files)
+        {
+            this.OperationContainerFileVerification(operationContainer, files);
+        }
+
         public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null)
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
-        /// </summary>
-        /// <param name="operationContainer">
-        /// The provided <see cref="OperationContainer"/> to write
-        /// </param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
-        /// </returns>
         public override Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
         {
             throw new System.NotImplementedException();
         }
 
-        /// <summary>
-        /// Reads the data related to the provided <see cref="Thing"/> from the data-source
-        /// </summary>
-        /// <typeparam name="T">
-        /// an type of <see cref="Thing"/>
-        /// </typeparam>
-        /// <param name="thing">
-        /// An instance of <see cref="Thing"/> that needs to be read from the data-source
-        /// </param>
-        /// <param name="token">
-        /// The <see cref="CancellationToken"/>
-        /// </param>
-        /// <param name="attributes">
-        /// An instance of <see cref="IQueryAttributes"/> to be passed along with the request
-        /// </param>
-        /// <returns>
-        /// a list of <see cref="Thing"/> that are contained by the provided <see cref="Thing"/> including the <see cref="Thing"/> itself
-        /// </returns>
         public override Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken token, IQueryAttributes attributes = null)
         {
             throw new System.NotImplementedException();
         }
 
-        /// <summary>
-        /// Reads the data related to the provided <see cref="Iteration"/> from the data-source
-        /// </summary>
-        /// <param name="iteration">
-        /// An instance of <see cref="Iteration"/> that needs to be read from the data-source
-        /// </param>
-        /// <param name="cancellationToken">
-        /// The <see cref="CancellationToken"/>
-        /// </param>
-        /// <param name="attributes">
-        /// An instance of <see cref="IQueryAttributes"/> to be used with the request
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Thing"/> that are contained by the provided <see cref="EngineeringModel"/> including the Reference-Data.
-        /// All the <see cref="Thing"/>s that have been updated since the last read will be returned.
-        /// </returns>
         public override Task<IEnumerable<Thing>> Read(Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
         {
             throw new System.NotImplementedException();
         }
 
-        /// <summary>
-        /// Creates the specified <see cref="Thing"/> on a data source
-        /// </summary>
-        /// <param name="thing">
-        /// The <see cref="Thing"/> that is to be created
-        /// </param>
-        /// <typeparam name="T">
-        /// The type of <see cref="Thing"/>
-        /// </typeparam>
-        /// <returns>
-        /// A list of <see cref="Thing"/> that have been updated since the last Read has been performed. This includes the thing that was created.
-        /// </returns>
         public override IEnumerable<Thing> Create<T>(T thing)
         {
             throw new System.NotImplementedException();
         }
 
-        /// <summary>
-        /// Performs an update to the <see cref="Thing"/> on the data-source
-        /// </summary>
-        /// <param name="thing">
-        /// The <see cref="Thing"/> that is to be updated
-        /// </param>
-        /// <typeparam name="T">
-        /// a type of <see cref="Thing"/>
-        /// </typeparam>
-        /// <returns>
-        /// A list of <see cref="Thing"/> that have been updated since the last Read has been performed.
-        /// </returns>
         public override IEnumerable<Thing> Update<T>(T thing)
         {
             throw new System.NotImplementedException();
         }
 
-        /// <summary>
-        /// Deletes the specified <see cref="Thing"/> from the data-source
-        /// </summary>
-        /// <param name="thing">
-        /// The <see cref="Thing"/> that is to be deleted
-        /// </param>
-        /// <typeparam name="T">
-        /// a type of <see cref="Thing"/>
-        /// </typeparam>
-        /// <returns>
-        /// A list of <see cref="Thing"/> that have been updated since the last Read has been performed.
-        /// </returns>
         public override IEnumerable<Thing> Delete<T>(T thing)
         {
             throw new System.NotImplementedException();
         }
 
-        /// <summary>
-        /// Opens a connection to a data source <see cref="Uri"/>
-        /// </summary>
-        /// <param name="credentials">
-        /// The <see cref="Dal.Credentials"/> that are used to connect to the data source such as username, password and <see cref="Uri"/>
-        /// </param>
-        /// <param name="cancellationToken">
-        /// The cancellation Token.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{T}"/> that the services return when connecting to the <see cref="SiteDirectory"/>.
-        /// </returns>
         public override Task<IEnumerable<Thing>> Open(Credentials credentials, CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
         }
 
-        /// <summary>
-        /// Closes the connection to the data-source.
-        /// </summary>
         public override void Close()
         {
             throw new System.NotImplementedException();
         }
-
-        /// <summary>
-        /// Assertion that the provided string is a valid <see cref="Uri"/> to connect to
-        /// a data-source with the current implementation of the <see cref="IDal"/>
-        /// </summary>
-        /// <param name="uri">
-        /// a string representing a <see cref="Uri"/>
-        /// </param>
-        /// <returns>
-        /// true when valid, false when invalid
-        /// </returns>
+        
         public override bool IsValidUri(string uri)
         {
             throw new System.NotImplementedException();
