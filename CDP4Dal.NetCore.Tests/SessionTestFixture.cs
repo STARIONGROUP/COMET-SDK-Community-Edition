@@ -58,29 +58,14 @@ namespace CDP4Dal.Tests
     [TestFixture]
     public class SessionTestFixture
     {
-        /// <summary>
-        /// mocked data service
-        /// </summary>
         private Mock<IDal> mockedDal;
 
-        /// <summary>
-        /// a list of <see cref="CDP4Common.DTO.Thing"/> returned from the mocked <see cref="IDal"/>
-        /// </summary>
         private List<Thing> dalOutputs;
 
-        /// <summary>
-        /// The uri of the mocked <see cref="IDal"/>
-        /// </summary>
         private Uri uri;
 
-        /// <summary>
-        /// The <see cref="Session"/> object under test
-        /// </summary>
         private Session session;
 
-        /// <summary>
-        /// The <see cref="Person"/> object under test
-        /// </summary>
         private CDP4Common.DTO.Person person;
 
         private CDP4Common.DTO.SiteDirectory sieSiteDirectoryDto;
@@ -475,6 +460,7 @@ namespace CDP4Dal.Tests
         public async Task VerifyThatReadIterationWorks()
         {
             var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) {ShortName = "John"};
             var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
             var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
             var mrdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
@@ -486,8 +472,10 @@ namespace CDP4Dal.Tests
             siteDir.Model.Add(modelSetup);
             siteDir.SiteReferenceDataLibrary.Add(srdl);
             siteDir.Domain.Add(activeDomain);
+            siteDir.Person.Add(JohnDoe);
 
             this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(JohnDoe.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => JohnDoe));
             this.session.Assembler.Cache.TryAdd(new CacheKey(modelSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => modelSetup));
             this.session.Assembler.Cache.TryAdd(new CacheKey(mrdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => mrdl));
             this.session.Assembler.Cache.TryAdd(new CacheKey(srdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => srdl));
@@ -544,7 +532,40 @@ namespace CDP4Dal.Tests
 
             Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(iterationToOpen, null));
         }
-    
+
+        [Test]
+        public async Task Verify_that_when_active_person_is_null_Iteration_is_not_read()
+        {
+            var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
+
+            var model = new EngineeringModel(Guid.NewGuid(), 1);
+            var iteration = new Iteration(iterationSetup.IterationIid, 10) { IterationSetup = iterationSetup.Iid };
+            model.Iteration.Add(iteration.Iid);
+            model.EngineeringModelSetup = modelSetup.Iid;
+
+            var activeDomain = new DomainOfExpertise(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+
+            var readOutput = new List<Thing>
+            {
+                model,
+                iteration
+            };
+
+            var readTaskCompletionSource = new TaskCompletionSource<IEnumerable<Thing>>();
+            readTaskCompletionSource.SetResult(readOutput);
+            this.mockedDal.Setup(x => x.Read(It.IsAny<Iteration>(), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>())).Returns(readTaskCompletionSource.Task);
+
+            var iterationToOpen = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
+            var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
+            iterationToOpen.Container = modelToOpen;
+
+            await this.session.Read(iterationToOpen, activeDomain);
+            this.mockedDal.Verify(
+                x => x.Read(It.Is<Iteration>(i => i.Iid == iterationToOpen.Iid), It.IsAny<CancellationToken>(),
+                    It.IsAny<IQueryAttributes>()), Times.Never);
+        }
+
         [Test]
         public void VeriyThatCDPVersionIsSet()
         {

@@ -326,6 +326,12 @@ namespace CDP4Dal
 
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
             await this.Assembler.Synchronize(dtoThings);
+            
+            if (this.ActivePerson == null)
+            {
+                logger.Warn("The Session.ActivePerson returns null");
+            }
+
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
 
             logger.Info("Synchronization with the {0} server done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
@@ -366,6 +372,16 @@ namespace CDP4Dal
         /// </remarks>
         public async Task Read(Iteration iteration, DomainOfExpertise domain)
         {
+            // if the Session.ActivePerson == null, the Credentials class used to open the session
+            // does not have have a Person object in the Cache. If this condition is true, an Iteration
+            // cannot/should not be read, since the proper participant/domain information cannot be associated.
+            // to the Iteration object
+            if (this.ActivePerson == null)
+            {
+                logger.Warn("The Session.ActivePerson is null, the Iteration will not be read.");
+                return;
+            }
+
             // check if iteration is already open
             // if so check that the domain is not different
             var iterationDomainPair = this.openIterations.SingleOrDefault(x => x.Key.Iid == iteration.Iid);
@@ -733,6 +749,7 @@ namespace CDP4Dal
         /// <param name="activeDomain">The active <see cref="DomainOfExpertise"/> in this <see cref="Session"/></param>
         private void AddIterationToOpenList(Guid iterationId, DomainOfExpertise activeDomain)
         {
+            
             Lazy<Thing> lazyIteraion;
             this.Assembler.Cache.TryGetValue(new CacheKey(iterationId, null), out lazyIteraion);
             if (lazyIteraion == null)
@@ -743,6 +760,7 @@ namespace CDP4Dal
             var iteration = lazyIteraion.Value as Iteration;
             if (iteration == null)
             {
+                logger.Warn("The iteration {iterationId} is not present in the Cache and is therefore not added to the OpenIterations", iterationId);
                 return;
             }
 
@@ -751,11 +769,11 @@ namespace CDP4Dal
                 return;
             }
 
-            var activeParticipant = ((EngineeringModel)iteration.Container).EngineeringModelSetup.Participant.Where(p => p.Person == this.ActivePerson).SingleOrDefault();
+            var activeParticipant = ((EngineeringModel)iteration.Container).EngineeringModelSetup.Participant.SingleOrDefault(p => p.Person == this.ActivePerson);
 
             if (activeParticipant == null)
             {
-                throw new InvalidOperationException("The iteration does not have an active participant associated.");
+                throw new InvalidOperationException("The iteration does not have an active associated participant.");
             }
 
             this.openIterations.Add(iteration, new Tuple<DomainOfExpertise, Participant>(activeDomain, activeParticipant));
