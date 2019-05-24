@@ -472,7 +472,7 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public void VerifyThatReadIterationWorks()
+        public async Task VerifyThatReadIterationWorks()
         {
             var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
             var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
@@ -516,13 +516,13 @@ namespace CDP4Dal.Tests
             var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
             iterationToOpen.Container = modelToOpen;
 
-            this.session.Read(iterationToOpen, activeDomain).Wait();
+            await this.session.Read(iterationToOpen, activeDomain);
             this.mockedDal.Verify(x => x.Read(It.Is<Iteration>(i => i.Iid == iterationToOpen.Iid), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>()), Times.Once);
 
             var pair = this.session.OpenIterations.Single();
             Assert.AreEqual(pair.Value.Item1, activeDomain);
 
-            this.session.Read(iterationToOpen, activeDomain).Wait();
+            await this.session.Read(iterationToOpen, activeDomain);
             this.mockedDal.Verify(x => x.Read(It.Is<Iteration>(i => i.Iid == iterationToOpen.Iid), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>()), Times.Exactly(2));
 
             pair = this.session.OpenIterations.Single();
@@ -539,13 +539,12 @@ namespace CDP4Dal.Tests
                     return readTaskCompletionSource.Task;
                 });
 
-            this.session.Refresh().Wait();
+            await this.session.Refresh();
             this.mockedDal.Verify(x => x.Read<Thing>(It.IsAny<Thing>(), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>()), Times.Exactly(1));
 
             Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(iterationToOpen, null));
         }
     
-
         [Test]
         public void VeriyThatCDPVersionIsSet()
         {
