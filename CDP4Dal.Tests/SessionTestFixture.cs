@@ -151,7 +151,10 @@ namespace CDP4Dal.Tests
                 }
             });
             
-            var context = string.Format("/SiteDirectory/{0}", Guid.NewGuid());
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson").SetValue(session, johnDoe, null);
             await this.session.Write(new OperationContainer(context));
 
             Assert.IsTrue(beginUpdateReceived);

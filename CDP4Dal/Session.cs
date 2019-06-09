@@ -312,6 +312,9 @@ namespace CDP4Dal
 
             if (this.ActivePerson == null)
             {
+                // clear cache
+                await this.Assembler.Clear();
+
                 throw new IncompleteModelException("The Person object that matches the user specified in the Credentials could not be found");
             }
 
@@ -357,7 +360,7 @@ namespace CDP4Dal
         {
             if (this.ActivePerson == null)
             {
-                throw new InvalidOperationException("The Iteration cannot be read when the ActivePerson is null; The Open method must be used prior to any of the Read methods");
+                throw new InvalidOperationException("The Iteration cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
             }
 
             // check if iteration is already open
@@ -417,7 +420,7 @@ namespace CDP4Dal
         {
             if (this.ActivePerson == null)
             {
-                throw new InvalidOperationException("The Iteration cannot be read when the ActivePerson is null; The Open method must be used prior to any of the Read methods");
+                throw new InvalidOperationException("The ReferenceDataLibrary cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
             }
 
             await this.Read((Thing)rdl);
@@ -435,7 +438,7 @@ namespace CDP4Dal
         {
             if (this.ActivePerson == null)
             {
-                throw new InvalidOperationException("The Iteration cannot be read when the ActivePerson is null; The Open method must be used prior to any of the Read methods");
+                throw new InvalidOperationException($"The {thing.ClassKind} cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
             }
 
             logger.Info("Session.Read {0} {1}", thing.ClassKind, thing.Iid);
@@ -481,6 +484,11 @@ namespace CDP4Dal
         /// </returns>
         public async Task Write(OperationContainer operationContainer)
         {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException($"The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+            }
+
             this.Dal.Session = this;
             var dtoThings = await this.Dal.Write(operationContainer);
 
@@ -506,6 +514,11 @@ namespace CDP4Dal
         /// </returns>
         public async Task Refresh()
         {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException($"The Refresh operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+            }
+
             foreach (var topContainer in this.GetSiteDirectoryAndActiveIterations())
             {
                 await this.Update(topContainer);
@@ -520,6 +533,11 @@ namespace CDP4Dal
         /// </returns>
         public async Task Reload()
         {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException($"The Reload operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+            }
+
             foreach (var topContainer in this.GetSiteDirectoryAndActiveIterations())
             {
                 await this.Update(topContainer, false);
