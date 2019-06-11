@@ -30,13 +30,12 @@ namespace CDP4Dal
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.Types;
     using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
-
     using DAL;
     using Events;
     using NLog;
@@ -52,16 +51,11 @@ namespace CDP4Dal
         /// The NLog logger
         /// </summary>
         private static Logger logger = LogManager.GetCurrentClassLogger();
-
+        
         /// <summary>
-        /// Backing field for <see cref="ActivePerson"/>
+        /// The cancellation token source.
         /// </summary>
-        private Person activePerson;
-
-        /// <summary>
-        /// The cancelation token source.
-        /// </summary>
-        private CancellationTokenSource cancelationTokenSource;
+        private CancellationTokenSource cancellationTokenSource;
 
         /// <summary>
         /// Backing field for <see cref="OpenReferenceDataLibraries"/>
@@ -137,23 +131,7 @@ namespace CDP4Dal
         /// <summary>
         /// Gets the active <see cref="Person"/> in this <see cref="Session"/>
         /// </summary>
-        public Person ActivePerson
-        {
-            get
-            {
-                if (this.activePerson != null)
-                {
-                    return this.activePerson;
-                }
-
-                this.activePerson = this.Assembler.Cache.Select(x => x.Value)
-                    .Select(lazy => lazy.Value)
-                    .OfType<Person>()
-                    .SingleOrDefault(pers => pers.ShortName == this.Credentials.UserName);
-
-                return this.activePerson;
-            }
-        }
+        public Person ActivePerson { get; private set; }
 
         /// <summary>
         /// Retrieves the <see cref="Participant"/>s from the <see cref="Iteration"/>s that are currently open
@@ -306,16 +284,16 @@ namespace CDP4Dal
             logger.Info("Open request {0}", this.DataSourceUri);
 
             // Create the token source
-            this.cancelationTokenSource = new CancellationTokenSource();
+            this.cancellationTokenSource = new CancellationTokenSource();
             IReadOnlyList<CDP4Common.DTO.Thing> dtoThings;
             try
             {
-                dtoThings = (await this.Dal.Open(this.Credentials, this.cancelationTokenSource.Token)).ToList();
+                dtoThings = (await this.Dal.Open(this.Credentials, this.cancellationTokenSource.Token)).ToList();
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Open request cancelled {0}", this.DataSourceUri);
-                this.cancelationTokenSource = null;
+                this.cancellationTokenSource = null;
                 return;
             }
 
@@ -326,6 +304,20 @@ namespace CDP4Dal
 
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
             await this.Assembler.Synchronize(dtoThings);
+
+            this.ActivePerson = this.Assembler.Cache.Select(x => x.Value)
+                .Select(lazy => lazy.Value)
+                .OfType<Person>()
+                .SingleOrDefault(pers => pers.ShortName == this.Credentials.UserName);
+
+            if (this.ActivePerson == null)
+            {
+                // clear cache
+                await this.Assembler.Clear();
+
+                throw new IncompleteModelException("The Person object that matches the user specified in the Credentials could not be found");
+            }
+
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
 
             logger.Info("Synchronization with the {0} server done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
@@ -366,6 +358,11 @@ namespace CDP4Dal
         /// </remarks>
         public async Task Read(Iteration iteration, DomainOfExpertise domain)
         {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException("The Iteration cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
+            }
+
             // check if iteration is already open
             // if so check that the domain is not different
             var iterationDomainPair = this.openIterations.SingleOrDefault(x => x.Key.Iid == iteration.Iid);
@@ -378,18 +375,18 @@ namespace CDP4Dal
             }
 
             // Create the token source
-            this.cancelationTokenSource = new CancellationTokenSource();
+            this.cancellationTokenSource = new CancellationTokenSource();
             IEnumerable<CDP4Common.DTO.Thing> dtoThings;
             try
             {
                 var iterationDto = (CDP4Common.DTO.Iteration)iteration.ToDto();
                 this.Dal.Session = this;
-                dtoThings = await this.Dal.Read(iterationDto, this.cancelationTokenSource.Token);
+                dtoThings = await this.Dal.Read(iterationDto, this.cancellationTokenSource.Token);
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.Read {0} {1} cancelled", iteration.ClassKind, iteration.Iid);
-                this.cancelationTokenSource = null;
+                this.cancellationTokenSource = null;
                 return;
             }
 
@@ -421,6 +418,11 @@ namespace CDP4Dal
         /// </remarks>
         public async Task Read(ReferenceDataLibrary rdl)
         {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException("The ReferenceDataLibrary cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
+            }
+
             await this.Read((Thing)rdl);
             this.AddRdlToOpenList(rdl);
         }
@@ -434,20 +436,25 @@ namespace CDP4Dal
         /// </returns>
         public async Task Read(Thing thing)
         {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException($"The {thing.ClassKind} cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
+            }
+
             logger.Info("Session.Read {0} {1}", thing.ClassKind, thing.Iid);
             var dto = thing.ToDto();
 
             // Create the token source
-            this.cancelationTokenSource = new CancellationTokenSource();
+            this.cancellationTokenSource = new CancellationTokenSource();
             IEnumerable<CDP4Common.DTO.Thing> dtoThings;
             try
             {
-                dtoThings = await this.Dal.Read(dto, this.cancelationTokenSource.Token);
+                dtoThings = await this.Dal.Read(dto, this.cancellationTokenSource.Token);
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.Read {0} {1} cancelled", thing.ClassKind, thing.Iid);
-                this.cancelationTokenSource = null;
+                this.cancellationTokenSource = null;
                 return;
             }
 
@@ -477,6 +484,11 @@ namespace CDP4Dal
         /// </returns>
         public async Task Write(OperationContainer operationContainer)
         {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException($"The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+            }
+
             this.Dal.Session = this;
             var dtoThings = await this.Dal.Write(operationContainer);
 
@@ -497,11 +509,16 @@ namespace CDP4Dal
         /// <summary>
         /// Refreshes all the <see cref="TopContainer"/>s in the cache
         /// </summary>
-        /// /// <returns>
+        /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
         public async Task Refresh()
         {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException($"The Refresh operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+            }
+
             foreach (var topContainer in this.GetSiteDirectoryAndActiveIterations())
             {
                 await this.Update(topContainer);
@@ -516,6 +533,11 @@ namespace CDP4Dal
         /// </returns>
         public async Task Reload()
         {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException($"The Reload operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+            }
+
             foreach (var topContainer in this.GetSiteDirectoryAndActiveIterations())
             {
                 await this.Update(topContainer, false);
@@ -527,9 +549,9 @@ namespace CDP4Dal
         /// </summary>
         public void Cancel()
         {
-            if (this.cancelationTokenSource != null)
+            if (this.cancellationTokenSource != null)
             {
-                this.cancelationTokenSource.Cancel();
+                this.cancellationTokenSource.Cancel();
             }
         }
 
@@ -546,6 +568,8 @@ namespace CDP4Dal
 
             logger.Info("Session {0} closed successfully", this.DataSourceUri);
             this.openReferenceDataLibraries.Clear();
+
+            this.ActivePerson = null;
         }
 
         /// <summary>
@@ -613,15 +637,15 @@ namespace CDP4Dal
             var queryAttribute = new DalQueryAttributes { RevisionNumber = revisionNumber };
 
             // Create the token source
-            this.cancelationTokenSource = new CancellationTokenSource();
+            this.cancellationTokenSource = new CancellationTokenSource();
             IEnumerable<CDP4Common.DTO.Thing> dtoThings;
             try
             {
-                dtoThings = await this.Dal.Read(thing.ToDto(), this.cancelationTokenSource.Token, queryAttribute);
+                dtoThings = await this.Dal.Read(thing.ToDto(), this.cancellationTokenSource.Token, queryAttribute);
             }
             catch (OperationCanceledException)
             {
-                this.cancelationTokenSource = null;
+                this.cancellationTokenSource = null;
                 return;
             }
 
@@ -743,6 +767,7 @@ namespace CDP4Dal
             var iteration = lazyIteraion.Value as Iteration;
             if (iteration == null)
             {
+                logger.Warn("The iteration {iterationId} is not present in the Cache and is therefore not added to the OpenIterations", iterationId);
                 return;
             }
 
@@ -751,11 +776,11 @@ namespace CDP4Dal
                 return;
             }
 
-            var activeParticipant = ((EngineeringModel)iteration.Container).EngineeringModelSetup.Participant.Where(p => p.Person == this.ActivePerson).SingleOrDefault();
+            var activeParticipant = ((EngineeringModel)iteration.Container).EngineeringModelSetup.Participant.SingleOrDefault(p => p.Person == this.ActivePerson);
 
             if (activeParticipant == null)
             {
-                throw new InvalidOperationException("The iteration does not have an active participant associated.");
+                throw new InvalidOperationException("The iteration does not have an active associated participant.");
             }
 
             this.openIterations.Add(iteration, new Tuple<DomainOfExpertise, Participant>(activeDomain, activeParticipant));
