@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Dal Community Edition</Title>
-    <Version>5.0.1</Version>
+    <Version>5.0.2</Version>
     <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron</Authors>
@@ -16,9 +16,7 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
-      [Update] to CDP4Common-CE version 3.1.0
-      [Update] to System.Reactive version 4.1.5
-      [Add] generation of XML docs and pdb to nuget; fixes #49
+      [Improve] error logging in Assembler.Synchronize() method
     </PackageReleaseNotes>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>

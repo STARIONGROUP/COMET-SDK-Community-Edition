@@ -272,7 +272,7 @@ namespace CDP4Dal
             }
             catch (Exception e)
             {
-                logger.Error(e.Message);
+                logger.Error(e);
             }
             finally
             {
