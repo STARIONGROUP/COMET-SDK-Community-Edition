@@ -3,6 +3,7 @@
 The Concurrent Design Platform Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the Concurrent Design Platform (CDP4) to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/RHEAGROUP/CDP4-WebServices-Community-Edition) and the [Desktop Application](https://github.com/RHEAGROUP/CDP4-IME-Community-Edition). The following libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
 
   - CDP4Common
+  - CDP4Rules
   - CDP4JsonSerializer
   - CDP4Dal
   - CDP4JsonFileDal
@@ -16,6 +17,7 @@ The SDK contains multiple libraries that are each packaged as a nuget and avaial
 Package | Link
 --------|--------
 CDP4Common | [![NuGet Badge](https://buildstats.info/nuget/CDP4Common-CE)](https://buildstats.info/nuget/CDP4Common-CE)
+CDP4Rules | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4Rules-CE)
 CDP4JsonSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonSerializer-CE)](https://buildstats.info/nuget/CDP4JsonSerializer-CE)
 CDP4Dal | [![NuGet Badge](https://buildstats.info/nuget/CDP4Dal-CE)](https://buildstats.info/nuget/CDP4Dal-CE)
 CDP4JsonFileDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonFileDal-CE)](https://buildstats.info/nuget/CDP4JsonFileDal-CE)
@@ -38,6 +40,10 @@ Development |  [![Build Status](https://ci.appveyor.com/api/projects/status/0u3q
 The CDP4Common library is a C# implementation of the CDP4 UML master model. The CDP4 UML master model is based on the ECSS-E-TM-10-25A Annex A UML master model and extends it with CDP4 concepts to improve the use of ECSS-E-TM-10-25A Annex A for Concurrent Design of complex systems. The library contains both POCO and DTO implementations of the classes defined in the CDP4 UML master model. The POCO classes are used when a full object graph is required. The DTO's are used when a full object graph is not required, references to other class are represented by unique identifiers in the form of a GUID.
 
 The CDP4Common library also includes a set of so-called MetaInfo classes. These classes are used to provide information about the classes in the UML master model such as the properties, relationships to other classes etc. These classes provide similar functionality as the C# reflection system, but with higher performance.
+
+## CDP4Rules
+
+The CDP4Rules library provides a mechanism for checking CDP4 instances versus defined **rules**. This rule checking mechanism is introduced to verify the correctness of POCO's that cannot be verified based on the CDP4 Master (UML) model (such as multiplicity, type information, etc.). Each rule has a code, description and default severity.
 
 ## CDP4JsonSerializer
 
