@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TypeResolver.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,11 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Helpers
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using System.Reflection;
     using CommonData;
@@ -136,6 +135,26 @@ namespace CDP4Common.Helpers
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Queries the super (base) types and interfaces of a give <see cref="Type"/>
+        /// </summary>
+        /// <param name="type">
+        /// The subject <see cref="Type"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{Type}"/> which may be empty
+        /// </returns>
+        public static IEnumerable<Type> QueryBaseClassesAndInterfaces(this Type type)
+        {
+            return type.QueryBaseType() == typeof(object)
+                ? type.GetInterfaces()
+                : Enumerable
+                    .Repeat(type.QueryBaseType(), 1)
+                    .Concat(type.GetInterfaces())
+                    .Concat(type.QueryBaseType().QueryBaseClassesAndInterfaces())
+                    .Distinct();
         }
     }
 }
