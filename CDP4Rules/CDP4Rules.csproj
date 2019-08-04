@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <Company>RHEA System S.A.</Company>
+    <Title>CDP4Rules Community Edition</Title>
+    <Version>0.0.1</Version>
+    <Description>CDP4 Class Library that provides Model Analysis and Rule Checking</Description>
+    <Copyright>Copyright © RHEA System S.A.</Copyright>
+    <Authors>Sam</Authors>
+    <PackageId>CDP4Rules-CE</PackageId>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/RHEAGROUP/CDP4-SDK-Community-Edition/master/docs/cdp4-icon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
+    <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
+    <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
+    <PackageReleaseNotes>
+    </PackageReleaseNotes>
+    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition="'$(Configuration)'=='Release'">
+      <ItemGroup>
+        <PackageReference Include="CDP4Common-CE" Version="3.1.0" />
+      </ItemGroup>
+    </When>
+
+    <When Condition="'$(Configuration)'=='Debug'">
+      <ItemGroup>
+        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+      </ItemGroup>
+    </When>
+  </Choose>
+
+  
+</Project>

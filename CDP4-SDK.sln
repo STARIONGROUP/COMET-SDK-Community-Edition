@@ -37,7 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4ServicesDal.NetCore.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4WspDal.NetCore.Tests", "CDP4WspDal.NetCore.Tests\CDP4WspDal.NetCore.Tests.csproj", "{46B293DE-39D4-4012-9FAA-DA7A62F0AD45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4JsonFileDal.NetCore.Tests", "CDP4JsonFileDal.NetCore.Tests\CDP4JsonFileDal.NetCore.Tests.csproj", "{0764766C-07C4-40D8-9910-25D93002A927}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonFileDal.NetCore.Tests", "CDP4JsonFileDal.NetCore.Tests\CDP4JsonFileDal.NetCore.Tests.csproj", "{0764766C-07C4-40D8-9910-25D93002A927}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4Rules", "CDP4Rules\CDP4Rules.csproj", "{9EE84CC2-E768-4AB5-A657-1C36D602BEB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{0764766C-07C4-40D8-9910-25D93002A927}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0764766C-07C4-40D8-9910-25D93002A927}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0764766C-07C4-40D8-9910-25D93002A927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EE84CC2-E768-4AB5-A657-1C36D602BEB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EE84CC2-E768-4AB5-A657-1C36D602BEB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EE84CC2-E768-4AB5-A657-1C36D602BEB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EE84CC2-E768-4AB5-A657-1C36D602BEB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
