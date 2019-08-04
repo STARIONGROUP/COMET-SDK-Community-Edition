@@ -1,4 +1,4 @@
-﻿// <copyright file="AnnotationRuleChecker.cs" company="RHEA System S.A.">
+﻿// <copyright file="AnnotationRuleCheckerTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené
@@ -21,12 +21,12 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using CDP4Common.CommonData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Rules.Common;
@@ -90,19 +90,19 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             Assert.That(result, Is.Null);
         }
 
-        //[Test]
-        //public void Verify_that_RuleCheckerEngine_can_execute_rules()
-        //{
-        //    var ruleCheckerEngine = new RuleCheckerEngine();
+        [Test]
+        public void Verify_that_RuleCheckerEngine_can_execute_rules()
+        {
+            var ruleCheckerEngine = new RuleCheckerEngine();
 
-        //    var alias = new Alias();
-        //    alias.Iid = Guid.NewGuid();
-        //    alias.LanguageCode = "en-GB";
-        //    this.engineeringModelSetup.Alias.Add(alias);
+            var alias = new Alias();
+            alias.Iid = Guid.NewGuid();
+            alias.LanguageCode = "en-GB";
+            this.engineeringModelSetup.Alias.Add(alias);
 
-        //    var result = ruleCheckerEngine.Run(new List<Thing>() { alias }).ToList();
+            var result = ruleCheckerEngine.Run(new List<Thing>() { alias }).ToList();
 
-        //    Assert.That(result, Is.Not.Empty);
-        //}
+            Assert.That(result, Is.Not.Empty);
+        }
     }
 }
