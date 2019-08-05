@@ -38,9 +38,16 @@ namespace CDP4Rules
     /// </summary>
     public class RuleCheckerEngine
     {
-        private Dictionary<Type, RuleChecker> ruleCheckers;
+        /// <summary>
+        /// A Dictionary used to store queried RuleCheckers per <see cref="Type"/>
+        /// for fast access.
+        /// </summary>
+        private readonly Dictionary<Type, RuleChecker> ruleCheckers;
 
-        private Dictionary<Type, IEnumerable<Type>> typesAndInterfacesMap;
+        /// <summary>
+        /// A Dictionary of <see cref="Type"/>s and the Interfacse/Types they implement.
+        /// </summary>
+        private readonly Dictionary<Type, IEnumerable<Type>> typesAndInterfacesMap;
 
         /// <summary>
         /// Initializes a new instance of <see cref="RuleCheckerEngine"/>
@@ -50,7 +57,7 @@ namespace CDP4Rules
             this.ruleCheckers = new Dictionary<Type, RuleChecker>();
             this.typesAndInterfacesMap = new Dictionary<Type, IEnumerable<Type>>();
 
-            foreach (var ruleCheckerType in this.QueryRuleCheckers())
+            foreach (var ruleCheckerType in this.QueryRuleCheckerTypes())
             {
                 var ruleCheckerAttribute = ruleCheckerType.QueryGetCustomAttribute<RuleCheckerAttribute>() as RuleCheckerAttribute;
 
@@ -63,7 +70,14 @@ namespace CDP4Rules
             }
         }
 
-        private IEnumerable<Type> QueryRuleCheckers()
+        /// <summary>
+        /// Queries all the current assembly for all the types that implement
+        /// the abstract <see cref="RuleChecker"/> type.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{Type}"/>
+        /// </returns>
+        private IEnumerable<Type> QueryRuleCheckerTypes()
         {
             var assembly = Assembly.GetAssembly(typeof(RuleChecker));
 
@@ -71,12 +85,7 @@ namespace CDP4Rules
 
             return ruleCheckerTypes;
         }
-
-        public RuleCheckerEngine(IEnumerable<IRule> rules)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Runs the <see cref="RuleCheckerEngine"/> on the provided <see cref="Thing"/>s
         /// </summary>

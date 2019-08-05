@@ -30,10 +30,28 @@ namespace CDP4Rules.Common
     /// </summary>
     public class RuleCheckResult
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleCheckResult"/> class
+        /// </summary>
         public RuleCheckResult()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleCheckResult"/> class
+        /// </summary>
+        /// <param name="thing">
+        /// a reference to te <see cref="Thing"/> that has been checked by a Rule
+        /// </param>
+        /// <param name="id">
+        /// the identifier or code of the Rule that may have been broken
+        /// </param>
+        /// <param name="description">
+        /// the description of the Rule that may have been broken
+        /// </param>
+        /// <param name="severity">
+        /// the <see cref="SeverityKind"/>
+        /// </param>
         public RuleCheckResult(Thing thing, string id, string description, SeverityKind severity)
         {
             this.Thing = thing;
