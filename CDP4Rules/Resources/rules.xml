@@ -17,5 +17,25 @@
       <DESCRIPTION>Checks whether the specified LanguageCode is a valid LanguageCode as specified in ISO 639-1 part 1 or part 2</DESCRIPTION>
       <SEVERITY>Warning</SEVERITY>
     </RULE>
+    <RULE>
+      <ID>MA-003</ID>
+      <DESCRIPTION>Checks whether a CategorizableThing is a member of the same Category more than once, including via category sub-classing</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-004</ID>
+      <DESCRIPTION>Checks whether a Thing references a Deprecated Thing where isDeprecated = true</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-005</ID>
+      <DESCRIPTION>Checks whether the Owner DomainOfExpertise is one of the activeDomains of the EngineeringModelSetup that is referenced by the container EngineeringModel</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-006</ID>
+      <DESCRIPTION>Checks whether the ShortName of a ShortNamedThing is valid</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
   </RULES>
 </E-TM-10-25-RULE-DEFINITION>
