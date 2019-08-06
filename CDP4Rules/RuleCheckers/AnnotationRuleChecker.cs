@@ -46,7 +46,7 @@ namespace CDP4Rules.RuleCheckers
         /// <returns>
         /// A instance of <see cref="RuleCheckResult"/>
         /// </returns>
-        [Rule("MA-001", "Checks whether the specified LanguageCode exists in the SiteDirectory", SeverityKind.Warning)]
+        [Rule("MA-001")]
         public RuleCheckResult CheckWheterTheLanguageCodeExistsInTheSiteDirectory(Thing thing)
         {
             var annotation = thing as IAnnotation;
@@ -85,6 +85,8 @@ namespace CDP4Rules.RuleCheckers
             throw new Exception("MA-001 could not be checked");
         }
 
+
+
         /// <summary>
         /// Checks whether the specified LanguageCode is a valid LanguageCode as specified in ISO 639-1 part 1 or part 2
         /// </summary>
@@ -94,7 +96,7 @@ namespace CDP4Rules.RuleCheckers
         /// <returns>
         /// A instance of <see cref="RuleCheckResult"/>
         /// </returns>
-        [Rule("MA-002", "Checks whether the specified LanguageCode is a valid LanguageCode as specified in ISO 639-1 part 1 or part 2", SeverityKind.Warning)]
+        [Rule("MA-002")]
         public RuleCheckResult CheckWeatherTheLanguageCodeIsValid(Thing thing)
         {
             var annotation = thing as IAnnotation;
@@ -105,7 +107,7 @@ namespace CDP4Rules.RuleCheckers
             
             if (CultureInfo.GetCultures(CultureTypes.AllCultures).All(x => x.Name != annotation.LanguageCode))
             {
-                return new RuleCheckResult(thing, "MA-003", $"The Annotation.LanguageCode: {annotation.LanguageCode} for Idd: {thing.Iid} is not a valid LanguageCode", SeverityKind.Warning);
+                return new RuleCheckResult(thing, "MA-002", $"The Annotation.LanguageCode: {annotation.LanguageCode} for Idd: {thing.Iid} is not a valid LanguageCode", SeverityKind.Warning);
             }
             else
             {

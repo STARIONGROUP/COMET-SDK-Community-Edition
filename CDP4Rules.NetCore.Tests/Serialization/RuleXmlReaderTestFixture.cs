@@ -1,4 +1,4 @@
-﻿// <copyright file="RuleAttribute.cs" company="RHEA System S.A.">
+﻿// <copyright file="RuleXmlReaderTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené
@@ -21,44 +21,38 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Rules.Common
+namespace CDP4Rules.NetCore.Tests.Serialization
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using CDP4Common.CommonData;
+    using CDP4Common.SiteDirectoryData;
+    using CDP4Rules.Common;
+    using CDP4Rules.RuleCheckers;
+    using CDP4Rules.Serialization;
+    using NUnit.Framework;
 
     /// <summary>
-    /// The purpose of the <see cref="RuleAttribute"/> is to decorate methods that check a particular rule and
-    /// to describe that Rule
+    /// Suite of tests for the <see cref="RuleXmlReader"/> class.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class RuleAttribute : Attribute
+    [TestFixture]
+    public class RuleXmlReaderTestFixture
     {
-        /// <summary>
-        /// Initializes a new instance of <see cref="RuleAttribute"/>
-        /// </summary>
-        public RuleAttribute()
+        private RuleXmlReader ruleXmlReader;
+
+        [SetUp]
+        public void SetUp()
         {
+            this.ruleXmlReader = new RuleXmlReader();
         }
 
-        /// <summary>
-        /// Initializes a new instance of <see cref="RuleAttribute"/>
-        /// </summary>
-        /// <param name="id">
-        /// The alpha-numeric unique identifier of
-        /// </param>
-        /// <param name="description">
-        /// the human readable description
-        /// </param>
-        /// <param name="severity">
-        /// the default <see cref="SeverityKind"/>
-        /// </param>
-        public RuleAttribute(string id)
+        [Test]
+        public void Verify_that_rules_can_be_deserialized_from_resource()
         {
-            this.Id = id;
-        }
+            var rules = this.ruleXmlReader.Deserialize();
 
-        /// <summary>
-        /// Gets or sets the alpha-numeric unique identifier of
-        /// </summary>
-        public string Id { get; set; }
+            Assert.That(rules, Is.Not.Null.And.Not.Empty);
+        }
     }
 }

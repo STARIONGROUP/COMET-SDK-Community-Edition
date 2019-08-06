@@ -21,12 +21,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using CDP4Common.EngineeringModelData;
 
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Rules.Common;
@@ -56,7 +57,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         }
 
         [Test]
-        public void Verify_that_CheckWheterTheLanguageCodeExistsInTheSiteDirectory_yields_correct_result()
+        public void Verify_that_CheckWheterTheLanguageCodeExistsInTheSiteDirectory_yields_correct_result_for_SiteDirectory_Contained_Alias()
         {
             var alias = new Alias();
             alias.LanguageCode = "en-GB";
@@ -66,6 +67,36 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
 
             Assert.That(result.Id, Is.EqualTo("MA-001"));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+
+            var naturalLanguage = new NaturalLanguage();
+            naturalLanguage.LanguageCode = "en-GB";
+            this.siteDirectory.NaturalLanguage.Add(naturalLanguage);
+
+            result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void Verify_that_CheckWheterTheLanguageCodeExistsInTheSiteDirectory_yields_correct_result_for_EngineeringModel_Contained_Alias()
+        {
+            var engineeringModel = new EngineeringModel();
+            engineeringModel.EngineeringModelSetup = this.engineeringModelSetup;
+
+            var iteration = new Iteration();
+            engineeringModel.Iteration.Add(iteration);
+
+            var elementDefinition = new ElementDefinition();
+            iteration.Element.Add(elementDefinition);
+
+            var alias = new Alias {LanguageCode = "en-GB"};
+            elementDefinition.Alias.Add(alias);
+
+            var result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
+
+            Assert.That(result.Id, Is.EqualTo("MA-001"));
+            Assert.That(result.Description, Is.EqualTo($"The Annotation.LanguageCode: {alias.LanguageCode} for Idd: {alias.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}"));
             Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
 
             var naturalLanguage = new NaturalLanguage();
@@ -103,6 +134,11 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var result = ruleCheckerEngine.Run(new List<Thing>() { alias }).ToList();
 
             Assert.That(result, Is.Not.Empty);
+
+            var ruleCheckResult = result.SingleOrDefault(x => x.Id == "MA-001");
+
+            Assert.That(ruleCheckResult.Description, Is.EqualTo($"The Annotation.LanguageCode: en-GB for Idd: {alias.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}"));
+            Assert.That(ruleCheckResult.Severity, Is.EqualTo(SeverityKind.Warning));
         }
     }
 }

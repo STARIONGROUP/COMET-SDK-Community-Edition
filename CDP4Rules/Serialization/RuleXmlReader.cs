@@ -1,4 +1,4 @@
-﻿// <copyright file="RuleAttribute.cs" company="RHEA System S.A.">
+﻿// <copyright file="RuleXmlReader.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené
@@ -21,44 +21,32 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Rules.Common
+namespace CDP4Rules.Serialization
 {
-    using System;
+    using System.Collections.Generic;
+    using System.Xml.Serialization;
+    using CDP4Rules.Common;
 
     /// <summary>
-    /// The purpose of the <see cref="RuleAttribute"/> is to decorate methods that check a particular rule and
-    /// to describe that Rule
+    /// The purpose of the <see cref="RuleXmlReader"/> is to read the
+    /// defined rules from the embedded rules xml file 
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class RuleAttribute : Attribute
+    internal class RuleXmlReader
     {
         /// <summary>
-        /// Initializes a new instance of <see cref="RuleAttribute"/>
+        /// Deserialize the <see cref="IRule"/>s from the rules resource
         /// </summary>
-        public RuleAttribute()
+        /// <returns></returns>
+        internal IEnumerable<IRule> Deserialize()
         {
-        }
+            using (var stream = this.GetType().Assembly.GetManifestResourceStream("CDP4Rules.Resources.rules.xml"))
+            {
+                var serializer = new XmlSerializer(typeof(RuleDefinition));
 
-        /// <summary>
-        /// Initializes a new instance of <see cref="RuleAttribute"/>
-        /// </summary>
-        /// <param name="id">
-        /// The alpha-numeric unique identifier of
-        /// </param>
-        /// <param name="description">
-        /// the human readable description
-        /// </param>
-        /// <param name="severity">
-        /// the default <see cref="SeverityKind"/>
-        /// </param>
-        public RuleAttribute(string id)
-        {
-            this.Id = id;
-        }
+                var modelAnalysis = (RuleDefinition) serializer.Deserialize(stream);
 
-        /// <summary>
-        /// Gets or sets the alpha-numeric unique identifier of
-        /// </summary>
-        public string Id { get; set; }
+                return modelAnalysis.Rules;
+            }
+        }
     }
 }

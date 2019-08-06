@@ -1,4 +1,4 @@
-﻿// <copyright file="RuleAttribute.cs" company="RHEA System S.A.">
+﻿// <copyright file="RuleDefinition.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené
@@ -21,44 +21,31 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Rules.Common
+namespace CDP4Rules.Serialization
 {
     using System;
+    using System.Collections.Generic;
+    using System.Xml.Serialization;
 
     /// <summary>
-    /// The purpose of the <see cref="RuleAttribute"/> is to decorate methods that check a particular rule and
-    /// to describe that Rule
+    /// The <see cref="RuleDefinition"/> class constitutes the root element of a <see cref="RuleDefinition"/> Document.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class RuleAttribute : Attribute
+    [Serializable]
+    [XmlType(TypeName = "RuleDefinition")]
+    [XmlRoot("E-TM-10-25-RULE-DEFINITION")]
+    public class RuleDefinition
     {
         /// <summary>
-        /// Initializes a new instance of <see cref="RuleAttribute"/>
+        /// Gets or sets the mandatory Document header, which contains metadata relevant for the <see cref="RuleDefinition"/> Document.
         /// </summary>
-        public RuleAttribute()
-        {
-        }
+        [XmlElement("HEADER")]
+        public Header Header { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="RuleAttribute"/>
+        /// Gets or sets the <see cref="List{Rule}"/> contained in the <see cref="RuleDefinition"/> Document.
         /// </summary>
-        /// <param name="id">
-        /// The alpha-numeric unique identifier of
-        /// </param>
-        /// <param name="description">
-        /// the human readable description
-        /// </param>
-        /// <param name="severity">
-        /// the default <see cref="SeverityKind"/>
-        /// </param>
-        public RuleAttribute(string id)
-        {
-            this.Id = id;
-        }
-
-        /// <summary>
-        /// Gets or sets the alpha-numeric unique identifier of
-        /// </summary>
-        public string Id { get; set; }
+        [XmlArray("RULES")]
+        [XmlArrayItem("RULE", typeof(Rule))]
+        public List<Rule> Rules { get; set; }
     }
 }

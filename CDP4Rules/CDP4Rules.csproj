@@ -39,5 +39,13 @@
     </When>
   </Choose>
 
+  <ItemGroup>
+    <None Remove="Resources\rules.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\rules.xml" />
+  </ItemGroup>
+
   
 </Project>

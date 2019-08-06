@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<E-TM-10-25-RULE-DEFINITION>
+  <HEADER>
+    <TITLE>CDP4-SDK Model Analysis Rules</TITLE>
+    <COMMENT>-</COMMENT>
+    <CREATION-TIME>2019-12-06T07:21:00</CREATION-TIME>
+    <E-TM-10-25-TOOL>CDP4</E-TM-10-25-TOOL>
+  </HEADER>
+  <RULES>
+    <RULE>
+      <ID>MA-001</ID>
+      <DESCRIPTION>Checks whether the specified LanguageCode exists in the SiteDirectory</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+    </RULE>
+  </RULES>
+</E-TM-10-25-RULE-DEFINITION>
