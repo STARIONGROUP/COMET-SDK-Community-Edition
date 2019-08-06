@@ -21,14 +21,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using CDP4Common.EngineeringModelData;
-
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using CDP4Common.CommonData;
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Rules.Common;
     using CDP4Rules.RuleCheckers;
@@ -82,6 +81,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(result.Id, Is.EqualTo("MA-001"));
             Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(result.Thing, Is.EqualTo(alias));
 
             var naturalLanguage = new NaturalLanguage();
             naturalLanguage.LanguageCode = "en-GB";
@@ -112,6 +112,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             Assert.That(result.Id, Is.EqualTo("MA-001"));
             Assert.That(result.Description, Is.EqualTo($"The Annotation.LanguageCode: {alias.LanguageCode} for Idd: {alias.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}"));
             Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(result.Thing, Is.EqualTo(alias));
 
             var naturalLanguage = new NaturalLanguage();
             naturalLanguage.LanguageCode = "en-GB";
@@ -153,6 +154,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(ruleCheckResult.Description, Is.EqualTo($"The Annotation.LanguageCode: en-GB for Idd: {alias.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}"));
             Assert.That(ruleCheckResult.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(ruleCheckResult.Thing, Is.EqualTo(alias));
         }
     }
 }

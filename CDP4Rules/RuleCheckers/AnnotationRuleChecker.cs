@@ -21,13 +21,12 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Reflection;
-
 namespace CDP4Rules.RuleCheckers
 {
     using System;
     using System.Globalization;
     using System.Linq;
+    using System.Reflection;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
