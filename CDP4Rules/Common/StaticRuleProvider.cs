@@ -1,4 +1,4 @@
-﻿// <copyright file="Rule.cs" company="RHEA System S.A.">
+﻿// <copyright file="StaticRuleProvider.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené
@@ -21,35 +21,29 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Rules.Serialization
+namespace CDP4Rules.Common
 {
-    using System;
-    using System.Xml.Serialization;
-    using CDP4Rules.Common;
+    using System.Collections.Generic;
 
     /// <summary>
-    /// Represents a model analysis rule that can be (de)serialized to and from XML
+    /// A static (singleton) provider for the available <see cref="IRule"/>s
     /// </summary>
-    [Serializable]
-    [XmlType(TypeName = "Rule")]
-    public class Rule : IRule
+    public class StaticRuleProvider
     {
         /// <summary>
-        /// Gets or sets the unique human readable identifier
+        /// The <see cref="RuleProvider"/> instance for the application
         /// </summary>
-        [XmlElement("ID")]
-        public string Id { get; set; }
+        private static readonly RuleProvider provider = new RuleProvider();
 
         /// <summary>
-        /// Gets or sets the human readable description of the intent of the <see cref="Rule"/>
+        /// Queries the available <see cref="IRule"/>s.
         /// </summary>
-        [XmlElement("DESCRIPTION")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="SeverityKind"/>
-        /// </summary>
-        [XmlElement("SEVERITY")]
-        public SeverityKind Severity { get; set; }
+        /// <returns>
+        /// an <see cref="IEnumerable{IRule}"/>
+        /// </returns>
+        public static IEnumerable<IRule> QueryRules()
+        {
+            return provider.QueryRules();
+        }
     }
 }

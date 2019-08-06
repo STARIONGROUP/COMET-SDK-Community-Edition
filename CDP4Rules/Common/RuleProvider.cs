@@ -1,4 +1,4 @@
-﻿// <copyright file="Rule.cs" company="RHEA System S.A.">
+﻿// <copyright file="RuleProvider.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené
@@ -21,35 +21,38 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Rules.Serialization
+namespace CDP4Rules.Common
 {
-    using System;
-    using System.Xml.Serialization;
-    using CDP4Rules.Common;
+    using System.Collections.Generic;
+    using System.Linq;
+    using CDP4Rules.Serialization;
 
     /// <summary>
-    /// Represents a model analysis rule that can be (de)serialized to and from XML
+    /// A provider for the available <see cref="IRule"/>
     /// </summary>
-    [Serializable]
-    [XmlType(TypeName = "Rule")]
-    public class Rule : IRule
+    public class RuleProvider : IRuleProvider
     {
-        /// <summary>
-        /// Gets or sets the unique human readable identifier
-        /// </summary>
-        [XmlElement("ID")]
-        public string Id { get; set; }
+        private List<IRule> rules;
 
         /// <summary>
-        /// Gets or sets the human readable description of the intent of the <see cref="Rule"/>
+        /// Initializes a new version of the <see cref="RuleProvider"/> class.
         /// </summary>
-        [XmlElement("DESCRIPTION")]
-        public string Description { get; set; }
+        public RuleProvider()
+        {
+            var ruleXmlReader = new RuleXmlReader();
+
+            this.rules = ruleXmlReader.Deserialize().ToList();
+        }
 
         /// <summary>
-        /// Gets or sets the <see cref="SeverityKind"/>
+        /// Queries the available <see cref="IRule"/>s.
         /// </summary>
-        [XmlElement("SEVERITY")]
-        public SeverityKind Severity { get; set; }
+        /// <returns>
+        /// an <see cref="IEnumerable{IRule}"/>
+        /// </returns>
+        public IEnumerable<IRule> QueryRules()
+        {
+            return rules;
+        }
     }
 }

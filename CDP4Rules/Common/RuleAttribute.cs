@@ -35,13 +35,6 @@ namespace CDP4Rules.Common
         /// <summary>
         /// Initializes a new instance of <see cref="RuleAttribute"/>
         /// </summary>
-        public RuleAttribute()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="RuleAttribute"/>
-        /// </summary>
         /// <param name="id">
         /// The alpha-numeric unique identifier of
         /// </param>

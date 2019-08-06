@@ -21,6 +21,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Reflection;
+
 namespace CDP4Rules.RuleCheckers
 {
     using System;
@@ -41,14 +43,22 @@ namespace CDP4Rules.RuleCheckers
         /// Checks whether the specified LanguageCode exists in the SiteDirectory
         /// </summary>
         /// <param name="thing">
-        /// The subject <see cref="Thing"/>
+        /// The subject <see cref="IAnnotation"/>
         /// </param>
         /// <returns>
         /// A instance of <see cref="RuleCheckResult"/>
         /// </returns>
+        /// <exception cref="ArgumentException">
+        /// thrown when <param name="thing"/> is not an <see cref="IAnnotation"/>
+        /// </exception>
         [Rule("MA-001")]
         public RuleCheckResult CheckWheterTheLanguageCodeExistsInTheSiteDirectory(Thing thing)
         {
+            if (thing == null)
+            {
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
+            }
+
             var annotation = thing as IAnnotation;
             if (annotation == null)
             {
@@ -69,12 +79,15 @@ namespace CDP4Rules.RuleCheckers
                 siteDirectory = topContainer as SiteDirectory;
             }
 
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
             if (siteDirectory != null)
             {
                 var languageCodeExists = siteDirectory.NaturalLanguage.Any(x => x.LanguageCode == annotation.LanguageCode);
                 if (!languageCodeExists)
                 {
-                    return new RuleCheckResult(thing, "MA-001", $"The Annotation.LanguageCode: {annotation.LanguageCode} for Idd: {thing.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}", SeverityKind.Warning);
+                    return new RuleCheckResult(thing, rule.Id, $"The Annotation.LanguageCode: {annotation.LanguageCode} for Idd: {thing.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}", rule.Severity);
                 }
                 else
                 {
@@ -82,11 +95,9 @@ namespace CDP4Rules.RuleCheckers
                 }
             }
 
-            throw new Exception("MA-001 could not be checked");
+            throw new Exception($"{rule.Id} could not be checked");
         }
-
-
-
+        
         /// <summary>
         /// Checks whether the specified LanguageCode is a valid LanguageCode as specified in ISO 639-1 part 1 or part 2
         /// </summary>
@@ -96,6 +107,9 @@ namespace CDP4Rules.RuleCheckers
         /// <returns>
         /// A instance of <see cref="RuleCheckResult"/>
         /// </returns>
+        /// <exception cref="ArgumentException">
+        /// thrown when <param name="thing"/> is not an <see cref="IAnnotation"/>
+        /// </exception>
         [Rule("MA-002")]
         public RuleCheckResult CheckWeatherTheLanguageCodeIsValid(Thing thing)
         {
@@ -104,17 +118,20 @@ namespace CDP4Rules.RuleCheckers
             {
                 throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
             }
-            
+
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
             if (CultureInfo.GetCultures(CultureTypes.AllCultures).All(x => x.Name != annotation.LanguageCode))
             {
-                return new RuleCheckResult(thing, "MA-002", $"The Annotation.LanguageCode: {annotation.LanguageCode} for Idd: {thing.Iid} is not a valid LanguageCode", SeverityKind.Warning);
+                return new RuleCheckResult(thing, rule.Id, $"The Annotation.LanguageCode: {annotation.LanguageCode} for Idd: {thing.Iid} is not a valid LanguageCode", rule.Severity);
             }
             else
             {
                 return null;
             }
 
-            throw new Exception("MA-002 could not be checked");
+            throw new Exception($"{rule.Id} could not be checked");
         }
     }
 }

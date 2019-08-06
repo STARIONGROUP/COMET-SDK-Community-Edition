@@ -12,5 +12,10 @@
       <DESCRIPTION>Checks whether the specified LanguageCode exists in the SiteDirectory</DESCRIPTION>
       <SEVERITY>Warning</SEVERITY>
     </RULE>
+    <RULE>
+      <ID>MA-002</ID>
+      <DESCRIPTION>Checks whether the specified LanguageCode is a valid LanguageCode as specified in ISO 639-1 part 1 or part 2</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+    </RULE>
   </RULES>
 </E-TM-10-25-RULE-DEFINITION>

@@ -33,13 +33,6 @@ namespace CDP4Rules.Common
         /// <summary>
         /// Initializes a new instance of the <see cref="RuleCheckResult"/> class
         /// </summary>
-        public RuleCheckResult()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RuleCheckResult"/> class
-        /// </summary>
         /// <param name="thing">
         /// a reference to te <see cref="Thing"/> that has been checked by a Rule
         /// </param>

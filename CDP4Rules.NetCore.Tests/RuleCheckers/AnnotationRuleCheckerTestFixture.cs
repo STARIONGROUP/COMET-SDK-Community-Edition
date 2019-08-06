@@ -57,6 +57,20 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         }
 
         [Test]
+        public void Verify_that_when_CheckWheterTheLanguageCodeExistsInTheSiteDirectory_is_called_with_null_thing_exception_thrown()
+        {
+            Assert.Throws<ArgumentNullException>(() => this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(null)) ;
+        }
+
+        [Test]
+        public void Verify_that_when_CheckWheterTheLanguageCodeExistsInTheSiteDirectory_is_called_with_incorrect_thing_exception_thrown()
+        {
+            var elementDefinition = new ElementDefinition();
+
+            Assert.Throws<ArgumentException>(() => this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(elementDefinition));
+        }
+
+        [Test]
         public void Verify_that_CheckWheterTheLanguageCodeExistsInTheSiteDirectory_yields_correct_result_for_SiteDirectory_Contained_Alias()
         {
             var alias = new Alias();
