@@ -8,34 +8,156 @@
   </HEADER>
   <RULES>
     <RULE>
-      <ID>MA-001</ID>
-      <DESCRIPTION>Checks whether the specified LanguageCode exists in the SiteDirectory</DESCRIPTION>
-      <SEVERITY>Warning</SEVERITY>
+      <ID>MA-0010</ID>
+      <DESCRIPTION>Checks whether the ShortName of a ShortNamedThing is valid</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
     </RULE>
     <RULE>
-      <ID>MA-002</ID>
+      <ID>MA-0020</ID>
       <DESCRIPTION>Checks whether the specified LanguageCode is a valid LanguageCode as specified in ISO 639-1 part 1 or part 2</DESCRIPTION>
       <SEVERITY>Warning</SEVERITY>
     </RULE>
     <RULE>
-      <ID>MA-003</ID>
-      <DESCRIPTION>Checks whether a CategorizableThing is a member of the same Category more than once, including via category sub-classing</DESCRIPTION>
+      <ID>MA-0030</ID>
+      <DESCRIPTION>Checks whether EmailAddress.value is a valid email address as specified in IETF RFC 5321</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0040</ID>
+      <DESCRIPTION>Checks whether TelephoneNumber.value is a valid telephone number as specified in IETF RFC 3966</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0100</ID>
+      <DESCRIPTION>Checks whether the specified LanguageCode exists in the SiteDirectory</DESCRIPTION>
       <SEVERITY>Warning</SEVERITY>
     </RULE>
     <RULE>
-      <ID>MA-004</ID>
-      <DESCRIPTION>Checks whether a Thing references a Deprecated Thing where isDeprecated = true</DESCRIPTION>
-      <SEVERITY>Warning</SEVERITY>
-    </RULE>
-    <RULE>
-      <ID>MA-005</ID>
+      <ID>MA-0110</ID>
       <DESCRIPTION>Checks whether the Owner DomainOfExpertise is one of the activeDomains of the EngineeringModelSetup that is referenced by the container EngineeringModel</DESCRIPTION>
       <SEVERITY>Warning</SEVERITY>
     </RULE>
     <RULE>
-      <ID>MA-006</ID>
-      <DESCRIPTION>Checks whether the ShortName of a ShortNamedThing is valid</DESCRIPTION>
+      <ID>MA-0200</ID>
+      <DESCRIPTION>Checks whether a referenced Category is the in chain of Reference Data Libraries</DESCRIPTION>
       <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0210</ID>
+      <DESCRIPTION>Checks whether a referenced FileType is the in chain of Reference Data Libraries</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0220</ID>
+      <DESCRIPTION>Checks whether a referenced ParameterType is the in chain of Reference Data Libraries</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0230</ID>
+      <DESCRIPTION>Checks whether a referenced MeasurementScale is the in chain of Reference Data Libraries</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0240</ID>
+      <DESCRIPTION>Checks whether a referenced MeasurementUnit  is the in chain of Reference Data Libraries</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0250</ID>
+      <DESCRIPTION>Checks whether a referenced Rule is the in chain of Reference Data Libraries</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0260</ID>
+      <DESCRIPTION>Checks whether a referenced ReferenceSource is the in chain of Reference Data Libraries</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+      <NOTES>instances of DomainOfExpertise, DomainOfExpertiseGroup, EngineeringModelSetup, ParticipantRole, PersonRole, ReferenceDataLibrary are excluded from this check</NOTES>
+    </RULE>
+    <RULE>
+      <ID>MA-0270</ID>
+      <DESCRIPTION>Checks whether a referenced UnitPrefix is the in chain of Reference Data Libraries</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0300</ID>
+      <DESCRIPTION>Checks whether a CategorizableThing is not a member of the same Category more than once, including via category sub-classing</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0310</ID>
+      <DESCRIPTION>Checks whether a CategorizableThing is not a member of an abstract Category</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0400</ID>
+      <DESCRIPTION>Checks whether a DefinedThing has at most one Definition per natural language</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0500</ID>
+      <DESCRIPTION>Checks whether a Thing does not reference a DeprecatableThing where DeprecatableThing.isDeprecated = true</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+      <NOTES>DeprecatableThing where DeprecatableThingisDeprecated = true are ignored</NOTES>
+    </RULE>
+    <RULE>
+      <ID>MA-0510</ID>
+      <DESCRIPTION>Checks whether the source and target property of a BinaryRelationship are contained by the same Iteration that contains the BinaryRelationship</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0520</ID>
+      <DESCRIPTION>Checks whether a Parameter does not reference a CompoundParameterType where CompoundParameterType.isFinalized = false</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0610</ID>
+      <DESCRIPTION>Checks whether an ElementDefinition contains parameters that have unique names</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0620</ID>
+      <DESCRIPTION>Checks whether an ElementDefinition contains parameters that have unique shortnames</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0700</ID>
+      <DESCRIPTION>Checks whether a ParameterType.shortname is case-sensitive unique within its containing ReferenceDataLibrary</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0710</ID>
+      <DESCRIPTION>Checks whether a ParameterType.symbol is case-sensitive unique within its containing ReferenceDataLibrary</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0720</ID>
+      <DESCRIPTION>Checks whether a Category.shortname is unique within its containing ReferenceDataLibrary</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0730</ID>
+      <DESCRIPTION>Checks whether a Category.name is unique within its containing ReferenceDataLibrary</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0740</ID>
+      <DESCRIPTION>Checks whether a ParameterTypeComponent has a valid scale</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0750</ID>
+      <DESCRIPTION>Checks whether the QuantityKind.defaultScale is in the collection of all PossibleScales</DESCRIPTION>
+      <SEVERITY>Error</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0800</ID>
+      <DESCRIPTION>Checks whether the Requirement.shortname unique within its containing RequirementsSpecification</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+    </RULE>
+    <RULE>
+      <ID>MA-0810</ID>
+      <DESCRIPTION>Checks whether the ShortnamedThing.shortname is unique within its Container</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
     </RULE>
   </RULES>
 </E-TM-10-25-RULE-DEFINITION>

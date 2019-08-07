@@ -79,7 +79,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             var result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
 
-            Assert.That(result.Id, Is.EqualTo("MA-001"));
+            Assert.That(result.Id, Is.EqualTo("MA-0100"));
             Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
             Assert.That(result.Thing, Is.EqualTo(alias));
 
@@ -109,7 +109,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             var result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
 
-            Assert.That(result.Id, Is.EqualTo("MA-001"));
+            Assert.That(result.Id, Is.EqualTo("MA-0100"));
             Assert.That(result.Description, Is.EqualTo($"The Annotation.LanguageCode: {alias.LanguageCode} for Idd: {alias.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}"));
             Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
             Assert.That(result.Thing, Is.EqualTo(alias));
@@ -121,6 +121,19 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
 
             Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void Verify_that_CheckWeatherTheLanguageCodeIsValid_throws_exception_when_thing_is_null()
+        {
+            Assert.Throws<ArgumentNullException>(() => this.annotationRuleChecker.CheckWeatherTheLanguageCodeIsValid(null)) ;
+        }
+
+        [Test]
+        public void Verify_that_CheckWeatherTheLanguageCodeIsValid_throws_exception_when_thing_is_not_an_annotation()
+        {
+            var elementDefinition = new ElementDefinition();
+            Assert.Throws<ArgumentException>(() => this.annotationRuleChecker.CheckWeatherTheLanguageCodeIsValid(elementDefinition));
         }
 
         [Test]
@@ -137,6 +150,21 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         }
 
         [Test]
+        public void Verify_that_when_LanguageCode_is_invalid_a_result_is_returned()
+        {
+            var alias = new Alias();
+            alias.LanguageCode = "xx-YY";
+
+            this.engineeringModelSetup.Alias.Add(alias);
+
+            var result = this.annotationRuleChecker.CheckWeatherTheLanguageCodeIsValid(alias);
+
+            Assert.That(result.Id, Is.EqualTo("MA-0020"));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(result.Description, Is.EqualTo($"The Annotation.LanguageCode: {alias.LanguageCode} for Idd: {alias.Iid} is not a valid LanguageCode"));
+        }
+
+        [Test]
         public void Verify_that_RuleCheckerEngine_can_execute_rules()
         {
             var ruleCheckerEngine = new RuleCheckerEngine();
@@ -150,7 +178,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(result, Is.Not.Empty);
 
-            var ruleCheckResult = result.SingleOrDefault(x => x.Id == "MA-001");
+            var ruleCheckResult = result.SingleOrDefault(x => x.Id == "MA-0100");
 
             Assert.That(ruleCheckResult.Description, Is.EqualTo($"The Annotation.LanguageCode: en-GB for Idd: {alias.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}"));
             Assert.That(ruleCheckResult.Severity, Is.EqualTo(SeverityKind.Warning));

@@ -54,5 +54,18 @@ namespace CDP4Rules.NetCore.Tests.Serialization
 
             Assert.That(rules, Is.Not.Null.And.Not.Empty);
         }
+
+        [Test]
+        public void Verify_that_rules_properties_can_are_deserialized()
+        {
+            var rules = this.ruleXmlReader.Deserialize();
+
+            var rule = rules.Single(r => r.Id == "MA-0500");
+
+            Assert.That(rule.Description, Is.EqualTo("Checks whether a Thing does not reference a DeprecatableThing where DeprecatableThing.isDeprecated = true"));
+            Assert.That(rule.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(rule.Notes, Is.EqualTo("DeprecatableThing where DeprecatableThingisDeprecated = true are ignored"));
+
+        }
     }
 }

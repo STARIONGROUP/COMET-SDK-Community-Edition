@@ -1,4 +1,4 @@
-﻿// <copyright file="CategorizableThingRuleChecker.cs" company="RHEA System S.A.">
+﻿// <copyright file="ShortNamedThingChecker.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené
@@ -33,39 +33,46 @@ namespace CDP4Rules.RuleCheckers
     using CDP4Rules.Common;
 
     /// <summary>
-    /// The purpose of the <see cref="CategorizableThingRuleChecker"/> is to execute the rules for instances of type <see cref="ICategorizableThing"/>
+    /// The purpose of the <see cref="ShortNamedThingChecker"/> is to execute the rules for instances of type <see cref="IShortNamedThing"/>
     /// </summary>
-    [RuleChecker(typeof(ICategorizableThing))]
-    public class CategorizableThingRuleChecker : RuleChecker
+    [RuleChecker(typeof(IShortNamedThing))]
+    public class ShortNamedThingChecker : RuleChecker
     {
         /// <summary>
-        /// Checks whether the <see cref="ICategorizableThing"/> is not a member of the same category more
-        /// than once, including through sub-classing of categories 
+        /// Checks whether the ShortName of a <see cref="IShortNamedThing"/> is valid
         /// </summary>
         /// <param name="thing">
-        /// The subject <see cref="ICategorizableThing"/>
+        /// The subject <see cref="IShortNamedThing"/>
         /// </param>
         /// <returns>
         /// A instance of <see cref="RuleCheckResult"/>
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// thrown when <param name="thing"/> is not an <see cref="ICategorizableThing"/>
+        /// thrown when <param name="thing"/> is not an <see cref="IShortNamedThing"/>
         /// </exception>
-        [Rule("MA-0300")]
-        public RuleCheckResult CheckWhetherThereAreNoDuplicateCategoriesAreDefined(Thing thing)
+        [Rule("MA-0010")]
+        public RuleCheckResult CheckWhetherTheShortNameIsAValidShortName(Thing thing)
         {
             if (thing == null)
             {
                 throw new ArgumentNullException($"The {nameof(thing)} may not be null");
             }
 
-            var categorizableThing = thing as ICategorizableThing;
-            if (categorizableThing == null)
+            var shortNamedThing = thing as IShortNamedThing;
+            if (shortNamedThing == null)
             {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an ICategorizableThing");
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IShortNamedThing");
             }
 
             throw new NotImplementedException();
         }
+
+
+        private RuleCheckResult CheckShortNameValidityOfElementBase()
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

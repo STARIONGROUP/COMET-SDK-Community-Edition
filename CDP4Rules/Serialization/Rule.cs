@@ -51,5 +51,11 @@ namespace CDP4Rules.Serialization
         /// </summary>
         [XmlElement("SEVERITY")]
         public SeverityKind Severity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the human readable notes that provide extra information regarding the <see cref="Rule"/>
+        /// </summary>
+        [XmlElement("NOTES")]
+        public string Notes { get; set; }
     }
 }

@@ -50,7 +50,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <param name="thing"/> is not an <see cref="IAnnotation"/>
         /// </exception>
-        [Rule("MA-001")]
+        [Rule("MA-0100")]
         public RuleCheckResult CheckWheterTheLanguageCodeExistsInTheSiteDirectory(Thing thing)
         {
             if (thing == null)
@@ -94,7 +94,7 @@ namespace CDP4Rules.RuleCheckers
                 }
             }
 
-            throw new Exception($"{rule.Id} could not be checked");
+            throw new Exception("MA-0100 could not be checked");
         }
         
         /// <summary>
@@ -109,9 +109,14 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <param name="thing"/> is not an <see cref="IAnnotation"/>
         /// </exception>
-        [Rule("MA-002")]
+        [Rule("MA-0020")]
         public RuleCheckResult CheckWeatherTheLanguageCodeIsValid(Thing thing)
         {
+            if (thing == null)
+            {
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
+            }
+
             var annotation = thing as IAnnotation;
             if (annotation == null)
             {
@@ -129,8 +134,6 @@ namespace CDP4Rules.RuleCheckers
             {
                 return null;
             }
-
-            throw new Exception($"{rule.Id} could not be checked");
         }
     }
 }

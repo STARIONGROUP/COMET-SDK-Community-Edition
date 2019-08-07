@@ -42,5 +42,10 @@ namespace CDP4Rules.Common
         /// Gets or sets the default <see cref="SeverityKind"/>
         /// </summary>
         SeverityKind Severity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the human readable notes that provide extra information regarding the <see cref="Rule"/>
+        /// </summary>
+        string Notes { get; set; }
     }
 }
