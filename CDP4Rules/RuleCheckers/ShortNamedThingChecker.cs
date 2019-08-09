@@ -24,12 +24,11 @@
 namespace CDP4Rules.RuleCheckers
 {
     using System;
-    using System.Globalization;
     using System.Linq;
     using System.Reflection;
+    using System.Text.RegularExpressions;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.SiteDirectoryData;
     using CDP4Rules.Common;
 
     /// <summary>
@@ -45,10 +44,10 @@ namespace CDP4Rules.RuleCheckers
         /// The subject <see cref="IShortNamedThing"/>
         /// </param>
         /// <returns>
-        /// A instance of <see cref="RuleCheckResult"/>
+        /// A instance of <see cref="RuleCheckResult"/> when the rule is violated, or null when all is good
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// thrown when <param name="thing"/> is not an <see cref="IShortNamedThing"/>
+        /// thrown when <paramref name="thing"/> is not an <see cref="IShortNamedThing"/>
         /// </exception>
         [Rule("MA-0010")]
         public RuleCheckResult CheckWhetherTheShortNameIsAValidShortName(Thing thing)
@@ -64,15 +63,86 @@ namespace CDP4Rules.RuleCheckers
                 throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IShortNamedThing");
             }
 
-            throw new NotImplementedException();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            if (thing is ElementBase elementBase)
+            {
+                return this.CheckShortNameValidityOfElementBase(elementBase, rule);
+            }
+
+            if (thing is RequirementsContainer requirementsContainer)
+            {
+                return this.CheckShortNameValidityOfRequirementsContainer(requirementsContainer, rule);
+            }
+            
+            return this.CheckShortNameValidityOfShortNamedThing(shortNamedThing, rule);
         }
 
-
-        private RuleCheckResult CheckShortNameValidityOfElementBase()
+        /// <summary>
+        /// Checks the validity of the <see cref="DefinedThing.ShortName"/> property
+        /// </summary>
+        /// <param name="elementBase">
+        /// the subject <see cref="ElementBase"/>
+        /// </param>
+        /// <param name="rule">
+        /// the corresponding <see cref="IRule"/>
+        /// </param>
+        /// <returns>
+        /// A instance of <see cref="RuleCheckResult"/> when the rule is violated, or null when all is good
+        /// </returns>
+        private RuleCheckResult CheckShortNameValidityOfElementBase(ElementBase elementBase, IRule rule)
         {
-            throw new NotImplementedException();
+            if (!Regex.IsMatch(elementBase.ShortName, "^[a-zA-Z][a-zA-Z0-9_]*$"))
+            {
+                return new RuleCheckResult(elementBase, rule.Id, $"The ShortName: {elementBase.ShortName} is invalid. The ShortName must start with a letter and not contain any spaces or non alphanumeric characters.", rule.Severity);
+            }
+
+            return null;
         }
 
+        /// <summary>
+        /// Checks the validity of the <see cref="RequirementsContainer"/> ShortName property
+        /// </summary>
+        /// <param name="requirementsContainer">
+        /// the subject <see cref="RequirementsContainer"/>
+        /// </param>
+        /// <param name="rule">
+        /// the corresponding <see cref="IRule"/>
+        /// </param>
+        /// <returns>
+        /// A instance of <see cref="RuleCheckResult"/> when the rule is violated, or null when all is good
+        /// </returns>
+        private RuleCheckResult CheckShortNameValidityOfRequirementsContainer(RequirementsContainer requirementsContainer, IRule rule)
+        {
+            if (!Regex.IsMatch(requirementsContainer.ShortName, "^[a-zA-Z][a-zA-Z0-9_]*$"))
+            {
+                return new RuleCheckResult(requirementsContainer, rule.Id, $"The ShortName: {requirementsContainer.ShortName} is invalid. The ShortName must start with a letter and not contain any spaces or non alphanumeric characters.", rule.Severity);
+            }
 
+            return null;
+        }
+        
+        /// <summary>
+        /// Checks the validity of the <see cref="IShortNamedThing.ShortName"/> property
+        /// </summary>
+        /// <param name="shortNamedThing"></param>
+        /// the subject <see cref="IShortNamedThing"/>
+        /// <param name="rule">
+        /// the corresponding <see cref="IRule"/>
+        /// </param>
+        /// <returns>
+        /// A instance of <see cref="RuleCheckResult"/> when the rule is violated, or null when all is good
+        /// </returns>
+        private RuleCheckResult CheckShortNameValidityOfShortNamedThing(IShortNamedThing shortNamedThing, IRule rule)
+        {
+            if (Regex.IsMatch(shortNamedThing.ShortName, @"\w\s"))
+            {
+                var thing = shortNamedThing as Thing;
+                return new RuleCheckResult(thing, rule.Id, $"The ShortName: {shortNamedThing.ShortName} is invalid. A shortName should not contain any whitespace", rule.Severity);
+            }
+
+            return null;
+        }
     }
 }
