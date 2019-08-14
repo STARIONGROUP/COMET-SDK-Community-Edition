@@ -274,18 +274,18 @@ namespace CDP4JsonFileDal
             var clonedEngineeringModelSetups = new List<EngineeringModelSetup>();
             foreach (var engineeringModelSetup in engineeringModelSetups)
             {
-                var clonedEngìneeringModelSetup = engineeringModelSetup.Clone(false);
-                clonedEngìneeringModelSetup.IterationSetup.Clear();
+                var clonedEngineeringModelSetup = engineeringModelSetup.Clone(false);
+                clonedEngineeringModelSetup.IterationSetup.Clear();
 
                 foreach (var iterIterationSetup in iterIterationSetups)
                 {
                     if (iterIterationSetup.Container == engineeringModelSetup)
                     {
-                        clonedEngìneeringModelSetup.IterationSetup.Add(iterIterationSetup);
+                        clonedEngineeringModelSetup.IterationSetup.Add(iterIterationSetup);
                     }
                 }
 
-                clonedEngineeringModelSetups.Add(clonedEngìneeringModelSetup);
+                clonedEngineeringModelSetups.Add(clonedEngineeringModelSetup);
             }
 
             siteDirectoryDto.Model.Clear();
