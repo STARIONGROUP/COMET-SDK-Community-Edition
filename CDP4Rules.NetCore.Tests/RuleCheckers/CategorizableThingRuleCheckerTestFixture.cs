@@ -23,6 +23,8 @@
 
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
+    using System;
+    using CDP4Common.SiteDirectoryData;
     using CDP4Rules.RuleCheckers;
     using NUnit.Framework;
 
@@ -38,6 +40,20 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         public void SetUp()
         {
             this.categorizableThingRuleChecker = new CategorizableThingRuleChecker();
+        }
+
+        [Test]
+        public void Verify_that_when_CheckWhetherThereAreNoDuplicateCategoriesAreDefined_is_called_with_null_thing_exception_is_thrown()
+        {
+            Assert.Throws<ArgumentNullException>(() => this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(null));
+        }
+
+        [Test]
+        public void Verify_that_when_CheckWhetherThereAreNoDuplicateCategoriesAreDefined_is_called_with_non_categorizable_thing_exception_is_thrown()
+        {
+            var unit = new SimpleUnit();
+
+            Assert.Throws<ArgumentException>(() => this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(unit));
         }
     }
 }
