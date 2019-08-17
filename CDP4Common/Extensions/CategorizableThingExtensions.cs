@@ -72,9 +72,7 @@ namespace CDP4Common.SiteDirectoryData
         }
 
         /// <summary>
-        /// Queries all the super categories of the categories of an <see cref="ICategorizableThing"/>
-        /// and returns the categories and all the super categories up the inheritance chain. Duplicate categories
-        /// are removed from the result.
+        /// Queries all the categories and super categories from the categories of an <see cref="ICategorizableThing"/>
         /// </summary>
         /// <param name="categorizableThing">
         /// The <see cref="ICategorizableThing"/> that is to be queried for all its categories and its super categories.

@@ -21,6 +21,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using CDP4Common.EngineeringModelData;
+using CDP4Rules.Common;
+
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
@@ -55,5 +58,44 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.Throws<ArgumentException>(() => this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(unit));
         }
+
+        [Test]
+        public void Verify_that_whenCheckWhetherThereAreNoDuplicateCategoriesAreDefined_is_called_when_CategorizableThing_is_member_of_same_category_mroe_than_one_result_is_Returned()
+        {
+            var lithiumBatteries = new Category{ Iid = Guid.Parse("e89f7639-9583-4656-905c-d8908b569a82"), ShortName = "LITHIUM_BAT" };
+
+            var elementDefinition = new ElementDefinition();
+            elementDefinition.Category.Add(lithiumBatteries);
+            elementDefinition.Category.Add(lithiumBatteries);
+
+            Assert.That(elementDefinition.Category.Count, Is.EqualTo(2));
+
+            var result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition);
+
+            Assert.That(result.Id, Is.EqualTo("MA-0300"));
+            Assert.That(result.Description, 
+                Is.EqualTo("The CategorizableThing is a member of the following Categories: e89f7639-9583-4656-905c-d8908b569a82; with shortNames: LITHIUM_BAT more than once"));
+            Assert.That(result.Thing, Is.EqualTo(elementDefinition));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+
+            elementDefinition.Category.Clear();
+
+            var batteries = new Category { Iid = Guid.Parse("5a16b679-a703-48a7-9994-6a7aa355395a"), ShortName = "BAT" };
+            var products = new Category { Iid = Guid.Parse("09be61c4-b74e-4b97-8ff6-6e82ef93ec93"), ShortName = "PROD" };
+
+            lithiumBatteries.SuperCategory.Add(batteries);
+            batteries.SuperCategory.Add(products);
+
+            elementDefinition.Category.Add(lithiumBatteries);
+            elementDefinition.Category.Add(products);
+
+            result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition);
+            Assert.That(result.Id, Is.EqualTo("MA-0300"));
+            Assert.That(result.Description,
+                Is.EqualTo("The CategorizableThing is a member of the following Categories: e89f7639-9583-4656-905c-d8908b569a82,09be61c4-b74e-4b97-8ff6-6e82ef93ec93; with shortNames: LITHIUM_BAT,PROD more than once"));
+            Assert.That(result.Thing, Is.EqualTo(elementDefinition));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+       
     }
 }

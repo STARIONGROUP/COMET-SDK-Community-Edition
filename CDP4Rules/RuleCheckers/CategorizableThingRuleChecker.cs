@@ -24,11 +24,10 @@
 namespace CDP4Rules.RuleCheckers
 {
     using System;
-    using System.Globalization;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using CDP4Common.CommonData;
-    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Rules.Common;
 
@@ -68,16 +67,39 @@ namespace CDP4Rules.RuleCheckers
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
             var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
 
-            var categories = categorizableThing.GetAllCategories(false);
-
             //find if there are any duplicates:
-            var anyDuplicate = categories.GroupBy(x => x.Iid).Any(g => g.Count() > 1);
-            if (anyDuplicate)
+            List<Category> duplicates = categorizableThing.Category.GroupBy(s => s).SelectMany(grp => grp.Skip(1)).Distinct().ToList();
+            if (duplicates.Any())
             {
-                return  new RuleCheckResult(thing, rule.Id, "The CategorizableThing is a member of the same Category more than once", SeverityKind.Warning);
+                var duplicateIdentifiers = string.Join(",", duplicates.Select(r => r.Iid));
+                var duplicateShortNames = string.Join(",", duplicates.Select(r => r.ShortName));
+
+                return  new RuleCheckResult(thing, rule.Id, $"The CategorizableThing is a member of the following Categories: {duplicateIdentifiers}; with shortNames: {duplicateShortNames} more than once", SeverityKind.Warning);
             }
 
-            throw new NotImplementedException();
+            // verify whether a CategorizableThing is a member of a category and its supercategory by means of the Category property.
+            duplicates = new List<Category>();
+            foreach (var category in categorizableThing.Category.ToList())
+            {
+                foreach (var superCategory in category.AllSuperCategories())
+                {
+                    if (categorizableThing.Category.Any(x => x.Iid == superCategory.Iid))
+                    {
+                        duplicates.Add(category);
+                        duplicates.Add(superCategory);
+                    }
+                }
+            }
+            duplicates = duplicates.Distinct().ToList();
+            if (duplicates.Any())
+            {
+                var duplicateIdentifiers = string.Join(",", duplicates.Select(r => r.Iid));
+                var duplicateShortNames = string.Join(",", duplicates.Select(r => r.ShortName));
+
+                return new RuleCheckResult(thing, rule.Id, $"The CategorizableThing is a member of the following Categories: {duplicateIdentifiers}; with shortNames: {duplicateShortNames} more than once", SeverityKind.Warning);
+            }
+
+            return null;
         }
     }
 }
