@@ -45,8 +45,11 @@ namespace CDP4Rules.RuleCheckers
         /// The subject <see cref="ICategorizableThing"/>
         /// </param>
         /// <returns>
-        /// A instance of <see cref="RuleCheckResult"/>
+        /// An instance of <see cref="RuleCheckResult"/>
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ICategorizableThing"/>
         /// </exception>
@@ -97,6 +100,50 @@ namespace CDP4Rules.RuleCheckers
                 var duplicateShortNames = string.Join(",", duplicates.Select(r => r.ShortName));
 
                 return new RuleCheckResult(thing, rule.Id, $"The CategorizableThing is a member of the following Categories: {duplicateIdentifiers}; with shortNames: {duplicateShortNames} more than once", SeverityKind.Warning);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Checks whether the <see cref="ICategorizableThing"/> is not a member of an abstract category
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="ICategorizableThing"/>
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="RuleCheckResult"/>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="ICategorizableThing"/>
+        /// </exception>
+        [Rule("MA-0310")]
+        public RuleCheckResult ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(Thing thing)
+        {
+            if (thing == null)
+            {
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
+            }
+
+            var categorizableThing = thing as ICategorizableThing;
+            if (categorizableThing == null)
+            {
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an ICategorizableThing");
+            }
+
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            var abstractCategories = categorizableThing.Category.Where(c => c.IsAbstract);
+            if (abstractCategories.Any())
+            {
+                var abstractIdentifiers = string.Join(",", abstractCategories.Select(r => r.Iid));
+                var abstractShortNames = string.Join(",", abstractCategories.Select(r => r.ShortName));
+
+                return new RuleCheckResult(thing, rule.Id, $"The CategorizableThing is a member of the following abstract Categories: {abstractIdentifiers}; with shortNames: {abstractShortNames}", SeverityKind.Error);
             }
 
             return null;

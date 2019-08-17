@@ -96,6 +96,67 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             Assert.That(result.Thing, Is.EqualTo(elementDefinition));
             Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
         }
-       
+
+        [Test]
+        public void Verify_that_when_CategorizableThing_is_not_a_member_of_duplicate_categories_null_is_returned()
+        {
+            var elementDefinition = new ElementDefinition();
+            var result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition);
+            Assert.That(result, Is.Null);
+
+            var batteries = new Category();
+            elementDefinition.Category.Add(batteries);
+            result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition);
+            Assert.That(result, Is.Null);
+
+            var lithiums = new Category();
+            elementDefinition.Category.Add(lithiums);
+            result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition);
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void Verify_that_when_ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory_is_called_with_null_thing_exception_is_thrown()
+        {
+            Assert.Throws<ArgumentNullException>(() => this.categorizableThingRuleChecker.ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(null));
+        }
+
+        [Test]
+        public void Verify_that_when_ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory_is_called_with_non_categorizable_thing_exception_is_thrown()
+        {
+            var unit = new SimpleUnit();
+
+            Assert.Throws<ArgumentException>(() => this.categorizableThingRuleChecker.ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(unit));
+        }
+
+        [Test]
+        public void Verify_that_when_a_CategorizableThing_is_a_member_of_an_abstract_error_a_result_is_returned()
+        {
+            var product = new Category {Iid = Guid.Parse("dacef175-37e2-45ab-bd56-df0ff0c66714"), ShortName = "PROD", IsAbstract = true};
+
+            var elementDefinition = new ElementDefinition();
+            elementDefinition.Category.Add(product);
+
+            var result = this.categorizableThingRuleChecker.ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(elementDefinition);
+
+            Assert.That(result.Id, Is.EqualTo("MA-0310"));
+            Assert.That(result.Description,
+                Is.EqualTo("The CategorizableThing is a member of the following abstract Categories: dacef175-37e2-45ab-bd56-df0ff0c66714; with shortNames: PROD"));
+            Assert.That(result.Thing, Is.EqualTo(elementDefinition));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
+        }
+
+        [Test]
+        public void Verify_that_when_a_CategorizableThing_is_a_not_member_of_an_abstract_error_null_is_returned()
+        {
+            var elementDefinition = new ElementDefinition();
+            var result = this.categorizableThingRuleChecker.ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(elementDefinition);
+            Assert.That(result, Is.Null);
+
+            var product = new Category { Iid = Guid.Parse("dacef175-37e2-45ab-bd56-df0ff0c66714"), ShortName = "PROD" };
+            elementDefinition.Category.Add(product);
+            result = this.categorizableThingRuleChecker.ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(elementDefinition);
+            Assert.That(result, Is.Null);
+        }
     }
 }
