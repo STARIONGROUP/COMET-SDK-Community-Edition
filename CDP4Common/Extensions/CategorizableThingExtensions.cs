@@ -86,7 +86,7 @@ namespace CDP4Common.SiteDirectoryData
         /// If the <paramref name="categorizableThing"/> is an <see cref="ElementUsage"/> the returned <see cref="Category"/> instances
         /// include those of the referenced <see cref="ElementDefinition"/>.
         /// </remarks>
-        public static IEnumerable<Category> GetAllCategories(this ICategorizableThing categorizableThing)
+        public static IEnumerable<Category> GetAllCategories(this ICategorizableThing categorizableThing, bool removeDuplicates = true)
         {
             var allCategories = new List<Category>();
 
@@ -114,7 +114,14 @@ namespace CDP4Common.SiteDirectoryData
                 result.Add(category);
             }
 
-            return result.Distinct();
+            if (removeDuplicates)
+            {
+                return result.Distinct();
+            }
+            else
+            {
+                return result;
+            }
         }
 
         /// <summary>

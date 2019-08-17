@@ -49,7 +49,7 @@ namespace CDP4Rules.RuleCheckers
         /// A instance of <see cref="RuleCheckResult"/>
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// thrown when <param name="thing"/> is not an <see cref="ICategorizableThing"/>
+        /// thrown when <paramref name="thing"/> is not an <see cref="ICategorizableThing"/>
         /// </exception>
         [Rule("MA-0300")]
         public RuleCheckResult CheckWhetherThereAreNoDuplicateCategoriesAreDefined(Thing thing)
@@ -63,6 +63,18 @@ namespace CDP4Rules.RuleCheckers
             if (categorizableThing == null)
             {
                 throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an ICategorizableThing");
+            }
+
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            var categories = categorizableThing.GetAllCategories(false);
+
+            //find if there are any duplicates:
+            var anyDuplicate = categories.GroupBy(x => x.Iid).Any(g => g.Count() > 1);
+            if (anyDuplicate)
+            {
+                return  new RuleCheckResult(thing, rule.Id, "The CategorizableThing is a member of the same Category more than once", SeverityKind.Warning);
             }
 
             throw new NotImplementedException();
