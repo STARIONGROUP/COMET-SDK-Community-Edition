@@ -161,7 +161,7 @@ namespace CDP4Rules.RuleCheckers
             var categorizableThing = thing as ICategorizableThing;
             if (categorizableThing == null)
             {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an ICategorizableThing");
             }
 
             return categorizableThing;

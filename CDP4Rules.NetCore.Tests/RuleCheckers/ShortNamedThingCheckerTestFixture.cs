@@ -21,6 +21,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
+
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
@@ -64,7 +66,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var elementDefinition = new ElementDefinition();
             elementDefinition.ShortName = "123Xa -";
 
-            var result = this.shortNamedThingChecker.CheckWhetherTheShortNameIsAValidShortName(elementDefinition);
+            var result = this.shortNamedThingChecker.CheckWhetherTheShortNameIsAValidShortName(elementDefinition).Single();
 
             Assert.That(result.Id, Is.EqualTo("MA-0010"));
             Assert.That(result.Thing, Is.EqualTo(elementDefinition));
@@ -72,14 +74,14 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         }
 
         [Test]
-        public void Verify_that_when_an_ElementBase_has_an_valid_shortname_null_is_returned()
+        public void Verify_that_when_an_ElementBase_has_an_valid_shortname_empty_is_returned()
         {
             var elementDefinition = new ElementDefinition();
             elementDefinition.ShortName = "BAT";
 
             var result = this.shortNamedThingChecker.CheckWhetherTheShortNameIsAValidShortName(elementDefinition);
 
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
         }
 
         [Test]
@@ -88,7 +90,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var requirementsSpecification = new RequirementsSpecification();
             requirementsSpecification.ShortName = "123 we";
 
-            var result = this.shortNamedThingChecker.CheckWhetherTheShortNameIsAValidShortName(requirementsSpecification);
+            var result = this.shortNamedThingChecker.CheckWhetherTheShortNameIsAValidShortName(requirementsSpecification).Single();
 
             Assert.That(result.Id, Is.EqualTo("MA-0010"));
             Assert.That(result.Thing, Is.EqualTo(requirementsSpecification));
@@ -103,7 +105,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             var result = this.shortNamedThingChecker.CheckWhetherTheShortNameIsAValidShortName(requirementsSpecification);
 
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
         }
         
         [Test]
@@ -112,7 +114,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var requirement = new Requirement();
             requirement.ShortName = "contains a space";
 
-            var result = this.shortNamedThingChecker.CheckWhetherTheShortNameIsAValidShortName(requirement);
+            var result = this.shortNamedThingChecker.CheckWhetherTheShortNameIsAValidShortName(requirement).Single();
 
             Assert.That(result.Id, Is.EqualTo("MA-0010"));
             Assert.That(result.Thing, Is.EqualTo(requirement));
@@ -127,7 +129,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             var result = this.shortNamedThingChecker.CheckWhetherTheShortNameIsAValidShortName(requirement);
 
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
         }
     }
 }

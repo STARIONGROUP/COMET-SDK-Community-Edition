@@ -97,7 +97,7 @@ namespace CDP4Rules.RuleCheckers
             var definedThing = thing as DefinedThing;
             if (definedThing == null)
             {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not a DefinedThing");
             }
 
             return definedThing;

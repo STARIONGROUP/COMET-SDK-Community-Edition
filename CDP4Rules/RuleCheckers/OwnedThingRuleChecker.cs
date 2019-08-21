@@ -46,7 +46,7 @@ namespace CDP4Rules.RuleCheckers
         /// The subject <see cref="IOwnedThing"/>
         /// </param>
         /// <returns>
-        /// An instance of <see cref="RuleCheckResult"/>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="thing"/> is null

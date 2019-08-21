@@ -24,6 +24,7 @@
 namespace CDP4Rules.RuleCheckers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
@@ -44,39 +45,57 @@ namespace CDP4Rules.RuleCheckers
         /// The subject <see cref="IShortNamedThing"/>
         /// </param>
         /// <returns>
-        /// A instance of <see cref="RuleCheckResult"/> when the rule is violated, or null when all is good
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
         /// </returns>
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="IShortNamedThing"/>
         /// </exception>
         [Rule("MA-0010")]
-        public RuleCheckResult CheckWhetherTheShortNameIsAValidShortName(Thing thing)
+        public IEnumerable<RuleCheckResult> CheckWhetherTheShortNameIsAValidShortName(Thing thing)
         {
-            if (thing == null)
-            {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
-            }
+            var shortNamedThing = this.VerifyThingArgument(thing);
 
-            var shortNamedThing = thing as IShortNamedThing;
-            if (shortNamedThing == null)
-            {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IShortNamedThing");
-            }
-
+            var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
             var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
 
-            if (thing is ElementBase elementBase)
+            switch (thing)
             {
-                return this.CheckShortNameValidityOfElementBase(elementBase, rule);
+                case ElementBase elementBase:
+                {
+                    var result = this.CheckShortNameValidityOfElementBase(elementBase, rule);
+                    if (result != null)
+                    {
+                        results.Add(result);
+                    }
+
+                    break;
+                }
+
+                case RequirementsContainer requirementsContainer:
+                {
+                    var result = this.CheckShortNameValidityOfRequirementsContainer(requirementsContainer, rule);
+                    if (result != null)
+                    {
+                        results.Add(result);
+                    }
+
+                    break;
+                }
+
+                default:
+                {
+                    var result = this.CheckShortNameValidityOfShortNamedThing(shortNamedThing, rule);
+                    if (result != null)
+                    {
+                        results.Add(result);
+                    }
+
+                    break;
+                }
             }
 
-            if (thing is RequirementsContainer requirementsContainer)
-            {
-                return this.CheckShortNameValidityOfRequirementsContainer(requirementsContainer, rule);
-            }
-            
-            return this.CheckShortNameValidityOfShortNamedThing(shortNamedThing, rule);
+            return results;
         }
 
         /// <summary>
@@ -143,6 +162,37 @@ namespace CDP4Rules.RuleCheckers
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Verifies that the <see cref="Thing"/> is of the correct type
+        /// </summary>
+        /// <param name="thing">
+        /// the subject <see cref="Thing"/>
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="IShortNamedThing"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="IShortNamedThing"/>
+        /// </exception>
+        private IShortNamedThing VerifyThingArgument(Thing thing)
+        {
+            if (thing == null)
+            {
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
+            }
+
+            var shortNamedThing = thing as IShortNamedThing;
+            if (shortNamedThing == null)
+            {
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IShortNamedThing");
+            }
+
+            return shortNamedThing;
         }
     }
 }

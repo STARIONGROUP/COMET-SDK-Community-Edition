@@ -133,7 +133,7 @@ namespace CDP4Rules.RuleCheckers
             var binaryRelationship = thing as BinaryRelationship;
             if (binaryRelationship == null)
             {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not a BinaryRelationship");
             }
 
             return binaryRelationship;
