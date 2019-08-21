@@ -24,6 +24,7 @@
 namespace CDP4Rules.RuleCheckers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using CDP4Common.CommonData;
@@ -44,7 +45,7 @@ namespace CDP4Rules.RuleCheckers
         /// The subject <see cref="BinaryRelationship"/>
         /// </param>
         /// <returns>
-        /// An instance of <see cref="RuleCheckResult"/>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="thing"/> is null
@@ -56,19 +57,11 @@ namespace CDP4Rules.RuleCheckers
         /// thrown when source or target of the <see cref="BinaryRelationship"/> is null
         /// </exception>
         [Rule("MA-0510")]
-        public RuleCheckResult CheckWhetherSourceAndTargetAreContainedByTheSameIteration(Thing thing)
+        public IEnumerable<RuleCheckResult> CheckWhetherSourceAndTargetAreContainedByTheSameIteration(Thing thing)
         {
-            if (thing == null)
-            {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
-            }
+            var binaryRelationship = this.VerifyThingArgument(thing);
 
-            var binaryRelationship = thing as BinaryRelationship;
-            if (binaryRelationship == null)
-            {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an BinaryRelationship");
-            }
-
+            var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
             var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
 
@@ -85,26 +78,65 @@ namespace CDP4Rules.RuleCheckers
             var sourceIteration = binaryRelationship.Source.GetContainerOfType(typeof(Iteration));
             if (sourceIteration == null)
             {
-                return new RuleCheckResult(thing, rule.Id, "The source is not contained by an Iteration", SeverityKind.Warning);
+                var result = new RuleCheckResult(thing, rule.Id, "The source is not contained by an Iteration", SeverityKind.Warning);
+                results.Add(result);
+            }
+            else
+            {
+                if (sourceIteration.Iid != binaryRelationship.Container.Iid)
+                {
+                    var result = new RuleCheckResult(thing, rule.Id, "The source of the BinaryRelationship is not contained by the same Iteration as the BinaryRelationship", SeverityKind.Warning);
+                    results.Add(result);
+                }
             }
 
             var targetIteration = binaryRelationship.Target.GetContainerOfType(typeof(Iteration));
             if (targetIteration == null)
             {
-                return new RuleCheckResult(thing, rule.Id, "The target is not contained by an Iteration", SeverityKind.Warning);
+                var result = new RuleCheckResult(thing, rule.Id, "The target is not contained by an Iteration", SeverityKind.Warning);
+                results.Add(result);
             }
-
-            if (sourceIteration.Iid != binaryRelationship.Container.Iid)
+            else
             {
-                return new RuleCheckResult(thing, rule.Id, "The source of the BinaryRelationship is not contained by the same Iteration as the BinaryRelationship", SeverityKind.Warning);
+                if (targetIteration.Iid != binaryRelationship.Container.Iid)
+                {
+                    var result = new RuleCheckResult(thing, rule.Id, "The target of the BinaryRelationship is not contained by the same Iteration as the BinaryRelationship", SeverityKind.Warning);
+                    results.Add(result);
+                }
             }
 
-            if (targetIteration.Iid != binaryRelationship.Container.Iid)
+            return results;
+        }
+
+        /// <summary>
+        /// Verifies that the <see cref="Thing"/> is of the correct type
+        /// </summary>
+        /// <param name="thing">
+        /// the subject <see cref="Thing"/>
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="BinaryRelationship"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="BinaryRelationship"/>
+        /// </exception>
+        private BinaryRelationship VerifyThingArgument(Thing thing)
+        {
+            if (thing == null)
             {
-                return new RuleCheckResult(thing, rule.Id, "The target of the BinaryRelationship is not contained by the same Iteration as the BinaryRelationship", SeverityKind.Warning);
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
             }
 
-            return null;
+            var binaryRelationship = thing as BinaryRelationship;
+            if (binaryRelationship == null)
+            {
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
+            }
+
+            return binaryRelationship;
         }
     }
 }

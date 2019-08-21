@@ -21,6 +21,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
+
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
@@ -80,11 +82,14 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         [Test]
         public void Verify_that_when_source_is_not_contained_by_an_Iteration_a_result_is_returned()
         {
+            var elementDefinition = new ElementDefinition();
+            this.iteration.Element.Add(elementDefinition);
+
             var siteDirectory = new SiteDirectory();
             this.binaryRelationship.Source = siteDirectory;
-            this.binaryRelationship.Target = new ElementDefinition();
-
-            var result = this.binaryRelationshipRuleChecker.CheckWhetherSourceAndTargetAreContainedByTheSameIteration(this.binaryRelationship);
+            this.binaryRelationship.Target = elementDefinition;
+            
+            var result = this.binaryRelationshipRuleChecker.CheckWhetherSourceAndTargetAreContainedByTheSameIteration(this.binaryRelationship).Single();
 
             Assert.That(result.Id, Is.EqualTo("MA-0510"));
             Assert.That(result.Description,Is.EqualTo("The source is not contained by an Iteration"));
@@ -102,7 +107,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var siteDirectory = new SiteDirectory();
             this.binaryRelationship.Target = siteDirectory;
             
-            var result = this.binaryRelationshipRuleChecker.CheckWhetherSourceAndTargetAreContainedByTheSameIteration(this.binaryRelationship);
+            var result = this.binaryRelationshipRuleChecker.CheckWhetherSourceAndTargetAreContainedByTheSameIteration(this.binaryRelationship).SingleOrDefault();
 
             Assert.That(result.Id, Is.EqualTo("MA-0510"));
             Assert.That(result.Description, Is.EqualTo("The target is not contained by an Iteration"));
@@ -122,7 +127,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             this.iteration.Element.Add(target);
             this.binaryRelationship.Target = target;
 
-            var result = this.binaryRelationshipRuleChecker.CheckWhetherSourceAndTargetAreContainedByTheSameIteration(this.binaryRelationship);
+            var result = this.binaryRelationshipRuleChecker.CheckWhetherSourceAndTargetAreContainedByTheSameIteration(this.binaryRelationship).SingleOrDefault();
 
             Assert.That(result.Id, Is.EqualTo("MA-0510"));
             Assert.That(result.Description, Is.EqualTo("The source of the BinaryRelationship is not contained by the same Iteration as the BinaryRelationship"));
@@ -142,7 +147,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             otherIteration.Element.Add(target);
             this.binaryRelationship.Target = target;
 
-            var result = this.binaryRelationshipRuleChecker.CheckWhetherSourceAndTargetAreContainedByTheSameIteration(this.binaryRelationship);
+            var result = this.binaryRelationshipRuleChecker.CheckWhetherSourceAndTargetAreContainedByTheSameIteration(this.binaryRelationship).SingleOrDefault();
 
             Assert.That(result.Id, Is.EqualTo("MA-0510"));
             Assert.That(result.Description, Is.EqualTo("The target of the BinaryRelationship is not contained by the same Iteration as the BinaryRelationship"));
@@ -161,9 +166,9 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             this.iteration.Element.Add(target);
             this.binaryRelationship.Target = target;
 
-            var result = this.binaryRelationshipRuleChecker.CheckWhetherSourceAndTargetAreContainedByTheSameIteration(this.binaryRelationship);
+            var results = this.binaryRelationshipRuleChecker.CheckWhetherSourceAndTargetAreContainedByTheSameIteration(this.binaryRelationship);
 
-            Assert.That(result, Is.Null);
+            Assert.That(results, Is.Empty);
         }
     }
 }
