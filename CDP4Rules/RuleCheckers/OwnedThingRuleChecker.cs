@@ -24,6 +24,7 @@
 namespace CDP4Rules.RuleCheckers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using CDP4Common.CommonData;
@@ -54,7 +55,41 @@ namespace CDP4Rules.RuleCheckers
         /// thrown when <paramref name="thing"/> is not an <see cref="IOwnedThing"/>
         /// </exception>
         [Rule("MA-0110")]
-        public RuleCheckResult ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(Thing thing)
+        public IEnumerable<RuleCheckResult> ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(Thing thing)
+        {
+            var ownedThing = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            var engineeringModel = thing.TopContainer as EngineeringModel;
+            
+            if (!engineeringModel.EngineeringModelSetup.ActiveDomain.Contains(ownedThing.Owner))
+            {
+                var result = new RuleCheckResult(thing, rule.Id, $"The Owner {ownedThing.Owner.Iid}:{ownedThing.Owner.ShortName} is not an active Domain of the container Engineering Model", SeverityKind.Warning);
+                results.Add(result);
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Verifies that the <see cref="Thing"/> is of the correct type
+        /// </summary>
+        /// <param name="thing">
+        /// the subject <see cref="Thing"/>
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="IOwnedThing"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="IOwnedThing"/>
+        /// </exception>
+        private IOwnedThing VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {
@@ -67,17 +102,7 @@ namespace CDP4Rules.RuleCheckers
                 throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IOwnedThing");
             }
 
-            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
-            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
-
-            var engineeringModel = thing.TopContainer as EngineeringModel;
-            
-            if (!engineeringModel.EngineeringModelSetup.ActiveDomain.Contains(ownedThing.Owner))
-            {
-                return new RuleCheckResult(thing, rule.Id, $"The Owner {ownedThing.Owner.Iid}:{ownedThing.Owner.ShortName} is not an active Domain of the container Engineering Model", SeverityKind.Warning);
-            }
-
-            return null;
+            return ownedThing;
         }
     }
 }

@@ -21,6 +21,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
+
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
@@ -81,7 +83,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             elementDefinition.Owner = new DomainOfExpertise { Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"), ShortName = "SYS"};
             this.iteration.Element.Add(elementDefinition);
 
-            var result = this.ownedThingRuleChecker.ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(elementDefinition);
+            var result = this.ownedThingRuleChecker.ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(elementDefinition).Single();
 
             Assert.That(result.Id, Is.EqualTo("MA-0110"));
 
@@ -93,14 +95,14 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         }
 
         [Test]
-        public void Verify_that_when_ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain_is_called_when_domain_is_in_activeDomain_null_is_returned()
+        public void Verify_that_when_ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain_is_called_when_domain_is_in_activeDomain_empty_is_returned()
         {
             var elementDefinition = new ElementDefinition();
             elementDefinition.Owner = this.domainOfExpertise;
             this.iteration.Element.Add(elementDefinition);
 
             var result = this.ownedThingRuleChecker.ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(elementDefinition);
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
         }
     }
 }
