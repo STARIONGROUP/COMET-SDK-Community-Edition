@@ -38,7 +38,6 @@ namespace CDP4JsonFileDal.Tests
     using CDP4Dal.DAL;
     using CDP4Dal.Operations;
     using CDP4JsonFileDal;
-    using CDP4JsonFileDal.Json;
     using Ionic.Zip;
     using Moq;
     using NLog;
@@ -260,46 +259,6 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
-        public void VerifyWriteHeaderThrowsException()
-        {
-            var person = new Person();
-            var exchangeFileHeader = new ExchangeFileHeader();
-            var zipFile = new ZipFile();
-            const string FilePath = "test";
-
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteHeaderFile(null, exchangeFileHeader, zipFile, FilePath));
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteHeaderFile(person, null, zipFile, FilePath));
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteHeaderFile(person, exchangeFileHeader, null, FilePath));
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteHeaderFile(person, exchangeFileHeader, zipFile, null));
-        }
-
-        [Test]
-        public void VerifyWriteSiteDirectoryFileThrowsException()
-        {
-            var siteDirItems = new List<Thing> { new CDP4Common.SiteDirectoryData.IterationSetup() };
-            var referencedSiteRdls = new List<SiteReferenceDataLibrary> { new SiteReferenceDataLibrary() };
-            var engineeringModelSetups = new List<CDP4Common.SiteDirectoryData.EngineeringModelSetup> { new CDP4Common.SiteDirectoryData.EngineeringModelSetup() };
-            var referencedIterationSetups = new List<CDP4Common.SiteDirectoryData.IterationSetup> { new CDP4Common.SiteDirectoryData.IterationSetup() };
-            var zipFile = new ZipFile();
-
-            // assert in reverse method variable order assignment to trip the proper variable exception
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, zipFile, null));
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, null, null));
-
-            referencedIterationSetups.Clear();
-            Assert.Throws<ArgumentException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, null, null));
-
-            engineeringModelSetups.Clear();
-            Assert.Throws<ArgumentException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, null, null));
-
-            referencedSiteRdls.Clear();
-            Assert.Throws<ArgumentException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, null, null));
-
-            siteDirItems.Clear();
-            Assert.Throws<ArgumentException>(() => this.dal.WriteSiteDirectoryFile(siteDirItems, referencedSiteRdls, engineeringModelSetups, referencedIterationSetups, null, null));
-        }
-
-        [Test]
         public void VerifyWriteSiteReferenceDataLibraryFilesThrowsException()
         {
             var siteReferenceDataLibraryItems = new List<List<Thing>> { new List<Thing> { new CDP4Common.SiteDirectoryData.SimpleUnit() } };
@@ -311,38 +270,6 @@ namespace CDP4JsonFileDal.Tests
 
             siteReferenceDataLibraryItems.Clear();
             Assert.Throws<ArgumentException>(() => this.dal.WriteSiteReferenceDataLibraryFiles(siteReferenceDataLibraryItems, null, null));
-        }
-
-        [Test]
-        public void VerifyWriteModelReferenceDataLibraryFilesThrowsException()
-        {
-            var modelReferenceDataLibraryItems = new List<List<Thing>> { new List<Thing> { new CDP4Common.SiteDirectoryData.SimpleUnit() } };
-            var zipFile = new ZipFile();
-
-            // assert in reverse method variable order assignment to trip the proper variable exception
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteModelReferenceDataLibraryFiles(modelReferenceDataLibraryItems, zipFile, null));
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteModelReferenceDataLibraryFiles(modelReferenceDataLibraryItems, null, null));
-
-            modelReferenceDataLibraryItems.Clear();
-            Assert.Throws<ArgumentException>(() => this.dal.WriteModelReferenceDataLibraryFiles(modelReferenceDataLibraryItems, null, null));
-        }
-
-        [Test]
-        public void VerifyWriteEngineeringModelFilesThrowsException()
-        {
-            var engineeringModelItems = new List<List<Thing>> { new List<Thing> { new EngineeringModel() } };
-            var iterationItems = new List<List<Thing>>() { new List<Thing> { new CDP4Common.EngineeringModelData.Iteration() } };
-            var zipFile = new ZipFile();
-
-            // assert in reverse method variable order assignment to trip the proper variable exception
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteEngineeringModelFiles(engineeringModelItems, iterationItems, zipFile, null));
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteEngineeringModelFiles(engineeringModelItems, iterationItems, null, null));
-
-            iterationItems.Clear();
-            Assert.Throws<ArgumentException>(() => this.dal.WriteEngineeringModelFiles(engineeringModelItems, iterationItems, null, null));
-
-            engineeringModelItems.Clear();
-            Assert.Throws<ArgumentException>(() => this.dal.WriteEngineeringModelFiles(engineeringModelItems, iterationItems, null, null));
         }
 
         [Test]
