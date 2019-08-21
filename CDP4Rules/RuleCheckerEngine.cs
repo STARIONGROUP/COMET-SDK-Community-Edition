@@ -97,6 +97,8 @@ namespace CDP4Rules
         /// </returns>
         public IEnumerable<RuleCheckResult> Run(IEnumerable<Thing> things)
         {
+            var results = new List<RuleCheckResult>();
+
             foreach (var thing in things)
             {
                 var runTimeType = thing.GetType();
@@ -113,15 +115,17 @@ namespace CDP4Rules
                         var methodInfos = ruleChecker.GetType().GetMethods().Where(m => m.GetCustomAttribute<RuleAttribute>() != null);
                         foreach (var methodInfo in methodInfos)
                         {
-                            var ruleCheckResult = methodInfo.Invoke(ruleChecker, new object[] { thing }) as RuleCheckResult;
-                            if (ruleCheckResult != null)
+                            var ruleCheckResults = methodInfo.Invoke(ruleChecker, new object[] { thing }) as IEnumerable<RuleCheckResult>;
+                            foreach (var result in ruleCheckResults)
                             {
-                                yield return ruleCheckResult;
+                                results.Add(result);
                             }
                         }
                     }
                 }
             }
+
+            return results;
         }
     }
 }

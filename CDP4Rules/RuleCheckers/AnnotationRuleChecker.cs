@@ -24,6 +24,7 @@
 namespace CDP4Rules.RuleCheckers
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
@@ -45,24 +46,15 @@ namespace CDP4Rules.RuleCheckers
         /// The subject <see cref="IAnnotation"/>
         /// </param>
         /// <returns>
-        /// A instance of <see cref="RuleCheckResult"/>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
         /// </returns>
         /// <exception cref="ArgumentException">
         /// thrown when <param name="thing"/> is not an <see cref="IAnnotation"/>
         /// </exception>
         [Rule("MA-0100")]
-        public RuleCheckResult CheckWheterTheLanguageCodeExistsInTheSiteDirectory(Thing thing)
+        public IEnumerable<RuleCheckResult> CheckWheterTheLanguageCodeExistsInTheSiteDirectory(Thing thing)
         {
-            if (thing == null)
-            {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
-            }
-
-            var annotation = thing as IAnnotation;
-            if (annotation == null)
-            {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
-            }
+            var annotation = this.VerifyThingArgument(thing);
 
             var topContainer = thing.TopContainer;
 
@@ -78,6 +70,7 @@ namespace CDP4Rules.RuleCheckers
                 siteDirectory = topContainer as SiteDirectory;
             }
 
+            var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
             var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
 
@@ -86,15 +79,12 @@ namespace CDP4Rules.RuleCheckers
                 var languageCodeExists = siteDirectory.NaturalLanguage.Any(x => x.LanguageCode == annotation.LanguageCode);
                 if (!languageCodeExists)
                 {
-                    return new RuleCheckResult(thing, rule.Id, $"The Annotation.LanguageCode: {annotation.LanguageCode} for Idd: {thing.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}", rule.Severity);
-                }
-                else
-                {
-                    return null;
+                    var result = new RuleCheckResult(thing, rule.Id, $"The Annotation.LanguageCode: {annotation.LanguageCode} for Idd: {thing.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}", rule.Severity);
+                    results.Add(result);
                 }
             }
 
-            throw new Exception("MA-0100 could not be checked");
+            return results;
         }
         
         /// <summary>
@@ -110,7 +100,7 @@ namespace CDP4Rules.RuleCheckers
         /// thrown when <param name="thing"/> is not an <see cref="IAnnotation"/>
         /// </exception>
         [Rule("MA-0020")]
-        public RuleCheckResult CheckWeatherTheLanguageCodeIsValid(Thing thing)
+        public IEnumerable<RuleCheckResult> CheckWeatherTheLanguageCodeIsValid(Thing thing)
         {
             if (thing == null)
             {
@@ -123,17 +113,48 @@ namespace CDP4Rules.RuleCheckers
                 throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
             }
 
+            var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
             var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
 
             if (CultureInfo.GetCultures(CultureTypes.AllCultures).All(x => x.Name != annotation.LanguageCode))
             {
-                return new RuleCheckResult(thing, rule.Id, $"The Annotation.LanguageCode: {annotation.LanguageCode} for Idd: {thing.Iid} is not a valid LanguageCode", rule.Severity);
+                var result = new RuleCheckResult(thing, rule.Id, $"The Annotation.LanguageCode: {annotation.LanguageCode} for Idd: {thing.Iid} is not a valid LanguageCode", rule.Severity);
+                results.Add(result);
             }
-            else
+
+            return results;
+        }
+
+        /// <summary>
+        /// Verifies that the <see cref="Thing"/> is of the correct type
+        /// </summary>
+        /// <param name="thing">
+        /// the subject <see cref="Thing"/>
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="IAnnotation"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="IAnnotation"/>
+        /// </exception>
+        private IAnnotation VerifyThingArgument(Thing thing)
+        {
+            if (thing == null)
             {
-                return null;
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
             }
+
+            var annotation = thing as IAnnotation;
+            if (annotation == null)
+            {
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
+            }
+
+            return annotation;
         }
     }
 }

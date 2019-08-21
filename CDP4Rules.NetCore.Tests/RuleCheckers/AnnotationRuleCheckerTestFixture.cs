@@ -77,7 +77,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             this.engineeringModelSetup.Alias.Add(alias);
 
-            var result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
+            var result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias).SingleOrDefault();
 
             Assert.That(result.Id, Is.EqualTo("MA-0100"));
             Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
@@ -87,9 +87,9 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             naturalLanguage.LanguageCode = "en-GB";
             this.siteDirectory.NaturalLanguage.Add(naturalLanguage);
 
-            result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
+            var results = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
 
-            Assert.That(result, Is.Null);
+            Assert.That(results, Is.Empty);
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var alias = new Alias {LanguageCode = "en-GB"};
             elementDefinition.Alias.Add(alias);
 
-            var result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
+            var result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias).SingleOrDefault();
 
             Assert.That(result.Id, Is.EqualTo("MA-0100"));
             Assert.That(result.Description, Is.EqualTo($"The Annotation.LanguageCode: {alias.LanguageCode} for Idd: {alias.Iid} does not exist in the SiteDirectory { siteDirectory.Iid}"));
@@ -118,9 +118,9 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             naturalLanguage.LanguageCode = "en-GB";
             this.siteDirectory.NaturalLanguage.Add(naturalLanguage);
 
-            result = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
+            var results = this.annotationRuleChecker.CheckWheterTheLanguageCodeExistsInTheSiteDirectory(alias);
 
-            Assert.That(result, Is.Null);
+            Assert.That(results, Is.Empty);
         }
 
         [Test]
@@ -144,9 +144,9 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             this.engineeringModelSetup.Alias.Add(alias);
 
-            var result = this.annotationRuleChecker.CheckWeatherTheLanguageCodeIsValid(alias);
+            var results = this.annotationRuleChecker.CheckWeatherTheLanguageCodeIsValid(alias);
 
-            Assert.That(result, Is.Null);
+            Assert.That(results, Is.Empty);
         }
 
         [Test]
@@ -157,7 +157,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             this.engineeringModelSetup.Alias.Add(alias);
 
-            var result = this.annotationRuleChecker.CheckWeatherTheLanguageCodeIsValid(alias);
+            var result = this.annotationRuleChecker.CheckWeatherTheLanguageCodeIsValid(alias).SingleOrDefault();
 
             Assert.That(result.Id, Is.EqualTo("MA-0020"));
             Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
