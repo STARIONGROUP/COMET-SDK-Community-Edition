@@ -21,13 +21,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using CDP4Common.EngineeringModelData;
-using CDP4Rules.Common;
-
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
+    using System.Linq;
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Rules.Common;
     using CDP4Rules.RuleCheckers;
     using NUnit.Framework;
 
@@ -70,7 +70,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(elementDefinition.Category.Count, Is.EqualTo(2));
 
-            var result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition);
+            var result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition).Single();
 
             Assert.That(result.Id, Is.EqualTo("MA-0300"));
             Assert.That(result.Description, 
@@ -89,7 +89,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             elementDefinition.Category.Add(lithiumBatteries);
             elementDefinition.Category.Add(products);
 
-            result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition);
+            result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition).Single();
             Assert.That(result.Id, Is.EqualTo("MA-0300"));
             Assert.That(result.Description,
                 Is.EqualTo("The CategorizableThing is a member of the following Categories: e89f7639-9583-4656-905c-d8908b569a82,09be61c4-b74e-4b97-8ff6-6e82ef93ec93; with shortNames: LITHIUM_BAT,PROD more than once"));
@@ -98,21 +98,21 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         }
 
         [Test]
-        public void Verify_that_when_CategorizableThing_is_not_a_member_of_duplicate_categories_null_is_returned()
+        public void Verify_that_when_CategorizableThing_is_not_a_member_of_duplicate_categories_empyt_list_is_returned()
         {
             var elementDefinition = new ElementDefinition();
             var result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition);
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
 
             var batteries = new Category();
             elementDefinition.Category.Add(batteries);
             result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition);
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
 
             var lithiums = new Category();
             elementDefinition.Category.Add(lithiums);
             result = this.categorizableThingRuleChecker.CheckWhetherThereAreNoDuplicateCategoriesAreDefined(elementDefinition);
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var elementDefinition = new ElementDefinition();
             elementDefinition.Category.Add(product);
 
-            var result = this.categorizableThingRuleChecker.ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(elementDefinition);
+            var result = this.categorizableThingRuleChecker.ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(elementDefinition).Single();
 
             Assert.That(result.Id, Is.EqualTo("MA-0310"));
             Assert.That(result.Description,
@@ -147,16 +147,16 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         }
 
         [Test]
-        public void Verify_that_when_a_CategorizableThing_is_a_not_member_of_an_abstract_error_null_is_returned()
+        public void Verify_that_when_a_CategorizableThing_is_a_not_member_of_an_abstract_error_is_returned()
         {
             var elementDefinition = new ElementDefinition();
             var result = this.categorizableThingRuleChecker.ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(elementDefinition);
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
 
             var product = new Category { Iid = Guid.Parse("dacef175-37e2-45ab-bd56-df0ff0c66714"), ShortName = "PROD" };
             elementDefinition.Category.Add(product);
             result = this.categorizableThingRuleChecker.ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(elementDefinition);
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
         }
     }
 }

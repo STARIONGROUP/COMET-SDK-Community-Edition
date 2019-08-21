@@ -45,7 +45,7 @@ namespace CDP4Rules.RuleCheckers
         /// The subject <see cref="ICategorizableThing"/>
         /// </param>
         /// <returns>
-        /// An instance of <see cref="RuleCheckResult"/>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="thing"/> is null
@@ -54,19 +54,11 @@ namespace CDP4Rules.RuleCheckers
         /// thrown when <paramref name="thing"/> is not an <see cref="ICategorizableThing"/>
         /// </exception>
         [Rule("MA-0300")]
-        public RuleCheckResult CheckWhetherThereAreNoDuplicateCategoriesAreDefined(Thing thing)
+        public IEnumerable<RuleCheckResult> CheckWhetherThereAreNoDuplicateCategoriesAreDefined(Thing thing)
         {
-            if (thing == null)
-            {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
-            }
+            var categorizableThing = this.VerifyThingArgument(thing);
 
-            var categorizableThing = thing as ICategorizableThing;
-            if (categorizableThing == null)
-            {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an ICategorizableThing");
-            }
-
+            var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
             var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
 
@@ -77,7 +69,8 @@ namespace CDP4Rules.RuleCheckers
                 var duplicateIdentifiers = string.Join(",", duplicates.Select(r => r.Iid));
                 var duplicateShortNames = string.Join(",", duplicates.Select(r => r.ShortName));
 
-                return  new RuleCheckResult(thing, rule.Id, $"The CategorizableThing is a member of the following Categories: {duplicateIdentifiers}; with shortNames: {duplicateShortNames} more than once", SeverityKind.Warning);
+                var result = new RuleCheckResult(thing, rule.Id, $"The CategorizableThing is a member of the following Categories: {duplicateIdentifiers}; with shortNames: {duplicateShortNames} more than once", SeverityKind.Warning);
+                results.Add(result);
             }
 
             // verify whether a CategorizableThing is a member of a category and its supercategory by means of the Category property.
@@ -99,10 +92,11 @@ namespace CDP4Rules.RuleCheckers
                 var duplicateIdentifiers = string.Join(",", duplicates.Select(r => r.Iid));
                 var duplicateShortNames = string.Join(",", duplicates.Select(r => r.ShortName));
 
-                return new RuleCheckResult(thing, rule.Id, $"The CategorizableThing is a member of the following Categories: {duplicateIdentifiers}; with shortNames: {duplicateShortNames} more than once", SeverityKind.Warning);
+                var result = new RuleCheckResult(thing, rule.Id, $"The CategorizableThing is a member of the following Categories: {duplicateIdentifiers}; with shortNames: {duplicateShortNames} more than once", SeverityKind.Warning);
+                results.Add(result);
             }
 
-            return null;
+            return results;
         }
 
         /// <summary>
@@ -112,7 +106,7 @@ namespace CDP4Rules.RuleCheckers
         /// The subject <see cref="ICategorizableThing"/>
         /// </param>
         /// <returns>
-        /// An instance of <see cref="RuleCheckResult"/>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="thing"/> is null
         /// </exception>
@@ -121,19 +115,11 @@ namespace CDP4Rules.RuleCheckers
         /// thrown when <paramref name="thing"/> is not an <see cref="ICategorizableThing"/>
         /// </exception>
         [Rule("MA-0310")]
-        public RuleCheckResult ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(Thing thing)
+        public IEnumerable<RuleCheckResult> ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(Thing thing)
         {
-            if (thing == null)
-            {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
-            }
+            var categorizableThing = this.VerifyThingArgument(thing);
 
-            var categorizableThing = thing as ICategorizableThing;
-            if (categorizableThing == null)
-            {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an ICategorizableThing");
-            }
-
+            var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
             var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
 
@@ -143,10 +129,42 @@ namespace CDP4Rules.RuleCheckers
                 var abstractIdentifiers = string.Join(",", abstractCategories.Select(r => r.Iid));
                 var abstractShortNames = string.Join(",", abstractCategories.Select(r => r.ShortName));
 
-                return new RuleCheckResult(thing, rule.Id, $"The CategorizableThing is a member of the following abstract Categories: {abstractIdentifiers}; with shortNames: {abstractShortNames}", SeverityKind.Error);
+                var result = new RuleCheckResult(thing, rule.Id, $"The CategorizableThing is a member of the following abstract Categories: {abstractIdentifiers}; with shortNames: {abstractShortNames}", SeverityKind.Error);
+                results.Add(result);
             }
 
-            return null;
+            return results;
+        }
+
+        /// <summary>
+        /// Verifies that the <see cref="Thing"/> is of the correct type
+        /// </summary>
+        /// <param name="thing">
+        /// the subject <see cref="Thing"/>
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="ICategorizableThing"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="ICategorizableThing"/>
+        /// </exception>
+        private ICategorizableThing VerifyThingArgument(Thing thing)
+        {
+            if (thing == null)
+            {
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
+            }
+
+            var categorizableThing = thing as ICategorizableThing;
+            if (categorizableThing == null)
+            {
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
+            }
+
+            return categorizableThing;
         }
     }
 }
