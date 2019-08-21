@@ -21,6 +21,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
+
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
@@ -74,7 +76,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             this.requirement.Definition.Add(english_def_2);
             this.requirement.Definition.Add(french_def_1);
 
-            var result = this.definedThingRuleChecker.CheckWhetherADefinedThingHasAtMostOneDefinitionPerNaturalLanguage(requirement);
+            var result = this.definedThingRuleChecker.CheckWhetherADefinedThingHasAtMostOneDefinitionPerNaturalLanguage(requirement).Single();
 
             Assert.That(result.Id, Is.EqualTo("MA-0400"));
             Assert.That(result.Description, Is.EqualTo("The DefinedThing contains Definitions with non-unique language codes: e9a80cab-680b-4b2c-98bb-47de59e49e25,19f45e4c-7c54-4653-9ccc-13580413768b; with LanguageCodes: en-GB,en-GB"));
@@ -94,7 +96,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             var result = this.definedThingRuleChecker.CheckWhetherADefinedThingHasAtMostOneDefinitionPerNaturalLanguage(requirement);
 
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Empty);
         }
     }
 }

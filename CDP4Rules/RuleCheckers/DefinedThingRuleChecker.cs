@@ -24,6 +24,7 @@
 namespace CDP4Rules.RuleCheckers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using CDP4Common.CommonData;
@@ -42,25 +43,17 @@ namespace CDP4Rules.RuleCheckers
         /// The subject <see cref="DefinedThing"/>
         /// </param>
         /// <returns>
-        /// A instance of <see cref="RuleCheckResult"/>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
         /// </returns>
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="Definition"/>
         /// </exception>
         [Rule("MA-0400")]
-        public RuleCheckResult CheckWhetherADefinedThingHasAtMostOneDefinitionPerNaturalLanguage(Thing thing)
+        public IEnumerable<RuleCheckResult> CheckWhetherADefinedThingHasAtMostOneDefinitionPerNaturalLanguage(Thing thing)
         {
-            if (thing == null)
-            {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
-            }
+            var definedThing = this.VerifyThingArgument(thing);
 
-            var definedThing = thing as DefinedThing;
-            if (definedThing == null)
-            {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not a DefinedThing");
-            }
-
+            var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
             var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
 
@@ -72,10 +65,42 @@ namespace CDP4Rules.RuleCheckers
                 var duplicateLanguageCodes = string.Join(",", duplicates.Select(d => d.LanguageCode));
 
                 //Checks whether a DefinedThing has at most one Definition per natural language
-                return new RuleCheckResult(thing, rule.Id, $"The DefinedThing contains Definitions with non-unique language codes: {duplicateIdentifiers}; with LanguageCodes: {duplicateLanguageCodes}", SeverityKind.Error);
+                var result = new RuleCheckResult(thing, rule.Id, $"The DefinedThing contains Definitions with non-unique language codes: {duplicateIdentifiers}; with LanguageCodes: {duplicateLanguageCodes}", SeverityKind.Error);
+                results.Add(result);
             }
 
-            return null;
+            return results;
+        }
+
+        /// <summary>
+        /// Verifies that the <see cref="Thing"/> is of the correct type
+        /// </summary>
+        /// <param name="thing">
+        /// the subject <see cref="Thing"/>
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="DefinedThing"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="DefinedThing"/>
+        /// </exception>
+        private DefinedThing VerifyThingArgument(Thing thing)
+        {
+            if (thing == null)
+            {
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
+            }
+
+            var definedThing = thing as DefinedThing;
+            if (definedThing == null)
+            {
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
+            }
+
+            return definedThing;
         }
     }
 }
