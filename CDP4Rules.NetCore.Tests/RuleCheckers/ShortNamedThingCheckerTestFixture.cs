@@ -21,11 +21,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Linq;
-
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
+    using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Rules.RuleCheckers;

@@ -28,6 +28,7 @@ namespace CDP4Rules.RuleCheckers
     using System.Linq;
     using System.Reflection;
     using CDP4Common.CommonData;
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Rules.Common;
 
@@ -134,6 +135,95 @@ namespace CDP4Rules.RuleCheckers
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Checks whether a referenced <see cref="Category"/> is the in chain of Reference Data Libraries
+        /// </summary>
+        /// <param name="thing"></param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="ICategorizableThing"/>
+        /// </exception>
+        [Rule("MA-0200")]
+        public IEnumerable<RuleCheckResult> CheckWhetherReferencedCategoryIsInChainOfRdls(Thing thing)
+        {
+            var categorizableThing = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+            
+            var referenceDataLibrary = (ReferenceDataLibrary)thing.GetContainerOfType(typeof(ReferenceDataLibrary));
+            if (referenceDataLibrary != null)
+            {
+                var result = this.CheckWhetherCategoriesOfCategorizableThingAreInTheChainOfRdls(categorizableThing, referenceDataLibrary, rule);
+
+                if (result != null)
+                {
+                    results.Add(result);
+                }
+            }
+
+            var engineeringModel = (EngineeringModel) thing.GetContainerOfType(typeof(EngineeringModel));
+            if (engineeringModel != null)
+            {
+                var modelReferenceDataLibrary = engineeringModel.EngineeringModelSetup.RequiredRdl.First();
+
+                var result = this.CheckWhetherCategoriesOfCategorizableThingAreInTheChainOfRdls(categorizableThing, modelReferenceDataLibrary, rule);
+
+                if (result != null)
+                {
+                    results.Add(result);
+                }
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Checks whether the categories that a <see cref="ICategorizableThing"/> is a member of are in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <param name="categorizableThing">
+        /// The <see cref="ICategorizableThing"/> whose member <see cref="Category"/> are checked
+        /// </param>
+        /// <param name="referenceDataLibrary">
+        /// The <see cref="ReferenceDataLibrary"/> that is used as leaf for the chain of <see cref="ReferenceDataLibrary"/>
+        /// </param>
+        /// <param name="rule">
+        /// The <see cref="IRule"/> that is being checked
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="RuleCheckResult"/> if a rule is violated, null if no rule is violated.
+        /// </returns>
+        private RuleCheckResult CheckWhetherCategoriesOfCategorizableThingAreInTheChainOfRdls(ICategorizableThing categorizableThing, ReferenceDataLibrary referenceDataLibrary, IRule rule)
+        {
+            var thing = categorizableThing as Thing;
+            var outOfChainOfRdlCategories = new List<Category>();
+
+            foreach (var category in categorizableThing.Category)
+            {
+                if (!referenceDataLibrary.IsCategoryInChainOfRdls(category))
+                {
+                    outOfChainOfRdlCategories.Add(category);
+                }
+            }
+
+            if (outOfChainOfRdlCategories.Any())
+            {
+                var categoryIdentifiers = string.Join(",", outOfChainOfRdlCategories.Select(r => r.Iid));
+                var categoryShortNames = string.Join(",", outOfChainOfRdlCategories.Select(r => r.ShortName));
+
+                var result = new RuleCheckResult(thing, rule.Id, $"The ICategorizableThing is a member of Categories that are not in the chain of Reference Data Libraries: {categoryIdentifiers}:{categoryShortNames}", SeverityKind.Error);
+                return result;
+            }
+
+            return null;
         }
 
         /// <summary>

@@ -22,6 +22,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
+
 namespace CDP4Common.SiteDirectoryData
 {
     using System.Collections.Generic;
@@ -88,6 +90,31 @@ namespace CDP4Common.SiteDirectoryData
                     yield return category;
                 }
             }
+        }
+
+        /// <summary>
+        /// Asserts whether a <see cref="Category"/> is in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <param name="category">
+        /// The subject <see cref="Category"/>
+        /// </param>
+        /// <returns>
+        /// true if the <see cref="Category"/> is on the chain of <see cref="ReferenceDataLibrary"/>, false if not
+        /// </returns>
+        /// <remarks>
+        /// the current <see cref="ReferenceDataLibrary"/> is in included in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </remarks>
+        public bool IsCategoryInChainOfRdls(Category category)
+        {
+            foreach (var referenceDataLibrary in this.AggregatedReferenceDataLibrary)
+            {
+                if (referenceDataLibrary.DefinedCategory.Any(c => c.Iid == category.Iid))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

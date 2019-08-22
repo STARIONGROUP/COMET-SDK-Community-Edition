@@ -38,7 +38,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
     public class CategorizableThingRuleCheckerTestFixture
     {
         private CategorizableThingRuleChecker categorizableThingRuleChecker;
-
+        
         [SetUp]
         public void SetUp()
         {
@@ -157,6 +157,59 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             elementDefinition.Category.Add(product);
             result = this.categorizableThingRuleChecker.ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(elementDefinition);
             Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_CheckWhetherReferencedCategoryIsInChainOfRdls_is_called_with_null_excption_is_thrown()
+        {
+            Assert.Throws<ArgumentNullException>(() => this.categorizableThingRuleChecker.CheckWhetherReferencedCategoryIsInChainOfRdls(null));
+        }
+
+        [Test]
+        public void Verify_that_when_CheckWhetherReferencedCategoryIsInChainOfRdls_is_called_with_non_ICategorizableThing_excption_is_thrown()
+        {
+            var siteDirectory = new SiteDirectory();
+            Assert.Throws<ArgumentException>(() => this.categorizableThingRuleChecker.CheckWhetherReferencedCategoryIsInChainOfRdls(siteDirectory));
+        }
+
+        [Test]
+        public void Verify_that_when_a_ICategorizableThing_is_a_member_of_a_Category_that_is_not_in_the_chain_of_rdl_a_result_is_returned()
+        {
+            var siteReferenceDataLibrary_1 = new SiteReferenceDataLibrary();
+            var category = new Category() { Iid = Guid.Parse("0b8f399c-a1b2-4993-abc3-31f2ad880936"), ShortName = "CAT" };
+            siteReferenceDataLibrary_1.DefinedCategory.Add(category);
+
+            var siteReferenceDataLibrary_2 = new SiteReferenceDataLibrary();
+            var fileType = new FileType{Iid = Guid.Parse("b050b1f4-6f4d-4ee8-993b-6d3ae67bb2f0"), ShortName = "FT"};
+            siteReferenceDataLibrary_2.FileType.Add(fileType);
+
+            fileType.Category.Add(category);
+
+            var result = this.categorizableThingRuleChecker.CheckWhetherReferencedCategoryIsInChainOfRdls(fileType).Single();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0200"));
+            Assert.That(result.Description, Is.EqualTo("The ICategorizableThing is a member of Categories that are not in the chain of Reference Data Libraries: 0b8f399c-a1b2-4993-abc3-31f2ad880936:CAT"));
+            Assert.That(result.Thing, Is.EqualTo(fileType));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
+
+            var modelReferenceDataLibrary = new ModelReferenceDataLibrary();
+            var engineeringModel = new EngineeringModel();
+            var engineeringModelSetup = new EngineeringModelSetup();
+            engineeringModel.EngineeringModelSetup = engineeringModelSetup;
+            engineeringModelSetup.RequiredRdl.Add(modelReferenceDataLibrary);
+
+            var iteration = new Iteration();
+            engineeringModel.Iteration.Add(iteration);
+            var elementDefinition = new ElementDefinition();
+            iteration.Element.Add(elementDefinition);
+
+            elementDefinition.Category.Add(category);
+
+            result = this.categorizableThingRuleChecker.CheckWhetherReferencedCategoryIsInChainOfRdls(elementDefinition).Single();
+            Assert.That(result.Id, Is.EqualTo("MA-0200"));
+            Assert.That(result.Description, Is.EqualTo("The ICategorizableThing is a member of Categories that are not in the chain of Reference Data Libraries: 0b8f399c-a1b2-4993-abc3-31f2ad880936:CAT"));
+            Assert.That(result.Thing, Is.EqualTo(elementDefinition));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
         }
     }
 }
