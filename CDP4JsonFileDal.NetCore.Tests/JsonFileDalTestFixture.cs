@@ -120,32 +120,6 @@ namespace CDP4JsonFileDal.NetCore.Tests
         }
 
         [Test]
-        public void VerifyCacheIsPresentOnOperationThing()
-        {
-            var iterationPoco = new CDP4Common.EngineeringModelData.Iteration
-            {
-                Iid = Guid.NewGuid(),
-                Cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>(),
-                Container = new EngineeringModel() { Iid = Guid.NewGuid() }
-            };
-            var iterationDto = iterationPoco.ToDto();
-
-            Assert.NotNull(iterationDto.QuerySourceThing());
-
-            var operation = new Operation(iterationDto, iterationDto, OperationKind.Create);
-            Assert.NotNull(JsonFileDal.GetAssociatedCache(operation));
-        }
-
-        [Test]
-        public void VerifyCacheRetrievalThrowsExceptionIfSourceThingMissing()
-        {
-            var iterationDto = new Iteration();
-            var operation = new Operation(iterationDto, iterationDto, OperationKind.Create);
-
-            Assert.Throws<ArgumentException>(() => JsonFileDal.GetAssociatedCache(operation));
-        }
-
-        [Test]
         [Category("AppVeyorExclusion")]
         public async Task VerifyThatOpenCreatesAConnection()
         {
@@ -209,67 +183,6 @@ namespace CDP4JsonFileDal.NetCore.Tests
             var iter1 = readResult.Single(d => d.ClassKind == ClassKind.Iteration);
             Assert.IsTrue(iterObject.ClassKind == iter1.ClassKind);
             Assert.IsTrue(iterObject.Iid == iter1.Iid);
-        }
-
-        [Test]
-        public void VerifyNonExportableItems()
-        {
-            // setup engineeringmodelsetup with 2 iterationsetup instances and 2 active domains
-            var iterationSetupData1 = new CDP4Common.SiteDirectoryData.IterationSetup { Iid = Guid.NewGuid() };
-            var iterationSetupData2 = new CDP4Common.SiteDirectoryData.IterationSetup { Iid = Guid.NewGuid() };
-            var domain1 = new CDP4Common.SiteDirectoryData.DomainOfExpertise { Iid = Guid.NewGuid() };
-            var domain2 = new CDP4Common.SiteDirectoryData.DomainOfExpertise { Iid = Guid.NewGuid() };
-            var domain3 = new CDP4Common.SiteDirectoryData.DomainOfExpertise { Iid = Guid.NewGuid() };
-            var domain4 = new CDP4Common.SiteDirectoryData.DomainOfExpertise { Iid = Guid.NewGuid() };
-
-            var engineeringModelSetupData1 = new CDP4Common.SiteDirectoryData.EngineeringModelSetup { Iid = Guid.NewGuid() };
-            engineeringModelSetupData1.IterationSetup.AddRange(new[] { iterationSetupData1, iterationSetupData2 });
-            engineeringModelSetupData1.ActiveDomain.AddRange(new[] { domain1, domain2 });
-
-            // setup second engineeringmodelsetip with 1 iterationsetup instance and 2 active domains
-            var iterationSetupData3 = new CDP4Common.SiteDirectoryData.IterationSetup { Iid = Guid.NewGuid() };
-            var engineeringModelSetupData2 = new CDP4Common.SiteDirectoryData.EngineeringModelSetup { Iid = Guid.NewGuid() };
-            engineeringModelSetupData2.IterationSetup.Add(iterationSetupData3);
-            engineeringModelSetupData2.ActiveDomain.AddRange(new[] { domain3, domain4 });
-
-            // prepare the site directory
-            this.siteDirectoryData.Model.AddRange(new[] { engineeringModelSetupData1, engineeringModelSetupData2 });
-            this.siteDirectoryData.Domain.AddRange(new[] { domain1, domain2, domain3, domain4 });
-
-            // determine all Thing instances that should not be included in the export
-            var nonExportables = JsonFileDal.DetermineNonExportableItems(
-                this.siteDirectoryData, new List<SiteReferenceDataLibrary>(), new[] { iterationSetupData1 }.ToList());
-
-            // the container engineeringmodel of iterationsetupdata 1 should be in the export, so not returned here
-            CollectionAssert.DoesNotContain(nonExportables, engineeringModelSetupData1);
-
-            // iterationsetupdata 1 should be in the export, so not returned here
-            CollectionAssert.DoesNotContain(nonExportables, iterationSetupData1);
-
-            // domain 1 and 2 should be in the export, so not returned here
-            CollectionAssert.DoesNotContain(nonExportables, domain1);
-            CollectionAssert.DoesNotContain(nonExportables, domain2);
-
-            // make sure that the the other items will be skipped during export, so should be included in the returned listing
-            CollectionAssert.Contains(nonExportables, engineeringModelSetupData2);
-            CollectionAssert.Contains(nonExportables, iterationSetupData2);
-            CollectionAssert.Contains(nonExportables, iterationSetupData3);
-            CollectionAssert.Contains(nonExportables, domain3);
-            CollectionAssert.Contains(nonExportables, domain4);
-        }
-
-        [Test]
-        public void VerifyWriteSiteReferenceDataLibraryFilesThrowsException()
-        {
-            var siteReferenceDataLibraryItems = new List<List<Thing>> { new List<Thing> { new CDP4Common.SiteDirectoryData.SimpleUnit() } };
-            var zipFile = new ZipFile();
-
-            // assert in reverse method variable order assignment to trip the proper variable exception
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteSiteReferenceDataLibraryFiles(siteReferenceDataLibraryItems, zipFile, null));
-            Assert.Throws<ArgumentNullException>(() => this.dal.WriteSiteReferenceDataLibraryFiles(siteReferenceDataLibraryItems, null, null));
-
-            siteReferenceDataLibraryItems.Clear();
-            Assert.Throws<ArgumentException>(() => this.dal.WriteSiteReferenceDataLibraryFiles(siteReferenceDataLibraryItems, null, null));
         }
 
         [Test]
