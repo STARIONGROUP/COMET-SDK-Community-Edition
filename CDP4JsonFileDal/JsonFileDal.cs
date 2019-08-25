@@ -29,7 +29,6 @@ namespace CDP4JsonFileDal
 #endif
 
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
@@ -37,7 +36,6 @@ namespace CDP4JsonFileDal
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
-    using CDP4Common.Types;
     using CDP4Dal.Operations;
     using CDP4Dal;
     using CDP4Dal.Composition;
@@ -77,11 +75,6 @@ namespace CDP4JsonFileDal
         /// The iteration zip location.
         /// </summary>
         private const string IterationZipLocation = "Iterations";
-
-        /// <summary>
-        /// The FileRevisions zip location.
-        /// </summary>
-        private const string FileRevisionZipLocation = "FileRevisions";
 
         /// <summary>
         /// The NLog logger
@@ -439,7 +432,7 @@ namespace CDP4JsonFileDal
             {
                 var returned = this.ReadSiteDirectoryJson(filePath, credentials).ToList();
 
-                var log = $"The Sitedirectory contains {returned.Count()} Things";
+                var log = $"The SiteDirectory contains {returned.Count()} Things";
                 Logger.Debug(log);
 
                 // check for credentials in the returned DTO's to see if the current Person is authorised to look into this SiteDirectory
@@ -728,6 +721,18 @@ namespace CDP4JsonFileDal
             }
         }
 
+        /// <summary>
+        /// Reads SiteDirectory data from the archive
+        /// </summary>
+        /// <param name="filePath">
+        /// the file path to the archive
+        /// </param>
+        /// <param name="credentials">
+        /// the <see cref="Credentials"/> used to read the archive
+        /// </param>
+        /// <returns>
+        /// an <see cref="IEnumerable{Thing}"/> containing <see cref="SiteDirectory"/> data
+        /// </returns>
         private IEnumerable<Thing> ReadSiteDirectoryJson(string filePath, Credentials credentials)
         {
             using (var zip = ZipFile.Read(filePath))
@@ -773,11 +778,8 @@ namespace CDP4JsonFileDal
         /// <param name="archivePassword">
         /// The password of the archive.
         /// </param>
-        /// <param name="cancellationToken">
-        /// The cancellation token.
-        /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// A <see cref="List{Thing}"/>
         /// </returns>
         /// <exception cref="Exception">
         /// throws exception if the file failed to open
