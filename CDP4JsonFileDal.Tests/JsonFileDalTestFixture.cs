@@ -38,7 +38,6 @@ namespace CDP4JsonFileDal.Tests
     using CDP4Dal.DAL;
     using CDP4Dal.Operations;
     using CDP4JsonFileDal;
-    using Ionic.Zip;
     using Moq;
     using NLog;
     using NLog.Config;
@@ -120,12 +119,24 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
+        public async Task Verify_that_when_uri_path_does_not_exist_exception_is_thrown()
+        {
+            var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "does_not_exist.zip");
+            this.credentials = new Credentials("admin", "pass", new Uri(path));
+            var jsonfiledal = new JsonFileDal();
+
+            Assert.ThrowsAsync<FileLoadException>(async () => await jsonfiledal.Open(this.credentials, this.cancelationTokenSource.Token));
+        }
+
+        [Test]
         [Category("AppVeyorExclusion")]
         public async Task VerifyThatOpenCreatesAConnection()
         {
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
             Assert.NotNull(returned);
             Assert.IsNotEmpty(returned);
+
+            Assert.DoesNotThrow(() => this.dal.Close());
         }
 
         [Test]
@@ -259,6 +270,26 @@ namespace CDP4JsonFileDal.Tests
             operationContainers.Single().AddOperation(operation);
 
             Assert.IsEmpty(await this.dal.Write(operationContainers, files));
+        }
+
+        [Test]
+        public void Verify_that_JsonFileDal_IsReadOnly()
+        {
+            Assert.That(this.dal.IsReadOnly, Is.True);
+        }
+
+        [Test]
+        public void Verify_that_Create_throws_exception()
+        {
+            var alias = new CDP4Common.DTO.Alias();
+
+            Assert.Throws<NotSupportedException>(() => this.dal.Create(alias));
+        }
+
+        [Test]
+        public async Task Verify_that_Open_with_null_credentials_throws_exception()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await this.dal.Open(null, this.cancelationTokenSource.Token));
         }
     }
 }
