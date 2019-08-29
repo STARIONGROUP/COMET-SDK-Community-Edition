@@ -218,6 +218,31 @@ namespace CDP4Common.SiteDirectoryData
         }
 
         /// <summary>
+        /// Asserts whether a <see cref="FileType"/> is in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <param name="fileType">
+        /// The subject <see cref="FileType"/>
+        /// </param>
+        /// <returns>
+        /// true if the <see cref="FileType"/> is on the chain of <see cref="ReferenceDataLibrary"/>, false if not
+        /// </returns>
+        /// <remarks>
+        /// the current <see cref="ReferenceDataLibrary"/> is in included in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </remarks>
+        public bool IsFileTypeInChainOfRdls(FileType fileType)
+        {
+            foreach (var referenceDataLibrary in this.AggregatedReferenceDataLibrary)
+            {
+                if (referenceDataLibrary.FileType.Any(f => f.Iid == fileType.Iid))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Queries the <see cref="Glossary"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
         /// current <see cref="ReferenceDataLibrary"/>
         /// </summary>

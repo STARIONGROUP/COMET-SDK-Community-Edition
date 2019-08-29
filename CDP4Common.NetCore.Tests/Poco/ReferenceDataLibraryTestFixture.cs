@@ -235,5 +235,25 @@ namespace CDP4Common.Tests.Poco
             
             Assert.That(new List<Constant>{mRdl_Constant, sRdl1_Constant, sRdl11_Constant}, Is.EquivalentTo(this.mRdl.QueryConstantsFromChainOfRdls()));
         }
+
+        [Test]
+        public void Verify_that_IsCategoryInChainOfRdls_returns_expected_result()
+        {
+            var category = new Category();
+            Assert.That(this.mRdl.IsCategoryInChainOfRdls(category), Is.False);
+
+            this.sRdl1.DefinedCategory.Add(category);
+            Assert.That(this.mRdl.IsCategoryInChainOfRdls(category), Is.True);
+        }
+
+        [Test]
+        public void Verify_that_IsFileTypeInChainOfRdls_returns_expected_result()
+        {
+            var fileType = new FileType();
+            Assert.That(this.mRdl.IsFileTypeInChainOfRdls(fileType), Is.False);
+
+            this.sRdl1.FileType.Add(fileType);
+            Assert.That(this.mRdl.IsFileTypeInChainOfRdls(fileType), Is.True);
+        }
     }
 }
