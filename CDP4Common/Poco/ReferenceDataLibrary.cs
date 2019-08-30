@@ -138,6 +138,31 @@ namespace CDP4Common.SiteDirectoryData
         }
 
         /// <summary>
+        /// Asserts whether a <see cref="FileType"/> is in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <param name="parameterType">
+        /// The subject <see cref="ParameterType"/>
+        /// </param>
+        /// <returns>
+        /// true if the <see cref="ParameterType"/> is on the chain of <see cref="ReferenceDataLibrary"/>, false if not
+        /// </returns>
+        /// <remarks>
+        /// the current <see cref="ReferenceDataLibrary"/> is in included in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </remarks>
+        public bool IsParameterTypeInChainOfRdls(ParameterType parameterType)
+        {
+            foreach (var referenceDataLibrary in this.AggregatedReferenceDataLibrary)
+            {
+                if (referenceDataLibrary.ParameterType.Any(f => f.Iid == parameterType.Iid))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Queries the <see cref="MeasurementScale"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
         /// current <see cref="ReferenceDataLibrary"/>
         /// </summary>

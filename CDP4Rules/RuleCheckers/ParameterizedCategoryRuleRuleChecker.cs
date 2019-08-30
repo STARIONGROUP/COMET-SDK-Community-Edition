@@ -73,6 +73,44 @@ namespace CDP4Rules.RuleCheckers
         }
 
         /// <summary>
+        /// Checks whether a referenced <see cref="ParameterType"/> is the in chain of Reference Data Libraries
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="Thing"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="ParameterizedCategoryRule"/>
+        /// </exception>
+        [Rule("MA-0220")]
+        public IEnumerable<RuleCheckResult> CheckWhetherReferencedParameterTypeIsInChainOfRdls(Thing thing)
+        {
+            var parameterizedCategoryRule = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            var referenceDataLibrary = (ReferenceDataLibrary) thing.Container;
+
+            foreach (var parameterType in parameterizedCategoryRule.ParameterType)
+            {
+                if (!referenceDataLibrary.IsParameterTypeInChainOfRdls(parameterType))
+                {
+                    var result = new RuleCheckResult(thing, rule.Id, $"The referenced ParameterType {parameterType.Iid}:{parameterType.ShortName} is not in the chain of Reference Data Libraries", SeverityKind.Error);
+                    results.Add(result);
+                }
+            }
+            
+            return results;
+        }
+
+        /// <summary>
         /// Verifies that the <see cref="Thing"/> is of the correct type
         /// </summary>
         /// <param name="thing">

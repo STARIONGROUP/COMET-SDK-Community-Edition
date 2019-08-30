@@ -255,5 +255,15 @@ namespace CDP4Common.Tests.Poco
             this.sRdl1.FileType.Add(fileType);
             Assert.That(this.mRdl.IsFileTypeInChainOfRdls(fileType), Is.True);
         }
+
+        [Test]
+        public void Verify_that_IsParameterTypeInChainOfRdls_returns_expected_result()
+        {
+            var parameterType = new TextParameterType();
+            Assert.That(this.mRdl.IsParameterTypeInChainOfRdls(parameterType), Is.False);
+
+            this.sRdl1.ParameterType.Add(parameterType);
+            Assert.That(this.mRdl.IsParameterTypeInChainOfRdls(parameterType), Is.True);
+        }
     }
 }

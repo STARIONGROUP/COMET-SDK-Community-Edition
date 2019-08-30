@@ -25,6 +25,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
     using System.Linq;
+    using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Rules.Common;
@@ -93,6 +94,50 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             this.parameterizedCategoryRule.Category = category;
 
             var results = this.parameterizedCategoryRuleRuleChecker.CheckWhetherReferencedCategoryIsInChainOfRdls(this.parameterizedCategoryRule);
+            Assert.That(results, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_CheckWhetherReferencedParameterTypeIsInChainOfRdls_is_called_with_nukll_exception_is_thrown()
+        {
+            Assert.Throws<ArgumentNullException>(() => this.parameterizedCategoryRuleRuleChecker.CheckWhetherReferencedParameterTypeIsInChainOfRdls(null));
+        }
+
+        [Test]
+        public void Verify_that_when_CheckWhetherReferencedParameterTypeIsInChainOfRdls_is_called_with_non_ParameterizedCategoryRule_exception_is_thrown()
+        {
+            var alias = new Alias();
+            Assert.Throws<ArgumentException>(() => this.parameterizedCategoryRuleRuleChecker.CheckWhetherReferencedParameterTypeIsInChainOfRdls(alias));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_ParameterType_is_not_in_chain_of_rdl_result_is_returned()
+        {
+            var otherSiteReferenceDataLibrary = new SiteReferenceDataLibrary();
+            var parameterType = new TextParameterType { Iid = Guid.Parse("df9031c7-85f2-4728-b303-146835e97fc3"), ShortName = "TEXT" };
+            otherSiteReferenceDataLibrary.ParameterType.Add(parameterType);
+
+            this.parameterizedCategoryRule.ParameterType.Add(parameterType);
+
+            var result = this.parameterizedCategoryRuleRuleChecker.CheckWhetherReferencedParameterTypeIsInChainOfRdls(this.parameterizedCategoryRule).Single();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0220"));
+            Assert.That(result.Description, Is.EqualTo("The referenced ParameterType df9031c7-85f2-4728-b303-146835e97fc3:TEXT is not in the chain of Reference Data Libraries"));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
+            Assert.That(result.Thing, Is.EqualTo(this.parameterizedCategoryRule));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_ParameterType_is_in_chain_of_rdl_no_result_is_returned()
+        {
+            
+            var parameterType = new TextParameterType { Iid = Guid.Parse("df9031c7-85f2-4728-b303-146835e97fc3"), ShortName = "TEXT" };
+            this.siteReferenceDataLibrary.ParameterType.Add(parameterType);
+
+            this.parameterizedCategoryRule.ParameterType.Add(parameterType);
+
+            var results = this.parameterizedCategoryRuleRuleChecker.CheckWhetherReferencedParameterTypeIsInChainOfRdls(this.parameterizedCategoryRule);
+
             Assert.That(results, Is.Empty);
         }
     }
