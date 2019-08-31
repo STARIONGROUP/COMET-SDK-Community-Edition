@@ -35,7 +35,7 @@ namespace CDP4Rules.RuleCheckers
     /// The purpose of the <see cref="ParameterTypeComponentRuleChecker"/> is to execute the rules for instances of type <see cref="ParameterTypeComponent"/>
     /// </summary>
     [RuleChecker(typeof(ParameterTypeComponent))]
-    public class ParameterTypeComponentRuleChecker
+    public class ParameterTypeComponentRuleChecker : RuleChecker
     {
         /// <summary>
         /// Checks whether a referenced <see cref="ParameterType"/> is the in chain of Reference Data Libraries

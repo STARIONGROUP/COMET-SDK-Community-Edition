@@ -305,5 +305,15 @@ namespace CDP4Common.Tests.Poco
             this.sRdl1.ReferenceSource.Add(referenceSource);
             Assert.That(this.mRdl.IsReferenceSourceInChainOfRdls(referenceSource), Is.True);
         }
+
+        [Test]
+        public void Verify_that_IsUnitPrefixInChainOfRdls_returns_expected_result()
+        {
+            var unitPrefix = new UnitPrefix();
+            Assert.That(this.mRdl.IsUnitPrefixInChainOfRdls(unitPrefix), Is.False);
+
+            this.sRdl1.UnitPrefix.Add(unitPrefix);
+            Assert.That(this.mRdl.IsUnitPrefixInChainOfRdls(unitPrefix), Is.True);
+        }
     }
 }

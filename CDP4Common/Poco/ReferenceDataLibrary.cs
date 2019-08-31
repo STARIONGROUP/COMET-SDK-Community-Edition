@@ -230,6 +230,32 @@ namespace CDP4Common.SiteDirectoryData
         }
 
         /// <summary>
+        /// Asserts whether a <see cref="UnitPrefix"/> is in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <param name="unitPrefix">
+        /// The subject <see cref="UnitPrefix"/>
+        /// </param>
+        /// <returns>
+        /// true if the <see cref="UnitPrefix"/> is on the chain of <see cref="ReferenceDataLibrary"/>, false if not
+        /// </returns>
+        /// <remarks>
+        /// The current <see cref="ReferenceDataLibrary"/> is in included in the chain of <see cref="ReferenceDataLibrary"/>
+        /// Equality is determined based on unique identifier (iid) equality.
+        /// </remarks>
+        public bool IsUnitPrefixInChainOfRdls(UnitPrefix unitPrefix)
+        {
+            foreach (var referenceDataLibrary in this.AggregatedReferenceDataLibrary)
+            {
+                if (referenceDataLibrary.UnitPrefix.Any(u => u.Iid == unitPrefix.Iid))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Queries the <see cref="MeasurementUnit"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
         /// current <see cref="ReferenceDataLibrary"/>
         /// </summary>
