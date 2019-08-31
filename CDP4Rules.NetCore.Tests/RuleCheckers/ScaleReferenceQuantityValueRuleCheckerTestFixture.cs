@@ -100,5 +100,43 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var scale = new RatioScale
+            {
+                Iid = Guid.Parse("1191838a-0f9f-4d2c-8369-cf729d281dee"),
+                ShortName = "SCALE",
+                IsDeprecated = true
+            };
+
+            this.scaleReferenceQuantityValue.Scale = scale;
+
+            var results = this.scaleReferenceQuantityValueRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.scaleReferenceQuantityValue);
+
+            var first = results.First();
+            Assert.That(first.Id, Is.EqualTo("MA-0500"));
+            Assert.That(first.Description, Is.EqualTo("The referenced MeasurementScale 1191838a-0f9f-4d2c-8369-cf729d281dee:SCALE of ScaleReferenceQuantityValue.Scale is deprecated"));
+            Assert.That(first.Thing, Is.EqualTo(this.scaleReferenceQuantityValue));
+            Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var scale = new RatioScale
+            {
+                Iid = Guid.Parse("1191838a-0f9f-4d2c-8369-cf729d281dee"),
+                ShortName = "SCALE",
+                IsDeprecated = false
+            };
+
+            this.scaleReferenceQuantityValue.Scale = scale;
+            
+            var results = this.scaleReferenceQuantityValueRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.scaleReferenceQuantityValue);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }

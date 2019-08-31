@@ -130,13 +130,70 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         [Test]
         public void Verify_that_when_referenced_ParameterType_is_in_chain_of_rdl_no_result_is_returned()
         {
-            
             var parameterType = new TextParameterType { Iid = Guid.Parse("df9031c7-85f2-4728-b303-146835e97fc3"), ShortName = "TEXT" };
             this.siteReferenceDataLibrary.ParameterType.Add(parameterType);
 
             this.parameterizedCategoryRule.ParameterType.Add(parameterType);
 
             var results = this.parameterizedCategoryRuleRuleChecker.CheckWhetherReferencedParameterTypeIsInChainOfRdls(this.parameterizedCategoryRule);
+
+            Assert.That(results, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var category = new Category
+            {
+                Iid = Guid.Parse("df9031c7-85f2-4728-b303-146835e97fc3"),
+                ShortName = "PROD",
+                IsDeprecated = true
+            };
+            this.parameterizedCategoryRule.Category = category;
+
+            var parameterType = new TextParameterType
+            {
+                Iid = Guid.Parse("df9031c7-85f2-4728-b303-146835e97fc3"),
+                ShortName = "TEXT",
+                IsDeprecated = true
+            };
+            this.parameterizedCategoryRule.ParameterType.Add(parameterType);
+
+            var results = this.parameterizedCategoryRuleRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.parameterizedCategoryRule);
+
+            var first = results.First();
+            Assert.That(first.Id, Is.EqualTo("MA-0500"));
+            Assert.That(first.Description, Is.EqualTo("The referenced Category df9031c7-85f2-4728-b303-146835e97fc3:PROD of ParameterizedCategoryRule.Category is deprecated"));
+            Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(first.Thing, Is.EqualTo(this.parameterizedCategoryRule));
+
+            var last = results.Last();
+            Assert.That(last.Id, Is.EqualTo("MA-0500"));
+            Assert.That(last.Description, Is.EqualTo("The referenced ParameterType df9031c7-85f2-4728-b303-146835e97fc3:TEXT in ParameterizedCategoryRule.ParameterType is deprecated"));
+            Assert.That(last.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(last.Thing, Is.EqualTo(this.parameterizedCategoryRule));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var category = new Category
+            {
+                Iid = Guid.Parse("df9031c7-85f2-4728-b303-146835e97fc3"),
+                ShortName = "PROD",
+                IsDeprecated = false
+            };
+            this.parameterizedCategoryRule.Category = category;
+
+            var parameterType = new TextParameterType
+            {
+                Iid = Guid.Parse("df9031c7-85f2-4728-b303-146835e97fc3"),
+                ShortName = "TEXT",
+                IsDeprecated = false
+            };
+            this.parameterizedCategoryRule.ParameterType.Add(parameterType);
+
+            var results = this.parameterizedCategoryRuleRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.parameterizedCategoryRule);
 
             Assert.That(results, Is.Empty);
         }

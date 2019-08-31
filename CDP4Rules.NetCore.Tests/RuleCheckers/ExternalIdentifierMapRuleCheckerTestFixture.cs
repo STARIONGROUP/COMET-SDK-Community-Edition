@@ -109,5 +109,43 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var referenceSource = new ReferenceSource
+            {
+                Iid = Guid.Parse("3c44c0e3-d2de-43f9-9636-8235984dc4bf"),
+                ShortName = "SOURCE",
+                IsDeprecated = true
+            };
+
+            this.externalIdentifierMap.ExternalFormat = referenceSource;
+
+            var results = this.externalIdentifierMapRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.externalIdentifierMap);
+
+            var first = results.First();
+            Assert.That(first.Id, Is.EqualTo("MA-0500"));
+            Assert.That(first.Description, Is.EqualTo("The referenced ReferenceSource 3c44c0e3-d2de-43f9-9636-8235984dc4bf:SOURCE of ExternalIdentifierMap.ExternalFormat is deprecated"));
+            Assert.That(first.Thing, Is.EqualTo(this.externalIdentifierMap));
+            Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var referenceSource = new ReferenceSource
+            {
+                Iid = Guid.Parse("3c44c0e3-d2de-43f9-9636-8235984dc4bf"),
+                ShortName = "SOURCE",
+                IsDeprecated = false
+            };
+
+            this.externalIdentifierMap.ExternalFormat = referenceSource;
+
+            var results = this.externalIdentifierMapRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.externalIdentifierMap);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }

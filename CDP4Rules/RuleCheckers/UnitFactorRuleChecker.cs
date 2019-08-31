@@ -38,6 +38,47 @@ namespace CDP4Rules.RuleCheckers
     public class UnitFactorRuleChecker : RuleChecker
     {
         /// <summary>
+        /// Checks whether a referenced <see cref="IDeprecatableThing"/> is deprecated
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="UnitFactor"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="UnitFactor"/>
+        /// </exception>
+        [Rule("MA-0500")]
+        public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
+        {
+            var unitFactor = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            var derivedUnit = (DerivedUnit) unitFactor.Container;
+            if (derivedUnit.IsDeprecated)
+            {
+                return results;
+            }
+
+            if (unitFactor.Unit.IsDeprecated)
+            {
+                var result = new RuleCheckResult(thing, rule.Id,
+                    $"The referenced MeasurementUnit {unitFactor.Unit.Iid}:{unitFactor.Unit.ShortName} of UnitFactor.Unit is deprecated",
+                    SeverityKind.Warning);
+                results.Add(result);
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Checks whether a referenced <see cref="MeasurementUnit"/> is the in chain of Reference Data Libraries
         /// </summary>
         /// <param name="thing">

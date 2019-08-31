@@ -142,5 +142,65 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var scale = new RatioScale()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "RATIO",
+                IsDeprecated = true
+            };
+
+            var parameterType = new TextParameterType()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "TEXT",
+                IsDeprecated = true
+            };
+
+            this.parameter.Scale = scale;
+            this.parameter.ParameterType = parameterType;
+
+            var results = this.parameterBaseRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.parameter);
+
+            var first = results.First();
+            Assert.That(first.Id, Is.EqualTo("MA-0500"));
+            Assert.That(first.Description, Is.EqualTo("The referenced MeasurementScale 7f1bacf8-9517-44d1-aead-6cf9c3027db7:RATIO of ParameterBase.Scale is deprecated"));
+            Assert.That(first.Thing, Is.EqualTo(this.parameter));
+            Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
+
+            var second = results.ElementAt(1);
+            Assert.That(second.Id, Is.EqualTo("MA-0500"));
+            Assert.That(second.Description, Is.EqualTo("The referenced ParameterType 7f1bacf8-9517-44d1-aead-6cf9c3027db7:TEXT of ParameterBase.ParameterType is deprecated"));
+            Assert.That(second.Thing, Is.EqualTo(this.parameter));
+            Assert.That(second.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var scale = new RatioScale()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "RATIO",
+                IsDeprecated = false
+            };
+
+            var parameterType = new TextParameterType()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "TEXT",
+                IsDeprecated = false
+            };
+
+            this.parameter.Scale = scale;
+            this.parameter.ParameterType = parameterType;
+
+            var results = this.parameterBaseRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.parameter);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }

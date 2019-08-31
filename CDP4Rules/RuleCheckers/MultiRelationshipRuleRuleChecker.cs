@@ -25,11 +25,9 @@ namespace CDP4Rules.RuleCheckers
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using CDP4Common.CommonData;
-    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Rules.Common;
 
@@ -78,6 +76,56 @@ namespace CDP4Rules.RuleCheckers
                     var result = new RuleCheckResult(thing, rule.Id, $"The MultiRelationshipRule.RelatedCategory {category.Iid}:{category.ShortName} of {multiRelationshipRule.Iid}:{multiRelationshipRule.ShortName} is not in the chain of Reference Data Libraries", SeverityKind.Error);
                     results.Add(result);
                 }
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Checks whether a referenced <see cref="IDeprecatableThing"/> is deprecated
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="MultiRelationshipRule"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="MultiRelationshipRule"/>
+        /// </exception>
+        [Rule("MA-0500")]
+        public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
+        {
+            var multiRelationshipRule = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            if (!multiRelationshipRule.IsDeprecated)
+            {
+                if (multiRelationshipRule.RelationshipCategory.IsDeprecated)
+                {
+                    var result = new RuleCheckResult(thing, rule.Id,
+                        $"The referenced Category {multiRelationshipRule.RelationshipCategory.Iid}:{multiRelationshipRule.RelationshipCategory.ShortName} of MultiRelationshipRule.RelationshipCategory is deprecated",
+                        SeverityKind.Warning);
+                    results.Add(result);
+                }
+
+                foreach (var category in multiRelationshipRule.RelatedCategory)
+                {
+                    if (category.IsDeprecated)
+                    {
+                        var result = new RuleCheckResult(thing, rule.Id,
+                            $"The referenced Category {category.Iid}:{category.ShortName} of MultiRelationshipRule.RelatedCategory is deprecated",
+                            SeverityKind.Warning);
+                        results.Add(result);
+                    }
+                }
+
             }
 
             return results;

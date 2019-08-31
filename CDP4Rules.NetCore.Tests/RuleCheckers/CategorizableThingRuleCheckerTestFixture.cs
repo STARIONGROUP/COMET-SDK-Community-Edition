@@ -211,5 +211,53 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             Assert.That(result.Thing, Is.EqualTo(elementDefinition));
             Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var elementDefinition = new ElementDefinition();
+            var requirement = new Requirement();
+            var category = new Category
+            {
+                Iid = Guid.Parse("55e32513-9e45-4a63-8cd4-e84b2f320a8d"),
+                ShortName = "DEPRECATED",
+                IsDeprecated = true
+            };
+
+            elementDefinition.Category.Add(category);
+            var result = this.categorizableThingRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(elementDefinition).Single();
+            Assert.That(result.Id, Is.EqualTo("MA-0500"));
+            Assert.That(result.Description, Is.EqualTo("The referenced Category 55e32513-9e45-4a63-8cd4-e84b2f320a8d:DEPRECATED of ICategorizableThing.Category is deprecated"));
+            Assert.That(result.Thing, Is.EqualTo(elementDefinition));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+
+            requirement.Category.Add(category);
+            result = this.categorizableThingRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(requirement).Single();
+            Assert.That(result.Id, Is.EqualTo("MA-0500"));
+            Assert.That(result.Description, Is.EqualTo("The referenced Category 55e32513-9e45-4a63-8cd4-e84b2f320a8d:DEPRECATED of ICategorizableThing.Category is deprecated"));
+            Assert.That(result.Thing, Is.EqualTo(requirement));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var elementDefinition = new ElementDefinition();
+            var requirement = new Requirement();
+            var category = new Category
+            {
+                Iid = Guid.Parse("55e32513-9e45-4a63-8cd4-e84b2f320a8d"),
+                ShortName = "NOTDEPRECATED",
+                IsDeprecated = false
+            };
+
+            elementDefinition.Category.Add(category);
+            var results = this.categorizableThingRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(elementDefinition);
+            Assert.That(results, Is.Empty);
+
+            requirement.Category.Add(category);
+            results = this.categorizableThingRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(requirement);
+            Assert.That(results, Is.Empty);
+        }
     }
 }

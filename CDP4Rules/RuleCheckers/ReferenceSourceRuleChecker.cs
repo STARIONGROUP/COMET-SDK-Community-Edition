@@ -38,6 +38,54 @@ namespace CDP4Rules.RuleCheckers
     public class ReferenceSourceRuleChecker : RuleChecker
     {
         /// <summary>
+        /// Checks whether a referenced <see cref="IDeprecatableThing"/> is deprecated
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="ReferenceSource"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="ReferenceSource"/>
+        /// </exception>
+        [Rule("MA-0500")]
+        public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
+        {
+            var referenceSource = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            if (referenceSource.IsDeprecated)
+            {
+                return results;
+            }
+
+            if (referenceSource.Publisher.IsDeprecated)
+            {
+                var result = new RuleCheckResult(thing, rule.Id,
+                    $"The referenced Organization {referenceSource.Publisher.Iid}:{referenceSource.Publisher.ShortName} of ReferenceSource.Publisher is deprecated",
+                    SeverityKind.Warning);
+                results.Add(result);
+            }
+
+            if (referenceSource.PublishedIn.IsDeprecated)
+            {
+                var result = new RuleCheckResult(thing, rule.Id,
+                    $"The referenced ReferenceSource {referenceSource.PublishedIn.Iid}:{referenceSource.PublishedIn.ShortName} of ReferenceSource.PublishedIn is deprecated",
+                    SeverityKind.Warning);
+                results.Add(result);
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Checks whether a referenced <see cref="ReferenceSource"/> is the in chain of Reference Data Libraries
         /// </summary>
         /// <param name="thing">

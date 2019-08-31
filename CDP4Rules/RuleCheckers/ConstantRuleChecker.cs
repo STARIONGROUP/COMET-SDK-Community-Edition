@@ -38,6 +38,54 @@ namespace CDP4Rules.RuleCheckers
     public class ConstantRuleChecker : RuleChecker
     {
         /// <summary>
+        /// Checks whether a referenced <see cref="IDeprecatableThing"/> is deprecated
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="Constant"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="Constant"/>
+        /// </exception>
+        [Rule("MA-0500")]
+        public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
+        {
+            var constant = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            if (constant.IsDeprecated)
+            {
+                return results;
+            }
+
+            if (constant.Scale != null && constant.Scale.IsDeprecated)
+            {
+                var result = new RuleCheckResult(thing, rule.Id,
+                    $"The referenced MeasurementScale {constant.Scale.Iid}:{constant.Scale.ShortName} of Constant.Scale is deprecated",
+                    SeverityKind.Warning);
+                results.Add(result);
+            }
+
+            if (constant.ParameterType.IsDeprecated)
+            {
+                var result = new RuleCheckResult(thing, rule.Id,
+                    $"The referenced ParameterType {constant.ParameterType.Iid}:{constant.ParameterType.ShortName} of Constant.ParameterType is deprecated",
+                    SeverityKind.Warning);
+                results.Add(result);
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Checks whether a referenced <see cref="ParameterType"/> is the in chain of Reference Data Libraries
         /// </summary>
         /// <param name="thing">

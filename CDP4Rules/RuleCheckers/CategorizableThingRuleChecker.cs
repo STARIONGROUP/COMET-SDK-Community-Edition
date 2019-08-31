@@ -39,6 +39,61 @@ namespace CDP4Rules.RuleCheckers
     public class CategorizableThingRuleChecker : RuleChecker
     {
         /// <summary>
+        /// Checks whether a referenced <see cref="IDeprecatableThing"/> is deprecated
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="PrefixedUnit"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="PrefixedUnit"/>
+        /// </exception>
+        [Rule("MA-0500")]
+        public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
+        {
+            var categorizableThing = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            var deprecatableThing = thing as IDeprecatableThing;
+            if (deprecatableThing != null && !deprecatableThing.IsDeprecated)
+            {
+                foreach (var category in categorizableThing.Category)
+                {
+                    if (category.IsDeprecated)
+                    {
+                        var result = new RuleCheckResult(thing, rule.Id,
+                            $"The referenced Category {category.Iid}:{category.ShortName} of ICategorizableThing.Category is deprecated",
+                            SeverityKind.Warning);
+                        results.Add(result);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var category in categorizableThing.Category)
+                {
+                    if (category.IsDeprecated)
+                    {
+                        var result = new RuleCheckResult(thing, rule.Id,
+                            $"The referenced Category {category.Iid}:{category.ShortName} of ICategorizableThing.Category is deprecated",
+                            SeverityKind.Warning);
+                        results.Add(result);
+                    }
+                }
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Checks whether the <see cref="ICategorizableThing"/> is not a member of the same category more
         /// than once, including through sub-classing of categories 
         /// </summary>

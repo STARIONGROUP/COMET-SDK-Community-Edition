@@ -38,6 +38,56 @@ namespace CDP4Rules.RuleCheckers
     public class ParameterizedCategoryRuleRuleChecker : RuleChecker
     {
         /// <summary>
+        /// Checks whether a referenced <see cref="IDeprecatableThing"/> is deprecated
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="ParameterizedCategoryRule"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="ParameterizedCategoryRule"/>
+        /// </exception>
+        [Rule("MA-0500")]
+        public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
+        {
+            var parameterizedCategoryRule = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            if (!parameterizedCategoryRule.IsDeprecated)
+            {
+                if (parameterizedCategoryRule.Category.IsDeprecated)
+                {
+                    var result = new RuleCheckResult(thing, rule.Id,
+                        $"The referenced Category {parameterizedCategoryRule.Category.Iid}:{parameterizedCategoryRule.Category.ShortName} of ParameterizedCategoryRule.Category is deprecated",
+                        SeverityKind.Warning);
+                    results.Add(result);
+                }
+
+                foreach (var parameterType in parameterizedCategoryRule.ParameterType)
+                {
+                    if (parameterType.IsDeprecated)
+                    {
+                        var result = new RuleCheckResult(thing, rule.Id,
+                            $"The referenced ParameterType {parameterType.Iid}:{parameterType.ShortName} in ParameterizedCategoryRule.ParameterType is deprecated",
+                            SeverityKind.Warning);
+                        results.Add(result);
+                    }
+                }
+
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Checks whether a referenced <see cref="Category"/> is the in chain of Reference Data Libraries
         /// </summary>
         /// <param name="thing">

@@ -36,7 +36,7 @@ namespace CDP4Rules.RuleCheckers
     /// The purpose of the <see cref="BinaryRelationshipRuleChecker"/> is to execute the rules for instances of type <see cref="BinaryRelationship"/>
     /// </summary>
     [RuleChecker(typeof(BinaryRelationship))]
-    public class BinaryRelationshipRuleChecker
+    public class BinaryRelationshipRuleChecker : RuleChecker
     {
         /// <summary>
         /// Checks whether the source and target of a <see cref="BinaryRelationship"/> are contained by the same iteration.

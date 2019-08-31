@@ -148,5 +148,65 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var scale = new RatioScale
+            {
+                Iid = Guid.Parse("1191838a-0f9f-4d2c-8369-cf729d281dee"),
+                ShortName = "SCALE",
+                IsDeprecated = true
+            };
+
+            var parameterType = new TextParameterType()
+            {
+                Iid = Guid.Parse("1191838a-0f9f-4d2c-8369-cf729d281dee"),
+                ShortName = "TEXT",
+                IsDeprecated = true
+            };
+
+            this.simpleParameterValue.Scale = scale;
+            this.simpleParameterValue.ParameterType = parameterType;
+
+            var results = this.simpleParameterValueRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.simpleParameterValue);
+
+            var first = results.First();
+            Assert.That(first.Id, Is.EqualTo("MA-0500"));
+            Assert.That(first.Description, Is.EqualTo("The referenced MeasurementScale 1191838a-0f9f-4d2c-8369-cf729d281dee:SCALE of SimpleParameterValue.Scale is deprecated"));
+            Assert.That(first.Thing, Is.EqualTo(this.simpleParameterValue));
+            Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
+
+            var second = results.ElementAt(1);
+            Assert.That(second.Id, Is.EqualTo("MA-0500"));
+            Assert.That(second.Description, Is.EqualTo("The referenced ParameterType 1191838a-0f9f-4d2c-8369-cf729d281dee:TEXT of SimpleParameterValue.ParameterType is deprecated"));
+            Assert.That(second.Thing, Is.EqualTo(this.simpleParameterValue));
+            Assert.That(second.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var scale = new RatioScale
+            {
+                Iid = Guid.Parse("1191838a-0f9f-4d2c-8369-cf729d281dee"),
+                ShortName = "SCALE",
+                IsDeprecated = false
+            };
+
+            var parameterType = new TextParameterType()
+            {
+                Iid = Guid.Parse("1191838a-0f9f-4d2c-8369-cf729d281dee"),
+                ShortName = "TEXT",
+                IsDeprecated = false
+            };
+
+            this.simpleParameterValue.Scale = scale;
+            this.simpleParameterValue.ParameterType = parameterType;
+
+            var results = this.simpleParameterValueRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.simpleParameterValue);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }

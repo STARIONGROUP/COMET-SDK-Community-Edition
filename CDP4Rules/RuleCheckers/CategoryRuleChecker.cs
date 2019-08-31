@@ -35,7 +35,7 @@ namespace CDP4Rules.RuleCheckers
     /// The purpose of the <see cref="CategoryRuleChecker"/> is to execute the rules for instances of type <see cref="Category"/>
     /// </summary>
     [RuleChecker(typeof(Category))]
-    public class CategoryRuleChecker
+    public class CategoryRuleChecker : RuleChecker
     {
         /// <summary>
         /// Checks whether a referenced <see cref="Category"/> is the in chain of Reference Data Libraries

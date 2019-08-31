@@ -96,5 +96,91 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var organization = new Organization
+            {
+                Iid = Guid.Parse("9f4daf6a-09e2-4ed5-a8be-79a0765654ca"),
+                ShortName = "RHEA",
+                IsDeprecated = true
+            };
+
+            var referencedReferenceSource = new ReferenceSource
+            {
+                Iid = Guid.Parse("3c44c0e3-d2de-43f9-9636-8235984dc4bf"),
+                ShortName = "REFERENCED-SOURCE",
+                IsDeprecated = true
+            };
+
+            this.referenceSource.Publisher = organization;
+            this.referenceSource.PublishedIn = referencedReferenceSource;
+            
+            var results = this.referenceSourceRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.referenceSource);
+
+            var first = results.First();
+            Assert.That(first.Id, Is.EqualTo("MA-0500"));
+            Assert.That(first.Description, Is.EqualTo("The referenced Organization 9f4daf6a-09e2-4ed5-a8be-79a0765654ca:RHEA of ReferenceSource.Publisher is deprecated"));
+            Assert.That(first.Thing, Is.EqualTo(this.referenceSource));
+            Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
+
+            var last = results.Last();
+            Assert.That(last.Id, Is.EqualTo("MA-0500"));
+            Assert.That(last.Description, Is.EqualTo("The referenced ReferenceSource 3c44c0e3-d2de-43f9-9636-8235984dc4bf:REFERENCED-SOURCE of ReferenceSource.PublishedIn is deprecated"));
+            Assert.That(last.Thing, Is.EqualTo(this.referenceSource));
+            Assert.That(last.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var organization = new Organization
+            {
+                Iid = Guid.Parse("9f4daf6a-09e2-4ed5-a8be-79a0765654ca"),
+                ShortName = "RHEA",
+                IsDeprecated = false
+            };
+
+            var referencedReferenceSource = new ReferenceSource
+            {
+                Iid = Guid.Parse("3c44c0e3-d2de-43f9-9636-8235984dc4bf"),
+                ShortName = "REFERENCED-SOURCE",
+                IsDeprecated = false
+            };
+
+            this.referenceSource.Publisher = organization;
+            this.referenceSource.PublishedIn = referencedReferenceSource;
+
+            var results = this.referenceSourceRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.referenceSource);
+
+            Assert.That(results, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_DeprecatableThing_Is_Deprecated_no_result_is_returned()
+        {
+            var organization = new Organization
+            {
+                Iid = Guid.Parse("9f4daf6a-09e2-4ed5-a8be-79a0765654ca"),
+                ShortName = "RHEA",
+                IsDeprecated = true
+            };
+
+            var referencedReferenceSource = new ReferenceSource
+            {
+                Iid = Guid.Parse("3c44c0e3-d2de-43f9-9636-8235984dc4bf"),
+                ShortName = "REFERENCED-SOURCE",
+                IsDeprecated = true
+            };
+
+            this.referenceSource.Publisher = organization;
+            this.referenceSource.PublishedIn = referencedReferenceSource;
+            this.referenceSource.IsDeprecated = true;
+
+            var results = this.referenceSourceRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.referenceSource);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }

@@ -24,7 +24,6 @@
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
@@ -108,6 +107,43 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             this.fileRevision.FileType.Add(fileType);
 
             var results = this.fileRevisionRuleChecker.CheckWhetherReferencedFileTypeIsInChainOfRlds(this.fileRevision);
+
+            Assert.That(results, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var fileType = new FileType()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "TAR",
+                IsDeprecated = true
+            };
+
+            this.fileRevision.FileType.Add(fileType);
+
+            var result = this.fileRevisionRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.fileRevision).First();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0500"));
+            Assert.That(result.Description, Is.EqualTo("The referenced FileType 7f1bacf8-9517-44d1-aead-6cf9c3027db7:TAR in FileRevision.FileType is deprecated"));
+            Assert.That(result.Thing, Is.EqualTo(this.fileRevision));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var fileType = new FileType()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "TAR",
+                IsDeprecated = false
+            };
+
+            this.fileRevision.FileType.Add(fileType);
+
+            var results = this.fileRevisionRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.fileRevision);
 
             Assert.That(results, Is.Empty);
         }

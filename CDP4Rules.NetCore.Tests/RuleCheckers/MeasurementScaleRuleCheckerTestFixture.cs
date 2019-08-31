@@ -97,5 +97,61 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var unit = new SimpleUnit()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "SIMPLE",
+                IsDeprecated = true
+            };
+
+            this.ratioScale.Unit = unit;
+
+            var results = this.measurementScaleRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.ratioScale);
+
+            var first = results.First();
+            Assert.That(first.Id, Is.EqualTo("MA-0500"));
+            Assert.That(first.Description, Is.EqualTo("The referenced MeasurementUnit 7f1bacf8-9517-44d1-aead-6cf9c3027db7:SIMPLE of MeasurementScale.Unit is deprecated"));
+            Assert.That(first.Thing, Is.EqualTo(this.ratioScale));
+            Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var unit = new SimpleUnit()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "SIMPLE",
+                IsDeprecated = false
+            };
+
+            this.ratioScale.Unit = unit;
+
+            var results = this.measurementScaleRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.ratioScale);
+
+            Assert.That(results, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_DeprecatableThing_Is_Deprecated_no_result_is_returned()
+        {
+            var unit = new SimpleUnit()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "SIMPLE",
+                IsDeprecated = true
+            };
+
+            this.ratioScale.Unit = unit;
+            this.ratioScale.IsDeprecated = true;
+
+            var results = this.measurementScaleRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.ratioScale);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }

@@ -96,5 +96,61 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var unit = new SimpleUnit()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "SIMPLE",
+                IsDeprecated = true
+            };
+
+            this.linearConversionUnit.ReferenceUnit = unit;
+
+            var results = this.conversionBasedUnitRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.linearConversionUnit);
+
+            var first = results.First();
+            Assert.That(first.Id, Is.EqualTo("MA-0500"));
+            Assert.That(first.Description, Is.EqualTo("The referenced MeasurementScale 7f1bacf8-9517-44d1-aead-6cf9c3027db7:SIMPLE of ConversionBasedUnit.ReferenceUnit is deprecated"));
+            Assert.That(first.Thing, Is.EqualTo(this.linearConversionUnit));
+            Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var unit = new SimpleUnit()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "SIMPLE",
+                IsDeprecated = false
+            };
+
+            this.linearConversionUnit.ReferenceUnit = unit;
+
+            var results = this.conversionBasedUnitRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.linearConversionUnit);
+
+            Assert.That(results, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_DeprecatableThing_Is_Deprecated_no_result_is_returned()
+        {
+            var unit = new SimpleUnit()
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "SIMPLE",
+                IsDeprecated = true
+            };
+
+            this.linearConversionUnit.ReferenceUnit = unit;
+            this.linearConversionUnit.IsDeprecated = true;
+
+            var results = this.conversionBasedUnitRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.linearConversionUnit);
+            
+            Assert.That(results, Is.Empty);
+        }
     }
 }

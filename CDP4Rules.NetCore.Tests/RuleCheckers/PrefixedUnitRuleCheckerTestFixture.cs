@@ -96,5 +96,44 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var unitPrefix = new UnitPrefix
+            {
+                Iid = Guid.Parse("55e32513-9e45-4a63-8cd4-e84b2f320a8d"),
+                ShortName = "PRE",
+                IsDeprecated = true
+            };
+
+            this.siteReferenceDataLibrary.UnitPrefix.Add(unitPrefix);
+            this.prefixedUnit.Prefix = unitPrefix;
+
+            var result = this.prefixedUnitRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.prefixedUnit).Single();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0500"));
+            Assert.That(result.Description, Is.EqualTo("The referenced UnitPrefix 55e32513-9e45-4a63-8cd4-e84b2f320a8d:PRE of PrefixedUnit.Prefix is deprecated"));
+            Assert.That(result.Thing, Is.EqualTo(this.prefixedUnit));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var unitPrefix = new UnitPrefix
+            {
+                Iid = Guid.Parse("55e32513-9e45-4a63-8cd4-e84b2f320a8d"),
+                ShortName = "PRE",
+                IsDeprecated = false
+            };
+
+            this.siteReferenceDataLibrary.UnitPrefix.Add(unitPrefix);
+            this.prefixedUnit.Prefix = unitPrefix;
+
+            var results = this.prefixedUnitRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.prefixedUnit);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }

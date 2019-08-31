@@ -36,8 +36,43 @@ namespace CDP4Rules.RuleCheckers
     /// The purpose of the <see cref="UserRuleVerificationRuleChecker"/> is to execute the rules for instances of type <see cref="UserRuleVerification"/>
     /// </summary>
     [RuleChecker(typeof(UserRuleVerification))]
-    public class UserRuleVerificationRuleChecker
+    public class UserRuleVerificationRuleChecker : RuleChecker
     {
+        /// <summary>
+        /// Checks whether a referenced <see cref="IDeprecatableThing"/> is deprecated
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="UserRuleVerification"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="UserRuleVerification"/>
+        /// </exception>
+        [Rule("MA-0500")]
+        public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
+        {
+            var userRuleVerification = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            if (userRuleVerification.Rule.IsDeprecated)
+            {
+                var result = new RuleCheckResult(thing, rule.Id,
+                    $"The referenced Rule {userRuleVerification.Rule.Iid}:{userRuleVerification.Rule.ShortName} of UserRuleVerification.Rule is deprecated",
+                    SeverityKind.Warning);
+                results.Add(result);
+            }
+
+            return results;
+        }
+
         /// <summary>
         /// Checks whether the referenced <see cref="Rule"/> is in the chain of <see cref="ReferenceDataLibrary"/>
         /// </summary>

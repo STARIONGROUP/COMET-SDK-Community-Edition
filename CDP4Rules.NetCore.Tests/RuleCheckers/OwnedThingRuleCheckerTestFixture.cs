@@ -65,29 +65,31 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         [Test]
         public void Verify_that_when_CheckWheterTheLanguageCodeExistsInTheSiteDirectory_is_called_with_null_thing_exception_thrown()
         {
-            Assert.Throws<ArgumentNullException>(() => this.ownedThingRuleChecker.ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(null));
+            Assert.Throws<ArgumentNullException>(() =>
+                this.ownedThingRuleChecker.ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(null));
         }
 
         [Test]
         public void Verify_that_when_CheckWheterTheLanguageCodeExistsInTheSiteDirectory_is_called_with_incorrect_thing_exception_thrown()
         {
             var option = new Option();
-            Assert.Throws<ArgumentException>(() => this.ownedThingRuleChecker.ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(option));
+            Assert.Throws<ArgumentException>(() =>
+                this.ownedThingRuleChecker.ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(option));
         }
 
         [Test]
         public void Verify_that_when_ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain_is_called_when_domain_is_not_in_activeDomain_result_is_returned()
         {
             var elementDefinition = new ElementDefinition();
-            elementDefinition.Owner = new DomainOfExpertise { Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"), ShortName = "SYS"};
+            elementDefinition.Owner = new DomainOfExpertise
+                {Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"), ShortName = "SYS"};
             this.iteration.Element.Add(elementDefinition);
 
-            var result = this.ownedThingRuleChecker.ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(elementDefinition).Single();
+            var result = this.ownedThingRuleChecker
+                .ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(elementDefinition).Single();
 
             Assert.That(result.Id, Is.EqualTo("MA-0110"));
-
-            Assert.That(result.Description,
-                Is.EqualTo("The Owner 7f1bacf8-9517-44d1-aead-6cf9c3027db7:SYS is not an active Domain of the container Engineering Model"));
+            Assert.That(result.Description,Is.EqualTo( "The Owner 7f1bacf8-9517-44d1-aead-6cf9c3027db7:SYS is not an active Domain of the container Engineering Model"));
             Assert.That(result.Thing, Is.EqualTo(elementDefinition));
             Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
 
@@ -102,6 +104,64 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             var result = this.ownedThingRuleChecker.ChecksWhetherTheReferencedOwnerDomainOfExpertiseIsIsAnActiveDomain(elementDefinition);
             Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var domainOfExpertise = new DomainOfExpertise
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "SYS",
+                IsDeprecated = true
+            };
+
+            var elementDefinition = new ElementDefinition
+            {
+                Owner = domainOfExpertise
+            };
+
+            var result = this.ownedThingRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(elementDefinition).Single();
+            Assert.That(result.Id, Is.EqualTo("MA-0500"));
+            Assert.That(result.Description, Is.EqualTo("The referenced DomainOfExpertise 7f1bacf8-9517-44d1-aead-6cf9c3027db7:SYS of IOwnedThing.Owner is deprecated"));
+            Assert.That(result.Thing, Is.EqualTo(elementDefinition));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+
+            var requirement = new Requirement
+            {
+                Owner = domainOfExpertise
+            };
+            result = this.ownedThingRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(requirement).Single();
+            Assert.That(result.Id, Is.EqualTo("MA-0500"));
+            Assert.That(result.Description, Is.EqualTo("The referenced DomainOfExpertise 7f1bacf8-9517-44d1-aead-6cf9c3027db7:SYS of IOwnedThing.Owner is deprecated"));
+            Assert.That(result.Thing, Is.EqualTo(requirement));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var domainOfExpertise = new DomainOfExpertise
+            {
+                Iid = Guid.Parse("7f1bacf8-9517-44d1-aead-6cf9c3027db7"),
+                ShortName = "SYS",
+                IsDeprecated = false
+            };
+
+            var elementDefinition = new ElementDefinition
+            {
+                Owner = domainOfExpertise
+            };
+
+            var results = this.ownedThingRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(elementDefinition);
+            Assert.That(results, Is.Empty);
+
+            var requirement = new Requirement
+            {
+                Owner = domainOfExpertise
+            };
+            results = this.ownedThingRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(requirement);
+            Assert.That(results, Is.Empty);
         }
     }
 }

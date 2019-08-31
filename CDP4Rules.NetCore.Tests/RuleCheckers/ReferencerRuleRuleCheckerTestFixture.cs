@@ -112,5 +112,64 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var referencingCategory = new Category
+            {
+                Iid = Guid.Parse("a52085b8-6b50-4d76-b699-14b2bb0af59f"),
+                ShortName = "referencing",
+                IsDeprecated = true
+            };
+            var referencedCategory = new Category
+            {
+                Iid = Guid.Parse("e0fdb079-2181-409a-ac76-256ccf5ef205"),
+                ShortName = "referenced",
+                IsDeprecated = true
+            };
+            
+            this.referencerRule.ReferencingCategory = referencingCategory;
+            this.referencerRule.ReferencedCategory.Add(referencedCategory);
+
+            var results = this.referencerRuleRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.referencerRule);
+
+            var first = results.First();
+
+            Assert.That(first.Id, Is.EqualTo("MA-0500"));
+            Assert.That(first.Description, Is.EqualTo("The referenced Category a52085b8-6b50-4d76-b699-14b2bb0af59f:referencing of ReferencerRule.ReferencingCategory is deprecated"));
+            Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(first.Thing, Is.EqualTo(this.referencerRule));
+
+            var last = results.Last();
+            Assert.That(last.Id, Is.EqualTo("MA-0500"));
+            Assert.That(last.Description, Is.EqualTo("The referenced Category e0fdb079-2181-409a-ac76-256ccf5ef205:referenced in ReferencerRule.ReferencedCategory is deprecated"));
+            Assert.That(last.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(last.Thing, Is.EqualTo(this.referencerRule));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var referencingCategory = new Category
+            {
+                Iid = Guid.Parse("a52085b8-6b50-4d76-b699-14b2bb0af59f"),
+                ShortName = "referencing",
+                IsDeprecated = false
+            };
+            var referencedCategory = new Category
+            {
+                Iid = Guid.Parse("e0fdb079-2181-409a-ac76-256ccf5ef205"),
+                ShortName = "referenced",
+                IsDeprecated = false
+            };
+
+            this.referencerRule.ReferencingCategory = referencingCategory;
+            this.referencerRule.ReferencedCategory.Add(referencedCategory);
+
+            var results = this.referencerRuleRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.referencerRule);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }

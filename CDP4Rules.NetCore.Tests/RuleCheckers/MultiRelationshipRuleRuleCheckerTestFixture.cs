@@ -112,5 +112,59 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_Deprecated_result_is_returned()
+        {
+            var relationshipCategory = new Category
+            {
+                Iid = Guid.Parse("4086ae01-4ee5-4c3a-89f9-bdf9b86d96dd"),
+                ShortName = "MULTIRELS",
+                IsDeprecated = true
+            };
+            this.siteReferenceDataLibrary.DefinedCategory.Add(relationshipCategory);
+
+            var relatedCategory = new Category
+            {
+                Iid = Guid.Parse("7ddec22b-694d-43db-a5ba-122d10b8efaf"),
+                ShortName = "RELATED",
+                IsDeprecated = true
+            };
+            this.siteReferenceDataLibrary.DefinedCategory.Add(relatedCategory);
+
+            this.multiRelationshipRule.RelationshipCategory = relationshipCategory;
+            this.multiRelationshipRule.RelatedCategory.Add(relatedCategory);
+
+            var results = this.multiRelationshipRuleRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.multiRelationshipRule);
+            
+            var first = results.First();
+            Assert.That(first.Id, Is.EqualTo("MA-0500"));
+            Assert.That(first.Description, Is.EqualTo("The referenced Category 4086ae01-4ee5-4c3a-89f9-bdf9b86d96dd:MULTIRELS of MultiRelationshipRule.RelationshipCategory is deprecated"));
+            Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(first.Thing, Is.EqualTo(this.multiRelationshipRule));
+
+            var last = results.Last();
+            Assert.That(last.Id, Is.EqualTo("MA-0500"));
+            Assert.That(last.Description, Is.EqualTo("The referenced Category 7ddec22b-694d-43db-a5ba-122d10b8efaf:RELATED of MultiRelationshipRule.RelatedCategory is deprecated"));
+            Assert.That(last.Severity, Is.EqualTo(SeverityKind.Warning));
+            Assert.That(last.Thing, Is.EqualTo(this.multiRelationshipRule));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_DeprecatableThing_Is_not_Deprecated_no_result_is_returned()
+        {
+            var relationshipCategory = new Category { Iid = Guid.Parse("4086ae01-4ee5-4c3a-89f9-bdf9b86d96dd"), ShortName = "MULTIRELS" };
+            this.siteReferenceDataLibrary.DefinedCategory.Add(relationshipCategory);
+
+            var relatedCategory = new Category { Iid = Guid.Parse("7ddec22b-694d-43db-a5ba-122d10b8efaf"), ShortName = "RELATED" };
+            this.siteReferenceDataLibrary.DefinedCategory.Add(relatedCategory);
+
+            this.multiRelationshipRule.RelationshipCategory = relationshipCategory;
+            this.multiRelationshipRule.RelatedCategory.Add(relatedCategory);
+
+            var results = this.multiRelationshipRuleRuleChecker.ChecksWhetherAReferencedDeprecatableThingIsDeprecated(this.multiRelationshipRule);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }

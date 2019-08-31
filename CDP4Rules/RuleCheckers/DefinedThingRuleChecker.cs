@@ -34,7 +34,7 @@ namespace CDP4Rules.RuleCheckers
     /// The purpose of the <see cref="DefinedThingRuleChecker"/> is to execute the rules for instances of type <see cref="DefinedThing"/>
     /// </summary>
     [RuleChecker(typeof(DefinedThing))]
-    public class DefinedThingRuleChecker
+    public class DefinedThingRuleChecker : RuleChecker
     {
         /// <summary>
         /// Checks whether a <see cref="DefinedThing"/> has at most one <see cref="Definition"/> per natural language
