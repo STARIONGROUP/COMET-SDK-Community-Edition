@@ -86,7 +86,7 @@ namespace CDP4Rules.RuleCheckers
 
             return results;
         }
-        
+
         /// <summary>
         /// Checks whether the specified LanguageCode is a valid LanguageCode as specified in ISO 639-1 part 1 or part 2
         /// </summary>
@@ -97,21 +97,12 @@ namespace CDP4Rules.RuleCheckers
         /// A instance of <see cref="RuleCheckResult"/>
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// thrown when <param name="thing"/> is not an <see cref="IAnnotation"/>
+        /// thrown when <paramref name="thing"/> is not an <see cref="IAnnotation"/>
         /// </exception>
         [Rule("MA-0020")]
         public IEnumerable<RuleCheckResult> CheckWeatherTheLanguageCodeIsValid(Thing thing)
         {
-            if (thing == null)
-            {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
-            }
-
-            var annotation = thing as IAnnotation;
-            if (annotation == null)
-            {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
-            }
+            var annotation = this.VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();

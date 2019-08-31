@@ -295,5 +295,15 @@ namespace CDP4Common.Tests.Poco
             this.sRdl1.Rule.Add(decompositionRule);
             Assert.That(this.mRdl.IsRuleInChainOfRdls(decompositionRule), Is.True);
         }
+
+        [Test]
+        public void Verify_that_IsReferenceSourceInChainOfRdls_returns_expected_result()
+        {
+            var referenceSource = new ReferenceSource();
+            Assert.That(this.mRdl.IsReferenceSourceInChainOfRdls(referenceSource), Is.False);
+
+            this.sRdl1.ReferenceSource.Add(referenceSource);
+            Assert.That(this.mRdl.IsReferenceSourceInChainOfRdls(referenceSource), Is.True);
+        }
     }
 }
