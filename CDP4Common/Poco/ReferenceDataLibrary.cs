@@ -187,10 +187,10 @@ namespace CDP4Common.SiteDirectoryData
         /// Asserts whether a <see cref="MeasurementScale"/> is in the chain of <see cref="ReferenceDataLibrary"/>
         /// </summary>
         /// <param name="measurementScale">
-        /// The subject <see cref="ParameterType"/>
+        /// The subject <see cref="MeasurementScale"/>
         /// </param>
         /// <returns>
-        /// true if the <see cref="ParameterType"/> is on the chain of <see cref="ReferenceDataLibrary"/>, false if not
+        /// true if the <see cref="MeasurementScale"/> is on the chain of <see cref="ReferenceDataLibrary"/>, false if not
         /// </returns>
         /// <remarks>
         /// The current <see cref="ReferenceDataLibrary"/> is in included in the chain of <see cref="ReferenceDataLibrary"/>.
@@ -247,6 +247,32 @@ namespace CDP4Common.SiteDirectoryData
                     yield return measurementUnit;
                 }
             }
+        }
+
+        /// <summary>
+        /// Asserts whether a <see cref="MeasurementUnit"/> is in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <param name="measurementUnit">
+        /// The subject <see cref="MeasurementUnit"/>
+        /// </param>
+        /// <returns>
+        /// true if the <see cref="MeasurementUnit"/> is on the chain of <see cref="ReferenceDataLibrary"/>, false if not
+        /// </returns>
+        /// <remarks>
+        /// The current <see cref="ReferenceDataLibrary"/> is in included in the chain of <see cref="ReferenceDataLibrary"/>.
+        /// Equality is determined based on unique identifier (iid) equality.
+        /// </remarks>
+        public bool IsMeasurementUnitInChainOfRdls(MeasurementUnit measurementUnit)
+        {
+            foreach (var referenceDataLibrary in this.AggregatedReferenceDataLibrary)
+            {
+                if (referenceDataLibrary.Unit.Any(f => f.Iid == measurementUnit.Iid))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

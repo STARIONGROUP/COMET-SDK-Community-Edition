@@ -86,7 +86,6 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             Assert.That(first.Description, Is.EqualTo("The referenced MeasurementScale 1191838a-0f9f-4d2c-8369-cf729d281dee:SCALE of ScaleReferenceQuantityValue.Scale is not in the chain of Reference Data Libraries"));
             Assert.That(first.Thing, Is.EqualTo(this.scaleReferenceQuantityValue));
             Assert.That(first.Severity, Is.EqualTo(SeverityKind.Error));
-
         }
 
         [Test]

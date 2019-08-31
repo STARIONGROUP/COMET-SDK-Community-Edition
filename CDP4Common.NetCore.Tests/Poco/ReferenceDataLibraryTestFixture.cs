@@ -265,5 +265,25 @@ namespace CDP4Common.Tests.Poco
             this.sRdl1.ParameterType.Add(parameterType);
             Assert.That(this.mRdl.IsParameterTypeInChainOfRdls(parameterType), Is.True);
         }
+
+        [Test]
+        public void Verify_that_IsMeasurementScaleInChainOfRdls_returns_expected_result()
+        {
+            var ratioScale = new RatioScale();
+            Assert.That(this.mRdl.IsMeasurementScaleInChainOfRdls(ratioScale), Is.False);
+
+            this.sRdl1.Scale.Add(ratioScale);
+            Assert.That(this.mRdl.IsMeasurementScaleInChainOfRdls(ratioScale), Is.True);
+        }
+
+        [Test]
+        public void Verify_that_IsMeasurementUnitInChainOfRdls_returns_expected_result()
+        {
+            var simpleUnit = new SimpleUnit();
+            Assert.That(this.mRdl.IsMeasurementUnitInChainOfRdls(simpleUnit), Is.False);
+
+            this.sRdl1.Unit.Add(simpleUnit);
+            Assert.That(this.mRdl.IsMeasurementUnitInChainOfRdls(simpleUnit), Is.True);
+        }
     }
 }
