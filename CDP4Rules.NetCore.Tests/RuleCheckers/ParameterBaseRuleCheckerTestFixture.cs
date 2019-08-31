@@ -72,13 +72,13 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         }
 
         [Test]
-        public void Verify_that_when_CheckWhetherReferencedFileTypeIsInChainOfRlds_is_called_with_null_exception_isThrown()
+        public void Verify_that_when_CheckWhetherReferencedParameterTypeIsInChainOfRdls_is_called_with_null_exception_isThrown()
         {
             Assert.Throws<ArgumentNullException>(() => this.parameterBaseRuleChecker.CheckWhetherReferencedParameterTypeIsInChainOfRdls(null));
         }
 
         [Test]
-        public void Verify_that_when_CheckWhetherReferencedFileTypeIsInChainOfRlds_is_called_with_not_FileRevision_exception_isThrown()
+        public void Verify_that_when_CheckWhetherReferencedParameterTypeIsInChainOfRdls_is_called_with_not_FileRevision_exception_isThrown()
         {
             var alias = new Alias();
             Assert.Throws<ArgumentException>(() => this.parameterBaseRuleChecker.CheckWhetherReferencedParameterTypeIsInChainOfRdls(alias));

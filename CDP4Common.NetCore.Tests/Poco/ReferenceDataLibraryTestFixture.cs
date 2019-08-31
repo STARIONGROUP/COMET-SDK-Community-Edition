@@ -285,5 +285,15 @@ namespace CDP4Common.Tests.Poco
             this.sRdl1.Unit.Add(simpleUnit);
             Assert.That(this.mRdl.IsMeasurementUnitInChainOfRdls(simpleUnit), Is.True);
         }
+
+        [Test]
+        public void Verify_that_IsRuleInChainOfRdls_returns_expected_result()
+        {
+            var decompositionRule = new DecompositionRule();
+            Assert.That(this.mRdl.IsRuleInChainOfRdls(decompositionRule), Is.False);
+
+            this.sRdl1.Rule.Add(decompositionRule);
+            Assert.That(this.mRdl.IsRuleInChainOfRdls(decompositionRule), Is.True);
+        }
     }
 }

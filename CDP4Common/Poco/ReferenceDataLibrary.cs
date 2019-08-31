@@ -381,6 +381,31 @@ namespace CDP4Common.SiteDirectoryData
         }
 
         /// <summary>
+        /// Asserts whether a <see cref="Rule"/> is in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <param name="rule">
+        /// The subject <see cref="Rule"/>
+        /// </param>
+        /// <returns>
+        /// true if the <see cref="Rule"/> is on the chain of <see cref="ReferenceDataLibrary"/>, false if not
+        /// </returns>
+        /// <remarks>
+        /// the current <see cref="ReferenceDataLibrary"/> is in included in the chain of <see cref="ReferenceDataLibrary"/>
+        /// </remarks>
+        public bool IsRuleInChainOfRdls(Rule rule)
+        {
+            foreach (var referenceDataLibrary in this.AggregatedReferenceDataLibrary)
+            {
+                if (referenceDataLibrary.Rule.Any(f => f.Iid == rule.Iid))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Queries the <see cref="Constant"/> from the chain of <see cref="ReferenceDataLibrary"/> including the
         /// current <see cref="ReferenceDataLibrary"/>
         /// </summary>
