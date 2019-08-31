@@ -24,7 +24,6 @@
 namespace CDP4Rules.NetCore.Tests.RuleCheckers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
@@ -111,6 +110,35 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             this.parameter.ParameterType = parameterType;
 
             var results = this.parameterBaseRuleChecker.CheckWhetherReferencedParameterTypeIsInChainOfRdls(this.parameter);
+
+            Assert.That(results, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_MeasurementScale_is_not_in_chain_of_rdls_result_is_returned()
+        {
+            var scale = new RatioScale { Iid = Guid.Parse("833f1e3e-0b2e-49ca-b1b0-ef6d627210d0"), ShortName = "SCALE" };
+            var otherSiterReferenceDataLibrary = new SiteReferenceDataLibrary();
+            otherSiterReferenceDataLibrary.Scale.Add(scale);
+
+            this.parameter.Scale = scale;
+
+            var result = this.parameterBaseRuleChecker.CheckWhetherReferencedMeasurementScaleInChainOfRdls(this.parameter).First();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0230"));
+            Assert.That(result.Description, Is.EqualTo("The referenced MeasurementScale 833f1e3e-0b2e-49ca-b1b0-ef6d627210d0:SCALE is not in the chain of Reference Data Libraries"));
+            Assert.That(result.Thing, Is.EqualTo(this.parameter));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_MeasurementScale_is_in_chain_of_rdls_no_result_is_returned()
+        {
+            var scale = new RatioScale();
+            this.modelReferenceDataLibrary.Scale.Add(scale);
+            this.parameter.Scale = scale;
+
+            var results = this.parameterBaseRuleChecker.CheckWhetherReferencedMeasurementScaleInChainOfRdls(this.parameter);
 
             Assert.That(results, Is.Empty);
         }

@@ -28,7 +28,6 @@ namespace CDP4Rules.RuleCheckers
     using System.Linq;
     using System.Reflection;
     using CDP4Common.CommonData;
-    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Rules.Common;
 
@@ -67,6 +66,41 @@ namespace CDP4Rules.RuleCheckers
             if (!referenceDataLibrary.IsParameterTypeInChainOfRdls(parameterTypeComponent.ParameterType))
             {
                 var result = new RuleCheckResult(thing, rule.Id, "The referenced ParameterType is not in the chain of Reference Data Libraries", SeverityKind.Error);
+                results.Add(result);
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Checks whether a referenced <see cref="MeasurementScale"/> is the in chain of Reference Data Libraries
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="ParameterTypeComponent"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="ParameterTypeComponent"/>
+        /// </exception>
+        [Rule("MA-0230")]
+        public IEnumerable<RuleCheckResult> CheckWhetherReferencedMeasurementScaleInChainOfRdls(Thing thing)
+        {
+            var parameterTypeComponent = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            var referenceDataLibrary = (ReferenceDataLibrary)thing.GetContainerOfType(typeof(ReferenceDataLibrary));
+
+            if (!referenceDataLibrary.IsMeasurementScaleInChainOfRdls(parameterTypeComponent.Scale))
+            {
+                var result = new RuleCheckResult(thing, rule.Id, $"The referenced MeasurementScale {parameterTypeComponent.Scale.Iid}:{parameterTypeComponent.Scale.ShortName} is not in the chain of Reference Data Libraries", SeverityKind.Error);
                 results.Add(result);
             }
 

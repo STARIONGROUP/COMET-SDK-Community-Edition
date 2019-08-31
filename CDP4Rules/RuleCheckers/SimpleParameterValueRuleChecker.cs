@@ -76,6 +76,43 @@ namespace CDP4Rules.RuleCheckers
         }
 
         /// <summary>
+        /// Checks whether a referenced <see cref="MeasurementScale"/> is the in chain of Reference Data Libraries
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="SimpleParameterValue"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="SimpleParameterValue"/>
+        /// </exception>
+        [Rule("MA-0230")]
+        public IEnumerable<RuleCheckResult> CheckWhetherReferencedMeasurementScaleInChainOfRdls(Thing thing)
+        {
+            var simpleParameterValue = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            var engineeringModel = thing.TopContainer as EngineeringModel;
+
+            var modelReferenceDataLibrary = engineeringModel.EngineeringModelSetup.RequiredRdl.Single();
+
+            if (!modelReferenceDataLibrary.IsMeasurementScaleInChainOfRdls(simpleParameterValue.Scale))
+            {
+                var result = new RuleCheckResult(thing, rule.Id, $"The referenced MeasurementScale {simpleParameterValue.Scale.Iid}:{simpleParameterValue.Scale.ShortName} of SimpleParameterValue.Scale is not in the chain of Reference Data Libraries", SeverityKind.Error);
+                results.Add(result);
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Verifies that the <see cref="Thing"/> is of the correct type
         /// </summary>
         /// <param name="thing">

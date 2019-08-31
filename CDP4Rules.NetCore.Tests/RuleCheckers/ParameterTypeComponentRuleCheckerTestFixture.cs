@@ -26,7 +26,6 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
     using System;
     using System.Linq;
     using CDP4Common.CommonData;
-    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Rules.Common;
     using CDP4Rules.RuleCheckers;
@@ -66,7 +65,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
         }
 
         [Test]
-        public void Verify_that_when_thing_is_not_a_BinaryRelationship_exception_is_thrown()
+        public void Verify_that_when_thing_is_not_a_ParameterTypeComponent_exception_is_thrown()
         {
             var alias = new Alias();
 
@@ -98,6 +97,34 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             this.parameterTypeComponent.ParameterType = parameterType;
 
             var results = this.parameterTypeComponentRuleChecker.CheckWhetherReferencedParameterTypeIsInChainOfRdls(this.parameterTypeComponent);
+
+            Assert.That(results, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_MeasurementScale_is_not_in_chain_of_rdls_result_is_returned()
+        {
+            var scale = new RatioScale { Iid = Guid.Parse("833f1e3e-0b2e-49ca-b1b0-ef6d627210d0"), ShortName = "SCALE" };
+            var otherSiterReferenceDataLibrary = new SiteReferenceDataLibrary();
+            otherSiterReferenceDataLibrary.Scale.Add(scale);
+            this.parameterTypeComponent.Scale = scale;
+
+            var result = this.parameterTypeComponentRuleChecker.CheckWhetherReferencedMeasurementScaleInChainOfRdls(this.parameterTypeComponent).First();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0230"));
+            Assert.That(result.Description, Is.EqualTo("The referenced MeasurementScale 833f1e3e-0b2e-49ca-b1b0-ef6d627210d0:SCALE is not in the chain of Reference Data Libraries"));
+            Assert.That(result.Thing, Is.EqualTo(this.parameterTypeComponent));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_MeasurementScale_is_in_chain_of_rdls_no_result_is_returned()
+        {
+            var scale = new RatioScale { Iid = Guid.Parse("833f1e3e-0b2e-49ca-b1b0-ef6d627210d0"), ShortName = "SCALE" };
+            this.siteReferenceDataLibrary.Scale.Add(scale);
+            this.parameterTypeComponent.Scale = scale;
+
+            var results = this.parameterTypeComponentRuleChecker.CheckWhetherReferencedMeasurementScaleInChainOfRdls(this.parameterTypeComponent);
 
             Assert.That(results, Is.Empty);
         }

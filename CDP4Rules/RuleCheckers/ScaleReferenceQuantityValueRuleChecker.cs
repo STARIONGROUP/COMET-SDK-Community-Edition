@@ -1,4 +1,4 @@
-﻿// <copyright file="ConstantRuleChecker.cs" company="RHEA System S.A.">
+﻿// <copyright file="ScaleReferenceQuantityValueRuleChecker.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené
@@ -32,51 +32,16 @@ namespace CDP4Rules.RuleCheckers
     using CDP4Rules.Common;
 
     /// <summary>
-    /// The purpose of the <see cref="ConstantRuleChecker"/> is to execute the rules for instances of type <see cref="Constant"/>
+    /// The purpose of the <see cref="ScaleReferenceQuantityValueRuleChecker"/> is to execute the rules for instances of type <see cref="ScaleReferenceQuantityValue"/>
     /// </summary>
-    [RuleChecker(typeof(Constant))]
-    public class ConstantRuleChecker : RuleChecker
+    [RuleChecker(typeof(ScaleReferenceQuantityValue))]
+    public class ScaleReferenceQuantityValueRuleChecker : RuleChecker
     {
-        /// <summary>
-        /// Checks whether a referenced <see cref="ParameterType"/> is the in chain of Reference Data Libraries
-        /// </summary>
-        /// <param name="thing">
-        /// The subject <see cref="Constant"/>
-        /// </param>
-        /// <returns>
-        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// thrown when <paramref name="thing"/> is null
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// thrown when <paramref name="thing"/> is not an <see cref="Constant"/>
-        /// </exception>
-        [Rule("MA-0220")]
-        public IEnumerable<RuleCheckResult> CheckWhetherReferencedParameterTypeIsInChainOfRdls(Thing thing)
-        {
-            var constant = this.VerifyThingArgument(thing);
-
-            var results = new List<RuleCheckResult>();
-            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
-            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
-
-            var referenceDataLibrary = (ReferenceDataLibrary)constant.Container;
-
-            if (!referenceDataLibrary.IsParameterTypeInChainOfRdls(constant.ParameterType))
-            {
-                var result = new RuleCheckResult(thing, rule.Id, $"The referenced ParameterType {constant.ParameterType.Iid}:{constant.ParameterType.ShortName} is not in the chain of Reference Data Libraries", SeverityKind.Error);
-                results.Add(result);
-            }
-
-            return results;
-        }
-
         /// <summary>
         /// Checks whether a referenced <see cref="MeasurementScale"/> is the in chain of Reference Data Libraries
         /// </summary>
         /// <param name="thing">
-        /// The subject <see cref="Constant"/>
+        /// The subject <see cref="ScaleReferenceQuantityValue"/>
         /// </param>
         /// <returns>
         /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
@@ -85,22 +50,22 @@ namespace CDP4Rules.RuleCheckers
         /// thrown when <paramref name="thing"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// thrown when <paramref name="thing"/> is not an <see cref="Constant"/>
+        /// thrown when <paramref name="thing"/> is not an <see cref="ScaleReferenceQuantityValue"/>
         /// </exception>
         [Rule("MA-0230")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedMeasurementScaleInChainOfRdls(Thing thing)
         {
-            var constant = this.VerifyThingArgument(thing);
+            var scaleReferenceQuantityValue = this.VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
             var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
 
-            var referenceDataLibrary = (ReferenceDataLibrary)constant.Container;
+            var referenceDataLibrary = (ReferenceDataLibrary)thing.GetContainerOfType(typeof(ReferenceDataLibrary));
 
-            if (!referenceDataLibrary.IsMeasurementScaleInChainOfRdls(constant.Scale))
+            if (!referenceDataLibrary.IsMeasurementScaleInChainOfRdls(scaleReferenceQuantityValue.Scale))
             {
-                var result = new RuleCheckResult(thing, rule.Id, $"The referenced MeasurementScale {constant.Scale.Iid}:{constant.Scale.ShortName} is not in the chain of Reference Data Libraries", SeverityKind.Error);
+                var result = new RuleCheckResult(thing, rule.Id, $"The referenced MeasurementScale {scaleReferenceQuantityValue.Scale.Iid}:{scaleReferenceQuantityValue.Scale.ShortName} of ScaleReferenceQuantityValue.Scale is not in the chain of Reference Data Libraries", SeverityKind.Error);
                 results.Add(result);
             }
 
@@ -114,28 +79,28 @@ namespace CDP4Rules.RuleCheckers
         /// the subject <see cref="Thing"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Constant"/>
+        /// an instance of <see cref="ScaleReferenceQuantityValue"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="thing"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// thrown when <paramref name="thing"/> is not an <see cref="Constant"/>
+        /// thrown when <paramref name="thing"/> is not an <see cref="ScaleReferenceQuantityValue"/>
         /// </exception>
-        private Constant VerifyThingArgument(Thing thing)
+        private ScaleReferenceQuantityValue VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {
                 throw new ArgumentNullException($"The {nameof(thing)} may not be null");
             }
 
-            var constant = thing as Constant;
-            if (constant == null)
+            var scaleReferenceQuantityValue = thing as ScaleReferenceQuantityValue;
+            if (scaleReferenceQuantityValue == null)
             {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an Constant");
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an ScaleReferenceQuantityValue");
             }
 
-            return constant;
+            return scaleReferenceQuantityValue;
         }
     }
 }

@@ -121,5 +121,35 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_referenced_MeasurementScale_is_not_in_chain_of_rdls_result_is_returned()
+        {
+            var scale = new RatioScale { Iid = Guid.Parse("1191838a-0f9f-4d2c-8369-cf729d281dee"), ShortName = "SCALE" };
+            var otherSiterReferenceDataLibrary = new SiteReferenceDataLibrary();
+            otherSiterReferenceDataLibrary.Scale.Add(scale);
+
+            this.relationalExpression.Scale = scale;
+
+            var result = this.relationalExpressionRuleChecker.CheckWhetherReferencedMeasurementScaleInChainOfRdls(this.relationalExpression).First();
+            
+            Assert.That(result.Id, Is.EqualTo("MA-0230"));
+            Assert.That(result.Description, Is.EqualTo("The referenced MeasurementScale 1191838a-0f9f-4d2c-8369-cf729d281dee:SCALE of RelationalExpression.Scale is not in the chain of Reference Data Libraries"));
+            Assert.That(result.Thing, Is.EqualTo(this.relationalExpression));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
+        }
+
+        [Test]
+        public void Verify_that_when_referenced_MeasurementScale_is_in_chain_of_rdls_no_result_is_returned()
+        {
+            var scale = new RatioScale { Iid = Guid.Parse("1191838a-0f9f-4d2c-8369-cf729d281dee"), ShortName = "SCALE" };
+            this.modelReferenceDataLibrary.Scale.Add(scale);
+
+            this.relationalExpression.Scale = scale;
+
+            var results = this.relationalExpressionRuleChecker.CheckWhetherReferencedMeasurementScaleInChainOfRdls(this.relationalExpression);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }
