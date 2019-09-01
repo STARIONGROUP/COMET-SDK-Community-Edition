@@ -202,5 +202,42 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_a_referenced_CompoundParameterType_is_not_finalized_a_result_is_returned()
+        {
+            var compoundParameterType = new CompoundParameterType
+            {
+                Iid = Guid.Parse("693b074c-426c-47f3-87ab-b2b2dad71525"),
+                ShortName = "MATRIX",
+                IsFinalized = false
+            };
+
+            this.parameter.ParameterType = compoundParameterType;
+
+            var result = this.parameterBaseRuleChecker.ChecksWhetherAReferencedCompoundParameterTypeIsFinalizedOrNot(this.parameter).Single();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0520"));
+            Assert.That(result.Description, Is.EqualTo("The referenced CompoundParameterType 693b074c-426c-47f3-87ab-b2b2dad71525:MATRIX of Parameter.ParameterType is not finalized"));
+            Assert.That(result.Thing, Is.EqualTo(parameter));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Warning));
+        }
+
+        [Test]
+        public void Verify_that_when_a_referenced_CompoundParameterType_is_finalized_no_result_is_returned()
+        {
+            var compoundParameterType = new CompoundParameterType
+            {
+                Iid = Guid.Parse("693b074c-426c-47f3-87ab-b2b2dad71525"),
+                ShortName = "MATRIX",
+                IsFinalized = true
+            };
+
+            this.parameter.ParameterType = compoundParameterType;
+
+            var results = this.parameterBaseRuleChecker.ChecksWhetherAReferencedCompoundParameterTypeIsFinalizedOrNot(this.parameter);
+
+            Assert.That(results, Is.Empty);
+        }
     }
 }

@@ -42,7 +42,7 @@ namespace CDP4Rules.RuleCheckers
         /// Checks whether a referenced <see cref="IDeprecatableThing"/> is deprecated
         /// </summary>
         /// <param name="thing">
-        /// The subject <see cref="DomainOfExpertiseGroup"/>
+        /// The subject <see cref="Parameter"/>
         /// </param>
         /// <returns>
         /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
@@ -51,7 +51,7 @@ namespace CDP4Rules.RuleCheckers
         /// thrown when <paramref name="thing"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// thrown when <paramref name="thing"/> is not an <see cref="DomainOfExpertiseGroup"/>
+        /// thrown when <paramref name="thing"/> is not an <see cref="Parameter"/>
         /// </exception>
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
