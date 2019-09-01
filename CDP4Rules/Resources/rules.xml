@@ -106,7 +106,7 @@
     </RULE>
     <RULE>
       <ID>MA-0520</ID>
-      <DESCRIPTION>Checks whether a Parameter does not reference a CompoundParameterType where CompoundParameterType.isFinalized = false</DESCRIPTION>
+      <DESCRIPTION>Checks whether a ParameterBase does not reference a CompoundParameterType where CompoundParameterType.isFinalized = false</DESCRIPTION>
       <SEVERITY>Warning</SEVERITY>
     </RULE>
     <RULE>
