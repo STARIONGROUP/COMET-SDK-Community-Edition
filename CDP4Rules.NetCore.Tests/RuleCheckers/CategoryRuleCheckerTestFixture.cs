@@ -38,10 +38,25 @@ namespace CDP4Rules.RuleCheckers
     {
         private CategoryRuleChecker categoryRuleChecker;
 
+        private SiteReferenceDataLibrary siteReferenceDataLibrary;
+        private Category category_1;
+        private Category category_2;
+        private Category category_3;
+
         [SetUp]
         public void SetUp()
         {
             this.categoryRuleChecker = new CategoryRuleChecker();
+
+            this.siteReferenceDataLibrary = new SiteReferenceDataLibrary();
+
+            this.category_1 = new Category { Iid = Guid.Parse("da4d1677-3f02-4272-965e-7a21f6b14b60") };
+            this.category_2 = new Category { Iid = Guid.Parse("f3813784-8420-452f-9f85-2c82756a4fa3") };
+            this.category_3 = new Category { Iid = Guid.Parse("82b811af-5e67-4304-9dd7-cb7b9d8a5a07") };
+
+            this.siteReferenceDataLibrary.DefinedCategory.Add(this.category_1);
+            this.siteReferenceDataLibrary.DefinedCategory.Add(this.category_2);
+            this.siteReferenceDataLibrary.DefinedCategory.Add(this.category_3);
         }
 
         [Test]
@@ -95,6 +110,36 @@ namespace CDP4Rules.RuleCheckers
             var results = this.categoryRuleChecker.CheckWhetherReferencedCategoryIsInChainOfRdls(category);
 
             Assert.That(results, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_when_A_Category_ShortName_is_not_unique_in_the_containing_RDL_a_result_is_returned()
+        {
+            this.category_1.ShortName = "CAT";
+            this.category_2.ShortName = "CAT";
+            this.category_3.ShortName = "CAT3";
+
+            var result = this.categoryRuleChecker.CheckWhetherTheCategoryShortNameIsUniqueInTheContainerRdl(this.category_1).Single();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0720"));
+            Assert.That(result.Description, Is.EqualTo("The Category does not have a unique ShortNames in the container Reference Data Library - f3813784-8420-452f-9f85-2c82756a4fa3:CAT"));
+            Assert.That(result.Thing, Is.EqualTo(this.category_1));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
+        }
+
+        [Test]
+        public void Verify_that_when_A_Category_Name_is_not_unique_in_the_containing_RDL_a_result_is_returned()
+        {
+            this.category_1.Name = "CAT";
+            this.category_2.Name = "CAT";
+            this.category_3.Name = "CAT3";
+
+            var result = this.categoryRuleChecker.CheckWhetherTheCategoryNameIsUniqueInTheContainerRdl(this.category_1).Single();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0730"));
+            Assert.That(result.Description, Is.EqualTo("The Category does not have a unique Names in the container Reference Data Library - f3813784-8420-452f-9f85-2c82756a4fa3:CAT"));
+            Assert.That(result.Thing, Is.EqualTo(this.category_1));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
         }
     }
 }

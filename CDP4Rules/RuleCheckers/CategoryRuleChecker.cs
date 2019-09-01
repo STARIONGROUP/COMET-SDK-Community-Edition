@@ -38,6 +38,86 @@ namespace CDP4Rules.RuleCheckers
     public class CategoryRuleChecker : RuleChecker
     {
         /// <summary>
+        /// Checks whether the <see cref="Category.ShortName"/> is case-sensitive unique within its containing <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="Category"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="Category"/>
+        /// </exception>
+        [Rule("MA-0720")]
+        public IEnumerable<RuleCheckResult> CheckWhetherTheCategoryShortNameIsUniqueInTheContainerRdl(Thing thing)
+        {
+            var category = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            var referenceDataLibrary = (ReferenceDataLibrary)thing.Container;
+
+            var duplicates = referenceDataLibrary.DefinedCategory.Where(p => p.ShortName == category.ShortName && p.Iid != category.Iid);
+
+            if (duplicates.Any())
+            {
+                var duplicateIdentifiers = string.Join(",", duplicates.Select(p => p.Iid));
+                var duplicateShortNames = string.Join(",", duplicates.Select(p => p.ShortName));
+
+                var result = new RuleCheckResult(thing, rule.Id, $"The Category does not have a unique ShortNames in the container Reference Data Library - {duplicateIdentifiers}:{duplicateShortNames}", SeverityKind.Error);
+                results.Add(result);
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Checks whether the <see cref="Category.Name"/> is case-sensitive unique within its containing <see cref="ReferenceDataLibrary"/>
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="Category"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="Category"/>
+        /// </exception>
+        [Rule("MA-0730")]
+        public IEnumerable<RuleCheckResult> CheckWhetherTheCategoryNameIsUniqueInTheContainerRdl(Thing thing)
+        {
+            var category = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            var referenceDataLibrary = (ReferenceDataLibrary)thing.Container;
+
+            var duplicates = referenceDataLibrary.DefinedCategory.Where(p => p.Name == category.Name && p.Iid != category.Iid);
+
+            if (duplicates.Any())
+            {
+                var duplicateIdentifiers = string.Join(",", duplicates.Select(p => p.Iid));
+                var duplicateShortNames = string.Join(",", duplicates.Select(p => p.Name));
+
+                var result = new RuleCheckResult(thing, rule.Id, $"The Category does not have a unique Names in the container Reference Data Library - {duplicateIdentifiers}:{duplicateShortNames}", SeverityKind.Error);
+                results.Add(result);
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Checks whether a referenced <see cref="Category"/> is the in chain of Reference Data Libraries
         /// </summary>
         /// <param name="thing">

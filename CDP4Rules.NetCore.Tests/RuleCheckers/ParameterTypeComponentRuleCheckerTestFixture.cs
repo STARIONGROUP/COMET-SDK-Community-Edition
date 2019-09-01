@@ -214,5 +214,33 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_The_ParameterTypeComponent_has_a_valid_scale()
+        {
+            var scale = new RatioScale();
+            var textParameterType = new TextParameterType();
+            var simpleQuantityKind = new SimpleQuantityKind();
+
+            this.parameterTypeComponent.Scale = scale;
+            this.parameterTypeComponent.ParameterType = textParameterType;
+
+            var result = this.parameterTypeComponentRuleChecker.ChecksWhetherTheParameterTypeComponentHasAValidScale(this.parameterTypeComponent).Single();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0740"));
+            Assert.That(result.Description, Is.EqualTo("When the referenced ParameterType is a not QuantityKind, the ParameterTypeComponent.Scale must be null"));
+            Assert.That(result.Thing, Is.EqualTo(this.parameterTypeComponent));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
+
+            this.parameterTypeComponent.Scale = null;
+            this.parameterTypeComponent.ParameterType = simpleQuantityKind;
+
+            result = this.parameterTypeComponentRuleChecker.ChecksWhetherTheParameterTypeComponentHasAValidScale(this.parameterTypeComponent).Single();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0740"));
+            Assert.That(result.Description, Is.EqualTo("When the referenced ParameterType is a QuantityKind, the ParameterTypeComponent.Scale may not be null"));
+            Assert.That(result.Thing, Is.EqualTo(this.parameterTypeComponent));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
+        }
     }
 }

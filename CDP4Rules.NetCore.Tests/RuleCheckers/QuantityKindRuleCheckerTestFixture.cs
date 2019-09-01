@@ -170,5 +170,45 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             Assert.That(results, Is.Empty);
         }
+
+        [Test]
+        public void Verify_that_when_the_DefaultScale_is_not_in_the_PossibleScales_a_result_is_returned()
+        {
+            var ratioScale_1 = new RatioScale { Iid = Guid.Parse("9fd6eb4f-5fb8-469f-8798-20bf4dd84e95"), ShortName = "scale_1" };
+            var ratioScale_2 = new RatioScale { Iid = Guid.Parse("eed266d7-3ce5-4117-8ca4-2db316ec9cc6"), ShortName = "scale_2" };
+            var ratioScale_3 = new RatioScale { Iid = Guid.Parse("918abf39-87af-4305-91e8-28c17ab274b2"), ShortName = "scale_3" };
+
+            var sqk = new SimpleQuantityKind();
+            sqk.PossibleScale.Add(ratioScale_1);
+            sqk.PossibleScale.Add(ratioScale_2);
+
+            sqk.DefaultScale = ratioScale_3;
+
+            var result = this.quantityKindRuleChecker.ChecksWhetherReferencedDefaultScaleIsInTheCollectionOfPossibleScales(sqk).Single();
+
+            Assert.That(result.Id, Is.EqualTo("MA-0750"));
+            Assert.That(result.Description, Is.EqualTo("The QuantityKind.DefaultScale 918abf39-87af-4305-91e8-28c17ab274b2:scale_3 is not in the list of QuantityKind.PossibleScale"));
+            Assert.That(result.Thing, Is.EqualTo(sqk));
+            Assert.That(result.Severity, Is.EqualTo(SeverityKind.Error));
+        }
+        [Test]
+        public void Verify_that_when_the_DefaultScale_is_in_the_PossibleScales_no_result_is_returned()
+        {
+            var ratioScale_1 = new RatioScale { Iid = Guid.Parse("9fd6eb4f-5fb8-469f-8798-20bf4dd84e95"), ShortName = "scale_1" };
+            var ratioScale_2 = new RatioScale { Iid = Guid.Parse("eed266d7-3ce5-4117-8ca4-2db316ec9cc6"), ShortName = "scale_2" };
+            var ratioScale_3 = new RatioScale { Iid = Guid.Parse("918abf39-87af-4305-91e8-28c17ab274b2"), ShortName = "scale_3" };
+
+            var sqk = new SimpleQuantityKind();
+            sqk.PossibleScale.Add(ratioScale_1);
+            sqk.PossibleScale.Add(ratioScale_2);
+            sqk.PossibleScale.Add(ratioScale_3);
+
+            sqk.DefaultScale = ratioScale_3;
+
+            var results = this.quantityKindRuleChecker.ChecksWhetherReferencedDefaultScaleIsInTheCollectionOfPossibleScales(sqk);
+
+            Assert.That(results, Is.Empty);
+        }
+
     }
 }

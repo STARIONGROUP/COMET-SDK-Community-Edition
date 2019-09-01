@@ -38,6 +38,59 @@ namespace CDP4Rules.RuleCheckers
     public class ParameterTypeComponentRuleChecker : RuleChecker
     {
         /// <summary>
+        /// Checks whether the referenced <see cref="MeasurementScale"/> is valid
+        /// </summary>
+        /// <param name="thing">
+        /// The subject <see cref="ParameterTypeComponent"/>
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="thing"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// thrown when <paramref name="thing"/> is not an <see cref="ParameterTypeComponent"/>
+        /// </exception>
+        [Rule("MA-0740")]
+        public IEnumerable<RuleCheckResult> ChecksWhetherTheParameterTypeComponentHasAValidScale(Thing thing)
+        {
+            var parameterTypeComponent = this.VerifyThingArgument(thing);
+
+            var results = new List<RuleCheckResult>();
+            var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
+            var rule = StaticRuleProvider.QueryRules().Single(r => r.Id == ruleAttribute.Id);
+
+            QuantityKind quantityKind = null;
+
+            if (parameterTypeComponent.Scale != null)
+            {
+                quantityKind = parameterTypeComponent.ParameterType as QuantityKind;
+                if (quantityKind == null)
+                {
+                    var result = new RuleCheckResult(thing, rule.Id,
+                        $"When the referenced ParameterType is a not QuantityKind, the ParameterTypeComponent.Scale must be null",
+                        SeverityKind.Error);
+                    results.Add(result);
+                }
+            }
+
+            quantityKind = parameterTypeComponent.ParameterType as QuantityKind;
+            if (quantityKind != null)
+            {
+                if (parameterTypeComponent.Scale == null)
+                {
+                    var result = new RuleCheckResult(thing, rule.Id,
+                        $"When the referenced ParameterType is a QuantityKind, the ParameterTypeComponent.Scale may not be null",
+                        SeverityKind.Error);
+                    results.Add(result);
+                }
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Checks whether a referenced <see cref="IDeprecatableThing"/> is deprecated
         /// </summary>
         /// <param name="thing">
