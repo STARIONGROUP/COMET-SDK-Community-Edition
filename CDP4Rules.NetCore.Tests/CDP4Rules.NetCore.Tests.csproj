@@ -14,13 +14,14 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4Common-CE" Version="3.2.0" />
+        <PackageReference Include="CDP4Rules-CE" Version="1.0.0" />
       </ItemGroup>
     </When>
 
     <When Condition="'$(Configuration)'=='Debug'">
       <ItemGroup>
         <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+		<ProjectReference Include="..\CDP4Rules\CDP4Rules.csproj" />
       </ItemGroup>
     </When>
   </Choose>
@@ -31,10 +32,6 @@
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit.Console" Version="3.10.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.14.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CDP4Rules\CDP4Rules.csproj" />
   </ItemGroup>
 
 </Project>

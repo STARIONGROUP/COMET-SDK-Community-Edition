@@ -12,7 +12,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4JsonSerializer-CE" Version="3.0.1" />
+        <PackageReference Include="CDP4JsonSerializer-CE" Version="3.0.2" />
       </ItemGroup>
     </When>
 

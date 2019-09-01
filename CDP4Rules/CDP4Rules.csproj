@@ -4,10 +4,10 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Rules Community Edition</Title>
-    <Version>0.0.1</Version>
+    <Version>1.0.0</Version>
     <Description>CDP4 Class Library that provides Model Analysis and Rule Checking</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam</Authors>
+    <Authors>Sam Gerené</Authors>
     <PackageId>CDP4Rules-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
@@ -16,6 +16,7 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
+      [Initial] Release version 1.0.0
     </PackageReleaseNotes>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
@@ -28,7 +29,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4Common-CE" Version="3.1.0" />
+        <PackageReference Include="CDP4Common-CE" Version="3.3.0" />
       </ItemGroup>
     </When>
 
@@ -47,5 +48,4 @@
     <EmbeddedResource Include="Resources\rules.xml" />
   </ItemGroup>
 
-  
 </Project>

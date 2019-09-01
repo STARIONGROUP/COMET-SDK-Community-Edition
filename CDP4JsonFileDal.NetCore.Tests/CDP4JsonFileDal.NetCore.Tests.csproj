@@ -12,7 +12,7 @@
   <Choose>
     <When Condition="'$(Configuration)'=='Release'">
       <ItemGroup>
-        <PackageReference Include="CDP4JsonFileDal-CE" Version="5.0.2" />
+        <PackageReference Include="CDP4JsonFileDal-CE" Version="5.0.3" />
       </ItemGroup>
     </When>
 
