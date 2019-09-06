@@ -36,7 +36,7 @@ namespace CDP4Rules
     /// The purpose of the <see cref="RuleCheckerEngine"/> is execute the <see cref="RuleChecker"/> on
     /// the provided <see cref="Thing"/>s.
     /// </summary>
-    public class RuleCheckerEngine
+    public class RuleCheckerEngine : IRuleCheckerEngine
     {
         /// <summary>
         /// A Dictionary used to store queried RuleCheckers per <see cref="Type"/>
