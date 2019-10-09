@@ -2,7 +2,7 @@
 // <copyright file="SerializerHelper.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -26,7 +26,6 @@ namespace CDP4JsonSerializer
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
     using CDP4Common.Types;
@@ -51,7 +50,8 @@ namespace CDP4JsonSerializer
         /// <returns>The <see cref="ValueArray{T}"/></returns>
         public static ValueArray<T> ToValueArray<T>(string valueArrayString)
         {
-            var extractArray = new Regex(@"^\[(.*)\]$");
+            var extractArray = new Regex(@"^\[(.*)\]$", RegexOptions.Singleline);
+
             var arrayExtractResult = extractArray.Match(valueArrayString);
             var extractedArrayString = arrayExtractResult.Groups[1].Value;
 
@@ -68,7 +68,10 @@ namespace CDP4JsonSerializer
                 stringValues.Add(match.Groups[1].Value.Replace("\\\"", "\"").Replace("\\\\", "\\"));
             }
 
+            //TODO: Is the Trim() really necessary here? ToJsonString serializes with leading/trailing spaces and ToValueArray Deserializez without leading/trailing spaces, which seems like an inconsistency.
+            //      See https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/issues/67
             var returned = stringValues.Select(m => (T)Convert.ChangeType(m.Trim(), typeof(T))).ToList();
+
             return new ValueArray<T>(returned);
         }
 
@@ -83,10 +86,10 @@ namespace CDP4JsonSerializer
             for (var i = 0; i < items.Count; i++)
             {
                 // make sure to escape double quote and backslash as this has special meaning in the value-array syntax
-                items[i] = string.Format("\"{0}\"", items[i].Replace("\\", "\\\\").Replace("\"", "\\\""));
+                items[i] = $"\"{items[i].Replace("\\", "\\\\").Replace("\"", "\\\"")}\"";
             }
 
-            return string.Format("[{0}]", string.Join(",", items));
+            return $"[{string.Join(",", items)}]";
         }
 
         /// <summary>
