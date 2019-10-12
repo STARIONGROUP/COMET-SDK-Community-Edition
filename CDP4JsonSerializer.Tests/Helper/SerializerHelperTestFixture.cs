@@ -77,8 +77,7 @@ namespace CDP4JsonSerializer.Tests.Helper
 
             Assert.AreEqual(json, resultjson, "Json creation failed for string \"{0}\"", input);
         }
-
-
+        
         private const string JsonString = @"{""widget"": {
                 ""debug"": ""on"",
                 ""window"": {
@@ -136,7 +135,7 @@ namespace CDP4JsonSerializer.Tests.Helper
             </bookstore>";
 
         private static readonly string[] TestStrings = new string[]
- {
+        {
             // See https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/issues/67
             //"value with trailing spaces  ",
             //"value with trailing space ",
@@ -174,6 +173,6 @@ namespace CDP4JsonSerializer.Tests.Helper
             "[_*q5d$U{qE7}r_7$fdf$h5yBFpPG+",
             XmlString,
             JsonString
- };
+        };
     }
 }
