@@ -27,6 +27,8 @@ namespace CDP4JsonSerializer.Tests.Helper
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CDP4Common.EngineeringModelData;
+    using CDP4Common.MetaInfo;
     using CDP4Common.Types;
     using NUnit.Framework;
 
@@ -59,6 +61,40 @@ namespace CDP4JsonSerializer.Tests.Helper
 
             var m = jObject.Property("m");
             Assert.IsNotNull(m);
+        }
+
+        [Test]
+        public void Verify_that_ParameterValueSet_is_serialized_and_deserialized()
+        {
+            var values = new List<string>();
+            values.Add("this is a\nnewline");
+            values.Add("this is another\nnewline");
+
+            var engineeringModel = new EngineeringModel { Iid = Guid.Parse("5643764e-f880-44bf-90ae-361f6661ceae") };
+            var iteration = new Iteration { Iid = Guid.Parse("f744ae63-cf36-4cc4-8d76-e83edd44f6d2") };
+            var elementDefinition = new ElementDefinition { Iid = Guid.Parse("f7f173ea-a742-42a5-81f1-59da2f470f16") };
+            var parameter = new Parameter { Iid = Guid.Parse("607764de-7598-4be2-9a95-34669de273e3") };
+            var parameterValueSet = new ParameterValueSet
+            {
+                Iid = Guid.Parse("2366c662-b857-4313-85ea-51f9bf4588b1"),
+                Manual = new ValueArray<string>(values)
+            };
+
+            engineeringModel.Iteration.Add(iteration);
+            iteration.Element.Add(elementDefinition);
+            elementDefinition.Parameter.Add(parameter);
+            parameter.ValueSet.Add(parameterValueSet);
+
+            var metadataprovider = new MetaDataProvider();
+            var serializer = new Cdp4JsonSerializer(metadataprovider, new Version(1, 1, 0));
+
+            var result = serializer.SerializeToString(parameterValueSet, false);
+
+            var stream = StreamHelper.GenerateStreamFromString(result);
+            var dtos = serializer.Deserialize(stream);
+            var dto = dtos.Single() as CDP4Common.DTO.ParameterValueSet;
+
+            Assert.That(dto.Manual, Is.EquivalentTo(values));
         }
 
         [Test]
