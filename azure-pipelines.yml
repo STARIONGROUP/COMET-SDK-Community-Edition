@@ -15,6 +15,13 @@ variables:
   buildConfiguration: 'Debug'
 
 steps:
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'cdp4-sdk'
+    organization: 'rheagroup'
+    scannerMode: 'MSBuild'
+    projectKey: 'ea3bc3f68f1bfb37ec938b071f0134c770083c5d'
+    projectName: 'CDP4-SDK-Community-Edition'
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
@@ -32,16 +39,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'cdp4-sdk'
-    organization: 'rheagroup'
-    scannerMode: 'MSBuild'
-    projectKey: 'ea3bc3f68f1bfb37ec938b071f0134c770083c5d'
-    projectName: 'CDP4-SDK-Community-Edition'
-
 - task: SonarCloudAnalyze@1
-
 - task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
