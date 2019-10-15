@@ -154,7 +154,7 @@ namespace CDP4Common.Helpers
         /// <returns>IEnumerable containing escaped strings</returns>
         private static IEnumerable<string> ValueArrayToStringList(ValueArray<string> valueArray)
         {
-            var items = valueArray;
+            var items = valueArray.ToList();
 
             for (var i = 0; i < items.Count; i++)
             {
