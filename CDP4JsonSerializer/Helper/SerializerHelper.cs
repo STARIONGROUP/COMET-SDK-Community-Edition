@@ -24,11 +24,9 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
     using CDP4Common.Types;
+    using CDP4Common.Helpers;
     using Newtonsoft.Json.Linq;
     using NLog;
 
@@ -48,49 +46,15 @@ namespace CDP4JsonSerializer
         /// <typeparam name="T">The generic type of the <see cref="ValueArray{T}"/></typeparam>
         /// <param name="valueArrayString">The string to convert</param>
         /// <returns>The <see cref="ValueArray{T}"/></returns>
-        public static ValueArray<T> ToValueArray<T>(string valueArrayString)
-        {
-            var extractArray = new Regex(@"^\[(.*)\]$", RegexOptions.Singleline);
-
-            var arrayExtractResult = extractArray.Match(valueArrayString);
-            var extractedArrayString = arrayExtractResult.Groups[1].Value;
-
-            // match within 2 unescape double-quote the following content:
-            // 1) (no special char \ or ") 0..* times
-            // 2) (a pattern that starts with \ followed by any character (special included) and 0..* "non special" characters) 0..* times
-            var valueExtractionRegex = new Regex(@"""([^""\\]*(\\.[^""\\]*)*)""");
-            var test = valueExtractionRegex.Matches(extractedArrayString);
-
-            var stringValues = new List<string>();
-            foreach (Match match in test)
-            {
-                // remove the extra backslash character added during serialization
-                stringValues.Add(match.Groups[1].Value.Replace("\\\"", "\"").Replace("\\\\", "\\"));
-            }
-
-            //TODO: Is the Trim() really necessary here? ToJsonString serializes with leading/trailing spaces and ToValueArray Deserializez without leading/trailing spaces, which seems like an inconsistency.
-            //      See https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/issues/67
-            var returned = stringValues.Select(m => (T)Convert.ChangeType(m.Trim(), typeof(T))).ToList();
-
-            return new ValueArray<T>(returned);
-        }
+        public static ValueArray<T> ToValueArray<T>(string valueArrayString) => ValueArrayUtils.FromJsonToValueArray<T>(valueArrayString);
 
         /// <summary>
         /// Convert a <see cref="ValueArray{String}"/> to the JSON format
         /// </summary>
         /// <param name="valueArray">The <see cref="ValueArray{String}"/></param>
         /// <returns>The JSON string</returns>
-        public static string ToJsonString(this ValueArray<string> valueArray)
-        {
-            var items = valueArray.ToList();
-            for (var i = 0; i < items.Count; i++)
-            {
-                // make sure to escape double quote and backslash as this has special meaning in the value-array syntax
-                items[i] = $"\"{items[i].Replace("\\", "\\\\").Replace("\"", "\\\"")}\"";
-            }
-
-            return $"[{string.Join(",", items)}]";
-        }
+        public static string ToJsonString(this ValueArray<string> valueArray) =>
+            ValueArrayUtils.ToJsonString(valueArray);
 
         /// <summary>
         /// Serialize a <see cref="OrderedItem"/> to a <see cref="JObject"/>
