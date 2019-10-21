@@ -128,6 +128,33 @@ namespace CDP4JsonSerializer.Tests
         }
 
         [Test]
+        public void VerifyThatValueArrayAreSerializedCorrectly()
+        {
+            this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
+
+            var parameterValueSet = new Dto.ParameterValueSet(Guid.NewGuid(), 1);
+            var valuearray = new[] { "123", "abc" };
+
+            parameterValueSet.Manual = new ValueArray<string>(valuearray);
+            parameterValueSet.Computed = new ValueArray<string>(valuearray);
+            parameterValueSet.Reference = new ValueArray<string>(valuearray);
+            parameterValueSet.Published = new ValueArray<string>(valuearray);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                this.serializer.SerializeToStream(new[] { parameterValueSet }, memoryStream);
+                memoryStream.Position = 0;
+
+                using (var reader = new StreamReader(memoryStream))
+                {
+                    var txt = reader.ReadToEnd();
+                    // output:  "manual":"[\"123\",\"abc\"]"
+                    Assert.IsTrue(txt.Contains("\"manual\":\"[\\\"123\\\",\\\"abc\\\"]\""));
+                }
+            }
+        }
+
+        [Test]
         public void VerifyThatValueArrayAreSerializedCorrectlyWithSpecialChar()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));

@@ -103,13 +103,10 @@ namespace CDP4JsonSerializer.Tests.Helper
         public void Verify_that_a_ValueArray_is_serialized_and_deserialized([ValueSource(nameof(TestStrings))] string input)
         {
             var valueArray = new ValueArray<string>(new List<string> { input });
-            var trimmedValueArray = new ValueArray<string>(new List<string> { input.Trim() });
-
             var json = valueArray.ToJsonString();
-
             var result = SerializerHelper.ToValueArray<string>(json);
 
-            Assert.AreEqual(trimmedValueArray, result, "ValueArray creation failed for string \"{0}\"", input);
+            Assert.AreEqual(valueArray, result, "ValueArray creation failed for string \"{0}\"", input);
 
             var resultjson = result.ToJsonString();
 
@@ -172,13 +169,14 @@ namespace CDP4JsonSerializer.Tests.Helper
                 </book>
             </bookstore>";
 
-        private static readonly string[] TestStrings = new string[]
+        private static readonly string[] TestStrings = 
         {
-            // See https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/issues/67
-            //"value with trailing spaces  ",
-            //"value with trailing space ",
-            //" value with leading spaces",
-            //"  value with leading space",
+            "value with trailing spaces  ",
+            "value with trailing space ",
+            " value with leading spaces",
+            "  value with leading space",
+            "\t\t\tvalue with leading and trailing tabs \t",
+            "\nvalue with leading and trailing linebreaks \r",
             "=2*(2+2)",
             "=2*\n(2+2)",
             "=2*\r(2+2)",

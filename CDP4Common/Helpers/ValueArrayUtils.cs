@@ -107,20 +107,17 @@ namespace CDP4Common.Helpers
             // match within 2 unescape double-quote the following content:
             // 1) (no special char \ or ") 0..* times
             // 2) (a pattern that starts with \ followed by any character (special included) and 0..* "non special" characters) 0..* times
-            var valueExtractionRegex = new Regex(@"""([^""\\]*(\\.[^""\\]*)*)""");
+            var valueExtractionRegex = new Regex(@"""([^""\\]*(\\.[^""\\]*)*)""", RegexOptions.Singleline);
             var test = valueExtractionRegex.Matches(extractedArrayString);
 
             var stringValues = new List<string>();
 
             foreach (Match match in test)
             {
-                // remove the extra backslash character added during serialization
-                stringValues.Add(match.Groups[1].Value.Replace("\\\"", "\"").Replace("\\\\", "\\"));
+                stringValues.Add(UnescapeString(match.Groups[1].Value));
             }
 
-            //TODO: Is the Trim() really necessary here? ToJsonString serializes with leading/trailing spaces and ToValueArray Deserializes without leading/trailing spaces, which seems like an inconsistency.
-            //      See https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/issues/67
-            var convertedStringList = stringValues.Select(m => (T)Convert.ChangeType(m.Trim(), typeof(T))).ToList();
+            var convertedStringList = stringValues.Select(m => (T)Convert.ChangeType(m, typeof(T))).ToList();
 
             return new ValueArray<T>(convertedStringList);
         }
@@ -158,11 +155,60 @@ namespace CDP4Common.Helpers
 
             for (var i = 0; i < items.Count; i++)
             {
-                // make sure to escape double quote and backslash as this has special meaning in the value-array syntax
-                items[i] = $"\"{items[i].Replace("\\", "\\\\").Replace("\"", "\\\"")}\"";
+                items[i] = $"\"{EscapeString(items[i])}\"";
             }
 
             return items;
+        }
+
+        /// <summary>
+        /// Contains a list of Keys and Values that can be used to replace each other when escaping and unescaping a <see cref="ValueArray{String}"/>
+        /// Details: Section 9 (String) of file: http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf
+        /// </summary>
+        private static readonly Dictionary<string, string> EscapePairs = new Dictionary<string, string>
+        {
+            {"\\\\", "\\"},
+            {"\\\"", "\""},
+            {"\\b", "\b"},
+            {"\\f", "\f"},
+            {"\\n", "\n"},
+            {"\\r", "\r"},
+            {"\\t", "\t"},
+            {"\\/", "/"}
+        };
+
+        /// <summary>
+        /// Escapes all characters that need to be treated as special characters in a <see cref="ValueArray{String}"/>
+        /// </summary>
+        /// <param name="unescapedString"></param>
+        /// <returns>The escaped string</returns>
+        public static string EscapeString(string unescapedString)
+        {
+            var escapedString = unescapedString;
+
+            foreach (var pair in EscapePairs)
+            {
+                escapedString = escapedString.Replace(pair.Value, pair.Key);
+            }
+
+            return escapedString;
+        }
+
+        /// <summary>
+        /// Unescapes all characters that need to be treated as special characters in a <see cref="ValueArray{String}"/>
+        /// </summary>
+        /// <param name="escapedString"></param>
+        /// <returns>The unescaped string</returns>
+        public static string UnescapeString(string escapedString)
+        {
+            var unescapeString = escapedString;
+
+            foreach (var pair in EscapePairs.Reverse())
+            {
+                unescapeString = unescapeString.Replace(pair.Key, pair.Value);
+            }
+
+            return unescapeString;
         }
     }
 }
