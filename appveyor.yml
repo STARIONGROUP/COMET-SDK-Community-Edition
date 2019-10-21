@@ -51,3 +51,7 @@ test:
     except:
       - WebServicesDependent
       - AppVeyorExclusion
+notifications:
+  - provider: Email
+    to:
+      - cdp_devs@rheagroup.com
