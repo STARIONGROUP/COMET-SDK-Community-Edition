@@ -3,7 +3,7 @@
 // <copyright file="IThingTransaction.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -56,6 +56,21 @@ namespace CDP4Dal.Operations
         /// Gets the copied <see cref="Thing"/>s
         /// </summary>
         IReadOnlyDictionary<Tuple<Thing, Thing>, OperationKind> CopiedThing { get; }
+
+        /// <summary>
+        /// The clone of the <see cref="Thing"/> associated with the current <see cref="ThingTransaction"/>
+        /// </summary>
+        Thing AssociatedClone { get; }
+
+        /// <summary>
+        /// Gets the <see cref="TransactionContext"/>
+        /// </summary>
+        TransactionContext TransactionContext { get; }
+
+        /// <summary>
+        /// The parent <see cref="IThingTransaction"/>
+        /// </summary>
+        IThingTransaction ParentTransaction { get; }
 
         /// <summary>
         /// Registers the provided <see cref="Thing"/> to be created in the current transaction along with all its potential contained <see cref="Thing"/>s
@@ -164,5 +179,11 @@ namespace CDP4Dal.Operations
         /// </summary>
         /// <returns>The <see cref="OperationContainer"/></returns>
         OperationContainer FinalizeTransaction();
+
+        /// <summary>
+        /// Merge the sub-transaction into the current <see cref="ThingTransaction"/>
+        /// </summary>
+        /// <param name="subTransaction">The sub-<see cref="IThingTransaction"/></param>
+        void Merge(IThingTransaction subTransaction);
     }
 }

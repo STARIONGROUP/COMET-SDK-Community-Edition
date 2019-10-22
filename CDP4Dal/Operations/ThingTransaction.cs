@@ -2,7 +2,7 @@
 // <copyright file="ThingTransaction.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -33,8 +33,6 @@ namespace CDP4Dal.Operations
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
     using CDP4Common.Extensions;
-    using CDP4Common.Helpers;
-    using CDP4Common.MetaInfo;
     using CDP4Common.Polyfills;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.CommonData;
@@ -45,17 +43,7 @@ namespace CDP4Dal.Operations
     /// The Transaction class contains all requests for the creations, updates, deletions of things
     /// </summary>
     public class ThingTransaction : IThingTransaction
-    {   
-        /// <summary>
-        /// The parent <see cref="ThingTransaction"/>
-        /// </summary>
-        private readonly ThingTransaction parentTransaction;
-
-        /// <summary>
-        /// The clone of the <see cref="Thing"/> associated with the current <see cref="ThingTransaction"/>
-        /// </summary>
-        private readonly Thing associatedClone;
-
+    {
         /// <summary>
         /// Gets the added <see cref="Thing"/>s
         /// </summary>
@@ -79,7 +67,7 @@ namespace CDP4Dal.Operations
         /// <summary>
         /// The current logger
         /// </summary>
-        private static Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ThingTransaction"/> class
@@ -101,13 +89,10 @@ namespace CDP4Dal.Operations
         /// </remarks>
         public ThingTransaction(TransactionContext transactionContext, Thing clone = null)
         {
-            if (transactionContext == null)
-            {
+            this.TransactionContext = 
+                transactionContext ?? 
                 throw new ArgumentNullException(nameof(transactionContext), $"The {nameof(transactionContext)} may not be null");
-            }
-
-            this.TransactionContext = transactionContext;
-            
+           
             this.addedThing = new List<Thing>();
             this.updatedThing = new Dictionary<Thing, Thing>();
             this.deletedThing = new List<Thing>();
@@ -115,7 +100,7 @@ namespace CDP4Dal.Operations
 
             if (clone != null)
             {
-                this.associatedClone = clone;
+                this.AssociatedClone = clone;
                 this.CreateOrUpdate(clone);
             }
         }
@@ -127,7 +112,7 @@ namespace CDP4Dal.Operations
         /// The clone of the <see cref="Thing"/> to add or update
         /// </param>
         /// <param name="parentTransaction">
-        /// The parent <see cref="ThingTransaction"/>
+        /// The parent <see cref="IThingTransaction"/>
         /// </param>
         /// <param name="containerClone">
         /// The container <see cref="Thing"/> for the current added or updated operation
@@ -143,7 +128,7 @@ namespace CDP4Dal.Operations
         ///    <paramref name="parentTransaction"/> shall be null.
         ///    <paramref name="containerClone"/> shall not be null as it is added as well and updated with the clone.
         /// </remarks>
-        public ThingTransaction(Thing clone, ThingTransaction parentTransaction, Thing containerClone)
+        public ThingTransaction(Thing clone, IThingTransaction parentTransaction, Thing containerClone)
         {
             if (clone == null)
             {
@@ -155,12 +140,12 @@ namespace CDP4Dal.Operations
             this.addedThing = new List<Thing>();
             this.updatedThing = new Dictionary<Thing, Thing>();
             this.deletedThing = new List<Thing>();
-            this.associatedClone = clone;
+            this.AssociatedClone = clone;
 
-            this.parentTransaction = parentTransaction;
+            this.ParentTransaction = parentTransaction;
             this.CreateOrUpdate(clone);
 
-            if (this.parentTransaction != null)
+            if (this.ParentTransaction != null)
             {
                 this.InitializeSubTransaction(this, containerClone);
             }
@@ -180,39 +165,37 @@ namespace CDP4Dal.Operations
         /// <summary>
         /// Gets the <see cref="TransactionContext"/>
         /// </summary>
-        public TransactionContext TransactionContext { get; private set; }
+        public IThingTransaction ParentTransaction { get; }
+
+        /// <summary>
+        /// Gets the <see cref="TransactionContext"/>
+        /// </summary>
+        public TransactionContext TransactionContext { get; }
+
+        /// <summary>
+        /// The clone of the <see cref="Thing"/> associated with the current <see cref="ThingTransaction"/>
+        /// </summary>
+        public Thing AssociatedClone { get; }
 
         /// <summary>
         /// Gets the Added <see cref="Thing"/>s
         /// </summary>
-        public IEnumerable<Thing> AddedThing
-        {
-            get { return this.addedThing; }
-        }
+        public IEnumerable<Thing> AddedThing => this.addedThing;
 
         /// <summary>
         /// Gets the deleted <see cref="Thing"/>s
         /// </summary>
-        public IEnumerable<Thing> DeletedThing
-        {
-            get { return this.deletedThing; }
-        }
+        public IEnumerable<Thing> DeletedThing => this.deletedThing;
 
         /// <summary>
         /// Gets the Updated <see cref="Thing"/>s where the Key is the original <see cref="Thing"/> and the value the cloned <see cref="Thing"/>
         /// </summary>
-        public IReadOnlyDictionary<Thing, Thing> UpdatedThing
-        {
-            get { return this.updatedThing; }
-        }
+        public IReadOnlyDictionary<Thing, Thing> UpdatedThing => this.updatedThing;
 
         /// <summary>
         /// Gets the copied <see cref="Thing"/>s
         /// </summary>
-        public IReadOnlyDictionary<Tuple<Thing, Thing>, OperationKind> CopiedThing
-        {
-            get { return this.copiedThing; }
-        }
+        public IReadOnlyDictionary<Tuple<Thing, Thing>, OperationKind> CopiedThing => copiedThing;
 
         /// <summary>
         /// Registers the provided <see cref="Thing"/> to be created in the current transaction
@@ -250,7 +233,7 @@ namespace CDP4Dal.Operations
                 }
             }
 
-            if (this.addedThing.Contains(clone))
+            if (this.AddedThing.Contains(clone))
             {
                 return;
             }
@@ -264,7 +247,7 @@ namespace CDP4Dal.Operations
 
             this.addedThing.Add(clone);
 
-            if (this.parentTransaction == null && containerClone != null)
+            if (this.ParentTransaction == null && containerClone != null)
             {
                 this.UpdateContainer(clone, containerClone);
             }
@@ -313,18 +296,18 @@ namespace CDP4Dal.Operations
                 throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null");
             }
 
-            if(this.updatedThing.Values.Any(x => x == clone) || this.addedThing.Any(x => x == clone))
+            if(this.UpdatedThing.Values.Any(x => x == clone) || this.AddedThing.Any(x => x == clone))
             {
                 return;
             }
 
-            if(this.updatedThing.Values.Any(x => x.Iid == clone.Iid) || this.addedThing.Any(x => x.Iid == clone.Iid))
+            if(this.UpdatedThing.Values.Any(x => x.Iid == clone.Iid) || this.AddedThing.Any(x => x.Iid == clone.Iid))
             {
                 return;
             }
 
-            var updatedthing = this.GetUpdatedThing(clone);
-            if(updatedthing != null)
+            var UpdatedThing = this.GetUpdatedThing(clone);
+            if(UpdatedThing != null)
             {
                 if (clone.Iid == Guid.Empty)
                 {
@@ -332,7 +315,7 @@ namespace CDP4Dal.Operations
                 }
 
                 clone.ChangeKind = ChangeKind.Update;
-                this.updatedThing.Add(updatedthing, clone);
+                this.updatedThing.Add(UpdatedThing, clone);
             }
             else
             {
@@ -352,7 +335,7 @@ namespace CDP4Dal.Operations
                 throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null.");
             }
             
-            if (this.deletedThing.Any(x => x.Iid == clone.Iid))
+            if (this.DeletedThing.Any(x => x.Iid == clone.Iid))
             {
                 return;
             }
@@ -365,7 +348,7 @@ namespace CDP4Dal.Operations
                 throw new NotImplementedException("Delete of Deprecatable thing is not implemented.");
             }
 
-            if (this.parentTransaction != null)
+            if (this.ParentTransaction != null)
             {
                 if (containerClone == null)
                 {
@@ -376,7 +359,7 @@ namespace CDP4Dal.Operations
                 if (previousUpdatedReference != null)
                 {
                     // remove potential reference from the list of updated thing in the current transaction
-                    var updatedThingKey = this.updatedThing.Keys.SingleOrDefault(x => x.Iid == clone.Iid);
+                    var updatedThingKey = this.UpdatedThing.Keys.SingleOrDefault(x => x.Iid == clone.Iid);
                     if (updatedThingKey != null)
                     {
                         this.updatedThing.Remove(updatedThingKey);
@@ -388,7 +371,7 @@ namespace CDP4Dal.Operations
                 else
                 {
                     // remove from the list of added thing 
-                    var thingInAddedList = this.addedThing.SingleOrDefault(x => x.Iid == clone.Iid);
+                    var thingInAddedList = this.AddedThing.SingleOrDefault(x => x.Iid == clone.Iid);
                     if (thingInAddedList != null)
                     {
                         this.addedThing.Remove(thingInAddedList);
@@ -455,7 +438,7 @@ namespace CDP4Dal.Operations
             clone.Iid = Guid.NewGuid();
             var originalCopyPair = new Tuple<Thing, Thing>(original, clone);
 
-            if (this.copiedThing.ContainsKey(originalCopyPair))
+            if (this.CopiedThing.ContainsKey(originalCopyPair))
             {
                 return;
             }
@@ -482,19 +465,15 @@ namespace CDP4Dal.Operations
                 throw new ArgumentOutOfRangeException(nameof(thing), $"The Iid of {nameof(thing)} may not be the empty Guid.");
             }
 
-            var clone = this.updatedThing.Values.SingleOrDefault(x => x.Iid == thing.Iid);
+            var clone = this.UpdatedThing.Values.SingleOrDefault(x => x.Iid == thing.Iid);
             if (clone != null)
             {
                 return clone;
             }
 
-            clone = this.addedThing.SingleOrDefault(x => x.Iid == thing.Iid);
-            if (clone != null)
-            {
-                return clone;
-            }
-
-            return null;
+            clone = this.AddedThing.SingleOrDefault(x => x.Iid == thing.Iid);
+            
+            return clone;
         }
 
         /// <summary>
@@ -523,12 +502,8 @@ namespace CDP4Dal.Operations
 
             var allUpdatedThing = this.GetAllUpdatedThings().ToList();
             clone = allUpdatedThing.SingleOrDefault(x => x.Iid == thing.Iid);
-            if (clone != null)
-            {
-                return clone;
-            }
-
-            return null;
+            
+            return clone;
         }
 
         /// <summary>
@@ -545,7 +520,7 @@ namespace CDP4Dal.Operations
         /// </remarks>
         public void FinalizeSubTransaction(Thing clone, Thing containerclone, Thing nextThing = null)
         {
-            if (this.parentTransaction == null)
+            if (this.ParentTransaction == null)
             {
                 throw new InvalidOperationException("This method shall only be called on a sub-transaction.");
             }
@@ -565,54 +540,54 @@ namespace CDP4Dal.Operations
             this.UpdateContainer(clone, containerclone, nextThing);
 
             // update the reference of possible other clones of the same type which were added when a contained item 
-            // of the current associatedClone was updated to another one
+            // of the current AssociatedClone was updated to another one
             var rootClone = GetOperationRootClone();
-            var cloneTypeToUpdate = this.associatedClone.GetContainerInformation().Item1;
+            var cloneTypeToUpdate = this.AssociatedClone.GetContainerInformation().Item1;
 
             foreach (
-                var addedthing in
-                    this.addedThing.Where(
-                        x => x != this.associatedClone && x.GetContainerInformation().Item1 == cloneTypeToUpdate))
+                var addedThing in
+                    this.AddedThing.Where(
+                        x => x != this.AssociatedClone && x.GetContainerInformation().Item1 == cloneTypeToUpdate))
             {
-                if (!addedthing.IsContainedBy(rootClone.Iid))
+                if (!addedThing.IsContainedBy(rootClone.Iid))
                 {
                     // no need to update the container as it cannot be accessed through the current chain of operations
                     continue;
                 }
 
                 // the clone should have been added
-                var containerOfaddedthing = this.GetClone(addedthing.Container);
-                if (containerOfaddedthing == null)
+                var containerOfAddedThing = this.GetClone(addedThing.Container);
+                if (containerOfAddedThing == null)
                 {
                     throw new TransactionException("could not find the corresponding clone for the container of the added thing added outside the chain of transaction.");
                 }
 
-                this.UpdateContainer(addedthing, containerOfaddedthing);
+                this.UpdateContainer(addedThing, containerOfAddedThing);
             }
 
             foreach (
-                var updatedthing in
-                    this.updatedThing.Values.Where(
-                        x => x != this.associatedClone && x.GetContainerInformation().Item1 == cloneTypeToUpdate))
+                var updatedThing in
+                    this.UpdatedThing.Values.Where(
+                        x => x != this.AssociatedClone && x.GetContainerInformation().Item1 == cloneTypeToUpdate))
             {
-                if (!updatedthing.IsContainedBy(rootClone.Iid))
+                if (!updatedThing.IsContainedBy(rootClone.Iid))
                 {
                     // no need to update the container as it cannot be access through the current chain of operations
                     continue;
                 }
 
                 // the clone should have been added
-                var containerOfupdatedthing = this.GetClone(updatedthing.Container);
-                if (containerOfupdatedthing == null)
+                var containerOfUpdatedThing = this.GetClone(updatedThing.Container);
+                if (containerOfUpdatedThing == null)
                 {
                     throw new TransactionException(
                         "could not find the corresponding clone for the container of the updated thing added outside the chain of transaction.");
                 }
 
-                this.UpdateContainer(updatedthing, containerOfupdatedthing);
+                this.UpdateContainer(updatedThing, containerOfUpdatedThing);
             }
 
-            this.parentTransaction.Merge(this);
+            this.ParentTransaction.Merge(this);
         }
 
         /// <summary>
@@ -621,7 +596,7 @@ namespace CDP4Dal.Operations
         /// <returns>The <see cref="OperationContainer"/></returns>
         public OperationContainer FinalizeTransaction()
         {
-            if (this.parentTransaction != null)
+            if (this.ParentTransaction != null)
             {
                 throw new InvalidOperationException("This shall only be possible for a root transaction.");
             }
@@ -649,23 +624,23 @@ namespace CDP4Dal.Operations
             // case1: the updated thing is already in the transaction as an updated thing
             var allUpdatedThings = this.GetAllUpdatedThings().ToList();
 
-            var updatedthing = allUpdatedThings.SingleOrDefault(x => x.Iid == clone.Iid);
-            if(updatedthing != null)
+            var updatedThing = allUpdatedThings.SingleOrDefault(x => x.Iid == clone.Iid);
+            if(updatedThing != null)
             {
-                if (updatedthing == clone)
+                if (updatedThing == clone)
                 {
                     throw new InvalidOperationException("The clone and its previous version cannot be the same.");
                 }
 
-                return updatedthing;
+                return updatedThing;
             }
 
             // case2: the updated thing is already in the transaction as an added thing
             var allAddedThings = this.GetAllAddedThings().ToList();
-            updatedthing = allAddedThings.SingleOrDefault(x => x.Iid == clone.Iid);
-            if (updatedthing != null)
+            updatedThing = allAddedThings.SingleOrDefault(x => x.Iid == clone.Iid);
+            if (updatedThing != null)
             {
-                if (updatedthing == clone)
+                if (updatedThing == clone)
                 {
                     throw new InvalidOperationException("The clone and its previous version cannot be the same.");
                 }
@@ -688,13 +663,13 @@ namespace CDP4Dal.Operations
             }
 
             // case4: the updated thing is the original
-            updatedthing = lazy.Value;
-            if (updatedthing == clone)
+            updatedThing = lazy.Value;
+            if (updatedThing == clone)
             {
                 throw new InvalidOperationException("The transaction only accepts clones.");
             }
 
-            return updatedthing;
+            return updatedThing;
         }
 
         /// <summary>
@@ -703,10 +678,10 @@ namespace CDP4Dal.Operations
         /// <returns>An enumeration of all the added things</returns>
         private IEnumerable<Thing> GetAllAddedThings()
         {
-            var allAddedThing = this.addedThing.ToList();
-            if (this.parentTransaction != null)
+            var allAddedThing = this.AddedThing.ToList();
+            if (this.ParentTransaction != null)
             {
-                this.PopulateAllAddedThingsList(this.parentTransaction, allAddedThing);
+                this.PopulateAllAddedThingsList(this.ParentTransaction, allAddedThing);
             }
 
             return allAddedThing;
@@ -717,13 +692,13 @@ namespace CDP4Dal.Operations
         /// </summary>
         /// <param name="transaction">The <see cref="ThingTransaction"/></param>
         /// <param name="allAddedThing">The list containing all the added things</param>
-        private void PopulateAllAddedThingsList(ThingTransaction transaction, List<Thing> allAddedThing)
+        private void PopulateAllAddedThingsList(IThingTransaction transaction, List<Thing> allAddedThing)
         {
-            var thingsToAdd = transaction.addedThing.Where(x => allAddedThing.All(y => y.Iid != x.Iid));
+            var thingsToAdd = transaction.AddedThing.Where(x => allAddedThing.All(y => y.Iid != x.Iid));
             allAddedThing.AddRange(thingsToAdd);
-            if (transaction.parentTransaction != null)
+            if (transaction.ParentTransaction != null)
             {
-                this.PopulateAllAddedThingsList(transaction.parentTransaction, allAddedThing);
+                this.PopulateAllAddedThingsList(transaction.ParentTransaction, allAddedThing);
             }
         }
 
@@ -733,10 +708,10 @@ namespace CDP4Dal.Operations
         /// <returns>An enumeration of all the updated things</returns>
         private IEnumerable<Thing> GetAllUpdatedThings()
         {
-            var allUpdatedThings = this.updatedThing.Values.ToList();
-            if (this.parentTransaction != null)
+            var allUpdatedThings = this.UpdatedThing.Values.ToList();
+            if (this.ParentTransaction != null)
             {
-                this.PopulateAllUpdatedThingsList(this.parentTransaction, allUpdatedThings);
+                this.PopulateAllUpdatedThingsList(this.ParentTransaction, allUpdatedThings);
             }
 
             return allUpdatedThings;
@@ -745,15 +720,15 @@ namespace CDP4Dal.Operations
         /// <summary>
         /// Populates the list of all the updated things in a specified transaction
         /// </summary>
-        /// <param name="transaction">The specified <see cref="ThingTransaction"/></param>
+        /// <param name="transaction">The specified <see cref="IThingTransaction"/></param>
         /// <param name="allUpdatedThing">The list of all the updated things to populate</param>
-        private void PopulateAllUpdatedThingsList(ThingTransaction transaction, List<Thing> allUpdatedThing)
+        private void PopulateAllUpdatedThingsList(IThingTransaction transaction, List<Thing> allUpdatedThing)
         {
-            var thingsToAdd = transaction.updatedThing.Values.Where(x => allUpdatedThing.All(y => y.Iid != x.Iid));
+            var thingsToAdd = transaction.UpdatedThing.Values.Where(x => allUpdatedThing.All(y => y.Iid != x.Iid));
             allUpdatedThing.AddRange(thingsToAdd);
-            if (transaction.parentTransaction != null)
+            if (transaction.ParentTransaction != null)
             {
-                this.PopulateAllUpdatedThingsList(transaction.parentTransaction, allUpdatedThing);
+                this.PopulateAllUpdatedThingsList(transaction.ParentTransaction, allUpdatedThing);
             }
         }
 
@@ -773,7 +748,7 @@ namespace CDP4Dal.Operations
                 var findIndexMethod = containerProperty.PropertyType.GetMethod("FindIndex", new []{ typeof(Predicate<Thing>) });
                 Predicate<Thing> predicate = x => x.Iid == thing.Iid;
 
-                var index = (int)findIndexMethod.Invoke(containerList, new object[] { predicate });
+                var index = (int)(findIndexMethod?.Invoke(containerList, new object[] { predicate })??-1);
                 if (index != -1)
                 {
                     // Get the indexer property, by default the indexer property name is "Item"
@@ -850,15 +825,14 @@ namespace CDP4Dal.Operations
         /// <param name="thing">The <see cref="Thing"/> to be remove from the containers</param>
         private void RemoveThingFromContainer(Thing thing)
         {
-            var containers = this.addedThing.Concat(this.updatedThing.Values);
+            var containers = this.AddedThing.Concat(this.UpdatedThing.Values);
             
             var thingType = thing.GetType();
 
             Thing originalThing = null;
             if (thing.Cache != null && thing.Cache.ContainsKey(thing.CacheKey))
             {
-                Lazy<Thing> lazyThing;
-                var result = thing.Cache.TryGetValue(thing.CacheKey, out lazyThing);
+                var result = thing.Cache.TryGetValue(thing.CacheKey, out var lazyThing);
                 originalThing = (result)? lazyThing.Value : null;
             }
 
@@ -912,13 +886,13 @@ namespace CDP4Dal.Operations
         }
 
         /// <summary>
-        /// Initialize a <see cref="ThingTransaction"/> from its parent transaction
+        /// Initialize a <see cref="IThingTransaction"/> from its parent transaction
         /// </summary>
         /// <param name="subTransaction">The <see cref="ThingTransaction"/> to initialize</param>
-        /// <param name="containerClone">The <see cref="Thing"/> that is supposed to contain the <see cref="associatedClone"/>. May be null at initialization</param>
+        /// <param name="containerClone">The <see cref="Thing"/> that is supposed to contain the <see cref="AssociatedClone"/>. May be null at initialization</param>
         private void InitializeSubTransaction(ThingTransaction subTransaction, Thing containerClone)
         {
-            var containerType = this.associatedClone.GetContainerInformation().Item1;
+            var containerType = this.AssociatedClone.GetContainerInformation().Item1;
 
             if (containerClone != null)
             {
@@ -928,13 +902,13 @@ namespace CDP4Dal.Operations
                     throw new InvalidOperationException("The specified container is not allowed as a container.");
                 }
 
-                if (this.parentTransaction.addedThing.Contains(containerClone))
+                if (this.ParentTransaction.AddedThing.Contains(containerClone))
                 {
                     subTransaction.addedThing.Add(containerClone);
                 }
-                else if (this.parentTransaction.updatedThing.Values.Contains(containerClone))
+                else if (this.ParentTransaction.UpdatedThing.Values.Contains(containerClone))
                 {
-                    var keyvalue = this.parentTransaction.updatedThing.Single(x => x.Value == containerClone);
+                    var keyvalue = this.ParentTransaction.UpdatedThing.Single(x => x.Value == containerClone);
                     subTransaction.updatedThing.Add(keyvalue.Key, keyvalue.Value);
                 }
                 else
@@ -966,13 +940,13 @@ namespace CDP4Dal.Operations
 
             foreach (var transaction in chainOfTransactions)
             {
-                if (clone.IsContainedBy(transaction.associatedClone.Iid))
+                if (clone.IsContainedBy(transaction.AssociatedClone.Iid))
                 {
                     continue;
                 }
 
                 // add a new clone if newContainerClone is not contained by the current operation's chain of clones
-                var containerType = transaction.associatedClone.GetType();
+                var containerType = transaction.AssociatedClone.GetType();
                 var container = clone.GetContainerOfType(containerType);
                 if (container == null)
                 {
@@ -992,12 +966,12 @@ namespace CDP4Dal.Operations
         /// <returns>The clone of the <see cref="Thing"/> at the root of all the current <see cref="ThingTransaction"/>s</returns>
         private Thing GetOperationRootClone()
         {
-            var rootClone = this.associatedClone;
-            var parent = this.parentTransaction;
+            var rootClone = this.AssociatedClone;
+            var parent = this.ParentTransaction;
             while (parent != null)
             {
-                rootClone = parent.associatedClone ?? rootClone;
-                parent = parent.parentTransaction;
+                rootClone = parent.AssociatedClone ?? rootClone;
+                parent = parent.ParentTransaction;
             }
 
             return rootClone;
@@ -1007,13 +981,13 @@ namespace CDP4Dal.Operations
         /// Gets the chain of <see cref="ThingTransaction"/> for the current one
         /// </summary>
         /// <returns>The chain of <see cref="ThingTransaction"/></returns>
-        private IEnumerable<ThingTransaction> GetChainOfSubTransactions()
+        private IEnumerable<IThingTransaction> GetChainOfSubTransactions()
         {
-            var parent = this.parentTransaction;
+            var parent = this.ParentTransaction;
             while (parent != null)
             {
                 yield return parent;
-                parent = parent.parentTransaction;
+                parent = parent.ParentTransaction;
             }
         }
 
@@ -1068,7 +1042,7 @@ namespace CDP4Dal.Operations
 
             if (containerProperty == null)
             {
-                throw new TransactionException(string.Format("The property {0} could not be found", containerInformation.Item2));
+                throw new TransactionException($"The property {containerInformation.Item2} could not be found");
             }
 
             if (containerProperty.PropertyType.GetGenericTypeDefinition() == typeof(ContainerList<>))
@@ -1086,17 +1060,17 @@ namespace CDP4Dal.Operations
         /// Merge the sub-transaction into the current <see cref="ThingTransaction"/>
         /// </summary>
         /// <param name="subTransaction">The sub-<see cref="IThingTransaction"/></param>
-        private void Merge(IThingTransaction subTransaction)
+        public void Merge(IThingTransaction subTransaction)
         {
-            // replace or add all element in addedThing
+            // replace or add all element in AddedThing
             foreach (var thing in subTransaction.AddedThing)
             {
-                if (this.addedThing.Contains(thing))
+                if (this.AddedThing.Contains(thing))
                 {
                     continue;
                 }
 
-                var existingThing = this.addedThing.SingleOrDefault(t => t.Iid == thing.Iid);
+                var existingThing = this.AddedThing.SingleOrDefault(t => t.Iid == thing.Iid);
                 if (existingThing != null)
                 {
                     // replace the current thing with the one from the sub-transaction
@@ -1111,9 +1085,9 @@ namespace CDP4Dal.Operations
 
             foreach (var keyValuePair in subTransaction.UpdatedThing)
             {
-                if (this.updatedThing.ContainsKey(keyValuePair.Key))
+                if (this.UpdatedThing.ContainsKey(keyValuePair.Key))
                 {
-                    var parentKeyValue = this.updatedThing.Single(x => x.Key == keyValuePair.Key);
+                    var parentKeyValue = this.UpdatedThing.Single(x => x.Key == keyValuePair.Key);
                     if (parentKeyValue.Value != keyValuePair.Value)
                     {
                         throw new InvalidOperationException("2 clones have been created for the same thing.");
@@ -1123,7 +1097,7 @@ namespace CDP4Dal.Operations
                 }
 
                 // check if the key in a sub-transaction correspond to a value in the current one
-                var existingKeyValue = this.updatedThing.SingleOrDefault(x => x.Value == keyValuePair.Key);
+                var existingKeyValue = this.UpdatedThing.SingleOrDefault(x => x.Value == keyValuePair.Key);
                 if (existingKeyValue.Key != null)
                 {
                     this.updatedThing[existingKeyValue.Key] = keyValuePair.Value;
@@ -1172,7 +1146,7 @@ namespace CDP4Dal.Operations
         /// <param name="operationContainer">The returned <see cref="OperationContainer"/></param>
         private void CreateNewThingOperation(OperationContainer operationContainer)
         {
-            foreach (var thing in this.addedThing)
+            foreach (var thing in this.AddedThing)
             {
                 operationContainer.AddOperation(new Operation(null, thing.ToDto(), OperationKind.Create));
             }
@@ -1192,9 +1166,9 @@ namespace CDP4Dal.Operations
         /// </remarks>
         private void CreateUpdatedThingOperation(OperationContainer operationContainer)
         {
-            foreach (var keyValue in this.updatedThing)
+            foreach (var keyValue in this.UpdatedThing)
             {
-                Thing originalThing = null;
+                Thing originalThing;
 
                 // keyValue.Value - the clone that has been updated in the context of the transaction
                 // keyValue.Key   - the original that is present in the cache
@@ -1228,7 +1202,7 @@ namespace CDP4Dal.Operations
         /// <param name="operationContainer">The returned <see cref="OperationContainer"/></param>
         private void CreateDeletedThingOperation(OperationContainer operationContainer)
         {
-            foreach (var thing in this.deletedThing)
+            foreach (var thing in this.DeletedThing)
             {
                 var dto = thing.ToDto();
                 operationContainer.AddOperation(new Operation(dto, dto, OperationKind.Delete));
@@ -1241,7 +1215,7 @@ namespace CDP4Dal.Operations
         /// <param name="operationContainer">The returned <see cref="OperationContainer"/></param>
         private void CreateCopyThingOperation(OperationContainer operationContainer)
         {
-            foreach (var pair in this.copiedThing)
+            foreach (var pair in this.CopiedThing)
             {
                 var originalCopy = pair.Key;
                 var original = originalCopy.Item1.ToDto();
@@ -1259,7 +1233,7 @@ namespace CDP4Dal.Operations
         /// Create the <see cref="Operation"/>s related to the moving of <see cref="Thing"/>s
         /// </summary>
         /// <param name="operationContainer">The returned <see cref="OperationContainer"/></param>
-        private void CreateMovethingOperation(OperationContainer operationContainer)
+        private void CreateMoveThingOperation(OperationContainer operationContainer)
         {
             throw new NotImplementedException();
         }
@@ -1270,10 +1244,10 @@ namespace CDP4Dal.Operations
         /// <returns>The <see cref="TopContainer.RevisionNumber"/></returns>
         private int GetTopContainerRevisionNumber()
         {
-            var things = new List<Thing>(this.addedThing);
-            things.AddRange(this.updatedThing.Keys);
-            things.AddRange(this.deletedThing);
-            things.AddRange(this.copiedThing.Select(x => x.Key.Item2));
+            var things = new List<Thing>(this.AddedThing);
+            things.AddRange(this.UpdatedThing.Keys);
+            things.AddRange(this.DeletedThing);
+            things.AddRange(this.CopiedThing.Select(x => x.Key.Item2));
 
             var distinctTopContainer = things.Select(x => x.TopContainer).DistinctBy(t => t.Iid).ToList();            
             if (distinctTopContainer.Count != 1)
@@ -1291,7 +1265,7 @@ namespace CDP4Dal.Operations
         {
             // filter out the added thing or updated thing that have been marked as deleted
             // filter out the contained thing of a deleted thing
-            var markedForDeletion = this.deletedThing.ToList();
+            var markedForDeletion = this.DeletedThing.ToList();
             foreach (var thing in markedForDeletion)
             {
                 var cloneType = thing.GetType();
@@ -1321,14 +1295,14 @@ namespace CDP4Dal.Operations
         private void RemoveThingFromOperationLists(Thing thingToRemove)
         {
             // remove it from the list of updated thing in the current transaction
-            var updatedThingKey = this.updatedThing.Keys.SingleOrDefault(x => x.Iid == thingToRemove.Iid);
+            var updatedThingKey = this.UpdatedThing.Keys.SingleOrDefault(x => x.Iid == thingToRemove.Iid);
             if (updatedThingKey != null)
             {
                 this.updatedThing.Remove(updatedThingKey);
             }
 
             // remove from the list of added thing 
-            var thingInAddedList = this.addedThing.SingleOrDefault(x => x.Iid == thingToRemove.Iid);
+            var thingInAddedList = this.AddedThing.SingleOrDefault(x => x.Iid == thingToRemove.Iid);
             if (thingInAddedList != null)
             {
                 this.addedThing.Remove(thingInAddedList);
@@ -1337,7 +1311,7 @@ namespace CDP4Dal.Operations
             // remove the thing as deleted if it is not cached
             if (!thingToRemove.IsCached())
             {
-                var thingInDeletedList = this.deletedThing.SingleOrDefault(x => x.Iid == thingToRemove.Iid);
+                var thingInDeletedList = this.DeletedThing.SingleOrDefault(x => x.Iid == thingToRemove.Iid);
                 if (thingInDeletedList != null)
                 {
                     this.deletedThing.Remove(thingInDeletedList);
