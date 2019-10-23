@@ -464,5 +464,46 @@ namespace CDP4Dal.Tests
             await assembler.Synchronize(new List<Dto.Thing> { sitedirdto });
             Assert.AreEqual(1, assembler.Cache.Count);
         }
+
+        [Test]
+        public async Task VerifyThatSynchronizationPreservesKeysOfOrderedItemList()
+        {
+            var assembler = new Assembler(this.uri);
+
+            var simpleUnit = new Dto.SimpleUnit(Guid.NewGuid(), 1) { Name = "Unit", ShortName = "unit" };
+            var ratioScale = new Dto.RatioScale(Guid.NewGuid(), 1) { Name = "Ration", ShortName = "ratio", NumberSet = NumberSetKind.INTEGER_NUMBER_SET };
+            ratioScale.Unit = simpleUnit.Iid;
+
+            var simpleQuantityKind1 = new Dto.SimpleQuantityKind(Guid.NewGuid(), 1) { Name = "Kind1", ShortName = "kind1", Symbol = "symbol" };
+            simpleQuantityKind1.DefaultScale = ratioScale.Iid;
+            var orderedItem1 = new OrderedItem() { K = 1, V = simpleQuantityKind1.Iid };
+
+            var simpleQuantityKind2 = new Dto.SimpleQuantityKind(Guid.NewGuid(), 1) { Name = "Kind2", ShortName = "kind2", Symbol = "symbol" };
+            simpleQuantityKind2.DefaultScale = ratioScale.Iid;
+            var orderedItem2 = new OrderedItem() { K = 2, V = simpleQuantityKind2.Iid };
+
+            this.siteRdl.Unit.Add(simpleUnit.Iid);
+            this.siteRdl.Scale.Add(ratioScale.Iid);
+            this.siteRdl.BaseQuantityKind.Add(orderedItem1);
+            this.siteRdl.BaseQuantityKind.Add(orderedItem2);
+
+            this.testInput.Add(simpleUnit);
+            this.testInput.Add(ratioScale);
+            this.testInput.Add(simpleQuantityKind1);
+            this.testInput.Add(simpleQuantityKind2);
+
+            await assembler.Synchronize(this.testInput);
+
+            Lazy<Thing> lazySiteRdl;
+            assembler.Cache.TryGetValue(new CacheKey(this.siteRdl.Iid, null), out lazySiteRdl);
+            var siteRdl = lazySiteRdl.Value as SiteReferenceDataLibrary;
+            var orderedItemList = siteRdl.BaseQuantityKind.ToDtoOrderedItemList();
+
+            Assert.AreEqual(1, orderedItemList.ToList()[0].K);
+            Assert.AreEqual(simpleQuantityKind1.Iid, orderedItemList.ToList()[0].V);
+
+            Assert.AreEqual(2, orderedItemList.ToList()[1].K);
+            Assert.AreEqual(simpleQuantityKind2.Iid, orderedItemList.ToList()[1].V);
+        }
     }
 }
