@@ -141,8 +141,8 @@ namespace CDP4JsonSerializer.Tests.Helper
         private const string XmlString = @"<?xml version=""1.0"" encoding=""UTF-8""?>
             <bookstore>
                 <book category=""cooking"">
-                    <title lang=""en"">Everyday Italian</title>
-                    <author>Giada De Laurentiis</author>
+                    <title lang=""en"">Everyday food</title>
+                    <author>Some great cook</author>
                     <year>2005</year>
                     <price>30.00</price>
                     <data><![CDATA[Within this Character Data block I can
@@ -154,14 +154,14 @@ namespace CDP4JsonSerializer.Tests.Helper
                         ]]></data>
                 </book>
                 <book category=""children"">
-                    <title lang=""en"">Harry Potter</title>
-                    <author>J K. Rowling</author>
+                    <title lang=""en"">Harry the child</title>
+                    <author>Some child author</author>
                     <year>2005</year>
                     <price>29.99</price>
                 </book>
                 <book category=""web"">
                     <title lang=""en"">Learning XML</title>
-                    <author>Erik T. Ray</author>
+                    <author>Some XML expert</author>
                     <year>2003</year>
                     <price>39.95</price>
                 </book>
