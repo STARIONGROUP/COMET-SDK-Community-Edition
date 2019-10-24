@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WSPDalTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4WspDal.Tests
 {
@@ -475,7 +473,7 @@ namespace CDP4WspDal.Tests
             fileRevision.AddContainer(ClassKind.Iteration, iterationiid);
             fileRevision.AddContainer(ClassKind.EngineeringModel, engineeringModeliid);
 
-            var context = string.Format("/EngineeringModel/{0}/iteration/{1}", engineeringModeliid, iterationiid);
+            var context = $"/EngineeringModel/{engineeringModeliid}/iteration/{iterationiid}";
             var operationContainer = new OperationContainer(context);
 
             var updateCommonFileStoreOperation = new Operation(originalDomainFileStore, modifiedDomainFileStore, OperationKind.Update);
@@ -496,8 +494,8 @@ namespace CDP4WspDal.Tests
             var dal = new WspDal();
             this.SetDalToBeOpen(dal);
 
-            var contextOne = string.Format("/EngineeringModel/{0}/iteration/{1}", Guid.NewGuid(), Guid.NewGuid());
-            var contextTwo = string.Format("/EngineeringModel/{0}/iteration/{1}", Guid.NewGuid(), Guid.NewGuid());
+            var contextOne = $"/EngineeringModel/{Guid.NewGuid()}/iteration/{Guid.NewGuid()}";
+            var contextTwo = $"/EngineeringModel/{Guid.NewGuid()}/iteration/{Guid.NewGuid()}";
 
             var operationContainerOne = new OperationContainer(contextOne);
             var operationContainerTwo = new OperationContainer(contextTwo);
@@ -507,6 +505,18 @@ namespace CDP4WspDal.Tests
             Assert.Throws<NotSupportedException>(() => dal.Write(operationContainers));
 
             Assert.Throws<NotSupportedException>(() => dal.Write(operationContainers));
+        }
+
+        [Test]
+        public async Task Vefify_that_when_OperationContainer_is_empty_an_empty_is_returned()
+        {
+            var dal = new WspDal();
+            this.SetDalToBeOpen(dal);
+
+            var context = $"/EngineeringModel/{Guid.NewGuid()}/iteration/{Guid.NewGuid()}";
+            var operationContainer = new OperationContainer(context);
+
+            Assert.That(await dal.Write(operationContainer), Is.Empty);
         }
 
         [Test]
@@ -578,7 +588,7 @@ namespace CDP4WspDal.Tests
         /// Set the credentials property so DAL appears to be open
         /// </summary>
         /// <param name="dal">
-        /// The <see cref="CdpServicesDal"/> that is to be opened
+        /// The <see cref="WspDal"/> that is to be opened
         /// </param>
         private void SetDalToBeOpen(WspDal dal)
         {

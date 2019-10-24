@@ -116,6 +116,12 @@ namespace CDP4ServicesDal
                 throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
             }
 
+            if (operationContainer.Operations.Count() == 0)
+            {
+                Logger.Debug("The operationContainer is empty, no round trip to the datasource is made");
+                return Enumerable.Empty<Thing>();
+            }
+
             var watch = Stopwatch.StartNew();
 
             var result = new List<Thing>();
