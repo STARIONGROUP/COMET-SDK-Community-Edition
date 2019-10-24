@@ -6,23 +6,13 @@
     <Description>CDP4Common netcore unit tests</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
-    <Configurations>Debug;Release</Configurations>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <Choose>
-    <When Condition="'$(Configuration)'=='Release'">
-      <ItemGroup>
-        <PackageReference Include="CDP4Common-CE" Version="3.4.0" />
-      </ItemGroup>
-    </When>
-
-    <When Condition="'$(Configuration)'=='Debug'">
-      <ItemGroup>
-        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-      </ItemGroup>
-    </When>
-  </Choose>
-
+  <ItemGroup>
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+  </ItemGroup>  
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="Moq" Version="4.12.0" />	  
