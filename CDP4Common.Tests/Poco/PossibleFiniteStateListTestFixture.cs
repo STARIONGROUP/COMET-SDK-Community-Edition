@@ -24,7 +24,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 #endregion
 
-namespace CDP4Common.NetCore.Tests.Poco
+namespace CDP4Common.Tests.Poco
 {
     using CDP4Common.EngineeringModelData;
     using NUnit.Framework;

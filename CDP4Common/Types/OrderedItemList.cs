@@ -481,6 +481,36 @@ namespace CDP4Common.Types
         }
 
         /// <summary>
+        /// Creates and returns a copy of this <see cref="OrderedItemList{T}"/> that preserves order of each item.
+        /// If the type T of the contained objects is <see cref="Thing"/> then a clone of each object is made with cloning all contained things, 
+        /// otherwise the object will be passed to a new item. Be cautious about mutability.
+        /// </summary>
+        /// <param name="container">The <see cref="Thing"/> that contains this <see cref="OrderedItemList{T}"/> clone.</param>
+        /// <returns>
+        /// A cloned instance of <see cref="OrderedItemList{T}"/>.
+        /// </returns>
+        public OrderedItemList<T> Clone(Thing container)
+        {
+            var clonedOrderedItemList = new OrderedItemList<T>(container, this.isComposite);
+            clonedOrderedItemList.AddOrderedItems(this.sortedItems.Select(x => {
+                var item = new OrderedItem() { K = x.Key };
+                var value = x.Value as Thing;
+                if (value != null)
+                {
+                    item.V = value.Clone(true);
+                }
+                else
+                {
+                    item.V = x.Value;
+                }
+
+                return item;
+            }));
+
+            return clonedOrderedItemList;
+        }
+
+        /// <summary>
         /// Compute a uniformly distributed random long sort key approximately in the middle between the given lower and upper sort keys.
         /// </summary>
         /// <param name="lowerSortKey">
