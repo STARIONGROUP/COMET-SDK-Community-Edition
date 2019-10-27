@@ -1,7 +1,6 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MappingToReferenceScale.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -21,8 +20,10 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
+// <summary>
+//   This is an auto-generated POCO Class. Any manual changes to this file will be overwritten!
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.SiteDirectoryData
 {
@@ -76,7 +77,7 @@ namespace CDP4Common.SiteDirectoryData
         /// </param>
         /// <param name="cache">
         /// The <see cref="ConcurrentDictionary{T, U}"/> where the current thing is stored.
-        /// The <see cref="Tuple{T}"/> of <see cref="Guid"/> and <see cref="Nullable{Guid}"/> is the key used to store this thing.
+        /// The <see cref="CacheKey"/> is the key used to store this thing.
         /// The key is a combination of this thing's identifier and the identifier of its <see cref="Iteration"/> container if applicable or null.
         /// </param>
         /// <param name="iDalUri">
