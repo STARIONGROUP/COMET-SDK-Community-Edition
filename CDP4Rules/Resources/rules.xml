@@ -159,5 +159,10 @@
       <DESCRIPTION>Checks whether the ShortnamedThing.shortname is unique within its Container</DESCRIPTION>
       <SEVERITY>Warning</SEVERITY>
     </RULE>
+    <RULE>
+      <ID>MA-0900</ID>
+      <DESCRIPTION>Checks whether the amount of Options in an Iteration of an EngineeringModel that is a Catalgue is not more than 1</DESCRIPTION>
+      <SEVERITY>Warning</SEVERITY>
+    </RULE>
   </RULES>
 </E-TM-10-25-RULE-DEFINITION>
