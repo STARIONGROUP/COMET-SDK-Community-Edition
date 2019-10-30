@@ -143,13 +143,9 @@ namespace CDP4Dal.Permission
                     return true;
                 case ParticipantAccessRightKind.MODIFY_IF_OWNER:
                     return true;
-
-                    break;
                 default:
                     return false;
             }
-
-            return false;
         }
 
         /// <summary>
