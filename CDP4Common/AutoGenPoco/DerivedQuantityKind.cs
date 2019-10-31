@@ -2,7 +2,7 @@
 // <copyright file="DerivedQuantityKind.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -127,14 +127,14 @@ namespace CDP4Common.SiteDirectoryData
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
             clone.HyperLink = cloneContainedThings ? new ContainerList<HyperLink>(clone) : new ContainerList<HyperLink>(this.HyperLink, clone);
             clone.PossibleScale = new List<MeasurementScale>(this.PossibleScale);
-            clone.QuantityKindFactor = cloneContainedThings ? new OrderedItemList<QuantityKindFactor>(clone, true) : new OrderedItemList<QuantityKindFactor>(this.QuantityKindFactor, clone);
+            clone.QuantityKindFactor = cloneContainedThings ? null : new OrderedItemList<QuantityKindFactor>(this.QuantityKindFactor, clone);
 
             if (cloneContainedThings)
             {
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
-                clone.QuantityKindFactor = this.QuantityKindFactor.Clone(clone);
+                clone.QuantityKindFactor = this.QuantityKindFactor.Clone(clone, true);
             }
 
             clone.Original = this;

@@ -2,7 +2,7 @@
 // <copyright file="Iteration.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -361,7 +361,7 @@ namespace CDP4Common.EngineeringModelData
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
             clone.ExternalIdentifierMap = cloneContainedThings ? new ContainerList<ExternalIdentifierMap>(clone) : new ContainerList<ExternalIdentifierMap>(this.ExternalIdentifierMap, clone);
             clone.Goal = cloneContainedThings ? new ContainerList<Goal>(clone) : new ContainerList<Goal>(this.Goal, clone);
-            clone.Option = cloneContainedThings ? new OrderedItemList<Option>(clone, true) : new OrderedItemList<Option>(this.Option, clone);
+            clone.Option = cloneContainedThings ? null : new OrderedItemList<Option>(this.Option, clone);
             clone.PossibleFiniteStateList = cloneContainedThings ? new ContainerList<PossibleFiniteStateList>(clone) : new ContainerList<PossibleFiniteStateList>(this.PossibleFiniteStateList, clone);
             clone.Publication = cloneContainedThings ? new ContainerList<Publication>(clone) : new ContainerList<Publication>(this.Publication, clone);
             clone.Relationship = cloneContainedThings ? new ContainerList<Relationship>(clone) : new ContainerList<Relationship>(this.Relationship, clone);
@@ -381,7 +381,7 @@ namespace CDP4Common.EngineeringModelData
                 clone.Element.AddRange(this.Element.Select(x => x.Clone(true)));
                 clone.ExternalIdentifierMap.AddRange(this.ExternalIdentifierMap.Select(x => x.Clone(true)));
                 clone.Goal.AddRange(this.Goal.Select(x => x.Clone(true)));
-                clone.Option = this.Option.Clone(clone);
+                clone.Option = this.Option.Clone(clone, true);
                 clone.PossibleFiniteStateList.AddRange(this.PossibleFiniteStateList.Select(x => x.Clone(true)));
                 clone.Publication.AddRange(this.Publication.Select(x => x.Clone(true)));
                 clone.Relationship.AddRange(this.Relationship.Select(x => x.Clone(true)));

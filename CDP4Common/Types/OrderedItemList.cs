@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OrderedItemList.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Types
 {
@@ -486,12 +484,13 @@ namespace CDP4Common.Types
         /// otherwise the object will be passed to a new item. Be cautious about mutability.
         /// </summary>
         /// <param name="container">The <see cref="Thing"/> that contains this <see cref="OrderedItemList{T}"/> clone.</param>
+        /// <param name="isComposite">Value indicating whether the <see cref="T"/> in this <see cref="OrderedItemList{T}"/> are part of a composition relationship</param>
         /// <returns>
         /// A cloned instance of <see cref="OrderedItemList{T}"/>.
         /// </returns>
-        public OrderedItemList<T> Clone(Thing container)
+        public OrderedItemList<T> Clone(Thing container, bool isComposite)
         {
-            var clonedOrderedItemList = new OrderedItemList<T>(container, this.isComposite);
+            var clonedOrderedItemList = new OrderedItemList<T>(container, isComposite);
             clonedOrderedItemList.AddOrderedItems(this.sortedItems.Select(x => {
                 var item = new OrderedItem() { K = x.Key };
                 var value = x.Value as Thing;

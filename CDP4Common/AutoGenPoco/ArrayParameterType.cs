@@ -2,7 +2,7 @@
 // <copyright file="ArrayParameterType.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -159,7 +159,7 @@ namespace CDP4Common.SiteDirectoryData
             var clone = (ArrayParameterType)this.MemberwiseClone();
             clone.Alias = cloneContainedThings ? new ContainerList<Alias>(clone) : new ContainerList<Alias>(this.Alias, clone);
             clone.Category = new List<Category>(this.Category);
-            clone.Component = cloneContainedThings ? new OrderedItemList<ParameterTypeComponent>(clone, true) : new OrderedItemList<ParameterTypeComponent>(this.Component, clone);
+            clone.Component = cloneContainedThings ? null : new OrderedItemList<ParameterTypeComponent>(this.Component, clone);
             clone.Definition = cloneContainedThings ? new ContainerList<Definition>(clone) : new ContainerList<Definition>(this.Definition, clone);
             clone.Dimension = new OrderedItemList<int>(this.Dimension, this);
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
@@ -169,7 +169,7 @@ namespace CDP4Common.SiteDirectoryData
             if (cloneContainedThings)
             {
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
-                clone.Component = this.Component.Clone(clone);
+                clone.Component = this.Component.Clone(clone, true);
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
             }
