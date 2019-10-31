@@ -2,7 +2,7 @@
 // <copyright file="Book.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -175,11 +175,11 @@ namespace CDP4Common.ReportingData
             clone.Category = new List<Category>(this.Category);
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
-            clone.Section = cloneContainedThings ? new OrderedItemList<Section>(clone, true) : new OrderedItemList<Section>(this.Section, clone);
+            clone.Section = cloneContainedThings ? null : new OrderedItemList<Section>(this.Section, clone);
 
             if (cloneContainedThings)
             {
-                clone.Section = this.Section.Clone(clone);
+                clone.Section = this.Section.Clone(clone, true);
             }
 
             clone.Original = this;

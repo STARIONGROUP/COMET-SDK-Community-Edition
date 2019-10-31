@@ -2,7 +2,7 @@
 // <copyright file="EngineeringModel.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -194,7 +194,7 @@ namespace CDP4Common.EngineeringModelData
         protected override Thing GenericClone(bool cloneContainedThings)
         {
             var clone = (EngineeringModel)this.MemberwiseClone();
-            clone.Book = cloneContainedThings ? new OrderedItemList<Book>(clone, true) : new OrderedItemList<Book>(this.Book, clone);
+            clone.Book = cloneContainedThings ? null : new OrderedItemList<Book>(this.Book, clone);
             clone.CommonFileStore = cloneContainedThings ? new ContainerList<CommonFileStore>(clone) : new ContainerList<CommonFileStore>(this.CommonFileStore, clone);
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
@@ -205,7 +205,7 @@ namespace CDP4Common.EngineeringModelData
 
             if (cloneContainedThings)
             {
-                clone.Book = this.Book.Clone(clone);
+                clone.Book = this.Book.Clone(clone, true);
                 clone.CommonFileStore.AddRange(this.CommonFileStore.Select(x => x.Clone(true)));
                 clone.GenericNote.AddRange(this.GenericNote.Select(x => x.Clone(true)));
                 clone.Iteration.AddRange(this.Iteration.Select(x => x.Clone(true)));

@@ -2,7 +2,7 @@
 // <copyright file="DiagramEdge.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -142,14 +142,14 @@ namespace CDP4Common.DiagramData
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
             clone.LocalStyle = cloneContainedThings ? new ContainerList<OwnedStyle>(clone) : new ContainerList<OwnedStyle>(this.LocalStyle, clone);
-            clone.Point = cloneContainedThings ? new OrderedItemList<Point>(clone, true) : new OrderedItemList<Point>(this.Point, clone);
+            clone.Point = cloneContainedThings ? null : new OrderedItemList<Point>(this.Point, clone);
 
             if (cloneContainedThings)
             {
                 clone.Bounds.AddRange(this.Bounds.Select(x => x.Clone(true)));
                 clone.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Clone(true)));
                 clone.LocalStyle.AddRange(this.LocalStyle.Select(x => x.Clone(true)));
-                clone.Point = this.Point.Clone(clone);
+                clone.Point = this.Point.Clone(clone, true);
             }
 
             clone.Original = this;
