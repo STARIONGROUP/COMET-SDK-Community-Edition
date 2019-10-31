@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PersonRole.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.SiteDirectoryData
 {
@@ -30,6 +28,7 @@ namespace CDP4Common.SiteDirectoryData
     using System.Linq;
     using System.Reflection;
     using CDP4Common.CommonData;
+    using CDP4Common.Helpers;
     using CDP4Common.Polyfills;
 
     /// <summary>
@@ -42,30 +41,16 @@ namespace CDP4Common.SiteDirectoryData
         /// </summary>
         private void PopulatePersonPermissions()
         {
-            var pocos = typeof(Thing).QueryAssembly().GetTypes().Where(x => typeof(Thing).QueryIsAssignableFrom(x));
-            foreach (var poco in pocos)
-            {
-                var field = poco.QueryField("DefaultPersonAccess");
-                if (field == null)
-                {
-                    continue;
-                }
-
-                var accessRight = (PersonAccessRightKind)field.GetRawConstantValue();
-                if (accessRight != PersonAccessRightKind.NONE)
-                {
-                    continue;
-                }
-
-                ClassKind classkind;
-                Enum.TryParse(poco.Name, out classkind);
-                var personPermission = new PersonPermission(Guid.NewGuid(), null, null)
-                                           {
-                                               AccessRight = accessRight,
-                                               ObjectClass = classkind
-                                           };
-                this.PersonPermission.Add(personPermission);
-            }
+            var provider = new DefaultPermissionProvider();
+            provider.GetDefaultTypeNamePersonPermissions()
+                    .Where(x => x.Value.Equals(PersonAccessRightKind.NONE))
+                    .ToList()
+                    .ForEach(x => {
+                        var personPermission = new PersonPermission(Guid.NewGuid(), null, null);
+                        personPermission.AccessRight = x.Value;
+                        personPermission.ObjectClass = (ClassKind)Enum.Parse(ClassKind.GetType(), x.Key);
+                        this.PersonPermission.Add(personPermission);
+                    });
         }
     }
 }
