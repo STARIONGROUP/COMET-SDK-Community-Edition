@@ -56,12 +56,12 @@ namespace CDP4Common.Types
         /// <summary>
         /// backing field for the container of this <see cref="OrderedItemList{T}"/>
         /// </summary>
-        public readonly Thing container;
+        public Thing Container { get; private set; }
 
         /// <summary>
         /// A value indicating that this <see cref="OrderedItemList{T}"/> is a container
         /// </summary>
-        public readonly bool isComposite;
+        public bool IsComposite { get; private set; }
 
         /// <summary>
         /// The highest sort key currently in this <see cref="OrderedItemList{T}"/>.
@@ -75,10 +75,10 @@ namespace CDP4Common.Types
         /// <param name="isComposite">Value indicating whether the <see cref="T"/> in this <see cref="OrderedItemList{T}"/> are part of a composition relationship</param>
         public OrderedItemList(Thing container, bool isComposite = false)
         {
-            this.container = container;
+            this.Container = container;
             this.sortedItems = new SortedList<long, T>();
             this.random = new Random(Guid.NewGuid().GetHashCode());
-            this.isComposite = isComposite;
+            this.IsComposite = isComposite;
         }
 
         /// <summary>
@@ -88,10 +88,10 @@ namespace CDP4Common.Types
         /// <param name="container">The owner of this <see cref="OrderedItemList{T}"/></param>
         public OrderedItemList(OrderedItemList<T> orderedItemList, Thing container)
         {
-            this.container = container;
+            this.Container = container;
             this.sortedItems = new SortedList<long, T>(orderedItemList.SortedItems);
             this.random = new Random(Guid.NewGuid().GetHashCode());
-            this.isComposite = orderedItemList.isComposite;
+            this.IsComposite = orderedItemList.IsComposite;
 
             if (this.sortedItems.Any())
             {
@@ -201,9 +201,9 @@ namespace CDP4Common.Types
                     throw new ArgumentNullException("value");
                 }
 
-                if (value as Thing != null && this.isComposite)
+                if (value as Thing != null && this.IsComposite)
                 {
-                    (value as Thing).Container = this.container;
+                    (value as Thing).Container = this.Container;
                 }
 
                 if (typeof(T) == typeof(Thing))
@@ -266,9 +266,9 @@ namespace CDP4Common.Types
             }
 
             var pocoThing = item as Thing;
-            if (pocoThing != null && this.isComposite)
+            if (pocoThing != null && this.IsComposite)
             {
-                pocoThing.Container = this.container;
+                pocoThing.Container = this.Container;
             }
 
             var newSortKey = this.ComputeSortKey(this.highestKey, this.highestKey + (2L * DefaultKeyInterval));
@@ -484,13 +484,12 @@ namespace CDP4Common.Types
         /// otherwise the object will be passed to a new item. Be cautious about mutability.
         /// </summary>
         /// <param name="container">The <see cref="Thing"/> that contains this <see cref="OrderedItemList{T}"/> clone.</param>
-        /// <param name="isComposite">Value indicating whether the <see cref="T"/> in this <see cref="OrderedItemList{T}"/> are part of a composition relationship</param>
         /// <returns>
         /// A cloned instance of <see cref="OrderedItemList{T}"/>.
         /// </returns>
-        public OrderedItemList<T> Clone(Thing container, bool isComposite)
+        public OrderedItemList<T> Clone(Thing container)
         {
-            var clonedOrderedItemList = new OrderedItemList<T>(container, isComposite);
+            var clonedOrderedItemList = new OrderedItemList<T>(container, this.IsComposite);
             clonedOrderedItemList.AddOrderedItems(this.sortedItems.Select(x => {
                 var item = new OrderedItem() { K = x.Key };
                 var value = x.Value as Thing;
@@ -554,9 +553,9 @@ namespace CDP4Common.Types
         private void Add(long sortKey, T item)
         {
             var domainObject = item as Thing;
-            if (domainObject != null && this.isComposite)
+            if (domainObject != null && this.IsComposite)
             {
-                domainObject.Container = this.container;
+                domainObject.Container = this.Container;
             }
 
             if (this.sortedItems.ContainsKey(sortKey))

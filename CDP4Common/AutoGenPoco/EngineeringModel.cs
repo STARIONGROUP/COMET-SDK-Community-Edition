@@ -205,7 +205,7 @@ namespace CDP4Common.EngineeringModelData
 
             if (cloneContainedThings)
             {
-                clone.Book = this.Book.Clone(clone, true);
+                clone.Book = this.Book.Clone(clone);
                 clone.CommonFileStore.AddRange(this.CommonFileStore.Select(x => x.Clone(true)));
                 clone.GenericNote.AddRange(this.GenericNote.Select(x => x.Clone(true)));
                 clone.Iteration.AddRange(this.Iteration.Select(x => x.Clone(true)));

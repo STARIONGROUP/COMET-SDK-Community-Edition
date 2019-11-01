@@ -179,7 +179,7 @@ namespace CDP4Common.ReportingData
 
             if (cloneContainedThings)
             {
-                clone.Section = this.Section.Clone(clone, true);
+                clone.Section = this.Section.Clone(clone);
             }
 
             clone.Original = this;

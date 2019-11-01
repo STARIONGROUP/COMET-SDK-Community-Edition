@@ -178,7 +178,7 @@ namespace CDP4Common.ReportingData
 
             if (cloneContainedThings)
             {
-                clone.Note = this.Note.Clone(clone, true);
+                clone.Note = this.Note.Clone(clone);
             }
 
             clone.Original = this;

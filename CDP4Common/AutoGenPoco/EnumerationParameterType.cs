@@ -140,7 +140,7 @@ namespace CDP4Common.SiteDirectoryData
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
-                clone.ValueDefinition = this.ValueDefinition.Clone(clone, true);
+                clone.ValueDefinition = this.ValueDefinition.Clone(clone);
             }
 
             clone.Original = this;
