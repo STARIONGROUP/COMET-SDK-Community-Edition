@@ -381,7 +381,7 @@ namespace CDP4Common.EngineeringModelData
                 clone.Element.AddRange(this.Element.Select(x => x.Clone(true)));
                 clone.ExternalIdentifierMap.AddRange(this.ExternalIdentifierMap.Select(x => x.Clone(true)));
                 clone.Goal.AddRange(this.Goal.Select(x => x.Clone(true)));
-                clone.Option = this.Option.Clone(clone, true);
+                clone.Option = this.Option.Clone(clone);
                 clone.PossibleFiniteStateList.AddRange(this.PossibleFiniteStateList.Select(x => x.Clone(true)));
                 clone.Publication.AddRange(this.Publication.Select(x => x.Clone(true)));
                 clone.Relationship.AddRange(this.Relationship.Select(x => x.Clone(true)));

@@ -140,7 +140,7 @@ namespace CDP4Common.EngineeringModelData
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
-                clone.RuleVerification = this.RuleVerification.Clone(clone, true);
+                clone.RuleVerification = this.RuleVerification.Clone(clone);
             }
 
             clone.Original = this;

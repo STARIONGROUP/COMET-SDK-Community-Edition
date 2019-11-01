@@ -149,7 +149,7 @@ namespace CDP4Common.DiagramData
                 clone.Bounds.AddRange(this.Bounds.Select(x => x.Clone(true)));
                 clone.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Clone(true)));
                 clone.LocalStyle.AddRange(this.LocalStyle.Select(x => x.Clone(true)));
-                clone.Point = this.Point.Clone(clone, true);
+                clone.Point = this.Point.Clone(clone);
             }
 
             clone.Original = this;

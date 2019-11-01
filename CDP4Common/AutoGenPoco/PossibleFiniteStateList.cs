@@ -169,7 +169,7 @@ namespace CDP4Common.EngineeringModelData
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
-                clone.PossibleState = this.PossibleState.Clone(clone, true);
+                clone.PossibleState = this.PossibleState.Clone(clone);
             }
 
             clone.Original = this;

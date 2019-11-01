@@ -142,7 +142,7 @@ namespace CDP4Common.SiteDirectoryData
             if (cloneContainedThings)
             {
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
-                clone.Component = this.Component.Clone(clone, true);
+                clone.Component = this.Component.Clone(clone);
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
             }

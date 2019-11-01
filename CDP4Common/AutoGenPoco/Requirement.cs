@@ -164,7 +164,7 @@ namespace CDP4Common.EngineeringModelData
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
                 clone.ParameterValue.AddRange(this.ParameterValue.Select(x => x.Clone(true)));
-                clone.ParametricConstraint = this.ParametricConstraint.Clone(clone, true);
+                clone.ParametricConstraint = this.ParametricConstraint.Clone(clone);
             }
 
             clone.Original = this;

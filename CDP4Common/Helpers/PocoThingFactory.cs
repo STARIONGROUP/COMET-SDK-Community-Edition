@@ -114,7 +114,7 @@ namespace CDP4Common.Helpers
                 {
                     var ordereditem = new OrderedItem {K = item.K, V = thing};
                     orderedList.Add(ordereditem);
-                    if (list.isComposite)
+                    if (list.IsComposite)
                     {
                         thing.ChangeKind = ChangeKind.None;
                     }
