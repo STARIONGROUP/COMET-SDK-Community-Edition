@@ -42,13 +42,14 @@ namespace CDP4Common.SiteDirectoryData
         private void PopulatePersonPermissions()
         {
             var provider = new DefaultPermissionProvider();
+            var classKindType = ClassKind.GetType();
             provider.GetDefaultTypeNamePersonPermissions()
                     .Where(x => x.Value.Equals(PersonAccessRightKind.NONE))
                     .ToList()
                     .ForEach(x => {
                         var personPermission = new PersonPermission(Guid.NewGuid(), null, null);
                         personPermission.AccessRight = x.Value;
-                        personPermission.ObjectClass = (ClassKind)Enum.Parse(ClassKind.GetType(), x.Key);
+                        personPermission.ObjectClass = (ClassKind)Enum.Parse(classKindType, x.Key);
                         this.PersonPermission.Add(personPermission);
                     });
         }
