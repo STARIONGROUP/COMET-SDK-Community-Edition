@@ -36,6 +36,7 @@ namespace CDP4JsonFileDal
     using System.Threading;
     using System.Threading.Tasks;
     using CDP4Common.CommonData;
+    using CDP4Common.Comparers;
     using CDP4Dal.Operations;
     using CDP4Dal;
     using CDP4Dal.Composition;
@@ -75,6 +76,12 @@ namespace CDP4JsonFileDal
         /// The iteration zip location.
         /// </summary>
         private const string IterationZipLocation = "Iterations";
+
+        /// <summary>
+        /// The <see cref="GuidComparer"/> that is used to sort <see cref="List{Guid}"/> for
+        /// stable serialization
+        /// </summary>
+        private readonly GuidComparer guidComparer = new GuidComparer();
 
         /// <summary>
         /// The NLog logger
@@ -577,7 +584,9 @@ namespace CDP4JsonFileDal
         {
             using (var memoryStream = new MemoryStream())
             {
-                this.Serializer.SerializeToStream(prunedSiteDirectoryContents, memoryStream);
+                var orderedContents = prunedSiteDirectoryContents.OrderBy(x => x.Iid, this.guidComparer);
+
+                this.Serializer.SerializeToStream(orderedContents, memoryStream);
                 using (var outputStream = new MemoryStream(memoryStream.ToArray()))
                 {
                     var zipEntry = zipFile.AddEntry("SiteDirectory.json", outputStream);
@@ -609,7 +618,7 @@ namespace CDP4JsonFileDal
                     containmentPocos.Remove(siteReferenceDataLibrary);
                 }
 
-                var dtos = containmentPocos.Select(poco => poco.ToDto());
+                var dtos = containmentPocos.Select(poco => poco.ToDto()).OrderBy(x => x.Iid, this.guidComparer);
 
                 using (var memoryStream = new MemoryStream())
                 {
@@ -648,7 +657,7 @@ namespace CDP4JsonFileDal
                     containmentPocos.Remove(modelReferenceDataLibrary);
                 }
 
-                var dtos = containmentPocos.Select(poco => poco.ToDto());
+                var dtos = containmentPocos.Select(poco => poco.ToDto()).OrderBy(x => x.Iid, this.guidComparer);
 
                 using (var memoryStream = new MemoryStream())
                 {
@@ -704,7 +713,7 @@ namespace CDP4JsonFileDal
                 }
 
                 var containmentPocos = iteration.QueryContainedThingsDeep();
-                var dtos = containmentPocos.Select(poco => poco.ToDto());
+                var dtos = containmentPocos.Select(poco => poco.ToDto()).OrderBy(x => x.Iid, this.guidComparer);
 
                 using (var iterationMemoryStream = new MemoryStream())
                 {
@@ -788,7 +797,7 @@ namespace CDP4JsonFileDal
         {
             if (zipEntry == null)
             {
-                throw new ArgumentNullException("zipEntry", "Supplied archive entry is invalid.");
+                throw new ArgumentNullException(nameof(zipEntry), "Supplied archive entry is invalid.");
             }
 
             var watch = Stopwatch.StartNew();
