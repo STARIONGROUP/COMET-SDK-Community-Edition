@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelReferenceDataLibrarySerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="ModelReferenceDataLibrarySerializer"/> class is to provide a <see cref="ModelReferenceDataLibrary"/> specific serializer
     /// </summary>
-    public class ModelReferenceDataLibrarySerializer : IThingSerializer
+    public class ModelReferenceDataLibrarySerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -78,30 +77,30 @@ namespace CDP4JsonSerializer
         private JObject Serialize(ModelReferenceDataLibrary modelReferenceDataLibrary)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](modelReferenceDataLibrary.Alias));
-            jsonObject.Add("baseQuantityKind", this.PropertySerializerMap["baseQuantityKind"](modelReferenceDataLibrary.BaseQuantityKind));
-            jsonObject.Add("baseUnit", this.PropertySerializerMap["baseUnit"](modelReferenceDataLibrary.BaseUnit));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](modelReferenceDataLibrary.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("baseQuantityKind", this.PropertySerializerMap["baseQuantityKind"](modelReferenceDataLibrary.BaseQuantityKind.OrderBy(x => x, this.orderedItemComparer)));
+            jsonObject.Add("baseUnit", this.PropertySerializerMap["baseUnit"](modelReferenceDataLibrary.BaseUnit.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), modelReferenceDataLibrary.ClassKind)));
-            jsonObject.Add("constant", this.PropertySerializerMap["constant"](modelReferenceDataLibrary.Constant));
-            jsonObject.Add("definedCategory", this.PropertySerializerMap["definedCategory"](modelReferenceDataLibrary.DefinedCategory));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](modelReferenceDataLibrary.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](modelReferenceDataLibrary.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](modelReferenceDataLibrary.ExcludedPerson));
-            jsonObject.Add("fileType", this.PropertySerializerMap["fileType"](modelReferenceDataLibrary.FileType));
-            jsonObject.Add("glossary", this.PropertySerializerMap["glossary"](modelReferenceDataLibrary.Glossary));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](modelReferenceDataLibrary.HyperLink));
+            jsonObject.Add("constant", this.PropertySerializerMap["constant"](modelReferenceDataLibrary.Constant.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("definedCategory", this.PropertySerializerMap["definedCategory"](modelReferenceDataLibrary.DefinedCategory.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](modelReferenceDataLibrary.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](modelReferenceDataLibrary.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](modelReferenceDataLibrary.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("fileType", this.PropertySerializerMap["fileType"](modelReferenceDataLibrary.FileType.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("glossary", this.PropertySerializerMap["glossary"](modelReferenceDataLibrary.Glossary.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](modelReferenceDataLibrary.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](modelReferenceDataLibrary.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](modelReferenceDataLibrary.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](modelReferenceDataLibrary.Name));
-            jsonObject.Add("parameterType", this.PropertySerializerMap["parameterType"](modelReferenceDataLibrary.ParameterType));
-            jsonObject.Add("referenceSource", this.PropertySerializerMap["referenceSource"](modelReferenceDataLibrary.ReferenceSource));
+            jsonObject.Add("parameterType", this.PropertySerializerMap["parameterType"](modelReferenceDataLibrary.ParameterType.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("referenceSource", this.PropertySerializerMap["referenceSource"](modelReferenceDataLibrary.ReferenceSource.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("requiredRdl", this.PropertySerializerMap["requiredRdl"](modelReferenceDataLibrary.RequiredRdl));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](modelReferenceDataLibrary.RevisionNumber));
-            jsonObject.Add("rule", this.PropertySerializerMap["rule"](modelReferenceDataLibrary.Rule));
-            jsonObject.Add("scale", this.PropertySerializerMap["scale"](modelReferenceDataLibrary.Scale));
+            jsonObject.Add("rule", this.PropertySerializerMap["rule"](modelReferenceDataLibrary.Rule.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("scale", this.PropertySerializerMap["scale"](modelReferenceDataLibrary.Scale.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](modelReferenceDataLibrary.ShortName));
-            jsonObject.Add("unit", this.PropertySerializerMap["unit"](modelReferenceDataLibrary.Unit));
-            jsonObject.Add("unitPrefix", this.PropertySerializerMap["unitPrefix"](modelReferenceDataLibrary.UnitPrefix));
+            jsonObject.Add("unit", this.PropertySerializerMap["unit"](modelReferenceDataLibrary.Unit.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("unitPrefix", this.PropertySerializerMap["unitPrefix"](modelReferenceDataLibrary.UnitPrefix.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }
 
@@ -122,7 +121,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var modelReferenceDataLibrary = thing as ModelReferenceDataLibrary;

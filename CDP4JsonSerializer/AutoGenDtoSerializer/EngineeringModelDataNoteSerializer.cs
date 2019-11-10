@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EngineeringModelDataNoteSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="EngineeringModelDataNoteSerializer"/> class is to provide a <see cref="EngineeringModelDataNote"/> specific serializer
     /// </summary>
-    public class EngineeringModelDataNoteSerializer : IThingSerializer
+    public class EngineeringModelDataNoteSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -71,14 +70,14 @@ namespace CDP4JsonSerializer
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), engineeringModelDataNote.ClassKind)));
             jsonObject.Add("content", this.PropertySerializerMap["content"](engineeringModelDataNote.Content));
             jsonObject.Add("createdOn", this.PropertySerializerMap["createdOn"](engineeringModelDataNote.CreatedOn));
-            jsonObject.Add("discussion", this.PropertySerializerMap["discussion"](engineeringModelDataNote.Discussion));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](engineeringModelDataNote.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](engineeringModelDataNote.ExcludedPerson));
+            jsonObject.Add("discussion", this.PropertySerializerMap["discussion"](engineeringModelDataNote.Discussion.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](engineeringModelDataNote.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](engineeringModelDataNote.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](engineeringModelDataNote.Iid));
             jsonObject.Add("languageCode", this.PropertySerializerMap["languageCode"](engineeringModelDataNote.LanguageCode));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](engineeringModelDataNote.ModifiedOn));
             jsonObject.Add("primaryAnnotatedThing", this.PropertySerializerMap["primaryAnnotatedThing"](engineeringModelDataNote.PrimaryAnnotatedThing));
-            jsonObject.Add("relatedThing", this.PropertySerializerMap["relatedThing"](engineeringModelDataNote.RelatedThing));
+            jsonObject.Add("relatedThing", this.PropertySerializerMap["relatedThing"](engineeringModelDataNote.RelatedThing.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](engineeringModelDataNote.RevisionNumber));
             return jsonObject;
         }
@@ -100,7 +99,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var engineeringModelDataNote = thing as EngineeringModelDataNote;

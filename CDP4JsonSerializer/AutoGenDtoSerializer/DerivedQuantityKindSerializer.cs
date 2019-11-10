@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DerivedQuantityKindSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="DerivedQuantityKindSerializer"/> class is to provide a <see cref="DerivedQuantityKind"/> specific serializer
     /// </summary>
-    public class DerivedQuantityKindSerializer : IThingSerializer
+    public class DerivedQuantityKindSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -72,21 +71,21 @@ namespace CDP4JsonSerializer
         private JObject Serialize(DerivedQuantityKind derivedQuantityKind)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](derivedQuantityKind.Alias));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](derivedQuantityKind.Category));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](derivedQuantityKind.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](derivedQuantityKind.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), derivedQuantityKind.ClassKind)));
             jsonObject.Add("defaultScale", this.PropertySerializerMap["defaultScale"](derivedQuantityKind.DefaultScale));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](derivedQuantityKind.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](derivedQuantityKind.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](derivedQuantityKind.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](derivedQuantityKind.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](derivedQuantityKind.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](derivedQuantityKind.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](derivedQuantityKind.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](derivedQuantityKind.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](derivedQuantityKind.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](derivedQuantityKind.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](derivedQuantityKind.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](derivedQuantityKind.Name));
-            jsonObject.Add("possibleScale", this.PropertySerializerMap["possibleScale"](derivedQuantityKind.PossibleScale));
+            jsonObject.Add("possibleScale", this.PropertySerializerMap["possibleScale"](derivedQuantityKind.PossibleScale.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("quantityDimensionSymbol", this.PropertySerializerMap["quantityDimensionSymbol"](derivedQuantityKind.QuantityDimensionSymbol));
-            jsonObject.Add("quantityKindFactor", this.PropertySerializerMap["quantityKindFactor"](derivedQuantityKind.QuantityKindFactor));
+            jsonObject.Add("quantityKindFactor", this.PropertySerializerMap["quantityKindFactor"](derivedQuantityKind.QuantityKindFactor.OrderBy(x => x, this.orderedItemComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](derivedQuantityKind.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](derivedQuantityKind.ShortName));
             jsonObject.Add("symbol", this.PropertySerializerMap["symbol"](derivedQuantityKind.Symbol));
@@ -110,7 +109,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var derivedQuantityKind = thing as DerivedQuantityKind;

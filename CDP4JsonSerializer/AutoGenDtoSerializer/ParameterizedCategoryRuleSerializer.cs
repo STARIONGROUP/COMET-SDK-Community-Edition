@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterizedCategoryRuleSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="ParameterizedCategoryRuleSerializer"/> class is to provide a <see cref="ParameterizedCategoryRule"/> specific serializer
     /// </summary>
-    public class ParameterizedCategoryRuleSerializer : IThingSerializer
+    public class ParameterizedCategoryRuleSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -68,18 +67,18 @@ namespace CDP4JsonSerializer
         private JObject Serialize(ParameterizedCategoryRule parameterizedCategoryRule)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](parameterizedCategoryRule.Alias));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](parameterizedCategoryRule.Alias.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("category", this.PropertySerializerMap["category"](parameterizedCategoryRule.Category));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), parameterizedCategoryRule.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](parameterizedCategoryRule.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](parameterizedCategoryRule.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](parameterizedCategoryRule.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](parameterizedCategoryRule.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](parameterizedCategoryRule.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](parameterizedCategoryRule.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](parameterizedCategoryRule.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](parameterizedCategoryRule.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](parameterizedCategoryRule.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](parameterizedCategoryRule.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](parameterizedCategoryRule.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](parameterizedCategoryRule.Name));
-            jsonObject.Add("parameterType", this.PropertySerializerMap["parameterType"](parameterizedCategoryRule.ParameterType));
+            jsonObject.Add("parameterType", this.PropertySerializerMap["parameterType"](parameterizedCategoryRule.ParameterType.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](parameterizedCategoryRule.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](parameterizedCategoryRule.ShortName));
             return jsonObject;
@@ -102,7 +101,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var parameterizedCategoryRule = thing as ParameterizedCategoryRule;

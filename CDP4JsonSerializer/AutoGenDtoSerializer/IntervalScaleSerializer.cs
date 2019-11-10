@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IntervalScaleSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="IntervalScaleSerializer"/> class is to provide a <see cref="IntervalScale"/> specific serializer
     /// </summary>
-    public class IntervalScaleSerializer : IThingSerializer
+    public class IntervalScaleSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -76,17 +75,17 @@ namespace CDP4JsonSerializer
         private JObject Serialize(IntervalScale intervalScale)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](intervalScale.Alias));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](intervalScale.Alias.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), intervalScale.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](intervalScale.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](intervalScale.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](intervalScale.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](intervalScale.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](intervalScale.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](intervalScale.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](intervalScale.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](intervalScale.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](intervalScale.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](intervalScale.IsDeprecated));
             jsonObject.Add("isMaximumInclusive", this.PropertySerializerMap["isMaximumInclusive"](intervalScale.IsMaximumInclusive));
             jsonObject.Add("isMinimumInclusive", this.PropertySerializerMap["isMinimumInclusive"](intervalScale.IsMinimumInclusive));
-            jsonObject.Add("mappingToReferenceScale", this.PropertySerializerMap["mappingToReferenceScale"](intervalScale.MappingToReferenceScale));
+            jsonObject.Add("mappingToReferenceScale", this.PropertySerializerMap["mappingToReferenceScale"](intervalScale.MappingToReferenceScale.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("maximumPermissibleValue", this.PropertySerializerMap["maximumPermissibleValue"](intervalScale.MaximumPermissibleValue));
             jsonObject.Add("minimumPermissibleValue", this.PropertySerializerMap["minimumPermissibleValue"](intervalScale.MinimumPermissibleValue));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](intervalScale.ModifiedOn));
@@ -97,7 +96,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](intervalScale.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](intervalScale.ShortName));
             jsonObject.Add("unit", this.PropertySerializerMap["unit"](intervalScale.Unit));
-            jsonObject.Add("valueDefinition", this.PropertySerializerMap["valueDefinition"](intervalScale.ValueDefinition));
+            jsonObject.Add("valueDefinition", this.PropertySerializerMap["valueDefinition"](intervalScale.ValueDefinition.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }
 
@@ -118,7 +117,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var intervalScale = thing as IntervalScale;

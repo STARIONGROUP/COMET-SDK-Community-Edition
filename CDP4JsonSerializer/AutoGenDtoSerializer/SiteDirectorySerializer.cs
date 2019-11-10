@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteDirectorySerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="SiteDirectorySerializer"/> class is to provide a <see cref="SiteDirectory"/> specific serializer
     /// </summary>
-    public class SiteDirectorySerializer : IThingSerializer
+    public class SiteDirectorySerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -77,29 +76,29 @@ namespace CDP4JsonSerializer
         private JObject Serialize(SiteDirectory siteDirectory)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("annotation", this.PropertySerializerMap["annotation"](siteDirectory.Annotation));
+            jsonObject.Add("annotation", this.PropertySerializerMap["annotation"](siteDirectory.Annotation.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), siteDirectory.ClassKind)));
             jsonObject.Add("createdOn", this.PropertySerializerMap["createdOn"](siteDirectory.CreatedOn));
             jsonObject.Add("defaultParticipantRole", this.PropertySerializerMap["defaultParticipantRole"](siteDirectory.DefaultParticipantRole));
             jsonObject.Add("defaultPersonRole", this.PropertySerializerMap["defaultPersonRole"](siteDirectory.DefaultPersonRole));
-            jsonObject.Add("domain", this.PropertySerializerMap["domain"](siteDirectory.Domain));
-            jsonObject.Add("domainGroup", this.PropertySerializerMap["domainGroup"](siteDirectory.DomainGroup));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](siteDirectory.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](siteDirectory.ExcludedPerson));
+            jsonObject.Add("domain", this.PropertySerializerMap["domain"](siteDirectory.Domain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("domainGroup", this.PropertySerializerMap["domainGroup"](siteDirectory.DomainGroup.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](siteDirectory.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](siteDirectory.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](siteDirectory.Iid));
             jsonObject.Add("lastModifiedOn", this.PropertySerializerMap["lastModifiedOn"](siteDirectory.LastModifiedOn));
-            jsonObject.Add("logEntry", this.PropertySerializerMap["logEntry"](siteDirectory.LogEntry));
-            jsonObject.Add("model", this.PropertySerializerMap["model"](siteDirectory.Model));
+            jsonObject.Add("logEntry", this.PropertySerializerMap["logEntry"](siteDirectory.LogEntry.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("model", this.PropertySerializerMap["model"](siteDirectory.Model.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](siteDirectory.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](siteDirectory.Name));
-            jsonObject.Add("naturalLanguage", this.PropertySerializerMap["naturalLanguage"](siteDirectory.NaturalLanguage));
-            jsonObject.Add("organization", this.PropertySerializerMap["organization"](siteDirectory.Organization));
-            jsonObject.Add("participantRole", this.PropertySerializerMap["participantRole"](siteDirectory.ParticipantRole));
-            jsonObject.Add("person", this.PropertySerializerMap["person"](siteDirectory.Person));
-            jsonObject.Add("personRole", this.PropertySerializerMap["personRole"](siteDirectory.PersonRole));
+            jsonObject.Add("naturalLanguage", this.PropertySerializerMap["naturalLanguage"](siteDirectory.NaturalLanguage.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("organization", this.PropertySerializerMap["organization"](siteDirectory.Organization.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("participantRole", this.PropertySerializerMap["participantRole"](siteDirectory.ParticipantRole.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("person", this.PropertySerializerMap["person"](siteDirectory.Person.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("personRole", this.PropertySerializerMap["personRole"](siteDirectory.PersonRole.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](siteDirectory.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](siteDirectory.ShortName));
-            jsonObject.Add("siteReferenceDataLibrary", this.PropertySerializerMap["siteReferenceDataLibrary"](siteDirectory.SiteReferenceDataLibrary));
+            jsonObject.Add("siteReferenceDataLibrary", this.PropertySerializerMap["siteReferenceDataLibrary"](siteDirectory.SiteReferenceDataLibrary.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }
 
@@ -120,7 +119,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var siteDirectory = thing as SiteDirectory;

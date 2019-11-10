@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReferencerRuleSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="ReferencerRuleSerializer"/> class is to provide a <see cref="ReferencerRule"/> specific serializer
     /// </summary>
-    public class ReferencerRuleSerializer : IThingSerializer
+    public class ReferencerRuleSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -70,19 +69,19 @@ namespace CDP4JsonSerializer
         private JObject Serialize(ReferencerRule referencerRule)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](referencerRule.Alias));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](referencerRule.Alias.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), referencerRule.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](referencerRule.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](referencerRule.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](referencerRule.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](referencerRule.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](referencerRule.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](referencerRule.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](referencerRule.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](referencerRule.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](referencerRule.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](referencerRule.IsDeprecated));
             jsonObject.Add("maxReferenced", this.PropertySerializerMap["maxReferenced"](referencerRule.MaxReferenced));
             jsonObject.Add("minReferenced", this.PropertySerializerMap["minReferenced"](referencerRule.MinReferenced));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](referencerRule.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](referencerRule.Name));
-            jsonObject.Add("referencedCategory", this.PropertySerializerMap["referencedCategory"](referencerRule.ReferencedCategory));
+            jsonObject.Add("referencedCategory", this.PropertySerializerMap["referencedCategory"](referencerRule.ReferencedCategory.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("referencingCategory", this.PropertySerializerMap["referencingCategory"](referencerRule.ReferencingCategory));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](referencerRule.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](referencerRule.ShortName));
@@ -106,7 +105,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var referencerRule = thing as ReferencerRule;

@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BinaryRelationshipRuleSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="BinaryRelationshipRuleSerializer"/> class is to provide a <see cref="BinaryRelationshipRule"/> specific serializer
     /// </summary>
-    public class BinaryRelationshipRuleSerializer : IThingSerializer
+    public class BinaryRelationshipRuleSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -71,13 +70,13 @@ namespace CDP4JsonSerializer
         private JObject Serialize(BinaryRelationshipRule binaryRelationshipRule)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](binaryRelationshipRule.Alias));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](binaryRelationshipRule.Alias.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), binaryRelationshipRule.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](binaryRelationshipRule.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](binaryRelationshipRule.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](binaryRelationshipRule.ExcludedPerson));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](binaryRelationshipRule.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](binaryRelationshipRule.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](binaryRelationshipRule.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("forwardRelationshipName", this.PropertySerializerMap["forwardRelationshipName"](binaryRelationshipRule.ForwardRelationshipName));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](binaryRelationshipRule.HyperLink));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](binaryRelationshipRule.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](binaryRelationshipRule.Iid));
             jsonObject.Add("inverseRelationshipName", this.PropertySerializerMap["inverseRelationshipName"](binaryRelationshipRule.InverseRelationshipName));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](binaryRelationshipRule.IsDeprecated));
@@ -108,7 +107,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var binaryRelationshipRule = thing as BinaryRelationshipRule;

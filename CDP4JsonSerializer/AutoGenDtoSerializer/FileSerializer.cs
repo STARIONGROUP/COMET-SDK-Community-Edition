@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FileSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="FileSerializer"/> class is to provide a <see cref="File"/> specific serializer
     /// </summary>
-    public class FileSerializer : IThingSerializer
+    public class FileSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -64,11 +63,11 @@ namespace CDP4JsonSerializer
         private JObject Serialize(File file)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("category", this.PropertySerializerMap["category"](file.Category));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](file.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), file.ClassKind)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](file.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](file.ExcludedPerson));
-            jsonObject.Add("fileRevision", this.PropertySerializerMap["fileRevision"](file.FileRevision));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](file.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](file.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("fileRevision", this.PropertySerializerMap["fileRevision"](file.FileRevision.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](file.Iid));
             jsonObject.Add("lockedBy", this.PropertySerializerMap["lockedBy"](file.LockedBy));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](file.ModifiedOn));
@@ -94,7 +93,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var file = thing as File;
