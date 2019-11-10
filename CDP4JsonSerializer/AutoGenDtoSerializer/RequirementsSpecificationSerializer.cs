@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementsSpecificationSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="RequirementsSpecificationSerializer"/> class is to provide a <see cref="RequirementsSpecification"/> specific serializer
     /// </summary>
-    public class RequirementsSpecificationSerializer : IThingSerializer
+    public class RequirementsSpecificationSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -71,21 +70,21 @@ namespace CDP4JsonSerializer
         private JObject Serialize(RequirementsSpecification requirementsSpecification)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](requirementsSpecification.Alias));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](requirementsSpecification.Category));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](requirementsSpecification.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](requirementsSpecification.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), requirementsSpecification.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](requirementsSpecification.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](requirementsSpecification.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](requirementsSpecification.ExcludedPerson));
-            jsonObject.Add("group", this.PropertySerializerMap["group"](requirementsSpecification.Group));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](requirementsSpecification.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](requirementsSpecification.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](requirementsSpecification.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](requirementsSpecification.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("group", this.PropertySerializerMap["group"](requirementsSpecification.Group.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](requirementsSpecification.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](requirementsSpecification.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](requirementsSpecification.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](requirementsSpecification.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](requirementsSpecification.Name));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](requirementsSpecification.Owner));
-            jsonObject.Add("parameterValue", this.PropertySerializerMap["parameterValue"](requirementsSpecification.ParameterValue));
-            jsonObject.Add("requirement", this.PropertySerializerMap["requirement"](requirementsSpecification.Requirement));
+            jsonObject.Add("parameterValue", this.PropertySerializerMap["parameterValue"](requirementsSpecification.ParameterValue.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("requirement", this.PropertySerializerMap["requirement"](requirementsSpecification.Requirement.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](requirementsSpecification.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](requirementsSpecification.ShortName));
             return jsonObject;
@@ -108,7 +107,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var requirementsSpecification = thing as RequirementsSpecification;

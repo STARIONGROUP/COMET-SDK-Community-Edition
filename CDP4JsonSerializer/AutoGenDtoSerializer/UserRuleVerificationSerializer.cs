@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UserRuleVerificationSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="UserRuleVerificationSerializer"/> class is to provide a <see cref="UserRuleVerification"/> specific serializer
     /// </summary>
-    public class UserRuleVerificationSerializer : IThingSerializer
+    public class UserRuleVerificationSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -65,8 +64,8 @@ namespace CDP4JsonSerializer
         {
             var jsonObject = new JObject();
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), userRuleVerification.ClassKind)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](userRuleVerification.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](userRuleVerification.ExcludedPerson));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](userRuleVerification.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](userRuleVerification.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("executedOn", this.PropertySerializerMap["executedOn"](userRuleVerification.ExecutedOn));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](userRuleVerification.Iid));
             jsonObject.Add("isActive", this.PropertySerializerMap["isActive"](userRuleVerification.IsActive));
@@ -94,7 +93,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var userRuleVerification = thing as UserRuleVerification;

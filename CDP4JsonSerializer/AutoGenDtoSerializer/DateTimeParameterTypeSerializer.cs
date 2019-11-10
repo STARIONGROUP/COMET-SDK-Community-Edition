@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DateTimeParameterTypeSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="DateTimeParameterTypeSerializer"/> class is to provide a <see cref="DateTimeParameterType"/> specific serializer
     /// </summary>
-    public class DateTimeParameterTypeSerializer : IThingSerializer
+    public class DateTimeParameterTypeSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -68,13 +67,13 @@ namespace CDP4JsonSerializer
         private JObject Serialize(DateTimeParameterType dateTimeParameterType)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](dateTimeParameterType.Alias));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](dateTimeParameterType.Category));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](dateTimeParameterType.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](dateTimeParameterType.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), dateTimeParameterType.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](dateTimeParameterType.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](dateTimeParameterType.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](dateTimeParameterType.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](dateTimeParameterType.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](dateTimeParameterType.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](dateTimeParameterType.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](dateTimeParameterType.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](dateTimeParameterType.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](dateTimeParameterType.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](dateTimeParameterType.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](dateTimeParameterType.ModifiedOn));
@@ -102,7 +101,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var dateTimeParameterType = thing as DateTimeParameterType;

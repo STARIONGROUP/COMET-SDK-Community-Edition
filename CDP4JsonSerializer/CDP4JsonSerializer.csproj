@@ -36,7 +36,6 @@
   <ItemGroup>
     <Folder Include="AutoGenDtoDeserializer\" />
     <Folder Include="AutoGenDtoSerializer\" />
-    <Folder Include="DtoSerializer\" />
     <Folder Include="Helper\" />
     <Folder Include="JsonConverter\" />
   </ItemGroup>

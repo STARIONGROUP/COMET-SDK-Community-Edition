@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CategorySerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="CategorySerializer"/> class is to provide a <see cref="Category"/> specific serializer
     /// </summary>
-    public class CategorySerializer : IThingSerializer
+    public class CategorySerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -69,12 +68,12 @@ namespace CDP4JsonSerializer
         private JObject Serialize(Category category)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](category.Alias));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](category.Alias.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), category.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](category.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](category.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](category.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](category.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](category.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](category.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](category.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](category.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](category.Iid));
             jsonObject.Add("isAbstract", this.PropertySerializerMap["isAbstract"](category.IsAbstract));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](category.IsDeprecated));
@@ -83,7 +82,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("permissibleClass", this.PropertySerializerMap["permissibleClass"](category.PermissibleClass.Select(e => Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), e))));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](category.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](category.ShortName));
-            jsonObject.Add("superCategory", this.PropertySerializerMap["superCategory"](category.SuperCategory));
+            jsonObject.Add("superCategory", this.PropertySerializerMap["superCategory"](category.SuperCategory.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }
 
@@ -104,7 +103,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var category = thing as Category;

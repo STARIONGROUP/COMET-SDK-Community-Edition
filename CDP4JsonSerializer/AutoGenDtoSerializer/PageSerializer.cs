@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PageSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="PageSerializer"/> class is to provide a <see cref="Page"/> specific serializer
     /// </summary>
-    public class PageSerializer : IThingSerializer
+    public class PageSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -66,15 +65,15 @@ namespace CDP4JsonSerializer
         private JObject Serialize(Page page)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("category", this.PropertySerializerMap["category"](page.Category));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](page.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), page.ClassKind)));
             jsonObject.Add("createdOn", this.PropertySerializerMap["createdOn"](page.CreatedOn));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](page.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](page.ExcludedPerson));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](page.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](page.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](page.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](page.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](page.Name));
-            jsonObject.Add("note", this.PropertySerializerMap["note"](page.Note));
+            jsonObject.Add("note", this.PropertySerializerMap["note"](page.Note.OrderBy(x => x, this.orderedItemComparer)));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](page.Owner));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](page.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](page.ShortName));
@@ -98,7 +97,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var page = thing as Page;

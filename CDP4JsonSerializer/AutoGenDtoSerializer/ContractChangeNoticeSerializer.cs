@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ContractChangeNoticeSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="ContractChangeNoticeSerializer"/> class is to provide a <see cref="ContractChangeNotice"/> specific serializer
     /// </summary>
-    public class ContractChangeNoticeSerializer : IThingSerializer
+    public class ContractChangeNoticeSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -76,26 +75,26 @@ namespace CDP4JsonSerializer
         private JObject Serialize(ContractChangeNotice contractChangeNotice)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("approvedBy", this.PropertySerializerMap["approvedBy"](contractChangeNotice.ApprovedBy));
+            jsonObject.Add("approvedBy", this.PropertySerializerMap["approvedBy"](contractChangeNotice.ApprovedBy.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("author", this.PropertySerializerMap["author"](contractChangeNotice.Author));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](contractChangeNotice.Category));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](contractChangeNotice.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("changeProposal", this.PropertySerializerMap["changeProposal"](contractChangeNotice.ChangeProposal));
             jsonObject.Add("classification", this.PropertySerializerMap["classification"](Enum.GetName(typeof(CDP4Common.ReportingData.AnnotationClassificationKind), contractChangeNotice.Classification)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), contractChangeNotice.ClassKind)));
             jsonObject.Add("content", this.PropertySerializerMap["content"](contractChangeNotice.Content));
             jsonObject.Add("createdOn", this.PropertySerializerMap["createdOn"](contractChangeNotice.CreatedOn));
-            jsonObject.Add("discussion", this.PropertySerializerMap["discussion"](contractChangeNotice.Discussion));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](contractChangeNotice.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](contractChangeNotice.ExcludedPerson));
+            jsonObject.Add("discussion", this.PropertySerializerMap["discussion"](contractChangeNotice.Discussion.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](contractChangeNotice.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](contractChangeNotice.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](contractChangeNotice.Iid));
             jsonObject.Add("languageCode", this.PropertySerializerMap["languageCode"](contractChangeNotice.LanguageCode));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](contractChangeNotice.ModifiedOn));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](contractChangeNotice.Owner));
             jsonObject.Add("primaryAnnotatedThing", this.PropertySerializerMap["primaryAnnotatedThing"](contractChangeNotice.PrimaryAnnotatedThing));
-            jsonObject.Add("relatedThing", this.PropertySerializerMap["relatedThing"](contractChangeNotice.RelatedThing));
+            jsonObject.Add("relatedThing", this.PropertySerializerMap["relatedThing"](contractChangeNotice.RelatedThing.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](contractChangeNotice.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](contractChangeNotice.ShortName));
-            jsonObject.Add("sourceAnnotation", this.PropertySerializerMap["sourceAnnotation"](contractChangeNotice.SourceAnnotation));
+            jsonObject.Add("sourceAnnotation", this.PropertySerializerMap["sourceAnnotation"](contractChangeNotice.SourceAnnotation.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("status", this.PropertySerializerMap["status"](Enum.GetName(typeof(CDP4Common.ReportingData.AnnotationStatusKind), contractChangeNotice.Status)));
             jsonObject.Add("title", this.PropertySerializerMap["title"](contractChangeNotice.Title));
             return jsonObject;
@@ -118,7 +117,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var contractChangeNotice = thing as ContractChangeNotice;

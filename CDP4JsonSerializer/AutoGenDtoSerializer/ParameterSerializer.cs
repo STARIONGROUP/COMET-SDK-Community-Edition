@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="ParameterSerializer"/> class is to provide a <see cref="Parameter"/> specific serializer
     /// </summary>
-    public class ParameterSerializer : IThingSerializer
+    public class ParameterSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -73,21 +72,21 @@ namespace CDP4JsonSerializer
             var jsonObject = new JObject();
             jsonObject.Add("allowDifferentOwnerOfOverride", this.PropertySerializerMap["allowDifferentOwnerOfOverride"](parameter.AllowDifferentOwnerOfOverride));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), parameter.ClassKind)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](parameter.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](parameter.ExcludedPerson));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](parameter.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](parameter.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("expectsOverride", this.PropertySerializerMap["expectsOverride"](parameter.ExpectsOverride));
             jsonObject.Add("group", this.PropertySerializerMap["group"](parameter.Group));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](parameter.Iid));
             jsonObject.Add("isOptionDependent", this.PropertySerializerMap["isOptionDependent"](parameter.IsOptionDependent));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](parameter.ModifiedOn));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](parameter.Owner));
-            jsonObject.Add("parameterSubscription", this.PropertySerializerMap["parameterSubscription"](parameter.ParameterSubscription));
+            jsonObject.Add("parameterSubscription", this.PropertySerializerMap["parameterSubscription"](parameter.ParameterSubscription.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("parameterType", this.PropertySerializerMap["parameterType"](parameter.ParameterType));
             jsonObject.Add("requestedBy", this.PropertySerializerMap["requestedBy"](parameter.RequestedBy));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](parameter.RevisionNumber));
             jsonObject.Add("scale", this.PropertySerializerMap["scale"](parameter.Scale));
             jsonObject.Add("stateDependence", this.PropertySerializerMap["stateDependence"](parameter.StateDependence));
-            jsonObject.Add("valueSet", this.PropertySerializerMap["valueSet"](parameter.ValueSet));
+            jsonObject.Add("valueSet", this.PropertySerializerMap["valueSet"](parameter.ValueSet.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }
 
@@ -108,7 +107,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var parameter = thing as Parameter;

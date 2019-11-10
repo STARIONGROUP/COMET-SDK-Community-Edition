@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BooleanParameterTypeSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="BooleanParameterTypeSerializer"/> class is to provide a <see cref="BooleanParameterType"/> specific serializer
     /// </summary>
-    public class BooleanParameterTypeSerializer : IThingSerializer
+    public class BooleanParameterTypeSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -68,13 +67,13 @@ namespace CDP4JsonSerializer
         private JObject Serialize(BooleanParameterType booleanParameterType)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](booleanParameterType.Alias));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](booleanParameterType.Category));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](booleanParameterType.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](booleanParameterType.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), booleanParameterType.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](booleanParameterType.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](booleanParameterType.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](booleanParameterType.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](booleanParameterType.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](booleanParameterType.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](booleanParameterType.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](booleanParameterType.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](booleanParameterType.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](booleanParameterType.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](booleanParameterType.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](booleanParameterType.ModifiedOn));
@@ -102,7 +101,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var booleanParameterType = thing as BooleanParameterType;

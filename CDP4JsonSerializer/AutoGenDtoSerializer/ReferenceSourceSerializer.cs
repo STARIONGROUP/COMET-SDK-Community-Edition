@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReferenceSourceSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="ReferenceSourceSerializer"/> class is to provide a <see cref="ReferenceSource"/> specific serializer
     /// </summary>
-    public class ReferenceSourceSerializer : IThingSerializer
+    public class ReferenceSourceSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -74,14 +73,14 @@ namespace CDP4JsonSerializer
         private JObject Serialize(ReferenceSource referenceSource)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](referenceSource.Alias));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](referenceSource.Alias.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("author", this.PropertySerializerMap["author"](referenceSource.Author));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](referenceSource.Category));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](referenceSource.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), referenceSource.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](referenceSource.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](referenceSource.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](referenceSource.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](referenceSource.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](referenceSource.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](referenceSource.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](referenceSource.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](referenceSource.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](referenceSource.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](referenceSource.IsDeprecated));
             jsonObject.Add("language", this.PropertySerializerMap["language"](referenceSource.Language));
@@ -114,7 +113,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var referenceSource = thing as ReferenceSource;

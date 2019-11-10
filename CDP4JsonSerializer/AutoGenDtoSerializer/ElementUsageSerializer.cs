@@ -1,11 +1,11 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ElementUsageSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -33,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="ElementUsageSerializer"/> class is to provide a <see cref="ElementUsage"/> specific serializer
     /// </summary>
-    public class ElementUsageSerializer : IThingSerializer
+    public class ElementUsageSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -71,21 +70,21 @@ namespace CDP4JsonSerializer
         private JObject Serialize(ElementUsage elementUsage)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](elementUsage.Alias));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](elementUsage.Category));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](elementUsage.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](elementUsage.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), elementUsage.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](elementUsage.Definition));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](elementUsage.Definition.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("elementDefinition", this.PropertySerializerMap["elementDefinition"](elementUsage.ElementDefinition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](elementUsage.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](elementUsage.ExcludedPerson));
-            jsonObject.Add("excludeOption", this.PropertySerializerMap["excludeOption"](elementUsage.ExcludeOption));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](elementUsage.HyperLink));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](elementUsage.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](elementUsage.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludeOption", this.PropertySerializerMap["excludeOption"](elementUsage.ExcludeOption.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](elementUsage.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](elementUsage.Iid));
             jsonObject.Add("interfaceEnd", this.PropertySerializerMap["interfaceEnd"](Enum.GetName(typeof(CDP4Common.EngineeringModelData.InterfaceEndKind), elementUsage.InterfaceEnd)));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](elementUsage.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](elementUsage.Name));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](elementUsage.Owner));
-            jsonObject.Add("parameterOverride", this.PropertySerializerMap["parameterOverride"](elementUsage.ParameterOverride));
+            jsonObject.Add("parameterOverride", this.PropertySerializerMap["parameterOverride"](elementUsage.ParameterOverride.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](elementUsage.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](elementUsage.ShortName));
             return jsonObject;
@@ -108,7 +107,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var elementUsage = thing as ElementUsage;
