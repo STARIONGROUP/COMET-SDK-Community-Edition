@@ -3,7 +3,7 @@
 // <copyright file="PermissionService.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -112,7 +112,7 @@ namespace CDP4Dal.Permission
                 this.Session.ActivePersonParticipants.FirstOrDefault(
                     p => ((EngineeringModelSetup)p.Container).EngineeringModelIid == engineeringModel.Iid);
 
-            if (participant == null || participant.Role == null)
+            if (participant?.Role == null)
             {
                 return false;
             }
@@ -122,16 +122,14 @@ namespace CDP4Dal.Permission
 
             if (thing.GetType() != thingType)
             {
-                ClassKind superClassKind;
-
-                if (Enum.TryParse(thingType.Name, out superClassKind))
+                if (Enum.TryParse(thingType.Name, out ClassKind superClassKind))
                 {
                     permission = participant.Role.ParticipantPermission.SingleOrDefault(perm => perm.ObjectClass == superClassKind);
                 }
             }
 
             // if the permission is not found then get the default one.
-            var accessRightKind = permission == null ? StaticDefaultPermissionProvider.GetDefaultParticipantPermission(thingType.Name) : permission.AccessRight;
+            var accessRightKind = permission?.AccessRight ?? StaticDefaultPermissionProvider.GetDefaultParticipantPermission(thingType.Name);
 
             switch (accessRightKind)
             {
@@ -175,16 +173,14 @@ namespace CDP4Dal.Permission
 
             if (thing.GetType() != thingType)
             {
-                ClassKind superClassKind;
-
-                if (Enum.TryParse(thingType.Name, out superClassKind))
+                if (Enum.TryParse(thingType.Name, out ClassKind superClassKind))
                 {
                     permission = personRole.PersonPermission.SingleOrDefault(perm => perm.ObjectClass == superClassKind);
                 }
             }
 
             // if the permission is not found or superclass derivation is used then get the default one.
-            var accessRightKind = permission == null ? StaticDefaultPermissionProvider.GetDefaultPersonPermission(thingType.Name) : permission.AccessRight;
+            var accessRightKind = permission?.AccessRight ?? StaticDefaultPermissionProvider.GetDefaultPersonPermission(thingType.Name);
 
             switch (accessRightKind)
             {
@@ -299,14 +295,14 @@ namespace CDP4Dal.Permission
             var engineeringModel = thing.TopContainer;
 
             var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
-            if (iteration!= null && iteration.IterationSetup.FrozenOn != null)
+            if (iteration?.IterationSetup.FrozenOn != null)
             {
                 return false;
             }
 
             var participant = this.Session.ActivePersonParticipants.FirstOrDefault(p => ((EngineeringModelSetup)p.Container).EngineeringModelIid == engineeringModel.Iid);
 
-            if (participant == null || participant.Role == null)
+            if (participant?.Role == null)
             {
                 return false;
             }
@@ -315,16 +311,14 @@ namespace CDP4Dal.Permission
 
             if (thing.GetType() != thingType)
             {
-                ClassKind superClassKind;
-
-                if (Enum.TryParse(thingType.Name, out superClassKind))
+                if (Enum.TryParse(thingType.Name, out ClassKind superClassKind))
                 {
                     permission = participant.Role.ParticipantPermission.SingleOrDefault(perm => perm.ObjectClass == superClassKind);
                 }
             }
 
             // if the permission is not found then get the default one.
-            var accessRightKind = permission == null ? StaticDefaultPermissionProvider.GetDefaultParticipantPermission(thingType.Name) : permission.AccessRight;
+            var accessRightKind = permission?.AccessRight ?? StaticDefaultPermissionProvider.GetDefaultParticipantPermission(thingType.Name);
 
             switch (accessRightKind)
             {
@@ -335,9 +329,8 @@ namespace CDP4Dal.Permission
                 case ParticipantAccessRightKind.MODIFY:
                     return true;
                 case ParticipantAccessRightKind.MODIFY_IF_OWNER:
-                    var ownedThing = thing as IOwnedThing;
 
-                    if (ownedThing != null)
+                    if (thing is IOwnedThing ownedThing)
                     {
                         return this.CanWriteIfParticipantOwned(ownedThing);
                     }
@@ -365,14 +358,14 @@ namespace CDP4Dal.Permission
 
             var iteration = containerThing is Iteration it ? it : containerThing.GetContainerOfType<Iteration>();
             
-            if (iteration != null && iteration.IterationSetup.FrozenOn != null)
+            if (iteration?.IterationSetup.FrozenOn != null)
             {
                 return false;
             }
 
             var participant = this.Session.ActivePersonParticipants.FirstOrDefault(p => ((EngineeringModelSetup)p.Container).EngineeringModelIid == engineeringModel.Iid);
 
-            if (participant == null || participant.Role == null)
+            if (participant?.Role == null)
             {
                 return false;
             }
@@ -380,7 +373,7 @@ namespace CDP4Dal.Permission
             var permission = participant.Role.ParticipantPermission.SingleOrDefault(perm => perm.ObjectClass == classKind);
 
             // if the permission is not found then get the default one.
-            var right = permission != null ? permission.AccessRight : StaticDefaultPermissionProvider.GetDefaultParticipantPermission(thingType.ToString());
+            var right = permission?.AccessRight ?? StaticDefaultPermissionProvider.GetDefaultParticipantPermission(thingType.ToString());
 
             switch (right)
             {
@@ -423,16 +416,14 @@ namespace CDP4Dal.Permission
 
             if (thing.GetType() != thingType)
             {
-                ClassKind superClassKind;
-
-                if (Enum.TryParse(thingType.Name, out superClassKind))
+                if (Enum.TryParse(thingType.Name, out ClassKind superClassKind))
                 {
                     permission = personRole.PersonPermission.SingleOrDefault(perm => perm.ObjectClass == superClassKind);
                 }
             }
 
             // if the permission is not found or superclass derivation is used then get the default one.
-            var accessRightKind = permission == null ? StaticDefaultPermissionProvider.GetDefaultPersonPermission(thingType.Name) : permission.AccessRight;
+            var accessRightKind = permission?.AccessRight ?? StaticDefaultPermissionProvider.GetDefaultPersonPermission(thingType.Name);
 
             switch (accessRightKind)
             {
@@ -491,7 +482,7 @@ namespace CDP4Dal.Permission
             var permission = personRole.PersonPermission.SingleOrDefault(p => p.ObjectClass == classKind);
 
             // if the permission is not found or superclass derivation is used then get the default one.
-            var accessRightKind = permission == null ? StaticDefaultPermissionProvider.GetDefaultPersonPermission(thingType.ToString()) : permission.AccessRight;
+            var accessRightKind = permission?.AccessRight ?? StaticDefaultPermissionProvider.GetDefaultPersonPermission(thingType.ToString());
 
             switch (accessRightKind)
             {
@@ -502,9 +493,8 @@ namespace CDP4Dal.Permission
                 case PersonAccessRightKind.MODIFY:
                     return true;
                 case PersonAccessRightKind.MODIFY_IF_PARTICIPANT:
-                    if (containerThing is EngineeringModelSetup)
+                    if (containerThing is EngineeringModelSetup setup)
                     {
-                        var setup = containerThing as EngineeringModelSetup;
                         return setup.Participant.Any(x => x.Person == this.Session.ActivePerson);
                     }
 
@@ -531,8 +521,7 @@ namespace CDP4Dal.Permission
         /// <param name="thingType">The <see cref="Type"/> of the <see cref="Thing"/> that will be write to.</param>
         /// <returns>True if the permissions of the superclass allow it.</returns>
         private bool CanWriteBasedOnSuperclassClassKind(Thing containerThing, ClassKind thingType)
-        { 
-            ClassKind superClassKind;
+        {
             var baseType = StaticMetadataProvider.BaseType(thingType.ToString());
 
             if (string.IsNullOrWhiteSpace(baseType))
@@ -540,7 +529,7 @@ namespace CDP4Dal.Permission
                 return false;
             }
 
-            return Enum.TryParse(baseType, out superClassKind) && this.CanWrite(superClassKind, containerThing);
+            return Enum.TryParse(baseType, out ClassKind superClassKind) && this.CanWrite(superClassKind, containerThing);
         }
 
         /// <summary>
@@ -552,35 +541,37 @@ namespace CDP4Dal.Permission
         {
             var thing = (Thing)ownedThing;
 
-            var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
-
-            if (iteration == null || !this.Session.OpenIterations.TryGetValue(iteration, out var participation))
+            if (thing.Container is EngineeringModel currentModel)
             {
-                return false;
-            }
-
-            //Check if the iteration domain is null
-            if (participation.Item1 == null)
-            {
-                return false;
+                return this.Session.OpenIterations.Where(x => x.Key.Container == currentModel).Select(x => x.Value).Any();
             }
 
             //Check if the ownedThing domain is contained in the participant domains 
-            if (participation.Item2 != null)
+            return this.TryGetThingParticipant(thing, out var participant) 
+                   && participant.Domain.Contains(ownedThing.Owner);
+        }
+
+        /// <summary>
+        /// Try to get the user's 'participant information for the Iteration where the thing input parameter belongs to
+        /// </summary>
+        /// <param name="thing">General Thing for which the user's participant information is retrieved.</param>
+        /// <param name="participant">outgoing parameter that contains the user's <see cref="Participant"/> information.</param>
+        /// <returns></returns>
+        private bool TryGetThingParticipant(Thing thing, out Participant participant)
+        {
+            var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
+            participant = null;
+
+            if (iteration != null 
+                   && this.Session.OpenIterations.TryGetValue(iteration, out var participation)
+                   && participation.Item1 != null
+                   && participation.Item2 != null)
             {
-                var participant = participation.Item2;
-                if (participant.Domain.Contains(ownedThing.Owner))
-                {
-                    return true;
-                }
+                participant = participation.Item2;
+                return true;
             }
 
-            // OwnedThing directly under EngineeringModel (CommonFileStore)
-            // give permission if any active domain in the model
-            
-            // get all activedomain for the current model
-            var currentModel = (EngineeringModel)thing.TopContainer;
-            return this.Session.OpenIterations.Where(x => x.Key.Container == currentModel).Select(x => x.Value).Any();
+            return false;
         }
     }
 }
