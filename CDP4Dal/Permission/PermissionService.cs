@@ -31,6 +31,7 @@ namespace CDP4Dal.Permission
     using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
@@ -85,6 +86,8 @@ namespace CDP4Dal.Permission
             logger.Trace("CanRead invoked on Thing {0} of type {1}", thing, thingType);
             var topContainerClassKind = thing.TopContainer.ClassKind;
 
+            this.CheckOwnedThing(thing);
+
             switch (topContainerClassKind)
             {
                 case ClassKind.SiteDirectory:
@@ -94,6 +97,18 @@ namespace CDP4Dal.Permission
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Checks if thing is an OwnedThing without an actual Wwner
+        /// </summary>
+        /// <param name="thing">The <see cref="Thing"/> to check.</param>
+        private void CheckOwnedThing(Thing thing)
+        {
+            if (thing is IOwnedThing ownedThing && ownedThing.Owner == null)
+            {
+                throw new IncompleteModelException($"Owner of {thing.GetType().Name} with id {thing.Iid} is empty.");
+            }
         }
 
         /// <summary>
@@ -238,8 +253,9 @@ namespace CDP4Dal.Permission
         /// <returns>True if Write operation can be performed.</returns>
         private bool CanWrite(Thing thing, Type thingType)
         {
-            var topContainerClassKind = thing.TopContainer.ClassKind;
+            this.CheckOwnedThing(thing);
 
+            var topContainerClassKind = thing.TopContainer.ClassKind;
             switch (topContainerClassKind)
             {
                 case ClassKind.SiteDirectory:
@@ -268,6 +284,8 @@ namespace CDP4Dal.Permission
             {
                 return false;
             }
+
+            this.CheckOwnedThing(containerThing);
 
             var topContainerClassKind = containerThing.TopContainer.ClassKind;
             switch (topContainerClassKind)
