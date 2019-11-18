@@ -31,6 +31,7 @@ namespace CDP4Dal.Tests.Permission
     using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Dal.Permission;
     using CDP4Dal.DAL;
@@ -126,6 +127,8 @@ namespace CDP4Dal.Tests.Permission
             this.modelsetup.EngineeringModelIid = this.model.Iid;
             this.iterationSetup.IterationIid = this.iteration.Iid;
             this.elementDef.Owner = this.domain1;
+            this.relationship.Owner = this.domain1;
+            this.parameter.Owner = this.domain1;
             this.requirementsSpecification.Requirement.Add(this.requirement);
             this.iteration.RequirementsSpecification.Add(this.requirementsSpecification);
             this.model.CommonFileStore.Add(this.commonFileStore);
@@ -343,15 +346,15 @@ namespace CDP4Dal.Tests.Permission
             specPermission.AccessRight = ParticipantAccessRightKind.MODIFY;
 
             //Requirement has no owner
-            Assert.IsFalse(this.permissionService.CanWrite(this.requirement));
-            Assert.IsTrue(this.permissionService.CanRead(this.requirement));
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanWrite(this.requirement));
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanRead(this.requirement));
+
+            //RequirementsSpecification has no owner
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanWrite(this.requirementsSpecification));
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanRead(this.requirementsSpecification));
 
             //Requirement has same owner than user's domain of expertise
             this.requirement.Owner = this.domain1;
-            Assert.IsTrue(this.permissionService.CanWrite(this.requirementsSpecification));
-            Assert.IsTrue(this.permissionService.CanRead(this.requirementsSpecification));
-
-            //RequirementsSpecification has no owner
             Assert.IsTrue(this.permissionService.CanWrite(this.requirement));
             Assert.IsTrue(this.permissionService.CanRead(this.requirement));
 
@@ -386,8 +389,8 @@ namespace CDP4Dal.Tests.Permission
             permission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
 
             //Thing has no owner
-            Assert.IsTrue(this.permissionService.CanWrite(this.commonFileStore));
-            Assert.IsTrue(this.permissionService.CanRead(this.commonFileStore));
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanWrite(this.commonFileStore));
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanRead(this.commonFileStore));
 
             //Thing has same owner as User's participant
             this.commonFileStore.Owner = this.domain1;

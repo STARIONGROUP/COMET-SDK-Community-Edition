@@ -3,7 +3,7 @@
 // <copyright file="PermissionServiceTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -31,6 +31,7 @@ namespace CDP4Dal.Tests.Permission
     using System.Linq;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Dal.Permission;
     using CDP4Dal.DAL;
@@ -62,8 +63,11 @@ namespace CDP4Dal.Tests.Permission
         private BinaryRelationship relationship;
         private Parameter parameter;
         private ParameterValueSet valueset;
+        private Requirement requirement;
+        private RequirementsSpecification requirementsSpecification;
 
         private PermissionService permissionService;
+        private CommonFileStore commonFileStore;
 
         [SetUp]
         public void Setup()
@@ -84,8 +88,8 @@ namespace CDP4Dal.Tests.Permission
             this.personRole = new PersonRole(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.participant = new Participant(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.participantRole = new ParticipantRole(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            this.model = new EngineeringModel(Guid.NewGuid(), this.assembler.Cache, this.uri){EngineeringModelSetup = this.modelsetup};
-            this.iteration = new Iteration(Guid.NewGuid(), this.assembler.Cache, this.uri){IterationSetup = this.iterationSetup};
+            this.model = new EngineeringModel(Guid.NewGuid(), this.assembler.Cache, this.uri) { EngineeringModelSetup = this.modelsetup };
+            this.iteration = new Iteration(Guid.NewGuid(), this.assembler.Cache, this.uri) { IterationSetup = this.iterationSetup };
             this.definition = new Definition(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.srdl = new SiteReferenceDataLibrary(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.booleanpt = new BooleanParameterType(Guid.NewGuid(), this.assembler.Cache, this.uri);
@@ -94,6 +98,9 @@ namespace CDP4Dal.Tests.Permission
             this.relationship = new BinaryRelationship(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.parameter = new Parameter(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.valueset = new ParameterValueSet(Guid.NewGuid(), this.assembler.Cache, this.uri);
+            this.requirementsSpecification = new RequirementsSpecification(Guid.NewGuid(), this.assembler.Cache, this.uri);
+            this.requirement = new Requirement(Guid.NewGuid(), this.assembler.Cache, this.uri);
+            this.commonFileStore = new CommonFileStore(Guid.NewGuid(), this.assembler.Cache, this.uri);
 
             this.sitedir.Model.Add(this.modelsetup);
             this.sitedir.Person.Add(this.person);
@@ -120,10 +127,15 @@ namespace CDP4Dal.Tests.Permission
             this.modelsetup.EngineeringModelIid = this.model.Iid;
             this.iterationSetup.IterationIid = this.iteration.Iid;
             this.elementDef.Owner = this.domain1;
+            this.relationship.Owner = this.domain1;
+            this.parameter.Owner = this.domain1;
+            this.requirementsSpecification.Requirement.Add(this.requirement);
+            this.iteration.RequirementsSpecification.Add(this.requirementsSpecification);
+            this.model.CommonFileStore.Add(this.commonFileStore);
 
             this.session.Setup(x => x.ActivePerson).Returns(this.person);
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
-            this.session.Setup(x => x.OpenIterations).Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise,Participant>>
+            this.session.Setup(x => x.OpenIterations).Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>
             {
                 {this.iteration, new Tuple<DomainOfExpertise,Participant>(this.domain1,this.participant)}
             });
@@ -248,7 +260,7 @@ namespace CDP4Dal.Tests.Permission
         [Test]
         public void VerifyThatReadWriteIfParticipantWorks()
         {
-            this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> {this.participant});
+            this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
 
             var sdpermission = this.personRole.PersonPermission.Single(x => x.ObjectClass == ClassKind.SiteDirectory);
             sdpermission.AccessRight = PersonAccessRightKind.READ_IF_PARTICIPANT;
@@ -289,7 +301,7 @@ namespace CDP4Dal.Tests.Permission
         }
 
         [Test]
-        public void VerifyModifyIfOwner()
+        public void VerifyModifyIfOwnerForIterationsWithoutDomainOfExpertiseAndParticipant()
         {
             this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
             Assert.IsFalse(this.permissionService.CanWrite(this.model));
@@ -298,7 +310,7 @@ namespace CDP4Dal.Tests.Permission
             var permission =
                 this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.EngineeringModel);
             var defpermission =
-               this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.ElementDefinition);
+                this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.ElementDefinition);
 
             permission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
             defpermission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
@@ -317,6 +329,80 @@ namespace CDP4Dal.Tests.Permission
             Assert.IsFalse(this.permissionService.CanWrite(this.elementDef));
             Assert.IsTrue(this.permissionService.CanRead(this.elementDef));
         }
+
+        [Test]
+        public void VerifyModifyIfOwnerForRequirement()
+        {
+            this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
+            Assert.IsFalse(this.permissionService.CanWrite(this.model));
+            Assert.IsFalse(this.permissionService.CanRead(this.model));
+
+            var permission =
+                this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.Requirement);
+            var specPermission =
+                this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.RequirementsSpecification);
+
+            permission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
+            specPermission.AccessRight = ParticipantAccessRightKind.MODIFY;
+
+            //Requirement has no owner
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanWrite(this.requirement));
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanRead(this.requirement));
+
+            //RequirementsSpecification has no owner
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanWrite(this.requirementsSpecification));
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanRead(this.requirementsSpecification));
+
+            //Requirement has same owner than user's domain of expertise
+            this.requirement.Owner = this.domain1;
+            Assert.IsTrue(this.permissionService.CanWrite(this.requirement));
+            Assert.IsTrue(this.permissionService.CanRead(this.requirement));
+
+            //Requirement has other owner than user's domain of expertise
+            this.requirement.Owner = this.domain2;
+            Assert.IsFalse(this.permissionService.CanWrite(this.requirement));
+            Assert.IsTrue(this.permissionService.CanRead(this.requirement));
+
+            //RequirementsSepcification has same owner than user's domain of expertise
+            this.requirementsSpecification.Owner = this.domain1;
+            specPermission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
+            Assert.IsTrue(this.permissionService.CanWrite(this.requirementsSpecification));
+            Assert.IsTrue(this.permissionService.CanRead(this.requirementsSpecification));
+
+            //RequirementsSepcification has other owner than user's domain of expertise
+            this.requirementsSpecification.Owner = this.domain2;
+            Assert.IsFalse(this.permissionService.CanWrite(this.requirementsSpecification));
+            Assert.IsTrue(this.permissionService.CanRead(this.requirementsSpecification));
+
+        }
+
+        [Test]
+        public void VerifyModifyIfOwnerForThingsThatAreDirectlyUnderEngineeringModel()
+        {
+            this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
+            Assert.IsFalse(this.permissionService.CanWrite(this.model));
+            Assert.IsFalse(this.permissionService.CanRead(this.model));
+
+            var permission =
+                this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.CommonFileStore);
+
+            permission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
+
+            //Thing has no owner
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanWrite(this.commonFileStore));
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanRead(this.commonFileStore));
+
+            //Thing has same owner as User's participant
+            this.commonFileStore.Owner = this.domain1;
+            Assert.IsTrue(this.permissionService.CanWrite(this.commonFileStore));
+            Assert.IsTrue(this.permissionService.CanRead(this.commonFileStore));
+
+            //Thing has other owner as User's participant
+            this.commonFileStore.Owner = this.domain2;
+            Assert.IsTrue(this.permissionService.CanWrite(this.commonFileStore));
+            Assert.IsTrue(this.permissionService.CanRead(this.commonFileStore));
+        }
+
 
         [Test]
         public void VerifySameAsSuperclassParticipantPermission()
@@ -339,7 +425,7 @@ namespace CDP4Dal.Tests.Permission
             Assert.IsFalse(this.permissionService.CanWrite(this.valueset));
             Assert.IsFalse(this.permissionService.CanRead(this.valueset));
 
-            var permission =this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.Parameter);
+            var permission = this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.Parameter);
 
             permission.AccessRight = ParticipantAccessRightKind.MODIFY;
             Assert.IsTrue(this.permissionService.CanWrite(this.valueset));
