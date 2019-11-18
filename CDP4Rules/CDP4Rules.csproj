@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Rules Community Edition</Title>
-    <Version>1.2.0-rc1</Version>
+    <Version>1.2.0-rc2</Version>
     <Description>CDP4 Class Library that provides Model Analysis and Rule Checking</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam Gerené</Authors>
