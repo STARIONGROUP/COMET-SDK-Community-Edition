@@ -41,7 +41,7 @@ namespace CDP4Common.EngineeringModelData
                 return string.Format(
                     "{0} {1} {2} {3}",
                     this.ParameterType.ShortName,
-                    this.RelationalOperator,
+                    this.RelationalOperator.ToFriendlyString(),
                     string.Join(", ", this.Value),
                     (this.Scale != null) ? this.Scale.ShortName : string.Empty);
             }
