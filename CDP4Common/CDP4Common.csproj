@@ -38,7 +38,6 @@
     <Folder Include="Exceptions\" />
     <Folder Include="RuleVerification\" />
     <Folder Include="Validation\" />
-    <Folder Include="Poco\" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472'">
