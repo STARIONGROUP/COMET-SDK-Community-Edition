@@ -38,7 +38,7 @@ namespace CDP4Common.EngineeringModelData
         {
             get
             {
-                //use string.Format instead of string interpolation for readablility
+                // Use string.Format instead of string interpolation for readablility
                 return string.Format(
                     "{0} {1} {2} {3}",
                     this.ParameterType.ShortName,
