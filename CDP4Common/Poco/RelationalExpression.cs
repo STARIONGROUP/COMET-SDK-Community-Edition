@@ -3,7 +3,7 @@
 // <copyright file="RelationalExpression.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -41,7 +41,7 @@ namespace CDP4Common.EngineeringModelData
                 return string.Format(
                     "{0} {1} {2} {3}",
                     this.ParameterType.ShortName,
-                    this.RelationalOperator.ToFriendlyString(),
+                    this.RelationalOperator.ToScientificNotationString(),
                     string.Join(", ", this.Value),
                     (this.Scale != null) ? this.Scale.ShortName : string.Empty);
             }
