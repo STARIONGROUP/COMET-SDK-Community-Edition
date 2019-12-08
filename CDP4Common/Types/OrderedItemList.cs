@@ -563,7 +563,7 @@ namespace CDP4Common.Types
                 throw new ArgumentException("The key already exists", "sortKey");
             }
 
-            if (typeof(T) == typeof(Thing))
+            if (item is Thing)
             {
                 if (this.sortedItems.Values.Contains(item))
                 {
