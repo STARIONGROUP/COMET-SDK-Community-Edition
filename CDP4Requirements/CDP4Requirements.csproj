@@ -4,8 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Requirements Community Edition</Title>
-    <Version>0.0.1</Version>
-    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+    <VersionPrefix>0.0.1</VersionPrefix>
     <Description>CDP4 Class Library that provides requirement verification</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Alex, Alexander, Yevhen</Authors>
