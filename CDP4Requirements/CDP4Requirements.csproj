@@ -5,6 +5,7 @@
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Requirements Community Edition</Title>
     <Version>0.0.1</Version>
+    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Description>CDP4 Class Library that provides requirement verification</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Alex, Alexander, Yevhen</Authors>

@@ -5,6 +5,7 @@
     <Company>RHEA System S.A.</Company>
     <Title>CDP4JsonSerializer Community Edition</Title>
     <Version>4.0.0</Version>
+    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Description>CDP4 JSON Serialization Library</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen</Authors>
