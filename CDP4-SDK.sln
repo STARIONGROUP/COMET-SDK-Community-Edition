@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Common", "CDP4Common\CDP4Common.csproj", "{66BB2677-B6D6-43F2-A56C-884FADF6ABF9}"
 EndProject
@@ -41,7 +41,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonFileDal.NetCore.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Rules", "CDP4Rules\CDP4Rules.csproj", "{9EE84CC2-E768-4AB5-A657-1C36D602BEB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4Rules.NetCore.Tests", "CDP4Rules.NetCore.Tests\CDP4Rules.NetCore.Tests.csproj", "{95515A03-E02B-4C65-992D-32B82F763F7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Rules.NetCore.Tests", "CDP4Rules.NetCore.Tests\CDP4Rules.NetCore.Tests.csproj", "{95515A03-E02B-4C65-992D-32B82F763F7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4Requirements", "CDP4Requirements\CDP4Requirements.csproj", "{616F8A4A-F3E4-40C0-BE31-FFEC84369AFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4Requirements.Tests", "CDP4Requirements.Tests\CDP4Requirements.Tests.csproj", "{5BD84ABF-878F-4BE5-8844-429D649D5449}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +133,14 @@ Global
 		{95515A03-E02B-4C65-992D-32B82F763F7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95515A03-E02B-4C65-992D-32B82F763F7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95515A03-E02B-4C65-992D-32B82F763F7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{616F8A4A-F3E4-40C0-BE31-FFEC84369AFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{616F8A4A-F3E4-40C0-BE31-FFEC84369AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{616F8A4A-F3E4-40C0-BE31-FFEC84369AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{616F8A4A-F3E4-40C0-BE31-FFEC84369AFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BD84ABF-878F-4BE5-8844-429D649D5449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BD84ABF-878F-4BE5-8844-429D649D5449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BD84ABF-878F-4BE5-8844-429D649D5449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BD84ABF-878F-4BE5-8844-429D649D5449}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
