@@ -5,6 +5,7 @@
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Rules Community Edition</Title>
     <Version>1.2.0</Version>
+    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Description>CDP4 Class Library that provides Model Analysis and Rule Checking</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen</Authors>

@@ -5,6 +5,7 @@
     <Company>RHEA System S.A.</Company>
     <Title>CDP4ServicesDal Community Edition</Title>
     <Version>5.0.5</Version>
+    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Description>CDP4ServicesDal Dal Plugin</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen</Authors>
