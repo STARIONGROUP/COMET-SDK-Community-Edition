@@ -29,12 +29,16 @@ namespace CDP4Requirements.RequirementVerifiers
 
     using CDP4Common.EngineeringModelData;
 
+    using CDP4Dal;
+
     /// <summary>
     /// Base class for the verification if a <see cref="BooleanExpression"/> is compliant to data in an <see cref="Iteration"/>  
     /// </summary>
     /// <typeparam name="T">The type of <see cref="BooleanExpression"/> that is used for this verifier.</typeparam>
     public abstract class BooleanExpressionVerifier<T> : IBooleanExpressionVerifier where T : BooleanExpression
     {
+        private RequirementStateOfCompliance requirementStateOfCompliance;
+
         /// <summary>
         /// The <see cref="BooleanExpression"/> that is used for the verification process
         /// </summary>
@@ -43,7 +47,18 @@ namespace CDP4Requirements.RequirementVerifiers
         /// <summary>
         /// The current <see cref="CDP4Requirements.RequirementStateOfCompliance"/>>
         /// </summary>
-        public RequirementStateOfCompliance RequirementStateOfCompliance { get; protected set; }
+        public RequirementStateOfCompliance RequirementStateOfCompliance
+        {
+            get => this.requirementStateOfCompliance;
+            protected set
+            {
+                if (this.requirementStateOfCompliance != value)
+                {
+                    this.requirementStateOfCompliance = value;
+                    CDPMessageBus.Current.SendMessage(new BooleanExpressionVerificationChangedEvent(this), this.Expression);
+                }
+            }
+        }
 
         /// <summary>
         /// Verify a <see cref="BooleanExpression"/> with respect to a <see cref="Requirement"/> using data from a given <see cref="Iteration"/> 
