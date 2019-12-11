@@ -394,7 +394,7 @@ namespace CDP4Common.Tests.Types
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<KeyNotFoundException>(() => testlist.Move(-1, 1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(-1, 1));
         }
 
         [Test]
@@ -407,7 +407,7 @@ namespace CDP4Common.Tests.Types
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<KeyNotFoundException>(() => testlist.Move(2, 1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(2, 1));
         }
 
         [Test]
@@ -420,7 +420,7 @@ namespace CDP4Common.Tests.Types
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<KeyNotFoundException>(() => testlist.Move(0, -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(0, -1));
         }
 
         [Test]
@@ -433,7 +433,7 @@ namespace CDP4Common.Tests.Types
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<KeyNotFoundException>(() => testlist.Move(0, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(0, 3));
         }
 
         [Test]
