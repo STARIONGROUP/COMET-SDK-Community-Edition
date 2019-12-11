@@ -125,10 +125,7 @@ namespace CDP4Common.Types
         /// <returns>The index of the item if there is a match, else -1</returns>
         public int FindIndex(Predicate<T> match)
         {
-            if (match == null)
-            {
-                throw new ArgumentNullException("match");
-            }
+            this.ValidateValueForNull(match, "A match cannot be null");
 
             foreach (T item in this)
             {
@@ -179,39 +176,23 @@ namespace CDP4Common.Types
         {
             get
             {
-                if (index < 0 || index >= this.sortedItems.Count)
-                {
-                    throw new ArgumentOutOfRangeException(
-                        "index", string.Format("index is {0}, valid range is 0 to {1}", index, this.sortedItems.Count - 1));
-                }
-
+                this.ValidateIndex(index);
                 return this.sortedItems.Values[index];
             }
 
             set
             {
-                if (index < 0 || index >= this.sortedItems.Count)
-                {
-                    throw new ArgumentOutOfRangeException(
-                        "index", string.Format("index is {0}, valid range is 0 to {1}", index, this.sortedItems.Count - 1));
-                }
-
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
+                this.ValidateIndex(index);
+                this.ValidateValueForNull(value, "An item cannot be null");
 
                 if (value as Thing != null && this.IsComposite)
                 {
                     (value as Thing).Container = this.Container;
                 }
 
-                if (typeof(T) == typeof(Thing))
+                if (value as Thing != null)
                 {
-                    if (this.sortedItems.Values.Contains(value))
-                    {
-                        throw new InvalidOperationException(string.Format("The sorted list already contains the item {0}", (value as Thing).Iid));
-                    }
+                    this.ValidateItemForExistence(value);
                 }
 
                 var sortKey = this.sortedItems.ElementAt(index).Key;
@@ -252,17 +233,11 @@ namespace CDP4Common.Types
         /// </exception>
         public void Add(T item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException("item");
-            }
+            this.ValidateValueForNull(item, "An item cannot be null");
 
             if (item is Thing)
             {
-                if (this.sortedItems.Values.Contains(item))
-                {
-                    throw new InvalidOperationException("The added object already exists");
-                }
+                this.ValidateItemForExistence(item);
             }
 
             var pocoThing = item as Thing;
@@ -322,10 +297,7 @@ namespace CDP4Common.Types
         /// </param>
         public void Insert(int index, T item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException();
-            }
+            this.ValidateValueForNull(item, "An item cannot be null");
 
             if (index < this.Count)
             {
@@ -358,15 +330,8 @@ namespace CDP4Common.Types
         /// </remarks>
         public void Move(int index, int destinationIndex)
         {
-            if (index >= this.sortedItems.Count || index < 0)
-            {
-                throw new KeyNotFoundException(string.Format("The Key {0} does not exist in the ordered item list", index));
-            }
-
-            if (destinationIndex >= this.sortedItems.Count || destinationIndex < 0)
-            {
-                throw new KeyNotFoundException(string.Format("The Key {0} does not exist in the ordered item list", destinationIndex));
-            }
+            this.ValidateIndex(index);
+            this.ValidateIndex(destinationIndex);
 
             var minIndex = Math.Min(index, destinationIndex);
             var maxIndex = Math.Max(index, destinationIndex);
@@ -548,7 +513,7 @@ namespace CDP4Common.Types
         /// The item to be added.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        /// Thrown when <see cref="item"/> is null.
+        /// Thrown when <see paramref="item"/> is null.
         /// </exception>
         private void Add(long sortKey, T item)
         {
@@ -573,6 +538,62 @@ namespace CDP4Common.Types
 
             this.sortedItems.Add(sortKey, item);
             this.highestKey = Math.Max(sortKey, this.highestKey);
+        }
+
+        /// <summary>
+        /// Validates a value for being null.
+        /// </summary>
+        /// <param name="value">
+        /// The value to validate.
+        /// </param>
+        /// <param name="message">
+        /// The message to pass to an exception if validation not passes.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <see paramref="value"/> is null.
+        /// </exception>
+        private void ValidateValueForNull(object value, string message = "")
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(message);
+            }
+        }
+
+        /// <summary>
+        /// Validates an index to be within an allowed range of the underlying sorted list of items.
+        /// </summary>
+        /// <param name="index">
+        /// The value to validate.
+        /// </param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when <see paramref="index"/> is out of the allowed range.
+        /// </exception>
+        private void ValidateIndex(int index)
+        {
+            if (index < 0 || index >= this.sortedItems.Count)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "index", string.Format("The index {0} does not exist in the ordered item list, valid range is 0 to {1}", index, this.sortedItems.Count - 1));
+            }
+        }
+
+        /// <summary>
+        /// Validates whether an item is already in the underlying sorted list of items.
+        /// </summary>
+        /// <param name="item">
+        /// The item to validate.
+        /// </param>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when <see paramref="item"/> is already in the list.
+        /// </exception>
+        private void ValidateItemForExistence(T item)
+        {
+            if (this.sortedItems.Values.Contains(item))
+            {
+                var thing = item as Thing;
+                throw new InvalidOperationException(string.Format("The sorted list already contains the item {0}", thing != null ? thing.Iid.ToString() : "An item is not a Thing. Incorrect use of validation."));
+            }
         }
     }
 }
