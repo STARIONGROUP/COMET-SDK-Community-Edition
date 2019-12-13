@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BooleanExpressionVerificationChangedEvent.cs" company="RHEA System S.A.">
+// <copyright file="RequirementStateOfComplianceChangedEvent.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
@@ -22,28 +22,28 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Requirements
+namespace CDP4Requirements.Events
 {
     /// <summary>
-    /// The purpose of the <see cref="BooleanExpressionVerificationChangedEvent"/> is to notify an observer
-    /// that the referenced <see cref="IBooleanExpressionVerifier"/> has changed in some way and what that change is.
+    /// The purpose of the <see cref="RequirementStateOfComplianceChangedEvent"/> is to notify an observer
+    /// that the referenced <see cref="RequirementStateOfCompliance"/> has changed in some way and what that change is.
     /// </summary>
-    public class BooleanExpressionVerificationChangedEvent
+    public class RequirementStateOfComplianceChangedEvent
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BooleanExpressionVerificationChangedEvent"/> class.
+        /// Initializes a new instance of the <see cref="RequirementStateOfComplianceChangedEvent"/> class.
         /// </summary>
-        /// <param name="booleanExpressionVerifier">
-        /// The payload <see cref="IBooleanExpressionVerifier"/>.
+        /// <param name="requirementStateOfCompliance">
+        /// The payload <see cref="RequirementStateOfCompliance"/>.
         /// </param>
-        public BooleanExpressionVerificationChangedEvent(IBooleanExpressionVerifier booleanExpressionVerifier)
+        public RequirementStateOfComplianceChangedEvent(RequirementStateOfCompliance requirementStateOfCompliance)
         {
-            this.Verifier = booleanExpressionVerifier;
+            this.RequirementStateOfCompliance = requirementStateOfCompliance;
         }
 
         /// <summary>
-        /// Gets or sets the changed <see cref="IBooleanExpressionVerifier"/>
+        /// Gets or sets the changed <see cref="RequirementStateOfCompliance"/>
         /// </summary>
-        public IBooleanExpressionVerifier Verifier { get; }
+        public RequirementStateOfCompliance RequirementStateOfCompliance { get; }
     }
 }

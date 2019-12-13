@@ -1,5 +1,5 @@
-﻿// ----------------------------------------------------------------------------
-// <copyright file="IRequirementVerification.cs" company="RHEA System S.A.">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IRequirementStateOfComplianceCalculator.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
@@ -20,40 +20,23 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// ----------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Requirements
+namespace CDP4Requirements.Calculations
 {
     using CDP4Common.EngineeringModelData;
 
     /// <summary>
-    /// State of compliance for a <see cref="ParametricConstraint"/> or a <see cref="BooleanExpression"/>
+    /// Specification of the <see cref="IRequirementStateOfComplianceCalculator"/> interface.
     /// </summary>
-    public enum RequirementStateOfCompliance
+    public interface IRequirementStateOfComplianceCalculator
     {
         /// <summary>
-        /// No verification ran yet
+        /// The method that performs the necessary calculations and and returns the <see cref="RequirementStateOfCompliance"/> based on those calculations
         /// </summary>
-        Unknown,
-
-        /// <summary>
-        /// Verification process was started
-        /// </summary>
-        Calculating,
-
-        /// <summary>
-        /// Cannot verify because of some reason
-        /// </summary>
-        Inconclusive,
-
-        /// <summary>
-        /// All conditions are passed
-        /// </summary>
-        Pass,
-
-        /// <summary>
-        /// At least one condition does not pass
-        /// </summary>
-        Failed
+        /// <param name="valueSet">The <see cref="IValueSet"/> that is used for calculations</param>
+        /// <param name="relationalExpression">The <see cref="RelationalExpression"/> that is used for calculations</param>
+        /// <returns><see cref="RequirementStateOfCompliance"/> based on the calculations</returns>
+        RequirementStateOfCompliance Calculate(IValueSet valueSet, RelationalExpression relationalExpression);
     }
 }

@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Requirements.RequirementVerifiers
+namespace CDP4Requirements.Verifiers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -52,6 +52,8 @@ namespace CDP4Requirements.RequirementVerifiers
         /// <returns><see cref="Task"/> that returns the calculated <see cref="RequirementStateOfCompliance"/> for this class' <see cref="BooleanExpressionVerifier{T}.Expression"/> property</returns>
         public override async Task<RequirementStateOfCompliance> VerifyRequirementStateOfCompliance(IDictionary<BooleanExpression, IBooleanExpressionVerifier> booleanExpressionVerifiers, Iteration iteration)
         {
+            this.RequirementStateOfCompliance = RequirementStateOfCompliance.Calculating;
+
             if (!this.Expression?.Term?.Any() ?? true)
             {
                 return this.RequirementStateOfCompliance = RequirementStateOfCompliance.Inconclusive;
