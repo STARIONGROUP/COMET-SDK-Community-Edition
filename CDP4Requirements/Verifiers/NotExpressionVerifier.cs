@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BooleanExpressionVerifier.cs" company="RHEA System S.A.">
+// <copyright file="NotExpressionVerifier.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
@@ -22,50 +22,52 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Requirements.RequirementVerifiers
+namespace CDP4Requirements.Verifiers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using CDP4Common.EngineeringModelData;
 
-    using CDP4Dal;
-
     /// <summary>
-    /// Base class for the verification if a <see cref="BooleanExpression"/> is compliant to data in an <see cref="Iteration"/>  
+    /// Class used for the verification if a <see cref="NotExpression"/> is compliant to data in an <see cref="Iteration"/>  
     /// </summary>
-    /// <typeparam name="T">The type of <see cref="BooleanExpression"/> that is used for this verifier.</typeparam>
-    public abstract class BooleanExpressionVerifier<T> : IBooleanExpressionVerifier where T : BooleanExpression
+    public class NotExpressionVerifier : BooleanExpressionVerifier<NotExpression>
     {
-        private RequirementStateOfCompliance requirementStateOfCompliance;
-
         /// <summary>
-        /// The <see cref="BooleanExpression"/> that is used for the verification process
+        /// Initializes a new instance of the <see cref="AndExpressionVerifier"/> class.
         /// </summary>
-        public T Expression { get; protected set; }
-
-        /// <summary>
-        /// The current <see cref="CDP4Requirements.RequirementStateOfCompliance"/>>
-        /// </summary>
-        public RequirementStateOfCompliance RequirementStateOfCompliance
+        /// <param name="notExpression">The <see cref="AndExpressionVerifier"/> that is verified.</param>
+        public NotExpressionVerifier(NotExpression notExpression)
         {
-            get => this.requirementStateOfCompliance;
-            protected set
-            {
-                if (this.requirementStateOfCompliance != value)
-                {
-                    this.requirementStateOfCompliance = value;
-                    CDPMessageBus.Current.SendMessage(new BooleanExpressionVerificationChangedEvent(this), this.Expression);
-                }
-            }
+            this.Expression = notExpression;
         }
 
         /// <summary>
-        /// Verify a <see cref="BooleanExpression"/> with respect to a <see cref="Requirement"/> using data from a given <see cref="Iteration"/> 
+        /// Verify a <see cref="NotExpressionVerifier"/> with respect to a <see cref="Requirement"/> using data from a given <see cref="Iteration"/> 
         /// </summary>
         /// <param name="booleanExpressionVerifiers">A dictionary that contains all <see cref="BooleanExpression"/>s and their <see cref="BooleanExpressionVerifier{T}"/>s</param>
         /// <param name="iteration">The <see cref="Iteration"/> that contains the data (<see cref="ElementDefinition"/> and <see cref="ElementUsage"/>) used for verification</param>
         /// <returns><see cref="Task"/> that returns the calculated <see cref="RequirementStateOfCompliance"/> for this class' <see cref="BooleanExpressionVerifier{T}.Expression"/> property</returns>
-        public abstract Task<RequirementStateOfCompliance> VerifyRequirementStateOfCompliance(IDictionary<BooleanExpression, IBooleanExpressionVerifier> booleanExpressionVerifiers, Iteration iteration);
+        public override async Task<RequirementStateOfCompliance> VerifyRequirementStateOfCompliance(IDictionary<BooleanExpression, IBooleanExpressionVerifier> booleanExpressionVerifiers, Iteration iteration)
+        {
+            this.RequirementStateOfCompliance = RequirementStateOfCompliance.Calculating;
+
+            var expression = this.Expression?.Term;
+
+            if (expression == null)
+            {
+                return this.RequirementStateOfCompliance = RequirementStateOfCompliance.Inconclusive;
+            }
+
+            var expressionVerifier = booleanExpressionVerifiers[expression];
+            var requirementStateOfCompliance = await expressionVerifier.VerifyRequirementStateOfCompliance(booleanExpressionVerifiers, iteration);
+
+            return this.RequirementStateOfCompliance = requirementStateOfCompliance == RequirementStateOfCompliance.Pass
+                ? RequirementStateOfCompliance.Failed
+                : requirementStateOfCompliance == RequirementStateOfCompliance.Failed
+                    ? RequirementStateOfCompliance.Pass
+                    : requirementStateOfCompliance;
+        }
     }
 }

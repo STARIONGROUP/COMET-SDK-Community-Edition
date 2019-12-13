@@ -22,7 +22,7 @@
 // </copyright>
 // ----------------------------------------------------------------------------
 
-namespace CDP4Requirements
+namespace CDP4Requirements.Verifiers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -30,21 +30,16 @@ namespace CDP4Requirements
     using CDP4Common.EngineeringModelData;
 
     /// <summary>
-    /// Specification of the <see cref="BooleanExpression"/> verification interface.
+    /// Specification of the <see cref="IBooleanExpressionVerifier"/> verification interface.
     /// </summary>
-    public interface IBooleanExpressionVerifier
+    public interface IBooleanExpressionVerifier : IHaveRequirementStateOfCompliance
     {
-        /// <summary>
-        /// The current <see cref="CDP4Requirements.RequirementStateOfCompliance"/>>
-        /// </summary>
-        RequirementStateOfCompliance RequirementStateOfCompliance { get; }
-
         /// <summary>
         /// Verify a <see cref="BooleanExpression"/> with respect to a <see cref="Requirement"/> using data from a given <see cref="Iteration"/> 
         /// </summary>
         /// <param name="booleanExpressionVerifiers">A dictionary that contains all <see cref="BooleanExpression"/>s and their <see cref="BooleanExpressionVerifier{T}"/>s</param>
         /// <param name="iteration">The <see cref="Iteration"/> that contains the data (<see cref="ElementDefinition"/> and <see cref="ElementUsage"/>) used for verification</param>
-        /// <returns><see cref="Task"/> that returns the calculated <see cref="RequirementStateOfCompliance"/> for this class' <see cref="BooleanExpressionVerifier{T}.Expression"/> property</returns>
+        /// <returns><see cref="Task"/> that returns the calculated <see cref="RequirementStateOfCompliance"/> for this class</returns>
         Task<RequirementStateOfCompliance> VerifyRequirementStateOfCompliance(IDictionary<BooleanExpression, IBooleanExpressionVerifier> booleanExpressionVerifiers, Iteration iteration);
     }
 }

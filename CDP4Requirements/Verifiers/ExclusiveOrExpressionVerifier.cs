@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OrExpressionVerifier.cs" company="RHEA System S.A.">
+// <copyright file="ExclusiveOrExpressionVerifier.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Requirements.RequirementVerifiers
+namespace CDP4Requirements.Verifiers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -31,27 +31,29 @@ namespace CDP4Requirements.RequirementVerifiers
     using CDP4Common.EngineeringModelData;
 
     /// <summary>
-    /// Class used for the verification if a <see cref="OrExpression"/> is compliant to data in an <see cref="Iteration"/>  
+    /// Class used for the verification if a <see cref="ExclusiveOrExpression"/> is compliant to data in an <see cref="Iteration"/>  
     /// </summary>
-    public class OrExpressionVerifier : BooleanExpressionVerifier<OrExpression>
+    public class ExclusiveOrExpressionVerifier : BooleanExpressionVerifier<ExclusiveOrExpression>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrExpressionVerifier"/> class.
+        /// Initializes a new instance of the <see cref="ExclusiveOrExpressionVerifier"/> class.
         /// </summary>
-        /// <param name="orExpression">The <see cref="OrExpression"/> that is verified.</param>
-        public OrExpressionVerifier(OrExpression orExpression)
+        /// <param name="exclusiveOrExpression">The <see cref="ExclusiveOrExpression"/> that is verified.</param>
+        public ExclusiveOrExpressionVerifier(ExclusiveOrExpression exclusiveOrExpression)
         {
-            this.Expression = orExpression;
+            this.Expression = exclusiveOrExpression;
         }
 
         /// <summary>
-        /// Verify a <see cref="OrExpression"/> with respect to a <see cref="Requirement"/> using data from a given <see cref="Iteration"/> 
+        /// Verify a <see cref="ExclusiveOrExpression"/> with respect to a <see cref="Requirement"/> using data from a given <see cref="Iteration"/> 
         /// </summary>
         /// <param name="booleanExpressionVerifiers">A dictionary that contains all <see cref="BooleanExpression"/>s and their <see cref="BooleanExpressionVerifier{T}"/>s</param>
         /// <param name="iteration">The <see cref="Iteration"/> that contains the data (<see cref="ElementDefinition"/> and <see cref="ElementUsage"/>) used for verification</param>
         /// <returns><see cref="Task"/> that returns the calculated <see cref="RequirementStateOfCompliance"/> for this class' <see cref="BooleanExpressionVerifier{T}.Expression"/> property</returns>
         public override async Task<RequirementStateOfCompliance> VerifyRequirementStateOfCompliance(IDictionary<BooleanExpression, IBooleanExpressionVerifier> booleanExpressionVerifiers, Iteration iteration)
         {
+            this.RequirementStateOfCompliance = RequirementStateOfCompliance.Calculating;
+
             if (!this.Expression?.Term?.Any() ?? true)
             {
                 return this.RequirementStateOfCompliance = RequirementStateOfCompliance.Inconclusive;
@@ -67,7 +69,7 @@ namespace CDP4Requirements.RequirementVerifiers
 
             return this.RequirementStateOfCompliance = requirementStateOfCompliances.Any(x => x == RequirementStateOfCompliance.Inconclusive)
                 ? RequirementStateOfCompliance.Inconclusive
-                : requirementStateOfCompliances.Any(x => x == RequirementStateOfCompliance.Pass)
+                : requirementStateOfCompliances.Count(x => x == RequirementStateOfCompliance.Pass) == 1
                     ? RequirementStateOfCompliance.Pass
                     : RequirementStateOfCompliance.Failed;
         }

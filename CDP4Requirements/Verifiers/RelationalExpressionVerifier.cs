@@ -22,13 +22,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Requirements.RequirementVerifiers
+namespace CDP4Requirements.Verifiers
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using CDP4Common.EngineeringModelData;
+
+    using CDP4Requirements.Calculations;
 
     /// <summary>
     /// Class used for the verification if a <see cref="RelationalExpression"/> is compliant to data in an <see cref="Iteration"/>  
@@ -50,9 +52,9 @@ namespace CDP4Requirements.RequirementVerifiers
         }
 
         /// <summary>
-        /// A list containing all the <see cref="RequirementStateOfCompliances"/>s that were found when verifying <see cref="Iteration"/> data (<see cref="ElementDefinition"/> and <see cref="ElementUsage"/>)
+        /// A list containing all the <see cref="VerifiedRequirementStateOfComplianceList"/>s that were found when verifying <see cref="Iteration"/> data (<see cref="ElementDefinition"/> and <see cref="ElementUsage"/>)
         /// </summary>
-        public RequirementStateOfCompliances RequirementStateOfCompliances { get; } = new RequirementStateOfCompliances();
+        public VerifiedRequirementStateOfComplianceList VerifiedRequirementStateOfComplianceList { get; } = new VerifiedRequirementStateOfComplianceList(new RequirementStateOfComplianceCalculator());
 
         /// <summary>
         /// Verify a <see cref="RelationalExpression"/> with respect to a <see cref="Requirement"/> using data from a given <see cref="Iteration"/> 
@@ -62,58 +64,63 @@ namespace CDP4Requirements.RequirementVerifiers
         /// <returns><see cref="Task"/> that returns the calculated <see cref="RequirementStateOfCompliance"/> for this class' <see cref="BooleanExpressionVerifier{T}.Expression"/> property</returns>
         public override async Task<RequirementStateOfCompliance> VerifyRequirementStateOfCompliance(IDictionary<BooleanExpression, IBooleanExpressionVerifier> booleanExpressionVerifiers, Iteration iteration)
         {
-            if (this.RequirementStateOfCompliance != RequirementStateOfCompliance.Unknown)
+            return await Task.Run(() =>
             {
-                return this.RequirementStateOfCompliance;
-            }
-
-            lock (this.locker)
-            {
-                if (this.RequirementStateOfCompliance != RequirementStateOfCompliance.Unknown)
+                if (this.RequirementStateOfCompliance.IsCalculated())
                 {
                     return this.RequirementStateOfCompliance;
                 }
 
-                foreach (var binaryRelation in this.Expression.QueryRelationships.OfType<BinaryRelationship>().Where(x => x.Source is ParameterOrOverrideBase && x.Target is RelationalExpression))
+                lock (this.locker)
                 {
-                    if (binaryRelation.Target is RelationalExpression expression)
+                    if (this.RequirementStateOfCompliance.IsCalculated())
                     {
-                        var relationParameter = binaryRelation.Source as Parameter;
+                        return this.RequirementStateOfCompliance;
+                    }
 
-                        var elementDefinitionParameters =
-                            iteration.Element.SelectMany(x => x.Parameter)
-                                .Where(x => x == relationParameter)
+                    this.RequirementStateOfCompliance = RequirementStateOfCompliance.Calculating;
+
+                    foreach (var binaryRelation in this.Expression.QueryRelationships.OfType<BinaryRelationship>().Where(x => x.Source is ParameterOrOverrideBase && x.Target is RelationalExpression))
+                    {
+                        if (binaryRelation.Target is RelationalExpression expression)
+                        {
+                            var relationParameter = binaryRelation.Source as Parameter;
+
+                            var elementDefinitionParameters =
+                                iteration.Element.SelectMany(x => x.Parameter)
+                                    .Where(x => x == relationParameter)
+                                    .ToList();
+
+                            if (relationParameter != null && elementDefinitionParameters.Any())
+                            {
+                                foreach (var parameter in elementDefinitionParameters)
+                                {
+                                    this.VerifiedRequirementStateOfComplianceList.VerifyAndAdd(parameter.ValueSet, expression);
+                                }
+                            }
+
+                            var relationParameterOverride = binaryRelation.Source as ParameterOverride;
+
+                            var elementUsageParameterOverrides = iteration.Element.SelectMany(x => x.ContainedElement)
+                                .SelectMany(x => x.ParameterOverride)
+                                .Where(x => x == relationParameterOverride)
                                 .ToList();
 
-                        if (relationParameter != null && elementDefinitionParameters.Any())
-                        {
-                            foreach (var parameter in elementDefinitionParameters)
+                            if (relationParameterOverride != null && elementUsageParameterOverrides.Any())
                             {
-                                this.RequirementStateOfCompliances.VerifyAndAdd(parameter.ValueSet, expression);
-                            }
-                        }
-
-                        var relationParameterOverride = binaryRelation.Source as ParameterOverride;
-
-                        var elementUsageParameterOverrides = iteration.Element.SelectMany(x => x.ContainedElement)
-                            .SelectMany(x => x.ParameterOverride)
-                            .Where(x => x == relationParameterOverride)
-                            .ToList();
-
-                        if (relationParameterOverride != null && elementUsageParameterOverrides.Any())
-                        {
-                            foreach (var parameterOverride in elementUsageParameterOverrides)
-                            {
-                                this.RequirementStateOfCompliances.VerifyAndAdd(parameterOverride.ValueSet, expression);
+                                foreach (var parameterOverride in elementUsageParameterOverrides)
+                                {
+                                    this.VerifiedRequirementStateOfComplianceList.VerifyAndAdd(parameterOverride.ValueSet, expression);
+                                }
                             }
                         }
                     }
+
+                    this.CalculateRequirementStateOfCompliance();
                 }
 
-                this.CalculateRequirementStateOfCompliance();
-            }
-
-            return this.RequirementStateOfCompliance;
+                return this.RequirementStateOfCompliance;
+            });
         }
 
         /// <summary>
@@ -121,15 +128,15 @@ namespace CDP4Requirements.RequirementVerifiers
         /// </summary>
         private void CalculateRequirementStateOfCompliance()
         {
-            if (!this.RequirementStateOfCompliances.Any())
+            if (!this.VerifiedRequirementStateOfComplianceList.Any())
             {
                 this.RequirementStateOfCompliance = RequirementStateOfCompliance.Inconclusive;
             }
-            else if (this.RequirementStateOfCompliances.All(x => x.Value == RequirementStateOfCompliance.Pass))
+            else if (this.VerifiedRequirementStateOfComplianceList.All(x => x.Value == RequirementStateOfCompliance.Pass))
             {
                 this.RequirementStateOfCompliance = RequirementStateOfCompliance.Pass;
             }
-            else if (this.RequirementStateOfCompliances.All(x => x.Value == RequirementStateOfCompliance.Failed))
+            else if (this.VerifiedRequirementStateOfComplianceList.All(x => x.Value == RequirementStateOfCompliance.Failed))
             {
                 this.RequirementStateOfCompliance = RequirementStateOfCompliance.Failed;
             }

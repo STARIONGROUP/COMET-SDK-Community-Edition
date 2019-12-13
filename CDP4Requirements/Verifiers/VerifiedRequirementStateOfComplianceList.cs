@@ -22,23 +22,35 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Requirements.RequirementVerifiers
+namespace CDP4Requirements.Verifiers
 {
-    using System;
     using System.Collections.Generic;
 
     using CDP4Common.EngineeringModelData;
 
+    using CDP4Requirements.Calculations;
+
     /// <summary>
     /// Class used for the verification if a <see cref="BooleanExpression"/> is compliant to data in an <see cref="Iteration"/>
-    /// It inherits from a <see cref="Dictionary{TKey,TValue}"/> so it links a <see cref="IValueSet"/> to a <see cref="RequirementStateOfCompliance"/>
+    /// It inherits from a <see cref="Dictionary{IValueSet,RequirementStateOfCompliance}"/> so it links a <see cref="IValueSet"/> to a <see cref="RequirementStateOfCompliance"/>
     /// </summary>
-    public class RequirementStateOfCompliances : Dictionary<IValueSet, RequirementStateOfCompliance>
+    public class VerifiedRequirementStateOfComplianceList : Dictionary<IValueSet, RequirementStateOfCompliance>
     {
+        private readonly IRequirementStateOfComplianceCalculator requirementStateOfComplianceCalculator;
+
         /// <summary>
-        /// Check a list of <see cref="IValueSet"/>s for compliance with a RelationalExpression and add the result to this instance of <see cref="RequirementStateOfCompliances"/>
+        /// Initializes an instance of <see cref="VerifiedRequirementStateOfComplianceList"/>
         /// </summary>
-        /// <param name="valueSets">List of <see cref="IValueSet"/>s to be checked and added to this instance of <see cref="RequirementStateOfCompliances"/></param>
+        /// <param name="requirementStateOfComplianceCalculator">Implementation of <see cref="IRequirementStateOfComplianceCalculator"/> that will be used to calculate the <see cref="RequirementStateOfCompliance"/></param>
+        public VerifiedRequirementStateOfComplianceList(IRequirementStateOfComplianceCalculator requirementStateOfComplianceCalculator)
+        {
+            this.requirementStateOfComplianceCalculator = requirementStateOfComplianceCalculator;
+        }
+
+        /// <summary>
+        /// Check a list of <see cref="IValueSet"/>s for compliance with a RelationalExpression and add the result to this instance of <see cref="VerifiedRequirementStateOfComplianceList"/>
+        /// </summary>
+        /// <param name="valueSets">List of <see cref="IValueSet"/>s to be checked and added to this instance of <see cref="VerifiedRequirementStateOfComplianceList"/></param>
         /// <param name="relationalExpression">The <see cref="RelationalExpression"/> that will be used to verify compliance</param>
         public void VerifyAndAdd(IEnumerable<IValueSet> valueSets, RelationalExpression relationalExpression)
         {
@@ -46,25 +58,7 @@ namespace CDP4Requirements.RequirementVerifiers
             {
                 if (!this.ContainsKey(valueSet))
                 {
-                    switch (relationalExpression.RelationalOperator)
-                    {
-                        case RelationalOperatorKind.EQ:
-                            this.Add(valueSet, relationalExpression.Value.ToString().Equals(valueSet.ActualValue.ToString()) ? RequirementStateOfCompliance.Pass : RequirementStateOfCompliance.Failed);
-
-                            break;
-
-                        case RelationalOperatorKind.GE:
-                        case RelationalOperatorKind.GT:
-                        case RelationalOperatorKind.LE:
-                        case RelationalOperatorKind.LT:
-
-                        case RelationalOperatorKind.NE:
-                            this.Add(valueSet, !relationalExpression.Value.ToString().Equals(valueSet.ActualValue.ToString()) ? RequirementStateOfCompliance.Pass : RequirementStateOfCompliance.Failed);
-
-                            break;
-
-                        default: throw new ArgumentOutOfRangeException(nameof(relationalExpression.RelationalOperator), relationalExpression.RelationalOperator, $"Unknown {nameof(relationalExpression.RelationalOperator)}");
-                    }
+                    this.Add(valueSet, this.requirementStateOfComplianceCalculator.Calculate(valueSet, relationalExpression));
                 }
             }
         }
