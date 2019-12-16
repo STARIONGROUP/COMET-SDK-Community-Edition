@@ -74,7 +74,7 @@ namespace CDP4Requirements.Verifiers
         /// <summary>
         /// Initializes this instance of <see cref="RequirementVerifier"/> 
         /// </summary>
-        /// <param name="requirement"></param>
+        /// <param name="requirement">The <see cref="Requirement"/> used for verification</param>
         public RequirementVerifier(Requirement requirement)
         {
             this.requirement = requirement;

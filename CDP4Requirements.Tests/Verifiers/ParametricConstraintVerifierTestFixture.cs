@@ -1,4 +1,5 @@
-﻿// <copyright file="ParametricConstraintVerifierTestFixture.cs" company="RHEA System S.A.">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ParametricConstraintVerifierTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
@@ -20,17 +21,15 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace CDP4Requirements.Tests
+namespace CDP4Requirements.Tests.Verifiers
 {
     using System;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
+    using CDP4Requirements.Tests.Builders;
     using CDP4Requirements.Verifiers;
 
     using NUnit.Framework;
@@ -67,11 +66,14 @@ namespace CDP4Requirements.Tests
 
         private ParameterOverrideValueSet parameterOverrideValueSet;
 
-        private readonly string okValue = "OK";
+        private const string OkValue = "10";
 
-        private readonly string notOkValue = "NOK";
+        private const string NotOkValue = "11";
+
         private Option option1;
+
         private Option option2;
+
         private ElementDefinition elementDefinition;
 
         [SetUp]
@@ -83,17 +85,29 @@ namespace CDP4Requirements.Tests
             this.exclusiveOrExpression = new ExclusiveOrExpression(Guid.NewGuid(), null, null);
             this.notExpression = new NotExpression(Guid.NewGuid(), null, null);
 
-            this.relationalExpression1 = new RelationalExpression(Guid.NewGuid(), null, null);
-            this.relationalExpression1.Value = new ValueArray<string>(new[] { this.okValue });
+            this.relationalExpression1 =
+                new RelationalExpressionBuilder()
+                    .WithSimpleQuantityKindParameterType()
+                    .WithValue(OkValue)
+                    .Build();
 
-            this.relationalExpression2 = new RelationalExpression(Guid.NewGuid(), null, null);
-            this.relationalExpression2.Value = new ValueArray<string>(new[] { this.okValue });
+            this.relationalExpression2 =
+                new RelationalExpressionBuilder()
+                    .WithSimpleQuantityKindParameterType()
+                    .WithValue(OkValue)
+                    .Build();
 
-            this.relationalExpression3 = new RelationalExpression(Guid.NewGuid(), null, null);
-            this.relationalExpression3.Value = new ValueArray<string>(new[] { this.okValue });
+            this.relationalExpression3 =
+                new RelationalExpressionBuilder()
+                    .WithSimpleQuantityKindParameterType()
+                    .WithValue(OkValue)
+                    .Build();
 
-            this.relationalExpression4 = new RelationalExpression(Guid.NewGuid(), null, null);
-            this.relationalExpression4.Value = new ValueArray<string>(new[] { this.okValue });
+            this.relationalExpression4 =
+                new RelationalExpressionBuilder()
+                    .WithSimpleQuantityKindParameterType()
+                    .WithValue(OkValue)
+                    .Build();
 
             this.orExpression.Term.Add(this.relationalExpression1);
             this.orExpression.Term.Add(this.relationalExpression2);
@@ -121,16 +135,21 @@ namespace CDP4Requirements.Tests
             this.iteration.Option.Add(this.option2);
 
             this.elementDefinition = new ElementDefinition(Guid.NewGuid(), null, null);
-            var elementUsage = new ElementUsage(Guid.NewGuid(), null, null);
-            elementUsage.ElementDefinition = this.elementDefinition;
+            var elementUsage = new ElementUsage(Guid.NewGuid(), null, null) { ElementDefinition = this.elementDefinition };
             this.elementDefinition.ContainedElement.Add(elementUsage);
 
-            var parameter = this.CreateParameter(this.option1);
+            var parameter =
+                new ParameterBuilder()
+                    .WithOption(this.option1)
+                    .WithSimpleQuantityKindParameterType()
+                    .WithValue(OkValue)
+                    .AddToElementDefinition(this.elementDefinition)
+                    .Build();
+
             this.iteration.Element.Add(this.elementDefinition);
 
-            var parameterOverride = new ParameterOverride(Guid.NewGuid(), null, null);
-            parameterOverride.Parameter = parameter;
-            this.parameterOverrideValueSet = new ParameterOverrideValueSet { ValueSwitch = ParameterSwitchKind.MANUAL, Manual = new ValueArray<string>(new[] { this.okValue }) };
+            var parameterOverride = new ParameterOverride(Guid.NewGuid(), null, null) { Parameter = parameter };
+            this.parameterOverrideValueSet = new ParameterOverrideValueSet { ValueSwitch = ParameterSwitchKind.MANUAL, Manual = new ValueArray<string>(new[] { OkValue }) };
             parameterOverride.ValueSet.Add(this.parameterOverrideValueSet);
             elementUsage.ParameterOverride.Add(parameterOverride);
 
@@ -138,24 +157,13 @@ namespace CDP4Requirements.Tests
             this.RegisterBinaryRelationShip(parameterOverride, this.relationalExpression2);
         }
 
-        private Parameter CreateParameter(Option option1)
-        {
-            var parameter = new Parameter(Guid.NewGuid(), null, null);
-            var parameterType = new SimpleQuantityKind(Guid.NewGuid(), null, null);
-
-            parameter.ParameterType = parameterType;
-            this.parameterValueSet = new ParameterValueSet { ActualOption = option1, ValueSwitch = ParameterSwitchKind.MANUAL, Manual = new ValueArray<string>(new[] { this.okValue }) };
-            parameter.ValueSet.Add(this.parameterValueSet);
-            this.elementDefinition.Parameter.Add(parameter);
-
-            return parameter;
-        }
-
         private void RegisterBinaryRelationShip(ParameterOrOverrideBase parameter, RelationalExpression expression)
         {
-            var relationShip = new BinaryRelationship(Guid.NewGuid(), null, null);
-            relationShip.Source = parameter;
-            relationShip.Target = expression;
+            var relationShip = new BinaryRelationship(Guid.NewGuid(), null, null)
+            {
+                Source = parameter,
+                Target = expression
+            };
 
             expression.Relationships.Add(relationShip);
             relationShip.Source.Relationships.Add(relationShip);
@@ -185,13 +193,13 @@ namespace CDP4Requirements.Tests
         [Test]
         public async Task Verify_that_state_of_compliances_are_properly_set_when_valuesets_do_not_match()
         {
-            this.parameterValueSet.Manual = new ValueArray<string>(new[] { this.notOkValue });
-            this.parameterOverrideValueSet.Manual = new ValueArray<string>(new[] { this.notOkValue });
+            this.parameterValueSet.Manual = new ValueArray<string>(new[] { NotOkValue });
+            this.parameterOverrideValueSet.Manual = new ValueArray<string>(new[] { NotOkValue });
 
             await this.parametricConstraintVerifier.VerifyRequirements(this.iteration);
 
             Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.parametricConstraintVerifier.RequirementStateOfCompliance);
-            
+
             Assert.AreEqual(RequirementStateOfCompliance.Failed, this.parametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
             Assert.AreEqual(RequirementStateOfCompliance.Failed, this.parametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
             Assert.AreEqual(RequirementStateOfCompliance.Failed, this.parametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
@@ -226,8 +234,8 @@ namespace CDP4Requirements.Tests
         public async Task Verify_that_state_of_compliances_are_properly_set_when_a_notExpression_is_used_on_a_orExpression_that_is_not_compliant()
         {
             this.notExpression.Term = this.orExpression;
-            this.parameterValueSet.Manual = new ValueArray<string>(new[] { this.notOkValue });
-            this.parameterOverrideValueSet.Manual = new ValueArray<string>(new[] { this.notOkValue });
+            this.parameterValueSet.Manual = new ValueArray<string>(new[] { NotOkValue });
+            this.parameterOverrideValueSet.Manual = new ValueArray<string>(new[] { NotOkValue });
 
             await this.parametricConstraintVerifier.VerifyRequirements(this.iteration);
 
@@ -247,7 +255,7 @@ namespace CDP4Requirements.Tests
         [Test]
         public async Task Verify_that_state_of_compliances_are_properly_set_when_a_orExpression_is_partially_compliant()
         {
-            this.parameterOverrideValueSet.Manual = new ValueArray<string>(new[] { this.notOkValue });
+            this.parameterOverrideValueSet.Manual = new ValueArray<string>(new[] { NotOkValue });
 
             await this.parametricConstraintVerifier.VerifyRequirements(this.iteration);
 
@@ -267,8 +275,19 @@ namespace CDP4Requirements.Tests
         [Test]
         public async Task Verify_that_state_of_compliances_are_properly_set_when_valuesets_are_compliant()
         {
-            var parameter1 = this.CreateParameter(this.option1);
-            var parameter2 = this.CreateParameter(this.option1);
+            var parameter1 = new ParameterBuilder()
+                .WithOption(this.option1)
+                .WithSimpleQuantityKindParameterType()
+                .WithValue(OkValue)
+                .AddToElementDefinition(this.elementDefinition)
+                .Build();
+
+            var parameter2 = new ParameterBuilder()
+                .WithOption(this.option1)
+                .WithSimpleQuantityKindParameterType()
+                .WithValue(OkValue)
+                .AddToElementDefinition(this.elementDefinition)
+                .Build();
 
             this.RegisterBinaryRelationShip(parameter1, this.relationalExpression3);
             this.RegisterBinaryRelationShip(parameter2, this.relationalExpression4);
@@ -301,10 +320,19 @@ namespace CDP4Requirements.Tests
         [Test]
         public async Task Verify_that_state_of_compliances_are_properly_set_when_valuesets_are_not_compliant()
         {
-            var parameter1 = this.CreateParameter(this.option1);
-            var parameter2 = this.CreateParameter(this.option1);
-            parameter1.ValueSet.First().Manual = new ValueArray<string>(new[] { this.notOkValue });
-            parameter2.ValueSet.First().Manual = new ValueArray<string>(new[] { this.notOkValue });
+            var parameter1 = new ParameterBuilder()
+                .WithOption(this.option1)
+                .WithSimpleQuantityKindParameterType()
+                .WithValue(NotOkValue)
+                .AddToElementDefinition(this.elementDefinition)
+                .Build();
+
+            var parameter2 = new ParameterBuilder()
+                .WithOption(this.option1)
+                .WithSimpleQuantityKindParameterType()
+                .WithValue(NotOkValue)
+                .AddToElementDefinition(this.elementDefinition)
+                .Build();
 
             this.RegisterBinaryRelationShip(parameter1, this.relationalExpression3);
             this.RegisterBinaryRelationShip(parameter2, this.relationalExpression4);
@@ -336,9 +364,19 @@ namespace CDP4Requirements.Tests
         [Test]
         public async Task Verify_that_state_of_compliances_are_properly_set_when_valuesets_are_partially_compliant()
         {
-            var parameter1 = this.CreateParameter(this.option1);
-            var parameter2 = this.CreateParameter(this.option1);
-            parameter1.ValueSet.First().Manual = new ValueArray<string>(new[] { this.notOkValue });
+            var parameter1 = new ParameterBuilder()
+                .WithOption(this.option1)
+                .WithSimpleQuantityKindParameterType()
+                .WithValue(NotOkValue)
+                .AddToElementDefinition(this.elementDefinition)
+                .Build();
+
+            var parameter2 = new ParameterBuilder()
+                .WithOption(this.option1)
+                .WithSimpleQuantityKindParameterType()
+                .WithValue(OkValue)
+                .AddToElementDefinition(this.elementDefinition)
+                .Build();
 
             this.RegisterBinaryRelationShip(parameter1, this.relationalExpression3);
             this.RegisterBinaryRelationShip(parameter2, this.relationalExpression4);

@@ -31,6 +31,7 @@ namespace CDP4Requirements.Verifiers
     using CDP4Common.EngineeringModelData;
 
     using CDP4Requirements.Calculations;
+    using CDP4Requirements.ExtensionMethods;
 
     /// <summary>
     /// Class used for the verification if a <see cref="RelationalExpression"/> is compliant to data in an <see cref="Iteration"/>  
@@ -80,7 +81,9 @@ namespace CDP4Requirements.Verifiers
 
                     this.RequirementStateOfCompliance = RequirementStateOfCompliance.Calculating;
 
-                    foreach (var binaryRelation in this.Expression.QueryRelationships.OfType<BinaryRelationship>().Where(x => x.Source is ParameterOrOverrideBase && x.Target is RelationalExpression))
+                    foreach (var binaryRelation in this.Expression.QueryRelationships
+                        .OfType<BinaryRelationship>()
+                        .Where(x => x.Source is ParameterOrOverrideBase parameter && !parameter.ParameterType.IsDeprecated && x.Target is RelationalExpression))
                     {
                         if (binaryRelation.Target is RelationalExpression expression)
                         {
