@@ -91,6 +91,7 @@ namespace CDP4Requirements.Verifiers
             this.RequirementStateOfCompliance = RequirementStateOfCompliance.Calculating;
 
             this.CreateBooleanExpressionVerifiers();
+
             return await this.VerifyRequirementStateOfCompliance(this.BooleanExpressionVerifiers, iteration);
         }
 
@@ -112,11 +113,12 @@ namespace CDP4Requirements.Verifiers
             await Task.WhenAll(tasks.ToArray());
 
             var topLevelBooleanExpressions = this.parametricConstraint.Expression.GetTopLevelExpressions();
-            var topLevelBooleanExpressionVerifiers = 
+
+            var topLevelBooleanExpressionVerifiers =
                 this.BooleanExpressionVerifiers
-                .Where(x => topLevelBooleanExpressions.Contains(x.Key))
-                .Select(x => x.Value)
-                .ToList();
+                    .Where(x => topLevelBooleanExpressions.Contains(x.Key))
+                    .Select(x => x.Value)
+                    .ToList();
 
             return this.RequirementStateOfCompliance =
                 topLevelBooleanExpressionVerifiers.Any(x => x.RequirementStateOfCompliance == RequirementStateOfCompliance.Inconclusive)

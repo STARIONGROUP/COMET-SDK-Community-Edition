@@ -79,7 +79,7 @@ namespace CDP4Requirements.Verifiers
         ///  Entrance methods for verifying if a <see cref="Requirement"/> and its underlying tree of <see cref="BooleanExpression"/>s
         ///  is compliant to data (<see cref="ElementDefinition"/> and <see cref="ElementUsage"/>) in an <see cref="Iteration"/>
         /// </summary>
-        /// <param name="iteration"></param>
+        /// <param name="iteration">The <see cref="Iteration"/> that hold the data for verification</param>
         /// <returns>A <see cref="Task"/> that completes when all (underlying) verifications are completed</returns>
         public async Task<RequirementStateOfCompliance> VerifyRequirements(Iteration iteration)
         {
@@ -96,7 +96,7 @@ namespace CDP4Requirements.Verifiers
 
             if (this.Container is RequirementsSpecification requirementsSpecification)
             {
-                foreach (var requirement in requirementsSpecification.Requirement)
+                foreach (var requirement in this.GetAllowedRequirements(requirementsSpecification.Requirement))
                 {
                     var requirementsVerifier = new RequirementVerifier(requirement);
                     verifiers.Add(requirementsVerifier);
@@ -107,11 +107,27 @@ namespace CDP4Requirements.Verifiers
             await Task.WhenAll(tasks.ToArray());
 
             return this.RequirementStateOfCompliance =
-                verifiers.Any(x => x.RequirementStateOfCompliance == RequirementStateOfCompliance.Inconclusive)
-                    ? RequirementStateOfCompliance.Inconclusive
-                    : verifiers.Any(x => x.RequirementStateOfCompliance == RequirementStateOfCompliance.Failed)
-                        ? RequirementStateOfCompliance.Failed
-                        : RequirementStateOfCompliance.Pass;
+                verifiers.Any()
+                    ? verifiers.Any(x => x.RequirementStateOfCompliance == RequirementStateOfCompliance.Inconclusive)
+                        ? RequirementStateOfCompliance.Inconclusive
+                        : verifiers.Any(x => x.RequirementStateOfCompliance == RequirementStateOfCompliance.Failed)
+                            ? RequirementStateOfCompliance.Failed
+                            : RequirementStateOfCompliance.Pass
+                    : RequirementStateOfCompliance.Inconclusive;
+        }
+
+        /// <summary>
+        /// Get the <see cref="Requirement"/>s that are allowed in the verification process
+        /// </summary>
+        /// <param name="requirements">Unfiltered list of <see cref="Requirement"/>s</param>
+        /// <returns></returns>
+        private IReadOnlyList<Requirement> GetAllowedRequirements(IEnumerable<Requirement> requirements)
+        {
+            var allowedRequirements = requirements.AsQueryable();
+
+            allowedRequirements = allowedRequirements.Where(x => !x.IsDeprecated);
+
+            return allowedRequirements.ToList();
         }
     }
 }

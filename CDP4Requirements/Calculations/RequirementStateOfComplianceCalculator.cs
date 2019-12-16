@@ -25,8 +25,13 @@
 namespace CDP4Requirements.Calculations
 {
     using System;
+    using System.Collections.Generic;
 
+    using CDP4Common.CommonData;
+    using CDP4Common.Comparers;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Implementation of the <see cref="IRequirementStateOfComplianceCalculator"/> interface that is used for the calculation of a <see cref="RequirementStateOfCompliance"/>
@@ -41,21 +46,107 @@ namespace CDP4Requirements.Calculations
         /// <returns><see cref="RequirementStateOfCompliance"/> based on the calculations</returns>
         public RequirementStateOfCompliance Calculate(IValueSet valueSet, RelationalExpression relationalExpression)
         {
+            var comparer = this.GetValueSetComparer(relationalExpression);
+
             switch (relationalExpression.RelationalOperator)
             {
                 case RelationalOperatorKind.EQ:
-                    return relationalExpression.Value.ToString().Equals(valueSet.ActualValue.ToString()) ? RequirementStateOfCompliance.Pass : RequirementStateOfCompliance.Failed;
+                    return comparer.Compare(valueSet.ActualValue, relationalExpression.Value) == 0
+                        ? RequirementStateOfCompliance.Pass
+                        : RequirementStateOfCompliance.Failed;
 
                 case RelationalOperatorKind.GE:
+                    return comparer.Compare(valueSet.ActualValue, relationalExpression.Value) >= 0
+                        ? RequirementStateOfCompliance.Pass
+                        : RequirementStateOfCompliance.Failed;
+
                 case RelationalOperatorKind.GT:
+                    return comparer.Compare(valueSet.ActualValue, relationalExpression.Value) > 0
+                        ? RequirementStateOfCompliance.Pass
+                        : RequirementStateOfCompliance.Failed;
+
                 case RelationalOperatorKind.LE:
+                    return comparer.Compare(valueSet.ActualValue, relationalExpression.Value) <= 0
+                        ? RequirementStateOfCompliance.Pass
+                        : RequirementStateOfCompliance.Failed;
+
                 case RelationalOperatorKind.LT:
+                    return comparer.Compare(valueSet.ActualValue, relationalExpression.Value) < 0
+                        ? RequirementStateOfCompliance.Pass
+                        : RequirementStateOfCompliance.Failed;
 
                 case RelationalOperatorKind.NE:
-                    return !relationalExpression.Value.ToString().Equals(valueSet.ActualValue.ToString()) ? RequirementStateOfCompliance.Pass : RequirementStateOfCompliance.Failed;
+                    return comparer.Compare(valueSet.ActualValue, relationalExpression.Value) != 0
+                        ? RequirementStateOfCompliance.Pass
+                        : RequirementStateOfCompliance.Failed;
 
                 default: throw new ArgumentOutOfRangeException(nameof(relationalExpression.RelationalOperator), relationalExpression.RelationalOperator, $"Unknown {nameof(relationalExpression.RelationalOperator)}");
             }
+        }
+
+        /// <summary>
+        /// Gets the ValueSet comparer for this kind of <see cref="ScalarParameterType"/>
+        /// </summary>
+        /// <param name="relationalExpression">The <see cref="RelationalExpression"/></param>
+        /// <returns>The <see cref="IComparer{ValueArray{string}}"/></returns>
+        private IComparer<ValueArray<string>> GetValueSetComparer(RelationalExpression relationalExpression)
+        {
+            IComparer<ValueArray<string>> comparer;
+
+            switch (relationalExpression.ParameterType.ClassKind)
+            {
+                case ClassKind.SpecializedQuantityKind:
+                    comparer = new QuantityKindValueSetComparer();
+
+                    break;
+
+                case ClassKind.SimpleQuantityKind:
+                    comparer = new QuantityKindValueSetComparer();
+
+                    break;
+
+                case ClassKind.DerivedQuantityKind:
+                    comparer = new QuantityKindValueSetComparer();
+
+                    break;
+
+                case ClassKind.BooleanParameterType:
+                    comparer = new BooleanValueSetComparer();
+
+                    break;
+
+                case ClassKind.EnumerationParameterType:
+                    comparer = new EnumerationValueSetComparer();
+
+                    break;
+
+                case ClassKind.DateParameterType:
+                    comparer = new DateTimeValueSetComparer();
+
+                    break;
+
+                case ClassKind.DateTimeParameterType:
+                    comparer = new DateTimeValueSetComparer();
+
+                    break;
+
+                case ClassKind.TimeOfDayParameterType:
+                    comparer = new DateTimeValueSetComparer();
+
+                    break;
+
+                case ClassKind.TextParameterType:
+                    comparer = new DateTimeValueSetComparer();
+
+                    break;
+
+                default:
+                    comparer = new StringValueSetComparer();
+
+                    break;
+            }
+
+            return comparer;
         }
     }
 }
