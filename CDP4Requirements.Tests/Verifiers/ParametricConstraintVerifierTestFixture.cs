@@ -62,7 +62,7 @@ namespace CDP4Requirements.Tests.Verifiers
 
         private Iteration iteration;
 
-        private ParameterValueSet parameterValueSet;
+        private Parameter parameter;
 
         private ParameterOverrideValueSet parameterOverrideValueSet;
 
@@ -138,7 +138,7 @@ namespace CDP4Requirements.Tests.Verifiers
             var elementUsage = new ElementUsage(Guid.NewGuid(), null, null) { ElementDefinition = this.elementDefinition };
             this.elementDefinition.ContainedElement.Add(elementUsage);
 
-            var parameter =
+            this.parameter =
                 new ParameterBuilder()
                     .WithOption(this.option1)
                     .WithSimpleQuantityKindParameterType()
@@ -148,7 +148,7 @@ namespace CDP4Requirements.Tests.Verifiers
 
             this.iteration.Element.Add(this.elementDefinition);
 
-            var parameterOverride = new ParameterOverride(Guid.NewGuid(), null, null) { Parameter = parameter };
+            var parameterOverride = new ParameterOverride(Guid.NewGuid(), null, null) { Parameter = this.parameter };
             this.parameterOverrideValueSet = new ParameterOverrideValueSet { ValueSwitch = ParameterSwitchKind.MANUAL, Manual = new ValueArray<string>(new[] { OkValue }) };
             parameterOverride.ValueSet.Add(this.parameterOverrideValueSet);
             elementUsage.ParameterOverride.Add(parameterOverride);
@@ -193,7 +193,7 @@ namespace CDP4Requirements.Tests.Verifiers
         [Test]
         public async Task Verify_that_state_of_compliances_are_properly_set_when_valuesets_do_not_match()
         {
-            this.parameterValueSet.Manual = new ValueArray<string>(new[] { NotOkValue });
+            this.parameter.ValueSet[0].Manual = new ValueArray<string>(new[] { NotOkValue });
             this.parameterOverrideValueSet.Manual = new ValueArray<string>(new[] { NotOkValue });
 
             await this.parametricConstraintVerifier.VerifyRequirements(this.iteration);
@@ -234,7 +234,7 @@ namespace CDP4Requirements.Tests.Verifiers
         public async Task Verify_that_state_of_compliances_are_properly_set_when_a_notExpression_is_used_on_a_orExpression_that_is_not_compliant()
         {
             this.notExpression.Term = this.orExpression;
-            this.parameterValueSet.Manual = new ValueArray<string>(new[] { NotOkValue });
+            this.parameter.ValueSet[0].Manual = new ValueArray<string>(new[] { NotOkValue });
             this.parameterOverrideValueSet.Manual = new ValueArray<string>(new[] { NotOkValue });
 
             await this.parametricConstraintVerifier.VerifyRequirements(this.iteration);
