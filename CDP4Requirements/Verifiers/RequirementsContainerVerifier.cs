@@ -36,7 +36,7 @@ namespace CDP4Requirements.Verifiers
     using CDP4Requirements.Events;
 
     /// <summary>
-    /// Class used for the verification if a <see cref="Requirement"/> is compliant to data in an <see cref="Iteration"/>  
+    /// Class used for the verification if a <see cref="RequirementsContainer"/> is compliant to data in an <see cref="Iteration"/>  
     /// </summary>
     public class RequirementsContainerVerifier : IHaveRequirementStateOfCompliance
     {
