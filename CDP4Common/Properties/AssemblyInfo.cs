@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblyInfo.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 using System.Runtime.CompilerServices;
 
@@ -58,6 +56,6 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("CDP4SiteDirectory.Tests")]
 [assembly: InternalsVisibleTo("CDP4EngineeringModel.Tests")]
 [assembly: InternalsVisibleTo("ProductTree.Tests")]
-[assembly: InternalsVisibleTo("CDP4Requirements.Tests")]
+[assembly: InternalsVisibleTo("CDP4RequirementsVerification.Tests")]
 [assembly: InternalsVisibleTo("CDP4OfficeInfrastructure")]
 [assembly: InternalsVisibleTo("CDP4Tools.Tests")]
