@@ -26,10 +26,9 @@ namespace CDP4Common.Tests.Extensions
 {
     using System;
     using System.Collections.Concurrent;
-    using System.Collections.Generic;
 
     using CDP4Common.CommonData;
-    using CDP4Common.EngineeringModelData;    
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
 
     using NUnit.Framework;
@@ -65,20 +64,20 @@ namespace CDP4Common.Tests.Extensions
 
             var siteDirectory = new SiteDirectory(Guid.NewGuid(), this.cache, this.uri);
             this.siteRdl_A = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri);
-            this.siteRdl_A_A = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri) {RequiredRdl = this.siteRdl_A};
-            this.siteRdl_A_B = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri) {RequiredRdl = this.siteRdl_A};
+            this.siteRdl_A_A = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri) { RequiredRdl = this.siteRdl_A };
+            this.siteRdl_A_B = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri) { RequiredRdl = this.siteRdl_A };
             this.siteRdl_B = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri);
-            var modelRdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri) {RequiredRdl = this.siteRdl_A_A};
-            var engineeringModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);            
+            var modelRdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri) { RequiredRdl = this.siteRdl_A_A };
+            var engineeringModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
             var engineeringModelSetup = new EngineeringModelSetup(Guid.NewGuid(), this.cache, this.uri);
             engineeringModelSetup.RequiredRdl.Add(modelRdl);
             engineeringModel.EngineeringModelSetup = engineeringModelSetup;
             engineeringModelSetup.EngineeringModelIid = engineeringModel.Iid;
             siteDirectory.Model.Add(engineeringModelSetup);
-            siteDirectory.SiteReferenceDataLibrary.Add(siteRdl_A);
-            siteDirectory.SiteReferenceDataLibrary.Add(siteRdl_A_A);
-            siteDirectory.SiteReferenceDataLibrary.Add(siteRdl_A_B);
-            siteDirectory.SiteReferenceDataLibrary.Add(siteRdl_B);
+            siteDirectory.SiteReferenceDataLibrary.Add(this.siteRdl_A);
+            siteDirectory.SiteReferenceDataLibrary.Add(this.siteRdl_A_A);
+            siteDirectory.SiteReferenceDataLibrary.Add(this.siteRdl_A_B);
+            siteDirectory.SiteReferenceDataLibrary.Add(this.siteRdl_B);
             var iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
             engineeringModel.Iteration.Add(iteration);
 
@@ -213,7 +212,7 @@ namespace CDP4Common.Tests.Extensions
 
             Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.transmitterCategory), Is.False);
 
-            Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.functionCategory), Is.False);            
+            Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.functionCategory), Is.False);
         }
 
         [Test]
@@ -228,7 +227,7 @@ namespace CDP4Common.Tests.Extensions
 
             Assert.That(parameterType.IsCategoryInChainOfRdls(this.transmitterCategory), Is.False);
 
-            Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.functionCategory), Is.False);            
+            Assert.That(this.elementDefinition.IsCategoryInChainOfRdls(this.functionCategory), Is.False);
         }
     }
 }
