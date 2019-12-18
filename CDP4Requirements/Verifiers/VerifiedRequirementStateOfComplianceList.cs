@@ -31,7 +31,7 @@ namespace CDP4Requirements.Verifiers
     using CDP4Requirements.Calculations;
 
     /// <summary>
-    /// Class used for the verification if a <see cref="BooleanExpression"/> is compliant to data in an <see cref="Iteration"/>
+    /// Class used for the verification if a <see cref="RelationalExpression"/> is compliant to data in an <see cref="Iteration"/>
     /// It inherits from a <see cref="Dictionary{IValueSet,RequirementStateOfCompliance}"/> so it links a <see cref="IValueSet"/> to a <see cref="RequirementStateOfCompliance"/>
     /// </summary>
     public class VerifiedRequirementStateOfComplianceList : Dictionary<IValueSet, RequirementStateOfCompliance>

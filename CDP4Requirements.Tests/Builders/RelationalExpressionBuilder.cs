@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ParameterBuilder.cs" company="RHEA System S.A.">
+// <copyright file="RelationalExpressionBuilder.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
@@ -30,12 +30,30 @@ namespace CDP4Requirements.Tests.Builders
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
+    /// <summary>
+    /// Class that follows the builder pattern, to construct a <see cref="RelationalExpression"/>
+    /// </summary>
     public class RelationalExpressionBuilder
     {
+        /// <summary>
+        /// The <see cref="ScalarParameterType"/>
+        /// </summary>
         private ScalarParameterType parameterType;
+
+        /// <summary>
+        /// The <see cref="ValueArray{String}"/>
+        /// </summary>
         private ValueArray<string> values;
+
+        /// <summary>
+        /// The <see cref="RelationalOperatorKind"/>
+        /// </summary>
         private RelationalOperatorKind relationalOperatorKind;
 
+        /// <summary>
+        /// Create a <see cref="SimpleQuantityKind"/> to be added to the <see cref="RelationalExpression"/> when the <see cref="Build"/> method is used
+        /// </summary>
+        /// <returns><see cref="RelationalExpressionBuilder"/> "this"</returns>
         public RelationalExpressionBuilder WithSimpleQuantityKindParameterType()
         {
             this.parameterType = new SimpleQuantityKind
@@ -45,12 +63,22 @@ namespace CDP4Requirements.Tests.Builders
             return this;
         }
 
+        /// <summary>
+        /// Create a <see cref="ValueArray{String}"/> to be added to the <see cref="RelationalExpression"/> when the <see cref="Build"/> method is used
+        /// </summary>
+        /// <param name="value">The value of the first element in the <see cref="ValueArray{String}"/></param>
+        /// <returns><see cref="RelationalExpressionBuilder"/> "this"</returns>
         public RelationalExpressionBuilder WithValue(object value)
         {
             this.values = new ValueArray<string>(new [] { value.ToString() });
             return this;
         }
 
+        /// <summary>
+        /// Set the <see cref="RelationalOperatorKind"/> to be set on the <see cref="RelationalExpression"/> when the <see cref="Build"/> method is used
+        /// </summary>
+        /// <param name="relationalOperatorKind"></param>
+        /// <returns><see cref="RelationalExpressionBuilder"/> "this"</returns>
         public RelationalExpressionBuilder WithRelationalOperatorKind(RelationalOperatorKind relationalOperatorKind)
         {
             this.relationalOperatorKind = relationalOperatorKind;
@@ -58,6 +86,10 @@ namespace CDP4Requirements.Tests.Builders
             return this;
         }
 
+        /// <summary>
+        /// Construct a new <see cref="RelationalExpression"/>
+        /// </summary>
+        /// <returns>The <see cref="RelationalExpression"/></returns>
         public RelationalExpression Build()
         {
             var relationalExpression = new RelationalExpression(Guid.NewGuid(), null, null)

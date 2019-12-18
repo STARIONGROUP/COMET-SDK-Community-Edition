@@ -30,13 +30,36 @@ namespace CDP4Requirements.Tests.Builders
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
+    /// <summary>
+    /// Class that follows the builder pattern, to construct a <see cref="Parameter"/>
+    /// </summary>
     public class ParameterBuilder
     {
+        /// <summary>
+        /// The <see cref="Option"/>
+        /// </summary>
         private Option option;
+
+        /// <summary>
+        /// The <see cref="ScalarParameterType"/>
+        /// </summary>
         private ScalarParameterType parameterType;
+
+        /// <summary>
+        /// The <see cref="ValueArray{String}"/>
+        /// </summary>
         private ValueArray<string> values;
+
+        /// <summary>
+        /// The <see cref="ElementDefinition"/>
+        /// </summary>
         private ElementDefinition elementDefinition;
 
+        /// <summary>
+        /// Add an <see cref="Option"/> to be added to the <see cref="Parameter"/> when the <see cref="Build"/> method is used
+        /// </summary>
+        /// <param name="option">The <see cref="Option"/></param>
+        /// <returns><see cref="ParameterBuilder"/> "this"</returns>
         public ParameterBuilder WithOption(Option option)
         {
             this.option = option;
@@ -44,6 +67,10 @@ namespace CDP4Requirements.Tests.Builders
             return this;
         }
 
+        /// <summary>
+        /// Create a <see cref="SimpleQuantityKind"/> to be added to the <see cref="Parameter"/> when the <see cref="Build"/> method is used
+        /// </summary>
+        /// <returns><see cref="ParameterBuilder"/> "this"</returns>
         public ParameterBuilder WithSimpleQuantityKindParameterType()
         {
             this.parameterType = new SimpleQuantityKind
@@ -54,6 +81,11 @@ namespace CDP4Requirements.Tests.Builders
             return this;
         }
 
+        /// <summary>
+        /// Create a <see cref="ValueArray{String}"/> to be added to the <see cref="Parameter"/> when the <see cref="Build"/> method is used
+        /// </summary>
+        /// <param name="value">The value of the first element in the <see cref="ValueArray{String}"/></param>
+        /// <returns><see cref="ParameterBuilder"/> "this"</returns>
         public ParameterBuilder WithValue(object value)
         {
             this.values = new ValueArray<string>(new[] { value.ToString() });
@@ -61,6 +93,22 @@ namespace CDP4Requirements.Tests.Builders
             return this;
         }
 
+        /// <summary>
+        /// Sets the <see cref="elementDefinition"/> that will be used to add the <see cref="Parameter"/> to after it is constructed in the <see cref="Build"/> method
+        /// </summary>
+        /// <param name="elementDefinition">The <see cref="ElementDefinition"/></param>
+        /// <returns><see cref="ParameterBuilder"/> "this"</returns>
+        public ParameterBuilder AddToElementDefinition(ElementDefinition elementDefinition)
+        {
+            this.elementDefinition = elementDefinition;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Construct a new <see cref="Parameter"/>
+        /// </summary>
+        /// <returns>The <see cref="Parameter"/></returns>
         public Parameter Build()
         {
             var parameter = new Parameter(Guid.NewGuid(), null, null)
@@ -78,19 +126,9 @@ namespace CDP4Requirements.Tests.Builders
 
             parameter.ValueSet.Add(parameterValueSet);
 
-            if (this.elementDefinition != null)
-            {
-                this.elementDefinition.Parameter.Add(parameter);
-            }
+            this.elementDefinition?.Parameter.Add(parameter);
 
             return parameter;
-        }
-
-        public ParameterBuilder AddToElementDefinition(ElementDefinition elementDefinition)
-        {
-            this.elementDefinition = elementDefinition;
-
-            return this;
         }
     }
 }
