@@ -16,10 +16,10 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
-      [Implement] stable serialization of properties
-	</PackageReleaseNotes>
+      [Update] to CDP4Common 5.0.0
+    </PackageReleaseNotes>
   </PropertyGroup>
-  
+
   <PropertyGroup>    
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>    
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
@@ -40,5 +40,5 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
-  
+
 </Project>

@@ -16,19 +16,19 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
-		[Add] Ordered serialization to Annex C.3 implementation (zip archive); fixes #78
-	</PackageReleaseNotes>
+      [Update] to CDP4Common 5.0.0
+    </PackageReleaseNotes>
   </PropertyGroup>
-  
+
   <PropertyGroup>    
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>    
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
-  
+
   <ItemGroup>
-	<ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-	<ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
-	<ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+    <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,5 +38,5 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' ">
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
-  
+
 </Project>

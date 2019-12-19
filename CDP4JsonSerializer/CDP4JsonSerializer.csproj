@@ -16,17 +16,17 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25 JSON</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
-      [Add] stable serialization (properties, reference properties, ordered items); fixes #78
+      [Update] to CDP4Common 5.0.0
     </PackageReleaseNotes>
   </PropertyGroup>
-  
+
   <PropertyGroup>    
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>    
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
-  
+
   <ItemGroup>
-	<ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
   </ItemGroup>
     
   <ItemGroup>

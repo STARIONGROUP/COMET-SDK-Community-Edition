@@ -16,17 +16,17 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
-       [Add] check for Owner in PermissionService
+      [Update] to CDP4Common 5.0.0
   </PackageReleaseNotes>
   </PropertyGroup>
-  
+
   <PropertyGroup>    
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>    
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
-	<ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' ">
@@ -35,7 +35,7 @@
     <PackageReference Include="Rx-Interfaces" version="2.2.5" />
     <PackageReference Include="Rx-Linq" version="2.2.5" />
   </ItemGroup>
-    
+
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Reactive" Version="4.1.5" />
   </ItemGroup>
