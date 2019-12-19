@@ -26,6 +26,8 @@
 
 namespace CDP4Common.EngineeringModelData
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Extended part for the auto-generated <see cref="RelationalExpression"/>
     /// </summary>
@@ -47,5 +49,11 @@ namespace CDP4Common.EngineeringModelData
                     (this.Scale != null) ? this.Scale.ShortName : string.Empty);
             }
         }
+
+        /// <summary>
+        /// Gets the expressions that are direct children of this class
+        /// </summary>
+        /// <returns><see cref="IReadOnlyList{BooleanExpression}"/> containing <see cref="BooleanExpression"/>s that are direct children of this class</returns>
+        protected override IReadOnlyList<BooleanExpression> GetMyExpressions() => new List<BooleanExpression>();
     }
 }

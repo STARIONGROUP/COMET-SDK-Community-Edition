@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ExclusiveOrExpression.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,10 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Extended part for the auto-generated <see cref="ExclusiveOrExpression"/>
     /// </summary>
@@ -34,12 +34,12 @@ namespace CDP4Common.EngineeringModelData
         /// <summary>
         /// Gets the representation of the <see cref="ExclusiveOrExpression"/> as a string
         /// </summary>
-        public override string StringValue
-        {
-            get
-            {
-                return "XOR";
-            }
-        }
+        public override string StringValue => "XOR";
+
+        /// <summary>
+        /// Gets the expressions that are direct children of this class
+        /// </summary>
+        /// <returns><see cref="IReadOnlyList{BooleanExpression}"/> containing <see cref="BooleanExpression"/>s that are direct children of this class</returns>
+        protected override IReadOnlyList<BooleanExpression> GetMyExpressions() => this.Term;
     }
 }

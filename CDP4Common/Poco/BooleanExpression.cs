@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BooleanExpression.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,10 +21,14 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using CDP4Common.Extensions;
+
     /// <summary>
     /// Extended part for the auto-generated <see cref="BooleanExpression"/>
     /// </summary>
@@ -35,5 +38,61 @@ namespace CDP4Common.EngineeringModelData
         /// Gets the representation of the <see cref="BooleanExpression"/> as a string
         /// </summary>
         public abstract string StringValue { get; }
+
+        /// <summary>
+        /// Gets the expressions that are direct children of me or are "free" at the toplevel of the <see cref="BooleanExpression"/> tree.
+        /// "Free" means not set as a child of another <see cref="BooleanExpression"/>.
+        /// </summary>
+        /// <returns><see cref="IReadOnlyList{T}"/> containing <see cref="BooleanExpression"/>s that are direct children of the class in the <see cref="myself"/> parameter or that are not set as a child for another <see cref="BooleanExpression"/></returns>
+        public IReadOnlyList<BooleanExpression> GetMyAndFreeExpressions()
+        {
+            var myExpressions = new List<BooleanExpression>();
+
+            myExpressions.AddRange(this.GetMyExpressions());
+
+            if (this.Container is ParametricConstraint parametricConstraint)
+            {
+                myExpressions.AddRange(parametricConstraint.Expression.GetTopLevelExpressions().OfType<RelationalExpression>().Where(x => !myExpressions.Contains(x)));
+            }
+
+            return myExpressions.ToList();
+        }
+
+        /// <summary>
+        /// Gets the expressions that are direct children of this class
+        /// </summary>
+        /// <returns><see cref="IReadOnlyList{BooleanExpression}"/> containing <see cref="BooleanExpression"/>s that are direct children of this class</returns>
+        protected abstract IReadOnlyList<BooleanExpression> GetMyExpressions();
+
+        /// <summary>
+        /// Gets all descendant expressions of this class
+        /// </summary>
+        /// <returns><see cref="IReadOnlyList{BooleanExpression}"/> containing <see cref="BooleanExpression"/>s all descendant expressions of this class</returns>
+        public IReadOnlyList<BooleanExpression> GetMeAndMyDescendantExpressions()
+        {
+            var myDescendants = new List<BooleanExpression>();
+
+            this.TryAddMeAndMyDescendants(myDescendants);
+
+            return myDescendants.ToList();
+        }
+
+        /// <summary>
+        /// Add a<see cref="BooleanExpression"/> to a list if it is not allready contained in that list
+        /// </summary>
+        /// <param name="expressions"><see cref="ICollection{BooleanExpression}"/> where the <see cref="BooleanExpression"/> should be added to if not allready there</param>
+        private void TryAddMeAndMyDescendants(ICollection<BooleanExpression> expressions)
+        {
+            if (expressions.Contains(this))
+            {
+                return;
+            }
+
+            expressions.Add(this);
+            foreach (var expression in this.GetMyExpressions())
+            {
+                expression.TryAddMeAndMyDescendants(expressions);
+            }
+        }
     }
 }

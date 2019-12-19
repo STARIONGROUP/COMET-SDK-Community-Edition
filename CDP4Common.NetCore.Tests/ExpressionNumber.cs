@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AndExpression.cs" company="RHEA System S.A.">
+// <copyright file="ExpressionNumber.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -22,24 +22,23 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.EngineeringModelData
+namespace CDP4Common.NetCore.Tests
 {
-    using System.Collections.Generic;
+    using System;
 
     /// <summary>
-    /// Extended part for the auto-generated <see cref="AndExpression"/>
+    /// Helper enum so a static (Nuniot) testcase source can be used
     /// </summary>
-    public partial class AndExpression
+    [Flags]
+    public enum ExpressionNumber
     {
-        /// <summary>
-        /// Gets the representation of the <see cref="AndExpression"/> as a string
-        /// </summary>
-        public override string StringValue => "AND";
-
-        /// <summary>
-        /// Gets the expressions that are direct children of this class
-        /// </summary>
-        /// <returns><see cref="IReadOnlyList{BooleanExpression}"/> containing <see cref="BooleanExpression"/>s that are direct children of this class</returns>
-        protected override IReadOnlyList<BooleanExpression> GetMyExpressions() => this.Term;
+        And = 1,
+        Or = 2,
+        ExclusiveOr = 4,
+        Not = 8,
+        Relational1 = 16,
+        Relational2 = 32,
+        Relational3 = 64,
+        Relational4 = 128
     }
 }

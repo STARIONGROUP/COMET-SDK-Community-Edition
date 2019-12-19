@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.NetCore.Tests.Extensions
+namespace CDP4Common.Tests.Extensions
 {
     using System;
     using System.Collections.Generic;
@@ -36,7 +36,7 @@ namespace CDP4Common.NetCore.Tests.Extensions
     /// Suite of tests for the <see cref="BooleanExpressionExtensions"/> class
     /// </summary>
     [TestFixture]
-    public class BooleanExpressionExtensionsTestFixture
+    public class BooleanExpressionTestFixture
     {
         private IList<BooleanExpression> booleanExpressions;
 
