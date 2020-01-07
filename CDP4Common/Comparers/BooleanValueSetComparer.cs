@@ -56,7 +56,7 @@ namespace CDP4Common.Comparers
                 }
             }
 
-            return string.Compare(x?.ToString(), y?.ToString(), StringComparison.OrdinalIgnoreCase);
+            return string.CompareOrdinal(x?.ToString().ToLower(), y?.ToString().ToLower());
         }
 
         /// <summary>
