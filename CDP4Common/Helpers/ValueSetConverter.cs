@@ -190,33 +190,6 @@ namespace CDP4Common.Helpers
         }
 
         /// <summary>
-        /// Convert a string created using local regional settings and converts it to the right string representation <see cref="ParameterType"/>
-        /// </summary>
-        /// <param name="localString">The to be converted <see cref="string"/></param>
-        /// <param name="parameterType">The <see cref="ParameterType"/></param>
-        /// <param name="scale">The <see cref="MeasurementScale"/></param>
-        /// <returns>Converted <see cref="string"/></returns>
-        public static string LocalStringToValueSetString(this string localString, ParameterType parameterType)
-        {
-            if (new[] { ClassKind.DateTimeParameterType, ClassKind.DateParameterType, ClassKind.TimeOfDayParameterType }.Contains(parameterType.ClassKind))
-            {
-                var defaultValue = DefaultObject(parameterType);
-
-                if (!localString.Equals(defaultValue))
-                {
-                    if (DateTime.TryParse(localString, out var dateTimeObject))
-                    {
-                        return defaultValue?.ToString();
-                    }
-
-                    return dateTimeObject.ToValueSetString(parameterType);
-                }
-            }
-
-            return localString;
-        }
-
-        /// <summary>
         /// Return the default object associated to a <see cref="ParameterType"/>
         /// </summary>
         /// <param name="parameterType">The <see cref="ParameterType"/></param>
