@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard1.6;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>5.0.2</VersionPrefix>
+    <VersionPrefix>5.1.0</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen</Authors>
@@ -16,10 +16,7 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
     <PackageReleaseNotes>
-      [Fix] Incorrect Type check in OrderedItemList; fixes #82
-      [Change] type of Exceptions that are thrown by OrderedItemList
-      [Add] Add ValueSetComparer classes
-      [Add] GetMyExpressions convenience methods to RelationalExpression
+      [Add] BooleanParameterType comparison in Requirement Verification is now case insensitive; fixes #268
     </PackageReleaseNotes>
   </PropertyGroup>
 
