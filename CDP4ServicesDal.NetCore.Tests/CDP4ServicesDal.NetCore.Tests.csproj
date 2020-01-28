@@ -9,22 +9,12 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <Choose>
-    <When Condition="'$(Configuration)'=='Release'">
-      <ItemGroup>
-        <PackageReference Include="CDP4ServicesDal-CE" Version="5.0.3" />
-      </ItemGroup>
-    </When>
-
-    <When Condition="'$(Configuration)'=='Debug'">
-      <ItemGroup>
-        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-        <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
-        <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
-        <ProjectReference Include="..\CDP4ServicesDal\CDP4ServicesDal.csproj" />
-      </ItemGroup>
-    </When>
-  </Choose>
+  <ItemGroup>
+    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+    <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
+    <ProjectReference Include="..\CDP4ServicesDal\CDP4ServicesDal.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
