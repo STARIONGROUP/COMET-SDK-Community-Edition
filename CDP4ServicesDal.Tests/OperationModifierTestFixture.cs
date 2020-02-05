@@ -37,7 +37,7 @@ namespace CDP4ServicesDal.Tests
     [TestFixture]
     internal class OperationModifierTestFixture
     {
-        private Uri uri = new Uri("https://cdp4services-public.rheagroup.com");
+        private Uri uri = new Uri("https://cdp4services-public.cdp4.org");
         private Mock<ISession> session;
         private Assembler assembler;
 

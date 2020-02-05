@@ -57,7 +57,7 @@ namespace CDP4WspDal.Tests
         private WspDal dal;
         private Credentials credentials;
         private CancellationTokenSource cancelationTokenSource;
-        private Uri uri = new Uri("https://cdp4services-test.rheagroup.com");
+        private Uri uri = new Uri("https://cdp4services-test.cdp4.org");
         private ISession session;
         private Assembler assembler;
 
@@ -370,7 +370,7 @@ namespace CDP4WspDal.Tests
         public async Task VerifyThatReadIterationWorks()
         {
             var dal = new WspDal { Session = this.session};
-            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.rheagroup.com"));            
+            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));            
             var session = new Session(dal, credentials);
             
             var returned = await dal.Open(credentials, this.cancelationTokenSource.Token);
@@ -434,7 +434,7 @@ namespace CDP4WspDal.Tests
             var files = new List<string> { filepath };
 
             var contentHash = "F73747371CFD9473C19A0A7F99BCAB008474C4CA";
-            var uri = new Uri("https://cdp4services-test.rheagroup.com");            
+            var uri = new Uri("https://cdp4services-test.cdp4.org");            
             this.credentials = new Credentials("admin", "pass", uri);
 
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);

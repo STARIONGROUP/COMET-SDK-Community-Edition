@@ -44,7 +44,7 @@ namespace CDP4WspDal.Tests
     {
         private Mock<ISession> session;
         private Mock<IPermissionService> permissionService;
-        private Uri uri = new Uri("https://cdp4services-public.rheagroup.com");
+        private Uri uri = new Uri("https://cdp4services-public.cdp4.org");
         private Assembler assembler;
 
         private SiteDirectory siteDir;

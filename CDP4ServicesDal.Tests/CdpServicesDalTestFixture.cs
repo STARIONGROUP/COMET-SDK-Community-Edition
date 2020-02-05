@@ -56,7 +56,7 @@ namespace CDP4ServicesDal.Tests
         private List<Parameter> headers;
         private ISession session;
 
-        private readonly Uri uri = new Uri("https://cdp4services-test.rheagroup.com");
+        private readonly Uri uri = new Uri("https://cdp4services-test.cdp4.org");
         private CancellationTokenSource cancelationTokenSource;
         
         private SiteDirectory siteDirectory;
@@ -170,7 +170,7 @@ namespace CDP4ServicesDal.Tests
         [Test]
         public async Task VerifyThatIfNotHttpOrHttpsExceptionIsThrown()
         {
-            var uri = new Uri("https://cdp4services-test.rheagroup.com");
+            var uri = new Uri("https://cdp4services-test.cdp4.org");
             var invalidCredentials = new Credentials("John", "a password", uri);
 
             Assert.That(async () => await dal.Open(invalidCredentials, new CancellationToken()), Throws.TypeOf<DalReadException>());
@@ -370,7 +370,7 @@ namespace CDP4ServicesDal.Tests
         public async Task VerifyThatReadIterationWorks()
         {
             var dal = new CdpServicesDal { Session = this.session };
-            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.rheagroup.com"));
+            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
             var session = new Session(dal, credentials);
 
             var returned = await dal.Open(credentials, this.cancelationTokenSource.Token);
@@ -434,7 +434,7 @@ namespace CDP4ServicesDal.Tests
             var files = new List<string> { filepath };
 
             var contentHash = "F73747371CFD9473C19A0A7F99BCAB008474C4CA";
-            var uri = new Uri("https://cdp4services-test.rheagroup.com");            
+            var uri = new Uri("https://cdp4services-test.cdp4.org");            
             this.credentials = new Credentials("admin", "pass", uri);
 
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
@@ -493,8 +493,8 @@ namespace CDP4ServicesDal.Tests
         {
             var dal = new CdpServicesDal();
 
-            Assert.IsTrue(dal.IsValidUri("http://cdp4services-test.rheagroup.com"));
-            Assert.IsTrue(dal.IsValidUri("https://cdp4services-test.rheagroup.com"));
+            Assert.IsTrue(dal.IsValidUri("http://cdp4services-test.cdp4.org"));
+            Assert.IsTrue(dal.IsValidUri("https://cdp4services-test.cdp4.org"));
             Assert.IsFalse(dal.IsValidUri("file://some file"));
         }
  
@@ -543,7 +543,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task Verify_that_opens_returns_expected_result()
         {
-            var uri = new Uri("https://cdp4services-test.rheagroup.com");
+            var uri = new Uri("https://cdp4services-test.cdp4.org");
             this.credentials = new Credentials("admin", "pass", uri);
 
             var dal = new CdpServicesDal();
@@ -558,7 +558,7 @@ namespace CDP4ServicesDal.Tests
         public async Task Verify_that_opens_and_close_removes_items_from_cache()
         {
             this.dal = new CdpServicesDal { Session = this.session };
-            this.credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.rheagroup.com"));
+            this.credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
             
             this.session = new Session(dal, credentials);
             await this.session.Open();
@@ -595,7 +595,7 @@ namespace CDP4ServicesDal.Tests
         {
             var proxySettings = new ProxySettings(new Uri("http://tinyproxy:8888"));
             
-            var uri = new Uri("https://cdp4services-test.rheagroup.com");
+            var uri = new Uri("https://cdp4services-test.cdp4.org");
             this.credentials = new Credentials("admin", "pass", uri, proxySettings);
 
             var dal = new CdpServicesDal();
@@ -608,7 +608,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task Verify_that_multiple_read_requests_can_be_made_in_parallel()
         {
-            var uri = new Uri("https://cdp4services-test.rheagroup.com");
+            var uri = new Uri("https://cdp4services-test.cdp4.org");
             var credentials = new Credentials("admin", "pass", uri);
             var assembler = new Assembler(this.uri);
             

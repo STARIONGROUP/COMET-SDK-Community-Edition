@@ -55,7 +55,7 @@ namespace CDP4WspDal.Tests
         [SetUp]
         public void SetUp()
         {
-            this.uri = new Uri("https://cdp4services-test.rheagroup.com");
+            this.uri = new Uri("https://cdp4services-test.cdp4.org");
             this.credentials = new Credentials("admin", "pass", this.uri);
 
             this.tokenSource = new CancellationTokenSource();
