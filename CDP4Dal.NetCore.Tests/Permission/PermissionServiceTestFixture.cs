@@ -209,7 +209,7 @@ namespace CDP4Dal.Tests.Permission
             Assert.IsFalse(this.permissionService.CanWrite(this.definition));
 
             sdPermission.AccessRight = PersonAccessRightKind.MODIFY;
-            Assert.IsTrue(this.permissionService.CanWrite(this.definition));
+            Assert.IsTrue(this.permissionService.CanRead(this.definition));
             Assert.IsTrue(this.permissionService.CanWrite(this.definition));
         }
 
@@ -228,7 +228,7 @@ namespace CDP4Dal.Tests.Permission
             permission.AccessRight = PersonAccessRightKind.MODIFY;
             Assert.IsTrue(this.permissionService.CanRead(this.booleanpt));
             Assert.IsTrue(this.permissionService.CanWrite(this.booleanpt));
-            Assert.IsTrue(this.permissionService.CanWrite(ClassKind.BooleanParameterType, this.srdl));
+            Assert.IsFalse(this.permissionService.CanWrite(ClassKind.BooleanParameterType, this.srdl));
         }
 
         [Test]

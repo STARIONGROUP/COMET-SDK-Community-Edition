@@ -367,14 +367,14 @@ namespace CDP4Dal.Permission
         /// creation of a certain <see cref="EngineeringModel"/> contained <see cref="Thing"/>.
         /// </summary>
         /// <param name="classKind">The <see cref="ClassKind"/> that ultimately determines the permissions.</param>
-        /// <param name="containerThing">The <see cref="Thing"/> to write to</param>
+        /// <param name="thing">The <see cref="Thing"/> to write to</param>
         /// <param name="thingType">The <see cref="ClassKind"/> that ultimately determines the permissions.</param>
         /// <returns>True if Write operation can be performed.</returns>
-        private bool CanWriteEngineeringModelContainedThing(ClassKind classKind, Thing containerThing, ClassKind thingType)
+        private bool CanWriteEngineeringModelContainedThing(ClassKind classKind, Thing thing, ClassKind thingType)
         {
-            var engineeringModel = containerThing.TopContainer as EngineeringModel;
+            var engineeringModel = thing.TopContainer as EngineeringModel;
 
-            var iteration = containerThing is Iteration it ? it : containerThing.GetContainerOfType<Iteration>();
+            var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
             
             if (iteration?.IterationSetup.FrozenOn != null)
             {
@@ -396,9 +396,9 @@ namespace CDP4Dal.Permission
             switch (right)
             {
                 case ParticipantAccessRightKind.SAME_AS_CONTAINER:
-                    return this.CanWrite(containerThing, containerThing.GetType());
+                    return this.CanWrite(thing.Container, thing.Container.GetType());
                 case ParticipantAccessRightKind.SAME_AS_SUPERCLASS:
-                    return this.CanWriteBasedOnSuperclassClassKind(containerThing, thingType);
+                    return this.CanWriteBasedOnSuperclassClassKind(thing, thingType);
                 case ParticipantAccessRightKind.MODIFY:
                 case ParticipantAccessRightKind.MODIFY_IF_OWNER:
                     return true;
@@ -480,10 +480,10 @@ namespace CDP4Dal.Permission
         /// creation of a certain <see cref="SiteDirectory"/> contained <see cref="Thing"/>.
         /// </summary>
         /// <param name="classKind">The <see cref="ClassKind"/> that ultimately determines the permissions.</param>
-        /// <param name="containerThing">The <see cref="Thing"/> to write to</param>
+        /// <param name="thing">The <see cref="Thing"/> to write to</param>
         /// <param name="thingType">The <see cref="ClassKind"/> that determine the permission</param>
         /// <returns>True if Write operation can be performed.</returns>
-        private bool CanWriteSiteDirectoryContainedThing(ClassKind classKind, Thing containerThing, ClassKind thingType)
+        private bool CanWriteSiteDirectoryContainedThing(ClassKind classKind, Thing thing, ClassKind thingType)
         {
             var person = this.Session.ActivePerson;
             if (person == null)
@@ -505,23 +505,23 @@ namespace CDP4Dal.Permission
             switch (accessRightKind)
             {
                 case PersonAccessRightKind.SAME_AS_CONTAINER:
-                    return this.CanWrite(containerThing, containerThing.GetType());
+                    return this.CanWrite(thing.Container, thing.Container.GetType());
                 case PersonAccessRightKind.SAME_AS_SUPERCLASS:
-                    return this.CanWriteBasedOnSuperclassClassKind(containerThing, thingType);
+                    return this.CanWriteBasedOnSuperclassClassKind(thing, thingType);
                 case PersonAccessRightKind.MODIFY:
                     return true;
                 case PersonAccessRightKind.MODIFY_IF_PARTICIPANT:
-                    if (containerThing is EngineeringModelSetup setup)
+                    if (thing is EngineeringModelSetup setup)
                     {
                         return setup.Participant.Any(x => x.Person == this.Session.ActivePerson);
                     }
 
-                    if (containerThing is SiteReferenceDataLibrary)
+                    if (thing is SiteReferenceDataLibrary)
                     {
                         var rdl =
                                             this.Session.RetrieveSiteDirectory()
                                                 .Model.SelectMany(ems => this.Session.GetEngineeringModelSetupRdlChain(ems));
-                        return rdl.Contains(containerThing);
+                        return rdl.Contains(thing);
                     }
 
                     return false;
