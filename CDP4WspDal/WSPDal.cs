@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WSPDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -94,13 +94,16 @@ namespace CDP4WspDal
         }
 
         /// <summary>
-        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/>.
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
         /// </summary>
         /// <param name="operationContainer">
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
+        /// </param>
         /// <returns>
-        /// A list of <see cref="CDP4Common.DTO.Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
         public override async Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
         {
@@ -204,6 +207,28 @@ namespace CDP4WspDal
             Logger.Info("Write Operation completed in {0} [ms]", watch.ElapsedMilliseconds);
 
             return result;
+        }
+
+        /// <summary>
+        /// Reads the data related to the provided <see cref="Thing"/> from the data-source
+        /// </summary>
+        /// <param name="route">
+        /// The Uri/route of the Thing that needs to be read from the data-source
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>
+        /// </param>
+        /// <param name="attributes">
+        /// An instance of <see cref="IQueryAttributes"/> to be used with the request
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="Thing"/>s that are contained by the provided <see cref="Thing"/> including the <see cref="Thing"/>.
+        /// In case the <see cref="Thing"/> is a top container then all the <see cref="Thing"/>s that have been updated since the
+        /// last read will be returned.
+        /// </returns>
+        public override Task<IEnumerable<Thing>> ReadByRoute(string route, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            throw new NotSupportedException("Reading Things by route/URI is not supported");
         }
 
         /// <summary>

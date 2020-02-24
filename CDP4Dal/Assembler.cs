@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Assembler.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -330,8 +330,19 @@ namespace CDP4Dal
 
                     if (dto.RevisionNumber < currentThing.RevisionNumber)
                     {
-                        logger.Trace("A DTO with revision {0} smaller than the revision {1} of the existing POCO {2}:{3} has been identified, the data; The data-source has sent a revision from the past",
-                            dto.RevisionNumber, currentThing.RevisionNumber, currentThing.CacheKey.Thing, currentThing.CacheKey.Iteration);
+                        if (!currentThing.Revisions.ContainsKey(dto.RevisionNumber))
+                        {
+                            //Add the found DTO to the currentThing's Revisions property
+                            var poco = dto.InstantiatePoco(this.Cache, this.IDalUri);
+                            PocoThingFactory.ResolveDependencies(dto, poco);
+
+                            currentThing.Revisions.Add(dto.RevisionNumber, poco);
+                            logger.Trace("Revision {0} added to Revisions of {1}:{2}", dto.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
+                        }
+                        else
+                        {
+                            logger.Trace("Revision {0} of Thing {1}:{2} already exists in the Thing.Revisions cache", currentThing.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
+                        }
                     }
                 }
             }

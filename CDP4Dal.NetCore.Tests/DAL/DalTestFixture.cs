@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -250,6 +250,11 @@ namespace CDP4Dal.Tests.DAL
             throw new System.NotImplementedException();
         }
 
+        public override Task<IEnumerable<Thing>> ReadByRoute(string route, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken token, IQueryAttributes attributes = null)
         {
             throw new System.NotImplementedException();
@@ -301,6 +306,11 @@ namespace CDP4Dal.Tests.DAL
         }
 
         public override Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<IEnumerable<Thing>> ReadByRoute(string route, CancellationToken cancellationToken, IQueryAttributes attributes = null)
         {
             throw new NotImplementedException();
         }

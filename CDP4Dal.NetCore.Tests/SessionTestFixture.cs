@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -630,6 +630,11 @@ namespace CDP4Dal.NetCore.Tests
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
         public Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Thing>> ReadByRoute(string route, CancellationToken cancellationToken, IQueryAttributes attributes = null)
         {
             throw new NotImplementedException();
         }

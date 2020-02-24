@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PocoThingFactory.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -33,8 +33,6 @@ namespace CDP4Common.Helpers
     using CDP4Common.Types;
     using NLog;
 
-    using Dto = CDP4Common.DTO;
-
     /// <summary>
     /// Provides static method to instantiate and resolve the properties of all <see cref="Thing"/>s stored in a cache.
     /// Provides internal static helper methods to resolve the properties of a thing.
@@ -47,6 +45,17 @@ namespace CDP4Common.Helpers
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// Call ResolvedReferencedProperties for the POCO <see cref="Thing"/>
+        /// </summary>
+        /// <param name="dto">the associated DTO <see cref="DTO.Thing"/> with the data</param>
+        /// <param name="poco">The <see cref="Thing"/>s</param>
+        public static void ResolveDependencies(DTO.Thing dto, Thing poco)
+        {
+            poco.ResetSentinel();
+            poco.ResolveProperties(dto);
+        }
+
+        /// <summary>
         /// Call ResolvedReferencedProperties for the POCO <see cref="Thing"/>s
         /// </summary>
         /// <param name="dtoThings">the associated DTO <see cref="Thing"/>s with the data</param>
@@ -56,12 +65,11 @@ namespace CDP4Common.Helpers
             foreach (var dtoThing in dtoThings)
             {
                 var cacheKey = new CacheKey(dtoThing.Iid, dtoThing.IterationContainerId);
-                Lazy<Thing> associatedLazyPoco;
-                if (cache.TryGetValue(cacheKey, out associatedLazyPoco))
+
+                if (cache.TryGetValue(cacheKey, out var associatedLazyPoco))
                 {
                     var associatedPoco = associatedLazyPoco.Value;
-                    associatedPoco.ResetSentinel();
-                    associatedPoco.ResolveProperties(dtoThing);
+                    ResolveDependencies(dtoThing, associatedPoco);
                 }
             }
         }
@@ -79,8 +87,7 @@ namespace CDP4Common.Helpers
             list.Clear();
             foreach (var guid in guidList)
             {
-                T thing;
-                if (cache.TryGet(guid, iterationId, out thing))
+                if (cache.TryGet(guid, iterationId, out T thing))
                 {
                     thing.ChangeKind = ChangeKind.None;
                     list.Add(thing);
@@ -102,15 +109,13 @@ namespace CDP4Common.Helpers
             var orderedList = new List<OrderedItem>();
             foreach (var item in orderedItemList)
             {
-                Guid guid;
-                if (!Guid.TryParse(item.V.ToString(), out guid))
+                if (!Guid.TryParse(item.V.ToString(), out var guid))
                 {
                     logger.Error("The ordered item does not represent a Thing.");
                     continue;
                 }
 
-                T thing;
-                if (cache.TryGet(guid, iterationId, out thing))
+                if (cache.TryGet(guid, iterationId, out T thing))
                 {
                     var ordereditem = new OrderedItem {K = item.K, V = thing};
                     orderedList.Add(ordereditem);
@@ -139,7 +144,7 @@ namespace CDP4Common.Helpers
         /// <summary>
         /// Clear and add to the <see cref="OrderedItemList{T}"/> from a <see cref="IEnumerable{OrderedItem}"/>
         /// </summary>
-        /// <typeparam name="T">The generic type of the <see cref="OrderedItemList{T}"/>. This should be a primitive type that matches the value of the <see cref="Dto.Thing"/>'s <see cref="IEnumerable{OrderedItem}"/></typeparam>
+        /// <typeparam name="T">The generic type of the <see cref="OrderedItemList{T}"/>. This should be a primitive type that matches the value of the <see cref="DTO.Thing"/>'s <see cref="IEnumerable{OrderedItem}"/></typeparam>
         /// <param name="list">The <see cref="OrderedItemList{T}"/> to resolve</param>
         /// <param name="orderedItemList">The source <see cref="IEnumerable{OrderedItem}"/></param>
         internal static void ClearAndAddRange<T>(this OrderedItemList<T> list, IEnumerable<OrderedItem> orderedItemList)
@@ -161,8 +166,7 @@ namespace CDP4Common.Helpers
             list.Clear();
             foreach (var guid in guidList)
             {
-                T thing;
-                if (cache.TryGet(guid, iterationId, out thing))
+                if (cache.TryGet(guid, iterationId, out T thing))
                 {
                     list.Add(thing);
                 }
@@ -239,8 +243,7 @@ namespace CDP4Common.Helpers
         /// <returns>The casted <see cref="Thing"/></returns>
         private static T Get<T>(this ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, CacheKey key) where T : Thing
         {
-            Lazy<Thing> lazy;
-            var result = cache.TryGetValue(key, out lazy);
+            var result = cache.TryGetValue(key, out var lazy);
             if (!result)
             {
                 return null;

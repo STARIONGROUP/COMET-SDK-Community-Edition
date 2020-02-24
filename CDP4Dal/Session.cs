@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Session.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -28,18 +28,22 @@ namespace CDP4Dal
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
-    using CDP4Common.Types;
-    using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
-    using DAL;
-    using Events;
+    using CDP4Common.Types;
+
+    using CDP4Dal.DAL;
+    using CDP4Dal.Events;
+    using CDP4Dal.Operations;
+    using CDP4Dal.Permission;
+
     using NLog;
-    using Permission;
 
     /// <summary>
     /// The <see cref="Session"/> class encapsulates the <see cref="DAL.Credentials"/>, <see cref="IDal"/> and <see cref="CDP4Dal.Assembler"/>
@@ -51,7 +55,7 @@ namespace CDP4Dal
         /// The NLog logger
         /// </summary>
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        
+
         /// <summary>
         /// The cancellation token source.
         /// </summary>
@@ -105,10 +109,7 @@ namespace CDP4Dal
         /// <summary>
         /// Gets the version of the data-model that is supported by the associated <see cref="Dal"/>
         /// </summary>
-        public Version DalVersion
-        {
-            get { return this.Dal.DalVersion; }
-        }
+        public Version DalVersion => this.Dal.DalVersion;
 
         /// <summary>
         /// Asserts whether the <see cref="Version"/> is supported by the connected <see cref="ISession.Dal"/>
@@ -137,17 +138,17 @@ namespace CDP4Dal
         /// Retrieves the <see cref="Participant"/>s from the <see cref="Iteration"/>s that are currently open
         /// and that the current active <see cref="Person"/> is associated to.
         /// </summary>
-        public IEnumerable<Participant> ActivePersonParticipants 
+        public IEnumerable<Participant> ActivePersonParticipants
         {
             get
             {
                 foreach (var openIteration in this.openIterations)
                 {
                     yield return openIteration.Value.Item2;
-                }                
+                }
             }
         }
-        
+
         /// <summary>
         /// Gets the <see cref="CDP4Dal.Assembler"/> associated with the current <see cref="Session"/> containing the Cache
         /// </summary>
@@ -176,7 +177,7 @@ namespace CDP4Dal
         {
             get
             {
-                var personName = this.ActivePerson != null ? this.ActivePerson.Name : string.Empty;                
+                var personName = this.ActivePerson != null ? this.ActivePerson.Name : string.Empty;
                 return $"{this.DataSourceUri} - {personName}";
             }
         }
@@ -184,18 +185,12 @@ namespace CDP4Dal
         /// <summary>
         /// Gets the list of <see cref="ReferenceDataLibrary"/> that are currently open in the running application.
         /// </summary>
-        public IEnumerable<ReferenceDataLibrary> OpenReferenceDataLibraries
-        {
-            get { return this.openReferenceDataLibraries; }
-        }
+        public IEnumerable<ReferenceDataLibrary> OpenReferenceDataLibraries => this.openReferenceDataLibraries;
 
         /// <summary>
         /// Gets the list of <see cref="Iteration"/>s that are currently open with the active <see cref="DomainOfExpertise"/> and <see cref="Participant"/>
         /// </summary>
-        public IReadOnlyDictionary<Iteration, Tuple<DomainOfExpertise, Participant>> OpenIterations
-        {
-            get { return this.openIterations; }
-        }
+        public IReadOnlyDictionary<Iteration, Tuple<DomainOfExpertise, Participant>> OpenIterations => this.openIterations;
 
         /// <summary>
         /// Retrieves the <see cref="SiteDirectory"/> in the context of the current session
@@ -220,12 +215,13 @@ namespace CDP4Dal
         public DomainOfExpertise QuerySelectedDomainOfExpertise(Iteration iteration)
         {
             var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => x.Key.Iid == iteration.Iid);
+
             if (iterationDomainPair.Equals(default(KeyValuePair<Iteration, Tuple<DomainOfExpertise, Participant>>)))
             {
                 return null;
             }
 
-            return (iterationDomainPair.Value == null || iterationDomainPair.Value.Item1 == null) ? null : iterationDomainPair.Value.Item1;
+            return iterationDomainPair.Value == null || iterationDomainPair.Value.Item1 == null ? null : iterationDomainPair.Value.Item1;
         }
 
         /// <summary>
@@ -286,6 +282,7 @@ namespace CDP4Dal
             // Create the token source
             this.cancellationTokenSource = new CancellationTokenSource();
             IReadOnlyList<CDP4Common.DTO.Thing> dtoThings;
+
             try
             {
                 dtoThings = (await this.Dal.Open(this.Credentials, this.cancellationTokenSource.Token)).ToList();
@@ -321,7 +318,7 @@ namespace CDP4Dal
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
 
             logger.Info("Synchronization with the {0} server done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
-            
+
             var sessionChange = new SessionEvent(this, SessionStatus.Open);
             CDPMessageBus.Current.SendMessage(sessionChange);
 
@@ -336,6 +333,7 @@ namespace CDP4Dal
         public void SwitchDomain(Guid iterationId, DomainOfExpertise domain)
         {
             var iterationPair = this.openIterations.SingleOrDefault(x => x.Key.Iid == iterationId);
+
             if (iterationPair.Key != null && iterationPair.Value.Item1 != domain)
             {
                 var selectedParticipation = new Tuple<DomainOfExpertise, Participant>(domain, iterationPair.Value.Item2);
@@ -366,7 +364,8 @@ namespace CDP4Dal
             // check if iteration is already open
             // if so check that the domain is not different
             var iterationDomainPair = this.openIterations.SingleOrDefault(x => x.Key.Iid == iteration.Iid);
-            if (!iterationDomainPair.Equals(default(KeyValuePair<Iteration, Tuple<DomainOfExpertise,Participant>>)))
+
+            if (!iterationDomainPair.Equals(default(KeyValuePair<Iteration, Tuple<DomainOfExpertise, Participant>>)))
             {
                 if (iterationDomainPair.Value.Item1 != domain)
                 {
@@ -377,9 +376,10 @@ namespace CDP4Dal
             // Create the token source
             this.cancellationTokenSource = new CancellationTokenSource();
             IEnumerable<CDP4Common.DTO.Thing> dtoThings;
+
             try
             {
-                var iterationDto = (CDP4Common.DTO.Iteration)iteration.ToDto();
+                var iterationDto = (CDP4Common.DTO.Iteration) iteration.ToDto();
                 this.Dal.Session = this;
                 dtoThings = await this.Dal.Read(iterationDto, this.cancellationTokenSource.Token);
             }
@@ -392,6 +392,7 @@ namespace CDP4Dal
 
             // proceed if no problem
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
+
             if (!enumerable.Any())
             {
                 logger.Warn("no data returned upon Read on {0}", this.DataSourceUri);
@@ -423,7 +424,7 @@ namespace CDP4Dal
                 throw new InvalidOperationException("The ReferenceDataLibrary cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
             }
 
-            await this.Read((Thing)rdl);
+            await this.Read((Thing) rdl);
             this.AddRdlToOpenList(rdl);
         }
 
@@ -436,6 +437,19 @@ namespace CDP4Dal
         /// </returns>
         public async Task Read(Thing thing)
         {
+            await this.Read(thing, null);
+        }
+
+        /// <summary>
+        /// Read a <see cref="Thing"/> in the associated <see cref="IDal"/>
+        /// </summary>
+        /// <param name="thing">The <see cref="Thing"/> to read</param>
+        /// <param name="queryAttributes">The <see cref="IQueryAttributes"/> to be used to read data</param>
+        /// <returns>
+        /// an await-able <see cref="Task"/>
+        /// </returns>
+        public async Task Read(Thing thing, IQueryAttributes queryAttributes)
+        {
             if (this.ActivePerson == null)
             {
                 throw new InvalidOperationException($"The {thing.ClassKind} cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
@@ -447,9 +461,10 @@ namespace CDP4Dal
             // Create the token source
             this.cancellationTokenSource = new CancellationTokenSource();
             IEnumerable<CDP4Common.DTO.Thing> dtoThings;
+
             try
             {
-                dtoThings = await this.Dal.Read(dto, this.cancellationTokenSource.Token);
+                dtoThings = await this.Dal.Read(dto, this.cancellationTokenSource.Token, queryAttributes);
             }
             catch (OperationCanceledException)
             {
@@ -460,17 +475,92 @@ namespace CDP4Dal
 
             // proceed if no problem
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
-            if (!enumerable.Any())
+
+            await this.AfterReadOrWriteOrUpdate(enumerable);
+        }
+
+        /// <summary>
+        /// Read a list of <see cref="Thing"/>s in the associated <see cref="IDal"/>
+        /// </summary>
+        /// <param name="routes">The <see cref="IEnumerable{String}"/> that contains the Routes of the things to read</param>
+        /// <param name="queryAttributes">The <see cref="IQueryAttributes"/> to be used to read data</param>
+        /// <returns>
+        /// an await-able <see cref="Task"/>
+        /// </returns>
+        public async Task Read(IEnumerable<string> routes, IQueryAttributes queryAttributes)
+        {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException($"The data cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
+            }
+
+            var routeList = routes.ToList();
+
+            if (!routeList.Any())
+            {
+                throw new ArgumentException($"The requested list of things is null or empty.");
+            }
+
+            logger.Info("Session.Read {0} things", routeList.Count());
+
+            var foundThings = new List<CDP4Common.DTO.Thing>();
+
+            try
+            {
+                // Max 10 async calls at a time, otherwise we could create a sort of a DDOS attack to the DAL/webservice
+                var loopCount = 10;
+
+                while (routeList.Any())
+                {
+                    var tasks = new List<Task<IEnumerable<CDP4Common.DTO.Thing>>>();
+
+                    // Create the token source
+                    this.cancellationTokenSource = new CancellationTokenSource();
+
+                    foreach (var route in routeList.Take(loopCount))
+                    {
+                        tasks.Add(this.Dal.ReadByRoute(route, this.cancellationTokenSource.Token, queryAttributes));
+                    }
+
+                    var newThings = (await Task.WhenAll(tasks.ToArray())).SelectMany(x => x).ToList();
+
+                    foundThings.AddRange(newThings);
+
+                    routeList = routeList.Skip(loopCount).ToList();
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                logger.Info("Session.Read cancelled");
+                this.cancellationTokenSource = null;
+                return;
+            }
+
+            await this.AfterReadOrWriteOrUpdate(foundThings);
+        }
+
+        /// <summary>
+        /// Default actions to perform after a read or write action
+        /// </summary>
+        /// <param name="things"> A list of <see cref="CDP4Common.DTO.Thing"/>s to perform AfterReadOrWriteOrUpdate actions to</param>
+        /// <param name="caller">The name of the method calling this method</param>
+        /// <returns>
+        /// an await-able <see cref="Task"/>
+        /// </returns>
+        private async Task AfterReadOrWriteOrUpdate(IList<CDP4Common.DTO.Thing> things, [CallerMemberName] string caller = null)
+        {
+            // proceed if no problem
+            if (!things.Any())
             {
                 logger.Warn("no data returned upon Read on {0}", this.DataSourceUri);
             }
 
             var sw = new Stopwatch();
-            logger.Info("Synchronization of DTOs for Read from server {0} started", this.DataSourceUri);
+            logger.Info($"Synchronization of DTOs for {caller} from/to server {0} started", this.DataSourceUri);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
-            await this.Assembler.Synchronize(enumerable);
+            await this.Assembler.Synchronize(things);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
-            logger.Info("Synchronization of DTOs for Read from server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
+            logger.Info($"Synchronization of DTOs for {caller} from/to server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -493,17 +583,8 @@ namespace CDP4Dal
             var dtoThings = await this.Dal.Write(operationContainer);
 
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
-            if (!enumerable.Any())
-            {
-                logger.Warn("no data returned upon Write on {0}", this.DataSourceUri);
-            }
 
-            var sw = new Stopwatch();
-            logger.Info("Synchronization of DTOs for Write to server {0} started", this.DataSourceUri);
-            CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
-            await this.Assembler.Synchronize(enumerable);
-            CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
-            logger.Info("Synchronization of DTOs for Write to server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
+            await this.AfterReadOrWriteOrUpdate(enumerable);
         }
 
         /// <summary>
@@ -589,6 +670,7 @@ namespace CDP4Dal
 
             // Cannot close a SiteRdl that is required by a ModelRdl
             var mRdls = this.openReferenceDataLibraries.OfType<ModelReferenceDataLibrary>().ToList();
+
             if (mRdls.Any(modelReferenceDataLibrary => modelReferenceDataLibrary.GetRequiredRdls().Contains(sRdl)))
             {
                 return;
@@ -603,6 +685,7 @@ namespace CDP4Dal
             var orderedRdlsToClose = sRdlsToClose.OrderByDescending(x => x.GetRequiredRdls().Count());
 
             var tasks = new List<Task>();
+
             foreach (var siteReferenceDataLibrary in orderedRdlsToClose)
             {
                 tasks.Add(this.Assembler.CloseRdl(siteReferenceDataLibrary));
@@ -616,7 +699,7 @@ namespace CDP4Dal
             {
                 this.openReferenceDataLibraries.Remove(siteReferenceDataLibrary);
             }
-            
+
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.RdlClosed));
         }
 
@@ -639,6 +722,7 @@ namespace CDP4Dal
             // Create the token source
             this.cancellationTokenSource = new CancellationTokenSource();
             IEnumerable<CDP4Common.DTO.Thing> dtoThings;
+
             try
             {
                 dtoThings = await this.Dal.Read(thing.ToDto(), this.cancellationTokenSource.Token, queryAttribute);
@@ -650,17 +734,8 @@ namespace CDP4Dal
             }
 
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
-            if (!enumerable.Any())
-            {
-                logger.Warn("no data returned upon Read on {0}", this.DataSourceUri);
-            }
 
-            var sw = new Stopwatch();
-            logger.Info("Synchronization of DTOs for Update to server {0} started", this.DataSourceUri);
-            CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
-            await this.Assembler.Synchronize(enumerable);
-            CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
-            logger.Info("Synchronization of DTOs for Update to server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
+            await this.AfterReadOrWriteOrUpdate(enumerable);
         }
 
         /// <summary>
@@ -694,6 +769,7 @@ namespace CDP4Dal
             await this.Assembler.CloseIterationSetup(iterationSetup);
 
             var iterationToRemove = this.openIterations.Select(x => x.Key).SingleOrDefault(x => x.Iid == iterationSetup.IterationIid);
+
             if (iterationToRemove != null)
             {
                 this.openIterations.Remove(iterationToRemove);
@@ -710,9 +786,9 @@ namespace CDP4Dal
         {
             return this.Assembler.Cache
                 .Select(x => x.Value.Value)
-                .Where(x => 
-                    x is SiteDirectory 
-                    || (x is Iteration && ((Iteration)x).IterationSetup.FrozenOn == null && this.OpenIterations.ContainsKey((Iteration)x))
+                .Where(x =>
+                    x is SiteDirectory
+                    || x is Iteration && ((Iteration) x).IterationSetup.FrozenOn == null && this.OpenIterations.ContainsKey((Iteration) x)
                 )
                 .ToList();
         }
@@ -727,6 +803,7 @@ namespace CDP4Dal
         {
             Lazy<Thing> lazyThing;
             this.Assembler.Cache.TryGetValue(new CacheKey(thing.Iid, null), out lazyThing);
+
             if (lazyThing == null)
             {
                 return;
@@ -759,12 +836,14 @@ namespace CDP4Dal
         {
             Lazy<Thing> lazyIteraion;
             this.Assembler.Cache.TryGetValue(new CacheKey(iterationId, null), out lazyIteraion);
+
             if (lazyIteraion == null)
             {
                 return;
             }
 
             var iteration = lazyIteraion.Value as Iteration;
+
             if (iteration == null)
             {
                 logger.Warn("The iteration {iterationId} is not present in the Cache and is therefore not added to the OpenIterations", iterationId);
@@ -776,7 +855,7 @@ namespace CDP4Dal
                 return;
             }
 
-            var activeParticipant = ((EngineeringModel)iteration.Container).EngineeringModelSetup.Participant.SingleOrDefault(p => p.Person == this.ActivePerson);
+            var activeParticipant = ((EngineeringModel) iteration.Container).EngineeringModelSetup.Participant.SingleOrDefault(p => p.Person == this.ActivePerson);
 
             if (activeParticipant == null)
             {
@@ -785,7 +864,7 @@ namespace CDP4Dal
 
             this.openIterations.Add(iteration, new Tuple<DomainOfExpertise, Participant>(activeDomain, activeParticipant));
 
-            var modelRdl = ((EngineeringModel)iteration.Container).EngineeringModelSetup.RequiredRdl.Single();
+            var modelRdl = ((EngineeringModel) iteration.Container).EngineeringModelSetup.RequiredRdl.Single();
             this.AddRdlToOpenList(modelRdl);
         }
     }

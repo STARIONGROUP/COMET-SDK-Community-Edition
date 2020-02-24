@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -250,6 +250,35 @@ namespace CDP4ServicesDal
         /// <summary>
         /// Reads the data related to the provided <see cref="Thing"/> from the data-source
         /// </summary>
+        /// <param name="route">
+        /// The Uri/route of the Thing  that needs to be read from the data-source
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>
+        /// </param>
+        /// <param name="attributes">
+        /// An instance of <see cref="IQueryAttributes"/> to be used with the request
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="Thing"/> that are contained by the provided <see cref="Thing"/> including the <see cref="Thing"/>.
+        /// In case the <see cref="Thing"/> is a top container then all the <see cref="Thing"/>s that have been updated since the
+        /// last read will be returned.
+        /// </returns>
+        public override async Task<IEnumerable<Thing>> ReadByRoute(string route, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            if (this.Credentials == null || this.Credentials.Uri == null)
+            {
+                throw new InvalidOperationException("The CDP4 DAL is not open.");
+            }
+
+            var watch = Stopwatch.StartNew();
+
+            return await this.ReadByRoute(watch, route, cancellationToken, attributes);
+        }
+
+        /// <summary>
+        /// Reads the data related to the provided <see cref="Thing"/> from the data-source
+        /// </summary>
         /// <typeparam name="T">
         /// an type of <see cref="Thing"/>
         /// </typeparam>
@@ -279,8 +308,6 @@ namespace CDP4ServicesDal
 
             var watch = Stopwatch.StartNew();
 
-            var thingRoute = this.CleanUriFinalSlash(thing.Route);
-
             if (attributes == null)
             {
                 var inlcudeReferenData = thing is ReferenceDataLibrary;
@@ -288,7 +315,14 @@ namespace CDP4ServicesDal
                 attributes = this.GetIUriQueryAttribute(inlcudeReferenData);
             }
 
-            var resourcePath = $"{thingRoute}{attributes.ToString()}";
+            return await this.ReadByRoute(watch, thing.Route, cancellationToken, attributes);
+        }
+
+        private async Task<IEnumerable<Thing>> ReadByRoute(Stopwatch watch, string route, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            var thingRoute = this.CleanUriFinalSlash(route);
+
+            var resourcePath = $"{thingRoute}{attributes?.ToString()}";
 
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
@@ -317,8 +351,7 @@ namespace CDP4ServicesDal
                 {
                     var returned = this.Serializer.Deserialize(resultStream);
 
-                    Guid iterationId;
-                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
+                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(returned, iterationId);
                     }
