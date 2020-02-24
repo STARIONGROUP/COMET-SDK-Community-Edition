@@ -634,11 +634,6 @@ namespace CDP4Dal.NetCore.Tests
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Thing>> ReadByRoute(string route, CancellationToken cancellationToken, IQueryAttributes attributes = null)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Reads the data related to the provided <see cref="Thing"/> from the data-source
         /// </summary>

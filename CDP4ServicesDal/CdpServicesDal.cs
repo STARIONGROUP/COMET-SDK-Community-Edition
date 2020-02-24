@@ -250,35 +250,6 @@ namespace CDP4ServicesDal
         /// <summary>
         /// Reads the data related to the provided <see cref="Thing"/> from the data-source
         /// </summary>
-        /// <param name="route">
-        /// The Uri/route of the Thing  that needs to be read from the data-source
-        /// </param>
-        /// <param name="cancellationToken">
-        /// The <see cref="CancellationToken"/>
-        /// </param>
-        /// <param name="attributes">
-        /// An instance of <see cref="IQueryAttributes"/> to be used with the request
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Thing"/> that are contained by the provided <see cref="Thing"/> including the <see cref="Thing"/>.
-        /// In case the <see cref="Thing"/> is a top container then all the <see cref="Thing"/>s that have been updated since the
-        /// last read will be returned.
-        /// </returns>
-        public override async Task<IEnumerable<Thing>> ReadByRoute(string route, CancellationToken cancellationToken, IQueryAttributes attributes = null)
-        {
-            if (this.Credentials == null || this.Credentials.Uri == null)
-            {
-                throw new InvalidOperationException("The CDP4 DAL is not open.");
-            }
-
-            var watch = Stopwatch.StartNew();
-
-            return await this.ReadByRoute(watch, route, cancellationToken, attributes);
-        }
-
-        /// <summary>
-        /// Reads the data related to the provided <see cref="Thing"/> from the data-source
-        /// </summary>
         /// <typeparam name="T">
         /// an type of <see cref="Thing"/>
         /// </typeparam>

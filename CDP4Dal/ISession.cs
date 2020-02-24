@@ -214,12 +214,12 @@ namespace CDP4Dal
         /// <summary>
         /// Read a list of <see cref="Thing"/>s in the associated <see cref="IDal"/>
         /// </summary>
-        /// <param name="routes">The <see cref="IEnumerable{String}"/> that contains the Routes of the things to read</param>
+        /// <param name="things">The <see cref="IEnumerable{Thing}"/> that contains the <see cref="Thing"/>s to read</param>
         /// <param name="queryAttributes">The <see cref="IQueryAttributes"/> to be used to read data</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
-        Task Read(IEnumerable<string> routes, IQueryAttributes queryAttributes);
+        Task Read(IEnumerable<Thing> things, IQueryAttributes queryAttributes);
 
         /// <summary>
         /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.

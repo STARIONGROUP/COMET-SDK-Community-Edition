@@ -482,26 +482,26 @@ namespace CDP4Dal
         /// <summary>
         /// Read a list of <see cref="Thing"/>s in the associated <see cref="IDal"/>
         /// </summary>
-        /// <param name="routes">The <see cref="IEnumerable{String}"/> that contains the Routes of the things to read</param>
+        /// <param name="things">The <see cref="IEnumerable{Thing}"/> that contains the <see cref="Thing"/> to read</param>
         /// <param name="queryAttributes">The <see cref="IQueryAttributes"/> to be used to read data</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
-        public async Task Read(IEnumerable<string> routes, IQueryAttributes queryAttributes)
+        public async Task Read(IEnumerable<Thing> things, IQueryAttributes queryAttributes)
         {
             if (this.ActivePerson == null)
             {
                 throw new InvalidOperationException($"The data cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
             }
 
-            var routeList = routes.ToList();
+            var thingList = things.ToList();
 
-            if (!routeList.Any())
+            if (!thingList.Any())
             {
                 throw new ArgumentException($"The requested list of things is null or empty.");
             }
 
-            logger.Info("Session.Read {0} things", routeList.Count());
+            logger.Info("Session.Read {0} things", thingList.Count());
 
             var foundThings = new List<CDP4Common.DTO.Thing>();
 
@@ -510,23 +510,23 @@ namespace CDP4Dal
                 // Max 10 async calls at a time, otherwise we could create a sort of a DDOS attack to the DAL/webservice
                 var loopCount = 10;
 
-                while (routeList.Any())
+                while (thingList.Any())
                 {
                     var tasks = new List<Task<IEnumerable<CDP4Common.DTO.Thing>>>();
 
                     // Create the token source
                     this.cancellationTokenSource = new CancellationTokenSource();
 
-                    foreach (var route in routeList.Take(loopCount))
+                    foreach (var thing in thingList.Take(loopCount))
                     {
-                        tasks.Add(this.Dal.ReadByRoute(route, this.cancellationTokenSource.Token, queryAttributes));
+                        tasks.Add(this.Dal.Read(thing.ToDto(), this.cancellationTokenSource.Token, queryAttributes));
                     }
 
                     var newThings = (await Task.WhenAll(tasks.ToArray())).SelectMany(x => x).ToList();
 
                     foundThings.AddRange(newThings);
 
-                    routeList = routeList.Skip(loopCount).ToList();
+                    thingList = thingList.Skip(loopCount).ToList();
                 }
             }
             catch (OperationCanceledException)
