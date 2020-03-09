@@ -29,24 +29,41 @@ namespace CDP4Dal
     using System;
 
     /// <summary>
-    /// The static helper class that provides utilities to assist the Data Access Layer
+    /// Utils class to provide UriExtensions to CDP4Dal
     /// </summary>
-    public static class Utils
+    public static class UriExtensions
     {
         /// <summary>
-        /// Asserts that the supplied <see cref="object"/> is not null and throws a <see cref="NullReferenceException"/> if it is.
+        /// Asserts that the uri is following the http or https schema.
         /// </summary>
-        /// <param name="thing">
-        /// The object which should not be null
+        /// <param name="uri">
+        /// The uri.
         /// </param>
-        /// <param name="message">
-        /// The error message that will be used as error message on the thrown <see cref="NullReferenceException"/>
-        /// </param>
-        public static void AssertNotNull(object thing, string message)
+        /// <exception cref="ArgumentException">
+        /// If the <see cref="Uri"/> is not either a HTTP or a HTTPS schema, this exception is thrown.
+        /// </exception>
+        public static void AssertUriIsHttpOrHttpsSchema(this Uri uri)
         {
-            if (thing == null)
+            if (!(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
             {
-                throw new NullReferenceException(message);
+                throw new ArgumentException($"Invalid URI scheme for: {uri}");
+            }
+        }
+
+        /// <summary>
+        /// Asserts that the uri is following the file schema.
+        /// </summary>
+        /// <param name="uri">
+        /// The uri.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// If the <see cref="Uri"/> is not File schema, this exception is thrown.
+        /// </exception>
+        public static void AssertUriIsFileSchema(this Uri uri)
+        {
+            if (uri.Scheme != Uri.UriSchemeFile)
+            {
+                throw new ArgumentException($"Invalid URI scheme for: {uri}");
             }
         }
     }

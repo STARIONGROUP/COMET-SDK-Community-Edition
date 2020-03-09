@@ -27,7 +27,6 @@
 namespace CDP4Dal.Tests
 {
     using System;
-    using CDP4Common.SiteDirectoryData;
     using NUnit.Framework;
 
     [TestFixture]
@@ -36,57 +35,57 @@ namespace CDP4Dal.Tests
         [Test]
         public void AssertThatUriSchemaAssertionWorksForHttpAndHttps()
         {
-            Utils.AssertUriIsHttpOrHttpsSchema(new Uri("http://somehost.com:23/"));
-            Utils.AssertUriIsHttpOrHttpsSchema(new Uri("https://someotherhost.com"));
+            UriExtensions.AssertUriIsHttpOrHttpsSchema(new Uri("http://somehost.com:23/"));
+            UriExtensions.AssertUriIsHttpOrHttpsSchema(new Uri("https://someotherhost.com"));
         }
 
         [Test]
         public void AssertThatNonHttpAndHttpsSchemasThrow()
         {
-            Assert.Throws<ArgumentException>(() => Utils.AssertUriIsHttpOrHttpsSchema(new Uri("file://somehost.com")));
-            Assert.Throws<ArgumentException>(() => Utils.AssertUriIsHttpOrHttpsSchema(new Uri("ftp://somehost.com")));
+            Assert.Throws<ArgumentException>(() => UriExtensions.AssertUriIsHttpOrHttpsSchema(new Uri("file://somehost.com")));
+            Assert.Throws<ArgumentException>(() => UriExtensions.AssertUriIsHttpOrHttpsSchema(new Uri("ftp://somehost.com")));
         }
 
         [Test]
         public void AssertThatUriSchemaAssertionWorksForFile()
         {
-            Utils.AssertUriIsFileSchema(new Uri("file://localhost/etc/fstab"));
-            Utils.AssertUriIsFileSchema(new Uri("file:///c:/WINDOWS/clock.avi"));
+            UriExtensions.AssertUriIsFileSchema(new Uri("file://localhost/etc/fstab"));
+            UriExtensions.AssertUriIsFileSchema(new Uri("file:///c:/WINDOWS/clock.avi"));
         }
 
         [Test]
         public void AssertThatNonFileSchemasThrow()
         {
-            Assert.Throws<ArgumentException>(() => Utils.AssertUriIsFileSchema(new Uri("http://somehost.com")));
-            Assert.Throws<ArgumentException>(() => Utils.AssertUriIsFileSchema(new Uri("ftp://somehost.com")));
+            Assert.Throws<ArgumentException>(() => UriExtensions.AssertUriIsFileSchema(new Uri("http://somehost.com")));
+            Assert.Throws<ArgumentException>(() => UriExtensions.AssertUriIsFileSchema(new Uri("ftp://somehost.com")));
         }
 
         [Test]
         public void VerifyCapitalizefirstLetterFunction()
         {
-            Assert.AreEqual("A", Utils.CapitalizeFirstLetter("a"));
-            Assert.AreEqual("Abcd", Utils.CapitalizeFirstLetter("abcd"));
+            Assert.AreEqual("A", StringExtensions.CapitalizeFirstLetter("a"));
+            Assert.AreEqual("Abcd", StringExtensions.CapitalizeFirstLetter("abcd"));
         }
 
         [Test]
         public void VerifyLowerCasefirstLetterFunction()
         {
-            Assert.AreEqual("a", Utils.LowerCaseFirstLetter("A"));
-            Assert.AreEqual("aBCD", Utils.LowerCaseFirstLetter("ABCD"));
+            Assert.AreEqual("a", StringExtensions.LowerCaseFirstLetter("A"));
+            Assert.AreEqual("aBCD", StringExtensions.LowerCaseFirstLetter("ABCD"));
         }
 
         [Test]
         public void VerifyCapitalizefirstLetterThatExceptionIsThrownWhenargumentIsNull()
         {
-            Assert.Throws<ArgumentException>(() => Utils.CapitalizeFirstLetter(null));
-            Assert.Throws<ArgumentException>(() => Utils.CapitalizeFirstLetter(string.Empty));
+            Assert.Throws<ArgumentException>(() => StringExtensions.CapitalizeFirstLetter(null));
+            Assert.Throws<ArgumentException>(() => StringExtensions.CapitalizeFirstLetter(string.Empty));
         }
 
         [Test]
         public void VerifyLowerCasefirstLetterThatExceptionIsThrownWhenargumentIsNull()
         {
-            Assert.Throws<ArgumentException>(() => Utils.LowerCaseFirstLetter(null));
-            Assert.Throws<ArgumentException>(() => Utils.LowerCaseFirstLetter(string.Empty));
+            Assert.Throws<ArgumentException>(() => StringExtensions.LowerCaseFirstLetter(null));
+            Assert.Throws<ArgumentException>(() => StringExtensions.LowerCaseFirstLetter(string.Empty));
         }
     }
 }
