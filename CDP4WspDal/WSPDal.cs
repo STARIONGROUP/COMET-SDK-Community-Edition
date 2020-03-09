@@ -429,7 +429,7 @@ namespace CDP4WspDal
                 throw new ArgumentNullException(nameof(credentials.Uri), $"The Credentials URI may not be null");
             }
 
-            Utils.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
+            UriExtensions.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
 
             var queryAttributes = new QueryAttributes
             {

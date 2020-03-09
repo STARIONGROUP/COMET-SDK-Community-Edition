@@ -29,25 +29,50 @@ namespace CDP4Dal
     using System;
 
     /// <summary>
-    /// The static helper class that provides utilities to assist the Data Access Layer
+    /// Utils class to provide StringExtensions to CDP4Dal
     /// </summary>
-    public static class Utils
+    public static class StringExtensions
     {
         /// <summary>
-        /// Asserts that the supplied <see cref="object"/> is not null and throws a <see cref="NullReferenceException"/> if it is.
+        /// Converts the first character of the string to an upper case letter.
         /// </summary>
-        /// <param name="thing">
-        /// The object which should not be null
+        /// <param name="input">
+        /// The input string.
         /// </param>
-        /// <param name="message">
-        /// The error message that will be used as error message on the thrown <see cref="NullReferenceException"/>
-        /// </param>
-        public static void AssertNotNull(object thing, string message)
+        /// <returns>
+        /// The <see cref="string"/> with the transformed first letter.
+        /// </returns>
+        public static string CapitalizeFirstLetter(this string input)
         {
-            if (thing == null)
+            // Check for empty string.
+            if (string.IsNullOrEmpty(input))
             {
-                throw new NullReferenceException(message);
+                throw new ArgumentException("The input string may not be null or empty.");
             }
+
+            // Return char and concat substring.
+            return char.ToUpper(input[0]) + input.Substring(1);
+        }
+
+        /// <summary>
+        /// Converts the first character of the string to a lower case letter.
+        /// </summary>
+        /// <param name="input">
+        /// The input string.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> with the transformed first letter.
+        /// </returns>
+        public static string LowerCaseFirstLetter(this string input)
+        {
+            // Check for empty string.
+            if (string.IsNullOrEmpty(input))
+            {
+                throw new ArgumentException("The input string may not be null or empty.");
+            }
+
+            // Return char and concat substring.
+            return char.ToLower(input[0]) + input.Substring(1);
         }
     }
 }
