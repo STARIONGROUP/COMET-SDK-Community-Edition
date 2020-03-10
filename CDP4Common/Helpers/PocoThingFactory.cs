@@ -45,10 +45,10 @@ namespace CDP4Common.Helpers
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Call ResolvedReferencedProperties for the POCO <see cref="Thing"/>
+        /// Resolve the POCO <see cref="Thing"/>'s properties using the assiciated DTO <see cref="DTO.Thing"/>'s properties
         /// </summary>
-        /// <param name="dto">the associated DTO <see cref="DTO.Thing"/> with the data</param>
-        /// <param name="poco">The <see cref="Thing"/>s</param>
+        /// <param name="dto">the associated DTO <see cref="DTO.Thing"/> that contains the data</param>
+        /// <param name="poco">The <see cref="Thing"/></param>
         public static void ResolveDependencies(DTO.Thing dto, Thing poco)
         {
             poco.ResetSentinel();
@@ -56,9 +56,9 @@ namespace CDP4Common.Helpers
         }
 
         /// <summary>
-        /// Call ResolvedReferencedProperties for the POCO <see cref="Thing"/>s
+        /// Get the cached POCO <see cref="Thing"/>s  for the associated DTO <see cref="DTO.Thing"/>s and resolve their properties
         /// </summary>
-        /// <param name="dtoThings">the associated DTO <see cref="Thing"/>s with the data</param>
+        /// <param name="dtoThings">the associated DTO <see cref="DTO.Thing"/>s with the data</param>
         /// <param name="cache">the cache containing the <see cref="Thing"/>s</param>
         public static void ResolveDependencies(IEnumerable<DTO.Thing> dtoThings, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache)
         {

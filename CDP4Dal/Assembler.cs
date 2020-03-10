@@ -82,11 +82,6 @@ namespace CDP4Dal
         private List<Dto> unresolvedDtos;
 
         /// <summary>
-        /// The <see cref="List{Dto}"/> that temporarily contains older revisions of already cached POCO's
-        /// </summary>
-        private List<Dto> olderRevisionDtos;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Assembler"/> class.
         /// </summary>
         /// <param name="uri">the <see cref="Uri"/> associated with this <see cref="Assembler"/></param>
@@ -137,10 +132,7 @@ namespace CDP4Dal
 
                 logger.Info("Start Synchronization of {0}", this.IDalUri);
 
-                this.olderRevisionDtos = new List<Dto>();
-
-                this.UpdateThingRevisions(dtoThings);
-                var updatedAndNewThingRevisions = dtoThings.Except(this.olderRevisionDtos).ToList();
+                this.UpdateThingRevisions(dtoThings, out var uncachedOrUpdatedOrNewThingRevisions);
 
                 this.thingsMarkedForDeletion = new List<Thing>();
 
@@ -170,13 +162,13 @@ namespace CDP4Dal
 
                 logger.Trace("Start Updating cache");
                 startwatch = Stopwatch.StartNew();
-                this.AddOrUpdateTheCache(updatedAndNewThingRevisions);
+                this.AddOrUpdateTheCache(uncachedOrUpdatedOrNewThingRevisions);
                 startwatch.Stop();
                 logger.Trace("Updating cache took {0} [ms]", startwatch.ElapsedMilliseconds);
 
                 logger.Trace("Start Resolving properties");
                 startwatch = Stopwatch.StartNew();
-                PocoThingFactory.ResolveDependencies(updatedAndNewThingRevisions, this.Cache);
+                PocoThingFactory.ResolveDependencies(uncachedOrUpdatedOrNewThingRevisions, this.Cache);
                 startwatch.Stop();
                 logger.Trace("Resolving properties took {0} [ms]", startwatch.ElapsedMilliseconds);
 
@@ -233,7 +225,7 @@ namespace CDP4Dal
 
                                 if (dtoThing.RevisionNumber > cacheThingRevisionNumber)
                                 {
-                                    // send event only if revision number has increased from the old cached version
+                                    // send event if revision number has increased from the old cached version
                                     CDPMessageBus.Current.SendObjectChangeEvent(thingObject, EventKind.Updated);
                                     messageCounter++;
                                 }
@@ -314,14 +306,16 @@ namespace CDP4Dal
         /// <param name="dtoThings">
         /// the DTO's coming from the data-source
         /// </param>
+        /// <param name="uncachedOrUpdatedOrNewThingRevisions">A list that contains <see cref="CDP4Common.DTO.Thing"/>s that are </param>
         /// <remarks>
         /// If the revision of the DTO is smaller that the revision of the the cached POCO, it is a DTO that represents
         /// the state of a DTO from the past. It will be added to the cached POCO's <see cref="Thing.Revisions"/> property
         /// </remarks>
-        private void UpdateThingRevisions(IEnumerable<CDP4Common.DTO.Thing> dtoThings)
+        private void UpdateThingRevisions(IEnumerable<CDP4Common.DTO.Thing> dtoThings, out IList<CDP4Common.DTO.Thing> uncachedOrUpdatedOrNewThingRevisions)
         {
             // create and store a shallow clone of the a current cached Thing
             var revisionCloneWatch = Stopwatch.StartNew();
+            uncachedOrUpdatedOrNewThingRevisions= new List<CDP4Common.DTO.Thing>(dtoThings);
 
             foreach (var dto in dtoThings)
             {
@@ -358,7 +352,7 @@ namespace CDP4Dal
                     {
                         if (!currentThing.Revisions.ContainsKey(dto.RevisionNumber))
                         {
-                            this.olderRevisionDtos.Add(dto);
+                            uncachedOrUpdatedOrNewThingRevisions.Remove(dto);
 
                             //Add the found DTO to the currentThing's Revisions property
                             var poco = dto.InstantiatePoco(this.Cache, this.IDalUri);
