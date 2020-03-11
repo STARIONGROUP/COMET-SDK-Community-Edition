@@ -406,7 +406,7 @@ namespace CDP4ServicesDal
                 throw new ArgumentNullException(nameof(credentials.Uri), $"The Credentials URI may not be null");
             }
 
-            Utils.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
+            UriExtensions.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
 
             var queryAttributes = new QueryAttributes
             {
@@ -694,7 +694,7 @@ namespace CDP4ServicesDal
             try
             {
                 var validUriAssertion = new Uri(uri);
-                Utils.AssertUriIsHttpOrHttpsSchema(validUriAssertion);
+                UriExtensions.AssertUriIsHttpOrHttpsSchema(validUriAssertion);
                 return true;
             }
             catch (Exception)

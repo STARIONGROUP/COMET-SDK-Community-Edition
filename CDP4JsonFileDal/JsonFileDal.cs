@@ -244,7 +244,7 @@ namespace CDP4JsonFileDal
             }
             
             // make sure that the uri is of the correct format
-            Utils.AssertUriIsFileSchema(this.Credentials.Uri);
+            UriExtensions.AssertUriIsFileSchema(this.Credentials.Uri);
 
             var filePath = this.Credentials.Uri.LocalPath;
 
@@ -426,7 +426,7 @@ namespace CDP4JsonFileDal
             }
 
             // make sure that the uri is of the correct format
-            Utils.AssertUriIsFileSchema(credentials.Uri);
+            UriExtensions.AssertUriIsFileSchema(credentials.Uri);
 
             var filePath = credentials.Uri.LocalPath;
 

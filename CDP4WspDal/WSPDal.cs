@@ -122,7 +122,7 @@ namespace CDP4WspDal
 
             var watch = Stopwatch.StartNew();
 
-            var hasCopyValuesOperations = operationContainer.Operations.Any(op => CDP4Dal.Utils.IsCopyKeepOriginalValuesOperation(op.OperationKind));
+            var hasCopyValuesOperations = operationContainer.Operations.Any(op => OperationKindExtensions.IsCopyKeepOriginalValuesOperation(op.OperationKind));
 
             var modifier = new OperationModifier(this.Session);
             var copyHandler = new CopyOperationHandler(this.Session);
@@ -130,7 +130,7 @@ namespace CDP4WspDal
             copyHandler.ModifiedCopyOperation(operationContainer);
             modifier.ModifyOperationContainer(operationContainer);
 
-            var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || CDP4Dal.Utils.IsCopyOperation(operation.OperationKind));
+            var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || OperationKindExtensions.IsCopyOperation(operation.OperationKind));
             if (invalidOperationKind)
             {
                 throw new InvalidOperationKindException("The WSP DAL does not support Copy or Move operations");
@@ -429,7 +429,7 @@ namespace CDP4WspDal
                 throw new ArgumentNullException(nameof(credentials.Uri), $"The Credentials URI may not be null");
             }
 
-            Utils.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
+            UriExtensions.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
 
             var queryAttributes = new QueryAttributes
             {
