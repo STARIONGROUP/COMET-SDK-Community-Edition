@@ -132,17 +132,17 @@ namespace CDP4Dal
 
                 logger.Info("Start Synchronization of {0}", this.IDalUri);
 
-                this.UpdateThingRevisions(dtoThings, out var uncachedOrUpdatedOrNewThingRevisions);
+                var existentGuid =
+                    this.Cache.Select(
+                            x => new Tuple<CacheKey, int>(x.Value.Value.CacheKey, x.Value.Value.RevisionNumber))
+                        .ToList();
+
+                this.UpdateThingRevisions(dtoThings, out var uncachedOrUpdatedOrNewerThingRevisions);
 
                 this.thingsMarkedForDeletion = new List<Thing>();
 
                 logger.Trace("Starting Clean-up Unused references");
                 var startwatch = Stopwatch.StartNew();
-
-                var existentGuid =
-                    this.Cache.Select(
-                        x => new Tuple<CacheKey, int>(x.Value.Value.CacheKey, x.Value.Value.RevisionNumber))
-                        .ToList();
 
                 this.DtoThingToUpdate = dtoThings.ToList();
 
@@ -162,13 +162,13 @@ namespace CDP4Dal
 
                 logger.Trace("Start Updating cache");
                 startwatch = Stopwatch.StartNew();
-                this.AddOrUpdateTheCache(uncachedOrUpdatedOrNewThingRevisions);
+                this.AddOrUpdateTheCache(uncachedOrUpdatedOrNewerThingRevisions);
                 startwatch.Stop();
                 logger.Trace("Updating cache took {0} [ms]", startwatch.ElapsedMilliseconds);
 
                 logger.Trace("Start Resolving properties");
                 startwatch = Stopwatch.StartNew();
-                PocoThingFactory.ResolveDependencies(uncachedOrUpdatedOrNewThingRevisions, this.Cache);
+                PocoThingFactory.ResolveDependencies(uncachedOrUpdatedOrNewerThingRevisions, this.Cache);
                 startwatch.Stop();
                 logger.Trace("Resolving properties took {0} [ms]", startwatch.ElapsedMilliseconds);
 
@@ -204,7 +204,7 @@ namespace CDP4Dal
 
                     var messageCounter = 0;
 
-                    foreach (var dtoThing in this.DtoThingToUpdate)
+                    foreach (var dtoThing in uncachedOrUpdatedOrNewerThingRevisions)
                     {
                         var cacheKey = new CacheKey(dtoThing.Iid, dtoThing.IterationContainerId);
                         var succeed = this.Cache.TryGetValue(cacheKey, out var updatedLazyThing);
@@ -350,14 +350,13 @@ namespace CDP4Dal
 
                     if (dto.RevisionNumber < currentThing.RevisionNumber)
                     {
+                        uncachedOrUpdatedOrNewThingRevisions.Remove(dto);
+                        //Add the found DTO to the currentThing's Revisions property
+                        var poco = dto.InstantiatePoco(this.Cache, this.IDalUri);
+                        PocoThingFactory.ResolveDependencies(dto, poco);
+
                         if (!currentThing.Revisions.ContainsKey(dto.RevisionNumber))
                         {
-                            uncachedOrUpdatedOrNewThingRevisions.Remove(dto);
-
-                            //Add the found DTO to the currentThing's Revisions property
-                            var poco = dto.InstantiatePoco(this.Cache, this.IDalUri);
-                            PocoThingFactory.ResolveDependencies(dto, poco);
-
                             currentThing.Revisions.Add(dto.RevisionNumber, poco);
                             logger.Trace("Revision {0} added to Revisions of {1}:{2}", dto.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
                         }

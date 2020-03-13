@@ -50,6 +50,11 @@ namespace CDP4RequirementsVerification.Verifiers
         public T Expression { get; protected set; }
 
         /// <summary>
+        /// Indication that the CDPMessageBus can be used.
+        /// </summary>
+        protected bool IsMessageBusActive { get; set; } = true;
+
+        /// <summary>
         /// The current <see cref="CDP4RequirementsVerification.RequirementStateOfCompliance"/>>
         /// </summary>
         public RequirementStateOfCompliance RequirementStateOfCompliance
@@ -60,7 +65,11 @@ namespace CDP4RequirementsVerification.Verifiers
                 if (this.requirementStateOfCompliance != value)
                 {
                     this.requirementStateOfCompliance = value;
-                    CDPMessageBus.Current.SendMessage(new RequirementStateOfComplianceChangedEvent(value), this.Expression);
+
+                    if (this.IsMessageBusActive)
+                    {
+                        CDPMessageBus.Current.SendMessage(new RequirementStateOfComplianceChangedEvent(value), this.Expression);
+                    }
                 }
             }
         }
