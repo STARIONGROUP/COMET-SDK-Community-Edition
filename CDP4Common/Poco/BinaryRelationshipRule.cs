@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BinaryRelationshipRule.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.SiteDirectoryData
 {
@@ -121,7 +119,7 @@ namespace CDP4Common.SiteDirectoryData
                 var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                 violation.ViolatingThing.Add(binaryRelationship.Iid);
                 violation.ViolatingThing.Add(binaryRelationship.Source.Iid);
-                violation.Description = string.Format("The Source [{0}:{1}] of the BinaryRelationShip is not a CategorizableThing", binaryRelationship.Source.ClassKind, binaryRelationship.Source.Iid);
+                violation.Description = $"The Source [{binaryRelationship.Source.ClassKind}:{binaryRelationship.Source.Iid}] of the BinaryRelationShip is not a CategorizableThing";
 
                 return violation;
             }
@@ -132,7 +130,7 @@ namespace CDP4Common.SiteDirectoryData
                 var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                 violation.ViolatingThing.Add(binaryRelationship.Iid);
                 violation.ViolatingThing.Add(binaryRelationship.Source.Iid);
-                violation.Description = string.Format("The Source [{0}:{1}] of the BinaryRelationShip {2} is not a member of Category {3} with shortname {4} or any of it's super categories", binaryRelationship.Source.ClassKind, binaryRelationship.Source.Iid, binaryRelationship.Iid, this.SourceCategory.Iid, this.SourceCategory.ShortName);
+                violation.Description = $"The Source [{binaryRelationship.Source.ClassKind}:{binaryRelationship.Source.Iid}] of the BinaryRelationShip {binaryRelationship.Iid} is not a member of Category {this.SourceCategory.Iid} with shortname {this.SourceCategory.ShortName} or any of it's super categories";
 
                 return violation;                    
             }
@@ -157,7 +155,7 @@ namespace CDP4Common.SiteDirectoryData
                 var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                 violation.ViolatingThing.Add(binaryRelationship.Iid);
                 violation.ViolatingThing.Add(binaryRelationship.Target.Iid);
-                violation.Description = string.Format("The Target [{0}:{1}] of the BinaryRelationShip is not a CategorizableThing", binaryRelationship.Target.ClassKind, binaryRelationship.Target.Iid);
+                violation.Description = $"The Target [{binaryRelationship.Target.ClassKind}:{binaryRelationship.Target.Iid}] of the BinaryRelationShip is not a CategorizableThing";
 
                 return violation;
             }
@@ -168,7 +166,7 @@ namespace CDP4Common.SiteDirectoryData
                 var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                 violation.ViolatingThing.Add(binaryRelationship.Iid);
                 violation.ViolatingThing.Add(binaryRelationship.Target.Iid);
-                violation.Description = string.Format("The Target [{0}:{1}] of the BinaryRelationShip {2} is not a member of Category {3} with shortname {4} or any of it's super categories", binaryRelationship.Target.ClassKind, binaryRelationship.Target.Iid, binaryRelationship.Iid, this.TargetCategory.Iid, this.TargetCategory.ShortName);
+                violation.Description = $"The Target [{binaryRelationship.Target.ClassKind}:{binaryRelationship.Target.Iid}] of the BinaryRelationShip {binaryRelationship.Iid} is not a member of Category {this.TargetCategory.Iid} with shortname {this.TargetCategory.ShortName} or any of it's super categories";
 
                 return violation;
             }

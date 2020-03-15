@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Requirement.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
@@ -55,11 +53,11 @@ namespace CDP4Common.EngineeringModelData
             if (this.Group == null)
             {
                 var requirementsSpecification = (RequirementsSpecification)this.Container;
-                return string.Format("{0}{1}{2}", requirementsSpecification.ShortName, delimeter, this.ShortName);
+                return $"{requirementsSpecification.ShortName}{delimeter}{this.ShortName}";
             }
 
             var groupPath = this.Group.Path(delimeter);
-            return string.Format("{0}{1}{2}", groupPath, delimeter, this.ShortName);
+            return $"{groupPath}{delimeter}{this.ShortName}";
         }
     }
 }

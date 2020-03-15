@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PropertyInfoPolyfill.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -26,6 +26,10 @@ namespace CDP4Common.Polyfills
 {
     using System.Reflection;
 
+    /// <summary>
+    /// The purpose of the <see cref="PropertyInfoPolyfill"/> class is to provide extension methods on the <see cref="PropertyInfo"/>
+    /// class that can be used from the full dotnet framework and dotnetstandard.
+    /// </summary>
     internal static class PropertyInfoPolyfill
     {
         internal static bool IsAttributeDefined<TAttribute>(this PropertyInfo propertyInfo)

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReferenceDataLibrary.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -28,6 +28,9 @@ namespace CDP4Common.SiteDirectoryData
     using System.Linq;
     using CDP4Common.CommonData;
 
+    /// <summary>
+    /// Extended part for the auto-generated <see cref="ReferenceDataLibrary"/>
+    /// </summary>
     public abstract partial class ReferenceDataLibrary
     {
         /// <summary>

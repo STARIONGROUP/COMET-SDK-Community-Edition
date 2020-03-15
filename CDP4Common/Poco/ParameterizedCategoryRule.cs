@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterizedCategoryRule.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.SiteDirectoryData
 {
@@ -105,7 +103,7 @@ namespace CDP4Common.SiteDirectoryData
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.RuleViolatedClassKind.Add(elementDefinition.ClassKind);
                         violation.ViolatingThing.Add(elementDefinition.Iid);
-                        violation.Description = string.Format("The Element Definition {0} does not contain parameters that reference the following parameter types {1} with shortnames: {2}", elementDefinition.Name, iids, shortnames);
+                        violation.Description = $"The Element Definition {elementDefinition.Name} does not contain parameters that reference the following parameter types {iids} with shortnames: {shortnames}";
 
                         violations.Add(violation);
                     }
@@ -142,7 +140,7 @@ namespace CDP4Common.SiteDirectoryData
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.RuleViolatedClassKind.Add(relationship.ClassKind);
                         violation.ViolatingThing.Add(relationship.Iid);
-                        violation.Description = string.Format("The Relationship {0} does not contain parameters that reference the following parameter types {1} with shortnames: {2}", relationship.Iid, iids, shortnames);
+                        violation.Description = $"The Relationship {relationship.Iid} does not contain parameters that reference the following parameter types {iids} with shortnames: {shortnames}";
 
                         violations.Add(violation);
                     }
@@ -179,7 +177,7 @@ namespace CDP4Common.SiteDirectoryData
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.RuleViolatedClassKind.Add(specification.ClassKind);
                         violation.ViolatingThing.Add(specification.Iid);
-                        violation.Description = string.Format("The RequirementsSpecification {0} does not contain parameters that reference the following parameter types {1} with shortnames: {2}", specification.Name, iids, shortnames);
+                        violation.Description = $"The RequirementsSpecification {specification.Name} does not contain parameters that reference the following parameter types {iids} with shortnames: {shortnames}";
 
                         violations.Add(violation);
                     }
@@ -219,7 +217,7 @@ namespace CDP4Common.SiteDirectoryData
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.RuleViolatedClassKind.Add(group.ClassKind);
                         violation.ViolatingThing.Add(group.Iid);
-                        violation.Description = string.Format("The RequirementsGroup {0} does not contain parameters that reference the following parameter types {1} with shortnames: {2}", group.Name, iids, shortnames);
+                        violation.Description = $"The RequirementsGroup {@group.Name} does not contain parameters that reference the following parameter types {iids} with shortnames: {shortnames}";
 
                         violations.Add(violation);
                     }
@@ -258,7 +256,7 @@ namespace CDP4Common.SiteDirectoryData
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.RuleViolatedClassKind.Add(requirement.ClassKind);
                         violation.ViolatingThing.Add(requirement.Iid);
-                        violation.Description = string.Format("The Requirement {0} does not contain parameters that reference the following parameter types {1} with shortnames: {2}", requirement.Name, iids, shortnames);
+                        violation.Description = $"The Requirement {requirement.Name} does not contain parameters that reference the following parameter types {iids} with shortnames: {shortnames}";
 
                         violations.Add(violation);
                     }

@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ContainerList.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Types
 {
@@ -86,7 +84,7 @@ namespace CDP4Common.Types
 
             if (this.Contains(thing))
             {
-                throw new InvalidOperationException(string.Format("The added item already exists {0}.", thing.Iid));
+                throw new InvalidOperationException($"The added item already exists {thing.Iid}.");
             }
 
             base.Add(thing);
@@ -116,7 +114,7 @@ namespace CDP4Common.Types
                 if (index < 0 || index >= base.Count)
                 {
                     throw new ArgumentOutOfRangeException(
-                        "index", string.Format("index is {0}, valid range is 0 to {1}", index, this.Count - 1));
+                        "index", $"index is {index}, valid range is 0 to {this.Count - 1}");
                 }
 
                 return base[index];
@@ -127,7 +125,7 @@ namespace CDP4Common.Types
                 if (index < 0 || index >= base.Count)
                 {
                     throw new ArgumentOutOfRangeException(
-                        "index", string.Format("index is {0}, valid range is 0 to {1}", index, this.Count - 1));
+                        "index", $"index is {index}, valid range is 0 to {this.Count - 1}");
                 }
 
                 if (value == null)
@@ -137,7 +135,7 @@ namespace CDP4Common.Types
                 
                 if (this.Contains(value) && base[index] != value)
                 {
-                    throw new InvalidOperationException(string.Format("The added item already exists {0}.", value.Iid));
+                    throw new InvalidOperationException($"The added item already exists {value.Iid}.");
                 }
 
                 value.Container = this.container;

@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ElementUsage.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.EngineeringModelData
 {
@@ -67,10 +65,10 @@ namespace CDP4Common.EngineeringModelData
             var elementDefinition = (ElementDefinition)this.Container;
             if (elementDefinition == null)
             {
-                throw new ContainmentException(string.Format("The container ElementDefinition of ElementUsage with iid {0} is null, the model code cannot be computed.", this.Iid));
+                throw new ContainmentException($"The container ElementDefinition of ElementUsage with iid {this.Iid} is null, the model code cannot be computed.");
             }
 
-            return string.Format("{0}.{1}", elementDefinition.ModelCode(), this.ShortName);
+            return $"{elementDefinition.ModelCode()}.{this.ShortName}";
         }
 
         /// <summary>

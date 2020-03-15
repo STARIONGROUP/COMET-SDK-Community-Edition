@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DecompositionRule.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.SiteDirectoryData
 {
@@ -74,7 +72,7 @@ namespace CDP4Common.SiteDirectoryData
                     {
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.ViolatingThing.Add(elementDefinition.Iid);
-                        violation.Description = string.Format("The Element Definition {0} does not contain the minimum of {1} Element Usages specified", elementDefinition.Iid, this.MinContained);
+                        violation.Description = $"The Element Definition {elementDefinition.Iid} does not contain the minimum of {this.MinContained} Element Usages specified";
 
                         violations.Add(violation);
                     }
@@ -83,7 +81,7 @@ namespace CDP4Common.SiteDirectoryData
                     {
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.ViolatingThing.Add(elementDefinition.Iid);
-                        violation.Description = string.Format("The Element Definition {0} contains more Element Usages than the maximum of {1} specified", elementDefinition.Iid, this.MaxContained.Value);
+                        violation.Description = $"The Element Definition {elementDefinition.Iid} contains more Element Usages than the maximum of {this.MaxContained.Value} specified";
 
                         violations.Add(violation);
                     }
@@ -136,7 +134,7 @@ namespace CDP4Common.SiteDirectoryData
                     var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                     violation.ViolatingThing.Add(elementDefinition.Iid);
                     violation.ViolatingThing.Add(elementUsage.Iid);
-                    violation.Description = string.Format("The Element Definition {0} contains an Element Usage {1} of an incorrect type", elementDefinition.Iid, elementUsage.Iid);
+                    violation.Description = $"The Element Definition {elementDefinition.Iid} contains an Element Usage {elementUsage.Iid} of an incorrect type";
 
                     violations.Add(violation);
                 }

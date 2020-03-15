@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParticipantRole.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -26,10 +26,8 @@ namespace CDP4Common.SiteDirectoryData
 {
     using System;
     using System.Linq;
-    using System.Reflection;
     using CDP4Common.CommonData;
     using CDP4Common.Helpers;
-    using CDP4Common.Polyfills;
 
     /// <summary>
     /// Extended part for the auto-generated <see cref="ParticipantRole"/>

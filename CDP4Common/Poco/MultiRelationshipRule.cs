@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MultiRelationshipRule.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.SiteDirectoryData
 {
@@ -96,7 +94,7 @@ namespace CDP4Common.SiteDirectoryData
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.ViolatingThing.Add(multiReplationship.Iid);
                         violation.ViolatingThing.Add(relatedThing.Iid);
-                        violation.Description = string.Format("The related Thing [{0}:{1}] of the MultiRelationship {2} is not a CategorizableThing", relatedThing.ClassKind, relatedThing.Iid, multiReplationship.Iid);
+                        violation.Description = $"The related Thing [{relatedThing.ClassKind}:{relatedThing.Iid}] of the MultiRelationship {multiReplationship.Iid} is not a CategorizableThing";
 
                         violations.Add(violation);
                     }
@@ -118,7 +116,7 @@ namespace CDP4Common.SiteDirectoryData
                             var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                             violation.ViolatingThing.Add(multiReplationship.Iid);
                             violation.ViolatingThing.Add(relatedThing.Iid);
-                            violation.Description = string.Format("The related Thing [{0}:{1}] is not a member of any of the required categories", relatedThing.ClassKind, relatedThing.Iid);
+                            violation.Description = $"The related Thing [{relatedThing.ClassKind}:{relatedThing.Iid}] is not a member of any of the required categories";
 
                             violations.Add(violation);
                         }

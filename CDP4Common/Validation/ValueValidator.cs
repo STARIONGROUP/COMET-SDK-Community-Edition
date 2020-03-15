@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValueValidator.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,18 +21,16 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Validation
 {
     using System;
     using System.Globalization;
     using System.Linq;
-    using CDP4Common.CommonData;
+
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
-    using CDP4Common.Types;
 
     using NLog;
 
@@ -133,7 +130,7 @@ namespace CDP4Common.Validation
                 return timeOfDayParameterType.Validate(value);
             }
             
-            throw new NotSupportedException(string.Format("The Validate method is not suported for parameterType: {0}", parameterType));
+            throw new NotSupportedException($"The Validate method is not suported for parameterType: {parameterType}");
         }
 
         /// <summary>
@@ -194,7 +191,7 @@ namespace CDP4Common.Validation
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
-            result.Message = string.Format("{0} is not a valid boolean, valid values are: {1}", value, string.Join(",", ValidBoolan));
+            result.Message = $"{value} is not a valid boolean, valid values are: {string.Join(",", ValidBoolan)}";
             return result;
         }
 
@@ -251,7 +248,7 @@ namespace CDP4Common.Validation
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
-            result.Message = string.Format("{0} is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD", value);
+            result.Message = $"{value} is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD";
             return result;
         }
 
@@ -295,7 +292,7 @@ namespace CDP4Common.Validation
                     Logger.Debug(ex);
 
                     result.ResultKind = ValidationResultKind.Invalid;
-                    result.Message = string.Format("{0} is not a valid DateTime, valid date-times are specified in ISO 8601, see http://www.w3.org/TR/xmlschema-2/#dateTime.", stringValue);
+                    result.Message = $"{stringValue} is not a valid DateTime, valid date-times are specified in ISO 8601, see http://www.w3.org/TR/xmlschema-2/#dateTime.";
                     return result;
                 }
             }
@@ -315,7 +312,7 @@ namespace CDP4Common.Validation
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
-            result.Message = string.Format("{0} is not a valid DateTime, valid date-times are specified in ISO 8601, see http://www.w3.org/TR/xmlschema-2/#dateTime.", value);
+            result.Message = $"{value} is not a valid DateTime, valid date-times are specified in ISO 8601, see http://www.w3.org/TR/xmlschema-2/#dateTime.";
             return result;
         }
 
@@ -350,7 +347,7 @@ namespace CDP4Common.Validation
                 if (!parameterType.AllowMultiSelect && values.Count() > 1)
                 {
                     result.ResultKind = ValidationResultKind.Invalid;
-                    result.Message = string.Format("The {0} Enumeration Parametertype does not allow multi-selection, multiple values seem to be selected", parameterType.Name);
+                    result.Message = $"The {parameterType.Name} Enumeration Parametertype does not allow multi-selection, multiple values seem to be selected";
                     return result;
                 }
 
@@ -374,7 +371,7 @@ namespace CDP4Common.Validation
                         }
 
                         result.ResultKind = ValidationResultKind.Invalid;
-                        result.Message = string.Format("The {0} Enumeration Parametertype does not contain the following value definition {1}, allowed values are: {2}", parameterType.Name, enumerationValue, joinedShortnames);
+                        result.Message = $"The {parameterType.Name} Enumeration Parametertype does not contain the following value definition {enumerationValue}, allowed values are: {joinedShortnames}";
                         return result;
                     }
                 }
@@ -385,7 +382,7 @@ namespace CDP4Common.Validation
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
-            result.Message = string.Format("The {0} Enumeration Parametertype does not contain the following value definition {1}", parameterType.Name, value);
+            result.Message = $"The {parameterType.Name} Enumeration Parametertype does not contain the following value definition {value}";
             return result;
         }
 
@@ -455,7 +452,7 @@ namespace CDP4Common.Validation
             else
             {
                 result.ResultKind = ValidationResultKind.Invalid;
-                result.Message = string.Format("{0} is not a valid value for a Text Parameter Type", value);
+                result.Message = $"{value} is not a valid value for a Text Parameter Type";
             }
 
             return result;
@@ -533,7 +530,7 @@ namespace CDP4Common.Validation
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
-            result.Message = string.Format("{0} is not a valid Time of Day, for valid Time Of Day formats see http://www.w3.org/TR/xmlschema-2/#time.", value);
+            result.Message = $"{value} is not a valid Time of Day, for valid Time Of Day formats see http://www.w3.org/TR/xmlschema-2/#time.";
             return result;
         }
 
@@ -594,7 +591,7 @@ namespace CDP4Common.Validation
                     if (!isInteger)
                     {
                         result.ResultKind = ValidationResultKind.Invalid;
-                        result.Message = string.Format("{0}:\"{1}\" is not a member of the INTEGER NUMBER SET", value.GetType().Name, value);
+                        result.Message = $"{value.GetType().Name}:\"{value}\" is not a member of the INTEGER NUMBER SET";
                         return result;
                     }
 
@@ -607,14 +604,14 @@ namespace CDP4Common.Validation
                             if (measurementScale.IsMaximumInclusive && integer > intMaximumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is greater than the maximium permissible value of \"{1}\"", integer, intMaximumPermissibleValue);
+                                result.Message = $"The value \"{integer}\" is greater than the maximium permissible value of \"{intMaximumPermissibleValue}\"";
                                 return result;
                             }
 
                             if (!measurementScale.IsMaximumInclusive && integer >= intMaximumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is greater than or equal to the maximium permissible value of \"{1}\"", integer, intMaximumPermissibleValue);
+                                result.Message = $"The value \"{integer}\" is greater than or equal to the maximium permissible value of \"{intMaximumPermissibleValue}\"";
                                 return result;
                             }
                         }
@@ -633,14 +630,14 @@ namespace CDP4Common.Validation
                             if (measurementScale.IsMinimumInclusive && integer < intMinimumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is smaller than the minimum permissible value of \"{1}\"", integer, intMinimumPermissibleValue);
+                                result.Message = $"The value \"{integer}\" is smaller than the minimum permissible value of \"{intMinimumPermissibleValue}\"";
                                 return result;
                             }
 
                             if (!measurementScale.IsMinimumInclusive && integer <= intMinimumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is smaller than or equal to the minimum permissible value of \"{1}\"", integer, intMinimumPermissibleValue);
+                                result.Message = $"The value \"{integer}\" is smaller than or equal to the minimum permissible value of \"{intMinimumPermissibleValue}\"";
                                 return result;
                             }
                         }
@@ -685,14 +682,14 @@ namespace CDP4Common.Validation
                     if (!isNatural)
                     {
                         result.ResultKind = ValidationResultKind.Invalid;
-                        result.Message = string.Format("{0}:\"{1}\" is not a member of the NATURAL NUMBER SET", value.GetType().Name, value);
+                        result.Message = $"{value.GetType().Name}:\"{value}\" is not a member of the NATURAL NUMBER SET";
                         return result;
                     }
 
                     if (natural < 0)
                     {
                         result.ResultKind = ValidationResultKind.Invalid;
-                        result.Message = string.Format("\"{0}\" is not a member of the NATURAL NUMBER SET", value);
+                        result.Message = $"\"{value}\" is not a member of the NATURAL NUMBER SET";
                         return result;
                     }
 
@@ -705,14 +702,14 @@ namespace CDP4Common.Validation
                             if (measurementScale.IsMaximumInclusive && natural > naturalMaximumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is greater than the maximium permissible value of \"{1}\"", natural, naturalMaximumPermissibleValue);
+                                result.Message = $"The value \"{natural}\" is greater than the maximium permissible value of \"{naturalMaximumPermissibleValue}\"";
                                 return result;
                             }
 
                             if (!measurementScale.IsMaximumInclusive && natural >= naturalMaximumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is greater than or equal to the maximium permissible value of \"{1}\"", natural, naturalMaximumPermissibleValue);
+                                result.Message = $"The value \"{natural}\" is greater than or equal to the maximium permissible value of \"{naturalMaximumPermissibleValue}\"";
                                 return result;
                             }
                         }
@@ -731,14 +728,14 @@ namespace CDP4Common.Validation
                             if (measurementScale.IsMinimumInclusive && natural < naturalMinimumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is smaller than the minimum permissible value of \"{1}\"", natural, naturalMinimumPermissibleValue);
+                                result.Message = $"The value \"{natural}\" is smaller than the minimum permissible value of \"{naturalMinimumPermissibleValue}\"";
                                 return result;
                             }
 
                             if (!measurementScale.IsMinimumInclusive && natural <= naturalMinimumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is smaller than or equal to the minimum permissible value of \"{1}\"", natural, naturalMinimumPermissibleValue);
+                                result.Message = $"The value \"{natural}\" is smaller than or equal to the minimum permissible value of \"{naturalMinimumPermissibleValue}\"";
                                 return result;
                             }
                         }
@@ -791,7 +788,7 @@ namespace CDP4Common.Validation
                     if (!isReal)
                     {
                         result.ResultKind = ValidationResultKind.Invalid;
-                        result.Message = string.Format("{0}:\"{1}\" is not a member of the REAL NUMBER SET", value.GetType().Name, value);
+                        result.Message = $"{value.GetType().Name}:\"{value}\" is not a member of the REAL NUMBER SET";
                         return result;
                     }
 
@@ -804,14 +801,14 @@ namespace CDP4Common.Validation
                             if (measurementScale.IsMaximumInclusive && real > realMaximumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is greater than the maximium permissible value of \"{1}\"", real, realMaximumPermissibleValue);
+                                result.Message = $"The value \"{real}\" is greater than the maximium permissible value of \"{realMaximumPermissibleValue}\"";
                                 return result;
                             }
 
                             if (!measurementScale.IsMaximumInclusive && real >= realMaximumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is greater than or equal to the maximium permissible value of \"{1}\"", real, realMaximumPermissibleValue);
+                                result.Message = $"The value \"{real}\" is greater than or equal to the maximium permissible value of \"{realMaximumPermissibleValue}\"";
                                 return result;
                             }
                         }
@@ -830,14 +827,14 @@ namespace CDP4Common.Validation
                             if (measurementScale.IsMinimumInclusive && real < realMinimumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is smaller than the minimum permissible value of \"{1}\"", real, realMinimumPermissibleValue);
+                                result.Message = $"The value \"{real}\" is smaller than the minimum permissible value of \"{realMinimumPermissibleValue}\"";
                                 return result;
                             }
 
                             if (!measurementScale.IsMinimumInclusive && real <= realMinimumPermissibleValue)
                             {
                                 result.ResultKind = ValidationResultKind.OutOfBounds;
-                                result.Message = string.Format("The value \"{0}\" is smaller than or equal to the minimum permissible value of \"{1}\"", real, realMinimumPermissibleValue);
+                                result.Message = $"The value \"{real}\" is smaller than or equal to the minimum permissible value of \"{realMinimumPermissibleValue}\"";
                                 return result;
                             }
                         }

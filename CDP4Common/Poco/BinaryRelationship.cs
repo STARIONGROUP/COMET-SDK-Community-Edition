@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BinaryRelationship.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -40,7 +40,7 @@ namespace CDP4Common.EngineeringModelData
         /// </summary>
         public override string UserFriendlyName
         {
-            get { return string.Format("{0} -> {1}", this.Source.UserFriendlyName, this.Target.UserFriendlyName); }
+            get { return $"{this.Source.UserFriendlyName} -> {this.Target.UserFriendlyName}"; }
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace CDP4Common.EngineeringModelData
         /// </summary>
         public override string UserFriendlyShortName
         {
-            get { return string.Format("{0}.{1}", this.Source.UserFriendlyShortName, this.Target.UserFriendlyShortName); }
+            get { return $"{this.Source.UserFriendlyShortName}.{this.Target.UserFriendlyShortName}"; }
         }
 
         /// <summary>
