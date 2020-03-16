@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DalQueryAttributes.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,10 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.DAL
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -39,6 +38,27 @@ namespace CDP4Dal.DAL
         public int? RevisionNumber { get; set; }
 
         /// <summary>
+        /// Gets or sets the from revision number.
+        /// </summary>
+        public int? FromRevisionNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the from revision number.
+        /// </summary>
+        public int? ToRevisionNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the from timestamp to get revisions.
+        /// </summary>
+        public DateTime? FromRevisionTimestamp { get; set; }
+
+        /// <summary>
+        /// Gets or sets the to timestamp to get revisions.
+        /// </summary>
+        public DateTime? ToRevisionTimestamp { get; set; }
+
+
+        /// <summary>
         /// Converts all values of this <see cref="DalQueryAttributes"/> class to a uri attributes string
         /// </summary>
         /// <returns>
@@ -47,7 +67,7 @@ namespace CDP4Dal.DAL
         public override string ToString()
         {
             var attributeString = this.JoinAttributes();
-            return string.IsNullOrEmpty(attributeString) ? string.Empty : string.Format("?{0}", attributeString);
+            return string.IsNullOrEmpty(attributeString) ? string.Empty : $"?{attributeString}";
         }
 
         /// <summary>
@@ -62,7 +82,27 @@ namespace CDP4Dal.DAL
 
             if (this.RevisionNumber != null)
             {
-                attributeList.Add(string.Format("revisionNumber={0}", this.RevisionNumber));
+                attributeList.Add($"revisionNumber={this.RevisionNumber}");
+            }
+
+            if (this.FromRevisionNumber != null)
+            {
+                attributeList.Add($"revisionFrom={this.FromRevisionNumber}");
+            }
+
+            if (this.ToRevisionNumber != null)
+            {
+                attributeList.Add($"revisionTo={this.ToRevisionNumber}");
+            }
+
+            if (this.FromRevisionTimestamp != null)
+            {
+                attributeList.Add($"revisionFrom={this.FromRevisionTimestamp?.ToString("yyyy-MM-ddTHH:mm:ss")}");
+            }
+
+            if (this.ToRevisionTimestamp != null)
+            {
+                attributeList.Add($"revisionTo={this.ToRevisionTimestamp?.ToString("yyyy-MM-ddTHH:mm:ss")}");
             }
 
             if (attributeList.Count == 0)

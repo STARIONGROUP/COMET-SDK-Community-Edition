@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WSPDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -94,13 +94,16 @@ namespace CDP4WspDal
         }
 
         /// <summary>
-        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/>.
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
         /// </summary>
         /// <param name="operationContainer">
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
+        /// </param>
         /// <returns>
-        /// A list of <see cref="CDP4Common.DTO.Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
         public override async Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
         {

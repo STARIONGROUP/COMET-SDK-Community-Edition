@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -279,16 +279,16 @@ namespace CDP4ServicesDal
 
             var watch = Stopwatch.StartNew();
 
-            var thingRoute = this.CleanUriFinalSlash(thing.Route);
-
             if (attributes == null)
             {
-                var inlcudeReferenData = thing is ReferenceDataLibrary;
+                var includeReferenData = thing is ReferenceDataLibrary;
 
-                attributes = this.GetIUriQueryAttribute(inlcudeReferenData);
+                attributes = this.GetIUriQueryAttribute(includeReferenData);
             }
 
-            var resourcePath = $"{thingRoute}{attributes.ToString()}";
+            var thingRoute = this.CleanUriFinalSlash(thing.Route);
+
+            var resourcePath = $"{thingRoute}{attributes?.ToString()}";
 
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
             var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
@@ -317,8 +317,7 @@ namespace CDP4ServicesDal
                 {
                     var returned = this.Serializer.Deserialize(resultStream);
 
-                    Guid iterationId;
-                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
+                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(returned, iterationId);
                     }

@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IQueryAttributes.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,10 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.DAL
 {
+    using System;
+
     /// <summary>
     /// The UriQueryAttributes interface.
     /// </summary>
@@ -51,5 +51,25 @@ namespace CDP4Dal.DAL
         /// Gets or sets the revision number.
         /// </summary>
         int? RevisionNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the from revision number.
+        /// </summary>
+        int? FromRevisionNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the from revision number.
+        /// </summary>
+        int? ToRevisionNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the from timestamp to get revisions.
+        /// </summary>
+        DateTime? FromRevisionTimestamp { get; set; }
+
+        /// <summary>
+        /// Gets or sets the to timestamp to get revisions.
+        /// </summary>
+        DateTime? ToRevisionTimestamp { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ISession.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -200,6 +200,26 @@ namespace CDP4Dal
         /// an await-able <see cref="Task"/>
         /// </returns>
         Task Read(Thing thing);
+
+        /// <summary>
+        /// Read a <see cref="Thing"/> in the associated <see cref="IDal"/>
+        /// </summary>
+        /// <param name="thing">The <see cref="Thing"/> to read</param>
+        /// <param name="queryAttributes">The <see cref="IQueryAttributes"/> that define query attributes</param>
+        /// <returns>
+        /// an await-able <see cref="Task"/>
+        /// </returns>
+        Task Read(Thing thing, IQueryAttributes queryAttributes);
+
+        /// <summary>
+        /// Read a list of <see cref="Thing"/>s in the associated <see cref="IDal"/>
+        /// </summary>
+        /// <param name="things">The <see cref="IEnumerable{Thing}"/> that contains the <see cref="Thing"/>s to read</param>
+        /// <param name="queryAttributes">The <see cref="IQueryAttributes"/> to be used to read data</param>
+        /// <returns>
+        /// an await-able <see cref="Task"/>
+        /// </returns>
+        Task Read(IEnumerable<Thing> things, IQueryAttributes queryAttributes);
 
         /// <summary>
         /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.

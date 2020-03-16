@@ -60,70 +60,88 @@ namespace CDP4RequirementsVerification.Verifiers
         /// <summary>
         /// Verify a <see cref="RelationalExpression"/> with respect to a <see cref="Requirement"/> using data from a given <see cref="Iteration"/> 
         /// </summary>
+        /// <param name="relationShips">A IEnumerable of <see cref="BinaryRelationship"/>s to verify requirements with</param>
+        /// <param name="iteration">The <see cref="Iteration"/> that contains the data (<see cref="ElementDefinition"/> and <see cref="ElementUsage"/>) used for verification</param>
+        /// <returns><see cref="Task"/> that returns the calculated <see cref="RequirementStateOfCompliance"/> for this class' <see cref="BooleanExpressionVerifier{T}.Expression"/> property</returns>
+        public async Task<RequirementStateOfCompliance> VerifyRequirementStateOfCompliance(IEnumerable<BinaryRelationship> relationShips, Iteration iteration)
+        {
+            this.IsMessageBusActive = false;
+            return await Task.Run(() => this.VerifyRequirementStateOfComplianceInternal(relationShips, iteration));
+        }
+
+        /// <summary>
+        /// Verify a <see cref="RelationalExpression"/> with respect to a <see cref="Requirement"/> using data from a given <see cref="Iteration"/> 
+        /// </summary>
         /// <param name="booleanExpressionVerifiers">A dictionary that contains all <see cref="BooleanExpression"/>s and their <see cref="BooleanExpressionVerifier{T}"/>s</param>
         /// <param name="iteration">The <see cref="Iteration"/> that contains the data (<see cref="ElementDefinition"/> and <see cref="ElementUsage"/>) used for verification</param>
         /// <returns><see cref="Task"/> that returns the calculated <see cref="RequirementStateOfCompliance"/> for this class' <see cref="BooleanExpressionVerifier{T}.Expression"/> property</returns>
         public override async Task<RequirementStateOfCompliance> VerifyRequirementStateOfCompliance(IDictionary<BooleanExpression, IBooleanExpressionVerifier> booleanExpressionVerifiers, Iteration iteration)
         {
-            return await Task.Run(() =>
+            var relations = this.Expression.QueryRelationships
+                .OfType<BinaryRelationship>()
+                .Where(x => x.Source is ParameterOrOverrideBase parameter && !parameter.ParameterType.IsDeprecated && x.Target is RelationalExpression)
+                .ToList();
+
+            this.IsMessageBusActive = true;
+            return await Task.Run(() => this.VerifyRequirementStateOfComplianceInternal(relations, iteration));
+        }
+
+        private RequirementStateOfCompliance VerifyRequirementStateOfComplianceInternal(IEnumerable<BinaryRelationship> relationShips, Iteration iteration)
+        {
+            if (this.RequirementStateOfCompliance.IsCalculated())
+            {
+                return this.RequirementStateOfCompliance;
+            }
+
+            lock (this.locker)
             {
                 if (this.RequirementStateOfCompliance.IsCalculated())
                 {
                     return this.RequirementStateOfCompliance;
                 }
 
-                lock (this.locker)
+                this.RequirementStateOfCompliance = RequirementStateOfCompliance.Calculating;
+
+                foreach (var binaryRelation in relationShips)
                 {
-                    if (this.RequirementStateOfCompliance.IsCalculated())
+                    if (binaryRelation.Target is RelationalExpression expression)
                     {
-                        return this.RequirementStateOfCompliance;
-                    }
+                        var relationParameter = binaryRelation.Source as Parameter;
 
-                    this.RequirementStateOfCompliance = RequirementStateOfCompliance.Calculating;
-
-                    foreach (var binaryRelation in this.Expression.QueryRelationships
-                        .OfType<BinaryRelationship>()
-                        .Where(x => x.Source is ParameterOrOverrideBase parameter && !parameter.ParameterType.IsDeprecated && x.Target is RelationalExpression))
-                    {
-                        if (binaryRelation.Target is RelationalExpression expression)
-                        {
-                            var relationParameter = binaryRelation.Source as Parameter;
-
-                            var elementDefinitionParameters =
-                                iteration.Element.SelectMany(x => x.Parameter)
-                                    .Where(x => x == relationParameter)
-                                    .ToList();
-
-                            if (relationParameter != null && elementDefinitionParameters.Any())
-                            {
-                                foreach (var parameter in elementDefinitionParameters)
-                                {
-                                    this.VerifiedRequirementStateOfComplianceList.VerifyAndAdd(parameter.ValueSet, expression);
-                                }
-                            }
-
-                            var relationParameterOverride = binaryRelation.Source as ParameterOverride;
-
-                            var elementUsageParameterOverrides = iteration.Element.SelectMany(x => x.ContainedElement)
-                                .SelectMany(x => x.ParameterOverride)
-                                .Where(x => x == relationParameterOverride)
+                        var elementDefinitionParameters =
+                            iteration.Element.SelectMany(x => x.Parameter)
+                                .Where(x => x == relationParameter)
                                 .ToList();
 
-                            if (relationParameterOverride != null && elementUsageParameterOverrides.Any())
+                        if (relationParameter != null && elementDefinitionParameters.Any())
+                        {
+                            foreach (var parameter in elementDefinitionParameters)
                             {
-                                foreach (var parameterOverride in elementUsageParameterOverrides)
-                                {
-                                    this.VerifiedRequirementStateOfComplianceList.VerifyAndAdd(parameterOverride.ValueSet, expression);
-                                }
+                                this.VerifiedRequirementStateOfComplianceList.VerifyAndAdd(parameter.ValueSet, expression);
+                            }
+                        }
+
+                        var relationParameterOverride = binaryRelation.Source as ParameterOverride;
+
+                        var elementUsageParameterOverrides = iteration.Element.SelectMany(x => x.ContainedElement)
+                            .SelectMany(x => x.ParameterOverride)
+                            .Where(x => x == relationParameterOverride)
+                            .ToList();
+
+                        if (relationParameterOverride != null && elementUsageParameterOverrides.Any())
+                        {
+                            foreach (var parameterOverride in elementUsageParameterOverrides)
+                            {
+                                this.VerifiedRequirementStateOfComplianceList.VerifyAndAdd(parameterOverride.ValueSet, expression);
                             }
                         }
                     }
-
-                    this.CalculateRequirementStateOfCompliance();
                 }
 
-                return this.RequirementStateOfCompliance;
-            });
+                this.CalculateRequirementStateOfCompliance();
+            }
+
+            return this.RequirementStateOfCompliance;
         }
 
         /// <summary>

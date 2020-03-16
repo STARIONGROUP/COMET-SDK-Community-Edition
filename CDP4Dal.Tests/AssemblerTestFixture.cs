@@ -28,12 +28,16 @@ namespace CDP4Dal.Tests
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+
     using CDP4Dal.Events;
+    
     using NUnit.Framework;
+    
     using Dto = CDP4Common.DTO;
 
     [TestFixture]
@@ -183,6 +187,107 @@ namespace CDP4Dal.Tests
             // checks that the removed category is no longer in the cache
             Assert.AreEqual(6, assembler.Cache.Count);            
             Assert.IsFalse(assembler.Cache.TryGetValue(new CacheKey(categoryToRemove.Iid, null), out lazyCat));
+        }
+
+        [Test]
+        public async Task AssertThatRevisionsAreCachedCorrectly()
+        {
+            var assembler = new Assembler(this.uri);
+
+            var parameterIid = Guid.NewGuid();
+            var parameterRevision1 = new Dto.Parameter(parameterIid, 1); //The Parameter's 1st Revision
+            var parameterRevision2 = new Dto.Parameter(parameterIid, 2); //The Parameter's 2nd Revision
+            var parameterRevision3 = new Dto.Parameter(parameterIid, 3); //The Parameter's 3rd Revision
+
+            var valueSet1 = new Dto.ParameterValueSet(Guid.NewGuid(), 1); //ValueSet that belongs to the parameter's 1st Revision
+            var valueSet2 = new Dto.ParameterValueSet(Guid.NewGuid(), 1); //ValueSet that belongs to the parameter's 2nd Revision
+            var valueSet3 = new Dto.ParameterValueSet(Guid.NewGuid(), 1); //ValueSet that belongs to the parameter's 3rd Revision
+
+            parameterRevision1.ValueSet.Add(valueSet1.Iid);
+            parameterRevision2.ValueSet.Add(valueSet2.Iid);
+            parameterRevision3.ValueSet.Add(valueSet3.Iid);
+
+            //******************************************************************************************************************
+            // 1st call of Synchronize for Revision 2, which is the currently active revision
+            //******************************************************************************************************************
+            await assembler.Synchronize(new List<Dto.Thing> { parameterRevision2, valueSet2 });
+            
+            //Cache should not be empty
+            Assert.IsNotEmpty(assembler.Cache);
+
+            //Cache should contain 2 items
+            Assert.AreEqual(2, assembler.Cache.Count);
+
+            //Get the cached version of the parameter
+            var cachedParameter = assembler.Cache.First(x => x.Value.Value.Iid == parameterRevision2.Iid).Value.Value as Parameter;
+
+            //Revision number should be 2 now
+            Assert.AreEqual(parameterRevision2.RevisionNumber, cachedParameter.RevisionNumber);
+
+            //Parameter should contain a ValueSet
+            Assert.AreEqual(1, cachedParameter.ValueSet.Count);
+
+            //Parameter should contain the correct ValueSet
+            Assert.AreEqual(cachedParameter.ValueSet.First().Iid, valueSet2.Iid);
+
+            //******************************************************************************************************************
+            // 2st call of Synchronize which introduces a newer revision: Revision nr. 3.
+            //******************************************************************************************************************
+            await assembler.Synchronize(new List<Dto.Thing> { parameterRevision3, valueSet3 });
+
+            //Cache should still contain 2 things, because parameterRevision2 is removed from cache together with valueSet2
+            //parameterRevision2 now is contained in the Revisions property of the cached version of the parameter
+            Assert.AreEqual(2, assembler.Cache.Count);
+
+            cachedParameter = assembler.Cache.First(x => x.Value.Value.Iid == parameterRevision3.Iid).Value.Value as Parameter;
+
+            //Current cached parameter version is Revision 3
+            Assert.AreEqual(parameterRevision3.RevisionNumber, cachedParameter.RevisionNumber);
+
+            //cached parameter should contain a ValueSet
+            Assert.AreEqual(1, cachedParameter.ValueSet.Count);
+
+            //cached parameter should contain exactly 1 revision
+            Assert.AreEqual(1, cachedParameter.Revisions.Count);
+
+            //cached parameter should contain the correct ValueSet
+            Assert.AreEqual(cachedParameter.ValueSet.First().Iid, valueSet3.Iid);
+            
+            //Revisions property of current cached item should contain the right revision number
+            Assert.AreEqual(cachedParameter.Revisions.First().Value.RevisionNumber, parameterRevision2.RevisionNumber);
+
+            //******************************************************************************************************************
+            // 3rd call of Synchronize with older revision, that should be added as a revision to an existing cached poco
+            //******************************************************************************************************************
+            await assembler.Synchronize(new List<Dto.Thing> { parameterRevision1, valueSet1 });
+
+            //Cache should still contain 2 things, because parameterRevision1 is added to the Revisions property of the current cached parameter
+            Assert.AreEqual(2, assembler.Cache.Count);
+
+            cachedParameter = assembler.Cache.First(x => x.Value.Value.Iid == parameterRevision1.Iid).Value.Value as Parameter;
+
+            //parameterRevision3 is still the current cached version
+            Assert.AreEqual(parameterRevision3.RevisionNumber, cachedParameter.RevisionNumber);
+
+            //cached parameter should contain a ValueSet
+            Assert.AreEqual(1, cachedParameter.ValueSet.Count);
+
+            //cached parameter should contain the correct ValueSet
+            Assert.AreEqual(cachedParameter.ValueSet.First().Iid, valueSet3.Iid);
+
+            //cached parameter should contain exactly 2 revisions
+            Assert.AreEqual(2, cachedParameter.Revisions.Count);
+
+            var revisionParameter1 = cachedParameter.Revisions.Single(x => x.Value.Iid == parameterRevision1.Iid && x.Value.RevisionNumber == parameterRevision1.RevisionNumber).Value as Parameter;
+            var revisionParameter2 = cachedParameter.Revisions.Single(x => x.Value.Iid == parameterRevision2.Iid && x.Value.RevisionNumber == parameterRevision2.RevisionNumber).Value as Parameter;
+
+            //Should be empty, because an older revision than the one currently in the cache was asked for
+            //In that case the ValueSet belonging to the Parameter doens't get cloned (because it is unknown at that moment)
+            Assert.AreEqual(0, revisionParameter1.ValueSet.Count);
+
+            //Should be 1, because the ValueSet2 was cloned and added to the Parameter added to the Revisions property of the cached parameter
+            //when revision 3 was added to the cache
+            Assert.AreEqual(1, revisionParameter2.ValueSet.Count);
         }
 
         [Test]
