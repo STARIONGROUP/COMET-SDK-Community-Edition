@@ -281,17 +281,12 @@ namespace CDP4ServicesDal
 
             if (attributes == null)
             {
-                var inlcudeReferenData = thing is ReferenceDataLibrary;
+                var includeReferenData = thing is ReferenceDataLibrary;
 
-                attributes = this.GetIUriQueryAttribute(inlcudeReferenData);
+                attributes = this.GetIUriQueryAttribute(includeReferenData);
             }
 
-            return await this.ReadByRoute(watch, thing.Route, cancellationToken, attributes);
-        }
-
-        private async Task<IEnumerable<Thing>> ReadByRoute(Stopwatch watch, string route, CancellationToken cancellationToken, IQueryAttributes attributes = null)
-        {
-            var thingRoute = this.CleanUriFinalSlash(route);
+            var thingRoute = this.CleanUriFinalSlash(thing.Route);
 
             var resourcePath = $"{thingRoute}{attributes?.ToString()}";
 

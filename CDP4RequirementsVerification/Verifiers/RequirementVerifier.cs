@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -56,6 +56,11 @@ namespace CDP4RequirementsVerification.Verifiers
 
         /// <summary>
         /// The current <see cref="CDP4RequirementsVerification.RequirementStateOfCompliance"/>>
+        /// <remarks>
+        /// Normally we don't put code in a property setter.
+        /// In this exceptional case we do, because we might want a <see cref="RequirementStateOfComplianceChangedEvent"/>
+        /// to be called through the <see cref="CDPMessageBus"/>
+        /// </remarks>
         /// </summary>
         public RequirementStateOfCompliance RequirementStateOfCompliance
         {
