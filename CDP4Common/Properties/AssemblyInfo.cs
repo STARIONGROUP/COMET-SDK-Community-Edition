@@ -44,6 +44,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("CDP4CategorizedParameterSheetGenerator.Tests")]
 [assembly: InternalsVisibleTo("CDP4CommonView.Tests")]
 [assembly: InternalsVisibleTo("CDP4Composition.Tests")]
+[assembly: InternalsVisibleTo("CDP4Dashboard.Tests")]
 [assembly: InternalsVisibleTo("CDP4IME.Tests")]
 [assembly: InternalsVisibleTo("CDP4LogInfo.Tests")]
 [assembly: InternalsVisibleTo("CDP4Notes.Tests")]
