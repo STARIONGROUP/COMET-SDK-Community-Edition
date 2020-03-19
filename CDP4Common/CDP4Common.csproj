@@ -4,19 +4,20 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard1.6;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>5.1.1</VersionPrefix>
+    <VersionPrefix>6.0.0</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen</Authors>
+    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathaniel, Kamil</Authors>
     <PackageId>CDP4Common-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/RHEAGROUP/CDP4-SDK-Community-Edition/master/docs/cdp4-icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
-    <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
+    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [Add] BooleanParameterType comparison in Requirement Verification is now case insensitive; fixes #268
+      [Update] Cache revisions and ISession to enable revision history; fixes #96
+      [Update] Nlog version 4.6.8
     </PackageReleaseNotes>
   </PropertyGroup>
 
@@ -44,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.6.2" />  
+    <PackageReference Include="NLog" Version="4.6.8" />  
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />  
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard1.6'" />

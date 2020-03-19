@@ -4,20 +4,23 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Dal Community Edition</Title>
-    <VersionPrefix>5.1.2</VersionPrefix>
+    <VersionPrefix>6.0.0</VersionPrefix>
     <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen</Authors>
+    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathaniel, Kamil</Authors>
     <PackageId>CDP4Dal-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/RHEAGROUP/CDP4-SDK-Community-Edition/master/docs/cdp4-icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
-    <PackageLicenseUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition/blob/master/COPYING.LESSER</PackageLicenseUrl>
+    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [Update] to CDP4Common 5.0.0
-  </PackageReleaseNotes>
+      [Update] to CDP4Common 6.0.0
+      [Fix] PermissionService; fixes #92
+      [Refactor] Utility Classes; fixes #47
+      [Implement] revision read; fixes #96
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>    
