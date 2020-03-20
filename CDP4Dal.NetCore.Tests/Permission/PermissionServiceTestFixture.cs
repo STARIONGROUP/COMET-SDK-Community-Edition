@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PermissionServiceTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests.Permission
 {
@@ -209,7 +207,7 @@ namespace CDP4Dal.Tests.Permission
             Assert.IsFalse(this.permissionService.CanWrite(this.definition));
 
             sdPermission.AccessRight = PersonAccessRightKind.MODIFY;
-            Assert.IsTrue(this.permissionService.CanRead(this.definition));
+            Assert.IsTrue(this.permissionService.CanWrite(this.definition));
             Assert.IsTrue(this.permissionService.CanWrite(this.definition));
         }
 
@@ -228,7 +226,7 @@ namespace CDP4Dal.Tests.Permission
             permission.AccessRight = PersonAccessRightKind.MODIFY;
             Assert.IsTrue(this.permissionService.CanRead(this.booleanpt));
             Assert.IsTrue(this.permissionService.CanWrite(this.booleanpt));
-            Assert.IsFalse(this.permissionService.CanWrite(ClassKind.BooleanParameterType, this.srdl));
+            Assert.IsTrue(this.permissionService.CanWrite(ClassKind.BooleanParameterType, this.srdl));
         }
 
         [Test]

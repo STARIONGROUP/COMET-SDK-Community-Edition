@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PermissionServiceTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests.Permission
 {
@@ -88,8 +86,8 @@ namespace CDP4Dal.Tests.Permission
             this.personRole = new PersonRole(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.participant = new Participant(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.participantRole = new ParticipantRole(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            this.model = new EngineeringModel(Guid.NewGuid(), this.assembler.Cache, this.uri){EngineeringModelSetup = this.modelsetup};
-            this.iteration = new Iteration(Guid.NewGuid(), this.assembler.Cache, this.uri){IterationSetup = this.iterationSetup};
+            this.model = new EngineeringModel(Guid.NewGuid(), this.assembler.Cache, this.uri) { EngineeringModelSetup = this.modelsetup };
+            this.iteration = new Iteration(Guid.NewGuid(), this.assembler.Cache, this.uri) { IterationSetup = this.iterationSetup };
             this.definition = new Definition(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.srdl = new SiteReferenceDataLibrary(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.booleanpt = new BooleanParameterType(Guid.NewGuid(), this.assembler.Cache, this.uri);
@@ -101,7 +99,7 @@ namespace CDP4Dal.Tests.Permission
             this.requirementsSpecification = new RequirementsSpecification(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.requirement = new Requirement(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.commonFileStore = new CommonFileStore(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            
+
             this.sitedir.Model.Add(this.modelsetup);
             this.sitedir.Person.Add(this.person);
             this.sitedir.Person.Add(this.person2);
@@ -135,7 +133,7 @@ namespace CDP4Dal.Tests.Permission
 
             this.session.Setup(x => x.ActivePerson).Returns(this.person);
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
-            this.session.Setup(x => x.OpenIterations).Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise,Participant>>
+            this.session.Setup(x => x.OpenIterations).Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>
             {
                 {this.iteration, new Tuple<DomainOfExpertise,Participant>(this.domain1,this.participant)}
             });
@@ -209,7 +207,7 @@ namespace CDP4Dal.Tests.Permission
             Assert.IsFalse(this.permissionService.CanWrite(this.definition));
 
             sdPermission.AccessRight = PersonAccessRightKind.MODIFY;
-            Assert.IsTrue(this.permissionService.CanRead(this.definition));
+            Assert.IsTrue(this.permissionService.CanWrite(this.definition));
             Assert.IsTrue(this.permissionService.CanWrite(this.definition));
         }
 
@@ -228,7 +226,7 @@ namespace CDP4Dal.Tests.Permission
             permission.AccessRight = PersonAccessRightKind.MODIFY;
             Assert.IsTrue(this.permissionService.CanRead(this.booleanpt));
             Assert.IsTrue(this.permissionService.CanWrite(this.booleanpt));
-            Assert.IsFalse(this.permissionService.CanWrite(ClassKind.BooleanParameterType, this.srdl));
+            Assert.IsTrue(this.permissionService.CanWrite(ClassKind.BooleanParameterType, this.srdl));
         }
 
         [Test]
@@ -260,7 +258,7 @@ namespace CDP4Dal.Tests.Permission
         [Test]
         public void VerifyThatReadWriteIfParticipantWorks()
         {
-            this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> {this.participant});
+            this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
 
             var sdpermission = this.personRole.PersonPermission.Single(x => x.ObjectClass == ClassKind.SiteDirectory);
             sdpermission.AccessRight = PersonAccessRightKind.READ_IF_PARTICIPANT;
@@ -425,7 +423,7 @@ namespace CDP4Dal.Tests.Permission
             Assert.IsFalse(this.permissionService.CanWrite(this.valueset));
             Assert.IsFalse(this.permissionService.CanRead(this.valueset));
 
-            var permission =this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.Parameter);
+            var permission = this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.Parameter);
 
             permission.AccessRight = ParticipantAccessRightKind.MODIFY;
             Assert.IsTrue(this.permissionService.CanWrite(this.valueset));
