@@ -24,17 +24,19 @@
 
 namespace CDP4Dal
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
-
+    
+    using CDP4Dal.Operations;
     using CDP4Dal.DAL;
-    using Permission;
-    using System;
 
+    using Permission;
+    
     /// <summary>
     /// The <see cref="ISession"/> interface encapsulates an <see cref="IDal"/> and 
     /// the associated <see cref="Assembler"/>

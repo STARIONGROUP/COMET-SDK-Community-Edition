@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PermissionService.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -22,19 +21,20 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Permission
 {
     using System;
     using System.ComponentModel;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
+    
     using NLog;
 
     /// <summary>
@@ -367,15 +367,15 @@ namespace CDP4Dal.Permission
         /// creation of a certain <see cref="EngineeringModel"/> contained <see cref="Thing"/>.
         /// </summary>
         /// <param name="classKind">The <see cref="ClassKind"/> that ultimately determines the permissions.</param>
-        /// <param name="thing">The <see cref="Thing"/> to write to</param>
+        /// <param name="containerThing">The <see cref="Thing"/> to write to</param>
         /// <param name="thingType">The <see cref="ClassKind"/> that ultimately determines the permissions.</param>
         /// <returns>True if Write operation can be performed.</returns>
-        private bool CanWriteEngineeringModelContainedThing(ClassKind classKind, Thing thing, ClassKind thingType)
+        private bool CanWriteEngineeringModelContainedThing(ClassKind classKind, Thing containerThing, ClassKind thingType)
         {
-            var engineeringModel = thing.TopContainer as EngineeringModel;
+            var engineeringModel = containerThing.TopContainer as EngineeringModel;
 
-            var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
-            
+            var iteration = containerThing is Iteration it ? it : containerThing.GetContainerOfType<Iteration>();
+
             if (iteration?.IterationSetup.FrozenOn != null)
             {
                 return false;
@@ -396,9 +396,9 @@ namespace CDP4Dal.Permission
             switch (right)
             {
                 case ParticipantAccessRightKind.SAME_AS_CONTAINER:
-                    return this.CanWrite(thing.Container, thing.Container.GetType());
+                    return this.CanWrite(containerThing, containerThing.GetType());
                 case ParticipantAccessRightKind.SAME_AS_SUPERCLASS:
-                    return this.CanWriteBasedOnSuperclassClassKind(thing, thingType);
+                    return this.CanWriteBasedOnSuperclassClassKind(containerThing, thingType);
                 case ParticipantAccessRightKind.MODIFY:
                 case ParticipantAccessRightKind.MODIFY_IF_OWNER:
                     return true;
@@ -480,10 +480,10 @@ namespace CDP4Dal.Permission
         /// creation of a certain <see cref="SiteDirectory"/> contained <see cref="Thing"/>.
         /// </summary>
         /// <param name="classKind">The <see cref="ClassKind"/> that ultimately determines the permissions.</param>
-        /// <param name="thing">The <see cref="Thing"/> to write to</param>
+        /// <param name="containerThing">The <see cref="Thing"/> to write to</param>
         /// <param name="thingType">The <see cref="ClassKind"/> that determine the permission</param>
         /// <returns>True if Write operation can be performed.</returns>
-        private bool CanWriteSiteDirectoryContainedThing(ClassKind classKind, Thing thing, ClassKind thingType)
+        private bool CanWriteSiteDirectoryContainedThing(ClassKind classKind, Thing containerThing, ClassKind thingType)
         {
             var person = this.Session.ActivePerson;
             if (person == null)
@@ -505,23 +505,23 @@ namespace CDP4Dal.Permission
             switch (accessRightKind)
             {
                 case PersonAccessRightKind.SAME_AS_CONTAINER:
-                    return this.CanWrite(thing.Container, thing.Container.GetType());
+                    return this.CanWrite(containerThing, containerThing.GetType());
                 case PersonAccessRightKind.SAME_AS_SUPERCLASS:
-                    return this.CanWriteBasedOnSuperclassClassKind(thing, thingType);
+                    return this.CanWriteBasedOnSuperclassClassKind(containerThing, thingType);
                 case PersonAccessRightKind.MODIFY:
                     return true;
                 case PersonAccessRightKind.MODIFY_IF_PARTICIPANT:
-                    if (thing is EngineeringModelSetup setup)
+                    if (containerThing is EngineeringModelSetup setup)
                     {
                         return setup.Participant.Any(x => x.Person == this.Session.ActivePerson);
                     }
 
-                    if (thing is SiteReferenceDataLibrary)
+                    if (containerThing is SiteReferenceDataLibrary)
                     {
                         var rdl =
                                             this.Session.RetrieveSiteDirectory()
                                                 .Model.SelectMany(ems => this.Session.GetEngineeringModelSetupRdlChain(ems));
-                        return rdl.Contains(thing);
+                        return rdl.Contains(containerThing);
                     }
 
                     return false;
@@ -565,7 +565,7 @@ namespace CDP4Dal.Permission
             }
 
             //Check if the ownedThing domain is contained in the participant domains 
-            return this.TryGetThingParticipant(thing, out var participant) 
+            return this.TryGetThingParticipant(thing, out var participant)
                    && participant.Domain.Contains(ownedThing.Owner);
         }
 
@@ -580,7 +580,7 @@ namespace CDP4Dal.Permission
             var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
             participant = null;
 
-            if (iteration != null 
+            if (iteration != null
                    && this.Session.OpenIterations.TryGetValue(iteration, out var participation)
                    && participation.Item1 != null
                    && participation.Item2 != null)

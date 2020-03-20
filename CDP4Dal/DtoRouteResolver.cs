@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DtoRouteResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -25,11 +25,14 @@
 namespace CDP4Dal
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.DTO;
     using CDP4Common.Types;
+    
     using CDP4Dal.Exceptions;
-    using System.Collections.Generic;
+    
     using Poco = CDP4Common.CommonData.Thing;
 
     /// <summary>
