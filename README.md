@@ -18,6 +18,7 @@ Package | Link
 --------|--------
 CDP4Common | [![NuGet Badge](https://buildstats.info/nuget/CDP4Common-CE)](https://buildstats.info/nuget/CDP4Common-CE)
 CDP4Rules | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4Rules-CE)
+CDP4RequirementsVerification | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4RequirementsVerification-CE)
 CDP4JsonSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonSerializer-CE)](https://buildstats.info/nuget/CDP4JsonSerializer-CE)
 CDP4Dal | [![NuGet Badge](https://buildstats.info/nuget/CDP4Dal-CE)](https://buildstats.info/nuget/CDP4Dal-CE)
 CDP4JsonFileDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonFileDal-CE)](https://buildstats.info/nuget/CDP4JsonFileDal-CE)
@@ -44,6 +45,10 @@ The CDP4Common library also includes a set of so-called MetaInfo classes. These 
 ## CDP4Rules
 
 The CDP4Rules library provides a mechanism for checking CDP4 instances versus defined **rules**. This rule checking mechanism is introduced to verify the correctness of POCO's that cannot be verified based on the CDP4 Master (UML) model (such as multiplicity, type information, etc.). Each rule has a code, description and default severity.
+
+## CDP4RequirementsVerification
+
+The CDP4RequirementsVerification library is used to perform requirements verification. E-TM-10-25 contains concepts to make record of requirements and to verify whether a design meets those requirements.
 
 ## CDP4JsonSerializer
 
