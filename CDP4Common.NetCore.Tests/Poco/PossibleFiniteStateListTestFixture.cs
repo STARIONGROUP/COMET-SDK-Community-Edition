@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PossibleFiniteStateListTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -24,12 +24,12 @@
 
 namespace CDP4Common.NetCore.Tests.Poco
 {
-    using CDP4Common.EngineeringModelData;
-    using NUnit.Framework;
     using System;
     using System.Linq;
-    using System.Collections.Generic;
-    using System.Text;
+
+    using CDP4Common.EngineeringModelData;
+
+    using NUnit.Framework;
 
     class PossibleFiniteStateListTestFixture
     {

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TypeResolverTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -28,9 +28,11 @@ namespace CDP4Common.NetCore.Tests.Helpers
     using System.Linq;
     using System.Collections.Generic;
     using System.Reflection;
+
     using CDP4Common.CommonData;
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
+
     using NUnit.Framework;
 
     /// <summary>

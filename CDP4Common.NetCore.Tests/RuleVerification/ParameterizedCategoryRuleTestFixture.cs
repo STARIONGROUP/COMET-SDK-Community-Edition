@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterizedCategoryRuleTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,18 +21,18 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.RuleVerification
 {
     using System;
     using System.Collections.Concurrent;
     using System.Linq;
-    using CommonData;
-    using EngineeringModelData;
-    using Moq;
+
+    using CDP4Common.CommonData;
+    using CDP4Common.EngineeringModelData;
+    using CDP4Common.SiteDirectoryData;
+
     using NUnit.Framework;
-    using SiteDirectoryData;
 
     [TestFixture]
     internal class ParameterizedCategoryRuleTestFixture
