@@ -36,14 +36,13 @@ namespace CDP4Common.EngineeringModelData
         /// Returns the derived <see cref="Path"/> value
         /// </summary>
         /// <returns>The <see cref="Path"/> value</returns>
-        protected string GetDerivedPath()
+        private string GetDerivedPath()
         {
             var path = new StringBuilder();
-            var containingFolder = this.ContainingFolder;
 
-            if (containingFolder != null)
+            if (this.ContainingFolder != null)
             {
-                path.Append(containingFolder.Path);
+                path.Append(this.ContainingFolder.Path);
                 path.Append("/");
                 path.Append(this.ContainingFolder.Name);
                 path.Append("/");
