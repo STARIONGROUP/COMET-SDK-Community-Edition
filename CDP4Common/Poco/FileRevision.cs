@@ -45,6 +45,8 @@ namespace CDP4Common.EngineeringModelData
             {
                 path.Append(containingFolder.Path);
                 path.Append("/");
+                path.Append(this.ContainingFolder.Name);
+                path.Append("/");
             }
 
             path.Append(this.Name);
