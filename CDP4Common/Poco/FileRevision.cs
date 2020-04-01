@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FileRevision.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -36,18 +36,18 @@ namespace CDP4Common.EngineeringModelData
         /// Returns the derived <see cref="Path"/> value
         /// </summary>
         /// <returns>The <see cref="Path"/> value</returns>
-        protected string GetDerivedPath()
+        private string GetDerivedPath()
         {
             var path = new StringBuilder();
-            var containingFolder = this.ContainingFolder;
-            if (containingFolder != null)
+
+            if (this.ContainingFolder != null)
             {
-                path.Append(containingFolder.Path);
+                path.Append(this.ContainingFolder.Path);
+                path.Append("/");
+                path.Append(this.ContainingFolder.Name);
                 path.Append("/");
             }
 
-            path.Append(this.ContainingFolder.Name);
-            path.Append("/");
             path.Append(this.Name);
 
             foreach (FileType fileType in this.FileType)

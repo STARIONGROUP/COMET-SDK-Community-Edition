@@ -2,7 +2,7 @@
 // <copyright file="FileRevisionTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -47,14 +47,20 @@ namespace CDP4Common.Tests.Poco
 
             this.filerev.FileType.Add(new FileType(Guid.NewGuid(), null, null) { Extension = "ext1" });
             this.filerev.FileType.Add(new FileType(Guid.NewGuid(), null, null) { Extension = "ext2" });
-
-            this.filerev.ContainingFolder = this.folder;
         }
 
         [Test]
-        public void VerifyPath()
+        public void VerifyPathForFileRevisionLocatedInFolder()
         {
+            this.filerev.ContainingFolder = this.folder;
             Assert.AreEqual("/path/filerev.ext1.ext2", this.filerev.Path);
+        }
+
+        [Test]
+        public void VerifyPathForFileRevisionLocatedInFileStore()
+        {
+            this.filerev.ContainingFolder = null;
+            Assert.AreEqual("filerev.ext1.ext2", this.filerev.Path);
         }
     }
 }
