@@ -179,6 +179,12 @@ namespace CDP4Dal.Operations
         OperationContainer FinalizeTransaction();
 
         /// <summary>
+        /// Get all the files that need to be added to the DataStore accoring to the added/changed/deleted <see cref="Thing"/>s
+        /// </summary>
+        /// <returns>An Array of strings that contain the local paths in the context of the users' computer</returns>
+        string[] GetFiles();
+
+        /// <summary>
         /// Merge the sub-transaction into the current <see cref="ThingTransaction"/>
         /// </summary>
         /// <param name="subTransaction">The sub-<see cref="IThingTransaction"/></param>

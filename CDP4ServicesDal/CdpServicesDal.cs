@@ -37,18 +37,22 @@ namespace CDP4ServicesDal
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Security.Cryptography;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.DTO;
+
     using CDP4Dal;
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
+    
     using CDP4JsonSerializer;
+    
     using NLog;
 
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
@@ -245,6 +249,96 @@ namespace CDP4ServicesDal
             var engineeringModelData = await this.Read((Thing)iteration, cancellationToken);
             result.AddRange(engineeringModelData);
             return result;
+        }
+
+        /// <summary>
+        /// Reads a physical file from a DataStore
+        /// </summary>
+        /// <param name="localFile">Download a localfile</param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>
+        /// </param>
+        /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
+        public override async Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken) 
+        { 
+            if (this.Credentials == null || this.Credentials.Uri == null)
+            {
+                throw new InvalidOperationException("The CDP4 DAL is not open.");
+            }
+
+            if (localFile == null)
+            {
+                throw new ArgumentNullException(nameof(localFile), $"The {nameof(localFile)} may not be null");
+            }
+
+            var watch = Stopwatch.StartNew();
+
+            var thingRoute = this.CleanUriFinalSlash(localFile.Route);
+
+            var resourcePath = $"{thingRoute}?includeFileData=true";
+
+            var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+            var uriBuilder = new UriBuilder(this.Credentials.Uri) { Path = resourcePath };
+            Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
+
+            var requestsw = Stopwatch.StartNew();
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, readToken);
+
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+            {
+                Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+                requestsw.Stop();
+
+                if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                {
+                    var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                    Logger.Error(msg);
+                    throw new DalReadException(msg);
+                }
+
+                this.ProcessHeaders(httpResponseMessage);
+
+                var multipartContent = await httpResponseMessage.Content.ReadAsByteArrayAsync();
+
+                var returned = this.GetFileContent(multipartContent);
+
+                watch.Stop();
+                Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
+
+                return returned;
+            }
+        }
+
+        /// <summary>
+        /// Gets the File part of a multipart Response
+        /// </summary>
+        /// <param name="responseBody"></param>
+        /// <returns>Physical file part of a <see cref="HttpResponseMessage"/> that contains both JSON and binary data</returns>
+        private byte[] GetFileContent(byte[] responseBody)
+        {
+            var responseBodyString = Encoding.Default.GetString(responseBody);
+
+            var boundaryRegex = new Regex("^-*\\w+");
+            var boundary = boundaryRegex.Matches(responseBodyString);
+
+            var regexWithBoundaryAtTheEnd = new Regex("Content-Length:\\s\\d+(\\r\\n|\\r|\\n){2}([\\s\\S]*)(\\r\\n)" + boundary[0], RegexOptions.IgnoreCase);
+            var regexWithoutBoundaryAtTheEnd = new Regex("Content-Length:\\s\\d+(\\r\\n|\\r|\\n){2}([\\s\\S]*)", RegexOptions.IgnoreCase);
+
+            var body = regexWithBoundaryAtTheEnd.Matches(responseBodyString);
+
+            if (body.Count == 0)
+            {
+                body = regexWithoutBoundaryAtTheEnd.Matches(responseBodyString);
+            }
+
+            if (body.Count == 0)
+            {
+                return null;
+            }
+
+            return Encoding.Default.GetBytes(body[0].Groups[2].Value);
         }
 
         /// <summary>

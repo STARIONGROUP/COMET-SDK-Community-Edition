@@ -98,9 +98,9 @@ namespace CDP4Dal.NetCore.Tests
 
             this.mockedDal = new Mock<IDal>();
             this.mockedDal.SetupProperty(d => d.Session);
-            
+
             this.session = new Session(this.mockedDal.Object, credentials);
-            
+
             var openTaskCompletionSource = new TaskCompletionSource<IEnumerable<Thing>>();
             openTaskCompletionSource.SetResult(this.dalOutputs);
             this.mockedDal.Setup(x => x.Open(It.IsAny<Credentials>(), It.IsAny<CancellationToken>())).Returns(openTaskCompletionSource.Task);
@@ -679,6 +679,11 @@ namespace CDP4Dal.NetCore.Tests
         /// All the <see cref="Thing"/>s that have been updated since the last read will be returned.
         /// </returns>
         public Task<IEnumerable<Thing>> Read(Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

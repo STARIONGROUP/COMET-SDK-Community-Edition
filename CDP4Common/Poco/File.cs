@@ -24,44 +24,43 @@
 
 namespace CDP4Common.EngineeringModelData
 {
-    using System.Text;
-    using CDP4Common.SiteDirectoryData;
+    using System;
+    using System.Linq;
 
     /// <summary>
-    /// Extended part for the auto-generated <see cref="FileRevision"/>
+    /// Extended part for the auto-generated <see cref="File"/>
     /// </summary>
-    public partial class FileRevision : ILocalFile
+    public partial class File
     {
         /// <summary>
-        /// Returns the derived <see cref="Path"/> value
+        /// Backing field for <see cref="CurrentContainingFolder"/>
         /// </summary>
-        /// <returns>The <see cref="Path"/> value</returns>
-        private string GetDerivedPath()
-        {
-            var path = new StringBuilder();
+        private Folder currentContainingFolder;
 
-            if (this.ContainingFolder != null)
+        /// <summary>
+        /// Gets or sets the currently known ContainingFolder of the file
+        /// </summary>
+        public Folder CurrentContainingFolder {
+            get { return this.FileRevision.Any() ? this.FileRevision.OrderByDescending(x => x.CreatedOn).First().ContainingFolder : this.currentContainingFolder; }
+            set
             {
-                path.Append(this.ContainingFolder.Path);
-                path.Append("/");
-                path.Append(this.ContainingFolder.Name);
-                path.Append("/");
+                if (this.FileRevision.Any())
+                {
+                    throw new InvalidOperationException($"Setting the {nameof(this.CurrentContainingFolder)} property is not allowed when the {this.FileRevision} proeprty contains data");
+                }
+
+                this.currentContainingFolder = value;
             }
-
-            path.Append(this.Name);
-
-            foreach (FileType fileType in this.FileType)
-            {
-                path.Append(".");
-                path.Append(fileType.Extension);
-            }
-
-            return path.ToString();
         }
 
         /// <summary>
-        /// Gets or sets the (temporary) LocalPath of the file
+        /// The current active <see cref="EngineeringModelData.FileRevision"/> which is the the last added FileRevision to the <see cref="FileRevision"/> property 
         /// </summary>
-        public string LocalPath { get; set; }
+        public FileRevision CurrentFileRevision => 
+            this.FileRevision
+                .OrderByDescending(x => x.CreatedOn)
+                .ThenByDescending(x => x.RevisionNumber)
+                .ThenBy(x => x.Iid)
+                .FirstOrDefault();
     }
 }

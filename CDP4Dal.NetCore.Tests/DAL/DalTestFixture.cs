@@ -29,12 +29,16 @@ namespace CDP4Dal.Tests.DAL
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common;
     using CDP4Common.DTO;
+    using CDP4Common.Helpers;
+
     using CDP4Dal.Composition;
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -54,7 +58,7 @@ namespace CDP4Dal.Tests.DAL
         [Test]
         public void Verify_that_the_credentials_are_set_to_Null_when_closed()
         {
-            var dal = new TestDal(this.credentials);            
+            var dal = new TestDal(this.credentials);
             dal.CloseSession();
             Assert.IsNull(dal.Credentials);
         }
@@ -102,6 +106,29 @@ namespace CDP4Dal.Tests.DAL
         }
 
         [Test]
+        public void Verify_That_SetIterationId_Works_For_All_PartitionDependentContainmentClassType()
+        {
+            var dal = new TestDal(this.credentials);
+            var uri = new Uri(@"http://localhost.com/EngineeringModel/694508eb-2730-488c-9405-6ca561df68dd/iteration/44647ff6-ffe3-44ff-9ed9-3256e2a97f9d?extent=deep&includeReferenceData=true&includeAllContainers=true");
+
+            var folder = new Folder();
+            var file = new CDP4Common.DTO.File();
+            var fileRevision = new FileRevision();
+            var list = new Thing[] { folder, file, fileRevision };
+
+            Assert.AreEqual(3, PartitionDependentContainmentClassType.ClassKindArray.Length, "a ClassKind was added to or removed from PartitionDependentContainmentClassType.ClassKindArray. Please make sure that this unit test, so that it tests all individual ClassKinds.");
+
+            if (dal.TryExtractIterationIdfromUri(uri, out var iterationId))
+            {
+                dal.SetIterationContainer(list, iterationId);
+            }
+
+            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", folder.IterationContainerId.Value.ToString());
+            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", file.IterationContainerId.Value.ToString());
+            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", fileRevision.IterationContainerId.Value.ToString());
+        }
+
+        [Test]
         public void Verify_that_when_fault_uri_is_provided_TryExtractIterationIdfromUri_returns_false()
         {
             var faultyUri = new Uri("http://some/faulty/uri/1234");
@@ -125,7 +152,7 @@ namespace CDP4Dal.Tests.DAL
         public void Verify_That_QueryRequestContext_Returns_Expected_Result()
         {
             var testdal = new TestDal(this.credentials);
-            
+
             var elementDefinitionUri = new Uri("http://www.rheagroup.com/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1/element/E9E8E386-B8BB-44F1-80B9-2C30761EE688");
             var elementDefinitionContext = testdal.QueryRequestContext(elementDefinitionUri);
             Assert.AreEqual("/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1", elementDefinitionContext);
@@ -135,7 +162,7 @@ namespace CDP4Dal.Tests.DAL
         public void Verify_that_for_a_decorated_dal_the_version_is_set()
         {
             var dal = new DecoratedDal();
-            Assert.That(dal.DalVersion,  Is.EqualTo(new Version(1,1,0)));
+            Assert.That(dal.DalVersion, Is.EqualTo(new Version(1, 1, 0)));
         }
 
         [Test]
@@ -157,7 +184,7 @@ namespace CDP4Dal.Tests.DAL
             var commonFileStore = new CDP4Common.EngineeringModelData.CommonFileStore(Guid.NewGuid(), null, null);
             engineeringModel.Iteration.Add(iteration);
             engineeringModel.CommonFileStore.Add(commonFileStore);
-            
+
             var context = TransactionContextResolver.ResolveContext(commonFileStore);
             var transaction = new ThingTransaction(context);
 
@@ -165,13 +192,13 @@ namespace CDP4Dal.Tests.DAL
 
             var file = new CDP4Common.EngineeringModelData.File(Guid.NewGuid(), null, null);
             var fileRevision = new CDP4Common.EngineeringModelData.FileRevision(Guid.NewGuid(), null, null);
-            
+
             transaction.Create(file, commonFileStoreClone);
             transaction.Create(fileRevision, file);
 
             var operationContainer = transaction.FinalizeTransaction();
 
-            var files = new List<string> {this.filePath};
+            var files = new List<string> { this.filePath };
 
             var testDal = new TestDal(this.credentials);
             Assert.Throws<InvalidOperationContainerException>(() => testDal.TestOperationContainerFileVerification(operationContainer, files));
@@ -196,7 +223,7 @@ namespace CDP4Dal.Tests.DAL
             var commonFileStore = new CDP4Common.EngineeringModelData.CommonFileStore(Guid.NewGuid(), null, null);
             engineeringModel.Iteration.Add(iteration);
             engineeringModel.CommonFileStore.Add(commonFileStore);
-            
+
             var context = TransactionContextResolver.ResolveContext(commonFileStore);
             var transaction = new ThingTransaction(context);
 
@@ -205,13 +232,13 @@ namespace CDP4Dal.Tests.DAL
             var file = new CDP4Common.EngineeringModelData.File(Guid.NewGuid(), null, null);
             var fileRevision = new CDP4Common.EngineeringModelData.FileRevision(Guid.NewGuid(), null, null);
             fileRevision.ContentHash = "1B686ADFA2CAE870A96E5885087337C032781BE6";
-            
+
             transaction.Create(file, commonFileStoreClone);
             transaction.Create(fileRevision, file);
 
             var operationContainer = transaction.FinalizeTransaction();
 
-            var files = new List<string> {this.filePath};
+            var files = new List<string> { this.filePath };
 
             var testDal = new TestDal(this.credentials);
 
@@ -223,7 +250,7 @@ namespace CDP4Dal.Tests.DAL
     internal class TestDal : Dal
     {
         public override bool IsReadOnly { get { return false; } }
-        
+
         public TestDal(Credentials credentials)
             : base()
         {
@@ -260,6 +287,11 @@ namespace CDP4Dal.Tests.DAL
             throw new System.NotImplementedException();
         }
 
+        public override Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<Thing> Create<T>(T thing)
         {
             throw new System.NotImplementedException();
@@ -284,14 +316,15 @@ namespace CDP4Dal.Tests.DAL
         {
             throw new System.NotImplementedException();
         }
-        
+
         public override bool IsValidUri(string uri)
         {
             throw new System.NotImplementedException();
         }
+
     }
 
-    [DalExport("decorateddal","a decorated dal","1.1.0",DalType.Web)]
+    [DalExportAttribute("decorateddal", "a decorated dal", "1.1.0", DalType.Web)]
     internal class DecoratedDal : Dal
     {
         public override bool IsReadOnly { get; }
@@ -311,6 +344,11 @@ namespace CDP4Dal.Tests.DAL
         }
 
         public override Task<IEnumerable<Thing>> Read(Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

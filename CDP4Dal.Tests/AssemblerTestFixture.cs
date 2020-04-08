@@ -674,5 +674,94 @@ namespace CDP4Dal.Tests
             Assert.AreEqual(2, orderedItemList.ToList()[1].K);
             Assert.AreEqual(simpleQuantityKind2.Iid, orderedItemList.ToList()[1].V);
         }
+
+        [Test]
+        public async Task AssertThatIterationIdsForCommonFileStoreRelatedDtosIsNull()
+        {
+            var assembler = new Assembler(this.uri);
+            var iterationIid = Guid.NewGuid();
+            var commonFileStore = new Dto.CommonFileStore(Guid.NewGuid(), 1);
+            var folder = new Dto.Folder(Guid.NewGuid(), 1) { IterationContainerId = iterationIid };
+            var file = new Dto.File(Guid.NewGuid(), 1) { IterationContainerId = iterationIid };
+            var fileRevision = new Dto.FileRevision(Guid.NewGuid(), 1) { IterationContainerId = iterationIid, ContainingFolder = folder.Iid };
+
+            file.FileRevision.Add(fileRevision.Iid);
+            commonFileStore.File.Add(file.Iid);
+            commonFileStore.Folder.Add(folder.Iid);
+
+            var initialList = new List<Dto.Thing> { commonFileStore, folder, file, fileRevision };
+
+            // 1st call of Synchronize, uses incoming DTO's
+            await assembler.Synchronize(initialList);
+
+            Assert.IsNotEmpty(assembler.Cache);
+            Assert.AreEqual(4, assembler.Cache.Count);
+
+            Assert.IsNull(folder.IterationContainerId);
+            Assert.IsNull(file.IterationContainerId);
+            Assert.IsNull(fileRevision.IterationContainerId);
+
+            //Newly added FileRevision
+            var addedFileRevision = new Dto.FileRevision(Guid.NewGuid(), 2) { IterationContainerId = iterationIid, ContainingFolder = folder.Iid };
+            file.FileRevision.Add(addedFileRevision.Iid);
+            file.RevisionNumber = 2;
+            file.IterationContainerId = iterationIid;
+
+            var addFileRevisionList = new List<Dto.Thing> { file, addedFileRevision};
+
+            // 2nd call of Synchronize, uses Cache and incoming DTO's
+            await assembler.Synchronize(addFileRevisionList);
+
+            Assert.IsNotEmpty(assembler.Cache);
+            Assert.AreEqual(5, assembler.Cache.Count);
+
+            Assert.IsNull(file.IterationContainerId);
+            Assert.IsNull(addedFileRevision.IterationContainerId);
+        }
+
+        [Test]
+        public async Task AssertThatIterationIdsForDomainFileStoreRelatedDtosStayFilled()
+        {
+            var assembler = new Assembler(this.uri);
+            var iterationIid = Guid.NewGuid();
+            var domainFileStore = new Dto.DomainFileStore(Guid.NewGuid(), 1);
+            var folder = new Dto.Folder(Guid.NewGuid(), 1) { IterationContainerId = iterationIid };
+            var file = new Dto.File(Guid.NewGuid(), 1) { IterationContainerId = iterationIid };
+            var fileRevision = new Dto.FileRevision(Guid.NewGuid(), 1) { IterationContainerId = iterationIid, ContainingFolder = folder.Iid };
+
+            file.FileRevision.Add(fileRevision.Iid);
+            domainFileStore.File.Add(file.Iid);
+            domainFileStore.Folder.Add(folder.Iid);
+
+            var initialList = new List<Dto.Thing> { domainFileStore, folder, file, fileRevision };
+
+            // 1st call of Synchronize, uses incoming DTO's
+            await assembler.Synchronize(initialList);
+
+            Assert.IsNotEmpty(assembler.Cache);
+            Assert.AreEqual(4, assembler.Cache.Count);
+
+            Assert.AreEqual(iterationIid, folder.IterationContainerId);
+            Assert.AreEqual(iterationIid,file.IterationContainerId);
+            Assert.AreEqual(iterationIid,fileRevision.IterationContainerId);
+
+            //Newly added FileRevision
+            var addedFileRevision = new Dto.FileRevision(Guid.NewGuid(), 2) { IterationContainerId = iterationIid, ContainingFolder = folder.Iid };
+            file.FileRevision.Add(addedFileRevision.Iid);
+            file.RevisionNumber = 2;
+            file.IterationContainerId = iterationIid;
+
+            var addFileRevisionList = new List<Dto.Thing> { file, addedFileRevision };
+
+            // 2nd call of Synchronize, uses Cache and incoming DTO's
+            await assembler.Synchronize(addFileRevisionList);
+
+            Assert.IsNotEmpty(assembler.Cache);
+            Assert.AreEqual(5, assembler.Cache.Count);
+
+            Assert.AreEqual(iterationIid, file.IterationContainerId);
+            Assert.AreEqual(iterationIid, addedFileRevision.IterationContainerId);
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 // <copyright file="Dal.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -155,6 +155,16 @@ namespace CDP4Dal.DAL
         public abstract Task<IEnumerable<Thing>> Read(Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null);
 
         /// <summary>
+        /// Reads a physical file from a DataStore
+        /// </summary>
+        /// <param name="localFile">Download a localfile</param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>
+        /// </param>
+        /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
+        public abstract Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken) ;
+
+        /// <summary>
         /// Creates the specified <see cref="Thing"/> on a data source
         /// </summary>
         /// <param name="thing">
@@ -275,6 +285,14 @@ namespace CDP4Dal.DAL
             foreach (var thing in dtos.Where(x => !engineeringModelContainmentClassKind.Contains(x.ClassKind)))
             {
                 // all the returned thing are iteration contained
+                thing.IterationContainerId = iterationId;
+            }
+
+            var partitionDependantContainmentClassKind = PartitionDependentContainmentClassType.ClassKindArray;
+
+            foreach (var thing in dtos.Where(x => x.IterationContainerId == null && partitionDependantContainmentClassKind.Contains(x.ClassKind)))
+            {
+                // set as iteration dependent and check at a later stage if this is correct.
                 thing.IterationContainerId = iterationId;
             }
         }
