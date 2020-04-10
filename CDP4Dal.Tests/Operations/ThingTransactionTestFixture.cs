@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTransactionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -26,13 +26,22 @@ namespace CDP4Dal.Tests
 {
     using System;
     using System.Collections.Concurrent;
+    using System.IO;
     using System.Linq;
+    using System.Text;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;    
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+    
     using CDP4Dal.Operations;
+
     using NUnit.Framework;
+
+    /// <summary>
+    /// Test suite of the <see cref="ThingTransaction"/> class
+    /// </summary>
 
     [TestFixture]
     public class ThingTransactionTestFixture
@@ -61,6 +70,23 @@ namespace CDP4Dal.Tests
             this.cache.TryAdd(new CacheKey(this.siteDirectory.Iid, null), new Lazy<Thing>(() => this.siteDirectory));
             this.cache.TryAdd(new CacheKey(this.engineeringModel.Iid, null), new Lazy<Thing>(() => this.engineeringModel));
             this.cache.TryAdd(new CacheKey(this.iteration.Iid, null), new Lazy<Thing>(() => this.iteration));
+        }
+
+        [Test]
+        public void VerifyThatFilePathsAreReturned()
+        {
+            var filePath = "myPath\\file.txt";
+            var byteArray = Encoding.ASCII.GetBytes("FileContents");
+            var stream = new MemoryStream(byteArray);
+            var contentHash = StreamToHashComputer.CalculateSha1HashFromStream(stream);
+            var fileRevision1 = new FileRevision(Guid.NewGuid(), this.cache, this.uri) { ContentHash = contentHash, LocalPath = filePath };
+            var fileRevision2 = new FileRevision(Guid.NewGuid(), this.cache, this.uri) { ContentHash = contentHash, LocalPath = filePath };
+
+            var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
+            var transaction = new ThingTransaction(transactionContext, fileRevision1);
+            transaction.CreateOrUpdate(fileRevision2);
+
+            CollectionAssert.AreEqual(transaction.GetFiles(), new [] { filePath });
         }
 
         [Test]

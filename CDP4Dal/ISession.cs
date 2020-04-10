@@ -28,6 +28,7 @@ namespace CDP4Dal
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
@@ -222,6 +223,25 @@ namespace CDP4Dal
         /// an await-able <see cref="Task"/>
         /// </returns>
         Task Read(IEnumerable<Thing> things, IQueryAttributes queryAttributes);
+
+        /// <summary>
+        /// Reads a physical file from a DataStore
+        /// </summary>
+        /// <param name="localFile">Download a localfile</param>
+        /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
+        Task<byte[]> ReadFile<T>(T localFile) where T : Thing, ILocalFile;
+
+        /// <summary>
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="files">List of file paths for files to be send to the datastore</param>
+        /// <returns>
+        /// an await-able <see cref="Task"/>
+        /// </returns>
+        Task Write(OperationContainer operationContainer, IEnumerable<string> files);
 
         /// <summary>
         /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.

@@ -137,6 +137,8 @@ namespace CDP4Dal
                             x => new Tuple<CacheKey, int>(x.Value.Value.CacheKey, x.Value.Value.RevisionNumber))
                         .ToList();
 
+                this.CheckPartitionDependentContainmentContainerIds(dtoThings);
+
                 this.UpdateThingRevisions(dtoThings, out var uncachedOrUpdatedOrNewerThingRevisions);
 
                 this.thingsMarkedForDeletion = new List<Thing>();
@@ -297,7 +299,7 @@ namespace CDP4Dal
                 logger.Trace("Assembler thread released");
             }
         }
-
+        
         /// <summary>
         /// For each DTO that is coming from the data-source, create a clone of the associated cached POCO
         /// and store this clone in the <see cref="Thing.Revisions"/> dictionary if it is a newer revision.
@@ -799,6 +801,117 @@ namespace CDP4Dal
 
                 this.thingsMarkedForDeletion.Clear();
             }
+        }
+
+        /// <summary>
+        /// Checks <see cref="Dto.IterationContainerId"/> property for ClassKinds mentioned in <see cref="PartitionDependentContainmentClassType"/>.
+        /// </summary>
+        /// <param name="dtoThings">
+        /// the DTO's coming from the data-source
+        /// </param>
+        /// <remarks>
+        /// This is part of a temporary solution of dealing with <see cref="Folder"/>, <see cref="File"/> and <see cref="FileRevision"/> <see cref="Dto"/>s.
+        /// </remarks>
+        private void CheckPartitionDependentContainmentContainerIds(IEnumerable<Dto> dtoThings)
+        {
+            var dtoList = dtoThings.ToList();
+            var checkDtos = dtoList.Where(x => PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray.Contains(x.ClassKind));
+
+            foreach (var dto in checkDtos)
+            {
+                if (dto.IterationContainerId != null)
+                {
+                    switch (dto.ClassKind)
+                    {
+                        case ClassKind.Folder:
+                            this.CheckIterationContainerIdForCommonFileStoreRelatedDto(dto, dtoList);
+                            break;
+                        case ClassKind.File:
+                            this.CheckIterationContainerIdForCommonFileStoreRelatedDto(dto, dtoList);
+                            break;
+                        case ClassKind.FileRevision:
+                            this.CheckIterationContainerIdForCommonFileStoreRelatedDto(dto, dtoList);
+                            break;
+                        default:
+                            throw new ArgumentException($"Unsupported PartitionDependentContainmentClassType found: {dto.ClassKind}");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks if a <see cref="Dto"/> exists within a CommonFileStore.
+        /// It uses data from <see cref="Dto"/>s coming from the data-source, or from the Cache.
+        /// </summary>
+        /// <param name="dto">The <see cref="CommonFileStore"/> related <see cref="Dto"/></param>
+        /// <param name="dtoThings">List of all <see cref="Dto"/>s coming from the data-source</param>
+        /// <remarks>
+        /// This is part of a temporary solution of dealing with <see cref="Folder"/>, <see cref="File"/> and <see cref="FileRevision"/> <see cref="Dto"/>s.
+        /// </remarks>
+        private void CheckIterationContainerIdForCommonFileStoreRelatedDto(Dto dto, IReadOnlyList<Dto> dtoThings)
+        {
+            if (dto.IterationContainerId == null)
+            {
+                return;
+            }
+
+            var findDtoIid = dto.Iid;
+
+            if (dto is CDP4Common.DTO.FileRevision revision)
+            {
+                if (!this.TryGetFileIid(revision, dtoThings, out findDtoIid))
+                {
+                    return;
+                }
+            }
+
+            if (dtoThings.Where(x => x.ClassKind == ClassKind.CommonFileStore)
+                .Cast<CDP4Common.DTO.CommonFileStore>()
+                .Any(x => x.Folder.Any(y => y == findDtoIid) || x.File.Any(y => y == findDtoIid)))
+            {
+                dto.IterationContainerId = null;
+            }
+            else if (this.Cache.Values.Where(x => x.Value.ClassKind == ClassKind.CommonFileStore)
+                .Select(x => x.Value)
+                .Cast<CommonFileStore>()
+                .Any(x => x.Folder.Any(y => y.Iid == findDtoIid) || x.File.Any(y => y.Iid == findDtoIid)))
+            {
+                dto.IterationContainerId = null;
+            }
+        }
+
+        /// <summary>
+        /// Finds the <see cref="CDP4Common.DTO.File"/>'s Iid property from <see cref="Dto"/>s coming from the data-source, or from the Cache
+        /// </summary>
+        /// <param name="fileRevision">The <see cref="FileRevision"/></param>
+        /// <param name="dtoThings">List of all &lt;see cref="Dto"/&gt;s coming from the data-source</param>
+        /// <param name="guid">If found, this contains the <see cref="CDP4Common.DTO.File"/>'s Iid</param>
+        /// <returns>True if found, otherwise false.</returns>
+        /// <remarks>
+        /// This is part of a temporary solution of dealing with <see cref="Folder"/>, <see cref="File"/> and <see cref="FileRevision"/> <see cref="Dto"/>s.
+        /// </remarks>
+        private bool TryGetFileIid(CDP4Common.DTO.FileRevision fileRevision, IReadOnlyList<Dto> dtoThings, out Guid guid)
+        {
+            guid = Guid.Empty;
+
+            if (dtoThings.Where(x => x.ClassKind == ClassKind.File)
+                    .Cast<CDP4Common.DTO.File>()
+                    .SingleOrDefault(x => x.FileRevision.Any(y => y == fileRevision.Iid)) is CDP4Common.DTO.File file)
+            {
+                guid = file.Iid;
+                return true;
+            }
+
+            if (this.Cache.Values.Where(x => x.Value.ClassKind == ClassKind.File)
+                .Select(x => x.Value)
+                .Cast<File>()
+                .SingleOrDefault(x => x.FileRevision.Any(y => y.Iid == fileRevision.Iid)) is File cachedFile)
+            {
+                guid = cachedFile.Iid;
+                return true;
+            }
+
+            return false;
         }
     }
 }

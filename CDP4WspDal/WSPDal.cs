@@ -36,18 +36,21 @@ namespace CDP4WspDal
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Security.Cryptography;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.DTO;
+
     using CDP4Dal;
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
+    
     using CDP4JsonSerializer;
+    
     using NLog;
 
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
@@ -276,6 +279,19 @@ namespace CDP4WspDal
             var engineeringModelData = await this.Read((Thing)iteration, cancellationToken);
             result.AddRange(engineeringModelData);
             return result;
+        }
+
+        /// <summary>
+        /// Reads a physical file from a DataStore
+        /// </summary>
+        /// <param name="thing">Download a localfile</param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>
+        /// </param>
+        /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
+        public override Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("The ReadFile operation is not supported by the file datasource.");
         }
 
         /// <summary>

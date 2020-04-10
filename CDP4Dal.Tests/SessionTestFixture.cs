@@ -683,6 +683,11 @@ namespace CDP4Dal.Tests
             throw new NotImplementedException();
         }
 
+        public Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Creates the specified <see cref="Thing"/> on the data-source
         /// </summary>

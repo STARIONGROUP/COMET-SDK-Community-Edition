@@ -2,7 +2,7 @@
 // <copyright file="OperationContainer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -82,7 +82,12 @@ namespace CDP4Dal.Operations
         /// This is either in the context of a <see cref="SiteDirectory"/> or an <see cref="Iteration"/>
         /// </summary>
         public string Context { get; private set; }
-        
+
+        /// <summary>
+        /// Gets or sets the to be uploaded files that are associated with this OperationCOntainer
+        /// </summary>
+        public IEnumerable<(string contentHash, byte[] fileContent)> Files { get; private set; } = new List<(string contentHash, byte[] fileContent)>();
+
         /// <summary>
         /// Gets the list of <see cref="Operation"/>s.
         /// </summary>

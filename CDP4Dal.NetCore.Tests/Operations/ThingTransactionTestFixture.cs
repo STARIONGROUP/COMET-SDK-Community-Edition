@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTransactionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -26,14 +26,22 @@ namespace CDP4Dal.Tests
 {
     using System;
     using System.Collections.Concurrent;
+    using System.IO;
     using System.Linq;
+    using System.Text;
+
     using CDP4Common.CommonData;
-    using CDP4Common.EngineeringModelData;    
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+    
     using CDP4Dal.Operations;
+    
     using NUnit.Framework;
 
+    /// <summary>
+    /// Test suite of the <see cref="ThingTransaction"/> class
+    /// </summary>
     [TestFixture]
     public class ThingTransactionTestFixture
     {
@@ -42,14 +50,12 @@ namespace CDP4Dal.Tests
         private Iteration iteration;
 
         private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache;
-        
         private Uri uri = new Uri("http://www.rheagroup.com");
-        
 
         [SetUp]
         public void Setup()
         {
-            this.cache = new ConcurrentDictionary<CacheKey, Lazy<CDP4Common.CommonData.Thing>>();
+            this.cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
             this.siteDirectory = new SiteDirectory(Guid.NewGuid(), this.cache, this.uri);
             this.engineeringModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
 
@@ -59,10 +65,27 @@ namespace CDP4Dal.Tests
             iterationSetup.IterationIid = this.iteration.Iid;
 
             this.engineeringModel.Iteration.Add(this.iteration);
-            
+
             this.cache.TryAdd(new CacheKey(this.siteDirectory.Iid, null), new Lazy<Thing>(() => this.siteDirectory));
             this.cache.TryAdd(new CacheKey(this.engineeringModel.Iid, null), new Lazy<Thing>(() => this.engineeringModel));
             this.cache.TryAdd(new CacheKey(this.iteration.Iid, null), new Lazy<Thing>(() => this.iteration));
+        }
+
+        [Test]
+        public void VerifyThatFilePathsAreReturned()
+        {
+            var filePath = "myPath\\file.txt";
+            var byteArray = Encoding.ASCII.GetBytes("FileContents");
+            var stream = new MemoryStream(byteArray);
+            var contentHash = StreamToHashComputer.CalculateSha1HashFromStream(stream);
+            var fileRevision1 = new FileRevision(Guid.NewGuid(), this.cache, this.uri) { ContentHash = contentHash, LocalPath = filePath };
+            var fileRevision2 = new FileRevision(Guid.NewGuid(), this.cache, this.uri) { ContentHash = contentHash, LocalPath = filePath };
+
+            var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
+            var transaction = new ThingTransaction(transactionContext, fileRevision1);
+            transaction.CreateOrUpdate(fileRevision2);
+
+            CollectionAssert.AreEqual(transaction.GetFiles(), new[] { filePath });
         }
 
         [Test]
@@ -72,7 +95,7 @@ namespace CDP4Dal.Tests
 
             var person = new Person(Guid.NewGuid(), this.cache, this.uri) { Container = this.siteDirectory };
             var transaction = new ThingTransaction(transactionContext, person);
-            
+
             var duplicateSiteDirectory = new SiteDirectory(this.siteDirectory.Iid, this.cache, this.uri);
             var anotherPerson = new Person(Guid.NewGuid(), this.cache, this.uri) { Container = duplicateSiteDirectory };
             transaction.CreateOrUpdate(anotherPerson);
@@ -86,7 +109,7 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatCreateThingWorks()
         {
-            var person = new Person(Guid.NewGuid(), this.cache, this.uri) {Container = this.siteDirectory};
+            var person = new Person(Guid.NewGuid(), this.cache, this.uri) { Container = this.siteDirectory };
             this.cache.TryAdd(new CacheKey(person.Iid, null), new Lazy<Thing>(() => person));
 
             var clonePerson = person.Clone(false);
@@ -129,7 +152,7 @@ namespace CDP4Dal.Tests
             var newModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
 
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
-            
+
             Assert.Throws<InvalidOperationException>(() => new ThingTransaction(transactionContext, newModel));
         }
 
@@ -139,7 +162,7 @@ namespace CDP4Dal.Tests
             var newSiteDirectory = new SiteDirectory(Guid.NewGuid(), this.cache, this.uri);
 
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
-            
+
             Assert.Throws<InvalidOperationException>(() => new ThingTransaction(transactionContext, newSiteDirectory));
         }
 
@@ -166,9 +189,9 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatUpdateThingWorks()
         {
-            var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);    
+            var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);
             this.cache.TryAdd(new CacheKey(phone.Iid, null), new Lazy<Thing>(() => phone));
-            
+
             var clone = phone.Clone(false);
 
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
@@ -183,7 +206,7 @@ namespace CDP4Dal.Tests
         {
             var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);
             this.cache.TryAdd(new CacheKey(phone.Iid, null), new Lazy<Thing>(() => phone));
-            
+
             var clone1 = phone.Clone(false);
             var clone2 = phone.Clone(false);
 
@@ -204,7 +227,7 @@ namespace CDP4Dal.Tests
             var email = new EmailAddress(Guid.NewGuid(), this.cache, this.uri);
             this.siteDirectory.Person.Add(person);
             person.EmailAddress.Add(email);
-            
+
             this.cache.TryAdd(new CacheKey(person.Iid, null), new Lazy<Thing>(() => person));
             this.cache.TryAdd(new CacheKey(email.Iid, null), new Lazy<Thing>(() => email));
 
@@ -222,7 +245,7 @@ namespace CDP4Dal.Tests
 
             var iterationClone = this.iteration.Clone(false);
             var option1 = new Option(Guid.NewGuid(), this.cache, this.uri);
-            
+
             var transactionContext = TransactionContextResolver.ResolveContext(this.iteration);
             var transaction = new ThingTransaction(transactionContext, iterationClone);
             transaction.CreateOrUpdate(iterationClone);
@@ -245,7 +268,7 @@ namespace CDP4Dal.Tests
             Assert.AreEqual(0, this.iteration.Option.Count);
             Assert.AreEqual(2, clone.Option.Count);
         }
-        
+
         /// <summary>
         /// Create a containment tree under site directory and update 
         /// </summary>
@@ -410,7 +433,7 @@ namespace CDP4Dal.Tests
 
             var unitFactor1 = new UnitFactor(Guid.NewGuid(), this.cache, this.uri);
             unit1.UnitFactor.Add(unitFactor1);
-            
+
             this.cache.TryAdd(new CacheKey(siterdl.Iid, null), new Lazy<Thing>(() => siterdl));
             this.cache.TryAdd(new CacheKey(unit1.Iid, null), new Lazy<Thing>(() => unit1));
             this.cache.TryAdd(new CacheKey(unitFactor1.Iid, null), new Lazy<Thing>(() => unitFactor1));
@@ -552,7 +575,7 @@ namespace CDP4Dal.Tests
             enumValue.Definition.Add(enumValueDef);
 
             enumPt.ValueDefinition.Add(enumValue);
-            
+
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
             var transaction = new ThingTransaction(transactionContext);
             transaction.CreateDeep(enumPt);
@@ -666,7 +689,7 @@ namespace CDP4Dal.Tests
             var email = new EmailAddress(Guid.NewGuid(), this.cache, this.uri);
             this.siteDirectory.Person.Add(person);
             person.EmailAddress.Add(email);
-            
+
             this.cache.TryAdd(new CacheKey(person.Iid, null), new Lazy<Thing>(() => person));
             this.cache.TryAdd(new CacheKey(email.Iid, null), new Lazy<Thing>(() => email));
 
@@ -827,8 +850,8 @@ namespace CDP4Dal.Tests
 
             var elementDefinitionClone = elementDefinition.Clone(false);
             var targetIterationClone = targetIteration.Clone(false);
-            
-            var transactionContext = TransactionContextResolver.ResolveContext(targetIteration);            
+
+            var transactionContext = TransactionContextResolver.ResolveContext(targetIteration);
             var transaction = new ThingTransaction(transactionContext);
             transaction.Copy(elementDefinitionClone, targetIterationClone, OperationKind.CopyDefaultValuesChangeOwner);
 
@@ -861,7 +884,7 @@ namespace CDP4Dal.Tests
 
             var elementDefinitionClone = elementDefinition.Clone(false);
             var targetIterationClone = targetIteration.Clone(false);
-            
+
             var transactionContext = TransactionContextResolver.ResolveContext(targetIteration);
             var transaction = new ThingTransaction(transactionContext);
             transaction.Copy(elementDefinitionClone, targetIterationClone, OperationKind.CopyKeepValuesChangeOwner);
@@ -940,7 +963,6 @@ namespace CDP4Dal.Tests
             var operationContainer = transaction.FinalizeTransaction();
             Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.CopyKeepValues));
             Assert.AreEqual(0, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
-            Assert.IsTrue(operationContainer.Context.Contains(typeof(Iteration).Name.ToLower()));
         }
 
         [Test]
@@ -970,7 +992,7 @@ namespace CDP4Dal.Tests
             Assert.Throws<ArgumentException>(() => transaction.Copy(elementDefinitionClone, targetIterationClone, OperationKind.Create));
         }
 
-        [Test]        
+        [Test]
         public void VerifyThatCopyThrowsExcpetionCloneThatIsToBeCopiedIsNull()
         {
             var sourceModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
@@ -995,7 +1017,7 @@ namespace CDP4Dal.Tests
             Assert.Throws<ArgumentNullException>(() => transaction.Copy(null, OperationKind.Copy));
         }
 
-        [Test]        
+        [Test]
         public void VerifyThatCopyThrowsExceptionWhenDestinationIsNull()
         {
             var sourceModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
@@ -1026,9 +1048,9 @@ namespace CDP4Dal.Tests
         {
             var model = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
             var iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
-            
+
             model.Iteration.Add(iteration);
-            
+
             var transactionContext = TransactionContextResolver.ResolveContext(iteration);
             var transaction = new ThingTransaction(transactionContext);
 
@@ -1042,9 +1064,9 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatArgumentNullExceptionIsThrownWhenContextIsNull()
         {
-             Assert.Throws<ArgumentNullException>(() => new ThingTransaction(null));
+            Assert.Throws<ArgumentNullException>(() => new ThingTransaction(null));
         }
-        
+
         [Test]
         public void VerifyThatArgumentNullExceptionIsThrownWhenCloneIsNull()
         {
@@ -1060,7 +1082,7 @@ namespace CDP4Dal.Tests
             var iterationClone = iteration.Clone(false);
             var elementDefinitionClone = elementDefinition.Clone(false);
 
-            Assert.Throws<ArgumentNullException>(() => new ThingTransaction(null, null, iterationClone));            
+            Assert.Throws<ArgumentNullException>(() => new ThingTransaction(null, null, iterationClone));
         }
     }
 }

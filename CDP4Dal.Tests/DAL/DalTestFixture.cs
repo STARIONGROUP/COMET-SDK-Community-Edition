@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -29,12 +29,16 @@ namespace CDP4Dal.Tests.DAL
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common;
     using CDP4Common.DTO;
+    using CDP4Common.Helpers;
+
     using CDP4Dal.Composition;
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -99,6 +103,29 @@ namespace CDP4Dal.Tests.DAL
             Assert.IsNull(iteration.IterationContainerId);
             Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", elementDefinition.IterationContainerId.Value.ToString());
             Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", parameter.IterationContainerId.Value.ToString());
+        }
+
+        [Test]
+        public void Verify_That_SetIterationId_Works_For_All_PartitionDependentContainmentClassType()
+        {
+            var dal = new TestDal(this.credentials);
+            var uri = new Uri(@"http://localhost.com/EngineeringModel/694508eb-2730-488c-9405-6ca561df68dd/iteration/44647ff6-ffe3-44ff-9ed9-3256e2a97f9d?extent=deep&includeReferenceData=true&includeAllContainers=true");
+
+            var folder = new Folder();
+            var file = new CDP4Common.DTO.File();
+            var fileRevision = new FileRevision();
+            var list = new Thing[] { folder, file, fileRevision };
+
+            Assert.AreEqual(3, PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray.Length, "a ClassKind was added to or removed from PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray. Please make sure that this unit test, so that it tests all individual ClassKinds.");
+
+            if (dal.TryExtractIterationIdfromUri(uri, out var iterationId))
+            {
+                dal.SetIterationContainer(list, iterationId);
+            }
+
+            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", folder.IterationContainerId.Value.ToString());
+            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", file.IterationContainerId.Value.ToString());
+            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", fileRevision.IterationContainerId.Value.ToString());
         }
 
         [Test]
@@ -260,6 +287,11 @@ namespace CDP4Dal.Tests.DAL
             throw new System.NotImplementedException();
         }
 
+        public override Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<Thing> Create<T>(T thing)
         {
             throw new System.NotImplementedException();
@@ -312,6 +344,11 @@ namespace CDP4Dal.Tests.DAL
         }
 
         public override Task<IEnumerable<Thing>> Read(Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

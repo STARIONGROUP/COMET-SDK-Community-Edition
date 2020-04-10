@@ -27,11 +27,13 @@ namespace CDP4Dal
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Threading.Tasks;
 
+    using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
@@ -540,6 +542,39 @@ namespace CDP4Dal
         }
 
         /// <summary>
+        /// Reads a physical file from a DataStore
+        /// </summary>
+        /// <param name="localFile">Download a localfile</param>
+        /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
+        public async Task<byte[]> ReadFile<T>(T localFile) where T : Thing, ILocalFile
+        {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException($"The {localFile.ClassKind} cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
+            }
+
+            logger.Info("Session.ReadFile {0} {1}", localFile.ClassKind, localFile.Iid);
+            var dto = localFile.ToDto();
+
+            // Create the token source
+            this.cancellationTokenSource = new CancellationTokenSource();
+            byte[] fileContent;
+
+            try
+            {
+                fileContent = await this.Dal.ReadFile(dto, this.cancellationTokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                logger.Info("Session.ReadFile {0} {1} cancelled", localFile.ClassKind, localFile.Iid);
+                this.cancellationTokenSource = null;
+                return null;
+            }
+
+            return fileContent;
+        }
+
+        /// <summary>
         /// Default actions to perform after a read or write action
         /// </summary>
         /// <param name="things"> A list of <see cref="CDP4Common.DTO.Thing"/>s to perform AfterReadOrWriteOrUpdate actions to</param>
@@ -569,22 +604,48 @@ namespace CDP4Dal
         /// <param name="operationContainer">
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
+        /// <param name="files">List of file paths for files to be sent to the datastore</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
-        public async Task Write(OperationContainer operationContainer)
+        public async Task Write(OperationContainer operationContainer, IEnumerable<string> files)
         {
             if (this.ActivePerson == null)
             {
                 throw new InvalidOperationException($"The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
             }
 
+            if (files?.Any() ?? false)
+            {
+                foreach (var file in files)
+                {
+                    if (!System.IO.File.Exists(file))
+                    {
+                        throw new FileNotFoundException($"File {file} was not found.");
+                    }
+                }
+            }
+
             this.Dal.Session = this;
-            var dtoThings = await this.Dal.Write(operationContainer);
+            var dtoThings = await this.Dal.Write(operationContainer, files);
 
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
 
             await this.AfterReadOrWriteOrUpdate(enumerable);
+        }
+
+        /// <summary>
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <returns>
+        /// an await-able <see cref="Task"/>
+        /// </returns>
+        public async Task Write(OperationContainer operationContainer)
+        {
+            await this.Write(operationContainer, null);
         }
 
         /// <summary>

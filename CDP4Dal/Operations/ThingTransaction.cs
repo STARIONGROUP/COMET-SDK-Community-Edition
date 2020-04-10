@@ -613,7 +613,28 @@ namespace CDP4Dal.Operations
 
             return operationContainer;
         }
-        
+
+        /// <summary>
+        /// Get all the files that need to be added to the DataStore accoring to the added/changed/deleted <see cref="Thing"/>s
+        /// </summary>
+        /// <returns>An Array of strings that contain the local paths in the context of the users' computer</returns>
+        public string[] GetFiles()
+        {
+            var files = new List<string>();
+
+            foreach (var thing in this.AddedThing.OfType<ILocalFile>().Union(this.UpdatedThing.OfType<ILocalFile>()).Where(x => x.LocalPath != null))
+            {
+                if (string.IsNullOrWhiteSpace(thing.ContentHash))
+                {
+                    throw new InvalidOperationException($"File {thing.LocalPath} cannot be saved because of an empty ContentHash" );
+                }
+
+                files.Add(thing.LocalPath);
+            }
+
+            return files.Any() ? files.Distinct().ToArray() : null;
+        }
+
         /// <summary>
         /// Get the last version of a specified <see cref="Thing"/> registered in the current chain of operations which <paramref name="clone"/> is an update of.
         /// </summary>

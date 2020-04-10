@@ -29,16 +29,19 @@ namespace CDP4Dal.NetCore.Tests
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
-    using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    using CDP4Dal.Composition;
+
+    using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
+
     using Moq;
+    
     using NUnit.Framework;
     
     using DomainOfExpertise = CDP4Common.SiteDirectoryData.DomainOfExpertise;
@@ -98,9 +101,9 @@ namespace CDP4Dal.NetCore.Tests
 
             this.mockedDal = new Mock<IDal>();
             this.mockedDal.SetupProperty(d => d.Session);
-            
+
             this.session = new Session(this.mockedDal.Object, credentials);
-            
+
             var openTaskCompletionSource = new TaskCompletionSource<IEnumerable<Thing>>();
             openTaskCompletionSource.SetResult(this.dalOutputs);
             this.mockedDal.Setup(x => x.Open(It.IsAny<Credentials>(), It.IsAny<CancellationToken>())).Returns(openTaskCompletionSource.Task);
@@ -679,6 +682,11 @@ namespace CDP4Dal.NetCore.Tests
         /// All the <see cref="Thing"/>s that have been updated since the last read will be returned.
         /// </returns>
         public Task<IEnumerable<Thing>> Read(Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
