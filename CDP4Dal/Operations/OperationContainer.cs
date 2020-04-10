@@ -88,7 +88,6 @@ namespace CDP4Dal.Operations
         /// </summary>
         public IEnumerable<(string contentHash, byte[] fileContent)> Files { get; private set; } = new List<(string contentHash, byte[] fileContent)>();
 
-
         /// <summary>
         /// Gets the list of <see cref="Operation"/>s.
         /// </summary>

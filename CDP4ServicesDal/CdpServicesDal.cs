@@ -254,26 +254,26 @@ namespace CDP4ServicesDal
         /// <summary>
         /// Reads a physical file from a DataStore
         /// </summary>
-        /// <param name="localFile">Download a localfile</param>
+        /// <param name="thing">The <see cref="Thing"/> that has a </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/>
         /// </param>
         /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
-        public override async Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken) 
+        public override async Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken) 
         { 
             if (this.Credentials == null || this.Credentials.Uri == null)
             {
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
 
-            if (localFile == null)
+            if (thing == null)
             {
-                throw new ArgumentNullException(nameof(localFile), $"The {nameof(localFile)} may not be null");
+                throw new ArgumentNullException(nameof(thing), $"The {nameof(thing)} may not be null");
             }
 
             var watch = Stopwatch.StartNew();
 
-            var thingRoute = this.CleanUriFinalSlash(localFile.Route);
+            var thingRoute = this.CleanUriFinalSlash(thing.Route);
 
             var resourcePath = $"{thingRoute}?includeFileData=true";
 

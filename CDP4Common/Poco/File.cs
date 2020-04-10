@@ -46,7 +46,7 @@ namespace CDP4Common.EngineeringModelData
             {
                 if (this.FileRevision.Any())
                 {
-                    throw new InvalidOperationException($"Setting the {nameof(this.CurrentContainingFolder)} property is not allowed when the {this.FileRevision} proeprty contains data");
+                    throw new InvalidOperationException($"Setting the {nameof(this.CurrentContainingFolder)} property is not allowed when the {this.FileRevision} property contains data");
                 }
 
                 this.currentContainingFolder = value;

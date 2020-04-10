@@ -21,6 +21,9 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
+// <summary>
+//   This is an auto-generated class. Any manual changes to this file will be overwritten!
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Common.Helpers
@@ -29,7 +32,7 @@ namespace CDP4Common.Helpers
     using CDP4Common.DTO;
 
     /// <summary>
-    /// Class representing the Array of <see cref="ClassKind"/>'s that can be contained by <see cref= "EngineeringModel"/> and <see cref= "Iteration" />
+    /// Class representing arrays of <see cref="ClassKind"/>'s that can be contained by through a composite aggregation of more that one (TopContainer) class and its subtree.
     /// </summary>
     public static class PartitionDependentContainmentClassType
     {
@@ -41,7 +44,7 @@ namespace CDP4Common.Helpers
         /// <remarks>
         /// The array does not contain any ClassKinds of abstract classes
         /// </remarks>
-        public static readonly ClassKind[] ClassKindArray = new[] {
+        public static readonly ClassKind[] EngineeringModelAndIterationClassKindArray = new[] {
             ClassKind.File,
             ClassKind.FileRevision,
             ClassKind.Folder,

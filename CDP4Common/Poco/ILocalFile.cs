@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IModelCode.cs" company="RHEA System S.A.">
+// <copyright file="ILocalFile.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
@@ -27,7 +27,7 @@ namespace CDP4Common
     using CDP4Common.EngineeringModelData;
 
     /// <summary>
-    /// A class that implements the <see cref="ILocalFile"/> interface exposes it's LocalPath and ContentHash property.
+    /// An interface for classes containing data that's needed in a file upload scenario.
     /// Typically used for <see cref="FileRevision"/> objects.
     /// </summary>
     public interface ILocalFile

@@ -157,12 +157,14 @@ namespace CDP4Dal.DAL
         /// <summary>
         /// Reads a physical file from a DataStore
         /// </summary>
-        /// <param name="localFile">Download a localfile</param>
+        /// <param name="thing">
+        /// The <see cref="Thing"/> that references a physical file
+        /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/>
         /// </param>
         /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
-        public abstract Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken) ;
+        public abstract Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken) ;
 
         /// <summary>
         /// Creates the specified <see cref="Thing"/> on a data source
@@ -288,7 +290,7 @@ namespace CDP4Dal.DAL
                 thing.IterationContainerId = iterationId;
             }
 
-            var partitionDependantContainmentClassKind = PartitionDependentContainmentClassType.ClassKindArray;
+            var partitionDependantContainmentClassKind = PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray;
 
             foreach (var thing in dtos.Where(x => x.IterationContainerId == null && partitionDependantContainmentClassKind.Contains(x.ClassKind)))
             {

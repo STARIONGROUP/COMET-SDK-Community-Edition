@@ -27,6 +27,7 @@ namespace CDP4Dal
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Threading;
@@ -603,7 +604,7 @@ namespace CDP4Dal
         /// <param name="operationContainer">
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
-        /// <param name="files">List of file paths for files to be send to the datastore</param>
+        /// <param name="files">List of file paths for files to be sent to the datastore</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
@@ -612,6 +613,14 @@ namespace CDP4Dal
             if (this.ActivePerson == null)
             {
                 throw new InvalidOperationException($"The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+            }
+
+            foreach (var file in files)
+            {
+                if (!System.IO.File.Exists(file))
+                {
+                    throw new FileNotFoundException($"File {file} was not found.");
+                }
             }
 
             this.Dal.Session = this;

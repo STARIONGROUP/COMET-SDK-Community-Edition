@@ -29,16 +29,19 @@ namespace CDP4Dal.NetCore.Tests
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
-    using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    using CDP4Dal.Composition;
+
+    using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
+
     using Moq;
+    
     using NUnit.Framework;
     
     using DomainOfExpertise = CDP4Common.SiteDirectoryData.DomainOfExpertise;

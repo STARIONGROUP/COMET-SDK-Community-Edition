@@ -815,7 +815,7 @@ namespace CDP4Dal
         private void CheckPartitionDependentContainmentContainerIds(IEnumerable<Dto> dtoThings)
         {
             var dtoList = dtoThings.ToList();
-            var checkDtos = dtoList.Where(x => PartitionDependentContainmentClassType.ClassKindArray.Contains(x.ClassKind));
+            var checkDtos = dtoList.Where(x => PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray.Contains(x.ClassKind));
 
             foreach (var dto in checkDtos)
             {

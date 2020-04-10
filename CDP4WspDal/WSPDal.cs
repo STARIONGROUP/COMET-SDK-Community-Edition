@@ -284,12 +284,12 @@ namespace CDP4WspDal
         /// <summary>
         /// Reads a physical file from a DataStore
         /// </summary>
-        /// <param name="localFile">Download a localfile</param>
+        /// <param name="thing">Download a localfile</param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/>
         /// </param>
         /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
-        public override Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken)
+        public override Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
         {
             throw new NotSupportedException("The ReadFile operation is not supported by the file datasource.");
         }

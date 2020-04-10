@@ -116,7 +116,7 @@ namespace CDP4Dal.Tests.DAL
             var fileRevision = new FileRevision();
             var list = new Thing[] { folder, file, fileRevision };
 
-            Assert.AreEqual(3, PartitionDependentContainmentClassType.ClassKindArray.Length, "a ClassKind was added to or removed from PartitionDependentContainmentClassType.ClassKindArray. Please make sure that this unit test, so that it tests all individual ClassKinds.");
+            Assert.AreEqual(3, PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray.Length, "a ClassKind was added to or removed from PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray. Please make sure that this unit test, so that it tests all individual ClassKinds.");
 
             if (dal.TryExtractIterationIdfromUri(uri, out var iterationId))
             {

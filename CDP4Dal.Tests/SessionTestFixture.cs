@@ -683,7 +683,7 @@ namespace CDP4Dal.Tests
             throw new NotImplementedException();
         }
 
-        public Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken)
+        public Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
