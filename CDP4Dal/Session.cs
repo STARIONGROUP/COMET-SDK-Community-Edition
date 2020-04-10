@@ -615,11 +615,14 @@ namespace CDP4Dal
                 throw new InvalidOperationException($"The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
             }
 
-            foreach (var file in files)
+            if (files?.Any() ?? false)
             {
-                if (!System.IO.File.Exists(file))
+                foreach (var file in files)
                 {
-                    throw new FileNotFoundException($"File {file} was not found.");
+                    if (!System.IO.File.Exists(file))
+                    {
+                        throw new FileNotFoundException($"File {file} was not found.");
+                    }
                 }
             }
 
