@@ -727,10 +727,10 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
-        /// 
+        /// Checks message content header for CDP4 tags an compatiple content-types
         /// </summary>
-        /// <param name="headerString"></param>
-        /// <param name="allowMultiPart"></param>
+        /// <param name="headerString">The header <see cref="string"/></param>
+        /// <param name="allowMultiPart">Indication if multipart Content-Type is allowed</param>
         /// <returns></returns>
         private bool IsCDP4ContentType(string headerString, bool allowMultiPart)
         {
