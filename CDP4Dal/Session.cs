@@ -383,13 +383,18 @@ namespace CDP4Dal
             {
                 var iterationDto = (CDP4Common.DTO.Iteration) iteration.ToDto();
                 this.Dal.Session = this;
-                dtoThings = await this.Dal.Read(iterationDto, this.cancellationTokenSource.Token);
+                dtoThings = await this.Dal.Read(iterationDto, this.cancellationTokenSource.Token, null);
+                this.cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.Read {0} {1} cancelled", iteration.ClassKind, iteration.Iid);
                 this.cancellationTokenSource = null;
                 return;
+            }
+            finally
+            {
+                this.cancellationTokenSource = null;
             }
 
             // proceed if no problem
@@ -687,11 +692,25 @@ namespace CDP4Dal
         }
 
         /// <summary>
+        /// Can a Cancel action be executed?
+        /// </summary>
+        /// <returns>True is Cancel is allowed, otherwise false.</returns>
+        public bool CanCancel()
+        {
+            if (this.cancellationTokenSource == null)
+            {
+                return false;
+            }
+
+            return this.cancellationTokenSource.Token.CanBeCanceled && !this.cancellationTokenSource.IsCancellationRequested;
+        }
+
+        /// <summary>
         /// Cancel any Read or Open operation.
         /// </summary>
         public void Cancel()
         {
-            if (this.cancellationTokenSource != null)
+            if (this.CanCancel())
             {
                 this.cancellationTokenSource.Cancel();
             }

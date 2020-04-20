@@ -276,6 +276,12 @@ namespace CDP4Dal
         Task Close();
 
         /// <summary>
+        /// Can a Cancel action be executed?
+        /// </summary>
+        /// <returns>True is Cancel is allowed, otherwise false.</returns>
+        bool CanCancel();
+
+        /// <summary>
         /// Cancel any Read or Open operation.
         /// </summary>
         void Cancel();

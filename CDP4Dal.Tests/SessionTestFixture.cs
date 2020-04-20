@@ -572,6 +572,35 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
+        public async Task VeriyThatCanCancelWorks()
+        {
+            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), null, null) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
+            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            var activeDomain = new DomainOfExpertise(Guid.NewGuid(), null, null);
+            var model = new EngineeringModel(Guid.NewGuid(), 1);
+            var iteration = new Iteration(Guid.NewGuid(), 10) { IterationSetup = iterationSetup.Iid };
+
+            var iterationToOpen = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
+            var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
+
+            this.session.GetType().GetProperty("ActivePerson").SetValue(this.session, JohnDoe, null);
+
+            iterationToOpen.Container = modelToOpen;
+
+            Assert.IsFalse(this.session.CanCancel());
+
+            this.mockedDal.Setup(x => x.Read(It.IsAny<Iteration>(), It.IsAny<CancellationToken>(), null))
+                .Callback(() => Assert.IsTrue(this.session.CanCancel()))
+                .ReturnsAsync(new List<Thing>());
+
+            await this.session.Read(iterationToOpen, activeDomain);
+
+            Assert.IsFalse(this.session.CanCancel());
+
+            this.mockedDal.Verify(x => x.Read(It.IsAny<Iteration>(), It.IsAny<CancellationToken>(), null), Times.Exactly(1));
+        }
+
+        [Test]
         public void VerifyThatIsVersionSupportedReturnsExpectedResult()
         {
             var testDal = new TestDal();

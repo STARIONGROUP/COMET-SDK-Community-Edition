@@ -38,7 +38,6 @@ namespace CDP4ServicesDal
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
-    using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -57,6 +56,7 @@ namespace CDP4ServicesDal
 
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
     using Thing = CDP4Common.DTO.Thing;
+    using UriExtensions = CDP4Dal.UriExtensions;
 
     /// <summary>
     /// The purpose of the <see cref="CdpServicesDal"/> is to provide the Data Access Layer for CDP4 ECSS-E-TM-10-25
@@ -298,47 +298,23 @@ namespace CDP4ServicesDal
                     throw new DalReadException(msg);
                 }
 
-                this.ProcessHeaders(httpResponseMessage);
+                this.ProcessHeaders(httpResponseMessage, true);
 
-                var multipartContent = await httpResponseMessage.Content.ReadAsByteArrayAsync();
+                cancellationToken.ThrowIfCancellationRequested();
 
-                var returned = this.GetFileContent(multipartContent);
+                var multipartContent = await httpResponseMessage.Content.ReadAsMultipartAsync(cancellationToken);
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var returned = await multipartContent.Contents[1].ReadAsByteArrayAsync();
+
+                cancellationToken.ThrowIfCancellationRequested();
 
                 watch.Stop();
                 Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
 
                 return returned;
             }
-        }
-
-        /// <summary>
-        /// Gets the File part of a multipart Response
-        /// </summary>
-        /// <param name="responseBody"></param>
-        /// <returns>Physical file part of a <see cref="HttpResponseMessage"/> that contains both JSON and binary data</returns>
-        private byte[] GetFileContent(byte[] responseBody)
-        {
-            var responseBodyString = Encoding.Default.GetString(responseBody);
-
-            var boundaryRegex = new Regex("^-*\\w+");
-            var boundary = boundaryRegex.Matches(responseBodyString);
-
-            var regexWithBoundaryAtTheEnd = new Regex("Content-Length:\\s\\d+(\\r\\n|\\r|\\n){2}([\\s\\S]*)(\\r\\n)" + boundary[0], RegexOptions.IgnoreCase);
-            var regexWithoutBoundaryAtTheEnd = new Regex("Content-Length:\\s\\d+(\\r\\n|\\r|\\n){2}([\\s\\S]*)", RegexOptions.IgnoreCase);
-
-            var body = regexWithBoundaryAtTheEnd.Matches(responseBodyString);
-
-            if (body.Count == 0)
-            {
-                body = regexWithoutBoundaryAtTheEnd.Matches(responseBodyString);
-            }
-
-            if (body.Count == 0)
-            {
-                return null;
-            }
-
-            return Encoding.Default.GetBytes(body[0].Groups[2].Value);
         }
 
         /// <summary>
@@ -711,20 +687,23 @@ namespace CDP4ServicesDal
         /// <summary>
         /// process the response to verify that the required headers are available
         /// </summary>
-        /// <param name="response">
+        /// <param name="httpResponseMessage">
         /// The <see cref="HttpResponseMessage"/> that is to be verified
         /// </param>
-        private void ProcessHeaders(HttpResponseMessage httpResponseMessage)
+        /// <param name="allowMultiPart">Optional <see cref="bool"/> indicating if multipart/mixed content is allowed in the contentheader</param>
+        private void ProcessHeaders(HttpResponseMessage httpResponseMessage, bool allowMultiPart = false)
         {
             var responseHeaders = httpResponseMessage.Headers;
             
             var cdpServerHeader = responseHeaders.SingleOrDefault(h => h.Key.ToLower(CultureInfo.InvariantCulture) == Headers.CDPServer.ToLower(CultureInfo.InvariantCulture));
+
             if (cdpServerHeader.Value == null)
             {
                 throw new HeaderException($"Header {Headers.CDPServer} not found");
             }
 
             var cdpCommonHeader = responseHeaders.SingleOrDefault(h => h.Key.ToLower(CultureInfo.InvariantCulture) == Headers.CDPCommon.ToLower(CultureInfo.InvariantCulture));
+
             if (cdpCommonHeader.Value == null)
             {
                 throw new HeaderException($"Header {Headers.CDPCommon} not found");
@@ -733,17 +712,48 @@ namespace CDP4ServicesDal
             var contentHeaders = httpResponseMessage.Content.Headers;
 
             var mediaTypeHeader = contentHeaders.SingleOrDefault(h => h.Key.ToLower(CultureInfo.InvariantCulture) == Headers.ContentType.ToLower(CultureInfo.InvariantCulture));
+
             if (mediaTypeHeader.Value == null)
             {
                 throw new HeaderException($"Header {Headers.ContentType} not found");
             }
-            
-            if (Convert.ToString(mediaTypeHeader.Value.FirstOrDefault()).ToLower(CultureInfo.InvariantCulture) != "application/json; ecss-e-tm-10-25; version=1.0.0")
+
+            var headerString = Convert.ToString(mediaTypeHeader.Value.FirstOrDefault()).ToLower(CultureInfo.InvariantCulture);
+
+            if (!this.IsCDP4ContentType(headerString, allowMultiPart))
             {
                 throw new HeaderException($"Header Media-Type has incompatible value: {mediaTypeHeader.Value} ");
             }
         }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="headerString"></param>
+        /// <param name="allowMultiPart"></param>
+        /// <returns></returns>
+        private bool IsCDP4ContentType(string headerString, bool allowMultiPart)
+        {
+            var headerArray = headerString
+                .Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim()).ToArray();
+
+            if (!headerArray.Contains("ecss-e-tm-10-25") || !headerArray.Contains("version=1.0.0"))
+            {
+                return false;
+            }
+
+            if (!headerArray.Contains("application/json"))
+            {
+                if (!allowMultiPart || !headerArray.Contains("multipart/mixed"))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Close the <see cref="CdpServicesDal"/>
         /// </summary>
