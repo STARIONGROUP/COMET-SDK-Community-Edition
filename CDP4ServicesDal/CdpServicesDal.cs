@@ -731,7 +731,7 @@ namespace CDP4ServicesDal
         /// </summary>
         /// <param name="headerString">The header <see cref="string"/></param>
         /// <param name="allowMultiPart">Indication if multipart Content-Type is allowed</param>
-        /// <returns></returns>
+        /// <returns>true if a CDP4 content type is found, otherwise false</returns>
         private bool IsCDP4ContentType(string headerString, bool allowMultiPart)
         {
             var headerArray = headerString
