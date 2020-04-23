@@ -383,13 +383,18 @@ namespace CDP4Dal
             {
                 var iterationDto = (CDP4Common.DTO.Iteration) iteration.ToDto();
                 this.Dal.Session = this;
-                dtoThings = await this.Dal.Read(iterationDto, this.cancellationTokenSource.Token);
+                dtoThings = await this.Dal.Read(iterationDto, this.cancellationTokenSource.Token, null);
+                this.cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.Read {0} {1} cancelled", iteration.ClassKind, iteration.Iid);
                 this.cancellationTokenSource = null;
                 return;
+            }
+            finally
+            {
+                this.cancellationTokenSource = null;
             }
 
             // proceed if no problem
@@ -687,11 +692,25 @@ namespace CDP4Dal
         }
 
         /// <summary>
+        /// Can a Cancel action be executed?
+        /// </summary>
+        /// <returns>True is Cancel is allowed, otherwise false.</returns>
+        public bool CanCancel()
+        {
+            if (this.cancellationTokenSource == null)
+            {
+                return false;
+            }
+
+            return this.cancellationTokenSource.Token.CanBeCanceled && !this.cancellationTokenSource.IsCancellationRequested;
+        }
+
+        /// <summary>
         /// Cancel any Read or Open operation.
         /// </summary>
         public void Cancel()
         {
-            if (this.cancellationTokenSource != null)
+            if (this.CanCancel())
             {
                 this.cancellationTokenSource.Cancel();
             }
@@ -927,6 +946,43 @@ namespace CDP4Dal
 
             var modelRdl = ((EngineeringModel) iteration.Container).EngineeringModelSetup.RequiredRdl.Single();
             this.AddRdlToOpenList(modelRdl);
+        }
+
+        /// <summary>
+        /// Queries the current <see cref="DomainOfExpertise"/> from the session for the current <see cref="Iteration"/>
+        /// </summary>
+        /// <returns>
+        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
+        /// </returns>
+        public DomainOfExpertise QueryCurrentDomainOfExpertise()
+        {
+            var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => !x.Key.IterationSetup.FrozenOn.HasValue);
+
+            if (iterationDomainPair.Equals(default(KeyValuePair<Iteration, Tuple<DomainOfExpertise, Participant>>)))
+            {
+                return null;
+            }
+
+            return (iterationDomainPair.Value == null) || (iterationDomainPair.Value.Item1 == null) ? null : iterationDomainPair.Value.Item1;
+        }
+
+        /// <summary>
+        /// Queries the <see cref="Participant"/>'s <see cref="DomainOfExpertise"/>'s from the session for the current <see cref="Iteration"/>
+        /// </summary>
+        /// <returns>
+        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
+        /// </returns>
+        public IEnumerable<DomainOfExpertise> QueryDomainOfExpertise()
+        {
+            var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => !x.Key.IterationSetup.FrozenOn.HasValue);
+            var domainOfExpertise = new List<DomainOfExpertise>();
+
+            if (iterationDomainPair.Value?.Item2 != null)
+            {
+                domainOfExpertise.AddRange(iterationDomainPair.Value.Item2.Domain);
+            }
+
+            return domainOfExpertise;
         }
     }
 }
