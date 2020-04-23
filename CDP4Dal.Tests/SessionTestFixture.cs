@@ -29,20 +29,25 @@ namespace CDP4Dal.Tests
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
-    using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
-    using CDP4Dal.Operations;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+
+    using CDP4Dal.Operations;
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
+
     using Moq;
+
     using NUnit.Framework;
     
     using DomainOfExpertise = CDP4Common.SiteDirectoryData.DomainOfExpertise;
+    using EngineeringModel = CDP4Common.DTO.EngineeringModel;
     using EngineeringModelSetup = CDP4Common.DTO.EngineeringModelSetup;
+    using Iteration = CDP4Common.DTO.Iteration;
     using ModelReferenceDataLibrary = CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary;
     using SiteDirectory = CDP4Common.DTO.SiteDirectory;
     using SiteReferenceDataLibrary = CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary;
@@ -313,7 +318,7 @@ namespace CDP4Dal.Tests
             var modelsetup = new EngineeringModelSetup(Guid.NewGuid(), 0);
             modelsetup.RequiredRdl.Add(mrdl.Iid);
 
-            var model = new EngineeringModel(Guid.NewGuid(), 0) { EngineeringModelSetup = modelsetup.Iid };
+            var model = new CDP4Common.DTO.EngineeringModel(Guid.NewGuid(), 0) { EngineeringModelSetup = modelsetup.Iid };
             var iteration = new Iteration(Guid.NewGuid(), 0);
             model.Iteration.Add(iteration.Iid);
 
@@ -616,8 +621,136 @@ namespace CDP4Dal.Tests
             var notSupportedVersion = new Version("2.0.0");
             Assert.IsFalse(this.session.IsVersionSupported(notSupportedVersion));
         }
-    }
 
+        [Test]
+        public async Task VerifyThatQueryCurrentDomainOfExpertiseWorks()
+        {
+            var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { IterationIid = Guid.NewGuid() };
+            var mrdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var srdl = new SiteReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var activeDomain = new DomainOfExpertise(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            mrdl.RequiredRdl = srdl;
+            modelSetup.RequiredRdl.Add(mrdl);
+            modelSetup.IterationSetup.Add(iterationSetup);
+            siteDir.Model.Add(modelSetup);
+            siteDir.SiteReferenceDataLibrary.Add(srdl);
+            siteDir.Domain.Add(activeDomain);
+            siteDir.Person.Add(JohnDoe);
+
+            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(JohnDoe.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => JohnDoe));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(modelSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => modelSetup));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(mrdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => mrdl));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(srdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => srdl));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(iterationSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => iterationSetup));
+
+            this.session.GetType().GetProperty("ActivePerson").SetValue(this.session, JohnDoe, null);
+
+            var participant = new CDP4Common.SiteDirectoryData.Participant(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { Person = this.session.ActivePerson };
+            participant.Domain.Add(activeDomain);
+            modelSetup.Participant.Add(participant);
+
+            var model = new EngineeringModel(Guid.NewGuid(), 1);
+            var iteration = new Iteration(iterationSetup.IterationIid, 10) { IterationSetup = iterationSetup.Iid };
+            model.Iteration.Add(iteration.Iid);
+            model.EngineeringModelSetup = modelSetup.Iid;
+
+            var readOutput = new List<Thing>
+            {
+                model,
+                iteration
+            };
+
+            var readTaskCompletionSource = new TaskCompletionSource<IEnumerable<Thing>>();
+            readTaskCompletionSource.SetResult(readOutput);
+            this.mockedDal.Setup(x => x.Read(It.IsAny<Iteration>(), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>())).Returns(readTaskCompletionSource.Task);
+
+            var iterationToOpen = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
+            var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
+            iterationToOpen.Container = modelToOpen;
+
+            await this.session.Read(iterationToOpen, activeDomain);
+
+            var resultDomain = this.session.QueryCurrentDomainOfExpertise();
+
+            Assert.AreEqual(activeDomain, resultDomain);
+
+            iterationSetup.FrozenOn = DateTime.UtcNow;
+
+            resultDomain = this.session.QueryCurrentDomainOfExpertise();
+
+            Assert.IsNull(resultDomain);
+        }
+
+        [Test]
+        public async Task VerifyThatQueryDomainOfExpertiseWorks()
+        {
+            var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { IterationIid = Guid.NewGuid() };
+            var mrdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var srdl = new SiteReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var activeDomain = new DomainOfExpertise(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            mrdl.RequiredRdl = srdl;
+            modelSetup.RequiredRdl.Add(mrdl);
+            modelSetup.IterationSetup.Add(iterationSetup);
+            siteDir.Model.Add(modelSetup);
+            siteDir.SiteReferenceDataLibrary.Add(srdl);
+            siteDir.Domain.Add(activeDomain);
+            siteDir.Person.Add(JohnDoe);
+
+            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(JohnDoe.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => JohnDoe));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(modelSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => modelSetup));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(mrdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => mrdl));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(srdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => srdl));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(iterationSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => iterationSetup));
+
+            this.session.GetType().GetProperty("ActivePerson").SetValue(this.session, JohnDoe, null);
+
+            var participant = new CDP4Common.SiteDirectoryData.Participant(Guid.NewGuid(), this.session.Assembler.Cache, this.uri){ Person = this.session.ActivePerson };
+            participant.Domain.Add(activeDomain);
+            modelSetup.Participant.Add(participant);
+
+            var model = new EngineeringModel(Guid.NewGuid(), 1);
+            var iteration = new Iteration(iterationSetup.IterationIid, 10) { IterationSetup = iterationSetup.Iid };
+            model.Iteration.Add(iteration.Iid);
+            model.EngineeringModelSetup = modelSetup.Iid;
+
+            var readOutput = new List<Thing>
+            {
+                model,
+                iteration
+            };
+
+            var readTaskCompletionSource = new TaskCompletionSource<IEnumerable<Thing>>();
+            readTaskCompletionSource.SetResult(readOutput);
+            this.mockedDal.Setup(x => x.Read(It.IsAny<Iteration>(), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>())).Returns(readTaskCompletionSource.Task);
+
+            var iterationToOpen = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
+            var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
+            iterationToOpen.Container = modelToOpen;
+
+            await this.session.Read(iterationToOpen, activeDomain);
+
+            var resultDomains = this.session.QueryDomainOfExpertise();
+
+            CollectionAssert.AreEqual(new [] {activeDomain}, resultDomains);
+
+            iterationSetup.FrozenOn = DateTime.UtcNow;
+
+            resultDomains = this.session.QueryDomainOfExpertise();
+
+            CollectionAssert.IsEmpty(resultDomains);
+        }
+    }
+    
     [DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
     internal class TestDal : IDal
     {

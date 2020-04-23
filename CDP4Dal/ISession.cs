@@ -311,5 +311,21 @@ namespace CDP4Dal
         /// The <see cref="Task"/>.
         /// </returns>
         Task CloseModelRdl(ModelReferenceDataLibrary modelRdl);
+
+        /// <summary>
+        /// Queries the current <see cref="DomainOfExpertise"/> from the session for the current <see cref="Iteration"/>
+        /// </summary>
+        /// <returns>
+        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
+        /// </returns>
+        DomainOfExpertise QueryCurrentDomainOfExpertise();
+
+        /// <summary>
+        /// Queries the <see cref="Participant"/>'s <see cref="DomainOfExpertise"/>'s from the session for the current <see cref="Iteration"/>
+        /// </summary>
+        /// <returns>
+        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
+        /// </returns>
+        IEnumerable<DomainOfExpertise> QueryDomainOfExpertise();
     }
 }

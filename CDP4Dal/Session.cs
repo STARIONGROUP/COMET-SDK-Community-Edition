@@ -947,5 +947,42 @@ namespace CDP4Dal
             var modelRdl = ((EngineeringModel) iteration.Container).EngineeringModelSetup.RequiredRdl.Single();
             this.AddRdlToOpenList(modelRdl);
         }
+
+        /// <summary>
+        /// Queries the current <see cref="DomainOfExpertise"/> from the session for the current <see cref="Iteration"/>
+        /// </summary>
+        /// <returns>
+        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
+        /// </returns>
+        public DomainOfExpertise QueryCurrentDomainOfExpertise()
+        {
+            var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => !x.Key.IterationSetup.FrozenOn.HasValue);
+
+            if (iterationDomainPair.Equals(default(KeyValuePair<Iteration, Tuple<DomainOfExpertise, Participant>>)))
+            {
+                return null;
+            }
+
+            return (iterationDomainPair.Value == null) || (iterationDomainPair.Value.Item1 == null) ? null : iterationDomainPair.Value.Item1;
+        }
+
+        /// <summary>
+        /// Queries the <see cref="Participant"/>'s <see cref="DomainOfExpertise"/>'s from the session for the current <see cref="Iteration"/>
+        /// </summary>
+        /// <returns>
+        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
+        /// </returns>
+        public IEnumerable<DomainOfExpertise> QueryDomainOfExpertise()
+        {
+            var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => !x.Key.IterationSetup.FrozenOn.HasValue);
+            var domainOfExpertise = new List<DomainOfExpertise>();
+
+            if (iterationDomainPair.Value?.Item2 != null)
+            {
+                domainOfExpertise.AddRange(iterationDomainPair.Value.Item2.Domain);
+            }
+
+            return domainOfExpertise;
+        }
     }
 }
