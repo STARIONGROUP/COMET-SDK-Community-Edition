@@ -2,7 +2,8 @@
 // <copyright file="RelationshipMetaInfo.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Kamil Wojnowski, 
+//            Nathanael Smiechowski
 //
 //    This file is part of CDP4-SDK Community Edition
 //
