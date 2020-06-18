@@ -24,8 +24,8 @@
 
 namespace CDP4Common.EngineeringModelData
 {
+    using System.Linq;
     using System.Text;
-    using CDP4Common.SiteDirectoryData;
 
     /// <summary>
     /// Extended part for the auto-generated <see cref="FileRevision"/>
@@ -50,7 +50,7 @@ namespace CDP4Common.EngineeringModelData
 
             path.Append(this.Name);
 
-            foreach (FileType fileType in this.FileType)
+            foreach (var fileType in this.FileType.Where(x => !string.IsNullOrWhiteSpace(x.Extension)))
             {
                 path.Append(".");
                 path.Append(fileType.Extension);

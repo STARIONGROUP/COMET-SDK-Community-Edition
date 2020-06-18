@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FileRevisionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,13 +21,14 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using System;
+
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -40,12 +40,14 @@ namespace CDP4Common.Tests.Poco
         [SetUp]
         public void Setup()
         {
-            this.folder = new Folder(Guid.NewGuid(), null, null) {Name = "path"};
+            this.folder = new Folder(Guid.NewGuid(), null, null) { Name = "path" };
 
             this.filerev = new FileRevision(Guid.NewGuid(), null, null);
             this.filerev.Name = "filerev";
 
             this.filerev.FileType.Add(new FileType(Guid.NewGuid(), null, null) { Extension = "ext1" });
+            this.filerev.FileType.Add(new FileType(Guid.NewGuid(), null, null) { Extension = null });
+            this.filerev.FileType.Add(new FileType(Guid.NewGuid(), null, null) { Extension = "" });
             this.filerev.FileType.Add(new FileType(Guid.NewGuid(), null, null) { Extension = "ext2" });
 
             this.filerev.ContainingFolder = this.folder;
