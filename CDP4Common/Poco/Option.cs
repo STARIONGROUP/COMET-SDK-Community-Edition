@@ -2,7 +2,7 @@
 // <copyright file="Option.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -36,8 +36,8 @@ namespace CDP4Common.EngineeringModelData
         {
             get
             {
-                var iteration = (Iteration)this.Container;
-                return iteration.DefaultOption == this;
+                var iteration = this.Container as Iteration;
+                return iteration?.DefaultOption == this;
             }
         }
     }
