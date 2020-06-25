@@ -2,6 +2,8 @@ image: Visual Studio 2019
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  TEST_RESULT: 'TestResult.xml'
+  TEST_COVERAGE: 'CoverResults.xml'
   SONARCLOUD_PROJECT_KEY: RHEAGROUP_CDP4-SDK-Community-Edition
   SONARCLOUD_ORGANIZATION: rheagroup
   SONARCLOUD_TOKEN:
@@ -33,24 +35,24 @@ before_build:
   - ps: >-
       if ($env:APPVEYOR_PULL_REQUEST_NUMBER){
         Write-Host Scanning PR: $env:APPVEYOR_PULL_REQUEST_NUMBER
-        SonarScanner.MSBuild.exe begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$env:SONARCLOUD_TOKEN /d:sonar.pullrequest.key=$env:APPVEYOR_PULL_REQUEST_NUMBER /d:sonar.pullrequest.provider=GitHub /d:sonar.pullrequest.github.repository=$env:APPVEYOR_REPO_NAME
+        SonarScanner.MSBuild.exe begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$env:SONARCLOUD_TOKEN /d:sonar.cs.opencover.reportsPaths=$env:TEST_COVERAGE /d:sonar.cs.nunit.reportsPaths=$env:TEST_RESULT /d:sonar.pullrequest.key=$env:APPVEYOR_PULL_REQUEST_NUMBER /d:sonar.pullrequest.provider=GitHub /d:sonar.pullrequest.github.repository=$env:APPVEYOR_REPO_NAME
       }
       else {
         Write-Host Scanning branch: $env:APPVEYOR_REPO_BRANCH
-        SonarScanner.MSBuild.exe begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$env:SONARCLOUD_TOKEN
+        SonarScanner.MSBuild.exe begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$env:SONARCLOUD_TOKEN /d:sonar.cs.opencover.reportsPaths=$env:TEST_COVERAGE /d:sonar.cs.nunit.reportsPaths=$env:TEST_RESULT
       }
 build:
   project: CDP4-SDK.sln
-test:
-  assemblies:
-    only:
-      - '**\bin\$(configuration)\net472\*.Tests.dll'
-      - '**\bin\$(configuration)\netstandard1.6\*.Tests.dll'
-      - '**\bin\$(configuration)\netstandard2.0\*.Tests.dll'
-  categories:
-    except:
-      - WebServicesDependent
-      - AppVeyorExclusion
+test_script:
+  - >
+    OpenCover.Console.exe
+    -log:Error
+    -register
+    -target:".\testrunner\NUnit.ConsoleRunner.3.11.1\tools\nunit3-console.exe"
+    -targetargs:"cdp4sdk-tests.nunit --where=""cat!=WebServicesDependent && cat!=AppVeyorExclusion"""
+    -returntargetcode
+    -hideskipped:All
+    -output:"%TEST_COVERAGE%"
 after_test:
   - ps: SonarScanner.MSBuild.exe end /d:"sonar.login=$env:SONARCLOUD_TOKEN"
 notifications:
