@@ -43,16 +43,16 @@ before_build:
       }
 build:
   project: CDP4-SDK.sln
-test_script:
-  - >
-    OpenCover.Console.exe
-    -log:Error
-    -register
-    -target:".\testrunner\NUnit.ConsoleRunner.3.11.1\tools\nunit3-console.exe"
-    -targetargs:"cdp4sdk-tests.nunit --where=""cat!=WebServicesDependent && cat!=AppVeyorExclusion"""
-    -returntargetcode
-    -hideskipped:All
-    -output:"%TEST_COVERAGE%"
+test:
+  assemblies:
+    only:
+      - '**\bin\$(configuration)\net472\*.Tests.dll'
+      - '**\bin\$(configuration)\netstandard1.6\*.Tests.dll'
+      - '**\bin\$(configuration)\netstandard2.0\*.Tests.dll'
+  categories:
+    except:
+      - WebServicesDependent
+      - AppVeyorExclusion
 after_test:
   - ps: SonarScanner.MSBuild.exe end /d:"sonar.login=$env:SONARCLOUD_TOKEN"
 notifications:
