@@ -2,8 +2,6 @@ image: Visual Studio 2019
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  TEST_RESULT: 'TestResult.xml'
-  TEST_COVERAGE: 'CoverResults.xml'
   SONARCLOUD_PROJECT_KEY: RHEAGROUP_CDP4-SDK-Community-Edition
   SONARCLOUD_ORGANIZATION: rheagroup
   SONARCLOUD_TOKEN:
@@ -35,11 +33,11 @@ before_build:
   - ps: >-
       if ($env:APPVEYOR_PULL_REQUEST_NUMBER){
         Write-Host Scanning PR: $env:APPVEYOR_PULL_REQUEST_NUMBER
-        SonarScanner.MSBuild.exe begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$env:SONARCLOUD_TOKEN /d:sonar.cs.opencover.reportsPaths=$env:TEST_COVERAGE /d:sonar.cs.nunit.reportsPaths=$env:TEST_RESULT /d:sonar.pullrequest.key=$env:APPVEYOR_PULL_REQUEST_NUMBER /d:sonar.pullrequest.provider=GitHub /d:sonar.pullrequest.github.repository=$env:APPVEYOR_REPO_NAME
+        SonarScanner.MSBuild.exe begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$env:SONARCLOUD_TOKEN /d:sonar.pullrequest.key=$env:APPVEYOR_PULL_REQUEST_NUMBER /d:sonar.pullrequest.provider=GitHub /d:sonar.pullrequest.github.repository=$env:APPVEYOR_REPO_NAME
       }
       else {
         Write-Host Scanning branch: $env:APPVEYOR_REPO_BRANCH
-        SonarScanner.MSBuild.exe begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$env:SONARCLOUD_TOKEN /d:sonar.cs.opencover.reportsPaths=$env:TEST_COVERAGE /d:sonar.cs.nunit.reportsPaths=$env:TEST_RESULT
+        SonarScanner.MSBuild.exe begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$env:SONARCLOUD_TOKEN
       }
 build:
   project: CDP4-SDK.sln
