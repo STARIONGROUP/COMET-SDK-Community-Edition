@@ -28,6 +28,7 @@
 
 namespace CDP4Common.MetaInfo
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -40,6 +41,7 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
+    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="SiteDirectory"/>.
@@ -224,17 +226,17 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Annotation", new PropertyMetaInfo("Annotation", "SiteDirectoryDataAnnotation", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Domain", new PropertyMetaInfo("Domain", "DomainOfExpertise", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DomainGroup", new PropertyMetaInfo("DomainGroup", "DomainOfExpertiseGroup", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "LogEntry", new PropertyMetaInfo("LogEntry", "SiteLogEntry", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Model", new PropertyMetaInfo("Model", "EngineeringModelSetup", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "NaturalLanguage", new PropertyMetaInfo("NaturalLanguage", "NaturalLanguage", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Organization", new PropertyMetaInfo("Organization", "Organization", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ParticipantRole", new PropertyMetaInfo("ParticipantRole", "ParticipantRole", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Person", new PropertyMetaInfo("Person", "Person", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "PersonRole", new PropertyMetaInfo("PersonRole", "PersonRole", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "SiteReferenceDataLibrary", new PropertyMetaInfo("SiteReferenceDataLibrary", "SiteReferenceDataLibrary", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Annotation", new PropertyMetaInfo("Annotation", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Domain", new PropertyMetaInfo("Domain", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DomainGroup", new PropertyMetaInfo("DomainGroup", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "LogEntry", new PropertyMetaInfo("LogEntry", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Model", new PropertyMetaInfo("Model", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "NaturalLanguage", new PropertyMetaInfo("NaturalLanguage", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Organization", new PropertyMetaInfo("Organization", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ParticipantRole", new PropertyMetaInfo("ParticipantRole", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Person", new PropertyMetaInfo("Person", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "PersonRole", new PropertyMetaInfo("PersonRole", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "SiteReferenceDataLibrary", new PropertyMetaInfo("SiteReferenceDataLibrary", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>
@@ -296,10 +298,10 @@ namespace CDP4Common.MetaInfo
         {
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "CreatedOn", new PropertyMetaInfo("CreatedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "DefaultParticipantRole", new PropertyMetaInfo("DefaultParticipantRole", "ParticipantRole", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "DefaultPersonRole", new PropertyMetaInfo("DefaultPersonRole", "PersonRole", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "DefaultParticipantRole", new PropertyMetaInfo("DefaultParticipantRole", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "DefaultPersonRole", new PropertyMetaInfo("DefaultPersonRole", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "LastModifiedOn", new PropertyMetaInfo("LastModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },

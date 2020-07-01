@@ -27,6 +27,7 @@
 
 namespace CDP4Common.ReportingData
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections;
     using System.Collections.Concurrent;
@@ -41,6 +42,7 @@ namespace CDP4Common.ReportingData
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+    #pragma warning restore S1128
 
     /// <summary>
     /// A thing that references a SiteDirectory-contained Thing through its unique identifier and revision number

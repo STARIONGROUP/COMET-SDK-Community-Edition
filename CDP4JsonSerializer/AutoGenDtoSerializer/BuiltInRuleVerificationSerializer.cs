@@ -1,26 +1,10 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BuiltInRuleVerificationSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public License
-//    along with this program; if not, write to the Free Software Foundation,
-//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+// <copyright file "BuiltInRuleVerificationSerializer.cs" company="RHEA System S.A.">
+//   Copyright (c) 2017 RHEA System S.A.
 // </copyright>
+// <summary>
+//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,11 +16,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="BuiltInRuleVerificationSerializer"/> class is to provide a <see cref="BuiltInRuleVerification"/> specific serializer
     /// </summary>
-    public class BuiltInRuleVerificationSerializer : BaseThingSerializer, IThingSerializer
+    public class BuiltInRuleVerificationSerializer : IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -64,8 +48,8 @@ namespace CDP4JsonSerializer
         {
             var jsonObject = new JObject();
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), builtInRuleVerification.ClassKind)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](builtInRuleVerification.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](builtInRuleVerification.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](builtInRuleVerification.ExcludedDomain));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](builtInRuleVerification.ExcludedPerson));
             jsonObject.Add("executedOn", this.PropertySerializerMap["executedOn"](builtInRuleVerification.ExecutedOn));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](builtInRuleVerification.Iid));
             jsonObject.Add("isActive", this.PropertySerializerMap["isActive"](builtInRuleVerification.IsActive));
@@ -93,7 +77,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
+                throw new ArgumentNullException("thing");
             }
 
             var builtInRuleVerification = thing as BuiltInRuleVerification;

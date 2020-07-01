@@ -28,6 +28,7 @@
 
 namespace CDP4Common.MetaInfo
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -40,6 +41,7 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
+    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="DiagramElementThing"/>.
@@ -206,9 +208,9 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Bounds", new PropertyMetaInfo("Bounds", "Bounds", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
-            { "DiagramElement", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "LocalStyle", new PropertyMetaInfo("LocalStyle", "OwnedStyle", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
+            { "Bounds", new PropertyMetaInfo("Bounds", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
+            { "DiagramElement", new PropertyMetaInfo("DiagramElement", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "LocalStyle", new PropertyMetaInfo("LocalStyle", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -258,14 +260,14 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "DepictedThing", new PropertyMetaInfo("DepictedThing", "Thing", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "DepictedThing", new PropertyMetaInfo("DepictedThing", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "SharedStyle", new PropertyMetaInfo("SharedStyle", "SharedStyle", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "SharedStyle", new PropertyMetaInfo("SharedStyle", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -297,9 +299,9 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "DiagramCanvas", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DiagramEdge", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DiagramObject", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DiagramCanvas", new PropertyMetaInfo("DiagramElement", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DiagramEdge", new PropertyMetaInfo("DiagramElement", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DiagramObject", new PropertyMetaInfo("DiagramElement", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>

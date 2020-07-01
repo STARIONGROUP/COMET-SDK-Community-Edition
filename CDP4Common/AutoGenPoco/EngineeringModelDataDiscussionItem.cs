@@ -27,6 +27,7 @@
 
 namespace CDP4Common.ReportingData
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections;
     using System.Collections.Concurrent;
@@ -41,6 +42,7 @@ namespace CDP4Common.ReportingData
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+    #pragma warning restore S1128
 
     /// <summary>
     /// The DiscussionItem is the concept that carries an intervention made by a participant after a ModellingAnnotationItem has been created following a review.

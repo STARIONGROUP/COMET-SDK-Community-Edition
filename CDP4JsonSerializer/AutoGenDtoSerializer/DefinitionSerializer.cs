@@ -1,26 +1,10 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DefinitionSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public License
-//    along with this program; if not, write to the Free Software Foundation,
-//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+// <copyright file "DefinitionSerializer.cs" company="RHEA System S.A.">
+//   Copyright (c) 2017 RHEA System S.A.
 // </copyright>
+// <summary>
+//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,11 +16,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="DefinitionSerializer"/> class is to provide a <see cref="Definition"/> specific serializer
     /// </summary>
-    public class DefinitionSerializer : BaseThingSerializer, IThingSerializer
+    public class DefinitionSerializer : IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -64,16 +48,16 @@ namespace CDP4JsonSerializer
         private JObject Serialize(Definition definition)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("citation", this.PropertySerializerMap["citation"](definition.Citation.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("citation", this.PropertySerializerMap["citation"](definition.Citation));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), definition.ClassKind)));
             jsonObject.Add("content", this.PropertySerializerMap["content"](definition.Content));
-            jsonObject.Add("example", this.PropertySerializerMap["example"](definition.Example.OrderBy(x => x, this.orderedItemComparer)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](definition.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](definition.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("example", this.PropertySerializerMap["example"](definition.Example));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](definition.ExcludedDomain));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](definition.ExcludedPerson));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](definition.Iid));
             jsonObject.Add("languageCode", this.PropertySerializerMap["languageCode"](definition.LanguageCode));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](definition.ModifiedOn));
-            jsonObject.Add("note", this.PropertySerializerMap["note"](definition.Note.OrderBy(x => x, this.orderedItemComparer)));
+            jsonObject.Add("note", this.PropertySerializerMap["note"](definition.Note));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](definition.RevisionNumber));
             return jsonObject;
         }
@@ -95,7 +79,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
+                throw new ArgumentNullException("thing");
             }
 
             var definition = thing as Definition;

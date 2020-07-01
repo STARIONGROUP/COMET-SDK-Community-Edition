@@ -28,6 +28,7 @@
 
 namespace CDP4Common.MetaInfo
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -40,6 +41,7 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
+    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="Person"/>.
@@ -208,9 +210,9 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "EmailAddress", new PropertyMetaInfo("EmailAddress", "EmailAddress", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "TelephoneNumber", new PropertyMetaInfo("TelephoneNumber", "TelephoneNumber", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "UserPreference", new PropertyMetaInfo("UserPreference", "UserPreference", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "EmailAddress", new PropertyMetaInfo("EmailAddress", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "TelephoneNumber", new PropertyMetaInfo("TelephoneNumber", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "UserPreference", new PropertyMetaInfo("UserPreference", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>
@@ -269,22 +271,22 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "DefaultDomain", new PropertyMetaInfo("DefaultDomain", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "DefaultEmailAddress", new PropertyMetaInfo("DefaultEmailAddress", "EmailAddress", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "DefaultTelephoneNumber", new PropertyMetaInfo("DefaultTelephoneNumber", "TelephoneNumber", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "DefaultDomain", new PropertyMetaInfo("DefaultDomain", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "DefaultEmailAddress", new PropertyMetaInfo("DefaultEmailAddress", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "DefaultTelephoneNumber", new PropertyMetaInfo("DefaultTelephoneNumber", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "GivenName", new PropertyMetaInfo("GivenName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "IsActive", new PropertyMetaInfo("IsActive", "bool", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "IsDeprecated", new PropertyMetaInfo("IsDeprecated", "bool", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
-            { "Organization", new PropertyMetaInfo("Organization", "Organization", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "Organization", new PropertyMetaInfo("Organization", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "OrganizationalUnit", new PropertyMetaInfo("OrganizationalUnit", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Password", new PropertyMetaInfo("Password", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "Role", new PropertyMetaInfo("Role", "PersonRole", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "Role", new PropertyMetaInfo("Role", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Surname", new PropertyMetaInfo("Surname", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
@@ -327,7 +329,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "SiteDirectory", new PropertyMetaInfo("Person", "Person", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "SiteDirectory", new PropertyMetaInfo("Person", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>

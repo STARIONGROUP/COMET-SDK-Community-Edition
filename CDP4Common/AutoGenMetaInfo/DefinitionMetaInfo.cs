@@ -28,6 +28,7 @@
 
 namespace CDP4Common.MetaInfo
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -40,6 +41,7 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
+    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="Definition"/>.
@@ -205,7 +207,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Citation", new PropertyMetaInfo("Citation", "Citation", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Citation", new PropertyMetaInfo("Citation", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>
@@ -256,8 +258,8 @@ namespace CDP4Common.MetaInfo
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Content", new PropertyMetaInfo("Content", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Example", new PropertyMetaInfo("Example", "string", PropertyKind.OrderedList, AggregationKind.None, false, true, true, 0, "*", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "LanguageCode", new PropertyMetaInfo("LanguageCode", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
@@ -293,61 +295,61 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "ArrayParameterType", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "BinaryRelationshipRule", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "BooleanParameterType", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Category", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "CompoundParameterType", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Constant", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "CyclicRatioScale", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DateParameterType", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DateTimeParameterType", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DecompositionRule", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DerivedQuantityKind", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DerivedUnit", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DomainOfExpertise", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DomainOfExpertiseGroup", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ElementDefinition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ElementUsage", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "EngineeringModelSetup", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "EnumerationParameterType", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "EnumerationValueDefinition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "FileType", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Glossary", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Goal", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "IntervalScale", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "LinearConversionUnit", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "LogarithmicScale", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ModelReferenceDataLibrary", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "MultiRelationshipRule", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Option", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "OrdinalScale", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ParameterizedCategoryRule", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ParticipantRole", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "PersonRole", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "PossibleFiniteState", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "PossibleFiniteStateList", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "PrefixedUnit", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "RatioScale", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ReferencerRule", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ReferenceSource", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Requirement", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "RequirementsGroup", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "RequirementsSpecification", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "RuleVerificationList", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ScaleValueDefinition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "SimpleQuantityKind", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "SimpleUnit", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "SiteReferenceDataLibrary", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "SpecializedQuantityKind", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Stakeholder", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "StakeholderValue", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "StakeHolderValueMap", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Term", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "TextParameterType", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "TimeOfDayParameterType", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "UnitPrefix", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ValueGroup", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ArrayParameterType", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "BinaryRelationshipRule", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "BooleanParameterType", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Category", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "CompoundParameterType", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Constant", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "CyclicRatioScale", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DateParameterType", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DateTimeParameterType", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DecompositionRule", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DerivedQuantityKind", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DerivedUnit", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DomainOfExpertise", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DomainOfExpertiseGroup", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ElementDefinition", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ElementUsage", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "EngineeringModelSetup", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "EnumerationParameterType", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "EnumerationValueDefinition", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "FileType", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Glossary", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Goal", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "IntervalScale", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "LinearConversionUnit", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "LogarithmicScale", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ModelReferenceDataLibrary", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "MultiRelationshipRule", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Option", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "OrdinalScale", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ParameterizedCategoryRule", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ParticipantRole", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "PersonRole", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "PossibleFiniteState", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "PossibleFiniteStateList", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "PrefixedUnit", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "RatioScale", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ReferencerRule", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ReferenceSource", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Requirement", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "RequirementsGroup", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "RequirementsSpecification", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "RuleVerificationList", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ScaleValueDefinition", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "SimpleQuantityKind", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "SimpleUnit", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "SiteReferenceDataLibrary", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "SpecializedQuantityKind", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Stakeholder", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "StakeholderValue", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "StakeHolderValueMap", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Term", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "TextParameterType", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "TimeOfDayParameterType", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "UnitPrefix", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ValueGroup", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>

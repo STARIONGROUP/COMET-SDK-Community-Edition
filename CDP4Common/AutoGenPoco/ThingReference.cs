@@ -27,6 +27,7 @@
 
 namespace CDP4Common.ReportingData
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections;
     using System.Collections.Concurrent;
@@ -41,6 +42,7 @@ namespace CDP4Common.ReportingData
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+    #pragma warning restore S1128
 
     /// <summary>
     /// Abstract-super-class of a Thing that references another Thing through its identifier and revision number

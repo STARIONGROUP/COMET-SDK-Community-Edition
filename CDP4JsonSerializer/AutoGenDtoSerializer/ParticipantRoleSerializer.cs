@@ -1,26 +1,10 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ParticipantRoleSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public License
-//    along with this program; if not, write to the Free Software Foundation,
-//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+// <copyright file "ParticipantRoleSerializer.cs" company="RHEA System S.A.">
+//   Copyright (c) 2017 RHEA System S.A.
 // </copyright>
+// <summary>
+//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,11 +16,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="ParticipantRoleSerializer"/> class is to provide a <see cref="ParticipantRole"/> specific serializer
     /// </summary>
-    public class ParticipantRoleSerializer : BaseThingSerializer, IThingSerializer
+    public class ParticipantRoleSerializer : IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -66,17 +50,17 @@ namespace CDP4JsonSerializer
         private JObject Serialize(ParticipantRole participantRole)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](participantRole.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](participantRole.Alias));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), participantRole.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](participantRole.Definition.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](participantRole.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](participantRole.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](participantRole.HyperLink.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](participantRole.Definition));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](participantRole.ExcludedDomain));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](participantRole.ExcludedPerson));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](participantRole.HyperLink));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](participantRole.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](participantRole.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](participantRole.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](participantRole.Name));
-            jsonObject.Add("participantPermission", this.PropertySerializerMap["participantPermission"](participantRole.ParticipantPermission.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("participantPermission", this.PropertySerializerMap["participantPermission"](participantRole.ParticipantPermission));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](participantRole.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](participantRole.ShortName));
             return jsonObject;
@@ -99,7 +83,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
+                throw new ArgumentNullException("thing");
             }
 
             var participantRole = thing as ParticipantRole;

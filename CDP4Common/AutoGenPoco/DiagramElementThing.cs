@@ -27,6 +27,7 @@
 
 namespace CDP4Common.DiagramData
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections;
     using System.Collections.Concurrent;
@@ -41,6 +42,7 @@ namespace CDP4Common.DiagramData
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+    #pragma warning restore S1128
 
     /// <summary>
     /// The abstract class for all types that represent diagramming elements. This abstract corresponds to the "DiagramElement" class defined by the OMG Diagram Definition v1.1

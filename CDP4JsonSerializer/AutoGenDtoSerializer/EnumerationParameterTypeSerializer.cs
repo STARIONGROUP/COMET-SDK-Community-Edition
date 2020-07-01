@@ -1,26 +1,10 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EnumerationParameterTypeSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public License
-//    along with this program; if not, write to the Free Software Foundation,
-//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+// <copyright file "EnumerationParameterTypeSerializer.cs" company="RHEA System S.A.">
+//   Copyright (c) 2017 RHEA System S.A.
 // </copyright>
+// <summary>
+//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,11 +16,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="EnumerationParameterTypeSerializer"/> class is to provide a <see cref="EnumerationParameterType"/> specific serializer
     /// </summary>
-    public class EnumerationParameterTypeSerializer : BaseThingSerializer, IThingSerializer
+    public class EnumerationParameterTypeSerializer : IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -69,14 +53,14 @@ namespace CDP4JsonSerializer
         private JObject Serialize(EnumerationParameterType enumerationParameterType)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](enumerationParameterType.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](enumerationParameterType.Alias));
             jsonObject.Add("allowMultiSelect", this.PropertySerializerMap["allowMultiSelect"](enumerationParameterType.AllowMultiSelect));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](enumerationParameterType.Category.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](enumerationParameterType.Category));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), enumerationParameterType.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](enumerationParameterType.Definition.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](enumerationParameterType.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](enumerationParameterType.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](enumerationParameterType.HyperLink.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](enumerationParameterType.Definition));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](enumerationParameterType.ExcludedDomain));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](enumerationParameterType.ExcludedPerson));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](enumerationParameterType.HyperLink));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](enumerationParameterType.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](enumerationParameterType.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](enumerationParameterType.ModifiedOn));
@@ -84,7 +68,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](enumerationParameterType.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](enumerationParameterType.ShortName));
             jsonObject.Add("symbol", this.PropertySerializerMap["symbol"](enumerationParameterType.Symbol));
-            jsonObject.Add("valueDefinition", this.PropertySerializerMap["valueDefinition"](enumerationParameterType.ValueDefinition.OrderBy(x => x, this.orderedItemComparer)));
+            jsonObject.Add("valueDefinition", this.PropertySerializerMap["valueDefinition"](enumerationParameterType.ValueDefinition));
             return jsonObject;
         }
 
@@ -105,7 +89,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
+                throw new ArgumentNullException("thing");
             }
 
             var enumerationParameterType = thing as EnumerationParameterType;

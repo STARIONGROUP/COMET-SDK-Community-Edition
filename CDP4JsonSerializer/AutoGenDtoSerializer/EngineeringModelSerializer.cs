@@ -1,26 +1,10 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EngineeringModelSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public License
-//    along with this program; if not, write to the Free Software Foundation,
-//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+// <copyright file "EngineeringModelSerializer.cs" company="RHEA System S.A.">
+//   Copyright (c) 2017 RHEA System S.A.
 // </copyright>
+// <summary>
+//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,11 +16,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="EngineeringModelSerializer"/> class is to provide a <see cref="EngineeringModel"/> specific serializer
     /// </summary>
-    public class EngineeringModelSerializer : BaseThingSerializer, IThingSerializer
+    public class EngineeringModelSerializer : IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -67,18 +51,18 @@ namespace CDP4JsonSerializer
         private JObject Serialize(EngineeringModel engineeringModel)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("book", this.PropertySerializerMap["book"](engineeringModel.Book.OrderBy(x => x, this.orderedItemComparer)));
+            jsonObject.Add("book", this.PropertySerializerMap["book"](engineeringModel.Book));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), engineeringModel.ClassKind)));
-            jsonObject.Add("commonFileStore", this.PropertySerializerMap["commonFileStore"](engineeringModel.CommonFileStore.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("commonFileStore", this.PropertySerializerMap["commonFileStore"](engineeringModel.CommonFileStore));
             jsonObject.Add("engineeringModelSetup", this.PropertySerializerMap["engineeringModelSetup"](engineeringModel.EngineeringModelSetup));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](engineeringModel.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](engineeringModel.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("genericNote", this.PropertySerializerMap["genericNote"](engineeringModel.GenericNote.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](engineeringModel.ExcludedDomain));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](engineeringModel.ExcludedPerson));
+            jsonObject.Add("genericNote", this.PropertySerializerMap["genericNote"](engineeringModel.GenericNote));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](engineeringModel.Iid));
-            jsonObject.Add("iteration", this.PropertySerializerMap["iteration"](engineeringModel.Iteration.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("iteration", this.PropertySerializerMap["iteration"](engineeringModel.Iteration));
             jsonObject.Add("lastModifiedOn", this.PropertySerializerMap["lastModifiedOn"](engineeringModel.LastModifiedOn));
-            jsonObject.Add("logEntry", this.PropertySerializerMap["logEntry"](engineeringModel.LogEntry.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("modellingAnnotation", this.PropertySerializerMap["modellingAnnotation"](engineeringModel.ModellingAnnotation.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("logEntry", this.PropertySerializerMap["logEntry"](engineeringModel.LogEntry));
+            jsonObject.Add("modellingAnnotation", this.PropertySerializerMap["modellingAnnotation"](engineeringModel.ModellingAnnotation));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](engineeringModel.ModifiedOn));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](engineeringModel.RevisionNumber));
             return jsonObject;
@@ -101,7 +85,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
+                throw new ArgumentNullException("thing");
             }
 
             var engineeringModel = thing as EngineeringModel;

@@ -28,6 +28,7 @@
 
 namespace CDP4Common.MetaInfo
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -40,6 +41,7 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
+    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="ReviewItemDiscrepancy"/>.
@@ -213,10 +215,10 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "ApprovedBy", new PropertyMetaInfo("ApprovedBy", "Approval", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Discussion", new PropertyMetaInfo("Discussion", "EngineeringModelDataDiscussionItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "RelatedThing", new PropertyMetaInfo("RelatedThing", "ModellingThingReference", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Solution", new PropertyMetaInfo("Solution", "Solution", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
+            { "ApprovedBy", new PropertyMetaInfo("ApprovedBy", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Discussion", new PropertyMetaInfo("Discussion", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "RelatedThing", new PropertyMetaInfo("RelatedThing", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Solution", new PropertyMetaInfo("Solution", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -275,22 +277,22 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Author", new PropertyMetaInfo("Author", "Participant", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "Category", new PropertyMetaInfo("Category", "Category", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "Author", new PropertyMetaInfo("Author", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "Category", new PropertyMetaInfo("Category", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Classification", new PropertyMetaInfo("Classification", "CDP4Common.ReportingData.AnnotationClassificationKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Content", new PropertyMetaInfo("Content", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "CreatedOn", new PropertyMetaInfo("CreatedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "LanguageCode", new PropertyMetaInfo("LanguageCode", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "PrimaryAnnotatedThing", new PropertyMetaInfo("PrimaryAnnotatedThing", "ModellingThingReference", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "Owner", new PropertyMetaInfo("Owner", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "PrimaryAnnotatedThing", new PropertyMetaInfo("PrimaryAnnotatedThing", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "SourceAnnotation", new PropertyMetaInfo("SourceAnnotation", "ModellingAnnotationItem", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "SourceAnnotation", new PropertyMetaInfo("SourceAnnotation", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Status", new PropertyMetaInfo("Status", "CDP4Common.ReportingData.AnnotationStatusKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Title", new PropertyMetaInfo("Title", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
@@ -334,7 +336,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "EngineeringModel", new PropertyMetaInfo("ModellingAnnotation", "ModellingAnnotationItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "EngineeringModel", new PropertyMetaInfo("ModellingAnnotation", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>

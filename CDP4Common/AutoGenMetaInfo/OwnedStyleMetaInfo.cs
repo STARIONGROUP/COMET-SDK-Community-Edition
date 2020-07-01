@@ -28,6 +28,7 @@
 
 namespace CDP4Common.MetaInfo
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -40,6 +41,7 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
+    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="OwnedStyle"/>.
@@ -202,7 +204,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "UsedColor", new PropertyMetaInfo("UsedColor", "Color", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "UsedColor", new PropertyMetaInfo("UsedColor", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>
@@ -260,12 +262,12 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "FillColor", new PropertyMetaInfo("FillColor", "Color", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "FillColor", new PropertyMetaInfo("FillColor", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "FillOpacity", new PropertyMetaInfo("FillOpacity", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "FontBold", new PropertyMetaInfo("FontBold", "bool", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "FontColor", new PropertyMetaInfo("FontColor", "Color", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "FontColor", new PropertyMetaInfo("FontColor", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "FontItalic", new PropertyMetaInfo("FontItalic", "bool", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "FontName", new PropertyMetaInfo("FontName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "FontSize", new PropertyMetaInfo("FontSize", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
@@ -275,7 +277,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "StrokeColor", new PropertyMetaInfo("StrokeColor", "Color", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "StrokeColor", new PropertyMetaInfo("StrokeColor", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "StrokeOpacity", new PropertyMetaInfo("StrokeOpacity", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "StrokeWidth", new PropertyMetaInfo("StrokeWidth", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
@@ -317,8 +319,8 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "DiagramEdge", new PropertyMetaInfo("LocalStyle", "OwnedStyle", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
-            { "DiagramObject", new PropertyMetaInfo("LocalStyle", "OwnedStyle", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
+            { "DiagramEdge", new PropertyMetaInfo("LocalStyle", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
+            { "DiagramObject", new PropertyMetaInfo("LocalStyle", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
         };
 
         /// <summary>

@@ -1,26 +1,10 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IterationSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public License
-//    along with this program; if not, write to the Free Software Foundation,
-//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+// <copyright file "IterationSerializer.cs" company="RHEA System S.A.">
+//   Copyright (c) 2017 RHEA System S.A.
 // </copyright>
+// <summary>
+//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,11 +16,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="IterationSerializer"/> class is to provide a <see cref="Iteration"/> specific serializer
     /// </summary>
-    public class IterationSerializer : BaseThingSerializer, IThingSerializer
+    public class IterationSerializer : IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -80,33 +64,33 @@ namespace CDP4JsonSerializer
         private JObject Serialize(Iteration iteration)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("actualFiniteStateList", this.PropertySerializerMap["actualFiniteStateList"](iteration.ActualFiniteStateList.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("actualFiniteStateList", this.PropertySerializerMap["actualFiniteStateList"](iteration.ActualFiniteStateList));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), iteration.ClassKind)));
             jsonObject.Add("defaultOption", this.PropertySerializerMap["defaultOption"](iteration.DefaultOption));
-            jsonObject.Add("diagramCanvas", this.PropertySerializerMap["diagramCanvas"](iteration.DiagramCanvas.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("domainFileStore", this.PropertySerializerMap["domainFileStore"](iteration.DomainFileStore.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("element", this.PropertySerializerMap["element"](iteration.Element.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](iteration.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](iteration.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("externalIdentifierMap", this.PropertySerializerMap["externalIdentifierMap"](iteration.ExternalIdentifierMap.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("goal", this.PropertySerializerMap["goal"](iteration.Goal.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("diagramCanvas", this.PropertySerializerMap["diagramCanvas"](iteration.DiagramCanvas));
+            jsonObject.Add("domainFileStore", this.PropertySerializerMap["domainFileStore"](iteration.DomainFileStore));
+            jsonObject.Add("element", this.PropertySerializerMap["element"](iteration.Element));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](iteration.ExcludedDomain));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](iteration.ExcludedPerson));
+            jsonObject.Add("externalIdentifierMap", this.PropertySerializerMap["externalIdentifierMap"](iteration.ExternalIdentifierMap));
+            jsonObject.Add("goal", this.PropertySerializerMap["goal"](iteration.Goal));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](iteration.Iid));
             jsonObject.Add("iterationSetup", this.PropertySerializerMap["iterationSetup"](iteration.IterationSetup));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](iteration.ModifiedOn));
-            jsonObject.Add("option", this.PropertySerializerMap["option"](iteration.Option.OrderBy(x => x, this.orderedItemComparer)));
-            jsonObject.Add("possibleFiniteStateList", this.PropertySerializerMap["possibleFiniteStateList"](iteration.PossibleFiniteStateList.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("publication", this.PropertySerializerMap["publication"](iteration.Publication.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("relationship", this.PropertySerializerMap["relationship"](iteration.Relationship.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("requirementsSpecification", this.PropertySerializerMap["requirementsSpecification"](iteration.RequirementsSpecification.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("option", this.PropertySerializerMap["option"](iteration.Option));
+            jsonObject.Add("possibleFiniteStateList", this.PropertySerializerMap["possibleFiniteStateList"](iteration.PossibleFiniteStateList));
+            jsonObject.Add("publication", this.PropertySerializerMap["publication"](iteration.Publication));
+            jsonObject.Add("relationship", this.PropertySerializerMap["relationship"](iteration.Relationship));
+            jsonObject.Add("requirementsSpecification", this.PropertySerializerMap["requirementsSpecification"](iteration.RequirementsSpecification));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](iteration.RevisionNumber));
-            jsonObject.Add("ruleVerificationList", this.PropertySerializerMap["ruleVerificationList"](iteration.RuleVerificationList.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("sharedDiagramStyle", this.PropertySerializerMap["sharedDiagramStyle"](iteration.SharedDiagramStyle.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("ruleVerificationList", this.PropertySerializerMap["ruleVerificationList"](iteration.RuleVerificationList));
+            jsonObject.Add("sharedDiagramStyle", this.PropertySerializerMap["sharedDiagramStyle"](iteration.SharedDiagramStyle));
             jsonObject.Add("sourceIterationIid", this.PropertySerializerMap["sourceIterationIid"](iteration.SourceIterationIid));
-            jsonObject.Add("stakeholder", this.PropertySerializerMap["stakeholder"](iteration.Stakeholder.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("stakeholderValue", this.PropertySerializerMap["stakeholderValue"](iteration.StakeholderValue.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("stakeholderValueMap", this.PropertySerializerMap["stakeholderValueMap"](iteration.StakeholderValueMap.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("stakeholder", this.PropertySerializerMap["stakeholder"](iteration.Stakeholder));
+            jsonObject.Add("stakeholderValue", this.PropertySerializerMap["stakeholderValue"](iteration.StakeholderValue));
+            jsonObject.Add("stakeholderValueMap", this.PropertySerializerMap["stakeholderValueMap"](iteration.StakeholderValueMap));
             jsonObject.Add("topElement", this.PropertySerializerMap["topElement"](iteration.TopElement));
-            jsonObject.Add("valueGroup", this.PropertySerializerMap["valueGroup"](iteration.ValueGroup.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("valueGroup", this.PropertySerializerMap["valueGroup"](iteration.ValueGroup));
             return jsonObject;
         }
 
@@ -127,7 +111,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
+                throw new ArgumentNullException("thing");
             }
 
             var iteration = thing as Iteration;

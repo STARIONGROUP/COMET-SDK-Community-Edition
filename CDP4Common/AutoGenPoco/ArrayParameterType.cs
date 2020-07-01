@@ -27,6 +27,7 @@
 
 namespace CDP4Common.SiteDirectoryData
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections;
     using System.Collections.Concurrent;
@@ -41,6 +42,7 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+    #pragma warning restore S1128
 
     /// <summary>
     /// specialization of CompoundParameterType that specifies a one-dimensional or multi-dimensional array parameter type with elements (components) that are typed by other ScalarParameterTypes

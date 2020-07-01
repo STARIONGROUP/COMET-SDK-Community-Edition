@@ -28,6 +28,7 @@
 
 namespace CDP4Common.MetaInfo
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -40,6 +41,7 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
+    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="UserRuleVerification"/>.
@@ -201,7 +203,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Violation", new PropertyMetaInfo("Violation", "RuleViolation", PropertyKind.List, AggregationKind.Composite, false, false, false, 0, "*", false) },
+            { "Violation", new PropertyMetaInfo("Violation", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, false, 0, "*", false) },
         };
 
         /// <summary>
@@ -250,16 +252,16 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ExecutedOn", new PropertyMetaInfo("ExecutedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "IsActive", new PropertyMetaInfo("IsActive", "bool", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
-            { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
+            { "Owner", new PropertyMetaInfo("Owner", "Guid", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "Rule", new PropertyMetaInfo("Rule", "Rule", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "Rule", new PropertyMetaInfo("Rule", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Status", new PropertyMetaInfo("Status", "CDP4Common.EngineeringModelData.RuleVerificationStatusKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -291,7 +293,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "RuleVerificationList", new PropertyMetaInfo("RuleVerification", "RuleVerification", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 0, "*", true) },
+            { "RuleVerificationList", new PropertyMetaInfo("RuleVerification", "Guid", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 0, "*", true) },
         };
 
         /// <summary>

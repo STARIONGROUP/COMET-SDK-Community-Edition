@@ -28,6 +28,7 @@
 
 namespace CDP4Common.MetaInfo
 {
+    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -40,6 +41,7 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
+    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="ParameterOverrideValueSet"/>.
@@ -249,19 +251,19 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "ActualOption", new PropertyMetaInfo("ActualOption", "Option", PropertyKind.Scalar, AggregationKind.None, true, false, true, 0, "1", false) },
-            { "ActualState", new PropertyMetaInfo("ActualState", "ActualFiniteState", PropertyKind.Scalar, AggregationKind.None, true, false, true, 0, "1", false) },
+            { "ActualOption", new PropertyMetaInfo("ActualOption", "Guid", PropertyKind.Scalar, AggregationKind.None, true, false, true, 0, "1", false) },
+            { "ActualState", new PropertyMetaInfo("ActualState", "Guid", PropertyKind.Scalar, AggregationKind.None, true, false, true, 0, "1", false) },
             { "ActualValue", new PropertyMetaInfo("ActualValue", "string", PropertyKind.ValueArray, AggregationKind.None, true, true, true, 1, "*", false) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Computed", new PropertyMetaInfo("Computed", "string", PropertyKind.ValueArray, AggregationKind.None, false, true, true, 1, "*", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Formula", new PropertyMetaInfo("Formula", "string", PropertyKind.ValueArray, AggregationKind.None, false, true, true, 1, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Manual", new PropertyMetaInfo("Manual", "string", PropertyKind.ValueArray, AggregationKind.None, false, true, true, 1, "*", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
-            { "ParameterValueSet", new PropertyMetaInfo("ParameterValueSet", "ParameterValueSet", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "Owner", new PropertyMetaInfo("Owner", "Guid", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
+            { "ParameterValueSet", new PropertyMetaInfo("ParameterValueSet", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Published", new PropertyMetaInfo("Published", "string", PropertyKind.ValueArray, AggregationKind.None, false, true, true, 1, "*", true) },
             { "Reference", new PropertyMetaInfo("Reference", "string", PropertyKind.ValueArray, AggregationKind.None, false, true, true, 1, "*", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
@@ -298,7 +300,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "ParameterOverride", new PropertyMetaInfo("ValueSet", "ParameterOverrideValueSet", PropertyKind.List, AggregationKind.Composite, false, false, true, 1, "*", true) },
+            { "ParameterOverride", new PropertyMetaInfo("ValueSet", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 1, "*", true) },
         };
 
         /// <summary>
