@@ -28,7 +28,6 @@
 
 namespace CDP4Common.MetaInfo
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -41,7 +40,6 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
-    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="ReferenceDataLibrary"/>.
@@ -231,19 +229,19 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Alias", new PropertyMetaInfo("Alias", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Constant", new PropertyMetaInfo("Constant", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DefinedCategory", new PropertyMetaInfo("DefinedCategory", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Definition", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "FileType", new PropertyMetaInfo("FileType", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Glossary", new PropertyMetaInfo("Glossary", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "HyperLink", new PropertyMetaInfo("HyperLink", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ParameterType", new PropertyMetaInfo("ParameterType", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ReferenceSource", new PropertyMetaInfo("ReferenceSource", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Rule", new PropertyMetaInfo("Rule", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Scale", new PropertyMetaInfo("Scale", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Unit", new PropertyMetaInfo("Unit", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "UnitPrefix", new PropertyMetaInfo("UnitPrefix", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Constant", new PropertyMetaInfo("Constant", "Constant", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DefinedCategory", new PropertyMetaInfo("DefinedCategory", "Category", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "FileType", new PropertyMetaInfo("FileType", "FileType", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Glossary", new PropertyMetaInfo("Glossary", "Glossary", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ParameterType", new PropertyMetaInfo("ParameterType", "ParameterType", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ReferenceSource", new PropertyMetaInfo("ReferenceSource", "ReferenceSource", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Rule", new PropertyMetaInfo("Rule", "Rule", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Scale", new PropertyMetaInfo("Scale", "MeasurementScale", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Unit", new PropertyMetaInfo("Unit", "MeasurementUnit", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "UnitPrefix", new PropertyMetaInfo("UnitPrefix", "UnitPrefix", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>
@@ -304,15 +302,15 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "BaseQuantityKind", new PropertyMetaInfo("BaseQuantityKind", "Guid", PropertyKind.OrderedList, AggregationKind.None, false, true, true, 0, "*", true) },
-            { "BaseUnit", new PropertyMetaInfo("BaseUnit", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "BaseQuantityKind", new PropertyMetaInfo("BaseQuantityKind", "QuantityKind", PropertyKind.OrderedList, AggregationKind.None, false, true, true, 0, "*", true) },
+            { "BaseUnit", new PropertyMetaInfo("BaseUnit", "MeasurementUnit", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "RequiredRdl", new PropertyMetaInfo("RequiredRdl", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "RequiredRdl", new PropertyMetaInfo("RequiredRdl", "SiteReferenceDataLibrary", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };

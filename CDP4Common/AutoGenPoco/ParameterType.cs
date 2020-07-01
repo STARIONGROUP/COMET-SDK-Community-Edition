@@ -27,7 +27,6 @@
 
 namespace CDP4Common.SiteDirectoryData
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections;
     using System.Collections.Concurrent;
@@ -42,7 +41,6 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    #pragma warning restore S1128
 
     /// <summary>
     /// abstract superclass that represents the common characteristics of any parameter type

@@ -27,7 +27,6 @@
 
 namespace CDP4Common.EngineeringModelData
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections;
     using System.Collections.Concurrent;
@@ -42,7 +41,6 @@ namespace CDP4Common.EngineeringModelData
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    #pragma warning restore S1128
 
     /// <summary>
     /// representation of a boolean and (conjunction) expression

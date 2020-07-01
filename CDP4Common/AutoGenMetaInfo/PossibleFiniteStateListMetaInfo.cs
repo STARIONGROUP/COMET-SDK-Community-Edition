@@ -28,7 +28,6 @@
 
 namespace CDP4Common.MetaInfo
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -41,7 +40,6 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
-    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="PossibleFiniteStateList"/>.
@@ -215,10 +213,10 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Alias", new PropertyMetaInfo("Alias", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Definition", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "HyperLink", new PropertyMetaInfo("HyperLink", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "PossibleState", new PropertyMetaInfo("PossibleState", "Guid", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 1, "*", true) },
+            { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "PossibleState", new PropertyMetaInfo("PossibleState", "PossibleFiniteState", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 1, "*", true) },
         };
 
         /// <summary>
@@ -270,15 +268,15 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Category", new PropertyMetaInfo("Category", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "Category", new PropertyMetaInfo("Category", "Category", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "DefaultState", new PropertyMetaInfo("DefaultState", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "DefaultState", new PropertyMetaInfo("DefaultState", "PossibleFiniteState", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "Owner", new PropertyMetaInfo("Owner", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
@@ -315,7 +313,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Iteration", new PropertyMetaInfo("PossibleFiniteStateList", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Iteration", new PropertyMetaInfo("PossibleFiniteStateList", "PossibleFiniteStateList", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>

@@ -1,10 +1,26 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file "SimpleQuantityKindSerializer.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+// <copyright file="SimpleQuantityKindSerializer.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2019 RHEA System S.A.
+//
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//
+//    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 3 of the License, or (at your option) any later version.
+//
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public License
+//    along with this program; if not, write to the Free Software Foundation,
+//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// <summary>
-//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -16,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="SimpleQuantityKindSerializer"/> class is to provide a <see cref="SimpleQuantityKind"/> specific serializer
     /// </summary>
-    public class SimpleQuantityKindSerializer : IThingSerializer
+    public class SimpleQuantityKindSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -54,19 +70,19 @@ namespace CDP4JsonSerializer
         private JObject Serialize(SimpleQuantityKind simpleQuantityKind)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](simpleQuantityKind.Alias));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](simpleQuantityKind.Category));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](simpleQuantityKind.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](simpleQuantityKind.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), simpleQuantityKind.ClassKind)));
             jsonObject.Add("defaultScale", this.PropertySerializerMap["defaultScale"](simpleQuantityKind.DefaultScale));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](simpleQuantityKind.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](simpleQuantityKind.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](simpleQuantityKind.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](simpleQuantityKind.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](simpleQuantityKind.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](simpleQuantityKind.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](simpleQuantityKind.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](simpleQuantityKind.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](simpleQuantityKind.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](simpleQuantityKind.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](simpleQuantityKind.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](simpleQuantityKind.Name));
-            jsonObject.Add("possibleScale", this.PropertySerializerMap["possibleScale"](simpleQuantityKind.PossibleScale));
+            jsonObject.Add("possibleScale", this.PropertySerializerMap["possibleScale"](simpleQuantityKind.PossibleScale.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("quantityDimensionSymbol", this.PropertySerializerMap["quantityDimensionSymbol"](simpleQuantityKind.QuantityDimensionSymbol));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](simpleQuantityKind.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](simpleQuantityKind.ShortName));
@@ -91,7 +107,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var simpleQuantityKind = thing as SimpleQuantityKind;

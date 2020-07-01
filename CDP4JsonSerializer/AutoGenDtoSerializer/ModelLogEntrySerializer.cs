@@ -1,10 +1,26 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file "ModelLogEntrySerializer.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+// <copyright file="ModelLogEntrySerializer.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2019 RHEA System S.A.
+//
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//
+//    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 3 of the License, or (at your option) any later version.
+//
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public License
+//    along with this program; if not, write to the Free Software Foundation,
+//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// <summary>
-//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -16,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="ModelLogEntrySerializer"/> class is to provide a <see cref="ModelLogEntry"/> specific serializer
     /// </summary>
-    public class ModelLogEntrySerializer : IThingSerializer
+    public class ModelLogEntrySerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -50,14 +66,14 @@ namespace CDP4JsonSerializer
         private JObject Serialize(ModelLogEntry modelLogEntry)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("affectedItemIid", this.PropertySerializerMap["affectedItemIid"](modelLogEntry.AffectedItemIid));
+            jsonObject.Add("affectedItemIid", this.PropertySerializerMap["affectedItemIid"](modelLogEntry.AffectedItemIid.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("author", this.PropertySerializerMap["author"](modelLogEntry.Author));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](modelLogEntry.Category));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](modelLogEntry.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), modelLogEntry.ClassKind)));
             jsonObject.Add("content", this.PropertySerializerMap["content"](modelLogEntry.Content));
             jsonObject.Add("createdOn", this.PropertySerializerMap["createdOn"](modelLogEntry.CreatedOn));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](modelLogEntry.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](modelLogEntry.ExcludedPerson));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](modelLogEntry.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](modelLogEntry.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](modelLogEntry.Iid));
             jsonObject.Add("languageCode", this.PropertySerializerMap["languageCode"](modelLogEntry.LanguageCode));
             jsonObject.Add("level", this.PropertySerializerMap["level"](Enum.GetName(typeof(CDP4Common.CommonData.LogLevelKind), modelLogEntry.Level)));
@@ -83,7 +99,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var modelLogEntry = thing as ModelLogEntry;

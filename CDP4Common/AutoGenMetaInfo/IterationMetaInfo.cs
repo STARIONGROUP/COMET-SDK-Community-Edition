@@ -28,7 +28,6 @@
 
 namespace CDP4Common.MetaInfo
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -41,7 +40,6 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
-    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="Iteration"/>.
@@ -245,23 +243,23 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "ActualFiniteStateList", new PropertyMetaInfo("ActualFiniteStateList", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DiagramCanvas", new PropertyMetaInfo("DiagramCanvas", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DomainFileStore", new PropertyMetaInfo("DomainFileStore", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Element", new PropertyMetaInfo("Element", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ExternalIdentifierMap", new PropertyMetaInfo("ExternalIdentifierMap", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Goal", new PropertyMetaInfo("Goal", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Option", new PropertyMetaInfo("Option", "Guid", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 1, "*", true) },
-            { "PossibleFiniteStateList", new PropertyMetaInfo("PossibleFiniteStateList", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Publication", new PropertyMetaInfo("Publication", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Relationship", new PropertyMetaInfo("Relationship", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "RequirementsSpecification", new PropertyMetaInfo("RequirementsSpecification", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "RuleVerificationList", new PropertyMetaInfo("RuleVerificationList", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "SharedDiagramStyle", new PropertyMetaInfo("SharedDiagramStyle", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Stakeholder", new PropertyMetaInfo("Stakeholder", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "StakeholderValue", new PropertyMetaInfo("StakeholderValue", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "StakeholderValueMap", new PropertyMetaInfo("StakeholderValueMap", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ValueGroup", new PropertyMetaInfo("ValueGroup", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ActualFiniteStateList", new PropertyMetaInfo("ActualFiniteStateList", "ActualFiniteStateList", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DiagramCanvas", new PropertyMetaInfo("DiagramCanvas", "DiagramCanvas", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DomainFileStore", new PropertyMetaInfo("DomainFileStore", "DomainFileStore", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Element", new PropertyMetaInfo("Element", "ElementDefinition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ExternalIdentifierMap", new PropertyMetaInfo("ExternalIdentifierMap", "ExternalIdentifierMap", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Goal", new PropertyMetaInfo("Goal", "Goal", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Option", new PropertyMetaInfo("Option", "Option", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 1, "*", true) },
+            { "PossibleFiniteStateList", new PropertyMetaInfo("PossibleFiniteStateList", "PossibleFiniteStateList", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Publication", new PropertyMetaInfo("Publication", "Publication", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Relationship", new PropertyMetaInfo("Relationship", "Relationship", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "RequirementsSpecification", new PropertyMetaInfo("RequirementsSpecification", "RequirementsSpecification", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "RuleVerificationList", new PropertyMetaInfo("RuleVerificationList", "RuleVerificationList", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "SharedDiagramStyle", new PropertyMetaInfo("SharedDiagramStyle", "SharedStyle", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Stakeholder", new PropertyMetaInfo("Stakeholder", "Stakeholder", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "StakeholderValue", new PropertyMetaInfo("StakeholderValue", "StakeholderValue", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "StakeholderValueMap", new PropertyMetaInfo("StakeholderValueMap", "StakeHolderValueMap", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ValueGroup", new PropertyMetaInfo("ValueGroup", "ValueGroup", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>
@@ -326,15 +324,15 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "DefaultOption", new PropertyMetaInfo("DefaultOption", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "DefaultOption", new PropertyMetaInfo("DefaultOption", "Option", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "IterationSetup", new PropertyMetaInfo("IterationSetup", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "IterationSetup", new PropertyMetaInfo("IterationSetup", "IterationSetup", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SourceIterationIid", new PropertyMetaInfo("SourceIterationIid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
-            { "TopElement", new PropertyMetaInfo("TopElement", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "TopElement", new PropertyMetaInfo("TopElement", "ElementDefinition", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -381,7 +379,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "EngineeringModel", new PropertyMetaInfo("Iteration", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 1, "*", true) },
+            { "EngineeringModel", new PropertyMetaInfo("Iteration", "Iteration", PropertyKind.List, AggregationKind.Composite, false, false, true, 1, "*", true) },
         };
 
         /// <summary>

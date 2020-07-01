@@ -1,10 +1,26 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file "ArrayParameterTypeSerializer.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+// <copyright file="ArrayParameterTypeSerializer.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2019 RHEA System S.A.
+//
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//
+//    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 3 of the License, or (at your option) any later version.
+//
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public License
+//    along with this program; if not, write to the Free Software Foundation,
+//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// <summary>
-//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -16,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="ArrayParameterTypeSerializer"/> class is to provide a <see cref="ArrayParameterType"/> specific serializer
     /// </summary>
-    public class ArrayParameterTypeSerializer : IThingSerializer
+    public class ArrayParameterTypeSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -55,15 +71,15 @@ namespace CDP4JsonSerializer
         private JObject Serialize(ArrayParameterType arrayParameterType)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](arrayParameterType.Alias));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](arrayParameterType.Category));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](arrayParameterType.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](arrayParameterType.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), arrayParameterType.ClassKind)));
-            jsonObject.Add("component", this.PropertySerializerMap["component"](arrayParameterType.Component));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](arrayParameterType.Definition));
-            jsonObject.Add("dimension", this.PropertySerializerMap["dimension"](arrayParameterType.Dimension));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](arrayParameterType.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](arrayParameterType.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](arrayParameterType.HyperLink));
+            jsonObject.Add("component", this.PropertySerializerMap["component"](arrayParameterType.Component.OrderBy(x => x, this.orderedItemComparer)));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](arrayParameterType.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("dimension", this.PropertySerializerMap["dimension"](arrayParameterType.Dimension.OrderBy(x => x, this.orderedItemComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](arrayParameterType.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](arrayParameterType.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](arrayParameterType.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](arrayParameterType.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](arrayParameterType.IsDeprecated));
             jsonObject.Add("isFinalized", this.PropertySerializerMap["isFinalized"](arrayParameterType.IsFinalized));
@@ -93,7 +109,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var arrayParameterType = thing as ArrayParameterType;

@@ -28,7 +28,6 @@
 
 namespace CDP4Common.MetaInfo
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -41,7 +40,6 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
-    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="EngineeringModelDataDiscussionItem"/>.
@@ -246,16 +244,16 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Author", new PropertyMetaInfo("Author", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "Author", new PropertyMetaInfo("Author", "Participant", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Content", new PropertyMetaInfo("Content", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "CreatedOn", new PropertyMetaInfo("CreatedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "LanguageCode", new PropertyMetaInfo("LanguageCode", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "ReplyTo", new PropertyMetaInfo("ReplyTo", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ReplyTo", new PropertyMetaInfo("ReplyTo", "DiscussionItem", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -287,14 +285,14 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "ActionItem", new PropertyMetaInfo("Discussion", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ChangeProposal", new PropertyMetaInfo("Discussion", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ChangeRequest", new PropertyMetaInfo("Discussion", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ContractChangeNotice", new PropertyMetaInfo("Discussion", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "EngineeringModelDataNote", new PropertyMetaInfo("Discussion", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "RequestForDeviation", new PropertyMetaInfo("Discussion", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "RequestForWaiver", new PropertyMetaInfo("Discussion", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ReviewItemDiscrepancy", new PropertyMetaInfo("Discussion", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ActionItem", new PropertyMetaInfo("Discussion", "EngineeringModelDataDiscussionItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ChangeProposal", new PropertyMetaInfo("Discussion", "EngineeringModelDataDiscussionItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ChangeRequest", new PropertyMetaInfo("Discussion", "EngineeringModelDataDiscussionItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ContractChangeNotice", new PropertyMetaInfo("Discussion", "EngineeringModelDataDiscussionItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "EngineeringModelDataNote", new PropertyMetaInfo("Discussion", "EngineeringModelDataDiscussionItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "RequestForDeviation", new PropertyMetaInfo("Discussion", "EngineeringModelDataDiscussionItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "RequestForWaiver", new PropertyMetaInfo("Discussion", "EngineeringModelDataDiscussionItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ReviewItemDiscrepancy", new PropertyMetaInfo("Discussion", "EngineeringModelDataDiscussionItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>

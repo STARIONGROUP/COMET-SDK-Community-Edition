@@ -27,12 +27,10 @@
 
 namespace CDP4Common.CommonData
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    #pragma warning restore S1128
 
     /// <summary>
     /// abstract supertype that represents information expressed in human-readable natural language

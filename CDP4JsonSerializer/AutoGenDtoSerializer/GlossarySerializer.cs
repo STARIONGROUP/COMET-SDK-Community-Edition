@@ -1,10 +1,26 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file "GlossarySerializer.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+// <copyright file="GlossarySerializer.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2019 RHEA System S.A.
+//
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//
+//    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 3 of the License, or (at your option) any later version.
+//
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public License
+//    along with this program; if not, write to the Free Software Foundation,
+//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// <summary>
-//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -16,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="GlossarySerializer"/> class is to provide a <see cref="Glossary"/> specific serializer
     /// </summary>
-    public class GlossarySerializer : IThingSerializer
+    public class GlossarySerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -51,20 +67,20 @@ namespace CDP4JsonSerializer
         private JObject Serialize(Glossary glossary)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](glossary.Alias));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](glossary.Category));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](glossary.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](glossary.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), glossary.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](glossary.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](glossary.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](glossary.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](glossary.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](glossary.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](glossary.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](glossary.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](glossary.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](glossary.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](glossary.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](glossary.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](glossary.Name));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](glossary.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](glossary.ShortName));
-            jsonObject.Add("term", this.PropertySerializerMap["term"](glossary.Term));
+            jsonObject.Add("term", this.PropertySerializerMap["term"](glossary.Term.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }
 
@@ -85,7 +101,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var glossary = thing as Glossary;

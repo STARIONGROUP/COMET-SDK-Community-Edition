@@ -27,7 +27,6 @@
 
 namespace CDP4Common.ReportingData
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections;
     using System.Collections.Concurrent;
@@ -42,7 +41,6 @@ namespace CDP4Common.ReportingData
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    #pragma warning restore S1128
 
     /// <summary>
     /// The objective of the request for waiver is to be the vehicle for requiring and agreeing to the use or the delivery of a product that does not conform to its approved product configuration baseline.

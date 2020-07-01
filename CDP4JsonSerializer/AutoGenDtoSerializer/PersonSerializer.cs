@@ -1,10 +1,26 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file "PersonSerializer.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+// <copyright file="PersonSerializer.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2019 RHEA System S.A.
+//
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//
+//    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 3 of the License, or (at your option) any later version.
+//
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public License
+//    along with this program; if not, write to the Free Software Foundation,
+//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// <summary>
-//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -16,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="PersonSerializer"/> class is to provide a <see cref="Person"/> specific serializer
     /// </summary>
-    public class PersonSerializer : IThingSerializer
+    public class PersonSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -62,9 +78,9 @@ namespace CDP4JsonSerializer
             jsonObject.Add("defaultDomain", this.PropertySerializerMap["defaultDomain"](person.DefaultDomain));
             jsonObject.Add("defaultEmailAddress", this.PropertySerializerMap["defaultEmailAddress"](person.DefaultEmailAddress));
             jsonObject.Add("defaultTelephoneNumber", this.PropertySerializerMap["defaultTelephoneNumber"](person.DefaultTelephoneNumber));
-            jsonObject.Add("emailAddress", this.PropertySerializerMap["emailAddress"](person.EmailAddress));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](person.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](person.ExcludedPerson));
+            jsonObject.Add("emailAddress", this.PropertySerializerMap["emailAddress"](person.EmailAddress.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](person.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](person.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("givenName", this.PropertySerializerMap["givenName"](person.GivenName));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](person.Iid));
             jsonObject.Add("isActive", this.PropertySerializerMap["isActive"](person.IsActive));
@@ -77,8 +93,8 @@ namespace CDP4JsonSerializer
             jsonObject.Add("role", this.PropertySerializerMap["role"](person.Role));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](person.ShortName));
             jsonObject.Add("surname", this.PropertySerializerMap["surname"](person.Surname));
-            jsonObject.Add("telephoneNumber", this.PropertySerializerMap["telephoneNumber"](person.TelephoneNumber));
-            jsonObject.Add("userPreference", this.PropertySerializerMap["userPreference"](person.UserPreference));
+            jsonObject.Add("telephoneNumber", this.PropertySerializerMap["telephoneNumber"](person.TelephoneNumber.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("userPreference", this.PropertySerializerMap["userPreference"](person.UserPreference.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }
 
@@ -99,7 +115,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var person = thing as Person;

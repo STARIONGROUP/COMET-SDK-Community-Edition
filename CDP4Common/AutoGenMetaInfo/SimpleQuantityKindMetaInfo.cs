@@ -28,7 +28,6 @@
 
 namespace CDP4Common.MetaInfo
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -41,7 +40,6 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
-    #pragma warning restore S1128
 
     /// <summary>
     /// This a class that holds meta info for <see cref="SimpleQuantityKind"/>.
@@ -212,9 +210,9 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Alias", new PropertyMetaInfo("Alias", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Definition", new PropertyMetaInfo("Definition", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "HyperLink", new PropertyMetaInfo("HyperLink", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>
@@ -268,18 +266,18 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "AllPossibleScale", new PropertyMetaInfo("AllPossibleScale", "Guid", PropertyKind.List, AggregationKind.None, true, false, true, 0, "*", false) },
-            { "Category", new PropertyMetaInfo("Category", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "AllPossibleScale", new PropertyMetaInfo("AllPossibleScale", "MeasurementScale", PropertyKind.List, AggregationKind.None, true, false, true, 0, "*", false) },
+            { "Category", new PropertyMetaInfo("Category", "Category", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "DefaultScale", new PropertyMetaInfo("DefaultScale", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "DefaultScale", new PropertyMetaInfo("DefaultScale", "MeasurementScale", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "IsDeprecated", new PropertyMetaInfo("IsDeprecated", "bool", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "NumberOfValues", new PropertyMetaInfo("NumberOfValues", "int", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
-            { "PossibleScale", new PropertyMetaInfo("PossibleScale", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "PossibleScale", new PropertyMetaInfo("PossibleScale", "MeasurementScale", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "QuantityDimensionExponent", new PropertyMetaInfo("QuantityDimensionExponent", "string", PropertyKind.OrderedList, AggregationKind.None, true, true, true, 0, "*", false) },
             { "QuantityDimensionExpression", new PropertyMetaInfo("QuantityDimensionExpression", "string", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
             { "QuantityDimensionSymbol", new PropertyMetaInfo("QuantityDimensionSymbol", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
@@ -322,8 +320,8 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "ModelReferenceDataLibrary", new PropertyMetaInfo("ParameterType", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "SiteReferenceDataLibrary", new PropertyMetaInfo("ParameterType", "Guid", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ModelReferenceDataLibrary", new PropertyMetaInfo("ParameterType", "ParameterType", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "SiteReferenceDataLibrary", new PropertyMetaInfo("ParameterType", "ParameterType", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>

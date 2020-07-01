@@ -1,10 +1,26 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file "RatioScaleSerializer.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+// <copyright file="RatioScaleSerializer.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2019 RHEA System S.A.
+//
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//
+//    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 3 of the License, or (at your option) any later version.
+//
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public License
+//    along with this program; if not, write to the Free Software Foundation,
+//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// <summary>
-//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -16,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="RatioScaleSerializer"/> class is to provide a <see cref="RatioScale"/> specific serializer
     /// </summary>
-    public class RatioScaleSerializer : IThingSerializer
+    public class RatioScaleSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -59,17 +75,17 @@ namespace CDP4JsonSerializer
         private JObject Serialize(RatioScale ratioScale)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](ratioScale.Alias));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](ratioScale.Alias.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), ratioScale.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](ratioScale.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](ratioScale.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](ratioScale.ExcludedPerson));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](ratioScale.HyperLink));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](ratioScale.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](ratioScale.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](ratioScale.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](ratioScale.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](ratioScale.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](ratioScale.IsDeprecated));
             jsonObject.Add("isMaximumInclusive", this.PropertySerializerMap["isMaximumInclusive"](ratioScale.IsMaximumInclusive));
             jsonObject.Add("isMinimumInclusive", this.PropertySerializerMap["isMinimumInclusive"](ratioScale.IsMinimumInclusive));
-            jsonObject.Add("mappingToReferenceScale", this.PropertySerializerMap["mappingToReferenceScale"](ratioScale.MappingToReferenceScale));
+            jsonObject.Add("mappingToReferenceScale", this.PropertySerializerMap["mappingToReferenceScale"](ratioScale.MappingToReferenceScale.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("maximumPermissibleValue", this.PropertySerializerMap["maximumPermissibleValue"](ratioScale.MaximumPermissibleValue));
             jsonObject.Add("minimumPermissibleValue", this.PropertySerializerMap["minimumPermissibleValue"](ratioScale.MinimumPermissibleValue));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](ratioScale.ModifiedOn));
@@ -80,7 +96,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](ratioScale.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](ratioScale.ShortName));
             jsonObject.Add("unit", this.PropertySerializerMap["unit"](ratioScale.Unit));
-            jsonObject.Add("valueDefinition", this.PropertySerializerMap["valueDefinition"](ratioScale.ValueDefinition));
+            jsonObject.Add("valueDefinition", this.PropertySerializerMap["valueDefinition"](ratioScale.ValueDefinition.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }
 
@@ -101,7 +117,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var ratioScale = thing as RatioScale;

@@ -27,12 +27,10 @@
 
 namespace CDP4Common.SiteDirectoryData
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections.Generic;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    #pragma warning restore S1128
 
     /// <summary>
     /// representation of a Thing in a SiteDirectory that is affected by PersonAccessRightKind.READ_IF_PARTICIPANT or PersonAccessRightKind.MODIFY_IF_PARTICIPANT

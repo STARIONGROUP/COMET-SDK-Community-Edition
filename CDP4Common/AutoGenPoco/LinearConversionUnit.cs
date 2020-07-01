@@ -27,7 +27,6 @@
 
 namespace CDP4Common.SiteDirectoryData
 {
-    #pragma warning disable S1128
     using System;
     using System.Collections;
     using System.Collections.Concurrent;
@@ -42,7 +41,6 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    #pragma warning restore S1128
 
     /// <summary>
     /// specialization of ConversionBasedUnit that represents a measurement unit that is defined with respect to another reference measurement unit through a linear conversion relation with a conversion factor

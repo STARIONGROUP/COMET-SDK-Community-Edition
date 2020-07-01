@@ -1,10 +1,26 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file "ChangeProposalSerializer.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+// <copyright file="ChangeProposalSerializer.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2019 RHEA System S.A.
+//
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//
+//    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 3 of the License, or (at your option) any later version.
+//
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public License
+//    along with this program; if not, write to the Free Software Foundation,
+//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// <summary>
-//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -16,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="ChangeProposalSerializer"/> class is to provide a <see cref="ChangeProposal"/> specific serializer
     /// </summary>
-    public class ChangeProposalSerializer : IThingSerializer
+    public class ChangeProposalSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -59,26 +75,26 @@ namespace CDP4JsonSerializer
         private JObject Serialize(ChangeProposal changeProposal)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("approvedBy", this.PropertySerializerMap["approvedBy"](changeProposal.ApprovedBy));
+            jsonObject.Add("approvedBy", this.PropertySerializerMap["approvedBy"](changeProposal.ApprovedBy.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("author", this.PropertySerializerMap["author"](changeProposal.Author));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](changeProposal.Category));
+            jsonObject.Add("category", this.PropertySerializerMap["category"](changeProposal.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("changeRequest", this.PropertySerializerMap["changeRequest"](changeProposal.ChangeRequest));
             jsonObject.Add("classification", this.PropertySerializerMap["classification"](Enum.GetName(typeof(CDP4Common.ReportingData.AnnotationClassificationKind), changeProposal.Classification)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), changeProposal.ClassKind)));
             jsonObject.Add("content", this.PropertySerializerMap["content"](changeProposal.Content));
             jsonObject.Add("createdOn", this.PropertySerializerMap["createdOn"](changeProposal.CreatedOn));
-            jsonObject.Add("discussion", this.PropertySerializerMap["discussion"](changeProposal.Discussion));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](changeProposal.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](changeProposal.ExcludedPerson));
+            jsonObject.Add("discussion", this.PropertySerializerMap["discussion"](changeProposal.Discussion.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](changeProposal.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](changeProposal.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](changeProposal.Iid));
             jsonObject.Add("languageCode", this.PropertySerializerMap["languageCode"](changeProposal.LanguageCode));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](changeProposal.ModifiedOn));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](changeProposal.Owner));
             jsonObject.Add("primaryAnnotatedThing", this.PropertySerializerMap["primaryAnnotatedThing"](changeProposal.PrimaryAnnotatedThing));
-            jsonObject.Add("relatedThing", this.PropertySerializerMap["relatedThing"](changeProposal.RelatedThing));
+            jsonObject.Add("relatedThing", this.PropertySerializerMap["relatedThing"](changeProposal.RelatedThing.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](changeProposal.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](changeProposal.ShortName));
-            jsonObject.Add("sourceAnnotation", this.PropertySerializerMap["sourceAnnotation"](changeProposal.SourceAnnotation));
+            jsonObject.Add("sourceAnnotation", this.PropertySerializerMap["sourceAnnotation"](changeProposal.SourceAnnotation.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("status", this.PropertySerializerMap["status"](Enum.GetName(typeof(CDP4Common.ReportingData.AnnotationStatusKind), changeProposal.Status)));
             jsonObject.Add("title", this.PropertySerializerMap["title"](changeProposal.Title));
             return jsonObject;
@@ -101,7 +117,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var changeProposal = thing as ChangeProposal;

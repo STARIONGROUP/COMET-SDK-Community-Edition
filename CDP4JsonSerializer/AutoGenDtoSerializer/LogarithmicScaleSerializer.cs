@@ -1,10 +1,26 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file "LogarithmicScaleSerializer.cs" company="RHEA System S.A.">
-//   Copyright (c) 2017 RHEA System S.A.
+// <copyright file="LogarithmicScaleSerializer.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2019 RHEA System S.A.
+//
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//
+//    This file is part of CDP4-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 3 of the License, or (at your option) any later version.
+//
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public License
+//    along with this program; if not, write to the Free Software Foundation,
+//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// <summary>
-//   This is an auto-generated Serializer class. Any manual changes on this file will be overwritten!
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -16,11 +32,11 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// The purpose of the <see cref="LogarithmicScaleSerializer"/> class is to provide a <see cref="LogarithmicScale"/> specific serializer
     /// </summary>
-    public class LogarithmicScaleSerializer : IThingSerializer
+    public class LogarithmicScaleSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
         /// The map containing the serialization methods
@@ -64,20 +80,20 @@ namespace CDP4JsonSerializer
         private JObject Serialize(LogarithmicScale logarithmicScale)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](logarithmicScale.Alias));
+            jsonObject.Add("alias", this.PropertySerializerMap["alias"](logarithmicScale.Alias.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), logarithmicScale.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](logarithmicScale.Definition));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](logarithmicScale.ExcludedDomain));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](logarithmicScale.ExcludedPerson));
+            jsonObject.Add("definition", this.PropertySerializerMap["definition"](logarithmicScale.Definition.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](logarithmicScale.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](logarithmicScale.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("exponent", this.PropertySerializerMap["exponent"](logarithmicScale.Exponent));
             jsonObject.Add("factor", this.PropertySerializerMap["factor"](logarithmicScale.Factor));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](logarithmicScale.HyperLink));
+            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](logarithmicScale.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](logarithmicScale.Iid));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](logarithmicScale.IsDeprecated));
             jsonObject.Add("isMaximumInclusive", this.PropertySerializerMap["isMaximumInclusive"](logarithmicScale.IsMaximumInclusive));
             jsonObject.Add("isMinimumInclusive", this.PropertySerializerMap["isMinimumInclusive"](logarithmicScale.IsMinimumInclusive));
             jsonObject.Add("logarithmBase", this.PropertySerializerMap["logarithmBase"](Enum.GetName(typeof(CDP4Common.SiteDirectoryData.LogarithmBaseKind), logarithmicScale.LogarithmBase)));
-            jsonObject.Add("mappingToReferenceScale", this.PropertySerializerMap["mappingToReferenceScale"](logarithmicScale.MappingToReferenceScale));
+            jsonObject.Add("mappingToReferenceScale", this.PropertySerializerMap["mappingToReferenceScale"](logarithmicScale.MappingToReferenceScale.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("maximumPermissibleValue", this.PropertySerializerMap["maximumPermissibleValue"](logarithmicScale.MaximumPermissibleValue));
             jsonObject.Add("minimumPermissibleValue", this.PropertySerializerMap["minimumPermissibleValue"](logarithmicScale.MinimumPermissibleValue));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](logarithmicScale.ModifiedOn));
@@ -86,11 +102,11 @@ namespace CDP4JsonSerializer
             jsonObject.Add("numberSet", this.PropertySerializerMap["numberSet"](Enum.GetName(typeof(CDP4Common.SiteDirectoryData.NumberSetKind), logarithmicScale.NumberSet)));
             jsonObject.Add("positiveValueConnotation", this.PropertySerializerMap["positiveValueConnotation"](logarithmicScale.PositiveValueConnotation));
             jsonObject.Add("referenceQuantityKind", this.PropertySerializerMap["referenceQuantityKind"](logarithmicScale.ReferenceQuantityKind));
-            jsonObject.Add("referenceQuantityValue", this.PropertySerializerMap["referenceQuantityValue"](logarithmicScale.ReferenceQuantityValue));
+            jsonObject.Add("referenceQuantityValue", this.PropertySerializerMap["referenceQuantityValue"](logarithmicScale.ReferenceQuantityValue.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](logarithmicScale.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](logarithmicScale.ShortName));
             jsonObject.Add("unit", this.PropertySerializerMap["unit"](logarithmicScale.Unit));
-            jsonObject.Add("valueDefinition", this.PropertySerializerMap["valueDefinition"](logarithmicScale.ValueDefinition));
+            jsonObject.Add("valueDefinition", this.PropertySerializerMap["valueDefinition"](logarithmicScale.ValueDefinition.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }
 
@@ -111,7 +127,7 @@ namespace CDP4JsonSerializer
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
             var logarithmicScale = thing as LogarithmicScale;
