@@ -52,6 +52,7 @@ test_script:
       -hideskipped:All
       -output:"%TEST_COVERAGE%"
       -filter:"+[CDP4*]* -[*.Tests*]* -[*.Views]*"
+      -oldstyle
       -excludebyattribute:*.ExcludeFromCodeCoverageAttribute
 after_test:
   - ps: dotnet sonarscanner end /d:"sonar.login=$env:SONARCLOUD_TOKEN"
