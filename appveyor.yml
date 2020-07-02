@@ -46,7 +46,7 @@ test_script:
       OpenCover.Console.exe
       -log:Error
       -register
-      -target:"dotnet"
+      -target:"C:\Program Files\dotnet\dotnet.exe"
       -targetargs:"test CDP4-SDK-NETF.sln --framework net45 --filter=""(TestCategory!~WebServicesDependent) & (TestCategory!~AppVeyorExclusion)"" --configuration %CONFIGURATION% -v q"
       -returntargetcode
       -hideskipped:All
