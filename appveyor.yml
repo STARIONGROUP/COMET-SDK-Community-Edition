@@ -2,6 +2,10 @@ image: Visual Studio 2019
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  PROJECT_MAIN:   'CDP4-SDK'
+  TEST_RESULT:    'TestResult.xml'
+  TEST_COVERAGE:  'CoverResults.xml'
+  SONARCLOUD_URL: 'https://sonarcloud.io'
   SONARCLOUD_PROJECT_KEY: RHEAGROUP_CDP4-SDK-Community-Edition
   SONARCLOUD_ORGANIZATION: rheagroup
   SONARCLOUD_TOKEN:
@@ -52,7 +56,6 @@ test_script:
       -hideskipped:All
       -output:"%TEST_COVERAGE%"
       -filter:"+[CDP4*]* -[*.Tests*]* -[*.Views]*"
-      -oldstyle
       -excludebyattribute:*.ExcludeFromCodeCoverageAttribute
 after_test:
   - ps: dotnet sonarscanner end /d:"sonar.login=$env:SONARCLOUD_TOKEN"
