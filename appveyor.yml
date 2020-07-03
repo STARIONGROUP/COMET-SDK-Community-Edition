@@ -68,7 +68,6 @@ test_script:
       
 after_test:
   - ps: dotnet sonarscanner end /d:"sonar.login=$env:SONARCLOUD_TOKEN"
-  - xcopy /q /Y /I "%TEST_RESULT%" "%TEST_LOG%\"
   - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_LOG%\"
 
 artifacts:
