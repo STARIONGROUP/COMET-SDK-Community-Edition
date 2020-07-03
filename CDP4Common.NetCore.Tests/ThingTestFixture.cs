@@ -160,7 +160,6 @@ namespace CDP4Common.Tests
         public void VerifyThatDisposeSetsCacheToNull()
         {
             var iid = Guid.NewGuid();
-            var revisionNumber = 1;
             var uri = new Uri("http://someuri");
             var cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
