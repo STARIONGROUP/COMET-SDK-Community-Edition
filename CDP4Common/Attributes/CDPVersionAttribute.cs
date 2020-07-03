@@ -27,7 +27,7 @@ namespace CDP4Common
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="CDPVersion"/> attribute is to decorate Classes and properties
+    /// The purpose of the <see cref="CDPVersionAttribute"/> attribute is to decorate Classes and properties
     /// that constitute CDP4 extensions to the ECSS-E-TM-10-25A Annex A master model. 
     /// </summary>
     /// <remarks>
@@ -38,7 +38,7 @@ namespace CDP4Common
     public class CDPVersionAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CDPVersion"/> class.
+        /// Initializes a new instance of the <see cref="CDPVersionAttribute"/> class.
         /// </summary>
         /// <param name="version">
         /// The version identifier
