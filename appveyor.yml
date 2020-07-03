@@ -3,6 +3,7 @@ environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   PROJECT_MAIN:   'CDP4-SDK'
+  TEST_LOG:       'TestResults'
   TEST_RESULT:    'TestResult.xml'
   TEST_COVERAGE:  'CoverResults.xml'
   SONARCLOUD_URL: 'https://sonarcloud.io'
