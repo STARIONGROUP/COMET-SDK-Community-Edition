@@ -2,6 +2,16 @@ image: Visual Studio 2019
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  PROJECT_MAIN:   'CDP4-SDK'
+  TEST_RESULT:    'TestResult.xml'
+  TEST_COVERAGE:  'CoverResults.xml'
+  SONARCLOUD_URL: 'https://sonarcloud.io'
+  SONARCLOUD_PROJECT_KEY: RHEAGROUP_CDP4-SDK-Community-Edition
+  SONARCLOUD_ORGANIZATION: rheagroup
+  SONARCLOUD_TOKEN:
+    secure: t9Adl8VvYx+PRNMC3aXmpSErjxmh/LaCV52WW1X/IxGgjkGYRTf7ZYcNs4s3Fqrt
+
+skip_branch_with_pr: true
 
 for:
 # configuration for "master" branch, build in Release mode
@@ -19,20 +29,50 @@ for:
 # "fall back" configuration for all other branches
 # no "branches" section defined
 configuration: Debug
+install:
+  - choco install opencover.portable
+  - dotnet tool install --global dotnet-sonarscanner
+
 before_build:
-  - cmd: nuget restore
-build:
-  project: CDP4-SDK.sln
-test:
-  assemblies:
-    only:
-      - '**\bin\$(configuration)\net472\*.Tests.dll'
-      - '**\bin\$(configuration)\netstandard1.6\*.Tests.dll'
-      - '**\bin\$(configuration)\netstandard2.0\*.Tests.dll'
-  categories:
-    except:
-      - WebServicesDependent
-      - AppVeyorExclusion
+  - cmd: nuget restore CDP4-SDK.sln
+  - ps: >-
+      if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
+        Write-Host Sonar Scanning PR# $env:APPVEYOR_PULL_REQUEST_NUMBER
+        dotnet sonarscanner begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url=$env:SONARCLOUD_URL /d:sonar.login=$env:SONARCLOUD_TOKEN /d:sonar.cs.opencover.reportsPaths=$env:TEST_COVERAGE /d:sonar.cs.nunit.reportsPaths=$env:TEST_RESULT /d:sonar.pullrequest.key=$env:APPVEYOR_PULL_REQUEST_NUMBER /d:sonar.pullrequest.provider=GitHub /d:sonar.pullrequest.github.repository=$env:APPVEYOR_REPO_NAME
+      } elseif ($env:APPVEYOR_REPO_BRANCH -eq "development") {
+        Write-Host Sonar Scanning branch $env:APPVEYOR_REPO_BRANCH
+        dotnet sonarscanner begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url=$env:SONARCLOUD_URL /d:sonar.login=$env:SONARCLOUD_TOKEN /d:sonar.cs.opencover.reportsPaths=$env:TEST_COVERAGE /d:sonar.cs.nunit.reportsPaths=$env:TEST_RESULT /d:sonar.branch.name=$env:APPVEYOR_REPO_BRANCH /d:sonar.pullrequest.github.repository=$env:APPVEYOR_REPO_NAME
+      } elseif ($env:APPVEYOR_REPO_BRANCH -eq "master") {
+        Write-Host Sonar Scanning branch $env:APPVEYOR_REPO_BRANCH
+        dotnet sonarscanner begin /key:$env:SONARCLOUD_PROJECT_KEY /o:$env:SONARCLOUD_ORGANIZATION /d:sonar.host.url=$env:SONARCLOUD_URL /d:sonar.login=$env:SONARCLOUD_TOKEN /d:sonar.cs.opencover.reportsPaths=$env:TEST_COVERAGE /d:sonar.cs.nunit.reportsPaths=$env:TEST_RESULT /d:sonar.branch.name=$env:APPVEYOR_REPO_BRANCH /d:sonar.pullrequest.github.repository=$env:APPVEYOR_REPO_NAME
+      } else {
+        Write-Host Skipping Sonar Scanning
+      }
+
+build_script:
+  - cmd: dotnet build CDP4-SDK-NETF.sln --configuration %CONFIGURATION% -v q --framework net45
+  - cmd: dotnet build CDP4-SDK-NETC.sln --configuration %CONFIGURATION% -v q --framework netcoreapp3.1
+
+test_script:
+    - >
+      OpenCover.Console.exe
+      -log:Error
+      -register
+      -target:"C:\Program Files\dotnet\dotnet.exe"
+      -targetargs:"test CDP4-SDK-NETF.sln --framework net45 --logger ""trx;LogFileName=%TEST_RESULT%"" --filter=""(TestCategory!~WebServicesDependent) & (TestCategory!~AppVeyorExclusion)"" --configuration %CONFIGURATION% -v q"
+      -returntargetcode
+      -hideskipped:All
+      -output:"%TEST_COVERAGE%"
+      -filter:"+[CDP4*]* -[*.Tests*]* -[*.Views]*"
+      -excludebyattribute:*.ExcludeFromCodeCoverageAttribute
+      
+after_test:
+  - ps: dotnet sonarscanner end /d:"sonar.login=$env:SONARCLOUD_TOKEN"
+  - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_LOG%\"
+
+artifacts:
+    - path: '%TEST_LOG%'
+
 notifications:
   - provider: Email
     to:
