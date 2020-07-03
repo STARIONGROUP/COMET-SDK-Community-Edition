@@ -70,7 +70,7 @@ test_script:
 after_test:
   - ps: >-
       if ($env:APPVEYOR_PULL_REQUEST_NUMBER -Or $env:APPVEYOR_REPO_BRANCH -eq "development" -Or $env:APPVEYOR_REPO_BRANCH -eq "master") {
-        SonarScanner.MSBuild.exe end /d:"sonar.login=$env:SONARCLOUD_TOKEN"
+        dotnet sonarscanner end /d:"sonar.login=$env:SONARCLOUD_TOKEN"
       }
   - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_LOG%\"
 
