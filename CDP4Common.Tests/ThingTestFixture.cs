@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests
 {
@@ -160,7 +158,6 @@ namespace CDP4Common.Tests
         public void VerifyThatDisposeSetsCacheToNull()
         {
             var iid = Guid.NewGuid();
-            var revisionNumber = 1;
             var uri = new Uri("http://someuri");
             var cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
