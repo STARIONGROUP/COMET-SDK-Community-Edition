@@ -46,9 +46,9 @@ namespace CDP4Dal.DAL
     /// </summary>
     public abstract class Dal : IDal
     {
-        //TODO: the EngineeringModelKinds property should be generated from the model, the risk by coding it here is that 
+        //TODO: the EngineeringModelKinds property should be generated from the model, the risk by coding it here is that
         // we forget to update this when we update the uml data-model. -> T1459
-     
+
         /// <summary>
         /// The current logger
         /// </summary>
@@ -62,11 +62,11 @@ namespace CDP4Dal.DAL
             this.MetaDataProvider = StaticMetadataProvider.GetMetaDataProvider;
             this.SetCdpVersion();
         }
-        
+
         /// <summary>
         /// Gets the supported version of the data-model
         /// </summary>
-        public Version DalVersion { get; private set; }
+        public Version DalVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ISession"/> that uses this <see cref="IDal"/>
@@ -101,7 +101,7 @@ namespace CDP4Dal.DAL
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
         public abstract Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null);
-        
+
         /// <summary>
         /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
         /// </summary>
@@ -381,7 +381,7 @@ namespace CDP4Dal.DAL
         /// <exception cref="InvalidOperationContainerException">
         /// An <see cref="InvalidOperationContainerException"/> is thrown when the <see cref="OperationContainer"/> does not contain an <see cref="Operation"/>
         /// that contains a <see cref="CDP4Common.DTO.FileRevision"/> instant whose content-hash matches the hash of the provided <paramref name="files"/>.
-        /// </exception>        
+        /// </exception>
         protected void OperationContainerFileVerification(OperationContainer operationContainer, IEnumerable<string> files)
         {
             foreach (var file in files)
@@ -409,7 +409,7 @@ namespace CDP4Dal.DAL
                 }
             }
         }
-        
+
         /// <summary>
         /// Sets the CDP Version data model version that is supported by the current <see cref="CDP4Dal.Session"/>
         /// </summary>
