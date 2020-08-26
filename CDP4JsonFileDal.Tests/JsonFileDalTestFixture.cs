@@ -300,6 +300,12 @@ namespace CDP4JsonFileDal.Tests
             Assert.IsTrue(this.dal.DalVersion.Major == 1);
             Assert.IsTrue(this.dal.DalVersion.Minor == 0);
             Assert.IsTrue(this.dal.DalVersion.Build == 0);
+
+            this.dal = new JsonFileDal(null);
+
+            Assert.IsTrue(this.dal.DalVersion.Major == 1);
+            Assert.IsTrue(this.dal.DalVersion.Minor == 1);
+            Assert.IsTrue(this.dal.DalVersion.Build == 0);
         }
     }
 }
