@@ -46,11 +46,11 @@ namespace CDP4JsonFileDal
     using CDP4Dal.DAL;
 
     using CDP4JsonFileDal.Json;
-    
+
     using CDP4JsonSerializer;
-    
+
     using Ionic.Zip;
-    
+
     using NLog;
 
     using Thing = CDP4Common.DTO.Thing;
@@ -100,6 +100,19 @@ namespace CDP4JsonFileDal
         /// </summary>
         public JsonFileDal()
         {
+            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonFileDal"/> class
+        /// </summary>
+        /// <param name="dalVersion">CDP4 model version <see cref="Version" /></param>
+        public JsonFileDal(Version dalVersion)
+        {
+            if (dalVersion != null)
+            {
+                this.DalVersion = dalVersion;
+            }
             this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
         }
 
@@ -261,7 +274,7 @@ namespace CDP4JsonFileDal
             {
                 throw new ArgumentNullException(nameof(this.Credentials.Uri), $"The Credentials URI may not be null");
             }
-            
+
             // make sure that the uri is of the correct format
             UriExtensions.AssertUriIsFileSchema(this.Credentials.Uri);
 

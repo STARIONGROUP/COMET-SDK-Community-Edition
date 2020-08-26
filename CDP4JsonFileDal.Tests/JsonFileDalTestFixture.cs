@@ -195,7 +195,7 @@ namespace CDP4JsonFileDal.Tests
             Assert.IsTrue(iterObject.ClassKind == iter1.ClassKind);
             Assert.IsTrue(iterObject.Iid == iter1.Iid);
         }
-        
+
         [Test]
         public async Task VerifyThatReadWithNonIterationInstanceSuppliedThrowsException()
         {
@@ -247,7 +247,7 @@ namespace CDP4JsonFileDal.Tests
             modelSetup.ActiveDomain.Add(domain);
 
             var requiredRdl = new CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary();
-            
+
             var person = new Person { ShortName = "admin" };
             var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) {Person = person};
             participant.Domain.Add(domain);
@@ -290,6 +290,22 @@ namespace CDP4JsonFileDal.Tests
         public async Task Verify_that_Open_with_null_credentials_throws_exception()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await this.dal.Open(null, this.cancelationTokenSource.Token));
+        }
+
+        [Test]
+        public void VerifyCtorWithVersion()
+        {
+            this.dal = new JsonFileDal(new Version("1.0.0"));
+
+            Assert.IsTrue(this.dal.DalVersion.Major == 1);
+            Assert.IsTrue(this.dal.DalVersion.Minor == 0);
+            Assert.IsTrue(this.dal.DalVersion.Build == 0);
+
+            this.dal = new JsonFileDal(null);
+
+            Assert.IsTrue(this.dal.DalVersion.Major == 1);
+            Assert.IsTrue(this.dal.DalVersion.Minor == 1);
+            Assert.IsTrue(this.dal.DalVersion.Build == 0);
         }
     }
 }
