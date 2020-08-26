@@ -297,7 +297,9 @@ namespace CDP4JsonFileDal.Tests
         {
             this.dal = new JsonFileDal(new Version("1.0.0"));
 
-            Assert.IsTrue(this.dal.DalVersion.ToString() == "1.0.0");
+            Assert.IsTrue(this.dal.DalVersion.Major == 1);
+            Assert.IsTrue(this.dal.DalVersion.Minor == 0);
+            Assert.IsTrue(this.dal.DalVersion.Build == 0);
         }
     }
 }

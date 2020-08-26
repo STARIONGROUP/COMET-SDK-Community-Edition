@@ -109,7 +109,10 @@ namespace CDP4JsonFileDal
         /// <param name="dalVersion">CDP4 model version <see cref="Version" /></param>
         public JsonFileDal(Version dalVersion)
         {
-            this.DalVersion = dalVersion;
+            if (dalVersion != null)
+            {
+                this.DalVersion = dalVersion;
+            }
             this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
         }
 
