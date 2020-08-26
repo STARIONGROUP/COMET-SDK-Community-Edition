@@ -297,9 +297,9 @@ namespace CDP4JsonFileDal.Tests
         {
             this.dal = new JsonFileDal(new Version("1.0.0"));
 
-            Assert.IsTrue(this.dal.DalVersion.Major == 1);
-            Assert.IsTrue(this.dal.DalVersion.Minor == 0);
-            Assert.IsTrue(this.dal.DalVersion.Build == 0);
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Major == 1);
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Minor == 0);
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Build == 0);
 
             this.dal = new JsonFileDal(null);
 
@@ -312,25 +312,21 @@ namespace CDP4JsonFileDal.Tests
         public void VerifyCtorWithVersionAndCopyright()
         {
             this.dal = new JsonFileDal(new Version("1.0.0"));
+            const string COPYRIGHT = "Copyright 2020 © ESA.";
+            const string REMARK = "This is custom ECSS-E-TM-10-25 exchange file";
 
-            Assert.IsTrue(this.dal.DalVersion.Major == 1);
-            Assert.IsTrue(this.dal.DalVersion.Minor == 0);
-            Assert.IsTrue(this.dal.DalVersion.Build == 0);
-            Assert.IsTrue(JsonFileDalUtils.ExchangeHeaderCopyright == JsonFileDalUtils.DefaultHeaderCopyright);
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Major == 1);
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Minor == 0);
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Build == 0);
 
-            this.dal = new JsonFileDal(new Version("1.0.0"), "Copyright 2020 © ESA.");
+            this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" });
+            Assert.IsInstanceOf(typeof(CDP4JsonFileDal.Json.ExchangeFileHeader), this.dal.FileHeader);
+            Assert.IsTrue(this.dal.FileHeader.Copyright == JsonFileDalUtils.DefaultHeaderCopyright);
+            Assert.IsTrue(this.dal.FileHeader.Remark == JsonFileDalUtils.ExchangeHeaderRemark);
 
-            Assert.IsTrue(this.dal.DalVersion.Major == 1);
-            Assert.IsTrue(this.dal.DalVersion.Minor == 0);
-            Assert.IsTrue(this.dal.DalVersion.Build == 0);
-            Assert.IsTrue(JsonFileDalUtils.ExchangeHeaderCopyright == "Copyright 2020 © ESA.");
-
-            this.dal = new JsonFileDal(null);
-
-            Assert.IsTrue(this.dal.DalVersion.Major == 1);
-            Assert.IsTrue(this.dal.DalVersion.Minor == 1);
-            Assert.IsTrue(this.dal.DalVersion.Build == 0);
-            Assert.IsTrue(JsonFileDalUtils.ExchangeHeaderCopyright == JsonFileDalUtils.DefaultHeaderCopyright);
+            this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" }, COPYRIGHT, REMARK);
+            Assert.IsTrue(this.dal.FileHeader.Copyright == COPYRIGHT);
+            Assert.IsTrue(this.dal.FileHeader.Remark == REMARK);
         }
     }
 }
