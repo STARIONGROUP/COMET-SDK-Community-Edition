@@ -307,5 +307,30 @@ namespace CDP4JsonFileDal.Tests
             Assert.IsTrue(this.dal.DalVersion.Minor == 1);
             Assert.IsTrue(this.dal.DalVersion.Build == 0);
         }
+
+        [Test]
+        public void VerifyCtorWithVersionAndCopyright()
+        {
+            this.dal = new JsonFileDal(new Version("1.0.0"));
+
+            Assert.IsTrue(this.dal.DalVersion.Major == 1);
+            Assert.IsTrue(this.dal.DalVersion.Minor == 0);
+            Assert.IsTrue(this.dal.DalVersion.Build == 0);
+            Assert.IsTrue(JsonFileDalUtils.ExchangeHeaderCopyright == JsonFileDalUtils.DefaultHeaderCopyright);
+
+            this.dal = new JsonFileDal(new Version("1.0.0"), "Copyright 2020 © ESA.");
+
+            Assert.IsTrue(this.dal.DalVersion.Major == 1);
+            Assert.IsTrue(this.dal.DalVersion.Minor == 0);
+            Assert.IsTrue(this.dal.DalVersion.Build == 0);
+            Assert.IsTrue(JsonFileDalUtils.ExchangeHeaderCopyright == "Copyright 2020 © ESA.");
+
+            this.dal = new JsonFileDal(null);
+
+            Assert.IsTrue(this.dal.DalVersion.Major == 1);
+            Assert.IsTrue(this.dal.DalVersion.Minor == 1);
+            Assert.IsTrue(this.dal.DalVersion.Build == 0);
+            Assert.IsTrue(JsonFileDalUtils.ExchangeHeaderCopyright == JsonFileDalUtils.DefaultHeaderCopyright);
+        }
     }
 }

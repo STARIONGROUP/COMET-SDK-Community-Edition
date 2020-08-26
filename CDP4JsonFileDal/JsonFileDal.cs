@@ -107,12 +107,15 @@ namespace CDP4JsonFileDal
         /// Initializes a new instance of the <see cref="JsonFileDal"/> class
         /// </summary>
         /// <param name="dalVersion">CDP4 model version <see cref="Version" /></param>
-        public JsonFileDal(Version dalVersion)
+        /// <param name="headerCopyright">Copyright text to be included in the exchange header file</param>
+        public JsonFileDal(Version dalVersion, string headerCopyright = JsonFileDalUtils.DefaultHeaderCopyright)
         {
             if (dalVersion != null)
             {
                 this.DalVersion = dalVersion;
             }
+
+            JsonFileDalUtils.ExchangeHeaderCopyright = headerCopyright;
             this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
         }
 
