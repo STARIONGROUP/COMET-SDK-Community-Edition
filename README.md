@@ -31,10 +31,24 @@ AppVeyor is used to build and test the C# CDP4-SDK
 
 Branch | Build Status
 ------- | :------------
-Master |  [![Build Status](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6/branch/master?svg=true)](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6)
-Development |  [![Build Status](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6/branch/development?svg=true)](https://ci.appveyor.com/api/projects/status/0u3qa0lt0l3phwn6)
+Master |  [![Build status](https://ci.appveyor.com/api/projects/status/393r6isv68rlpr51/branch/master?svg=true)](https://ci.appveyor.com/project/rheagroup/cdp4-sdk-community-edition/branch/master)
+Development |  [![Build status](https://ci.appveyor.com/api/projects/status/393r6isv68rlpr51/branch/development?svg=true)](https://ci.appveyor.com/project/rheagroup/cdp4-sdk-community-edition/branch/development)
 
-[![Build history](https://buildstats.info/appveyor/chart/samatrhea/cdp4-sdk-community-edition)](https://ci.appveyor.com/project/samatrhea/cdp4-sdk-community-edition/history)
+[![Build history](https://buildstats.info/appveyor/chart/rheagroup/cdp4-sdk-community-edition)](https://ci.appveyor.com/project/rheagroup/cdp4-sdk-community-edition/history)
+
+## SonarQube Status:
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=alert_status)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=security_rating)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=coverage)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=bugs)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=ncloc)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=sqale_index)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
 
 ## CDP4Common
 
