@@ -66,7 +66,7 @@ namespace CDP4Dal.DAL
         /// <summary>
         /// Gets the supported version of the data-model
         /// </summary>
-        public Version DalVersion { get; set; }
+        public Version DalVersion { get; protected set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ISession"/> that uses this <see cref="IDal"/>

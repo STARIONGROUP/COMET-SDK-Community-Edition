@@ -39,6 +39,7 @@ namespace CDP4JsonFileDal
     using CDP4Common.CommonData;
     using CDP4Common.Comparers;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.SiteDirectoryData;
 
     using CDP4Dal.Operations;
     using CDP4Dal;
@@ -113,7 +114,23 @@ namespace CDP4JsonFileDal
             {
                 this.DalVersion = dalVersion;
             }
+
             this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+        }
+
+        /// <summary>
+        /// Allow API user to update copyright information with custom data
+        /// </summary>
+        /// <param name="person">The <see cref="Person"/> that is used to create the <see cref="ExchangeFileHeader"/></param>
+        /// <param name="headerCopyright">Header copyright text</param>
+        /// <param name="headerRemark">Header remark text</param>
+        public void UpdateExchangeFileHeader(Person person, string headerCopyright = JsonFileDalUtils.DefaultHeaderCopyright, string headerRemark = JsonFileDalUtils.ExchangeHeaderRemark)
+        {
+            var exchangeFileHeader = JsonFileDalUtils.CreateExchangeFileHeader(person);
+            exchangeFileHeader.Remark = headerRemark;
+            exchangeFileHeader.Copyright = headerCopyright;
+
+            this.FileHeader = exchangeFileHeader;
         }
 
         /// <summary>
@@ -128,6 +145,11 @@ namespace CDP4JsonFileDal
         {
             get { return true; }
         }
+
+        /// <summary>
+        /// Gets the <see cref="ExchangeFileHeader"/>
+        /// </summary>
+        public ExchangeFileHeader FileHeader { get; private set; }
 
         /// <summary>
         /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s asynchronously.
@@ -195,7 +217,7 @@ namespace CDP4JsonFileDal
 
             var activePerson = JsonFileDalUtils.QueryActivePerson(this.Session.Credentials.UserName, siteDirectory);
 
-            var exchangeFileHeader = JsonFileDalUtils.CreateExchangeFileHeader(activePerson);
+            var exchangeFileHeader = this.FileHeader is ExchangeFileHeader ? this.FileHeader : JsonFileDalUtils.CreateExchangeFileHeader(activePerson);
 
             try
             {
