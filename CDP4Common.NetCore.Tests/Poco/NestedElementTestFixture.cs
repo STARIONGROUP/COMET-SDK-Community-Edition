@@ -26,17 +26,23 @@
 namespace CDP4Common.Tests.Poco
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Linq;
 
+    using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     using NUnit.Framework;
 
     [TestFixture]
     internal class NestedElementTestFixture
     {
+        private readonly Uri uri = new Uri("http://sdk.cdp4.org");
+        private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache;
+
         private NestedElement nestedElement;
 
         private ElementUsage elementUsage1;
@@ -53,18 +59,20 @@ namespace CDP4Common.Tests.Poco
         [SetUp]
         public void Setup()
         {
-            this.nestedElement = new NestedElement(Guid.NewGuid(), null, null);
-            this.rootElementDef = new ElementDefinition(Guid.NewGuid(), null, null) { Name = "ElementDef", ShortName = "Def" };
-            this.elementDef1 = new ElementDefinition(Guid.NewGuid(), null, null) { Name = "ElementDef1", ShortName = "Def1" };
-            this.elementDef2 = new ElementDefinition(Guid.NewGuid(), null, null) { Name = "ElementDef2", ShortName = "Def2" };
-            this.elementUsage1 = new ElementUsage(Guid.NewGuid(), null, null) { Name = "ElementUsage", ShortName = "Use1", ElementDefinition = this.elementDef1 };
-            this.elementUsage2 = new ElementUsage(Guid.NewGuid(), null, null) { Name = "ElementUsage2", ShortName = "Use2", ElementDefinition = this.elementDef2 };
+            this.cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
+
+            this.nestedElement = new NestedElement(Guid.NewGuid(), this.cache, this.uri);
+            this.rootElementDef = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef", ShortName = "Def" };
+            this.elementDef1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef1", ShortName = "Def1" };
+            this.elementDef2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef2", ShortName = "Def2" };
+            this.elementUsage1 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementUsage", ShortName = "Use1", ElementDefinition = this.elementDef1 };
+            this.elementUsage2 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementUsage2", ShortName = "Use2", ElementDefinition = this.elementDef2 };
 
             this.rootElementDef.ContainedElement.Add(this.elementUsage1);
             this.elementDef1.ContainedElement.Add(this.elementUsage2);
 
-            this.domain = new DomainOfExpertise(Guid.NewGuid(), null, null);
-            this.domain2 = new DomainOfExpertise(Guid.NewGuid(), null, null);
+            this.domain = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.uri);
+            this.domain2 = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.uri);
 
             this.elementUsage1.Owner = this.domain2;
             this.elementUsage2.Owner = this.domain2;
@@ -75,10 +83,14 @@ namespace CDP4Common.Tests.Poco
             this.nestedElement.ElementUsage.Add(this.elementUsage1);
             this.nestedElement.ElementUsage.Add(this.elementUsage2);
 
-            this.category = new Category(Guid.NewGuid(), null, null) { Name = "Category", ShortName = "Cat" };
+            this.category = new Category(Guid.NewGuid(), this.cache, this.uri) { Name = "Category", ShortName = "Cat" };
 
-            this.iteration = new Iteration(Guid.NewGuid(), null, null) { TopElement = this.rootElementDef };
-            this.option = new Option(Guid.NewGuid(), null, null) { Container = this.iteration };
+            var lazyCategory = new Lazy<Thing>(() => this.category);
+            this.cache.TryAdd(new CacheKey(this.category.Iid, null), lazyCategory);
+
+
+            this.iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri) { TopElement = this.rootElementDef };
+            this.option = new Option(Guid.NewGuid(), this.cache, this.uri) { Container = this.iteration };
 
             this.iteration.Option.Add(this.option);
         }
