@@ -160,21 +160,21 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyHasCategory()
         {
-            Assert.IsFalse(this.nestedElement.HasCategory(this.category));
+            Assert.IsFalse(this.nestedElement.IsMemberOfCategory(this.category));
         }
 
         [Test]
         public void VerifyHasCategoryWorksForElementDefinition()
         {
             this.elementDef2.Category.Add(this.category);
-            Assert.IsTrue(this.nestedElement.HasCategory(this.category));
+            Assert.IsTrue(this.nestedElement.IsMemberOfCategory(this.category));
         }
 
         [Test]
         public void VerifyHasCategoryWorksForElementUsage()
         {
             this.elementUsage2.Category.Add(this.category);
-            Assert.IsTrue(this.nestedElement.HasCategory(this.category));
+            Assert.IsTrue(this.nestedElement.IsMemberOfCategory(this.category));
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace CDP4Common.Tests.Poco
             this.nestedElement.ElementUsage.Clear();
             this.nestedElement.IsRootElement = true;
             this.rootElementDef.Category.Add(this.category);
-            Assert.IsTrue(this.nestedElement.HasCategory(this.category));
+            Assert.IsTrue(this.nestedElement.IsMemberOfCategory(this.category));
         }
 
         [Test]

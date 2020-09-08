@@ -113,19 +113,17 @@ namespace CDP4Common.EngineeringModelData
         }
 
         /// <summary>
-        /// Checks if a <see cref="NestedElement"/> contains a specific <see cref="Category"/>.
+        /// Asserts whether the <see cref="NestedElement"/>'s <see cref="ElementDefinition"/>, or <see cref="ElementUsage"/> is a member of the specific Category
         /// </summary>
         /// <param name="category">
         /// The <see cref="Category"/>.
         /// </param>
         /// <returns>
-        /// True if the <paramref name="category"/> is found, otherwise false.
+        /// True if the <see cref="NestedElement"/> is  a member of the <paramref name="category"/>, otherwise false.
         /// </returns>
-        public bool HasCategory(Category category)
-        {
-            return (this.GetElementDefinition()?.Category.Contains(category) ?? false)
-                   || (this.GetElementUsage()?.Category.Contains(category) ?? false);
-        }
+        public bool IsMemberOfCategory(Category category) =>
+            (this.GetElementDefinition()?.IsMemberOfCategory(category) ?? false)
+            || (this.GetElementUsage()?.IsMemberOfCategory(category) ?? false);
 
         /// <summary>
         /// Get the children of a <see cref="NestedElement"/>.
