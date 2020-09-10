@@ -173,6 +173,9 @@ namespace CDP4JsonFileDal
             var modelReferenceDataLibraries = new HashSet<CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary>();
             var domainsOfExpertises = new HashSet<CDP4Common.SiteDirectoryData.DomainOfExpertise>();
             var persons = new HashSet<CDP4Common.SiteDirectoryData.Person>();
+            var personRoles = new HashSet<CDP4Common.SiteDirectoryData.PersonRole>();
+            var participantRoles = new HashSet<CDP4Common.SiteDirectoryData.ParticipantRole>();
+            var organizations = new HashSet<CDP4Common.SiteDirectoryData.Organization>();
             var engineeringModelSetups = new HashSet<CDP4Common.SiteDirectoryData.EngineeringModelSetup>();
             var iterationSetups = new HashSet<CDP4Common.SiteDirectoryData.IterationSetup>();
 
@@ -202,7 +205,10 @@ namespace CDP4JsonFileDal
                 JsonFileDalUtils.AddDomainsOfExpertise(engineeringModelSetup, ref domainsOfExpertises);
 
                 // add the Persons that are to be included in the File
-                JsonFileDalUtils.AddPersons(engineeringModelSetup, ref persons);
+                JsonFileDalUtils.AddPersons(engineeringModelSetup, ref persons, ref personRoles, ref participantRoles, ref organizations);
+
+                // add organizations that are referrenced by ReferencedSource
+                JsonFileDalUtils.AddOrganizations(iterationRequiredRls, ref organizations);
             }
 
             var path = this.Session.Credentials.Uri.LocalPath;
@@ -212,6 +218,9 @@ namespace CDP4JsonFileDal
                 siteReferenceDataLibraries,
                 domainsOfExpertises,
                 persons,
+                personRoles,
+                participantRoles,
+                organizations,
                 engineeringModelSetups,
                 iterationSetups);
 

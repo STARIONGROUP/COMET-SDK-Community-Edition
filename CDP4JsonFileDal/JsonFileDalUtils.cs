@@ -152,8 +152,7 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Adds the <see cref="Person"/> of the <see cref="Participant"/> of the <see cref="engineeringModelSetup"/>
-        /// to the target <see cref="HashSet{Person}"/> if this does not already contain them
+        /// Add <see cref="Person"/> and related objects: <see cref="PersonRole"/>, <see cref="ParticipantRole"/>, <see cref="Organization"/> to a specific hash set passed by reference
         /// </summary>
         /// <param name="engineeringModelSetup">
         /// The <see cref="EngineeringModelSetup"/> that contains the active <see cref="DomainOfExpertise"/> instances.
@@ -161,13 +160,61 @@ namespace CDP4JsonFileDal
         /// <param name="persons">
         /// The target <see cref="HashSet{Person}"/>
         /// </param>
-        internal static void AddPersons(EngineeringModelSetup engineeringModelSetup, ref HashSet<Person> persons)
+        /// <param name="personRoles">
+        /// The target <see cref="HashSet{PersonRole}"/>
+        /// </param>
+        /// <param name="participantRoles">
+        /// The target <see cref="HashSet{ParticipantRole}"/>
+        /// </param>
+        /// <param name="organizations">
+        /// The target <see cref="HashSet{Organization}"/>
+        /// </param>///
+        internal static void AddPersons(EngineeringModelSetup engineeringModelSetup, ref HashSet<Person> persons, ref HashSet<PersonRole> personRoles, ref HashSet<ParticipantRole> participantRoles, ref HashSet<Organization> organizations)
         {
             foreach (var participant in engineeringModelSetup.Participant)
             {
                 if (!persons.Contains(participant.Person))
                 {
                     persons.Add(participant.Person);
+                }
+
+                if (!personRoles.Contains(participant.Person.Role))
+                {
+                    personRoles.Add(participant.Person.Role);
+                }
+
+                if (!participantRoles.Contains(participant.Role))
+                {
+                    participantRoles.Add(participant.Role);
+                }
+
+                if (!organizations.Contains(participant.Person.Organization))
+                {
+                    organizations.Add(participant.Person.Organization);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the <see cref="Organization"/> of the <see cref="ReferenceSource.Publisher"/>
+        /// to the target <see cref="HashSet{Organization}"/>
+        /// </summary>
+        /// <param name="referenceDataLibraries">
+        /// The <see cref="ReferenceDataLibrary"/>s that are to be added to the target <see cref="IEnumerable{ReferenceDataLibrary}"/>
+        /// </param>
+        /// <param name="organizations">
+        /// The target <see cref="HashSet{Organization}"/>
+        /// </param>
+        internal static void AddOrganizations(IEnumerable<ReferenceDataLibrary> referenceDataLibraries, ref HashSet<Organization> organizations)
+        {
+            foreach (var rdl in referenceDataLibraries)
+            {
+                foreach (var source in rdl.ReferenceSource)
+                {
+                    if (!organizations.Contains(source.Publisher))
+                    {
+                        organizations.Add(source.Publisher);
+                    }
                 }
             }
         }
@@ -202,6 +249,9 @@ namespace CDP4JsonFileDal
             HashSet<SiteReferenceDataLibrary> siteReferenceDataLibraries,
             HashSet<DomainOfExpertise> domainOfExpertises,
             HashSet<Person> persons,
+            HashSet<PersonRole> personRoles,
+            HashSet<ParticipantRole> participantRoles,
+            HashSet<Organization> organizations,
             HashSet<EngineeringModelSetup> engineeringModelSetups,
             HashSet<IterationSetup> iterIterationSetups)
         {
@@ -226,6 +276,9 @@ namespace CDP4JsonFileDal
                 else if (
                     siteDirectoryItem.GetContainerOfType<SiteReferenceDataLibrary>() == null &&
                     siteDirectoryItem.GetContainerOfType<DomainOfExpertise>() == null &&
+                    siteDirectoryItem.GetContainerOfType<ParticipantRole>() == null &&
+                    siteDirectoryItem.GetContainerOfType<PersonRole>() == null &&
+                    siteDirectoryItem.GetContainerOfType<Organization>() == null &&
                     siteDirectoryItem.GetContainerOfType<Person>() == null &&
                     siteDirectoryItem.GetContainerOfType<EngineeringModelSetup>() == null)
                 {
@@ -268,6 +321,52 @@ namespace CDP4JsonFileDal
                 }
 
                 siteDirectoryDto.Person.Add(person.Iid);
+            }
+
+            siteDirectoryDto.PersonRole.Clear();
+            foreach (var personRole in personRoles)
+            {
+                var pocos = personRole.QueryContainedThingsDeep();
+
+                foreach (var thing in pocos)
+                {
+                    if (!dtos.Any(x => x.Iid == thing.Iid))
+                    {
+                        dtos.Add(thing.ToDto());
+                    }
+                }
+
+                siteDirectoryDto.PersonRole.Add(personRole.Iid);
+            }
+
+            siteDirectoryDto.ParticipantRole.Clear();
+            foreach (var participantRole in participantRoles)
+            {
+                var pocos = participantRole.QueryContainedThingsDeep();
+
+                foreach (var thing in pocos)
+                {
+                    if (!dtos.Any(x => x.Iid == thing.Iid))
+                    {
+                        dtos.Add(thing.ToDto());
+                    }
+                }
+
+                siteDirectoryDto.ParticipantRole.Add(participantRole.Iid);
+            }
+
+            siteDirectoryDto.Organization.Clear();
+            foreach (var organization in organizations)
+            {
+                if (organization != null)
+                {
+                    if (!dtos.Any(x => x.Iid == organization.Iid))
+                    {
+                        dtos.Add(organization.ToDto());
+                    }
+
+                    siteDirectoryDto.Organization.Add(organization.Iid);
+                }
             }
 
             // remove the EngineeringModelSetup instances and replace with pruned onces only inlcuding the required iterationsetups
