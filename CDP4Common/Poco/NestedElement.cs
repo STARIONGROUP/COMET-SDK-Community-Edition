@@ -74,5 +74,80 @@ namespace CDP4Common.EngineeringModelData
         /// is the root of the Nested tree.
         /// </summary>
         public bool IsRootElement { get; internal set; }
+
+        /// <summary>
+        /// The <see cref="ElementBase"/> representing a <see cref="NestedElement"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ElementBase"/>.
+        /// </returns>
+        public ElementBase GetElementBase()
+        {
+            return this.IsRootElement
+                ? (ElementBase)this.RootElement
+                : this.ElementUsage.Last();
+        }
+
+        /// <summary>
+        /// The <see cref="ElementDefinition"/> representing a <see cref="NestedElement"/>, if it exists.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ElementDefinition"/>.
+        /// </returns>
+        public ElementDefinition GetElementDefinition()
+        {
+            var elementBase = this.GetElementBase();
+
+            return elementBase as ElementDefinition ?? (elementBase as ElementUsage)?.ElementDefinition;
+        }
+
+        /// <summary>
+        /// The <see cref="ElementUsage"/> representing a <see cref="NestedElement"/>, if it exists.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ElementUsage"/>.
+        /// </returns>
+        public ElementUsage GetElementUsage()
+        {
+            return this.GetElementBase() as ElementUsage;
+        }
+
+        /// <summary>
+        /// Asserts whether the <see cref="NestedElement"/>'s <see cref="ElementDefinition"/>, or <see cref="ElementUsage"/> is a member of the specific Category
+        /// </summary>
+        /// <param name="category">
+        /// The <see cref="Category"/>.
+        /// </param>
+        /// <returns>
+        /// True if the <see cref="NestedElement"/> is  a member of the <paramref name="category"/>, otherwise false.
+        /// </returns>
+        public bool IsMemberOfCategory(Category category) =>
+            (this.GetElementDefinition()?.IsMemberOfCategory(category) ?? false)
+            || (this.GetElementUsage()?.IsMemberOfCategory(category) ?? false);
+
+        /// <summary>
+        /// Get the children of a <see cref="NestedElement"/>.
+        /// </summary>
+        /// <param name="nestedElements">
+        /// A list containing all <see cref="NestedElement"/>s.
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{NestedElement}"/> containing all children <see cref="NestedElement"/>s.
+        /// </returns>
+        public IEnumerable<NestedElement> GetChildren(List<NestedElement> nestedElements)
+        {
+            var level = this.ElementUsage.Count;
+
+            var children = nestedElements.Where(ne => ne.ElementUsage.Count == level + 1);
+
+            if (level > 0)
+            {
+                children = children.Where(ne =>
+                    ne.ElementUsage[level - 1] == this.ElementUsage.LastOrDefault());
+            }
+
+            children = children.ToList();
+            return children;
+        }
     }
 }
