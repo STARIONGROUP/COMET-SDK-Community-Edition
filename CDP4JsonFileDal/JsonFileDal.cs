@@ -119,12 +119,12 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Allow API user to update copyright information with custom data
+        /// Allow the API user to update the copyright information with custom data
         /// </summary>
         /// <param name="person">The <see cref="Person"/> that is used to create the <see cref="ExchangeFileHeader"/></param>
         /// <param name="headerCopyright">Header copyright text</param>
         /// <param name="headerRemark">Header remark text</param>
-        public void UpdateExchangeFileHeader(Person person, string headerCopyright = JsonFileDalUtils.DefaultHeaderCopyright, string headerRemark = JsonFileDalUtils.ExchangeHeaderRemark)
+        public void UpdateExchangeFileHeader(Person person, string headerCopyright = JsonFileDalUtils.DefaultExchangeHeaderCopyright, string headerRemark = JsonFileDalUtils.DefaultExchangeHeaderRemark)
         {
             var exchangeFileHeader = JsonFileDalUtils.CreateExchangeFileHeader(person);
             exchangeFileHeader.Remark = headerRemark;
@@ -226,7 +226,7 @@ namespace CDP4JsonFileDal
 
             var activePerson = JsonFileDalUtils.QueryActivePerson(this.Session.Credentials.UserName, siteDirectory);
 
-            var exchangeFileHeader = this.FileHeader is ExchangeFileHeader ? this.FileHeader : JsonFileDalUtils.CreateExchangeFileHeader(activePerson);
+            var exchangeFileHeader = this.FileHeader as ExchangeFileHeader ?? JsonFileDalUtils.CreateExchangeFileHeader(activePerson);
 
             try
             {
