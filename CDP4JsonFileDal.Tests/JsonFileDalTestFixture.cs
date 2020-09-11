@@ -227,6 +227,20 @@ namespace CDP4JsonFileDal.Tests
             var domain = new DomainOfExpertise(Guid.NewGuid(), cache, this.credentials.Uri) { ShortName = "SYS" };
             this.siteDirectoryData.Domain.Add(domain);
 
+            // PersonRole
+            var role = new PersonRole(Guid.NewGuid(), null, null);
+            this.siteDirectoryData.PersonRole.Add(role);
+            this.siteDirectoryData.DefaultPersonRole = role;
+
+            // ParticipantRole
+            var participantRole = new ParticipantRole(Guid.Empty, null, null);
+            this.siteDirectoryData.ParticipantRole.Add(participantRole);
+            this.siteDirectoryData.DefaultParticipantRole = participantRole;
+
+            // Organization
+            var organization = new Organization(Guid.NewGuid(), null, null);
+            organization.Container = this.siteDirectoryData;
+
             var sitedirectoryDto = (CDP4Common.DTO.SiteDirectory)this.siteDirectoryData.ToDto();
             var clone = sitedirectoryDto.DeepClone<CDP4Common.DTO.SiteDirectory>();
             var operation = new Operation(sitedirectoryDto, clone, OperationKind.Update);
@@ -249,7 +263,10 @@ namespace CDP4JsonFileDal.Tests
             var requiredRdl = new CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary();
 
             var person = new Person { ShortName = "admin" };
+            person.Organization = organization;
             var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) {Person = person};
+            participant.Person.Role = role;
+            participant.Role = participantRole;
             participant.Domain.Add(domain);
             modelSetup.Participant.Add(participant);
 
