@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OptionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,11 +21,15 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
+    using System;
+    using System.Linq;
+
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Tests.Helpers;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -45,6 +48,27 @@ namespace CDP4Common.Tests.Poco
 
             Assert.IsTrue(option1.IsDefault);
             Assert.IsFalse(option2.IsDefault);
+        }
+
+        [Test]
+        public void VerifyGetNestedParameterValuesByPath()
+        {
+            var nestedElementTreeGeneratorTestFixture = new NestedElementTreeGeneratorTestFixture();
+            nestedElementTreeGeneratorTestFixture.SetUp();
+
+            var option = nestedElementTreeGeneratorTestFixture.iteration.Option.Single(x => x.ShortName == "OPT_A");
+
+            var doubleParameters = option.GetNestedParameterValuesByPath<double>("Sat\\m\\\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise);
+            Assert.AreEqual(2, doubleParameters.Count());
+            Assert.AreEqual(2D, doubleParameters.First());
+            Assert.AreEqual(3D, doubleParameters.Last());
+
+            var stringParameters = option.GetNestedParameterValuesByPath<string>("Sat\\m\\\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise);
+            Assert.AreEqual(2, stringParameters.Count());
+            Assert.AreEqual("2", stringParameters.First());
+            Assert.AreEqual("3", stringParameters.Last());
+
+            Assert.Throws<FormatException>(() => option.GetNestedParameterValuesByPath<bool>("Sat\\m\\\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise));
         }
     }
 }
