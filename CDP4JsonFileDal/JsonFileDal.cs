@@ -119,16 +119,16 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Allow API user to update copyright information with custom data
+        /// Allow the API user to update the copyright information with custom data
         /// </summary>
         /// <param name="person">The <see cref="Person"/> that is used to create the <see cref="ExchangeFileHeader"/></param>
         /// <param name="headerCopyright">Header copyright text</param>
         /// <param name="headerRemark">Header remark text</param>
-        public void UpdateExchangeFileHeader(Person person, string headerCopyright = JsonFileDalUtils.DefaultHeaderCopyright, string headerRemark = JsonFileDalUtils.ExchangeHeaderRemark)
+        public void UpdateExchangeFileHeader(Person person, string headerCopyright = null, string headerRemark = null)
         {
             var exchangeFileHeader = JsonFileDalUtils.CreateExchangeFileHeader(person);
-            exchangeFileHeader.Remark = headerRemark;
-            exchangeFileHeader.Copyright = headerCopyright;
+            exchangeFileHeader.Remark = headerRemark ?? exchangeFileHeader.Remark;
+            exchangeFileHeader.Copyright = headerCopyright ?? exchangeFileHeader.Copyright;
 
             this.FileHeader = exchangeFileHeader;
         }
@@ -173,6 +173,9 @@ namespace CDP4JsonFileDal
             var modelReferenceDataLibraries = new HashSet<CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary>();
             var domainsOfExpertises = new HashSet<CDP4Common.SiteDirectoryData.DomainOfExpertise>();
             var persons = new HashSet<CDP4Common.SiteDirectoryData.Person>();
+            var personRoles = new HashSet<CDP4Common.SiteDirectoryData.PersonRole>();
+            var participantRoles = new HashSet<CDP4Common.SiteDirectoryData.ParticipantRole>();
+            var organizations = new HashSet<CDP4Common.SiteDirectoryData.Organization>();
             var engineeringModelSetups = new HashSet<CDP4Common.SiteDirectoryData.EngineeringModelSetup>();
             var iterationSetups = new HashSet<CDP4Common.SiteDirectoryData.IterationSetup>();
 
@@ -202,7 +205,10 @@ namespace CDP4JsonFileDal
                 JsonFileDalUtils.AddDomainsOfExpertise(engineeringModelSetup, ref domainsOfExpertises);
 
                 // add the Persons that are to be included in the File
-                JsonFileDalUtils.AddPersons(engineeringModelSetup, ref persons);
+                JsonFileDalUtils.AddPersons(engineeringModelSetup, ref persons, ref personRoles, ref participantRoles, ref organizations);
+
+                // add organizations that are referrenced by ReferencedSource
+                JsonFileDalUtils.AddOrganizations(iterationRequiredRls, ref organizations);
             }
 
             var path = this.Session.Credentials.Uri.LocalPath;
@@ -212,12 +218,15 @@ namespace CDP4JsonFileDal
                 siteReferenceDataLibraries,
                 domainsOfExpertises,
                 persons,
+                personRoles,
+                participantRoles,
+                organizations,
                 engineeringModelSetups,
                 iterationSetups);
 
             var activePerson = JsonFileDalUtils.QueryActivePerson(this.Session.Credentials.UserName, siteDirectory);
 
-            var exchangeFileHeader = this.FileHeader is ExchangeFileHeader ? this.FileHeader : JsonFileDalUtils.CreateExchangeFileHeader(activePerson);
+            var exchangeFileHeader = this.FileHeader as ExchangeFileHeader ?? JsonFileDalUtils.CreateExchangeFileHeader(activePerson);
 
             try
             {
