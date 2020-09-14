@@ -39,12 +39,12 @@ namespace CDP4JsonFileDal
         /// <summary>
         /// A remark to be included in the exchange header file.
         /// </summary>
-        public const string DefaultExchangeHeaderRemark = "This is an ECSS-E-TM-10-25 exchange file";
+        private const string ExchangeHeaderRemark = "This is an ECSS-E-TM-10-25 exchange file";
 
         /// <summary>
         /// The default copyright text to be included in the exchange header file.
         /// </summary>
-        public const string DefaultExchangeHeaderCopyright = "Copyright 2016 © RHEA.";
+        private const string ExchangeHeaderCopyright = "Copyright 2016 © RHEA.";
 
         /// <summary>
         /// Adds the <paramref name="referenceDataLibraries"/> to the target <paramref name="siteReferenceDataLibraries"/> or <paramref name="modelReferenceDataLibraries"/>
@@ -453,8 +453,8 @@ namespace CDP4JsonFileDal
             var exchangeFileHeader = new ExchangeFileHeader
             {
                 DataModelVersion = "2.4.1",
-                Remark = DefaultExchangeHeaderRemark,
-                Copyright = DefaultExchangeHeaderCopyright,
+                Remark = ExchangeHeaderRemark,
+                Copyright = ExchangeHeaderCopyright,
                 Extensions = null
             };
 

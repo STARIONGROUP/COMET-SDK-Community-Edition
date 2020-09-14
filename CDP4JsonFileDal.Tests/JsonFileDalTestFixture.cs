@@ -338,8 +338,6 @@ namespace CDP4JsonFileDal.Tests
 
             this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" });
             Assert.IsInstanceOf(typeof(CDP4JsonFileDal.Json.ExchangeFileHeader), this.dal.FileHeader);
-            Assert.IsTrue(this.dal.FileHeader.Copyright == JsonFileDalUtils.DefaultExchangeHeaderCopyright);
-            Assert.IsTrue(this.dal.FileHeader.Remark == JsonFileDalUtils.DefaultExchangeHeaderRemark);
 
             this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" }, COPYRIGHT, REMARK);
             Assert.IsTrue(this.dal.FileHeader.Copyright == COPYRIGHT);

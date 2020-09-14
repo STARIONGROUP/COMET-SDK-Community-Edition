@@ -124,11 +124,11 @@ namespace CDP4JsonFileDal
         /// <param name="person">The <see cref="Person"/> that is used to create the <see cref="ExchangeFileHeader"/></param>
         /// <param name="headerCopyright">Header copyright text</param>
         /// <param name="headerRemark">Header remark text</param>
-        public void UpdateExchangeFileHeader(Person person, string headerCopyright = JsonFileDalUtils.DefaultExchangeHeaderCopyright, string headerRemark = JsonFileDalUtils.DefaultExchangeHeaderRemark)
+        public void UpdateExchangeFileHeader(Person person, string headerCopyright = null, string headerRemark = null)
         {
             var exchangeFileHeader = JsonFileDalUtils.CreateExchangeFileHeader(person);
-            exchangeFileHeader.Remark = headerRemark;
-            exchangeFileHeader.Copyright = headerCopyright;
+            exchangeFileHeader.Remark = headerRemark ?? exchangeFileHeader.Remark;
+            exchangeFileHeader.Copyright = headerCopyright ?? exchangeFileHeader.Copyright;
 
             this.FileHeader = exchangeFileHeader;
         }
