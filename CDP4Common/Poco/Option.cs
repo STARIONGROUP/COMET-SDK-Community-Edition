@@ -49,7 +49,7 @@ namespace CDP4Common.EngineeringModelData
         }
 
         /// <summary>
-        /// Finds a NestedParameter by its <see cref="NestedParameter.Path"/> in this <see cref="Option"/>'s <see cref="NestedParameter"/>s
+        /// Finds <see cref="NestedParameter"/>s by their <see cref="NestedParameter.Path"/>s in the <see cref="Option"/>'s <see cref="NestedParameter"/>
         /// and returns its <see cref="NestedParameter.ActualValue"/> "converted" to the generic <typeparamref name="T"></typeparamref>'s .
         /// </summary>
         /// <typeparam name="T">The generic type to which the <see cref="NestedParameter.ActualValue"/> needs to be "converted".</typeparam>
