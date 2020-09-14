@@ -178,10 +178,25 @@ namespace CDP4JsonFileDal
         {
             foreach (var participant in engineeringModelSetup.Participant)
             {
-                persons.Add(participant.Person);
-                personRoles.Add(participant.Person.Role);
-                participantRoles.Add(participant.Role);
-                organizations.Add(participant.Person.Organization);
+                if (!persons.Contains(participant.Person))
+                {
+                    persons.Add(participant.Person);
+                }
+
+                if (!personRoles.Contains(participant.Person.Role))
+                {
+                    personRoles.Add(participant.Person.Role);
+                }
+
+                if (!participantRoles.Contains(participant.Role))
+                {
+                    participantRoles.Add(participant.Role);
+                }
+
+                if (!organizations.Contains(participant.Person.Organization))
+                {
+                    organizations.Add(participant.Person.Organization);
+                }
             }
         }
 
@@ -201,7 +216,10 @@ namespace CDP4JsonFileDal
             {
                 foreach (var source in rdl.ReferenceSource)
                 {
-                    organizations.Add(source.Publisher);
+                    if (!organizations.Contains(source.Publisher))
+                    {
+                        organizations.Add(source.Publisher);
+                    }
                 }
             }
         }
@@ -289,9 +307,7 @@ namespace CDP4JsonFileDal
             siteDirectoryDto.Domain.Clear();
             foreach (var domainOfExpertise in domainOfExpertises)
             {
-                var pocos = domainOfExpertise.QueryContainedThingsDeep();
-
-                foreach (var thing in pocos)
+                foreach (var thing in domainOfExpertise.QueryContainedThingsDeep())
                 {
                     if (!dtos.Any(x => x.Iid == thing.Iid))
                     {
@@ -306,9 +322,7 @@ namespace CDP4JsonFileDal
             siteDirectoryDto.Person.Clear();
             foreach (var person in persons)
             {
-                var pocos = person.QueryContainedThingsDeep();
-
-                foreach (var thing in pocos)
+                foreach (var thing in person.QueryContainedThingsDeep())
                 {
                     if (!dtos.Any(x => x.Iid == thing.Iid))
                     {
@@ -322,9 +336,7 @@ namespace CDP4JsonFileDal
             siteDirectoryDto.PersonRole.Clear();
             foreach (var personRole in personRoles)
             {
-                var pocos = personRole.QueryContainedThingsDeep();
-
-                foreach (var thing in pocos)
+                foreach (var thing in personRole.QueryContainedThingsDeep())
                 {
                     if (!dtos.Any(x => x.Iid == thing.Iid))
                     {
@@ -338,9 +350,7 @@ namespace CDP4JsonFileDal
             siteDirectoryDto.ParticipantRole.Clear();
             foreach (var participantRole in participantRoles)
             {
-                var pocos = participantRole.QueryContainedThingsDeep();
-
-                foreach (var thing in pocos)
+                foreach (var thing in participantRole.QueryContainedThingsDeep())
                 {
                     if (!dtos.Any(x => x.Iid == thing.Iid))
                     {
