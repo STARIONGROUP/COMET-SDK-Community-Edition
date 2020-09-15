@@ -626,5 +626,27 @@ namespace CDP4Common.Helpers
 
             return nestedParameters.FirstOrDefault(x => x.AssociatedParameter == parameter)?.Path;
         }
+
+        /// <summary>
+        /// Get <see cref="NestedParameter.Path"/> for a <see cref="ParameterBase"/> 
+        /// </summary>
+        /// <param name="parameterBase">The <see cref="ParameterBase"/></param>
+        /// <param name="option">The <see cref="Option"/></param>
+        /// <param name="domain">The <see cref="DomainOfExpertise"/></param>
+        /// <param name="actualFiniteState">Get the <see cref="NestedParameter.Path"/> from a specific <see cref="ActualFiniteState"/></param>
+        /// <returns>The <see cref="NestedParameter.Path"/> if found, otherwise null</returns>
+        public string GetNestedParameterPath(ParameterBase parameterBase, Option option, DomainOfExpertise domain, ActualFiniteState actualFiniteState)
+        {
+            var nestedParameters = this.GetNestedParameters(option, domain);
+
+            var parameter = parameterBase;
+
+            if (parameterBase is ParameterOverride parameterOverride)
+            {
+                parameter = parameterOverride.Parameter;
+            }
+
+            return nestedParameters.FirstOrDefault(x => x.AssociatedParameter == parameter && x.ActualState == actualFiniteState)?.Path;
+        }
     }
 }
