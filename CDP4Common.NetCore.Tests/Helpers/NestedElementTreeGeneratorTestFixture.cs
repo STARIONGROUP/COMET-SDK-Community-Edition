@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedElementTreeGeneratorTestFixtre.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -47,6 +47,7 @@ namespace CDP4Common.Tests.Helpers
         private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache;
         public Iteration iteration;
         public DomainOfExpertise domainOfExpertise;
+        public DomainOfExpertise domainOfExpertise_2;
         private ElementDefinition elementDefinition_1;
         private ElementDefinition elementDefinition_2;
         private ElementUsage elementUsage_1;
@@ -55,6 +56,11 @@ namespace CDP4Common.Tests.Helpers
         private Option option_B;
         private Parameter parameter;
         private ParameterOverride parameterOverride;
+        private ElementDefinition elementDefinition_3;
+        private ElementUsage elementUsage_3;
+        private Parameter parameter2;
+        private ActualFiniteState actualState_3;
+        private ActualFiniteState actualState_4;
 
         [SetUp]
         public void SetUp()
@@ -68,6 +74,12 @@ namespace CDP4Common.Tests.Helpers
             {
                 ShortName = "SYS",
                 Name = "System"
+            };
+
+            this.domainOfExpertise_2 = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.uri)
+            {
+                ShortName = "TEST",
+                Name = "Test"
             };
 
             this.iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
@@ -96,6 +108,12 @@ namespace CDP4Common.Tests.Helpers
                 Name = "Battery"
             };
 
+            this.elementDefinition_3 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
+            {
+                ShortName = "Pow",
+                Name = "power"
+            };
+
             this.elementUsage_1 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri)
             {
                 ElementDefinition = this.elementDefinition_2,
@@ -110,15 +128,33 @@ namespace CDP4Common.Tests.Helpers
                 Name = "battery b"
             };
 
+            this.elementUsage_3 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri)
+            {
+                ElementDefinition = this.elementDefinition_3,
+                ShortName = "power",
+                Name = "power"
+            };
+
             var simpleQuantityKind = new SimpleQuantityKind(Guid.NewGuid(), null, null)
             {
                 ShortName = "m"
+            };
+
+            var simpleQuantityKind2 = new SimpleQuantityKind(Guid.NewGuid(), null, null)
+            {
+                ShortName = "v"
             };
 
             this.parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
                 ParameterType = simpleQuantityKind
+            };
+
+            this.parameter2 = new Parameter(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Owner = this.domainOfExpertise_2,
+                ParameterType = simpleQuantityKind2
             };
 
             this.parameterOverride = new ParameterOverride(Guid.NewGuid(), this.cache, this.uri)
@@ -139,8 +175,43 @@ namespace CDP4Common.Tests.Helpers
                 Iid = Guid.NewGuid()
             };
 
+            var actualList = new ActualFiniteStateList(Guid.NewGuid(), null, null);
+            actualList.Owner = this.domainOfExpertise;
+
+            var possibleList1 = new PossibleFiniteStateList(Guid.NewGuid(), null, null);
+
+            var possibleState1 = new PossibleFiniteState(Guid.NewGuid(), null, null) { Name = "possiblestate1", ShortName = "1" };
+            var possibleState2 = new PossibleFiniteState(Guid.NewGuid(), null, null) { Name = "possiblestate2", ShortName = "2" };
+
+            possibleList1.PossibleState.Add(possibleState1);
+            possibleList1.PossibleState.Add(possibleState2);
+
+            actualList.PossibleFiniteStateList.Add(possibleList1);
+
+            this.actualState_3 = new ActualFiniteState(Guid.NewGuid(), this.cache, this.uri);
+
+            this.actualState_3.PossibleState.Add(possibleState1);
+
+            this.actualState_4 = new ActualFiniteState(Guid.NewGuid(), this.cache, this.uri);
+
+            this.actualState_4.PossibleState.Add(possibleState2);
+
+            var parameterValueset_3 = new ParameterValueSet()
+            {
+                ActualState = this.actualState_3,
+                Iid = Guid.NewGuid()
+            };
+
+            var parameterValueset_4 = new ParameterValueSet()
+            {
+                ActualState = this.actualState_4,
+                Iid = Guid.NewGuid()
+            };
+
             var values_1 = new List<string> { "2" };
             var values_2 = new List<string> { "3" };
+            var values_3 = new List<string> { "220" };
+            var values_4 = new List<string> { "0" };
 
             var overrideValueset = new ParameterOverrideValueSet()
             {
@@ -164,6 +235,18 @@ namespace CDP4Common.Tests.Helpers
             parameterValueset_2.Formula = new CDP4Common.Types.ValueArray<string>(values_2);
             parameterValueset_2.ValueSwitch = ParameterSwitchKind.MANUAL;
 
+            parameterValueset_3.Manual = new CDP4Common.Types.ValueArray<string>(values_3);
+            parameterValueset_3.Reference = new CDP4Common.Types.ValueArray<string>(values_3);
+            parameterValueset_3.Computed = new CDP4Common.Types.ValueArray<string>(values_3);
+            parameterValueset_3.Formula = new CDP4Common.Types.ValueArray<string>(values_3);
+            parameterValueset_3.ValueSwitch = ParameterSwitchKind.MANUAL;
+
+            parameterValueset_4.Manual = new CDP4Common.Types.ValueArray<string>(values_4);
+            parameterValueset_4.Reference = new CDP4Common.Types.ValueArray<string>(values_4);
+            parameterValueset_4.Computed = new CDP4Common.Types.ValueArray<string>(values_4);
+            parameterValueset_4.Formula = new CDP4Common.Types.ValueArray<string>(values_4);
+            parameterValueset_4.ValueSwitch = ParameterSwitchKind.MANUAL;
+
             overrideValueset.Manual = new CDP4Common.Types.ValueArray<string>(values_1);
             overrideValueset.Reference = new CDP4Common.Types.ValueArray<string>(values_1);
             overrideValueset.Computed = new CDP4Common.Types.ValueArray<string>(values_1);
@@ -174,6 +257,9 @@ namespace CDP4Common.Tests.Helpers
             this.parameter.ValueSet.Add(parameterValueset_2);
             this.parameterOverride.ValueSet.Add(overrideValueset);
 
+            this.parameter2.ValueSet.Add(parameterValueset_3);
+            this.parameter2.ValueSet.Add(parameterValueset_4);
+
             this.elementUsage_1.ExcludeOption.Add(this.option_A);
             this.elementUsage_1.ParameterOverride.Add(this.parameterOverride);
 
@@ -181,10 +267,16 @@ namespace CDP4Common.Tests.Helpers
             this.elementDefinition_1.ContainedElement.Add(this.elementUsage_1);
             this.elementDefinition_1.ContainedElement.Add(this.elementUsage_2);
             this.elementDefinition_2.Parameter.Add(this.parameter);
+            this.elementDefinition_2.Parameter.Add(this.parameter2);
 
             this.iteration.Element.Add(this.elementDefinition_1);
             this.iteration.Element.Add(this.elementDefinition_2);
             this.iteration.TopElement = this.elementDefinition_1;
+
+            this.iteration.ActualFiniteStateList.Add(actualList);
+            this.iteration.PossibleFiniteStateList.Add(possibleList1);
+            actualList.ActualState.Add(this.actualState_3);
+            actualList.ActualState.Add(this.actualState_4);
         }
 
         [Test]
@@ -305,30 +397,115 @@ namespace CDP4Common.Tests.Helpers
         }
 
         [Test]
+        public void Verify_that_GetNestedParameters_Works_For_Specific_DomainOfExpertise()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
+
+            var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise, false);
+
+            Assert.AreEqual(4, NestedParameters.Count());
+
+            NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise_2, false);
+
+            Assert.AreEqual(2, NestedParameters.Count());
+        }
+
+        [Test]
+        public void Verify_that_GetNestedParameters_Works_For_All_DomainOfExpertises()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
+
+            var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, false);
+
+            Assert.AreEqual(6, NestedParameters.Count());
+        }
+
+        [Test]
+        public void Verify_that_Generate_Works_For_Specific_DomainOfExpertise()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
+
+            var NestedElements = this.nestedElementTreeGenerator.Generate(option, this.domainOfExpertise, false);
+
+            Assert.AreEqual(2, NestedElements.Count());
+            Assert.AreEqual(4, NestedElements.SelectMany(x => x.NestedParameter).Count());
+
+            NestedElements = this.nestedElementTreeGenerator.Generate(option, this.domainOfExpertise_2, false);
+
+            Assert.AreEqual(2, NestedElements.Count());
+            Assert.AreEqual(2, NestedElements.SelectMany(x => x.NestedParameter).Count());
+        }
+
+        [Test]
+        public void Verify_that_Generate_Works_For_All_DomainOfExpertises()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
+
+            var NestedElements = this.nestedElementTreeGenerator.Generate(option, false);
+
+            Assert.AreEqual(2, NestedElements.Count());
+            Assert.AreEqual(6, NestedElements.SelectMany(x => x.NestedParameter).Count());
+        }
+
+        [Test]
+        public void Verify_that_GenerateNestedElements_Works_For_Specific_DomainOfExpertise()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
+
+            var NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.domainOfExpertise, this.elementDefinition_1, false);
+
+            Assert.AreEqual(2, NestedElements.Count());
+            Assert.AreEqual(4, NestedElements.SelectMany(x => x.NestedParameter).Count());
+
+            NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.domainOfExpertise_2, this.elementDefinition_1, false);
+
+            Assert.AreEqual(2, NestedElements.Count());
+            Assert.AreEqual(2, NestedElements.SelectMany(x => x.NestedParameter).Count());
+        }
+
+        [Test]
+        public void Verify_that_GenerateNestedElements_Works_For_All_DomainOfExpertises()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
+
+            var NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.elementDefinition_1, false);
+
+            Assert.AreEqual(2, NestedElements.Count());
+            Assert.AreEqual(6, NestedElements.SelectMany(x => x.NestedParameter).Count());
+        }
+
+
+        [Test]
         public void VerifyThatGetNestedElementShortNameWorksForElementDefinition()
         {
-            Assert.AreEqual("Sat", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_1, this.option_A, this.domainOfExpertise));
-            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_2, this.option_A, this.domainOfExpertise));
-            Assert.AreEqual("Sat", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_1, this.option_B, this.domainOfExpertise));
-            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_2, this.option_B, this.domainOfExpertise));
+            Assert.AreEqual("Sat", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_1, this.option_A));
+            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_2, this.option_A));
+            Assert.AreEqual("Sat", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_1, this.option_B));
+            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_2, this.option_B));
         }
 
         [Test]
         public void VerifyThatGetNestedElementShortNameWorksForElementUsage()
         {
-            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_1, this.option_A, this.domainOfExpertise));
-            Assert.AreEqual("Sat.bat_b", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_2, this.option_A, this.domainOfExpertise));
-            Assert.AreEqual("Sat.bat_a", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_1, this.option_B, this.domainOfExpertise));
-            Assert.AreEqual("Sat.bat_b", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_2, this.option_B, this.domainOfExpertise));
+            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_1, this.option_A));
+            Assert.AreEqual("Sat.bat_b", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_2, this.option_A));
+            Assert.AreEqual("Sat.bat_a", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_1, this.option_B));
+            Assert.AreEqual("Sat.bat_b", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_2, this.option_B));
         }
 
         [Test]
         public void VerifyThatGetNestedParameterPathWorks()
         {
-            Assert.AreEqual("Sat\\m\\\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter, this.option_A, this.domainOfExpertise));
-            Assert.AreEqual("Sat\\m\\\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_A, this.domainOfExpertise));
-            Assert.AreEqual("Sat\\m\\\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter, this.option_B, this.domainOfExpertise));
-            Assert.AreEqual("Sat\\m\\\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_B, this.domainOfExpertise));
+            Assert.AreEqual("Sat\\m\\\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter, this.option_A));
+            Assert.AreEqual("Sat.bat_b\\v\\1\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_A));
+            Assert.AreEqual("Sat.bat_b\\v\\1\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_A, this.actualState_3));
+            Assert.AreEqual("Sat.bat_b\\v\\2\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_A, this.actualState_4));
+            Assert.AreEqual("Sat\\m\\\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_A));
+            Assert.AreEqual("Sat\\m\\\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter, this.option_B));
+            Assert.AreEqual("Sat.bat_a\\v\\1\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B));
+            Assert.AreEqual("Sat.bat_a\\v\\1\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B, this.actualState_3));
+            Assert.AreEqual("Sat.bat_a\\v\\2\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B, this.actualState_4));
+            Assert.AreEqual("Sat\\m\\\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_B));
         }
     }
 }
