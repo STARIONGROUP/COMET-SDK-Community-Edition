@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedElementTreeGeneratorTestFixtre.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -47,12 +47,20 @@ namespace CDP4Common.Tests.Helpers
         private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache;
         public Iteration iteration;
         public DomainOfExpertise domainOfExpertise;
-        
+        private ElementDefinition elementDefinition_1;
+        private ElementDefinition elementDefinition_2;
+        private ElementUsage elementUsage_1;
+        private ElementUsage elementUsage_2;
+        private Option option_A;
+        private Option option_B;
+        private Parameter parameter;
+        private ParameterOverride parameterOverride;
+
         [SetUp]
         public void SetUp()
         {
             this.nestedElementTreeGenerator = new NestedElementTreeGenerator();
-            
+
             this.uri = new Uri("http://www.rheagroup.com");
             this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
@@ -61,78 +69,78 @@ namespace CDP4Common.Tests.Helpers
                 ShortName = "SYS",
                 Name = "System"
             };
-            
+
             this.iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
 
-            var option_A = new Option(Guid.NewGuid(), this.cache, this.uri)
+            this.option_A = new Option(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "OPT_A",
                 Name = "Option A"
             };
-            
-            var option_B = new Option(Guid.NewGuid(), this.cache, this.uri)
+
+            this.option_B = new Option(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "OPT_B",
                 Name = "Option B"
             };
-            
-            var elementDefinition_1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
+
+            this.elementDefinition_1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "Sat",
                 Name = "Satellite"
             };
-            
-            var elementDefinition_2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
+
+            this.elementDefinition_2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "Bat",
                 Name = "Battery"
             };
 
-            var elementUsage_1 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri)
+            this.elementUsage_1 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri)
             {
-                ElementDefinition = elementDefinition_2,
+                ElementDefinition = this.elementDefinition_2,
                 ShortName = "bat_a",
                 Name = "battery a"
             };
-            
-            var elementUsage_2 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri)
+
+            this.elementUsage_2 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri)
             {
-                ElementDefinition = elementDefinition_2,
+                ElementDefinition = this.elementDefinition_2,
                 ShortName = "bat_b",
-                Name = "battery b"                
+                Name = "battery b"
             };
 
             var simpleQuantityKind = new SimpleQuantityKind(Guid.NewGuid(), null, null)
             {
                 ShortName = "m"
             };
-            
-            var parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
+
+            this.parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
                 ParameterType = simpleQuantityKind
             };
 
-            var parameterOverride = new ParameterOverride(Guid.NewGuid(), this.cache, this.uri)
+            this.parameterOverride = new ParameterOverride(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
-                Parameter = parameter
+                Parameter = this.parameter
             };
 
             var parameterValueset_1 = new ParameterValueSet()
             {
-                ActualOption = option_B,
+                ActualOption = this.option_B,
                 Iid = Guid.NewGuid()
             };
 
             var parameterValueset_2 = new ParameterValueSet()
             {
-                ActualOption = option_A,
+                ActualOption = this.option_A,
                 Iid = Guid.NewGuid()
             };
 
-            var values_1 = new List<string>() {"2"};
-            var values_2 = new List<string>() {"3"};
+            var values_1 = new List<string> { "2" };
+            var values_2 = new List<string> { "3" };
 
             var overrideValueset = new ParameterOverrideValueSet()
             {
@@ -140,9 +148,9 @@ namespace CDP4Common.Tests.Helpers
                 Iid = Guid.NewGuid()
             };
 
-            this.iteration.Option.Add(option_A);
-            this.iteration.Option.Add(option_B);
-            this.iteration.DefaultOption = option_A;
+            this.iteration.Option.Add(this.option_A);
+            this.iteration.Option.Add(this.option_B);
+            this.iteration.DefaultOption = this.option_A;
 
             parameterValueset_1.Manual = new CDP4Common.Types.ValueArray<string>(values_1);
             parameterValueset_1.Reference = new CDP4Common.Types.ValueArray<string>(values_1);
@@ -162,21 +170,21 @@ namespace CDP4Common.Tests.Helpers
             overrideValueset.Formula = new CDP4Common.Types.ValueArray<string>(values_1);
             overrideValueset.ValueSwitch = ParameterSwitchKind.MANUAL;
 
-            parameter.ValueSet.Add(parameterValueset_1);
-            parameter.ValueSet.Add(parameterValueset_2);
-            parameterOverride.ValueSet.Add(overrideValueset);
+            this.parameter.ValueSet.Add(parameterValueset_1);
+            this.parameter.ValueSet.Add(parameterValueset_2);
+            this.parameterOverride.ValueSet.Add(overrideValueset);
 
-            elementUsage_1.ExcludeOption.Add(option_A);
-            elementUsage_1.ParameterOverride.Add(parameterOverride);
+            this.elementUsage_1.ExcludeOption.Add(this.option_A);
+            this.elementUsage_1.ParameterOverride.Add(this.parameterOverride);
 
-            elementDefinition_1.Parameter.Add(parameter);
-            elementDefinition_1.ContainedElement.Add(elementUsage_1);
-            elementDefinition_1.ContainedElement.Add(elementUsage_2);
-            elementDefinition_2.Parameter.Add(parameter);
+            this.elementDefinition_1.Parameter.Add(this.parameter);
+            this.elementDefinition_1.ContainedElement.Add(this.elementUsage_1);
+            this.elementDefinition_1.ContainedElement.Add(this.elementUsage_2);
+            this.elementDefinition_2.Parameter.Add(this.parameter);
 
-            this.iteration.Element.Add(elementDefinition_1);
-            this.iteration.Element.Add(elementDefinition_2);
-            this.iteration.TopElement = elementDefinition_1;
+            this.iteration.Element.Add(this.elementDefinition_1);
+            this.iteration.Element.Add(this.elementDefinition_2);
+            this.iteration.TopElement = this.elementDefinition_1;
         }
 
         [Test]
@@ -199,7 +207,7 @@ namespace CDP4Common.Tests.Helpers
         public void Verify_that_excluded_usage_option_a_does_not_get_generated_as_nested_element()
         {
             var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
-            
+
             var nestedElements = this.nestedElementTreeGenerator.Generate(option, this.domainOfExpertise);
 
             foreach (var nestedElement in nestedElements)
@@ -292,8 +300,35 @@ namespace CDP4Common.Tests.Helpers
 
             foreach (var nestedParameter in NestedParameters)
             {
-                Assert.IsNotNull(nestedParameter.ValueSet);   
+                Assert.IsNotNull(nestedParameter.ValueSet);
             }
+        }
+
+        [Test]
+        public void VerifyThatGetNestedElementShortNameWorksForElementDefinition()
+        {
+            Assert.AreEqual("Sat", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_1, this.option_A, this.domainOfExpertise));
+            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_2, this.option_A, this.domainOfExpertise));
+            Assert.AreEqual("Sat", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_1, this.option_B, this.domainOfExpertise));
+            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementDefinition_2, this.option_B, this.domainOfExpertise));
+        }
+
+        [Test]
+        public void VerifyThatGetNestedElementShortNameWorksForElementUsage()
+        {
+            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_1, this.option_A, this.domainOfExpertise));
+            Assert.AreEqual("Sat.bat_b", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_2, this.option_A, this.domainOfExpertise));
+            Assert.AreEqual("Sat.bat_a", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_1, this.option_B, this.domainOfExpertise));
+            Assert.AreEqual("Sat.bat_b", this.nestedElementTreeGenerator.GetNestedElementShortName(this.elementUsage_2, this.option_B, this.domainOfExpertise));
+        }
+
+        [Test]
+        public void VerifyThatGetNestedParameterPathWorks()
+        {
+            Assert.AreEqual("Sat\\m\\\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter, this.option_A, this.domainOfExpertise));
+            Assert.AreEqual("Sat\\m\\\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_A, this.domainOfExpertise));
+            Assert.AreEqual("Sat\\m\\\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter, this.option_B, this.domainOfExpertise));
+            Assert.AreEqual("Sat\\m\\\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_B, this.domainOfExpertise));
         }
     }
 }

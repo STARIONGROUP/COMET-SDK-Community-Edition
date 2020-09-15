@@ -578,5 +578,53 @@ namespace CDP4Common.Helpers
 
             return nestedParameter;
         }
+
+        /// <summary>
+        /// Get <see cref="NestedElement.ShortName"/> for an <see cref="ElementDefinition"/> 
+        /// </summary>
+        /// <param name="elementDefinition">The <see cref="ElementDefinition"/></param>
+        /// <param name="option">The <see cref="Option"/></param>
+        /// <param name="domain">The <see cref="DomainOfExpertise"/></param>
+        /// <returns>The <see cref="NestedElement.ShortName"/> if found, otherwise null</returns>
+        public string GetNestedElementShortName(ElementDefinition elementDefinition, Option option, DomainOfExpertise domain)
+        {
+            var iteration = (Iteration)option.Container;
+            return iteration.TopElement == elementDefinition ? elementDefinition.ShortName : null;
+        }
+
+        /// <summary>
+        /// Get <see cref="NestedElement.ShortName"/> for an <see cref="ElementUsage"/> 
+        /// </summary>
+        /// <param name="elementUsage">The <see cref="ElementUsage"/></param>
+        /// <param name="option">The <see cref="Option"/></param>
+        /// <param name="domain">The <see cref="DomainOfExpertise"/></param>
+        /// <returns>The <see cref="NestedElement.ShortName"/> if found, otherwise null</returns>
+        public string GetNestedElementShortName(ElementUsage elementUsage, Option option, DomainOfExpertise domain)
+        {
+            var nestedElements = this.Generate(option, domain);
+
+            return nestedElements.FirstOrDefault(x => x.GetElementUsage() == elementUsage)?.ShortName;
+        }
+
+        /// <summary>
+        /// Get <see cref="NestedParameter.Path"/> for a <see cref="ParameterBase"/> 
+        /// </summary>
+        /// <param name="parameterBase">The <see cref="ParameterBase"/></param>
+        /// <param name="option">The <see cref="Option"/></param>
+        /// <param name="domain">The <see cref="DomainOfExpertise"/></param>
+        /// <returns>The <see cref="NestedParameter.Path"/> if found, otherwise null</returns>
+        public string GetNestedParameterPath(ParameterBase parameterBase, Option option, DomainOfExpertise domain)
+        {
+            var nestedParameters = this.GetNestedParameters(option, domain);
+
+            var parameter = parameterBase;
+
+            if (parameterBase is ParameterOverride parameterOverride)
+            {
+                parameter = parameterOverride.Parameter;
+            }
+
+            return nestedParameters.FirstOrDefault(x => x.AssociatedParameter == parameter)?.Path;
+        }
     }
 }
