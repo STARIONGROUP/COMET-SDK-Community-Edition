@@ -739,12 +739,14 @@ namespace CDP4Common.Helpers
         }
 
         /// <summary>
-        /// Get <see cref="NestedElement.ShortName"/> for an <see cref="ElementDefinition"/> 
+        /// Get <see cref="NestedElement.ShortName"/> for an <see cref="ElementDefinition"/>.
+        /// For the <see cref="Iteration"/>'s TopElement this is equal to the param <see cref="ElementDefinition"/>'s ShortName, that ShortName can be returned immediately.
+        /// Other <see cref="ElementDefinition"/>s  shall return the value null.
         /// </summary>
         /// <param name="elementDefinition">The <see cref="ElementDefinition"/></param>
         /// <param name="option">The <see cref="Option"/></param>
         /// <returns>The <see cref="NestedElement.ShortName"/> if found, otherwise null</returns>
-        public string GetNestedElementShortName(ElementDefinition elementDefinition, Option option)
+        public string GetNestedElementPath(ElementDefinition elementDefinition, Option option)
         {
             var iteration = (Iteration) option.Container;
             return iteration.TopElement == elementDefinition ? elementDefinition.ShortName : null;
@@ -756,7 +758,7 @@ namespace CDP4Common.Helpers
         /// <param name="elementUsage">The <see cref="ElementUsage"/></param>
         /// <param name="option">The <see cref="Option"/></param>
         /// <returns>The <see cref="NestedElement.ShortName"/> if found, otherwise null</returns>
-        public string GetNestedElementShortName(ElementUsage elementUsage, Option option)
+        public string GetNestedElementPath(ElementUsage elementUsage, Option option)
         {
             var nestedElements = this.Generate(option);
 
