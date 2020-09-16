@@ -24,6 +24,13 @@
 
 namespace CDP4Common.EngineeringModelData
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using CDP4Common.Helpers;
+    using CDP4Common.SiteDirectoryData;
+
     /// <summary>
     /// Extension for the auto-generated part
     /// </summary>
@@ -39,6 +46,26 @@ namespace CDP4Common.EngineeringModelData
                 var iteration = this.Container as Iteration;
                 return iteration?.DefaultOption == this;
             }
+        }
+
+        /// <summary>
+        /// Finds <see cref="NestedParameter"/>s by their <see cref="NestedParameter.Path"/>s in the <see cref="Option"/>'s <see cref="NestedParameter"/>
+        /// and returns its <see cref="NestedParameter.ActualValue"/> "converted" to the generic <typeparamref name="T" />'s.
+        /// </summary>
+        /// <typeparam name="T">The generic type to which the <see cref="NestedParameter.ActualValue"/> needs to be "converted".</typeparam>
+        /// <param name="path">The path to search for in all this <see cref="Option"/>'s <see cref="NestedParameter.Path"/> properties.</param>
+        /// <param name="domain">The <see cref="DomainOfExpertise"/> for which the <see cref="NestedParameter"/>s should be found.</param>
+        /// <returns>A single <see cref="NestedParameter"/> if the path was found
+        /// and its <see cref="NestedParameter.ActualValue"/> could be converted to the requested generic <typeparamref name="T"></typeparamref>, otherwise null.
+        /// If Convert.ChangeType fails, an <see cref="Exception"/> is thrown: <see href="https://docs.microsoft.com/en-us/dotnet/api/system.convert.changetype"/>.
+        /// 
+        /// </returns>
+        public IEnumerable<T> GetNestedParameterValuesByPath<T>(string path, DomainOfExpertise domain)
+        {
+            var allParameters = new NestedElementTreeGenerator().GetNestedParameters(this, domain);
+
+            return allParameters.Where(x => x.Path.Equals(path))
+                .Select(x => (T)Convert.ChangeType(x.ActualValue.ToValueSetObject(x.AssociatedParameter.ParameterType), typeof(T))).ToArray();
         }
     }
 }

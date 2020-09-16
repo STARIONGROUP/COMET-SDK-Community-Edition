@@ -25,13 +25,15 @@
 namespace CDP4Common.Helpers
 {
     using System;
-    using System.Collections.Generic;   
-    using System.Linq;    
+    using System.Collections.Generic;
+    using System.Linq;
+
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
+
     using NLog;
-    
+
     /// <summary>
     /// The purpose of the <see cref="NestedElementTreeGenerator"/> class is to generate the <see cref="NestedElement"/>s
     /// and <see cref="NestedParameter"/>s for an <see cref="Option"/> where the <see cref="NestedParameter"/>s
@@ -72,23 +74,69 @@ namespace CDP4Common.Helpers
         /// </exception>
         public IEnumerable<NestedParameter> GetNestedParameters(Option option, DomainOfExpertise domainOfExpertise, bool updateOption = false)
         {
-            if (option == null)
-            {
-                throw new ArgumentNullException(nameof(option), "The option may not be null");
-            }
-
             if (domainOfExpertise == null)
             {
                 throw new ArgumentNullException(nameof(domainOfExpertise), "The domainOfExpertise may not be null");
             }
 
-            var iteration = (Iteration)option.Container;
+            return this.GetNestedParameters_Impl(option, domainOfExpertise, updateOption);
+        }
 
-            Logger.Debug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise.ShortName}");
+        /// <summary>
+        /// Creates the <see cref="NestedParameter"/>s in a flat list from <see cref="NestedElement"/>s list for the of <see cref="NestedElement"/>s.
+        /// </summary>
+        /// <param name="option">
+        /// The <see cref="Option"/> for which the <see cref="NestedParameter"/>s flat list is created. When the <see cref="Option"/>
+        /// is null then none of the <see cref="ElementUsage"/>s are filtered.
+        /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{NestedParameter}"/> that contains the generated <see cref="NestedParameter"/>s
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when the <paramref name="option"/> is null
+        /// </exception>
+        public IEnumerable<NestedParameter> GetNestedParameters(Option option, bool updateOption = false)
+        {
+            return this.GetNestedParameters_Impl(option, null, updateOption);
+        }
 
-            var nestedElements = this.Generate(option, domainOfExpertise, updateOption);
+        /// <summary>
+        /// Creates the <see cref="NestedParameter"/>s in a flat list from <see cref="NestedElement"/>s list for the of <see cref="NestedElement"/>s.
+        /// </summary>
+        /// <param name="option">
+        /// The <see cref="Option"/> for which the <see cref="NestedParameter"/>s flat list is created. When the <see cref="Option"/>
+        /// is null then none of the <see cref="ElementUsage"/>s are filtered.
+        /// </param>
+        /// <param name="domainOfExpertise">
+        /// The <see cref="DomainOfExpertise"/> for which the <see cref="NestedParameter"/>s flat list needs to be generated. Only the <see cref="Parameter"/>s, <see cref="ParameterOverride"/>s and
+        /// <see cref="ParameterSubscription"/>s that are owned by the <see cref="DomainOfExpertise"/> will be taken into account.
+        /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{NestedParameter}"/> that contains the generated <see cref="NestedParameter"/>s
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when the <paramref name="option"/> is null
+        /// </exception>
+        private IEnumerable<NestedParameter> GetNestedParameters_Impl(Option option, DomainOfExpertise domainOfExpertise, bool updateOption)
+        {
+            if (option == null)
+            {
+                throw new ArgumentNullException(nameof(option), "The option may not be null");
+            }
 
-            Logger.Debug($"Crearing NestedParameters Iteration: {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise.ShortName}");
+            var iteration = (Iteration) option.Container;
+
+            Logger.Debug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise?.ShortName ?? ": All"}");
+
+            var nestedElements = this.Generate_Impl(option, domainOfExpertise, updateOption);
+
+            Logger.Debug($"Crearing NestedParameters Iteration: {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise?.ShortName ?? ": All"}");
 
             var flatNestedParameters = nestedElements.SelectMany(np => np.NestedParameter);
 
@@ -117,27 +165,71 @@ namespace CDP4Common.Helpers
         /// </exception>
         public IEnumerable<NestedElement> Generate(Option option, DomainOfExpertise domainOfExpertise, bool updateOption = false)
         {
-            if (option == null)
-            {
-                throw new ArgumentNullException(nameof(option), "The option may not be null");
-            }
-
             if (domainOfExpertise == null)
             {
                 throw new ArgumentNullException(nameof(domainOfExpertise), "The domainOfExpertise may not be null");
             }
 
-            var iteration = (Iteration)option.Container;
+            return this.Generate_Impl(option, domainOfExpertise, updateOption);
+        }
+
+        /// <summary>
+        /// Generates the <see cref="NestedElement"/>s and <see cref="NestedParameter"/>s for the specified <see cref="Option"/>
+        /// </summary>
+        /// <param name="option">
+        /// The <see cref="Option"/> for which the <see cref="NestedElement"/> tree needs to be generated.
+        /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{NestedElement}"/> that contains the generated <see cref="NestedElement"/>s filtered based on the provided <see cref="Option"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when the <paramref name="option"/> is null
+        /// </exception>
+        public IEnumerable<NestedElement> Generate(Option option, bool updateOption = false)
+        {
+            return this.Generate_Impl(option, null, updateOption);
+        }
+
+        /// <summary>
+        /// Generates the <see cref="NestedElement"/>s and <see cref="NestedParameter"/>s for the specified <see cref="Option"/>
+        /// </summary>
+        /// <param name="option">
+        /// The <see cref="Option"/> for which the <see cref="NestedElement"/> tree needs to be generated.
+        /// </param>
+        /// <param name="domainOfExpertise">
+        /// The <see cref="DomainOfExpertise"/> for which the <see cref="NestedElement"/> tree needs to be generated. Only the <see cref="Parameter"/>s, <see cref="ParameterOverride"/>s and
+        /// <see cref="ParameterSubscription"/>s that are owned by the <see cref="DomainOfExpertise"/> will be taken into account when generating <see cref="NestedParameter"/>s
+        /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{NestedElement}"/> that contains the generated <see cref="NestedElement"/>s filtered based on the provided <see cref="Option"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when the <paramref name="option"/> is null
+        /// </exception>
+        private IEnumerable<NestedElement> Generate_Impl(Option option, DomainOfExpertise domainOfExpertise, bool updateOption)
+        {
+            if (option == null)
+            {
+                throw new ArgumentNullException(nameof(option), "The option may not be null");
+            }
+
+            var iteration = (Iteration) option.Container;
             var rootElement = iteration.TopElement;
-            
+
             if (rootElement == null)
             {
                 throw new NestedElementTreeException($"The container Iteration of Option {option.ShortName} does not have a TopElement specified");
             }
 
-            Logger.Debug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise.ShortName}");
+            Logger.Debug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise?.ShortName ?? ": All"}");
 
-            var createNestedElements = this.GenerateNestedElements(option, domainOfExpertise, rootElement, updateOption);
+            var createNestedElements = this.GenerateNestedElements_Impl(option, domainOfExpertise, rootElement, updateOption);
             return createNestedElements;
         }
 
@@ -168,14 +260,68 @@ namespace CDP4Common.Helpers
         /// </exception>
         public IEnumerable<NestedElement> GenerateNestedElements(Option option, DomainOfExpertise domainOfExpertise, ElementDefinition rootElement, bool updateOption = false)
         {
-            if (option == null)
-            {
-                throw new ArgumentNullException(nameof(option), "The option may not be null");
-            }
-
             if (domainOfExpertise == null)
             {
                 throw new ArgumentNullException(nameof(domainOfExpertise), "The domainOfExpertise may not be null");
+            }
+
+            return this.GenerateNestedElements_Impl(option, domainOfExpertise, rootElement, updateOption);
+        }
+
+        /// <summary>
+        /// Generates the <see cref="NestedElement"/>s starting at the <paramref name="rootElement"/>
+        /// </summary>
+        /// <param name="option">
+        /// The <see cref="Option"/> for which the <see cref="NestedElement"/> tree is created. When the <see cref="Option"/>
+        /// is null then none of the <see cref="ElementUsage"/>s are filtered.
+        /// </param>
+        /// <param name="rootElement">
+        /// The <see cref="ElementDefinition"/> that serves as the root of the generated <see cref="NestedElement"/> tree.
+        /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{NestedElement}"/> that contains the generated <see cref="NestedElement"/>s
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when the <paramref name="option"/> is null
+        /// thrown when the <paramref name="rootElement"/> is null
+        /// </exception>
+        public IEnumerable<NestedElement> GenerateNestedElements(Option option, ElementDefinition rootElement, bool updateOption = false)
+        {
+            return this.GenerateNestedElements_Impl(option, null, rootElement, updateOption);
+        }
+
+        /// <summary>
+        /// Generates the <see cref="NestedElement"/>s starting at the <paramref name="rootElement"/>
+        /// </summary>
+        /// <param name="option">
+        /// The <see cref="Option"/> for which the <see cref="NestedElement"/> tree is created. When the <see cref="Option"/>
+        /// is null then none of the <see cref="ElementUsage"/>s are filtered.
+        /// </param>
+        /// <param name="domainOfExpertise">
+        /// The <see cref="DomainOfExpertise"/> for which the <see cref="NestedElement"/> tree needs to be generated. Only the <see cref="Parameter"/>s, <see cref="ParameterOverride"/>s and
+        /// <see cref="ParameterSubscription"/>s that are owned by the <see cref="DomainOfExpertise"/> will be taken into account when generating <see cref="NestedParameter"/>s
+        /// </param>
+        /// <param name="rootElement">
+        /// The <see cref="ElementDefinition"/> that serves as the root of the generated <see cref="NestedElement"/> tree.
+        /// </param>
+        /// <param name="updateOption">
+        /// Value indicating whether the <see cref="Option"/> shall be updated with the created <see cref="NestedElement"/>s or not.
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{NestedElement}"/> that contains the generated <see cref="NestedElement"/>s
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when the <paramref name="option"/> is null
+        /// thrown when the <paramref name="rootElement"/> is null
+        /// </exception>
+        private IEnumerable<NestedElement> GenerateNestedElements_Impl(Option option, DomainOfExpertise domainOfExpertise, ElementDefinition rootElement, bool updateOption = false)
+        {
+            if (option == null)
+            {
+                throw new ArgumentNullException(nameof(option), "The option may not be null");
             }
 
             if (rootElement == null)
@@ -184,10 +330,10 @@ namespace CDP4Common.Helpers
             }
 
             var nestedElements = new List<NestedElement>();
-            
+
             var rootNestedElement = this.CreateNestedElementAndNestedParametersForRootElement(rootElement, domainOfExpertise, option, updateOption);
             nestedElements.Add(rootNestedElement);
-            
+
             var elementUsages = new List<ElementUsage>();
             var recursedNestedElements = this.RecursivelyCreateNestedElements(rootElement, rootElement, domainOfExpertise, elementUsages, option, updateOption);
             nestedElements.AddRange(recursedNestedElements);
@@ -237,10 +383,11 @@ namespace CDP4Common.Helpers
                 }
 
                 var nestedElement = new NestedElement(Guid.NewGuid(), cache, uri)
-                                        {
-                                            RootElement = rootElement,
-                                            IsVolatile = true
-                                        };
+                {
+                    RootElement = rootElement,
+                    IsVolatile = true
+                };
+
                 if (updateOption)
                 {
                     option.NestedElement.Add(nestedElement);
@@ -251,24 +398,27 @@ namespace CDP4Common.Helpers
                 }
 
                 var nestedParameters = this.CreateNestedParameters(elementUsage, domainOfExpertise, option);
+
                 foreach (var nestedParameter in nestedParameters)
                 {
                     nestedElement.NestedParameter.Add(nestedParameter);
                 }
-                
+
                 var containmentUsages = new List<ElementUsage>();
+
                 foreach (var usage in elementUsages)
                 {
                     nestedElement.ElementUsage.Add(usage);
                     containmentUsages.Add(usage);
                 }
 
-                nestedElement.ElementUsage.Add(elementUsage);               
+                nestedElement.ElementUsage.Add(elementUsage);
                 containmentUsages.Add(elementUsage);
 
                 var referencedElementDefinition = elementUsage.ElementDefinition;
 
                 var nestedElements = this.RecursivelyCreateNestedElements(referencedElementDefinition, rootElement, domainOfExpertise, containmentUsages, option, updateOption);
+
                 foreach (var element in nestedElements)
                 {
                     yield return element;
@@ -320,7 +470,7 @@ namespace CDP4Common.Helpers
             {
                 var compoundParameterType = parameter.ParameterType as CompoundParameterType;
 
-                if (parameter.Owner == domainOfExpertise)
+                if (domainOfExpertise == null || parameter.Owner == domainOfExpertise)
                 {
                     var valueSets = parameter.IsOptionDependent ? parameter.ValueSet.Where(vs => vs.ActualOption == option).ToList() : parameter.ValueSet;
 
@@ -335,7 +485,7 @@ namespace CDP4Common.Helpers
                         {
                             foreach (var component in compoundParameterType.Component)
                             {
-                                var comp = (ParameterTypeComponent)component;
+                                var comp = (ParameterTypeComponent) component;
                                 var nestedParameter = this.CreatedNestedParameter(parameter, comp, parameterValueSet, option);
                                 nestedElement.NestedParameter.Add(nestedParameter);
                             }
@@ -345,9 +495,11 @@ namespace CDP4Common.Helpers
                 else
                 {
                     var subscription = parameter.ParameterSubscription.SingleOrDefault(ps => ps.Owner == domainOfExpertise);
+
                     if (subscription != null)
                     {
                         var nestedParameters = this.CreatedNestedParameters(subscription, option, compoundParameterType);
+
                         foreach (var nestedParameter in nestedParameters)
                         {
                             nestedElement.NestedParameter.Add(nestedParameter);
@@ -386,9 +538,10 @@ namespace CDP4Common.Helpers
                 var compoundParameterType = parameter.ParameterType as CompoundParameterType;
 
                 var parameterOveride = elementUsage.ParameterOverride.SingleOrDefault(po => po.Parameter == parameter);
+
                 if (parameterOveride == null)
                 {
-                    if (parameter.Owner == domainOfExpertise)
+                    if (domainOfExpertise == null || parameter.Owner == domainOfExpertise)
                     {
                         var valueSets = parameter.IsOptionDependent ? parameter.ValueSet.Where(vs => vs.ActualOption == option).ToList() : parameter.ValueSet;
 
@@ -403,7 +556,7 @@ namespace CDP4Common.Helpers
                             {
                                 foreach (var component in compoundParameterType.Component)
                                 {
-                                    var comp = (ParameterTypeComponent)component;
+                                    var comp = (ParameterTypeComponent) component;
                                     var nestedParameter = this.CreatedNestedParameter(parameter, comp, parameterValueSet, option);
                                     yield return nestedParameter;
                                 }
@@ -413,21 +566,24 @@ namespace CDP4Common.Helpers
                     else
                     {
                         var subscription = parameter.ParameterSubscription.SingleOrDefault(ps => ps.Owner == domainOfExpertise);
+
                         if (subscription != null)
                         {
                             var nestedParameters = this.CreatedNestedParameters(subscription, option, compoundParameterType);
+
                             foreach (var nestedParameter in nestedParameters)
                             {
                                 yield return nestedParameter;
                             }
                         }
-                    }                    
+                    }
                 }
                 else
                 {
-                    if (parameterOveride.Owner == domainOfExpertise)
+                    if (domainOfExpertise == null || parameterOveride.Owner == domainOfExpertise)
                     {
-                        var valueSets = parameterOveride.IsOptionDependent ? parameterOveride.ValueSet.Where(vs => vs.ActualOption == option).ToList() : parameterOveride.ValueSet;                        
+                        var valueSets = parameterOveride.IsOptionDependent ? parameterOveride.ValueSet.Where(vs => vs.ActualOption == option).ToList() : parameterOveride.ValueSet;
+
                         foreach (var parameterOverrideValueSet in valueSets)
                         {
                             if (compoundParameterType == null)
@@ -439,7 +595,7 @@ namespace CDP4Common.Helpers
                             {
                                 foreach (var component in compoundParameterType.Component)
                                 {
-                                    var comp = (ParameterTypeComponent)component;
+                                    var comp = (ParameterTypeComponent) component;
                                     var nestedParameter = this.CreatedNestedParameter(parameter, comp, parameterOverrideValueSet, option);
                                     yield return nestedParameter;
                                 }
@@ -449,13 +605,15 @@ namespace CDP4Common.Helpers
                     else
                     {
                         var subscription = parameterOveride.ParameterSubscription.SingleOrDefault(ps => ps.Owner == domainOfExpertise);
+
                         if (subscription != null)
                         {
                             var nestedParameters = this.CreatedNestedParameters(subscription, option, compoundParameterType);
+
                             foreach (var nestedParameter in nestedParameters)
                             {
                                 yield return nestedParameter;
-                            }                            
+                            }
                         }
                     }
                 }
@@ -482,6 +640,7 @@ namespace CDP4Common.Helpers
         private IEnumerable<NestedParameter> CreatedNestedParameters(ParameterSubscription subscription, Option option, CompoundParameterType compoundParameterType)
         {
             var valueSets = subscription.IsOptionDependent ? subscription.ValueSet.Where(vs => vs.ActualOption == option).ToList() : subscription.ValueSet;
+
             foreach (var parameterSubscriptionValueSet in valueSets)
             {
                 if (compoundParameterType == null)
@@ -493,7 +652,7 @@ namespace CDP4Common.Helpers
                 {
                     foreach (var component in compoundParameterType.Component)
                     {
-                        var comp = (ParameterTypeComponent)component;
+                        var comp = (ParameterTypeComponent) component;
                         var nestedParameter = this.CreateNestedParameter(subscription, comp, parameterSubscriptionValueSet, option);
                         yield return nestedParameter;
                     }
@@ -524,7 +683,7 @@ namespace CDP4Common.Helpers
             var componentIndex = component == null ? 0 : component.Index;
             var actualValue = valueSet.ActualValue[componentIndex];
             var formula = valueSet.Formula[componentIndex];
-            
+
             var nestedParameter = new NestedParameter(Guid.NewGuid(), parameter.Cache, parameter.IDalUri)
             {
                 IsVolatile = true,
@@ -563,7 +722,7 @@ namespace CDP4Common.Helpers
         {
             var componentIndex = component == null ? 0 : component.Index;
             var actualValue = valueSet.ActualValue[componentIndex];
-            
+
             var nestedParameter = new NestedParameter(Guid.NewGuid(), subscription.Cache, subscription.IDalUri)
             {
                 IsVolatile = true,
@@ -577,6 +736,74 @@ namespace CDP4Common.Helpers
             };
 
             return nestedParameter;
+        }
+
+        /// <summary>
+        /// Get <see cref="NestedElement.ShortName"/> for an <see cref="ElementDefinition"/>.
+        /// For the <see cref="Iteration"/>'s TopElement this is equal to the param <see cref="ElementDefinition"/>'s ShortName, that ShortName can be returned immediately.
+        /// Other <see cref="ElementDefinition"/>s  shall return the value null.
+        /// </summary>
+        /// <param name="elementDefinition">The <see cref="ElementDefinition"/></param>
+        /// <param name="option">The <see cref="Option"/></param>
+        /// <returns>The <see cref="NestedElement.ShortName"/> if found, otherwise null</returns>
+        public string GetNestedElementPath(ElementDefinition elementDefinition, Option option)
+        {
+            var iteration = (Iteration) option.Container;
+            return iteration.TopElement == elementDefinition ? elementDefinition.ShortName : null;
+        }
+
+        /// <summary>
+        /// Get <see cref="NestedElement.ShortName"/> for an <see cref="ElementUsage"/> 
+        /// </summary>
+        /// <param name="elementUsage">The <see cref="ElementUsage"/></param>
+        /// <param name="option">The <see cref="Option"/></param>
+        /// <returns>The <see cref="NestedElement.ShortName"/> if found, otherwise null</returns>
+        public string GetNestedElementPath(ElementUsage elementUsage, Option option)
+        {
+            var nestedElements = this.Generate(option);
+
+            return nestedElements.FirstOrDefault(x => x.GetElementUsage() == elementUsage)?.ShortName;
+        }
+
+        /// <summary>
+        /// Get <see cref="NestedParameter.Path"/> for a <see cref="ParameterBase"/> 
+        /// </summary>
+        /// <param name="parameterBase">The <see cref="ParameterBase"/></param>
+        /// <param name="option">The <see cref="Option"/></param>
+        /// <returns>The <see cref="NestedParameter.Path"/> if found, otherwise null</returns>
+        public string GetNestedParameterPath(ParameterBase parameterBase, Option option)
+        {
+            var nestedParameters = this.GetNestedParameters(option);
+
+            var parameter = parameterBase;
+
+            if (parameterBase is ParameterOverride parameterOverride)
+            {
+                parameter = parameterOverride.Parameter;
+            }
+
+            return nestedParameters.FirstOrDefault(x => x.AssociatedParameter == parameter)?.Path;
+        }
+
+        /// <summary>
+        /// Get <see cref="NestedParameter.Path"/> for a <see cref="ParameterBase"/> 
+        /// </summary>
+        /// <param name="parameterBase">The <see cref="ParameterBase"/></param>
+        /// <param name="option">The <see cref="Option"/></param>
+        /// <param name="actualFiniteState">Get the <see cref="NestedParameter.Path"/> from a specific <see cref="ActualFiniteState"/></param>
+        /// <returns>The <see cref="NestedParameter.Path"/> if found, otherwise null</returns>
+        public string GetNestedParameterPath(ParameterBase parameterBase, Option option, ActualFiniteState actualFiniteState)
+        {
+            var nestedParameters = this.GetNestedParameters(option);
+
+            var parameter = parameterBase;
+
+            if (parameterBase is ParameterOverride parameterOverride)
+            {
+                parameter = parameterOverride.Parameter;
+            }
+
+            return nestedParameters.FirstOrDefault(x => x.AssociatedParameter == parameter && x.ActualState == actualFiniteState)?.Path;
         }
     }
 }
