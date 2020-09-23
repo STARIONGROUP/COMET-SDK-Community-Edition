@@ -24,6 +24,7 @@
 
 namespace CDP4Common.Tests.Helpers
 {
+    using System;
     using System.Globalization;
 
     using CDP4Common.Helpers;
@@ -43,7 +44,7 @@ namespace CDP4Common.Tests.Helpers
         }
 
         [Test]
-        [TestCaseSource(nameof(TestCases))]
+        [TestCaseSource(nameof(TryParseDoubleTestCases))]
         public void VerifyThatValuesAreCalculatedCorrectly(string valueArrayValue, double expectedValue1, double expectedValue2, bool expectedTryParseResult, ParameterType parameterType)
         {
             var culture = new CultureInfo("en-GB")
@@ -66,7 +67,30 @@ namespace CDP4Common.Tests.Helpers
             Assert.AreEqual(expectedValue2, calculatedValue2);
         }
 
-        private static readonly object[] TestCases =
+        [Test]
+        [TestCaseSource(nameof(ValueSetConverterTestCases))]
+        public void VerifyThatValueSetValuesAreCalculatedCorrectly(object value, string expectedValue1, string expectedValue2, ParameterType parameterType)
+        {
+            var culture = new CultureInfo("en-GB")
+            {
+                NumberFormat =
+                {
+                    NumberDecimalSeparator = ",",
+                    NumberGroupSeparator = "."
+                }
+            };
+
+            System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+
+            Assert.AreEqual(expectedValue1, value.ToValueSetString(parameterType));
+
+            culture.NumberFormat.NumberDecimalSeparator = ".";
+            culture.NumberFormat.NumberGroupSeparator = ",";
+
+            Assert.AreEqual(expectedValue2, value.ToValueSetString(parameterType));
+        }
+
+        private static readonly object[] TryParseDoubleTestCases =
         {
             new object[] { "11", 11, 11, true, new SimpleQuantityKind()},
             new object[] { "11.11", 11.11, 11.11, true, new SimpleQuantityKind()},
@@ -76,6 +100,36 @@ namespace CDP4Common.Tests.Helpers
             new object[] { "", 0, 0, true, new SimpleQuantityKind()},
             new object[] { " ", 0, 0, true, new SimpleQuantityKind()},
             new object[] { "aa", 0, 0, false, new SimpleQuantityKind() }
+        };
+
+        private static readonly object[] ValueSetConverterTestCases =
+        {
+            new object[] { "AAA", "AAA", "AAA", new TextParameterType()},
+            new object[] { "11.11", "11.11", "11.11", new SimpleQuantityKind()},
+            new object[] { "11,11", "11.11", "11,11", new SimpleQuantityKind()},
+            new object[] { "-", "-", "-", new SimpleQuantityKind()},
+            new object[] { "", "-", "-", new SimpleQuantityKind()},
+            new object[] { " ", "-", "-", new SimpleQuantityKind()},
+            new object[] { true, "true", "true", new BooleanParameterType()},
+            new object[] { false, "false", "false", new BooleanParameterType()},
+            new object[] { "true", "true", "true", new TextParameterType()},
+            new object[] { "false", "false", "false", new TextParameterType()},
+            new object[] { "True", "true", "true", new TextParameterType()},
+            new object[] { "False", "false", "false", new TextParameterType()},
+            new object[] { 11.11F, "11.11", "11.11", new SimpleQuantityKind()},
+            new object[] { 11.11D, "11.11", "11.11", new SimpleQuantityKind()},
+            new object[] { new EnumerationValueDefinition() {ShortName = "enumValue"}, "enumValue", "enumValue", new EnumerationParameterType()},
+            new object[]
+            {
+                new []
+                {
+                    new EnumerationValueDefinition {ShortName = "enumValue1"},
+                    new EnumerationValueDefinition {ShortName = "enumValue2"}
+                }, $"enumValue1{Constants.PaddedMultiEnumSeparator}enumValue2", $"enumValue1{Constants.PaddedMultiEnumSeparator}enumValue2", new EnumerationParameterType()
+            },
+            new object[] { DateTime.ParseExact("2020-09-23T12:11:30", "yyyy-MM-ddTHH:mm:ss", null), "2020-09-23T12:11:30", "2020-09-23T12:11:30", new DateTimeParameterType()},
+            new object[] { DateTime.ParseExact("2020-09-23T12:11:30", "yyyy-MM-ddTHH:mm:ss", null), "2020-09-23", "2020-09-23", new DateParameterType()},
+            new object[] { DateTime.ParseExact("2020-09-23T12:11:30", "yyyy-MM-ddTHH:mm:ss", null), "12:11:30", "12:11:30", new TimeOfDayParameterType()},
         };
     }
 }
