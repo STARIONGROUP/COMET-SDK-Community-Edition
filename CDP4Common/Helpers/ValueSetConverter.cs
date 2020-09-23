@@ -2,7 +2,7 @@
 // <copyright file="ValueSetConverter.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -29,9 +29,10 @@ namespace CDP4Common.Helpers
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+
     using CDP4Common.CommonData;
-    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
+
     using NLog;
 
     /// <summary>
@@ -54,7 +55,7 @@ namespace CDP4Common.Helpers
         {
             if (parameterType == null)
             {
-                throw new ArgumentNullException("parameterType");
+                throw new ArgumentNullException(nameof(parameterType));
             }
 
             if (value == null)
@@ -73,23 +74,22 @@ namespace CDP4Common.Helpers
                 return booleanValue ? "true" : "false";
             }
 
-            if (value is float)
+            if (value is float f)
             {
-                return ((float)value).ToString(CultureInfo.InvariantCulture);
+                return f.ToString(CultureInfo.InvariantCulture);
             }
 
-            if (value is double)
+            if (value is double d)
             {
-                return ((double)value).ToString(CultureInfo.InvariantCulture);
+                return d.ToString(CultureInfo.InvariantCulture);
             }
 
             if (value is string)
             {
                 var stringValue = value.ToString();
-                 
+
                 // try parse double in any culture - allow the user to still use "." as separator
-                double doubleValue;
-                if (double.TryParse(stringValue, NumberStyles.Float, CultureInfo.InvariantCulture, out doubleValue))
+                if (double.TryParse(stringValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var doubleValue))
                 {
                     return doubleValue.ToString(CultureInfo.InvariantCulture);
                 }
@@ -100,34 +100,30 @@ namespace CDP4Common.Helpers
                     return doubleValue.ToString(CultureInfo.InvariantCulture);
                 }
 
-                bool booleanValue;
-                if (bool.TryParse(stringValue, out booleanValue))
+                if (bool.TryParse(stringValue, out var booleanValue))
                 {
                     return booleanValue ? "true" : "false";
                 }
 
-                return (string.IsNullOrWhiteSpace(value.ToString())) ? "-" : value.ToString();
+                return string.IsNullOrWhiteSpace(value.ToString()) ? "-" : value.ToString();
             }
 
             // single enum
-            var enumValueDef = value as EnumerationValueDefinition;
-            if (enumValueDef != null)
+            if (value is EnumerationValueDefinition enumValueDef)
             {
                 return enumValueDef.ShortName;
             }
 
             // multi enum
-            var objects = value as IEnumerable;
-            if (objects != null)
+            if (value is IEnumerable objects)
             {
                 var enumList = objects.Cast<EnumerationValueDefinition>().ToList();
                 return enumList.Count == 0 ? "-" : string.Join(Constants.PaddedMultiEnumSeparator, enumList.Select(x => x.ShortName));
             }
 
             // datetime
-            if (value is DateTime)
+            if (value is DateTime datetime)
             {
-                var datetime = (DateTime)value;
                 switch (parameterType.ClassKind)
                 {
                     case ClassKind.DateTimeParameterType:
@@ -151,8 +147,7 @@ namespace CDP4Common.Helpers
         public static object ToValueSetObject(this string value, ParameterType parameterType)
         {
             // enum parameter type
-            var enumParameterType = parameterType as EnumerationParameterType;
-            if (enumParameterType != null)
+            if (parameterType is EnumerationParameterType enumParameterType)
             {
                 if (enumParameterType.AllowMultiSelect)
                 {
@@ -170,21 +165,50 @@ namespace CDP4Common.Helpers
             switch (parameterType.ClassKind)
             {
                 case ClassKind.BooleanParameterType:
-                    bool booleanValue;
-                    return (bool.TryParse(value, out booleanValue)) ? (bool?)booleanValue : null;
+                    return bool.TryParse(value, out var booleanValue) ? (bool?)booleanValue : null;
+
                 case ClassKind.DateTimeParameterType:
-                    DateTime datetime;
-                    var isDateTime = DateTime.TryParse(value, null, DateTimeStyles.RoundtripKind, out datetime);
+                    var isDateTime = DateTime.TryParse(value, null, DateTimeStyles.RoundtripKind, out var datetime);
                     return isDateTime ? (DateTime?)datetime : null;
+                
                 case ClassKind.DateParameterType:
                     isDateTime = DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out datetime);
                     return isDateTime ? (DateTime?)datetime : null;
+                
                 case ClassKind.TimeOfDayParameterType:
                     isDateTime = DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind | DateTimeStyles.NoCurrentDateDefault, out datetime);
                     return isDateTime ? (DateTime?)datetime : null;
             }
 
             return value ?? "-";
+        }
+
+        /// <summary>
+        /// Convert a string value to a double according to ECSS-TM-10-25 rules.
+        /// </summary>
+        /// <param name="value">The <see cref="string"/> value</param>
+        /// <param name="parameterType">The <see cref="ParameterType"/> used to </param>
+        /// <param name="invariantNum">The converted <see cref="double"/></param>
+        /// <returns>True if parsing was succesful, otherwise false.</returns>
+        public static bool TryParseDouble(string value, ParameterType parameterType, out double invariantNum)
+        {
+            var calculatedValue = value;
+
+            if (parameterType == null)
+            {
+                invariantNum = 0D;
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(value) || value.Equals(DefaultObject(parameterType)))
+            {
+                invariantNum = 0D;
+                return true;
+            }
+
+            calculatedValue = ToValueSetString(calculatedValue, parameterType);
+ 
+            return double.TryParse(calculatedValue, NumberStyles.Any, CultureInfo.InvariantCulture, out invariantNum);
         }
 
         /// <summary>
