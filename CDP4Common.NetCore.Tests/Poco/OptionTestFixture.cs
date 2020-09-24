@@ -58,22 +58,33 @@ namespace CDP4Common.Tests.Poco
 
             var option = nestedElementTreeGeneratorTestFixture.iteration.Option.Single(x => x.ShortName == "OPT_A");
 
-            var doubleParameters = option.GetNestedParameterValuesByPath<double>("Sat\\m\\\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise).ToList();
+            var doubleParameters = option.GetNestedParameterValuesByPath<double>(@"Sat\m\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise).ToList();
             Assert.AreEqual(2, doubleParameters.Count);
             Assert.AreEqual(2D, doubleParameters.First());
             Assert.AreEqual(3D, doubleParameters.Last());
 
-            var stringParameters = option.GetNestedParameterValuesByPath<string>("Sat\\m\\\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise).ToList();
+            var stringParameters = option.GetNestedParameterValuesByPath<string>(@"Sat\m\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise).ToList();
             Assert.AreEqual(2, stringParameters.Count);
             Assert.AreEqual("2", stringParameters.First());
             Assert.AreEqual("3", stringParameters.Last());
 
-            Assert.Throws<FormatException>(() => option.GetNestedParameterValuesByPath<bool>("Sat\\m\\\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise));
+            Assert.Throws<FormatException>(() => option.GetNestedParameterValuesByPath<bool>(@"Sat\m\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise));
 
-            var objectParameters = option.GetNestedParameterValuesByPath<object>("Sat\\m\\\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise).ToList();
+            var objectParameters = option.GetNestedParameterValuesByPath<object>(@"Sat\m\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise).ToList();
             Assert.AreEqual(2, objectParameters.Count);
             Assert.AreEqual(2D, Convert.ChangeType(objectParameters.First(), typeof(double)));
             Assert.AreEqual("3", Convert.ChangeType(objectParameters.Last(), typeof(string)));
+
+            var domainCheckParameters = option.GetNestedParameterValuesByPath<double>(@"Sat.bat_b\v\1\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise).ToList();
+            Assert.AreEqual(0, domainCheckParameters.Count);
+
+            var domainCheckParametersWithCorrectDomain = option.GetNestedParameterValuesByPath<double>(@"Sat.bat_b\v\1\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise_2).ToList();
+            Assert.AreEqual(1, domainCheckParametersWithCorrectDomain.Count);
+            Assert.AreEqual(220D, domainCheckParametersWithCorrectDomain.First());
+
+            var domain2CheckParameters = option.GetNestedParameterValuesByPath<double>(@"Sat.bat_b\v\1\OPT_A").ToList();
+            Assert.AreEqual(1, domain2CheckParameters.Count);
+            Assert.AreEqual(220D, domain2CheckParameters.First());
         }
     }
 }
