@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;netstandard2.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4JsonFileDal Community Edition</Title>
     <VersionPrefix>6.1.0</VersionPrefix>
@@ -19,9 +19,11 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [Update] to CDP4Common 6.0.0; enable revision read
-      [Update] DotNetZip 1.13.7
-    </PackageReleaseNotes>
+		[Update] to CDP4Common 6.2.0
+		[Update] to CDP4Dal 6.2.0
+		[Update] DotNetZip 1.13.8
+		[Fix] serialization of Person related objects; fixes #131
+	</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>    
@@ -40,10 +42,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetZip" Version="1.13.7" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />  
+    <PackageReference Include="DotNetZip" Version="1.13.8" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' ">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' Or '$(TargetFramework)' == 'net48' ">
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
 
