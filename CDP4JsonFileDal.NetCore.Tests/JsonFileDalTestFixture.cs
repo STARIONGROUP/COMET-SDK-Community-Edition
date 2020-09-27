@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonFileDal.NetCore.Tests
+namespace CDP4JsonFileDal.Tests
 {
     using System;
     using System.Collections.Concurrent;
@@ -124,8 +124,8 @@ namespace CDP4JsonFileDal.NetCore.Tests
             var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "does_not_exist.zip");
             this.credentials = new Credentials("admin", "pass", new Uri(path));
             var jsonfiledal = new JsonFileDal();
-            
-            Assert.ThrowsAsync<FileLoadException>( async () => await jsonfiledal.Open(this.credentials, this.cancelationTokenSource.Token));
+
+            Assert.ThrowsAsync<FileLoadException>(async () => await jsonfiledal.Open(this.credentials, this.cancelationTokenSource.Token));
         }
 
         [Test]
@@ -227,6 +227,20 @@ namespace CDP4JsonFileDal.NetCore.Tests
             var domain = new DomainOfExpertise(Guid.NewGuid(), cache, this.credentials.Uri) { ShortName = "SYS" };
             this.siteDirectoryData.Domain.Add(domain);
 
+            // PersonRole
+            var role = new PersonRole(Guid.NewGuid(), null, null);
+            this.siteDirectoryData.PersonRole.Add(role);
+            this.siteDirectoryData.DefaultPersonRole = role;
+
+            // ParticipantRole
+            var participantRole = new ParticipantRole(Guid.Empty, null, null);
+            this.siteDirectoryData.ParticipantRole.Add(participantRole);
+            this.siteDirectoryData.DefaultParticipantRole = participantRole;
+
+            // Organization
+            var organization = new Organization(Guid.NewGuid(), null, null);
+            organization.Container = this.siteDirectoryData;
+
             var sitedirectoryDto = (CDP4Common.DTO.SiteDirectory)this.siteDirectoryData.ToDto();
             var clone = sitedirectoryDto.DeepClone<CDP4Common.DTO.SiteDirectory>();
             var operation = new Operation(sitedirectoryDto, clone, OperationKind.Update);
@@ -247,9 +261,12 @@ namespace CDP4JsonFileDal.NetCore.Tests
             modelSetup.ActiveDomain.Add(domain);
 
             var requiredRdl = new CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary();
-            
+
             var person = new Person { ShortName = "admin" };
-            var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) {Person = person};
+            person.Organization = organization;
+            var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) { Person = person };
+            participant.Person.Role = role;
+            participant.Role = participantRole;
             participant.Domain.Add(domain);
             modelSetup.Participant.Add(participant);
 
@@ -275,7 +292,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         [Test]
         public void Verify_that_JsonFileDal_IsReadOnly()
         {
-            Assert.That(this.dal.IsReadOnly, Is.True); 
+            Assert.That(this.dal.IsReadOnly, Is.True);
         }
 
         [Test]
@@ -290,6 +307,41 @@ namespace CDP4JsonFileDal.NetCore.Tests
         public async Task Verify_that_Open_with_null_credentials_throws_exception()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await this.dal.Open(null, this.cancelationTokenSource.Token));
+        }
+
+        [Test]
+        public void VerifyCtorWithVersion()
+        {
+            this.dal = new JsonFileDal(new Version("1.0.0"));
+
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Major == 1);
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Minor == 0);
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Build == 0);
+
+            this.dal = new JsonFileDal(null);
+
+            Assert.IsTrue(this.dal.DalVersion.Major == 1);
+            Assert.IsTrue(this.dal.DalVersion.Minor == 1);
+            Assert.IsTrue(this.dal.DalVersion.Build == 0);
+        }
+
+        [Test]
+        public void VerifyCtorWithVersionAndCopyright()
+        {
+            this.dal = new JsonFileDal(new Version("1.0.0"));
+            const string COPYRIGHT = "Copyright 2020 © ESA.";
+            const string REMARK = "This is custom ECSS-E-TM-10-25 exchange file";
+
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Major == 1);
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Minor == 0);
+            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Build == 0);
+
+            this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" });
+            Assert.IsInstanceOf(typeof(CDP4JsonFileDal.Json.ExchangeFileHeader), this.dal.FileHeader);
+
+            this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" }, COPYRIGHT, REMARK);
+            Assert.IsTrue(this.dal.FileHeader.Copyright == COPYRIGHT);
+            Assert.IsTrue(this.dal.FileHeader.Remark == REMARK);
         }
     }
 }
