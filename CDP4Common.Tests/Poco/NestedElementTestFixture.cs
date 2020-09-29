@@ -61,13 +61,19 @@ namespace CDP4Common.Tests.Poco
         {
             this.cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
 
+            this.iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
+            this.option = new Option(Guid.NewGuid(), this.cache, this.uri) { Container = this.iteration };
+
+            this.iteration.Option.Add(this.option);
+
             this.nestedElement = new NestedElement(Guid.NewGuid(), this.cache, this.uri);
-            this.rootElementDef = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef", ShortName = "Def" };
-            this.elementDef1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef1", ShortName = "Def1" };
-            this.elementDef2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef2", ShortName = "Def2" };
-            this.elementUsage1 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementUsage", ShortName = "Use1", ElementDefinition = this.elementDef1};
+            this.rootElementDef = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef", ShortName = "Def", Container = this.iteration };
+            this.elementDef1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef1", ShortName = "Def1", Container = this.iteration };
+            this.elementDef2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef2", ShortName = "Def2", Container = this.iteration };
+            this.elementUsage1 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementUsage", ShortName = "Use1", ElementDefinition = this.elementDef1 };
             this.elementUsage2 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementUsage2", ShortName = "Use2", ElementDefinition = this.elementDef2 };
 
+            this.iteration.TopElement = this.rootElementDef;
             this.rootElementDef.ContainedElement.Add(this.elementUsage1);
             this.elementDef1.ContainedElement.Add(this.elementUsage2);
 
@@ -88,11 +94,16 @@ namespace CDP4Common.Tests.Poco
             var lazyCategory = new Lazy<Thing>(() => this.category);
             this.cache.TryAdd(new CacheKey(this.category.Iid, null), lazyCategory);
 
+            var iterationSetup = new IterationSetup(Guid.NewGuid(), this.cache, this.uri);
+            this.iteration.IterationSetup = iterationSetup;
 
-            this.iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri) {TopElement = this.rootElementDef};
-            this.option = new Option(Guid.NewGuid(), this.cache, this.uri) { Container = this.iteration };
+            var engineeringModelSetup = new EngineeringModelSetup(Guid.NewGuid(), this.cache, this.uri);
+            engineeringModelSetup.IterationSetup.Add(iterationSetup);
 
-            this.iteration.Option.Add(this.option);
+            var modelReferenceLibrary = new ModelReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri);
+
+            modelReferenceLibrary.DefinedCategory.Add(this.category);
+            engineeringModelSetup.RequiredRdl.Add(modelReferenceLibrary);
         }
 
         [Test]
