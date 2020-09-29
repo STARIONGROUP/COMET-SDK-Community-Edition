@@ -125,17 +125,15 @@ namespace CDP4Common.EngineeringModelData
         {
             var elementBase = this.GetElementBase();
 
+            var elementDefinition = this.GetElementDefinition();
+            var iteration = elementDefinition.Container as Iteration;
+
             if (elementBase is ElementUsage elementUsage)
             {
-                return elementUsage.IsMemberOfCategory(category, elementUsage.RequiredRdls);
+                return elementUsage.IsMemberOfCategory(category, iteration?.RequiredRdls);
             }
 
-            if (elementBase is ElementDefinition elementDefinition)
-            {
-                return elementDefinition.IsMemberOfCategory(category, elementDefinition.RequiredRdls);
-            }
-
-            return false;
+            return elementDefinition.IsMemberOfCategory(category, iteration?.RequiredRdls);
         }
 
         /// <summary>

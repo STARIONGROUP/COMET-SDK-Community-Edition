@@ -221,18 +221,5 @@ namespace CDP4Common.EngineeringModelData
                 }
             }
         }
-
-        /// <summary>
-        /// Gets an <see cref="IEnumerable{ReferenceDataLibrary}"/> that contains the 
-        /// required <see cref="ReferenceDataLibrary"/> for the current <see cref="Thing"/>
-        /// </summary>
-        public override IEnumerable<ReferenceDataLibrary> RequiredRdls
-        {
-            get
-            {
-                var iteration = this.Container as Iteration;
-                return iteration?.RequiredRdls;
-            }
-        }
     }
 }

@@ -72,23 +72,10 @@ namespace CDP4Common.SiteDirectoryData
         /// </returns>
         public IEnumerable<Category> AllDerivedCategories()
         {
-            //var currentDateTime = DateTime.Now;
-            //List<Category> categories = null;
-
-            //if (this.categoryCache == null || currentDateTime - this.lastCacheRequest > new TimeSpan(0, 0, 0, 1))
-            //{
             var categories = this.Cache.Select(x => x.Value)
                 .Where(lazy => lazy.Value.ClassKind == ClassKind.Category)
                 .Select(lazy => lazy.Value)
                 .Cast<Category>().ToList();
-
-                //this.categoryCache = categories;
-                //this.lastCacheRequest = currentDateTime;
-            //}
-            //else
-            //{
-            //    categories = this.categoryCache;
-            //}
 
             foreach (var category in categories)
             {
