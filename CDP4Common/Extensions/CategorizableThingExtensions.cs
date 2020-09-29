@@ -58,7 +58,7 @@ namespace CDP4Common.SiteDirectoryData
         public static bool IsMemberOfCategory(this ICategorizableThing categorizableThing, Category category)
         {
             var categoriesToCheck = category.AllDerivedCategories().ToList();
-            return IsMemberOfCategory_Impl(categorizableThing, category, categoriesToCheck);
+            return IsMemberOfCategoryImplementation(categorizableThing, category, categoriesToCheck);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace CDP4Common.SiteDirectoryData
             var categoriesinRequiredRdls = requiredRdls.SelectMany(x => x.DefinedCategory).ToList();
             var categoriesToCheck = category.AllDerivedCategories(categoriesinRequiredRdls).ToList();
 
-            return IsMemberOfCategory_Impl(categorizableThing, category, categoriesToCheck);
+            return IsMemberOfCategoryImplementation(categorizableThing, category, categoriesToCheck);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace CDP4Common.SiteDirectoryData
         /// sub <see cref="Category"/> instances. Returns false if the <see cref="ICategorizableThing"/> is not a member
         /// of the <paramref name="category"/> nor any of it's sub <see cref="Category"/> instances.
         /// </returns>
-        private static bool IsMemberOfCategory_Impl(this ICategorizableThing categorizableThing, Category category, IEnumerable<Category> allDerivedCategories)
+        private static bool IsMemberOfCategoryImplementation(this ICategorizableThing categorizableThing, Category category, IEnumerable<Category> allDerivedCategories)
         {
             var categoriesToCheck = allDerivedCategories.ToList();
             categoriesToCheck.Add(category);
