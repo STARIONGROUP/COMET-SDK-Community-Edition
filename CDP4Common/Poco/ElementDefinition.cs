@@ -28,7 +28,9 @@ namespace CDP4Common.EngineeringModelData
     using System.Collections.Generic;
     using System.Linq;
 
+    using CDP4Common.CommonData;
     using CDP4Common.Exceptions;
+    using CDP4Common.SiteDirectoryData;
 
     /// <summary>
     /// Extension for the <see cref="ElementDefinition"/> class
@@ -217,6 +219,19 @@ namespace CDP4Common.EngineeringModelData
                 {
                     parameter.ToBePublished = value;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{ReferenceDataLibrary}"/> that contains the 
+        /// required <see cref="ReferenceDataLibrary"/> for the current <see cref="Thing"/>
+        /// </summary>
+        public override IEnumerable<ReferenceDataLibrary> RequiredRdls
+        {
+            get
+            {
+                var iteration = this.Container as Iteration;
+                return iteration?.RequiredRdls;
             }
         }
     }

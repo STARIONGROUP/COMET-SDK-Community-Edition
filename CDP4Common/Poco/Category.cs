@@ -59,6 +59,10 @@ namespace CDP4Common.SiteDirectoryData
             return supercategories;
         }
 
+        private List<Category> categoryCache = null;
+
+        private DateTime lastCacheRequest = DateTime.MinValue;
+
         /// <summary>
         /// Queries the full hierarchy of categories that are derived categories of the current <see cref="Category"/>
         /// and returns those as an <see cref="IEnumerable{Category}"/>
@@ -68,10 +72,23 @@ namespace CDP4Common.SiteDirectoryData
         /// </returns>
         public IEnumerable<Category> AllDerivedCategories()
         {
+            //var currentDateTime = DateTime.Now;
+            //List<Category> categories = null;
+
+            //if (this.categoryCache == null || currentDateTime - this.lastCacheRequest > new TimeSpan(0, 0, 0, 1))
+            //{
             var categories = this.Cache.Select(x => x.Value)
-                    .Where(lazy => lazy.Value.ClassKind == ClassKind.Category)
-                    .Select(lazy => lazy.Value)
-                    .Cast<Category>().ToList();
+                .Where(lazy => lazy.Value.ClassKind == ClassKind.Category)
+                .Select(lazy => lazy.Value)
+                .Cast<Category>().ToList();
+
+                //this.categoryCache = categories;
+                //this.lastCacheRequest = currentDateTime;
+            //}
+            //else
+            //{
+            //    categories = this.categoryCache;
+            //}
 
             foreach (var category in categories)
             {
@@ -97,7 +114,7 @@ namespace CDP4Common.SiteDirectoryData
         /// <returns>
         /// an <see cref="IEnumerable{Category}"/> that contains the <see cref="Category"/> instances that are derived from the current <see cref="Category"/>
         /// </returns>
-        private IEnumerable<Category> AllDerivedCategories(List<Category> categories)
+        public IEnumerable<Category> AllDerivedCategories(List<Category> categories)
         {
             foreach (var category in categories.Where(category => category.SuperCategory.Contains(this)))
             {
