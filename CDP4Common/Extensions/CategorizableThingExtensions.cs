@@ -41,6 +41,8 @@ namespace CDP4Common.SiteDirectoryData
         /// Queries the <see cref="ICategorizableThing"/> and checks whether it is a member of the 
         /// supplied <see cref="Category"/>, this includes membership of the sub <see cref="Category"/> instances
         /// of the provided <see cref="Category"/>
+        /// Extensive usage of this overload can slow down performance significantly.
+        /// Please use the overload that takes an <see cref="IEnumerable{ReferenceDataLibrary}"/> as a parameter for better performance.
         /// </summary>
         /// <param name="categorizableThing">
         /// The <see cref="ICategorizableThing"/> instance that is being queried.
@@ -55,20 +57,65 @@ namespace CDP4Common.SiteDirectoryData
         /// </returns>
         public static bool IsMemberOfCategory(this ICategorizableThing categorizableThing, Category category)
         {
-            var memberOfCategories = categorizableThing.GetAllCategories();
-
             var categoriesToCheck = category.AllDerivedCategories().ToList();
+            return IsMemberOfCategoryImplementation(categorizableThing, category, categoriesToCheck);
+        }
+
+        /// <summary>
+        /// Queries the <see cref="ICategorizableThing"/> and checks whether it is a member of the 
+        /// supplied <see cref="Category"/>, this includes membership of the sub <see cref="Category"/> instances
+        /// of the provided <see cref="Category"/>
+        /// </summary>
+        /// <param name="categorizableThing">
+        /// The <see cref="ICategorizableThing"/> instance that is being queried.
+        /// </param>
+        /// <param name="category">
+        /// The <see cref="Category"/> that the <see cref="ICategorizableThing"/> may be a member of.
+        /// </param>
+        /// <param name="requiredRdls">
+        /// An <see cref="IEnumerable{ReferenceDataLibrary}"/> that holds all <see cref="ReferenceDataLibrary"/>s
+        /// where derived <see cref="Category"/>s if <paramref name="category"/> can be found.
+        /// </param>
+        /// <returns>
+        /// returns true if the <see cref="ICategorizableThing"/> is a member of the <paramref name="category"/>, including it's 
+        /// sub <see cref="Category"/> instances. Returns false if the <see cref="ICategorizableThing"/> is not a member
+        /// of the <paramref name="category"/> nor any of it's sub <see cref="Category"/> instances.
+        /// </returns>
+        public static bool IsMemberOfCategory(this ICategorizableThing categorizableThing, Category category, IEnumerable<ReferenceDataLibrary> requiredRdls)
+        {
+            var categoriesinRequiredRdls = requiredRdls.SelectMany(x => x.DefinedCategory).ToList();
+            var categoriesToCheck = category.AllDerivedCategories(categoriesinRequiredRdls).ToList();
+
+            return IsMemberOfCategoryImplementation(categorizableThing, category, categoriesToCheck);
+        }
+
+        /// <summary>
+        /// Queries the <see cref="ICategorizableThing"/> and checks whether it is a member of the 
+        /// supplied <see cref="Category"/>, this includes membership of the sub <see cref="Category"/> instances
+        /// of the provided <see cref="Category"/>
+        /// </summary>
+        /// <param name="categorizableThing">
+        /// The <see cref="ICategorizableThing"/> instance that is being queried.
+        /// </param>
+        /// <param name="category">
+        /// The <see cref="Category"/> that the <see cref="ICategorizableThing"/> may be a member of.
+        /// </param>
+        /// <param name="allDerivedCategories">
+        /// A <see cref="IEnumerable{Category}"/> that contains all <see cref="Category"/>s that are derived from <paramref name="category"/>.
+        /// </param>
+        /// <returns>
+        /// returns true if the <see cref="ICategorizableThing"/> is a member of the <paramref name="category"/>, including it's 
+        /// sub <see cref="Category"/> instances. Returns false if the <see cref="ICategorizableThing"/> is not a member
+        /// of the <paramref name="category"/> nor any of it's sub <see cref="Category"/> instances.
+        /// </returns>
+        private static bool IsMemberOfCategoryImplementation(this ICategorizableThing categorizableThing, Category category, IEnumerable<Category> allDerivedCategories)
+        {
+            var categoriesToCheck = allDerivedCategories.ToList();
             categoriesToCheck.Add(category);
 
-            foreach (var memberOfCategory in memberOfCategories)
-            {
-                if (categoriesToCheck.Contains(memberOfCategory))
-                {
-                    return true;
-                }
-            }
+            var memberOfCategories = categorizableThing.GetAllCategories();
 
-            return false;
+            return memberOfCategories.Any(memberOfCategory => categoriesToCheck.Contains(memberOfCategory));
         }
 
         /// <summary>

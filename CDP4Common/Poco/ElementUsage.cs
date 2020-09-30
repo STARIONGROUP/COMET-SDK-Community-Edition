@@ -25,9 +25,12 @@
 namespace CDP4Common.EngineeringModelData
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
+    using CDP4Common.CommonData;
     using CDP4Common.Exceptions;
+    using CDP4Common.SiteDirectoryData;
 
     /// <summary>
     /// Extension for the <see cref="ElementUsage"/> class
