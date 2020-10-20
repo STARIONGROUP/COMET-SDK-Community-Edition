@@ -243,6 +243,8 @@ namespace CDP4JsonFileDal
                     this.WriteModelReferenceDataLibraryToZipFile(modelReferenceDataLibraries, zipFile, path);
 
                     this.WriteIterationsToZipFile(iterations, zipFile, path);
+
+                    this.WriteExtraFilesToZipFile(files, zipFile, path);
                 }
 
                 Logger.Info("Successfully exported the open session {1} to {0}.", path, this.Session.Credentials.Uri);
@@ -804,6 +806,26 @@ namespace CDP4JsonFileDal
                     }
                 }
             }
+        }
+
+        /// <summary>
+        ///  Writes the application dependend files to the <see cref="ZipFile"/>
+        /// </summary>
+        /// <param name="extraFilesPath">The files list that will be written</param>
+        /// <param name="zipFile">The target <see cref="ZipFile"/></param>
+        /// <param name="filePath">The file of the target <see cref="ZipFile"/></param>
+        private void WriteExtraFilesToZipFile(IEnumerable<string> extraFilesPath, ZipFile zipFile, string filePath)
+        {
+            var zipExtensionEntry = zipFile.AddDirectory("Extensions");
+            zipExtensionEntry.Comment = "The Extensions folder contains application - dependent files";
+
+            foreach (var extraFile in extraFilesPath)
+            {
+                var zipEntry = zipFile.AddFile(extraFile, "Extensions");
+                zipEntry.Comment = $"The {extraFile} file";
+            }
+
+            zipFile.Save(filePath);
         }
 
         /// <summary>
