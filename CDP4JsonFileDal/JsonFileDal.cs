@@ -81,6 +81,11 @@ namespace CDP4JsonFileDal
         private const string EngineeringModelZipLocation = "EngineeringModels";
 
         /// <summary>
+        /// The application-dependent(extensions) files zip location.
+        /// </summary>
+        private const string ExtensionsZipLocation = "Extensions";
+
+        /// <summary>
         /// The iteration zip location.
         /// </summary>
         private const string IterationZipLocation = "Iterations";
@@ -809,19 +814,16 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        ///  Writes the application dependend files to the <see cref="ZipFile"/>
+        ///  Writes the application dependend files inside specific folder to the <see cref="ZipFile"/>
         /// </summary>
         /// <param name="extraFilesPath">The files list that will be written</param>
         /// <param name="zipFile">The target <see cref="ZipFile"/></param>
         /// <param name="filePath">The file of the target <see cref="ZipFile"/></param>
         private void WriteExtraFilesToZipFile(IEnumerable<string> extraFilesPath, ZipFile zipFile, string filePath)
         {
-            var zipExtensionEntry = zipFile.AddDirectory("Extensions");
-            zipExtensionEntry.Comment = "The Extensions folder contains application - dependent files";
-
             foreach (var extraFile in extraFilesPath)
             {
-                var zipEntry = zipFile.AddFile(extraFile, "Extensions");
+                var zipEntry = zipFile.AddFile(extraFile, ExtensionsZipLocation);
                 zipEntry.Comment = $"The {extraFile} file";
             }
 
