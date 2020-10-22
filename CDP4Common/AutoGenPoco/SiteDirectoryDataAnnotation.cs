@@ -1,8 +1,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteDirectoryDataAnnotation.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//    Authors: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov, Smiechowski Nathanael
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -135,6 +135,28 @@ namespace CDP4Common.ReportingData
                 containers.Add(this.RelatedThing);
                 return containers;
             }
+        }
+
+        /// <summary>
+        /// Queries the referenced <see cref="Thing"/>s of the current <see cref="SiteDirectoryDataAnnotation"/>
+        /// </summary>
+        /// <remarks>
+        /// this does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
+        /// are exposed via the <see cref="ContainerLists"/> method
+        /// </remarks>
+        /// <returns>
+        /// An <see cref="IEnumerable{Thing}"/>
+        /// </returns>
+        public override IEnumerable<Thing> QueryReferencedThings()
+        {
+            foreach (var thing in base.QueryReferencedThings())
+            {
+                yield return thing;
+            }
+
+            yield return this.Author;
+
+            yield return this.PrimaryAnnotatedThing;
         }
 
         /// <summary>

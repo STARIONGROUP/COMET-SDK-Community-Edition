@@ -346,7 +346,9 @@ namespace CDP4Common.CommonData
         /// this does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
         /// are exposed via the <see cref="ContainerLists"/> method
         /// </remarks>
-        /// <returns></returns>
+        /// <returns>
+        /// An <see cref="IEnumerable{Thing}"/>
+        /// </returns>
         public virtual IEnumerable<Thing> QueryReferencedThings()
         {
             return Enumerable.Empty<Thing>();

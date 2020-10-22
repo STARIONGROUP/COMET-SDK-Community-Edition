@@ -1,8 +1,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FileRevision.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//    Authors: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov, Smiechowski Nathanael
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -161,6 +161,33 @@ namespace CDP4Common.EngineeringModelData
         {
             get { return this.GetDerivedPath(); }
             set { throw new InvalidOperationException("Forbidden Set value for the derived property FileRevision.Path"); }
+        }
+
+        /// <summary>
+        /// Queries the referenced <see cref="Thing"/>s of the current <see cref="FileRevision"/>
+        /// </summary>
+        /// <remarks>
+        /// this does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
+        /// are exposed via the <see cref="ContainerLists"/> method
+        /// </remarks>
+        /// <returns>
+        /// An <see cref="IEnumerable{Thing}"/>
+        /// </returns>
+        public override IEnumerable<Thing> QueryReferencedThings()
+        {
+            foreach (var thing in base.QueryReferencedThings())
+            {
+                yield return thing;
+            }
+
+            yield return this.ContainingFolder;
+
+            yield return this.Creator;
+
+            foreach (var thing in this.FileType.Select(x => x))
+            {
+                yield return thing;
+            }
         }
 
         /// <summary>

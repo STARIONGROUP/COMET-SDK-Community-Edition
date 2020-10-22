@@ -1,8 +1,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Stakeholder.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//    Authors: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov, Smiechowski Nathanael
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -104,6 +104,34 @@ namespace CDP4Common.EngineeringModelData
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         public List<StakeholderValue> StakeholderValue { get; set; }
+
+        /// <summary>
+        /// Queries the referenced <see cref="Thing"/>s of the current <see cref="Stakeholder"/>
+        /// </summary>
+        /// <remarks>
+        /// this does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
+        /// are exposed via the <see cref="ContainerLists"/> method
+        /// </remarks>
+        /// <returns>
+        /// An <see cref="IEnumerable{Thing}"/>
+        /// </returns>
+        public override IEnumerable<Thing> QueryReferencedThings()
+        {
+            foreach (var thing in base.QueryReferencedThings())
+            {
+                yield return thing;
+            }
+
+            foreach (var thing in this.Category)
+            {
+                yield return thing;
+            }
+
+            foreach (var thing in this.StakeholderValue)
+            {
+                yield return thing;
+            }
+        }
 
         /// <summary>
         /// Creates and returns a copy of this <see cref="Stakeholder"/> for edit purpose.
