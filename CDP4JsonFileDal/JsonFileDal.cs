@@ -821,6 +821,11 @@ namespace CDP4JsonFileDal
         /// <param name="filePath">The file of the target <see cref="ZipFile"/></param>
         private void WriteExtraFilesToZipFile(IEnumerable<string> extraFilesPath, ZipFile zipFile, string filePath)
         {
+            if (extraFilesPath is null)
+            {
+                return;
+            }
+
             foreach (var extraFile in extraFilesPath)
             {
                 var zipEntry = zipFile.AddFile(extraFile, ExtensionsZipLocation);
