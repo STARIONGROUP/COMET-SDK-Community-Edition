@@ -150,7 +150,7 @@ namespace CDP4Common.CommonData
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual List<DomainOfExpertise> ExcludedDomain { get; set; }
-        
+
         /// <summary>
         /// Gets or sets a list of <see cref="Person"/> that are excluded for this instance.
         /// </summary>
@@ -237,7 +237,7 @@ namespace CDP4Common.CommonData
                 {
                     return this.cacheKey;
                 }
-                
+
                 var iterationContainer = this.GetContainerOfType<Iteration>();
                 Guid? iterationId = null;
                 if (iterationContainer != null && this.ClassKind != ClassKind.Iteration)
@@ -274,7 +274,7 @@ namespace CDP4Common.CommonData
             {
                 var currentType = this.GetType();
                 var typeName = currentType.Name;
-                
+
                 if (this is TopContainer)
                 {
                     if (typeName == "SiteDirectory" && this.Iid == Guid.Empty)
@@ -289,7 +289,7 @@ namespace CDP4Common.CommonData
                 {
                     return "no thing, no route";
                 }
-                 
+
                 var container = this.Container;
 
                 if (container == null)
@@ -334,6 +334,39 @@ namespace CDP4Common.CommonData
                     var containedThings = thing.QueryContainedThingsDeep();
                     temp.AddRange(containedThings);
                 }
+            }
+
+            return temp;
+        }
+
+        /// <summary>
+        /// Queries the referenced <see cref="Thing"/>s of the current <see cref="Thing"/>
+        /// </summary>
+        /// <remarks>
+        /// this does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
+        /// are exposed via the <see cref="ContainerLists"/> method
+        /// </remarks>
+        /// <returns></returns>
+        public virtual IEnumerable<Thing> QueryReferencedThings()
+        {
+            return Enumerable.Empty<Thing>();
+        }
+
+        /// <summary>
+        /// Queries all the referenced <see cref="Thing"/>s of the current <see cref="Thing"/>, along the complete 
+        /// referenced <see cref="Thing"/> chain and returns them as a flat list
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerable{Thing}"/> 
+        /// </returns>
+        public IEnumerable<Thing> QueryReferencedThingsDeep()
+        {
+            var temp = new List<Thing>();
+
+            foreach (var thing in this.QueryReferencedThings())
+            {
+                temp.Add(thing);
+                temp.AddRange(thing.QueryReferencedThings());
             }
 
             return temp;
