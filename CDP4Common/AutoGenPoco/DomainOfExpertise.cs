@@ -109,8 +109,8 @@ namespace CDP4Common.SiteDirectoryData
         /// Queries the referenced <see cref="Thing"/>s of the current <see cref="DomainOfExpertise"/>
         /// </summary>
         /// <remarks>
-        /// this does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
-        /// are exposed via the <see cref="ContainerLists"/> method
+        /// This does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
+        /// are exposed via the <see cref="ContainerLists"/> property
         /// </remarks>
         /// <returns>
         /// An <see cref="IEnumerable{Thing}"/>
