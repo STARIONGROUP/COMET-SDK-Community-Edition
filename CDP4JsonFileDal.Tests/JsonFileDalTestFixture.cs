@@ -57,7 +57,17 @@ namespace CDP4JsonFileDal.Tests
     public class JsonFileDalTestFixture
     {
         /// <summary>
-        /// The instance of <see cref="JSONFileDal"/> that is being tested
+        /// AnnexC3 file archive
+        /// </summary>
+        private string annexC3File;
+
+        /// <summary>
+        /// Migration file that will be included
+        /// </summary>
+        private string migrationFile;
+
+        /// <summary>
+        /// The instance of <see cref="JsonFileDal"/> that is being tested
         /// </summary>
         private JsonFileDal dal;
 
@@ -99,12 +109,23 @@ namespace CDP4JsonFileDal.Tests
         public void SetUp()
         {
             var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "LOFT_ECSS-E-TM-10-25_AnnexC.zip");
+            var migrationSourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\files", "migration.json");
+
+            this.annexC3File = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "AnnexC3.zip");
+            this.migrationFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "migration.json");
+
+            if (!File.Exists(this.migrationFile))
+            {
+                File.Copy(migrationSourceFile, this.migrationFile);
+            }
 
             this.cancelationTokenSource = new CancellationTokenSource();
             this.credentials = new Credentials("admin", "pass", new Uri(path));
             this.session = new Mock<ISession>();
-            this.dal = new JsonFileDal();
-            this.dal.Session = this.session.Object;
+            this.dal = new JsonFileDal
+            {
+                Session = this.session.Object
+            };
 
             this.siteDirectoryData = new SiteDirectory();
             this.session.Setup(x => x.RetrieveSiteDirectory()).Returns(this.siteDirectoryData);
@@ -116,6 +137,16 @@ namespace CDP4JsonFileDal.Tests
         {
             this.credentials = null;
             this.dal = null;
+
+            if (File.Exists(this.annexC3File))
+            {
+                File.Delete(this.annexC3File);
+            }
+
+            if (File.Exists(this.migrationFile))
+            {
+                File.Delete(this.migrationFile);
+            }
         }
 
         [Test]
@@ -342,6 +373,97 @@ namespace CDP4JsonFileDal.Tests
             this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" }, COPYRIGHT, REMARK);
             Assert.IsTrue(this.dal.FileHeader.Copyright == COPYRIGHT);
             Assert.IsTrue(this.dal.FileHeader.Remark == REMARK);
+        }
+
+        [Test]
+        public void VerifyWritingWithoutMigrationFile()
+        {
+            var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
+            var zipSession = new Session(this.dal, zipCredentials);
+
+            var operationContainers = this.BuildOperationContainers();
+
+            Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
+        }
+
+        [Test]
+        public void VerifyWritingMigrationFile()
+        {
+            var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
+            var zipSession = new Session(this.dal, zipCredentials);
+
+            var operationContainers = this.BuildOperationContainers();
+
+            Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers, new string[] { this.migrationFile })));
+        }
+
+        /// <summary>
+        /// Build operation containes structure that will be serialized
+        /// </summary>
+        /// <returns>
+        /// List of <see cref="OperationContainer"/>
+        /// </returns>
+        private IEnumerable<OperationContainer> BuildOperationContainers()
+        {
+            var cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
+
+            // DomainOfExpertise
+            var domain = new DomainOfExpertise(Guid.NewGuid(), cache, this.credentials.Uri) { ShortName = "SYS" };
+            this.siteDirectoryData.Domain.Add(domain);
+
+            // PersonRole
+            var role = new PersonRole(Guid.NewGuid(), null, null);
+            this.siteDirectoryData.PersonRole.Add(role);
+            this.siteDirectoryData.DefaultPersonRole = role;
+
+            // ParticipantRole
+            var participantRole = new ParticipantRole(Guid.Empty, null, null);
+            this.siteDirectoryData.ParticipantRole.Add(participantRole);
+            this.siteDirectoryData.DefaultParticipantRole = participantRole;
+
+            // Organization
+            var organization = new Organization(Guid.NewGuid(), null, null)
+            {
+                Container = this.siteDirectoryData
+            };
+
+            // Iteration
+            var iterationIid = new Guid("b58ea73d-350d-4520-b9d9-a52c75ac2b5d");
+            var iterationSetup = new IterationSetup(Guid.NewGuid(), 0);
+            var iterationSetupPoco = new CDP4Common.SiteDirectoryData.IterationSetup(iterationSetup.Iid, cache, this.credentials.Uri);
+
+            // EngineeringModel
+            var model = new EngineeringModel(Guid.NewGuid(), cache, this.credentials.Uri);
+            var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup();
+            modelSetup.ActiveDomain.Add(domain);
+
+            var requiredRdl = new ModelReferenceDataLibrary();
+
+            var person = new Person { ShortName = "admin", Organization = organization };
+            var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) { Person = person };
+            participant.Person.Role = role;
+            participant.Role = participantRole;
+            participant.Domain.Add(domain);
+            modelSetup.Participant.Add(participant);
+
+            var lazyPerson = new Lazy<Thing>(() => person);
+            var iterationPoco = new CDP4Common.EngineeringModelData.Iteration(iterationIid, cache, this.credentials.Uri) { IterationSetup = iterationSetupPoco };
+            model.Iteration.Add(iterationPoco);
+            var iteration = (Iteration)iterationPoco.ToDto();
+            model.EngineeringModelSetup = modelSetup;
+            this.siteDirectoryData.Model.Add(modelSetup);
+            modelSetup.RequiredRdl.Add(requiredRdl);
+            modelSetup.IterationSetup.Add(iterationSetupPoco);
+            cache.TryAdd(new CacheKey(person.Iid, this.siteDirectoryData.Iid), lazyPerson);
+            this.siteDirectoryData.Cache = cache;
+            iteration.IterationSetup = iterationSetup.Iid;
+            var iterationClone = iteration.DeepClone<Iteration>();
+
+            var operation = new Operation(iteration, iterationClone, OperationKind.Update);
+            var operationContainers = new[] { new OperationContainer("/EngineeringModel/" + model.Iid + "/iteration/" + iteration.Iid, 0) };
+            operationContainers.Single().AddOperation(operation);
+
+            return operationContainers;
         }
     }
 }
