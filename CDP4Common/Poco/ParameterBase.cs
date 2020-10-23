@@ -170,7 +170,9 @@ namespace CDP4Common.EngineeringModelData
 
             if (valueSets.Count > 1)
             {
-                throw new Cdp4ModelValidationException($"Multiple ValueSets found for {this.GetType().Name} {this.UserFriendlyName} having {nameof(option)} = {option.Name} and {nameof(actualState)} = {actualState.Name}");
+                throw new Cdp4ModelValidationException(
+                    $"Multiple ValueSets found for {this.GetType().Name} {this.UserFriendlyName}" + 
+                    $" having {nameof(option)} = {option?.Name ?? "<empty>"} and {nameof(actualState)} = {actualState?.Name ?? "<empty>"}");
             }
 
             return valueSets.First();
