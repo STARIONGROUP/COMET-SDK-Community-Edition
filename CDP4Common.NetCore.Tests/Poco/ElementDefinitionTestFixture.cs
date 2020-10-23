@@ -232,5 +232,26 @@ namespace CDP4Common.Tests.Poco
 
             Assert.Throws<ContainmentException>(() => def1.ReferencingElementUsages());
         }
+
+        [Test]
+        public void Verify_that_QueryReferencedThings_and_QueryReferencedThingsDeep()
+        {
+            var elementDefinition = new ElementDefinition(Guid.NewGuid(), null, null);
+            var superCategory = new Category(Guid.NewGuid(), null, null);
+            var category = new Category(Guid.NewGuid(), null, null);
+            category.SuperCategory.Add(superCategory);
+
+            elementDefinition.Category.Add(category);
+
+            var referencedThings = elementDefinition.QueryReferencedThings();
+
+            CollectionAssert.Contains(referencedThings, category);
+            CollectionAssert.DoesNotContain(referencedThings, superCategory);
+
+            var referencedThingsDeep = elementDefinition.QueryReferencedThingsDeep();
+
+            CollectionAssert.Contains(referencedThingsDeep, category);
+            CollectionAssert.Contains(referencedThingsDeep, superCategory);
+        }
     }
 }
