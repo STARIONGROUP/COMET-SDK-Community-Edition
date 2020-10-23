@@ -130,36 +130,6 @@ namespace CDP4Common.Tests.Helpers
                 ShortName = "v"
             };
 
-            this.parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
-            {
-                Owner = this.domainOfExpertise,
-                ParameterType = simpleQuantityKind
-            };
-
-            this.parameter2 = new Parameter(Guid.NewGuid(), this.cache, this.uri)
-            {
-                Owner = this.domainOfExpertise_2,
-                ParameterType = simpleQuantityKind2
-            };
-
-            this.parameterOverride = new ParameterOverride(Guid.NewGuid(), this.cache, this.uri)
-            {
-                Owner = this.domainOfExpertise,
-                Parameter = this.parameter
-            };
-
-            var parameterValueset_1 = new ParameterValueSet()
-            {
-                ActualOption = this.option_B,
-                Iid = Guid.NewGuid()
-            };
-
-            var parameterValueset_2 = new ParameterValueSet()
-            {
-                ActualOption = this.option_A,
-                Iid = Guid.NewGuid()
-            };
-
             var actualList = new ActualFiniteStateList(Guid.NewGuid(), null, null);
             actualList.Owner = this.domainOfExpertise;
 
@@ -180,6 +150,38 @@ namespace CDP4Common.Tests.Helpers
             this.actualState_4 = new ActualFiniteState(Guid.NewGuid(), this.cache, this.uri);
 
             this.actualState_4.PossibleState.Add(possibleState2);
+
+            this.parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Owner = this.domainOfExpertise,
+                ParameterType = simpleQuantityKind,
+                IsOptionDependent = true
+            };
+
+            this.parameter2 = new Parameter(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Owner = this.domainOfExpertise_2,
+                ParameterType = simpleQuantityKind2,
+                StateDependence = actualList
+            };
+
+            this.parameterOverride = new ParameterOverride(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Owner = this.domainOfExpertise,
+                Parameter = this.parameter
+            };
+
+            var parameterValueset_1 = new ParameterValueSet()
+            {
+                ActualOption = this.option_B,
+                Iid = Guid.NewGuid()
+            };
+
+            var parameterValueset_2 = new ParameterValueSet()
+            {
+                ActualOption = this.option_A,
+                Iid = Guid.NewGuid()
+            };
 
             var parameterValueset_3 = new ParameterValueSet()
             {
@@ -229,7 +231,6 @@ namespace CDP4Common.Tests.Helpers
             parameterValueset_3.Formula = new CDP4Common.Types.ValueArray<string>(values_3);
             parameterValueset_3.Published = new CDP4Common.Types.ValueArray<string>(emptyValues);
             parameterValueset_3.ValueSwitch = ParameterSwitchKind.MANUAL;
-            parameterValueset_3.ActualOption = this.option_A;
 
             parameterValueset_4.Manual = new CDP4Common.Types.ValueArray<string>(emptyValues);
             parameterValueset_4.Reference = new CDP4Common.Types.ValueArray<string>(emptyValues);
@@ -237,7 +238,6 @@ namespace CDP4Common.Tests.Helpers
             parameterValueset_4.Formula = new CDP4Common.Types.ValueArray<string>(emptyValues);
             parameterValueset_4.Published = new CDP4Common.Types.ValueArray<string>(publishedValues);
             parameterValueset_4.ValueSwitch = ParameterSwitchKind.MANUAL;
-            parameterValueset_4.ActualOption = this.option_B;
 
             overrideValueset.Manual = new CDP4Common.Types.ValueArray<string>(values_1);
             overrideValueset.Reference = new CDP4Common.Types.ValueArray<string>(values_1);
@@ -248,6 +248,7 @@ namespace CDP4Common.Tests.Helpers
 
             this.parameter.ValueSet.Add(parameterValueset_1);
             this.parameter.ValueSet.Add(parameterValueset_2);
+
             this.parameterOverride.ValueSet.Add(overrideValueset);
 
             this.parameter2.ValueSet.Add(parameterValueset_3);
@@ -259,6 +260,7 @@ namespace CDP4Common.Tests.Helpers
             this.elementDefinition_1.Parameter.Add(this.parameter);
             this.elementDefinition_1.ContainedElement.Add(this.elementUsage_1);
             this.elementDefinition_1.ContainedElement.Add(this.elementUsage_2);
+
             this.elementDefinition_2.Parameter.Add(this.parameter);
             this.elementDefinition_2.Parameter.Add(this.parameter2);
 
@@ -390,17 +392,31 @@ namespace CDP4Common.Tests.Helpers
         }
 
         [Test]
-        public void Verify_that_GetNestedParameters_Works_For_Specific_DomainOfExpertise()
+        public void Verify_that_GetNestedParameters_Works_For_Specific_DomainOfExpertise_OptionA()
         {
             var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
 
             var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise, false).ToList();
 
-            Assert.AreEqual(4, NestedParameters.Count);
+            Assert.AreEqual(2, NestedParameters.Count);
 
             NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise_2, false).ToList();
 
             Assert.AreEqual(2, NestedParameters.Count);
+        }
+
+        [Test]
+        public void Verify_that_GetNestedParameters_Works_For_Specific_DomainOfExpertise_OptionB()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_B");
+
+            var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise, false).ToList();
+
+            Assert.AreEqual(3, NestedParameters.Count);
+
+            NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise_2, false).ToList();
+
+            Assert.AreEqual(4, NestedParameters.Count);
         }
 
         [Test]
@@ -410,7 +426,7 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, false).ToList();
 
-            Assert.AreEqual(6, NestedParameters.Count);
+            Assert.AreEqual(4, NestedParameters.Count);
         }
 
         [Test]
@@ -421,7 +437,7 @@ namespace CDP4Common.Tests.Helpers
             var NestedElements = this.nestedElementTreeGenerator.Generate(option, this.domainOfExpertise, false).ToList();
 
             Assert.AreEqual(2, NestedElements.Count);
-            Assert.AreEqual(4, NestedElements.SelectMany(x => x.NestedParameter).Count());
+            Assert.AreEqual(2, NestedElements.SelectMany(x => x.NestedParameter).Count());
 
             NestedElements = this.nestedElementTreeGenerator.Generate(option, this.domainOfExpertise_2, false).ToList();
 
@@ -437,7 +453,7 @@ namespace CDP4Common.Tests.Helpers
             var NestedElements = this.nestedElementTreeGenerator.Generate(option, false).ToList();
 
             Assert.AreEqual(2, NestedElements.Count);
-            Assert.AreEqual(6, NestedElements.SelectMany(x => x.NestedParameter).Count());
+            Assert.AreEqual(4, NestedElements.SelectMany(x => x.NestedParameter).Count());
         }
 
         [Test]
@@ -448,7 +464,7 @@ namespace CDP4Common.Tests.Helpers
             var NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.domainOfExpertise, this.elementDefinition_1, false).ToList();
 
             Assert.AreEqual(2, NestedElements.Count);
-            Assert.AreEqual(4, NestedElements.SelectMany(x => x.NestedParameter).Count());
+            Assert.AreEqual(2, NestedElements.SelectMany(x => x.NestedParameter).Count());
 
             NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.domainOfExpertise_2, this.elementDefinition_1, false).ToList();
 
@@ -464,7 +480,7 @@ namespace CDP4Common.Tests.Helpers
             var NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.elementDefinition_1, false).ToList();
 
             Assert.AreEqual(2, NestedElements.Count);
-            Assert.AreEqual(6, NestedElements.SelectMany(x => x.NestedParameter).Count());
+            Assert.AreEqual(4, NestedElements.SelectMany(x => x.NestedParameter).Count());
         }
 
         [Test]
