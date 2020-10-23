@@ -55,14 +55,12 @@ namespace CDP4Common.EngineeringModelData
         /// <typeparam name="T">The generic type to which the <see cref="NestedParameter.ActualValue"/> needs to be "converted".</typeparam>
         /// <param name="path">The path to search for in all this <see cref="Option"/>'s <see cref="NestedParameter.Path"/> properties.</param>
         /// <param name="domain">The <see cref="DomainOfExpertise"/> for which the <see cref="NestedParameter"/>s should be found.</param>
-        /// <returns>A single <see cref="NestedParameter"/> if the path was found
-        /// and its <see cref="NestedParameter.ActualValue"/> could be converted to the requested generic <typeparamref name="T"></typeparamref>, otherwise null.
+        /// <returns>A <see cref="IEnumerable{T}"/> containing <see cref="NestedParameter.ActualValue"/>'s converted to the requested generic <typeparamref name="T"></typeparamref>.
         /// If Convert.ChangeType fails, an <see cref="Exception"/> is thrown: <see href="https://docs.microsoft.com/en-us/dotnet/api/system.convert.changetype"/>.
-        /// 
         /// </returns>
         public IEnumerable<T> GetNestedParameterValuesByPath<T>(string path, DomainOfExpertise domain)
         {
-            var allParameters = new NestedElementTreeGenerator().GetNestedParameters(this, domain);
+            var allParameters = this.GetNestedParameterValueSetsByPath(path, domain);
 
             return this.GetNestedParameterValuesByPath<T>(path, allParameters);
         }
@@ -73,13 +71,12 @@ namespace CDP4Common.EngineeringModelData
         /// </summary>
         /// <typeparam name="T">The generic type to which the <see cref="NestedParameter.ActualValue"/> needs to be "converted".</typeparam>
         /// <param name="path">The path to search for in all this <see cref="Option"/>'s <see cref="NestedParameter.Path"/> properties.</param>
-        /// <returns>A single <see cref="NestedParameter"/> if the path was found
-        /// and its <see cref="NestedParameter.ActualValue"/> could be converted to the requested generic <typeparamref name="T"></typeparamref>, otherwise null.
+        /// <returns>A <see cref="IEnumerable{T}"/> containing <see cref="NestedParameter.ActualValue"/>'s converted to the requested generic <typeparamref name="T"></typeparamref>.
         /// If Convert.ChangeType fails, an <see cref="Exception"/> is thrown: <see href="https://docs.microsoft.com/en-us/dotnet/api/system.convert.changetype"/>.
         /// </returns>
         public IEnumerable<T> GetNestedParameterValuesByPath<T>(string path)
         {
-            var allParameters = new NestedElementTreeGenerator().GetNestedParameters(this);
+            var allParameters = this.GetNestedParameterValueSetsByPath(path);
 
             return this.GetNestedParameterValuesByPath<T>(path, allParameters);
         }
@@ -91,15 +88,111 @@ namespace CDP4Common.EngineeringModelData
         /// <typeparam name="T">The generic type to which the <see cref="NestedParameter.ActualValue"/> needs to be "converted".</typeparam>
         /// <param name="path">The path to search for in all this <see cref="Option"/>'s <see cref="NestedParameter.Path"/> properties.</param>
         /// <param name="allParameters">A <see cref="IEnumerable{NestedParameter}"/> that contains all available <see cref="NestedParameter"/>s where we can search the <paramref name="path"/> for.</param>
-        /// <returns>A single <see cref="NestedParameter"/> if the path was found
-        /// and its <see cref="NestedParameter.ActualValue"/> could be converted to the requested generic <typeparamref name="T"></typeparamref>, otherwise null.
+        /// <returns>A <see cref="IEnumerable{T}"/> containing <see cref="NestedParameter.ActualValue"/>'s converted to the requested generic <typeparamref name="T"></typeparamref>.
         /// If Convert.ChangeType fails, an <see cref="Exception"/> is thrown: <see href="https://docs.microsoft.com/en-us/dotnet/api/system.convert.changetype"/>.
         /// </returns>
         public IEnumerable<T> GetNestedParameterValuesByPath<T>(string path, IEnumerable<NestedParameter> allParameters)
         {
-            return allParameters.Where(x => x.Path.Equals(path))
-                .Select(x => (T)Convert.ChangeType(x.ActualValue.ToValueSetObject(x.AssociatedParameter.ParameterType), typeof(T)))
+            return this.GetNestedParameterValueSetsByPath(path, allParameters)
+                .Select(x => 
+                    x.ActualValue == "-" 
+                        ? default 
+                        : (T)Convert.ChangeType(x.ActualValue.ToValueSetObject(x.AssociatedParameter.ParameterType), typeof(T)))
                 .ToArray();
+        }
+
+        /// <summary>
+        /// Finds <see cref="NestedParameter"/>s by their <see cref="NestedParameter.Path"/>s in the <see cref="Option"/>'s <see cref="NestedParameter"/>
+        /// and returns its published value "converted" to the generic <typeparamref name="T" />'s.
+        /// </summary>
+        /// <typeparam name="T">The generic type to which the <see cref="NestedParameter.ActualValue"/> needs to be "converted".</typeparam>
+        /// <param name="path">The path to search for in all this <see cref="Option"/>'s <see cref="NestedParameter.Path"/> properties.</param>
+        /// <param name="domain">The <see cref="DomainOfExpertise"/> for which the <see cref="NestedParameter"/>s should be found.</param>
+        /// <returns>A <see cref="IEnumerable{T}"/> containing published value 's converted to the requested generic <typeparamref name="T"></typeparamref>.
+        /// If Convert.ChangeType fails, an <see cref="Exception"/> is thrown: <see href="https://docs.microsoft.com/en-us/dotnet/api/system.convert.changetype"/>.
+        /// </returns>
+        public IEnumerable<T> GetNestedParameterPublishedValuesByPath<T>(string path, DomainOfExpertise domain)
+        {
+            var allParameters = this.GetNestedParameterValueSetsByPath(path, domain);
+
+            return this.GetNestedParameterPublishedValuesByPath<T>(path, allParameters);
+        }
+
+        /// <summary>
+        /// Finds <see cref="NestedParameter"/>s by their <see cref="NestedParameter.Path"/>s in the <see cref="Option"/>'s <see cref="NestedParameter"/>
+        /// and returns its published value "converted" to the generic <typeparamref name="T" />'s.
+        /// </summary>
+        /// <typeparam name="T">The generic type to which the <see cref="NestedParameter.ActualValue"/> needs to be "converted".</typeparam>
+        /// <param name="path">The path to search for in all this <see cref="Option"/>'s <see cref="NestedParameter.Path"/> properties.</param>
+        /// <returns>A <see cref="IEnumerable{T}"/> containing published value 's converted to the requested generic <typeparamref name="T"></typeparamref>.
+        /// If Convert.ChangeType fails, an <see cref="Exception"/> is thrown: <see href="https://docs.microsoft.com/en-us/dotnet/api/system.convert.changetype"/>.
+        /// </returns>
+        public IEnumerable<T> GetNestedParameterPublishedValuesByPath<T>(string path)
+        {
+            var allParameters = this.GetNestedParameterValueSetsByPath(path);
+
+            return this.GetNestedParameterPublishedValuesByPath<T>(path, allParameters);
+        }
+
+        /// <summary>
+        /// Finds <see cref="NestedParameter"/>s by their <see cref="NestedParameter.Path"/>s in the <see cref="Option"/>'s <see cref="NestedParameter"/>
+        /// and returns its published value "converted" to the generic <typeparamref name="T" />'s.
+        /// </summary>
+        /// <typeparam name="T">The generic type to which the <see cref="NestedParameter.ActualValue"/> needs to be "converted".</typeparam>
+        /// <param name="path">The path to search for in all this <see cref="Option"/>'s <see cref="NestedParameter.Path"/> properties.</param>
+        /// <param name="allParameters">A <see cref="IEnumerable{NestedParameter}"/> that contains all available <see cref="NestedParameter"/>s where we can search the <paramref name="path"/> for.</param>
+        /// <returns>A <see cref="IEnumerable{T}"/> containing published value 's converted to the requested generic <typeparamref name="T"></typeparamref>.
+        /// If Convert.ChangeType fails, an <see cref="Exception"/> is thrown: <see href="https://docs.microsoft.com/en-us/dotnet/api/system.convert.changetype"/>.
+        /// </returns>
+        public IEnumerable<T> GetNestedParameterPublishedValuesByPath<T>(string path, IEnumerable<NestedParameter> allParameters)
+        {
+            return this.GetNestedParameterValueSetsByPath(path, allParameters)
+                .Select(x => 
+                    new 
+                    {
+                        PublishedValue = x.GetPublishedValue(),
+                        x.AssociatedParameter,
+                    }
+                )
+                .Select(x =>
+                    (x.PublishedValue.FirstOrDefault() ?? "-") == "-"
+                        ? default
+                        : (T)Convert.ChangeType(x.PublishedValue.First().ToValueSetObject(x.AssociatedParameter.ParameterType), typeof(T)))
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Finds and returns <see cref="NestedParameter"/>s by their <see cref="NestedParameter.Path"/>s in the <see cref="Option"/>'s <see cref="NestedParameter"/>
+        /// </summary>
+        /// <param name="path">The path to search for in all this <see cref="Option"/>'s <see cref="NestedParameter.Path"/> properties.</param>
+        /// <param name="domain">The <see cref="DomainOfExpertise"/> for which the <see cref="NestedParameter"/>s should be found.</param>
+        /// <returns>An <see cref="IEnumerable{NestedParameter}"/> containing all found <see cref="NestedParameter"/>s. </returns>
+        public IEnumerable<NestedParameter> GetNestedParameterValueSetsByPath(string path, DomainOfExpertise domain)
+        {
+            var allParameters = new NestedElementTreeGenerator().GetNestedParameters(this, domain);
+            return this.GetNestedParameterValueSetsByPath(path, allParameters).ToList();
+        }
+
+        /// <summary>
+        /// Finds and returns <see cref="NestedParameter"/>s by their <see cref="NestedParameter.Path"/>s in the <see cref="Option"/>'s <see cref="NestedParameter"/>
+        /// </summary>
+        /// <param name="path">The path to search for in all this <see cref="Option"/>'s <see cref="NestedParameter.Path"/> properties.</param>
+        /// <returns>An <see cref="IEnumerable{NestedParameter}"/> containing all found <see cref="NestedParameter"/>s. </returns>
+        public IEnumerable<NestedParameter> GetNestedParameterValueSetsByPath(string path)
+        {
+            var allParameters = new NestedElementTreeGenerator().GetNestedParameters(this);
+            return this.GetNestedParameterValueSetsByPath(path, allParameters).ToList();
+        }
+
+        /// <summary>
+        /// Finds and returns <see cref="NestedParameter"/>s by their <see cref="NestedParameter.Path"/>s in the <see cref="Option"/>'s <see cref="NestedParameter"/>
+        /// </summary>
+        /// <param name="path">The path to search for in all this <see cref="Option"/>'s <see cref="NestedParameter.Path"/> properties.</param>
+        /// <param name="allParameters">A <see cref="IEnumerable{NestedParameter}"/> that contains all available <see cref="NestedParameter"/>s where we can search the <paramref name="path"/> for.</param>
+        /// <returns>An <see cref="IEnumerable{NestedParameter}"/> containing all found <see cref="NestedParameter"/>s. </returns>
+        public IEnumerable<NestedParameter> GetNestedParameterValueSetsByPath(string path, IEnumerable<NestedParameter> allParameters)
+        {
+            return allParameters.Where(x => x.Path.Equals(path)).ToList();
         }
     }
 }

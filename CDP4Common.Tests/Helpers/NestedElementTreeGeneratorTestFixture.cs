@@ -196,7 +196,8 @@ namespace CDP4Common.Tests.Helpers
             var values_1 = new List<string> { "2" };
             var values_2 = new List<string> { "3" };
             var values_3 = new List<string> { "220" };
-            var values_4 = new List<string> { "0" };
+            var emptyValues = new List<string> { "-" };
+            var publishedValues = new List<string> { "123" };
 
             var overrideValueset = new ParameterOverrideValueSet()
             {
@@ -212,30 +213,37 @@ namespace CDP4Common.Tests.Helpers
             parameterValueset_1.Reference = new CDP4Common.Types.ValueArray<string>(values_1);
             parameterValueset_1.Computed = new CDP4Common.Types.ValueArray<string>(values_1);
             parameterValueset_1.Formula = new CDP4Common.Types.ValueArray<string>(values_1);
+            parameterValueset_1.Published = new CDP4Common.Types.ValueArray<string>(publishedValues);
             parameterValueset_1.ValueSwitch = ParameterSwitchKind.MANUAL;
 
             parameterValueset_2.Manual = new CDP4Common.Types.ValueArray<string>(values_2);
             parameterValueset_2.Reference = new CDP4Common.Types.ValueArray<string>(values_2);
             parameterValueset_2.Computed = new CDP4Common.Types.ValueArray<string>(values_2);
             parameterValueset_2.Formula = new CDP4Common.Types.ValueArray<string>(values_2);
+            parameterValueset_2.Published = new CDP4Common.Types.ValueArray<string>(publishedValues);
             parameterValueset_2.ValueSwitch = ParameterSwitchKind.MANUAL;
 
             parameterValueset_3.Manual = new CDP4Common.Types.ValueArray<string>(values_3);
             parameterValueset_3.Reference = new CDP4Common.Types.ValueArray<string>(values_3);
             parameterValueset_3.Computed = new CDP4Common.Types.ValueArray<string>(values_3);
             parameterValueset_3.Formula = new CDP4Common.Types.ValueArray<string>(values_3);
+            parameterValueset_3.Published = new CDP4Common.Types.ValueArray<string>(emptyValues);
             parameterValueset_3.ValueSwitch = ParameterSwitchKind.MANUAL;
+            parameterValueset_3.ActualOption = this.option_A;
 
-            parameterValueset_4.Manual = new CDP4Common.Types.ValueArray<string>(values_4);
-            parameterValueset_4.Reference = new CDP4Common.Types.ValueArray<string>(values_4);
-            parameterValueset_4.Computed = new CDP4Common.Types.ValueArray<string>(values_4);
-            parameterValueset_4.Formula = new CDP4Common.Types.ValueArray<string>(values_4);
+            parameterValueset_4.Manual = new CDP4Common.Types.ValueArray<string>(emptyValues);
+            parameterValueset_4.Reference = new CDP4Common.Types.ValueArray<string>(emptyValues);
+            parameterValueset_4.Computed = new CDP4Common.Types.ValueArray<string>(emptyValues);
+            parameterValueset_4.Formula = new CDP4Common.Types.ValueArray<string>(emptyValues);
+            parameterValueset_4.Published = new CDP4Common.Types.ValueArray<string>(publishedValues);
             parameterValueset_4.ValueSwitch = ParameterSwitchKind.MANUAL;
+            parameterValueset_4.ActualOption = this.option_B;
 
             overrideValueset.Manual = new CDP4Common.Types.ValueArray<string>(values_1);
             overrideValueset.Reference = new CDP4Common.Types.ValueArray<string>(values_1);
             overrideValueset.Computed = new CDP4Common.Types.ValueArray<string>(values_1);
             overrideValueset.Formula = new CDP4Common.Types.ValueArray<string>(values_1);
+            overrideValueset.Published = new CDP4Common.Types.ValueArray<string>(publishedValues);
             overrideValueset.ValueSwitch = ParameterSwitchKind.MANUAL;
 
             this.parameter.ValueSet.Add(parameterValueset_1);

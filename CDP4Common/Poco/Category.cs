@@ -24,10 +24,9 @@
 
 namespace CDP4Common.SiteDirectoryData
 {
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.Helpers;
 
@@ -58,10 +57,6 @@ namespace CDP4Common.SiteDirectoryData
 
             return supercategories;
         }
-
-        private List<Category> categoryCache = null;
-
-        private DateTime lastCacheRequest = DateTime.MinValue;
 
         /// <summary>
         /// Queries the full hierarchy of categories that are derived categories of the current <see cref="Category"/>
