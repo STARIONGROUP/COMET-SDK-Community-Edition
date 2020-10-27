@@ -154,9 +154,15 @@ namespace CDP4Common.ReportingData
                 yield return thing;
             }
 
-            yield return this.Author;
+            if (this.Author != null)
+            {
+                yield return this.Author;
+            }
 
-            yield return this.PrimaryAnnotatedThing;
+            if (this.PrimaryAnnotatedThing != null)
+            {
+                yield return this.PrimaryAnnotatedThing;
+            }
         }
 
         /// <summary>

@@ -360,11 +360,20 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.DefaultOption;
+            if (this.DefaultOption != null)
+            {
+                yield return this.DefaultOption;
+            }
 
-            yield return this.IterationSetup;
+            if (this.IterationSetup != null)
+            {
+                yield return this.IterationSetup;
+            }
 
-            yield return this.TopElement;
+            if (this.TopElement != null)
+            {
+                yield return this.TopElement;
+            }
         }
 
         /// <summary>

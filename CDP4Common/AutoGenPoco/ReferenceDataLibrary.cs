@@ -284,7 +284,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.RequiredRdl;
+            if (this.RequiredRdl != null)
+            {
+                yield return this.RequiredRdl;
+            }
         }
 
         /// <summary>

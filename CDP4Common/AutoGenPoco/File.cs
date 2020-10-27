@@ -160,9 +160,15 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.LockedBy;
+            if (this.LockedBy != null)
+            {
+                yield return this.LockedBy;
+            }
 
-            yield return this.Owner;
+            if (this.Owner != null)
+            {
+                yield return this.Owner;
+            }
         }
 
         /// <summary>

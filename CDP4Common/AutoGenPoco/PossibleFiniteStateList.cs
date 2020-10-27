@@ -168,9 +168,15 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.DefaultState;
+            if (this.DefaultState != null)
+            {
+                yield return this.DefaultState;
+            }
 
-            yield return this.Owner;
+            if (this.Owner != null)
+            {
+                yield return this.Owner;
+            }
         }
 
         /// <summary>

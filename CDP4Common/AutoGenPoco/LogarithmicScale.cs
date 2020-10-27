@@ -165,7 +165,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.ReferenceQuantityKind;
+            if (this.ReferenceQuantityKind != null)
+            {
+                yield return this.ReferenceQuantityKind;
+            }
         }
 
         /// <summary>

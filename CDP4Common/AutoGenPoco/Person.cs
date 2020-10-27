@@ -288,15 +288,30 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.DefaultDomain;
+            if (this.DefaultDomain != null)
+            {
+                yield return this.DefaultDomain;
+            }
 
-            yield return this.DefaultEmailAddress;
+            if (this.DefaultEmailAddress != null)
+            {
+                yield return this.DefaultEmailAddress;
+            }
 
-            yield return this.DefaultTelephoneNumber;
+            if (this.DefaultTelephoneNumber != null)
+            {
+                yield return this.DefaultTelephoneNumber;
+            }
 
-            yield return this.Organization;
+            if (this.Organization != null)
+            {
+                yield return this.Organization;
+            }
 
-            yield return this.Role;
+            if (this.Role != null)
+            {
+                yield return this.Role;
+            }
         }
 
         /// <summary>

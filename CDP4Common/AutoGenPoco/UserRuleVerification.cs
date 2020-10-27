@@ -125,7 +125,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.Rule;
+            if (this.Rule != null)
+            {
+                yield return this.Rule;
+            }
         }
 
         /// <summary>

@@ -120,9 +120,15 @@ namespace CDP4Common.ReportingData
                 yield return thing;
             }
 
-            yield return this.Author;
+            if (this.Author != null)
+            {
+                yield return this.Author;
+            }
 
-            yield return this.Owner;
+            if (this.Owner != null)
+            {
+                yield return this.Owner;
+            }
         }
 
         /// <summary>

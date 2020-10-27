@@ -122,9 +122,15 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.DependentScaleValue;
+            if (this.DependentScaleValue != null)
+            {
+                yield return this.DependentScaleValue;
+            }
 
-            yield return this.ReferenceScaleValue;
+            if (this.ReferenceScaleValue != null)
+            {
+                yield return this.ReferenceScaleValue;
+            }
         }
 
         /// <summary>

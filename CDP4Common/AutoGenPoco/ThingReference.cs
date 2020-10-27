@@ -117,7 +117,10 @@ namespace CDP4Common.ReportingData
                 yield return thing;
             }
 
-            yield return this.ReferencedThing;
+            if (this.ReferencedThing != null)
+            {
+                yield return this.ReferencedThing;
+            }
         }
 
         /// <summary>

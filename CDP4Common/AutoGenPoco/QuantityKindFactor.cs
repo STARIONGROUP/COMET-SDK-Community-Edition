@@ -119,7 +119,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.QuantityKind;
+            if (this.QuantityKind != null)
+            {
+                yield return this.QuantityKind;
+            }
         }
 
         /// <summary>

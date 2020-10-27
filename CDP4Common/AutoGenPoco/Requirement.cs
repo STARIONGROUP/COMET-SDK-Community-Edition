@@ -161,7 +161,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.Group;
+            if (this.Group != null)
+            {
+                yield return this.Group;
+            }
         }
 
         /// <summary>

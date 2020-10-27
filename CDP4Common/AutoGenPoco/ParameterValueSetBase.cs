@@ -225,9 +225,15 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.ActualOption;
+            if (this.ActualOption != null)
+            {
+                yield return this.ActualOption;
+            }
 
-            yield return this.ActualState;
+            if (this.ActualState != null)
+            {
+                yield return this.ActualState;
+            }
         }
 
         /// <summary>

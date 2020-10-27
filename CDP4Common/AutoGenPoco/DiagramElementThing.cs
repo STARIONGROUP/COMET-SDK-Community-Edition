@@ -144,9 +144,15 @@ namespace CDP4Common.DiagramData
                 yield return thing;
             }
 
-            yield return this.DepictedThing;
+            if (this.DepictedThing != null)
+            {
+                yield return this.DepictedThing;
+            }
 
-            yield return this.SharedStyle;
+            if (this.SharedStyle != null)
+            {
+                yield return this.SharedStyle;
+            }
         }
 
         /// <summary>

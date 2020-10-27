@@ -159,11 +159,20 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.Person;
+            if (this.Person != null)
+            {
+                yield return this.Person;
+            }
 
-            yield return this.Role;
+            if (this.Role != null)
+            {
+                yield return this.Role;
+            }
 
-            yield return this.SelectedDomain;
+            if (this.SelectedDomain != null)
+            {
+                yield return this.SelectedDomain;
+            }
         }
 
         /// <summary>

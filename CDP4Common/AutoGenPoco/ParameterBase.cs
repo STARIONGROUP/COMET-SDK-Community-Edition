@@ -157,15 +157,30 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.Group;
+            if (this.Group != null)
+            {
+                yield return this.Group;
+            }
 
-            yield return this.Owner;
+            if (this.Owner != null)
+            {
+                yield return this.Owner;
+            }
 
-            yield return this.ParameterType;
+            if (this.ParameterType != null)
+            {
+                yield return this.ParameterType;
+            }
 
-            yield return this.Scale;
+            if (this.Scale != null)
+            {
+                yield return this.Scale;
+            }
 
-            yield return this.StateDependence;
+            if (this.StateDependence != null)
+            {
+                yield return this.StateDependence;
+            }
         }
 
         /// <summary>

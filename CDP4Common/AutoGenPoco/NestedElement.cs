@@ -214,7 +214,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.RootElement;
+            if (this.RootElement != null)
+            {
+                yield return this.RootElement;
+            }
         }
 
         /// <summary>

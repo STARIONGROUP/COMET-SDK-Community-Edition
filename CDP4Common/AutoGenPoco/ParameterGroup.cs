@@ -122,7 +122,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.ContainingGroup;
+            if (this.ContainingGroup != null)
+            {
+                yield return this.ContainingGroup;
+            }
         }
 
         /// <summary>

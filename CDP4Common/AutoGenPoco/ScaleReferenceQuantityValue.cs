@@ -119,7 +119,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.Scale;
+            if (this.Scale != null)
+            {
+                yield return this.Scale;
+            }
         }
 
         /// <summary>

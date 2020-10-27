@@ -300,9 +300,15 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.DefaultParticipantRole;
+            if (this.DefaultParticipantRole != null)
+            {
+                yield return this.DefaultParticipantRole;
+            }
 
-            yield return this.DefaultPersonRole;
+            if (this.DefaultPersonRole != null)
+            {
+                yield return this.DefaultPersonRole;
+            }
         }
 
         /// <summary>

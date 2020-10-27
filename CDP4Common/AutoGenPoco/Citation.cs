@@ -151,7 +151,10 @@ namespace CDP4Common.CommonData
                 yield return thing;
             }
 
-            yield return this.Source;
+            if (this.Source != null)
+            {
+                yield return this.Source;
+            }
         }
 
         /// <summary>

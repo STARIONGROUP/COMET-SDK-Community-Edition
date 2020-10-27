@@ -180,9 +180,15 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.ContainingFolder;
+            if (this.ContainingFolder != null)
+            {
+                yield return this.ContainingFolder;
+            }
 
-            yield return this.Creator;
+            if (this.Creator != null)
+            {
+                yield return this.Creator;
+            }
 
             foreach (var thing in this.FileType.Select(x => x))
             {

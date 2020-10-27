@@ -146,7 +146,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.ReferencingCategory;
+            if (this.ReferencingCategory != null)
+            {
+                yield return this.ReferencingCategory;
+            }
         }
 
         /// <summary>

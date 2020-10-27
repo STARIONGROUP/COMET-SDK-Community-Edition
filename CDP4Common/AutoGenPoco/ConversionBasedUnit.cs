@@ -118,7 +118,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.ReferenceUnit;
+            if (this.ReferenceUnit != null)
+            {
+                yield return this.ReferenceUnit;
+            }
         }
 
         /// <summary>

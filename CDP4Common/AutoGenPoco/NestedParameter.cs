@@ -174,11 +174,20 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.ActualState;
+            if (this.ActualState != null)
+            {
+                yield return this.ActualState;
+            }
 
-            yield return this.AssociatedParameter;
+            if (this.AssociatedParameter != null)
+            {
+                yield return this.AssociatedParameter;
+            }
 
-            yield return this.Owner;
+            if (this.Owner != null)
+            {
+                yield return this.Owner;
+            }
         }
 
         /// <summary>

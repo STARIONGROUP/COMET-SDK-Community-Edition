@@ -137,7 +137,10 @@ namespace CDP4Common.ReportingData
                 yield return thing;
             }
 
-            yield return this.Actionee;
+            if (this.Actionee != null)
+            {
+                yield return this.Actionee;
+            }
         }
 
         /// <summary>

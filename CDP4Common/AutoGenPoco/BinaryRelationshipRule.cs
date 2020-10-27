@@ -149,11 +149,20 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.RelationshipCategory;
+            if (this.RelationshipCategory != null)
+            {
+                yield return this.RelationshipCategory;
+            }
 
-            yield return this.SourceCategory;
+            if (this.SourceCategory != null)
+            {
+                yield return this.SourceCategory;
+            }
 
-            yield return this.TargetCategory;
+            if (this.TargetCategory != null)
+            {
+                yield return this.TargetCategory;
+            }
         }
 
         /// <summary>

@@ -119,7 +119,10 @@ namespace CDP4Common.ReportingData
                 yield return thing;
             }
 
-            yield return this.FileType;
+            if (this.FileType != null)
+            {
+                yield return this.FileType;
+            }
         }
 
         /// <summary>

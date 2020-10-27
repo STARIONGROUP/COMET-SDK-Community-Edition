@@ -191,9 +191,15 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.PublishedIn;
+            if (this.PublishedIn != null)
+            {
+                yield return this.PublishedIn;
+            }
 
-            yield return this.Publisher;
+            if (this.Publisher != null)
+            {
+                yield return this.Publisher;
+            }
         }
 
         /// <summary>

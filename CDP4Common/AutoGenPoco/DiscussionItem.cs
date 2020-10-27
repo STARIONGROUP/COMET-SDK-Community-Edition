@@ -109,7 +109,10 @@ namespace CDP4Common.ReportingData
                 yield return thing;
             }
 
-            yield return this.ReplyTo;
+            if (this.ReplyTo != null)
+            {
+                yield return this.ReplyTo;
+            }
         }
 
         /// <summary>

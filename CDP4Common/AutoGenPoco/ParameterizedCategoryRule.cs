@@ -120,7 +120,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.Category;
+            if (this.Category != null)
+            {
+                yield return this.Category;
+            }
 
             foreach (var thing in this.ParameterType)
             {

@@ -215,7 +215,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.Parameter;
+            if (this.Parameter != null)
+            {
+                yield return this.Parameter;
+            }
         }
 
         /// <summary>

@@ -190,7 +190,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.DefaultScale;
+            if (this.DefaultScale != null)
+            {
+                yield return this.DefaultScale;
+            }
 
             foreach (var thing in this.PossibleScale)
             {

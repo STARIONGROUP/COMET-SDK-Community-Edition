@@ -110,7 +110,10 @@ namespace CDP4Common.ReportingData
                 yield return thing;
             }
 
-            yield return this.ChangeRequest;
+            if (this.ChangeRequest != null)
+            {
+                yield return this.ChangeRequest;
+            }
         }
 
         /// <summary>

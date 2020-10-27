@@ -170,7 +170,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.SourceIterationSetup;
+            if (this.SourceIterationSetup != null)
+            {
+                yield return this.SourceIterationSetup;
+            }
         }
 
         /// <summary>

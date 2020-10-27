@@ -230,7 +230,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.SubscribedValueSet;
+            if (this.SubscribedValueSet != null)
+            {
+                yield return this.SubscribedValueSet;
+            }
         }
 
         /// <summary>

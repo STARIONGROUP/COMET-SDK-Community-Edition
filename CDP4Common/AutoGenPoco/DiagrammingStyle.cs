@@ -243,11 +243,20 @@ namespace CDP4Common.DiagramData
                 yield return thing;
             }
 
-            yield return this.FillColor;
+            if (this.FillColor != null)
+            {
+                yield return this.FillColor;
+            }
 
-            yield return this.FontColor;
+            if (this.FontColor != null)
+            {
+                yield return this.FontColor;
+            }
 
-            yield return this.StrokeColor;
+            if (this.StrokeColor != null)
+            {
+                yield return this.StrokeColor;
+            }
         }
 
         /// <summary>

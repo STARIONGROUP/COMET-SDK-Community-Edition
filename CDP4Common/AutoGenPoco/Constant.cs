@@ -155,9 +155,15 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.ParameterType;
+            if (this.ParameterType != null)
+            {
+                yield return this.ParameterType;
+            }
 
-            yield return this.Scale;
+            if (this.Scale != null)
+            {
+                yield return this.Scale;
+            }
         }
 
         /// <summary>

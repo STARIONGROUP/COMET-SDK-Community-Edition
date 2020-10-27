@@ -171,7 +171,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.Author;
+            if (this.Author != null)
+            {
+                yield return this.Author;
+            }
 
             foreach (var thing in this.Category)
             {

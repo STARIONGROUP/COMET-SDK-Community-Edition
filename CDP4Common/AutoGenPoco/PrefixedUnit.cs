@@ -162,7 +162,10 @@ namespace CDP4Common.SiteDirectoryData
                 yield return thing;
             }
 
-            yield return this.Prefix;
+            if (this.Prefix != null)
+            {
+                yield return this.Prefix;
+            }
         }
 
         /// <summary>

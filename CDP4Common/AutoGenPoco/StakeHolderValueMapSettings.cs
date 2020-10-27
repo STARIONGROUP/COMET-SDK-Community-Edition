@@ -125,11 +125,20 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.GoalToValueGroupRelationship;
+            if (this.GoalToValueGroupRelationship != null)
+            {
+                yield return this.GoalToValueGroupRelationship;
+            }
 
-            yield return this.StakeholderValueToRequirementRelationship;
+            if (this.StakeholderValueToRequirementRelationship != null)
+            {
+                yield return this.StakeholderValueToRequirementRelationship;
+            }
 
-            yield return this.ValueGroupToStakeholderValueRelationship;
+            if (this.ValueGroupToStakeholderValueRelationship != null)
+            {
+                yield return this.ValueGroupToStakeholderValueRelationship;
+            }
         }
 
         /// <summary>

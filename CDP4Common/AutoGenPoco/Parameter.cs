@@ -154,7 +154,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.RequestedBy;
+            if (this.RequestedBy != null)
+            {
+                yield return this.RequestedBy;
+            }
         }
 
         /// <summary>

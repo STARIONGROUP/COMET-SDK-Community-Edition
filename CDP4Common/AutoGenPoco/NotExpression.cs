@@ -110,7 +110,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.Term;
+            if (this.Term != null)
+            {
+                yield return this.Term;
+            }
         }
 
         /// <summary>

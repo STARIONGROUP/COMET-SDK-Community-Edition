@@ -144,9 +144,15 @@ namespace CDP4Common.DiagramData
                 yield return thing;
             }
 
-            yield return this.Source;
+            if (this.Source != null)
+            {
+                yield return this.Source;
+            }
 
-            yield return this.Target;
+            if (this.Target != null)
+            {
+                yield return this.Target;
+            }
         }
 
         /// <summary>

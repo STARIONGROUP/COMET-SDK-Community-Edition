@@ -367,11 +367,8 @@ namespace CDP4Common.CommonData
 
             foreach (var thing in this.QueryReferencedThings())
             {
-                if (thing != null)
-                {
-                    temp.Add(thing);
-                    temp.AddRange(thing.QueryReferencedThings());
-                }
+                temp.Add(thing);
+                temp.AddRange(thing.QueryReferencedThings());
             }
 
             return temp.Distinct();

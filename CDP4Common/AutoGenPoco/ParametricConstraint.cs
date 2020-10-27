@@ -149,7 +149,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.TopExpression;
+            if (this.TopExpression != null)
+            {
+                yield return this.TopExpression;
+            }
         }
 
         /// <summary>

@@ -201,7 +201,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.EngineeringModelSetup;
+            if (this.EngineeringModelSetup != null)
+            {
+                yield return this.EngineeringModelSetup;
+            }
         }
 
         /// <summary>

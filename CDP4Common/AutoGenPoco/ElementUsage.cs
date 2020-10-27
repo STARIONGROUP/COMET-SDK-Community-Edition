@@ -168,7 +168,10 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
-            yield return this.ElementDefinition;
+            if (this.ElementDefinition != null)
+            {
+                yield return this.ElementDefinition;
+            }
 
             foreach (var thing in this.ExcludeOption)
             {
