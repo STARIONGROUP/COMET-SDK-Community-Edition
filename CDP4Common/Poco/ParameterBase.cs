@@ -2,7 +2,7 @@
 // <copyright file="ParameterBase.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -24,8 +24,12 @@
 
 namespace CDP4Common.EngineeringModelData
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
+
     using CDP4Common.CommonData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
 
     /// <summary>
@@ -93,14 +97,12 @@ namespace CDP4Common.EngineeringModelData
         {
             get
             {
-                var parameter = this as Parameter;
-                if (parameter != null)
+                if (this is Parameter parameter)
                 {
                     return parameter.ValueSet;
                 }
 
-                var parameterOverride = this as ParameterOverride;
-                if (parameterOverride != null)
+                if (this is ParameterOverride parameterOverride)
                 {
                     return parameterOverride.ValueSet;
                 }
@@ -120,5 +122,60 @@ namespace CDP4Common.EngineeringModelData
         /// The <see cref="string"/> that represents the model code, valid separators are <code>.</code> and <code>/</code>
         /// </returns>
         public abstract string ModelCode(int? componentIndex = null);
+
+        /// <summary>
+        /// Searches for a <see cref="IValueSet"/> for the given <see cref="Option"/> and <see cref="ActualFiniteState"/>.
+        /// </summary>
+        /// <param name="option">The <see cref="Option"/></param>
+        /// <param name="actualState">The <see cref="ActualFiniteState"/></param>
+        /// <returns>The <see cref="IValueSet"/></returns>
+        public IValueSet QueryParameterBaseValueSet(Option option, ActualFiniteState actualState)
+        {
+            var valueSets = this.ValueSets.ToList();
+
+            if (!valueSets.Any())
+            {
+                throw new IncompleteModelException($"{this.GetType().Name} {this.UserFriendlyName} doesn't contain any values.");
+            }
+
+            if (this.IsOptionDependent)
+            {
+                if (option == null)
+                {
+                    throw new ArgumentNullException($"{this.GetType().Name} {this.UserFriendlyName} is option dependent. The {nameof(option)} cannot be null.");
+                }
+
+                valueSets = valueSets.Where(x => x.ActualOption == option).ToList();
+
+                if (!valueSets.Any())
+                {
+                    throw new ArgumentException($"{this.GetType().Name} {this.UserFriendlyName} doesn't have values for {nameof(Option)} {option.Name}.");
+                }
+            }
+
+            if (this.StateDependence != null)
+            {
+                if (actualState == null)
+                {
+                    throw new ArgumentNullException($"{this.GetType().Name} {this.UserFriendlyName} is state dependent. The {nameof(actualState)} property cannot be null.");
+                }
+
+                valueSets = valueSets.Where(x => x.ActualState == actualState).ToList();
+
+                if (!valueSets.Any())
+                {
+                    throw new ArgumentException($"{this.GetType().Name} {this.UserFriendlyName} doesn't have values for {nameof(ActualFiniteState)} {actualState.Name}.");
+                }
+            }
+
+            if (valueSets.Count > 1)
+            {
+                throw new Cdp4ModelValidationException(
+                    $"Multiple ValueSets found for {this.GetType().Name} {this.UserFriendlyName}" + 
+                    $" having {nameof(option)} = {option?.Name ?? "<empty>"} and {nameof(actualState)} = {actualState?.Name ?? "<empty>"}");
+            }
+
+            return valueSets.First();
+        }
     }
 }

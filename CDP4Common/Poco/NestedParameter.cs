@@ -24,7 +24,11 @@
 
 namespace CDP4Common.EngineeringModelData
 {
+    using System.Linq;
+
+    using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Extended part for the auto-generated <see cref="NestedParameter"/>
@@ -113,6 +117,37 @@ namespace CDP4Common.EngineeringModelData
         public override string UserFriendlyShortName
         {
             get { return this.QueryParameterShortName(); }
+        }
+
+        /// <summary>
+        /// Gets the published value <see cref="ValueArray{String}"/> for this <see cref="NestedParameter"/>
+        /// </summary>
+       /// <returns>The published <see cref="ValueArray{String}"/></returns>
+        public ValueArray<string> GetPublishedValue()
+        {
+            if (this.AssociatedParameter is ParameterSubscription)
+            {
+                return this.ValueSet.Computed;
+            }
+
+            if (this.AssociatedParameter is ParameterOrOverrideBase parameterOrOverrideBase)
+            {
+                var parameterValueSetBase = parameterOrOverrideBase.QueryParameterBaseValueSet(this.Option, this.ActualState) as ParameterValueSetBase;
+                var published = parameterValueSetBase?.Published;
+
+                if (published != null)
+                {
+                    return published;
+                }
+            }
+
+            return new ValueArray<string>(
+                new []
+                {
+                    ValueSetConverter.DefaultObject(this.AssociatedParameter.ParameterType).ToValueSetString(this.AssociatedParameter.ParameterType)
+                },
+                this.AssociatedParameter
+            );
         }
     }
 }
