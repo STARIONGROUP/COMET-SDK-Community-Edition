@@ -254,7 +254,7 @@ namespace CDP4Dal.DAL
         /// The uri to clean up.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/> consisting of either the uri.
+        /// The <see cref="string"/> consisting of the uri without the final /
         /// </returns>
         protected string CleanUriFinalSlash(string uri)
         {
@@ -264,6 +264,42 @@ namespace CDP4Dal.DAL
             }
 
             return uri.EndsWith("/") ? uri.TrimEnd(uri[uri.Length - 1]) : uri;
+        }
+
+        /// <summary>
+        /// If the given path starts with '/' remove it.
+        /// </summary>
+        /// <param name="uri">
+        /// The path to clean up.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> consisting of the cleaned up path.
+        /// </returns>
+        protected string CleanPathStartingSlash(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return string.Empty;
+            }
+
+            return path.StartsWith("/") ? path.TrimStart(path[0]) : path;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="UriBuilder"/> object with appropriate base and paths set, accounting that the original uri might have
+        /// subpaths in it already
+        /// </summary>
+        /// <param name="uri">The base uri (including subpaths)</param>
+        /// <param name="path">The path to be appended.</param>
+        /// <returns>A complete <see cref="UriBuilder"/> object.</returns>
+        protected UriBuilder GetUriBuilder(Uri uri, string path)
+        {
+            var cleanPath = this.CleanPathStartingSlash(path);
+
+            var result = new UriBuilder(uri);
+
+            result.Path = $"{result.Path}{(result.Path.EndsWith("/") ? string.Empty : "/")}{cleanPath}";
+            return result;
         }
 
         /// <summary>
