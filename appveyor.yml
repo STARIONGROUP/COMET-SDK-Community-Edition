@@ -1,4 +1,6 @@
 image: Visual Studio 2019
+version: 1.0.{build}
+
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -56,6 +58,11 @@ before_build:
 build_script:
   - cmd: dotnet build CDP4-SDK-NETF.sln --configuration %CONFIGURATION% -v q --framework net45
   - cmd: dotnet build CDP4-SDK-NETC.sln --configuration %CONFIGURATION% -v q --framework netcoreapp3.1
+  - ps: >-
+      if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
+        Write-Host Building Nugets PR# $env:APPVEYOR_PULL_REQUEST_NUMBER
+        dotnet pack CDP4-SDK-NETF.sln --configuration %CONFIGURATION% --include-symbols --version-suffix "PR$env:APPVEYOR_PULL_REQUEST_NUMBER-$env:APPVEYOR_REPO_COMMIT_TIMESTAMP"
+      }
 
 test_script:
     - >
@@ -76,6 +83,14 @@ after_test:
         dotnet sonarscanner end /d:"sonar.login=$env:SONARCLOUD_TOKEN"
       }
   - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_LOG%\"
+
+deploy:
+  - provider: NuGet
+    server: https://nuget.pkg.github.com/RHEAGROUP/index.json
+    artifact: /.nupkg/
+    username: RHEAGROUP
+    api_key:
+      secure: uS7/WlBplrAs/j9ab9P3SUN7GZyf4QAHZX//YpDOzXG/DZ6o1MGHdIWLHHdDYM5P
 
 artifacts:
     - path: '%TEST_LOG%'
