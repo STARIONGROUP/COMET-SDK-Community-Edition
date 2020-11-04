@@ -59,10 +59,8 @@ build_script:
   - cmd: dotnet build CDP4-SDK-NETF.sln --configuration %CONFIGURATION% -v q --framework net45
   - cmd: dotnet build CDP4-SDK-NETC.sln --configuration %CONFIGURATION% -v q --framework netcoreapp3.1
   - ps: >-
-      if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
-        Write-Host Building Nugets PR# $env:APPVEYOR_PULL_REQUEST_NUMBER
-        dotnet pack CDP4-SDK-NETF.sln --configuration $env:CONFIGURATION -p:TargetFrameworks=net45 --no-build --include-symbols --version-suffix "PR$env:APPVEYOR_PULL_REQUEST_NUMBER-$env:APPVEYOR_BUILD_NUMBER"
-      }
+        Write-Host Building Nugets
+        dotnet pack CDP4-SDK-NETF.sln --configuration $env:CONFIGURATION -p:TargetFrameworks=net45 --no-build --include-symbols --version-suffix "$env:APPVEYOR_BUILD_NUMBER"
 
 test_script:
     - >
