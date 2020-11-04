@@ -269,7 +269,7 @@ namespace CDP4Dal.DAL
         /// <summary>
         /// If the given path starts with '/' remove it.
         /// </summary>
-        /// <param name="uri">
+        /// <param name="path">
         /// The path to clean up.
         /// </param>
         /// <returns>
