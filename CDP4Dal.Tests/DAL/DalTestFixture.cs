@@ -46,6 +46,7 @@ namespace CDP4Dal.Tests.DAL
     {
         private Credentials credentials;
         private string someURI = "http://someURI";
+        private string somePath = "SiteDirectory";
         private string filePath;
 
         [SetUp]
@@ -74,6 +75,54 @@ namespace CDP4Dal.Tests.DAL
             Assert.AreEqual(this.someURI, dal.CleanSlashes(uriWithTrailingSlash));
             Assert.AreEqual(string.Empty, dal.CleanSlashes(string.Empty));
             Assert.AreEqual(string.Empty, dal.CleanSlashes(null));
+        }
+
+        [Test]
+        public void Verify_That_Clean_Path_Start_Slash_Removes_First_Slash_From_Path()
+        {
+            var dal = new TestDal(this.credentials);
+
+            var pathWithSlash = $"/{this.somePath}";
+
+            Assert.AreEqual(this.somePath, dal.CleanPathSlashes(this.somePath));
+            Assert.AreEqual(this.somePath, dal.CleanPathSlashes(pathWithSlash));
+            Assert.AreEqual(string.Empty, dal.CleanPathSlashes(string.Empty));
+            Assert.AreEqual(string.Empty, dal.CleanPathSlashes(null));
+        }
+
+        [Test]
+        public void Verify_That_UriBuilder_Constructs_Proper_Uris()
+        {
+            var dal = new TestDal(this.credentials);
+
+            var pathWithSlash = $"/{this.somePath}";
+            var correctFullUri = "http://someuri:80/SiteDirectory";
+
+            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, pathWithSlash).ToString());
+
+            this.credentials = new Credentials("John", "Doe", new Uri("http://someURI/"));
+
+            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, pathWithSlash).ToString());
+
+            var pathWithoutSlash = $"{this.somePath}";
+            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, pathWithoutSlash).ToString());
+
+            this.credentials = new Credentials("John", "Doe", new Uri("http://someURI/mdb/"));
+            correctFullUri = "http://someuri:80/mdb/SiteDirectory";
+
+            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, pathWithoutSlash).ToString());
+            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, pathWithSlash).ToString());
+
+            this.credentials = new Credentials("John", "Doe", new Uri("http://someURI/mdb/a/b/c"));
+            correctFullUri = "http://someuri:80/mdb/a/b/c/SiteDirectory";
+
+            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, pathWithoutSlash).ToString());
+            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, pathWithSlash).ToString());
+
+            this.credentials = new Credentials("John", "Doe", new Uri("http://someURI/mdb/a/b/c/"));
+
+            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, pathWithoutSlash).ToString());
+            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, pathWithSlash).ToString());
         }
 
         [Test]
@@ -260,6 +309,16 @@ namespace CDP4Dal.Tests.DAL
         public string CleanSlashes(string uri)
         {
             return base.CleanUriFinalSlash(uri);
+        }
+
+        public string CleanPathSlashes(string path)
+        {
+            return base.CleanPathStartingSlash(path);
+        }
+
+        public UriBuilder GetBuilder(Uri uri, string path)
+        {
+            return base.GetUriBuilder(uri, path);
         }
 
         internal void TestOperationContainerFileVerification(OperationContainer operationContainer, IEnumerable<string> files)
