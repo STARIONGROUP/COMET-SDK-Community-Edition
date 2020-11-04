@@ -61,7 +61,7 @@ build_script:
   - ps: >-
       if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
         Write-Host Building Nugets PR# $env:APPVEYOR_PULL_REQUEST_NUMBER
-        dotnet pack CDP4-SDK-NETF.sln --configuration $env:CONFIGURATION --no-build --include-symbols --version-suffix "PR$env:APPVEYOR_PULL_REQUEST_NUMBER-$env:APPVEYOR_BUILD_NUMBER"
+        dotnet pack CDP4-SDK-NETF.sln --configuration $env:CONFIGURATION -p:TargetFrameworks=net45 --no-build --include-symbols --version-suffix "PR$env:APPVEYOR_PULL_REQUEST_NUMBER-$env:APPVEYOR_BUILD_NUMBER"
       }
 
 test_script:
