@@ -81,6 +81,11 @@ namespace CDP4JsonFileDal
         private const string EngineeringModelZipLocation = "EngineeringModels";
 
         /// <summary>
+        /// The application-dependent (extensions) files zip location.
+        /// </summary>
+        private const string ExtensionsZipLocation = "Extensions";
+
+        /// <summary>
         /// The iteration zip location.
         /// </summary>
         private const string IterationZipLocation = "Iterations";
@@ -157,13 +162,13 @@ namespace CDP4JsonFileDal
         /// <param name="operationContainers">
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
+        /// <param name="extensionFiles">
+        /// The path to the files that need to be uploaded. If <paramref name="extensionFiles"/> is null, then no files are to be uploaded
         /// </param>
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
-        public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> files = null)
+        public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> extensionFiles = null)
         {
             this.ValidateOperationContainers(operationContainers);
 
@@ -243,6 +248,8 @@ namespace CDP4JsonFileDal
                     this.WriteModelReferenceDataLibraryToZipFile(modelReferenceDataLibraries, zipFile, path);
 
                     this.WriteIterationsToZipFile(iterations, zipFile, path);
+
+                    this.WriteExtensionFilesToZipFile(extensionFiles, zipFile, path);
                 }
 
                 Logger.Info("Successfully exported the open session {1} to {0}.", path, this.Session.Credentials.Uri);
@@ -804,6 +811,28 @@ namespace CDP4JsonFileDal
                     }
                 }
             }
+        }
+
+        /// <summary>
+        ///  Writes the application dependend files inside specific folder to the <see cref="ZipFile"/>
+        /// </summary>
+        /// <param name="extraFilesPath">The files list that will be written</param>
+        /// <param name="zipFile">The target <see cref="ZipFile"/></param>
+        /// <param name="filePath">The file path of the target <see cref="ZipFile"/></param>
+        private void WriteExtensionFilesToZipFile(IEnumerable<string> extraFilesPath, ZipFile zipFile, string filePath)
+        {
+            if (extraFilesPath is null)
+            {
+                return;
+            }
+
+            foreach (var extraFile in extraFilesPath)
+            {
+                var zipEntry = zipFile.AddFile(extraFile, ExtensionsZipLocation);
+                zipEntry.Comment = $"The {extraFile} file";
+            }
+
+            zipFile.Save(filePath);
         }
 
         /// <summary>
