@@ -1,0 +1,50 @@
+@echo off
+
+IF %1.==. GOTO KeyError
+set apikey=%1
+
+GOTO Begin
+
+:KeyError
+ECHO.
+ECHO ERROR: No apikey was specified
+ECHO.
+
+GOTO End
+
+:Begin
+
+ECHO.
+ECHO Cleaning up...
+ECHO.
+
+IF EXIST "%~dp0\ReleaseBuilds" (
+    rmdir "%~dp0\ReleaseBuilds" /s /q
+)
+
+mkdir "%~dp0\ReleaseBuilds"
+
+rem Cleaning Builds...
+dotnet clean -c Release CDP4-SDK.sln
+
+ECHO.
+ECHO Packing nugets...
+ECHO.
+
+rem Packing New Versions...
+dotnet pack -c Release -o ReleaseBuilds CDP4-SDK.sln
+
+ECHO.
+ECHO Pushing to nuget.org ...
+ECHO.
+
+for %%f in (%~dp0\ReleaseBuilds\*.nupkg) do (
+    echo Pushing %%f
+    nuget push %%f -Source https://api.nuget.org/v3/index.json -ApiKey %apikey%
+)
+
+:End
+
+ECHO.
+ECHO Release Completed
+ECHO.

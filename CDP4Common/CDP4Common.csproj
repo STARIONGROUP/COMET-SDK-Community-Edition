@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netstandard1.6;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>6.2.1</VersionPrefix>
+    <VersionPrefix>6.3.0</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathaniel, Kamil</Authors>
@@ -19,13 +19,9 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-		[Refactor] FileRevision.GetDerivedPath(); fixes #118
-		[Refactor] Option.IsDefault; fixes #119
-		[Add] Option.GetNestedParameterValuesByPath; extend NestedElementTreeGenerator fixes #134
-		[Add] ValueSetConverter.TryParseDouble
-		[Add] NestedElement convenience methods; fixes #130
-		[Add] net48 and netstandard2.1 as target monikers; fixes #121
-	</PackageReleaseNotes>
+		[Refactor] IsMemberOfCategory improved; fixes #138
+    [Added] QueryReferencedThings and QueryReferencedThingsDeep  for all Things; fixes #142
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
