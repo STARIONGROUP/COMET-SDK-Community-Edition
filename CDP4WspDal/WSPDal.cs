@@ -156,7 +156,9 @@ namespace CDP4WspDal
 
             var postToken = operationContainer.Token;
             var resourcePath = $"{operationContainer.Context}{attribute}";
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, resourcePath);
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", postToken, resourcePath);
             Logger.Debug("WSP Dal POST: {0} - {1}", postToken, uriBuilder);
 
             var requestContent = this.CreateHttpContent(postToken, operationContainer, files);
@@ -338,7 +340,9 @@ namespace CDP4WspDal
             var resourcePath = $"{thingRoute}{attributes.ToString()}";
 
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, resourcePath);
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
             Logger.Debug("WSP GET {0}: {1}", readToken, uriBuilder);
 
             var requestsw = Stopwatch.StartNew();
@@ -464,7 +468,9 @@ namespace CDP4WspDal
             
             var watch = Stopwatch.StartNew();
             
-            var uriBuilder = this.GetUriBuilder(credentials.Uri, resourcePath);
+            var uriBuilder = this.GetUriBuilder(credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", openToken, resourcePath);
             Logger.Debug("WSP Open {0}: {1}", openToken, uriBuilder);
 
             var requestsw = Stopwatch.StartNew();

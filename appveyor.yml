@@ -64,7 +64,7 @@ build_script:
   - ps: >-
       if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
         Write-Host Building Nugets PR# $env:APPVEYOR_PULL_REQUEST_NUMBER
-        dotnet pack CDP4-SDK-NETF.sln --configuration $env:CONFIGURATION -p:TargetFrameworks=net45 --no-build --version-suffix "PR$env:APPVEYOR_PULL_REQUEST_NUMBER-$env:APPVEYOR_BUILD_NUMBER"
+        dotnet pack CDP4-SDK-NETF.sln --configuration $env:CONFIGURATION -p:TargetFrameworks=net45 --no-build --version-suffix "$env:APPVEYOR_BUILD_NUMBER-PR$env:APPVEYOR_PULL_REQUEST_NUMBER"
         nuget sources add -name github -username RHEAGROUP -password $env:GITHUB_TOKEN -source https://nuget.pkg.github.com/RHEAGROUP/index.json
         nuget setApiKey $env:GITHUB_TOKEN -Source "github" -Verbosity quiet
         

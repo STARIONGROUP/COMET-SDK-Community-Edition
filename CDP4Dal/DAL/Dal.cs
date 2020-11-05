@@ -290,11 +290,14 @@ namespace CDP4Dal.DAL
         /// subpaths in it already
         /// </summary>
         /// <param name="uri">The base uri (including subpaths)</param>
-        /// <param name="path">The path to be appended.</param>
+        /// <param name="path">The ref to a path to be appended.</param>
         /// <returns>A complete <see cref="UriBuilder"/> object.</returns>
-        protected UriBuilder GetUriBuilder(Uri uri, string path)
+        protected UriBuilder GetUriBuilder(Uri uri, ref string path)
         {
             var cleanPath = this.CleanPathStartingSlash(path);
+
+            // make sure the original request path is consistently WITHOUT leading slash
+            path = cleanPath;
 
             var result = new UriBuilder(uri);
 
