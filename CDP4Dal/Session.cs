@@ -949,32 +949,15 @@ namespace CDP4Dal
         }
 
         /// <summary>
-        /// Queries the current <see cref="DomainOfExpertise"/> from the session for the current <see cref="Iteration"/>
-        /// </summary>
-        /// <returns>
-        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
-        /// </returns>
-        public DomainOfExpertise QueryCurrentDomainOfExpertise()
-        {
-            var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => !x.Key.IterationSetup.FrozenOn.HasValue);
-
-            if (iterationDomainPair.Equals(default(KeyValuePair<Iteration, Tuple<DomainOfExpertise, Participant>>)))
-            {
-                return null;
-            }
-
-            return (iterationDomainPair.Value == null) || (iterationDomainPair.Value.Item1 == null) ? null : iterationDomainPair.Value.Item1;
-        }
-
-        /// <summary>
         /// Queries the <see cref="Participant"/>'s <see cref="DomainOfExpertise"/>'s from the session for the current <see cref="Iteration"/>
         /// </summary>
         /// <returns>
+        /// <param name="iteration">The <see cref="Iteration"/></param>
         /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
         /// </returns>
-        public IEnumerable<DomainOfExpertise> QueryDomainOfExpertise()
+        public IEnumerable<DomainOfExpertise> QueryDomainOfExpertise(Iteration iteration)
         {
-            var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => !x.Key.IterationSetup.FrozenOn.HasValue);
+            var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => x.Key.Iid == iteration.Iid);
             var domainOfExpertise = new List<DomainOfExpertise>();
 
             if (iterationDomainPair.Value?.Item2 != null)
