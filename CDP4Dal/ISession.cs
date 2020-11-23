@@ -134,7 +134,7 @@ namespace CDP4Dal
         /// </summary>
         /// <param name="iteration">The <see cref="Iteration"/></param>
         /// <returns>
-        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
+        /// The <see cref="DomainOfExpertise"/>s for the <see cref="Participant"/> that belongs to the <see cref="Iteration"/> for this <see cref="Session"/>.
         /// </returns>
         IEnumerable<DomainOfExpertise> QueryDomainOfExpertise(Iteration iteration);
 
