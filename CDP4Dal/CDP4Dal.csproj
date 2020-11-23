@@ -19,7 +19,7 @@
     <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-		[Update] Uri handling		
+      [Fix] Query DomainOfExpertise methods on ISession
 	</PackageReleaseNotes>
   </PropertyGroup>
 
