@@ -128,6 +128,15 @@ namespace CDP4Dal
         /// A <see cref="DomainOfExpertise"/> if has been selected for the <see cref="Iteration"/>, null otherwise.
         /// </returns>
         DomainOfExpertise QuerySelectedDomainOfExpertise(Iteration iteration);
+        
+        /// <summary>
+        /// Queries the <see cref="Participant"/>'s <see cref="DomainOfExpertise"/>'s from the session for the provided <see cref="Iteration"/>
+        /// </summary>
+        /// <param name="iteration">The <see cref="Iteration"/></param>
+        /// <returns>
+        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
+        /// </returns>
+        IEnumerable<DomainOfExpertise> QueryDomainOfExpertise(Iteration iteration);
 
         /// <summary>
         /// Switches the current domain for an iteration
@@ -311,14 +320,5 @@ namespace CDP4Dal
         /// The <see cref="Task"/>.
         /// </returns>
         Task CloseModelRdl(ModelReferenceDataLibrary modelRdl);
-
-        /// <summary>
-        /// Queries the <see cref="Participant"/>'s <see cref="DomainOfExpertise"/>'s from the session for the current <see cref="Iteration"/>
-        /// </summary>
-        /// <param name="iteration">The <see cref="Iteration"/></param>
-        /// <returns>
-        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
-        /// </returns>
-        IEnumerable<DomainOfExpertise> QueryDomainOfExpertise(Iteration iteration);
     }
 }

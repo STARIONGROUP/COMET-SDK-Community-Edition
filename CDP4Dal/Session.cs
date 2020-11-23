@@ -225,6 +225,26 @@ namespace CDP4Dal
 
             return iterationDomainPair.Value == null || iterationDomainPair.Value.Item1 == null ? null : iterationDomainPair.Value.Item1;
         }
+        
+        /// <summary>
+        /// Queries the <see cref="Participant"/>'s <see cref="DomainOfExpertise"/>'s from the session for the provided <see cref="Iteration"/>
+        /// </summary>
+        /// <returns>
+        /// <param name="iteration">The <see cref="Iteration"/></param>
+        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
+        /// </returns>
+        public IEnumerable<DomainOfExpertise> QueryDomainOfExpertise(Iteration iteration)
+        {
+            var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => x.Key.Iid == iteration.Iid);
+            var domainOfExpertise = new List<DomainOfExpertise>();
+
+            if (iterationDomainPair.Value?.Item2 != null)
+            {
+                domainOfExpertise.AddRange(iterationDomainPair.Value.Item2.Domain);
+            }
+
+            return domainOfExpertise;
+        }
 
         /// <summary>
         /// Convenience function to get the required reference data library chain for the passed in engineeringModel.
@@ -946,26 +966,6 @@ namespace CDP4Dal
 
             var modelRdl = ((EngineeringModel) iteration.Container).EngineeringModelSetup.RequiredRdl.Single();
             this.AddRdlToOpenList(modelRdl);
-        }
-
-        /// <summary>
-        /// Queries the <see cref="Participant"/>'s <see cref="DomainOfExpertise"/>'s from the session for the current <see cref="Iteration"/>
-        /// </summary>
-        /// <returns>
-        /// <param name="iteration">The <see cref="Iteration"/></param>
-        /// The <see cref="DomainOfExpertise"/> if selected, null otherwise.
-        /// </returns>
-        public IEnumerable<DomainOfExpertise> QueryDomainOfExpertise(Iteration iteration)
-        {
-            var iterationDomainPair = this.OpenIterations.SingleOrDefault(x => x.Key.Iid == iteration.Iid);
-            var domainOfExpertise = new List<DomainOfExpertise>();
-
-            if (iterationDomainPair.Value?.Item2 != null)
-            {
-                domainOfExpertise.AddRange(iterationDomainPair.Value.Item2.Domain);
-            }
-
-            return domainOfExpertise;
         }
     }
 }
