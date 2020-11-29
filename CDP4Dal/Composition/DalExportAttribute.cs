@@ -25,9 +25,10 @@
 namespace CDP4Dal.Composition
 {
     using System;
+
     using CDP4Dal.DAL;
 
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
 
     using System.ComponentModel.Composition;
     

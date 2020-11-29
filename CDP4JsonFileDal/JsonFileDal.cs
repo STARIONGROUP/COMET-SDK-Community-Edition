@@ -24,7 +24,7 @@
 
 namespace CDP4JsonFileDal
 {
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     using System.ComponentModel.Composition;
 #endif
 
@@ -60,7 +60,7 @@ namespace CDP4JsonFileDal
     /// Provides the Data Access Layer for file based import/export
     /// </summary>
     [DalExport("JSON File Based", "A file based JSON Data Access Layer", "1.1.0", DalType.File)]
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif
     public class JsonFileDal : Dal

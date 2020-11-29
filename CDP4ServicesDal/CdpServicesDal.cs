@@ -24,7 +24,7 @@
 
 namespace CDP4ServicesDal
 {
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     using System.ComponentModel.Composition;
 #endif
 
@@ -63,7 +63,7 @@ namespace CDP4ServicesDal
     /// Annex C, REST API
     /// </summary>
     [DalExport("CDP4 Services", "A CDP4 Services Data Access Layer", "1.1.0", DalType.Web)]
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif
     public class CdpServicesDal : Dal

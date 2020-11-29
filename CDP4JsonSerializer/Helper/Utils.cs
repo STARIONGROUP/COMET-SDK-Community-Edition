@@ -52,10 +52,10 @@ namespace CDP4JsonSerializer.Helper
                 throw new ArgumentException("string can't be empty!");
             }
 
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
-            return string.Format("{0}{1}", input.First().ToString(CultureInfo.InvariantCulture).ToUpper(), input.Substring(1));
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+            return $"{input.First().ToString(CultureInfo.InvariantCulture).ToUpper()}{input.Substring(1)}";
 #else
-            return string.Format("{0}{1}", input.First().ToString().ToUpper(), input.Substring(1));
+            return $"{input.First().ToString().ToUpper()}{input.Substring(1)}";
 #endif
 
         }
@@ -78,10 +78,10 @@ namespace CDP4JsonSerializer.Helper
             {
                 throw new ArgumentException("string can't be empty!");
             }
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
-            return string.Format("{0}{1}", input.First().ToString(CultureInfo.InvariantCulture).ToLower(), input.Substring(1));
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+            return $"{input.First().ToString(CultureInfo.InvariantCulture).ToLower()}{input.Substring(1)}";
 #else
-            return string.Format("{0}{1}", input.First().ToString().ToLower(), input.Substring(1));
+            return $"{input.First().ToString().ToLower()}{input.Substring(1)}";
 #endif
         }
     }

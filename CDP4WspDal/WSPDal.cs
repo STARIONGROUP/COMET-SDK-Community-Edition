@@ -24,7 +24,7 @@
 
 namespace CDP4WspDal
 {
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     using System.ComponentModel.Composition;
 #endif
 
@@ -60,7 +60,7 @@ namespace CDP4WspDal
     /// Provides the Data Access Layer for OCDT's WSP 
     /// </summary>
     [DalExport("OCDT WSP", "An OCDT WSP Data Access Layer", "1.0.0", DalType.Web)]
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif
     public class WspDal : Dal
