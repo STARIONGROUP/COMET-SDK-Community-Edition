@@ -28,6 +28,7 @@ namespace CDP4Common.Helpers
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Collections.Generic;
+
     using CDP4Common.Types;
 
     /// <summary>
@@ -37,7 +38,7 @@ namespace CDP4Common.Helpers
     public static class ValueArrayUtils
     {
         /// <summary>
-        /// Creates a <see cref="ValueArray{String}"/> with as many slots containing "-" as the provided <paramref name="numberOfValues"/>
+        /// Creates a <see cref="ValueArray{String}"/> with as many slots containing "-" as the provided <paramref name="size"/>
         /// </summary>
         /// <param name="size">
         /// An integer denoting the number of slots, this may not be lower than one.

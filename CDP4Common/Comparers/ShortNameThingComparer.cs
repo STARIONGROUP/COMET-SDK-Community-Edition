@@ -25,8 +25,12 @@
 namespace CDP4Common.Comparers
 {
     using System.Collections.Generic;
+
     using CDP4Common.CommonData;
 
+    /// <summary>
+    /// Comparer to be used when comparing <see cref="IShortNamedThing"/>s.
+    /// </summary>
     public class ShortNameThingComparer : IComparer<IShortNamedThing>
     {
         /// <summary>Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.</summary>

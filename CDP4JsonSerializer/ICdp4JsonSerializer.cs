@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ICdp4JsonSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,13 +21,13 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
+
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
 
@@ -109,7 +108,7 @@ namespace CDP4JsonSerializer
         /// The content Stream.
         /// </param>
         /// <returns>
-        /// The the deserialized instance of <see cref="T"/>.
+        /// The the deserialized instance of the specified Type
         /// </returns>
         T Deserialize<T>(Stream contentStream);
     }

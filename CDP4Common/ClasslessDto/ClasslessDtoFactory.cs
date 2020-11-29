@@ -26,18 +26,26 @@ namespace CDP4Common
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
 
+    /// <summary>
+    /// The purpose of the <see cref="ClasslessDtoFactory"/> is create a <see cref="ClasslessDTO"/> from a <see cref="CDP4Common.DTO.Thing"/>
+    /// using the <see cref="IMetaDataProvider"/>.
+    /// </summary>
     public static class ClasslessDtoFactory
     {
         /// <summary>
         /// Given a <see cref="List{T}"/> of properties to add, populate this plain DTO from a <see cref="CDP4Common.DTO.Thing"/>. The Iid and Classkind are populated automatically and thus
-        /// do not require to be entered into the <see cref="propertyList"/> variable. If <see cref="propertyList"/> is null then only the Iid and ClassKind are passed.
+        /// do not require to be entered into the <paramref name="propertyList"/> variable. If <paramref name="propertyList"/> is null then only the Iid and ClassKind are passed.
         /// </summary>
         /// <typeparam name="T">
         /// Of type <see cref="Thing"/>
         /// </typeparam>
+        /// <param name="metaDataProvider">
+        /// An instance of <see cref="IMetaDataProvider"/> used to provide metadata (reflection) for a <see cref="CDP4Common.DTO.Thing"/>
+        /// </param>
         /// <param name="thing">
         /// The <see cref="Thing"/>, properties of which to use to populate this DTO with.
         /// </param>
@@ -51,7 +59,7 @@ namespace CDP4Common
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException(nameof(thing));
             }
 
             var classlesdto = new ClasslessDTO();
@@ -73,9 +81,11 @@ namespace CDP4Common
                     }
 
                     var propertyMetadata = metainfo.GetPropertyMetaInfo(property);
+
                     if (!propertyMetadata.IsDerived && propertyMetadata.IsDataMember)
                     {
                         var propertyValue = metainfo.GetValue(property, thing);
+
                         if (propertyValue == null && !propertyMetadata.IsNullable)
                         {
                             propertyValue = string.Empty;
@@ -92,6 +102,9 @@ namespace CDP4Common
         /// <summary>
         /// The full <see cref="ClasslessDTO"/> from thing.
         /// </summary>
+        /// <param name="metaDataProvider">
+        /// An instance of <see cref="IMetaDataProvider"/> used to provide metadata (reflection) for a <see cref="CDP4Common.DTO.Thing"/>
+        /// </param>
         /// <param name="thing">
         /// The thing.
         /// </param>
@@ -108,7 +121,7 @@ namespace CDP4Common
         {
             if (thing == null)
             {
-                throw new ArgumentNullException("thing");
+                throw new ArgumentNullException(nameof(thing));
             }
 
             var classlesdto = new ClasslessDTO();
@@ -121,12 +134,14 @@ namespace CDP4Common
             foreach (var property in metainfo.GetPropertyNameCollection())
             {
                 var propertyMetadata = metainfo.GetPropertyMetaInfo(property);
+
                 if (property.Equals("Iid") || property.Equals("ClassKind") || propertyMetadata.IsDerived || !propertyMetadata.IsDataMember)
                 {
                     continue;
                 }
 
                 var propertyValue = metainfo.GetValue(property, thing);
+
                 if (propertyValue == null && !propertyMetadata.IsNullable)
                 {
                     propertyValue = string.Empty;

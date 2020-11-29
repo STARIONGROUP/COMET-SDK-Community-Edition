@@ -34,10 +34,19 @@ namespace CDP4Rules.Common
         /// </summary>
         None,
 
+        /// <summary>
+        /// Designation that there is an informational impact
+        /// </summary>
         Info,
 
+        /// <summary>
+        /// Designation that there is an warning impact
+        /// </summary>
         Warning,
 
+        /// <summary>
+        /// Designation that there is an error impact
+        /// </summary>
         Error,
     }
 }

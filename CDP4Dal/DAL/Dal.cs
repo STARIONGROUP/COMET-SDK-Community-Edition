@@ -31,13 +31,17 @@ namespace CDP4Dal.DAL
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
+    
     using CDP4Dal.Operations;
     using CDP4Dal.Composition;
     using CDP4Dal.Exceptions;
+    
     using NLog;
+    
     using Iteration = CDP4Common.DTO.Iteration;
     using Thing = CDP4Common.DTO.Thing;
 
@@ -452,9 +456,6 @@ namespace CDP4Dal.DAL
         /// <summary>
         /// Sets the CDP Version data model version that is supported by the current <see cref="CDP4Dal.Session"/>
         /// </summary>
-        /// <param name="dal">
-        /// The <see cref="IDal"/> the current <see cref="CDP4Dal.Session"/>
-        /// </param>
         /// <remarks>
         /// In case the <paramref name="dal"/> is not decorated with <see cref="DalExportAttribute"/> then
         /// the <see cref="Version"/> is set to "1.0.0.0"
@@ -463,6 +464,7 @@ namespace CDP4Dal.DAL
         {
             var dalType = this.GetType();
             var dalExportAttribute = (DalExportAttribute)Attribute.GetCustomAttribute(dalType, typeof(DalExportAttribute));
+
             if (dalExportAttribute != null)
             {
                 this.DalVersion = new Version(dalExportAttribute.CDPVersion);

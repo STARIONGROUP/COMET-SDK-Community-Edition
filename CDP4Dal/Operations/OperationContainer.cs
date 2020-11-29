@@ -25,7 +25,8 @@
 namespace CDP4Dal.Operations
 {
     using System;
-    using System.Collections.Generic;    
+    using System.Collections.Generic;
+
     using CDP4Common.DTO;
     using CDP4Common.Helpers;
 

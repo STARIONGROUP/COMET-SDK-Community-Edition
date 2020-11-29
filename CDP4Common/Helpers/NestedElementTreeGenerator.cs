@@ -675,6 +675,9 @@ namespace CDP4Common.Helpers
         /// The <see cref="ParameterValueSetBase"/> that provides the reference to the <see cref="ActualFiniteState"/> and values
         /// to create the <see cref="NestedParameter"/>
         /// </param>
+        /// <param name="option">
+        /// The <see cref="Option"/> for which the <see cref="NestedParameter"/> is created. 
+        /// </param>
         /// <returns>
         /// An instance of a non-volatile <see cref="NestedParameter"/>
         /// </returns>
@@ -714,6 +717,9 @@ namespace CDP4Common.Helpers
         /// <param name="valueSet">
         /// The <see cref="ParameterSubscriptionValueSet"/> that provides the reference to the <see cref="ActualFiniteState"/> and values
         /// to create the <see cref="NestedParameter"/>
+        /// </param>
+        /// <param name="option">
+        /// The <see cref="Option"/> for which the <see cref="NestedParameter"/> is created. 
         /// </param>
         /// <returns>
         /// An instance of a non-volatile <see cref="NestedParameter"/>

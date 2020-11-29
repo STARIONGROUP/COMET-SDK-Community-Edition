@@ -32,6 +32,7 @@ namespace CDP4Common.CommonData
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
+
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
     using CDP4Common.Polyfills;
@@ -54,7 +55,7 @@ namespace CDP4Common.CommonData
         public const ParticipantAccessRightKind DefaultParticipantAccess = ParticipantAccessRightKind.NOT_APPLICABLE;
 
         /// <summary>
-        /// Backing field for <see cref="CacheId"/> property.
+        /// Backing field for <see cref="CacheKey"/> property.
         /// </summary>
         private CacheKey cacheKey;
 
@@ -179,7 +180,7 @@ namespace CDP4Common.CommonData
         public virtual DateTime ModifiedOn { get; set; }
 
         /// <summary>
-        /// revision number of this <see cref=""/>
+        /// revision number of this <see cref="Thing"/>
         /// Note: In this data model a revision numbering approach similar to Subversion is used, see <a href="http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.basic">http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.basic</a>. Therefore the revision number is actually a change set number. At any time that an update to a Thing is made and committed to a persistent data store, the <i>revisionNumber</i> of its TopContainer is incremented by one, and then the <i>revisionNumber</i> of the updated Thing is set to the new TopContainer's <i>revisionNumber</i>. See also TopContainer. When a Thing is first created (in a client application) its <i>revisionNumber</i> is set to zero, implying it has not yet been persisted.
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]

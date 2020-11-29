@@ -28,9 +28,11 @@ namespace CDP4Common.Helpers
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Types;
+    
     using NLog;
 
     /// <summary>
@@ -85,6 +87,7 @@ namespace CDP4Common.Helpers
         internal static void ResolveList<T>(this ContainerList<T> list, IEnumerable<Guid> guidList, Guid? iterationId, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache) where T : Thing
         {
             list.Clear();
+
             foreach (var guid in guidList)
             {
                 if (cache.TryGet(guid, iterationId, out T thing))
@@ -107,6 +110,7 @@ namespace CDP4Common.Helpers
         {
             list.Clear();
             var orderedList = new List<OrderedItem>();
+
             foreach (var item in orderedItemList)
             {
                 if (!Guid.TryParse(item.V.ToString(), out var guid))
@@ -119,6 +123,7 @@ namespace CDP4Common.Helpers
                 {
                     var ordereditem = new OrderedItem {K = item.K, V = thing};
                     orderedList.Add(ordereditem);
+
                     if (list.IsComposite)
                     {
                         thing.ChangeKind = ChangeKind.None;
@@ -164,6 +169,7 @@ namespace CDP4Common.Helpers
         internal static void ResolveList<T>(this List<T> list, IEnumerable<Guid> guidList, Guid? iterationId, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache) where T : Thing
         {
             list.Clear();
+
             foreach (var guid in guidList)
             {
                 if (cache.TryGet(guid, iterationId, out T thing))
@@ -174,13 +180,13 @@ namespace CDP4Common.Helpers
         }
 
         /// <summary>
-        /// Try to get the <see cref="Thing"/> of type <see cref="T"/> corresponding to the given <paramref name="itemIid"/>
+        /// Try to get the <see cref="Thing"/> of type <see cref="Thing"/> corresponding to the given <paramref name="itemIid"/>
         /// </summary>
         /// <typeparam name="T">The type of <see cref="Thing"/> to get</typeparam>
         /// <param name="cache">The cache that stores the <see cref="Thing"/>s</param>
         /// <param name="itemIid">The id of the <see cref="Thing"/> to retrieve</param>
         /// <param name="iterationId">The potential iteration id the item to retrieve is contained in</param>
-        /// <param name="thing">The returned <see cref="Thing"/> of type <see cref="T"/></param>
+        /// <param name="thing">The returned <see cref="Thing"/> of type <see cref="Thing"/></param>
         /// <returns>True if the operation succeeds</returns>
         internal static bool TryGet<T>(this ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Guid itemIid, Guid? iterationId, out T thing) where T : Thing
         {
@@ -189,13 +195,13 @@ namespace CDP4Common.Helpers
         }
 
         /// <summary>
-        /// Get the <see cref="Thing"/> of type <see cref="T"/> corresponding to the given <paramref name="itemIid"/>
+        /// Get the <see cref="Thing"/> of type <see cref="Thing"/> corresponding to the given <paramref name="itemIid"/>
         /// </summary>
         /// <typeparam name="T">The type of <see cref="Thing"/> to get</typeparam>
         /// <param name="cache">The cache that stores the <see cref="Thing"/>s</param>
         /// <param name="itemIid">The id of the <see cref="Thing"/> to retrieve</param>
         /// <param name="iterationId">The potential iteration id the item to retrieve is contained in</param>
-        /// <returns>The <see cref="Thing"/> of type <see cref="T"/></returns>
+        /// <returns>The <see cref="Thing"/> of type <see cref="Thing"/></returns>
         /// <remarks>
         /// A 2 steps approach is necessary to retrieve a thing 
         /// as in some cases it is not possible to know if the <see cref="Thing"/> is contained in an iteration or not.
@@ -216,6 +222,7 @@ namespace CDP4Common.Helpers
             {
                 key = new CacheKey(itemIid, null);
                 thing = cache.Get<T>(key);
+
                 if (thing != null)
                 {
                     return thing;
@@ -235,7 +242,7 @@ namespace CDP4Common.Helpers
         }
 
         /// <summary>
-        /// Get the <see cref="Thing"/> of type <see cref="T"/> with the given <paramref name="key"/>
+        /// Get the <see cref="Thing"/> of type <see cref="Thing"/> with the given <paramref name="key"/>
         /// </summary>
         /// <typeparam name="T">The type of <see cref="Thing"/></typeparam>
         /// <param name="cache">The cache that stores all the things</param>
@@ -244,12 +251,14 @@ namespace CDP4Common.Helpers
         private static T Get<T>(this ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, CacheKey key) where T : Thing
         {
             var result = cache.TryGetValue(key, out var lazy);
+
             if (!result)
             {
                 return null;
             }
 
             var thing = lazy.Value;
+
             if (!(thing is T))
             {
                 logger.Error("The thing found in the cache with the key is not of the right type, cached id: {0}, {1}", thing.CacheKey.Thing, thing.CacheKey.Iteration);

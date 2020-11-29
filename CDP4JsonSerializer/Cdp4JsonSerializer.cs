@@ -234,7 +234,7 @@ namespace CDP4JsonSerializer
         /// The content Stream.
         /// </param>
         /// <returns>
-        /// The the deserialized instance of <see cref="T"/>.
+        /// The the deserialized instance of the specified Type
         /// </returns>
         public T Deserialize<T>(Stream contentStream)
         {

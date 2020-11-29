@@ -26,9 +26,11 @@ namespace CDP4JsonFileDal
 {
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+
     using CDP4JsonFileDal.Json;
 
     /// <summary>
@@ -81,7 +83,7 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Adds the provided <see cref="iteration"/> to the <see cref="iterations"/> if this does not already contain it
+        /// Adds the provided <paramref name="iteration"/> to the <paramref name="iterations"/> if this does not already contain it
         /// </summary>
         /// <param name="iteration">
         /// The <see cref="Iteration"/> that is to be added
@@ -98,7 +100,7 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Adds the provided <see cref="engineeringModelSetup"/> to the <see cref="engineeringModelSetups"/> if this does not already contain it
+        /// Adds the provided <paramref name="engineeringModelSetup"/> to the <paramref name="engineeringModelSetups"/> if this does not already contain it
         /// </summary>
         /// <param name="engineeringModelSetup">
         /// The <see cref="EngineeringModelSetup"/> that is to be added
@@ -115,7 +117,7 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Adds the provided <see cref="iterationSetup"/> to the <see cref="iterationSetups"/> if this does not already contain it
+        /// Adds the provided <paramref name="iterationSetup"/> to the <paramref name="iterationSetups"/> if this does not already contain it
         /// </summary>
         /// <param name="iterationSetup">
         /// The <see cref="IterationSetup"/> that is to be added

@@ -26,17 +26,15 @@ namespace CDP4Common.SiteDirectoryData
 {
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using NLog;
 
     /// <summary>
     /// Extension methods for <see cref="ICategorizableThing"/>
     /// </summary>
     public static class CategorizableThingExtensions
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// Queries the <see cref="ICategorizableThing"/> and checks whether it is a member of the 
         /// supplied <see cref="Category"/>, this includes membership of the sub <see cref="Category"/> instances
@@ -124,6 +122,9 @@ namespace CDP4Common.SiteDirectoryData
         /// <param name="categorizableThing">
         /// The <see cref="ICategorizableThing"/> that is to be queried for all its categories and its super categories.
         /// </param>
+        /// <param name="removeDuplicates">
+        /// a value indicating whether the duplicates should be reoved or not.
+        /// </param>
         /// <returns>
         /// an <see cref="IEnumerable{Category}"/> that contains all the categories, duplicates are removed.
         /// </returns>
@@ -136,9 +137,11 @@ namespace CDP4Common.SiteDirectoryData
             var allCategories = new List<Category>();
 
             var elementUsage = categorizableThing as ElementUsage;
+
             if (elementUsage != null)
             {
                 var elementDefinition = elementUsage.ElementDefinition;
+
                 if (elementDefinition != null)
                 {
                     allCategories.AddRange(elementDefinition.Category);

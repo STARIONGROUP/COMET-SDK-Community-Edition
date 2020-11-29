@@ -430,7 +430,7 @@ namespace CDP4Dal.NetCore.Tests
 
             CDP4Common.CommonData.Thing changedObject = null;
             CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(CDP4Common.EngineeringModelData.Iteration)).Subscribe(x => changedObject = x.ChangedThing);
-            session2.CloseIterationSetup(iterationSetup);
+            await session2.CloseIterationSetup(iterationSetup);
             Assert.NotNull(changedObject);
         }
 
@@ -546,7 +546,7 @@ namespace CDP4Dal.NetCore.Tests
         }
 
         [Test]
-        public void Verify_that_when_active_person_is_null_Iteration_is_not_read()
+        public async Task Verify_that_when_active_person_is_null_Iteration_is_not_read()
         {
             var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), null, null) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
             var activeDomain = new DomainOfExpertise(Guid.NewGuid(), null, null);

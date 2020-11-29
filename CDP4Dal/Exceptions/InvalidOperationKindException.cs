@@ -29,8 +29,8 @@ namespace CDP4Dal.Exceptions
     using CDP4Dal.DAL;
 
     /// <summary>
-    /// A InvalidOperationKindException is thrown whenever an <see cref="OperationContainer"/> contains
-    /// <see cref="Operation"/> that are not supported by the implementation of an <see cref="IDal"/>
+    /// A InvalidOperationKindException is thrown whenever an <see cref="CDP4Dal.Operations.OperationContainer"/> contains
+    /// <see cref="CDP4Dal.Operations.Operation"/> that are not supported by the implementation of an <see cref="IDal"/>
     /// </summary>
     public class InvalidOperationKindException : Exception
     {

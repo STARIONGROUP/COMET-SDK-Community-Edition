@@ -28,9 +28,11 @@ namespace CDP4Rules.RuleCheckers
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+    
     using CDP4Rules.Common;
     
     /// <summary>
@@ -49,7 +51,7 @@ namespace CDP4Rules.RuleCheckers
         /// An <see cref="IEnumerable{RuleCheckResult}"/> which is empty when no rule violations are encountered.
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// thrown when <param name="thing"/> is not an <see cref="IAnnotation"/>
+        /// thrown when <paramref name="thing"/> is not an <see cref="IAnnotation"/>
         /// </exception>
         [Rule("MA-0100")]
         public IEnumerable<RuleCheckResult> CheckWheterTheLanguageCodeExistsInTheSiteDirectory(Thing thing)

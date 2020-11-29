@@ -38,12 +38,6 @@ namespace CDP4Rules.Common
         /// <param name="id">
         /// The alpha-numeric unique identifier of
         /// </param>
-        /// <param name="description">
-        /// the human readable description
-        /// </param>
-        /// <param name="severity">
-        /// the default <see cref="SeverityKind"/>
-        /// </param>
         public RuleAttribute(string id)
         {
             this.Id = id;

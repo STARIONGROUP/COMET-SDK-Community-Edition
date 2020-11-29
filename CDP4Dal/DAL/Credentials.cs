@@ -36,7 +36,7 @@ namespace CDP4Dal.DAL
         /// Backing field of the <see cref="Password"/> property where the password is stored
         /// </summary>
         private readonly string password;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Credentials"/> class. 
         /// </summary>
@@ -49,21 +49,24 @@ namespace CDP4Dal.DAL
         /// <param name="uri">
         /// the <see cref="Uri"/> of the data-store
         /// </param>
+        /// <param name="proxySettings">
+        /// The <see cref="ProxySettings"/> used to encapsulate proxy server settings
+        /// </param>
         public Credentials(string username, string password, Uri uri, ProxySettings proxySettings = null)
         {
             if (string.IsNullOrEmpty(username))
             {
-                throw new ArgumentNullException("username", "The username may not be empty or null");
+                throw new ArgumentNullException(nameof(username), "The username may not be empty or null");
             }
 
             if (string.IsNullOrEmpty(password))
             {
-                throw new ArgumentNullException("password", "The password may not be empty or null");
+                throw new ArgumentNullException(nameof(password), "The password may not be empty or null");
             }
 
             if (uri == null)
             {
-                throw new ArgumentNullException("uri", "The uri may not be null");
+                throw new ArgumentNullException(nameof(uri), "The uri may not be null");
             }
 
             this.UserName = username;

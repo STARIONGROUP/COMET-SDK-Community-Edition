@@ -27,7 +27,7 @@ namespace CDP4Dal.Exceptions
     using System;
 
     /// <summary>
-    /// A <see cref="InstanceNotFoundException"/> is thrown the when a <see cref="Thing"/> cannot be found.
+    /// A <see cref="InstanceNotFoundException"/> is thrown the when a <see cref="CDP4Common.CommonData.Thing"/> cannot be found.
     /// </summary>
     public class InstanceNotFoundException : Exception
     {

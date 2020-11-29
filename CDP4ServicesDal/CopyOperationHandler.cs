@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CopyOperationHandler.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4ServicesDal
 {
@@ -30,12 +28,15 @@ namespace CDP4ServicesDal
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Helpers;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
+
     using Poco = CDP4Common.CommonData.Thing;
 
     /// <summary>
@@ -69,7 +70,7 @@ namespace CDP4ServicesDal
         private List<Operation> operations;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WspCopyOperationHandler"/> class
+        /// Initializes a new instance of the <see cref="CopyOperationHandler"/> class
         /// </summary>
         /// <param name="session">The <see cref="ISession"/></param>
         public CopyOperationHandler(ISession session)

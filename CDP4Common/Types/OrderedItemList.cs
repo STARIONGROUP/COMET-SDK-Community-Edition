@@ -30,6 +30,7 @@ namespace CDP4Common.Types
     using System.ComponentModel;
     using System.Linq;
     using System.Runtime.CompilerServices;
+
     using CDP4Common.CommonData;
 
     /// <summary>
@@ -72,7 +73,7 @@ namespace CDP4Common.Types
         /// Initializes a new instance of the <see cref="OrderedItemList{T}"/> class
         /// </summary>
         /// <param name="container">The <see cref="Thing"/> that contains this <see cref="OrderedItemList{T}"/></param>
-        /// <param name="isComposite">Value indicating whether the <see cref="T"/> in this <see cref="OrderedItemList{T}"/> are part of a composition relationship</param>
+        /// <param name="isComposite">Value indicating whether the <see cref="System.Type"/> in this <see cref="OrderedItemList{T}"/> are part of a composition relationship</param>
         public OrderedItemList(Thing container, bool isComposite = false)
         {
             this.Container = container;
@@ -229,7 +230,7 @@ namespace CDP4Common.Types
         /// The item to be added.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        /// Thrown when <see cref="item"/> is null.
+        /// Thrown when <paramref name="item"/> is null.
         /// </exception>
         public void Add(T item)
         {

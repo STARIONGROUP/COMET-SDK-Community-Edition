@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CopyInfo.cs" company="RHEA System S.A.">
+// <copyright file="CopyInfoOptions.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
@@ -57,7 +57,7 @@ namespace CDP4Common.Dto
 
         /// <summary>
         /// Gets or sets a value indicating whether the copied objects should keep their original owner (if applicable)
-        /// Or use <see cref="Owner"/>
+        /// Or use <see cref="CDP4Common.DTO.IOwnedThing.Owner"/>
         /// </summary>
         public bool? KeepOwner { get; set; }
     }

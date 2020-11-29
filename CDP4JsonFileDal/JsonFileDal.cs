@@ -593,7 +593,7 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Validates that the correctness of the <see cref="operationContainers"/>
+        /// Validates that the correctness of the <paramref name="operationContainers"/>
         /// </summary>
         /// <param name="operationContainers">
         /// The <see cref="IEnumerable{OperationContainer}"/> to validate
@@ -602,24 +602,24 @@ namespace CDP4JsonFileDal
         {
             if (operationContainers == null)
             {
-                throw new ArgumentNullException("operationContainers", "The operationContainer may not be null");
+                throw new ArgumentNullException(nameof(operationContainers), "The operationContainer may not be null");
             }
 
             if (!operationContainers.Any())
             {
-                throw new ArgumentException("The operationContainers may not be empty", "operationContainer");
+                throw new ArgumentException("The operationContainers may not be empty", nameof(operationContainers));
             }
 
             if (operationContainers.Any(operationContainer => !operationContainer.Operations.Any()))
             {
-                throw new ArgumentException("None of the OperationContainers contain Operations", "operationContainers");
+                throw new ArgumentException("None of the OperationContainers contain Operations", nameof(operationContainers));
             }
 
             foreach (var operationContainer in operationContainers)
             {
                 if (operationContainer.Operations.Any(operation => operation.ModifiedThing.GetType() != typeof(CDP4Common.DTO.Iteration)))
                 {
-                    throw new ArgumentException($"Only instances of Things of type {typeof(CDP4Common.DTO.Iteration).Name} are eligible for export", "operationContainer");
+                    throw new ArgumentException($"Only instances of Things of type {typeof(CDP4Common.DTO.Iteration).Name} are eligible for export", nameof(operationContainers));
                 }
             }
         }
@@ -628,7 +628,7 @@ namespace CDP4JsonFileDal
         /// Write the header file to the zip export archive.
         /// </summary>
         /// <param name="echExchangeFileHeader">
-        /// The <see cref="ExchangeFileHeader"/> that is to be written to the <see cref="zipFile"/>
+        /// The <see cref="ExchangeFileHeader"/> that is to be written to the <paramref name="zipFile"/>
         /// </param>
         /// <param name="zipFile">
         /// The zip archive instance to add the information to.
@@ -670,6 +670,7 @@ namespace CDP4JsonFileDal
                 var orderedContents = prunedSiteDirectoryContents.OrderBy(x => x.Iid, this.guidComparer);
 
                 this.Serializer.SerializeToStream(orderedContents, memoryStream);
+
                 using (var outputStream = new MemoryStream(memoryStream.ToArray()))
                 {
                     var zipEntry = zipFile.AddEntry("SiteDirectory.json", outputStream);
@@ -686,7 +687,7 @@ namespace CDP4JsonFileDal
         /// The <see cref="CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary"/> that are to be written to the <see cref="ZipFile"/>
         /// </param>
         /// <param name="zipFile">
-        /// The target <see cref="ZipFile"/> that the <see cref="siteReferenceDataLibraries"/> are written to.
+        /// The target <see cref="ZipFile"/> that the <paramref name="siteReferenceDataLibraries"/> are written to.
         /// </param>
         /// <param name="filePath">
         /// The file of the target <see cref="ZipFile"/>
@@ -725,7 +726,7 @@ namespace CDP4JsonFileDal
         /// The <see cref="CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary"/> that are to be written to the <see cref="ZipFile"/>
         /// </param>
         /// <param name="zipFile">
-        /// The target <see cref="ZipFile"/> that the <see cref="modelReferenceDataLibraries"/> are written to.
+        /// The target <see cref="ZipFile"/> that the <paramref name="modelReferenceDataLibraries"/> are written to.
         /// </param>
         /// <param name="filePath">
         /// The file of the target <see cref="ZipFile"/>
@@ -763,7 +764,7 @@ namespace CDP4JsonFileDal
         /// The <see cref="CDP4Common.EngineeringModelData.Iteration"/> that are to be written to the <see cref="ZipFile"/>
         /// </param>
         /// <param name="zipFile">
-        /// The target <see cref="ZipFile"/> that the <see cref="iterations"/> are written to.
+        /// The target <see cref="ZipFile"/> that the <paramref name="iterations"/> are written to.
         /// </param>
         /// <param name="filePath">
         /// The file of the target <see cref="ZipFile"/>
