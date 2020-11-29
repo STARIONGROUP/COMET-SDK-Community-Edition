@@ -7,7 +7,7 @@
     <VersionPrefix>6.3.0</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathaniel, Kamil</Authors>
+    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Kamil</Authors>
     <PackageId>CDP4Common-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>

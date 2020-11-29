@@ -2,7 +2,7 @@
 // <copyright file="Cdp4ModelValidationException.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -25,10 +25,16 @@
 namespace CDP4Common.Exceptions
 {
     using System;
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+    using System.Runtime.Serialization;
+#endif
 
     /// <summary>
     /// The CDP4 model validation exception.
     /// </summary>
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+    [Serializable]
+#endif
     public class Cdp4ModelValidationException : Exception
     {
         /// <summary>
@@ -62,5 +68,21 @@ namespace CDP4Common.Exceptions
             : base(message, innerException)
         {
         }
+
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContainmentException"/> class.
+        /// </summary>
+        /// <param name="info">
+        /// The serialization data
+        /// </param>
+        /// <param name="context">
+        /// The <see cref="StreamingContext"/>
+        /// </param>
+        protected Cdp4ModelValidationException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+#endif
     }
 }

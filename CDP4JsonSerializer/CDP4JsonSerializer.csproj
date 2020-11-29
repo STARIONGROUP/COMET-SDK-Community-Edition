@@ -7,7 +7,7 @@
     <VersionPrefix>6.3.0</VersionPrefix>
     <Description>CDP4 JSON Serialization Library</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathaniel, Kamil</Authors>
+    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
     <PackageId>CDP4JsonSerializer-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>

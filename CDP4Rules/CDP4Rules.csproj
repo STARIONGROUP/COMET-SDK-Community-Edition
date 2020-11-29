@@ -7,7 +7,7 @@
     <VersionPrefix>6.3.0</VersionPrefix>
     <Description>CDP4 Class Library that provides Model Analysis and Rule Checking</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathaniel, Kamil</Authors>
+    <Authors>Sam, Alex, Alexander, Yevhen, Nathanael</Authors>
     <PackageId>CDP4Rules-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>

@@ -7,7 +7,7 @@
     <VersionPrefix>7.0.0</VersionPrefix>
     <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathaniel, Kamil</Authors>
+    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
     <PackageId>CDP4Dal-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>

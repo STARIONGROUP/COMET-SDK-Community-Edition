@@ -7,7 +7,7 @@
     <VersionPrefix>0.5.0</VersionPrefix>
     <Description>CDP4 Class Library that provides requirement verification</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Alex, Alexander, Yevhen, Nathaniel, Kamil</Authors>
+    <Authors>Sam, Alex, Alexander, Yevhen, Nathanael</Authors>
     <PackageId>CDP4RequirementsVerification-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
