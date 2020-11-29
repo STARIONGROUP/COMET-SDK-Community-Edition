@@ -2,7 +2,7 @@
 // <copyright file="InstanceNotFoundException.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Aelxander van Delft, Nathananiel Smiechowski
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -25,10 +25,16 @@
 namespace CDP4Dal.Exceptions
 {
     using System;
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+    using System.Runtime.Serialization;
+#endif
 
     /// <summary>
     /// A <see cref="InstanceNotFoundException"/> is thrown the when a <see cref="Thing"/> cannot be found.
     /// </summary>
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+    [Serializable]
+#endif
     public class InstanceNotFoundException : Exception
     {
         /// <summary>
@@ -62,5 +68,21 @@ namespace CDP4Dal.Exceptions
             : base(message, innerException)
         {
         }
+
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstanceNotFoundException"/> class.
+        /// </summary>
+        /// <param name="info">
+        /// The serialization data
+        /// </param>
+        /// <param name="context">
+        /// The <see cref="StreamingContext"/>
+        /// </param>
+        protected InstanceNotFoundException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+#endif
     }
 }

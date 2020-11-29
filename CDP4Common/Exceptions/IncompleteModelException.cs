@@ -2,7 +2,7 @@
 // <copyright file="IncompleteModelException.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Aelxander van Delft, Nathananiel Smiechowski
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -25,7 +25,7 @@
 namespace CDP4Common.Exceptions
 {
     using System;
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     using System.Runtime.Serialization;
 #endif
     using CDP4Common.CommonData;
@@ -34,6 +34,9 @@ namespace CDP4Common.Exceptions
     /// An <see cref="IncompleteModelException"/> is thrown when the containment tree of any <see cref="Thing"/> is walked, either
     /// up or down and the model is incomplete.
     /// </summary>
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+    [Serializable]
+#endif
     public class IncompleteModelException : Exception
     {
         /// <summary>
@@ -68,7 +71,7 @@ namespace CDP4Common.Exceptions
         {
         }
 
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
         /// <summary>
         /// Initializes a new instance of the <see cref="IncompleteModelException"/> class.
         /// </summary>

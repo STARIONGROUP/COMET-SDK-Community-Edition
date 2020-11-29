@@ -25,13 +25,16 @@
 namespace CDP4JsonSerializer
 {
     using System;
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     using System.Runtime.Serialization;
 #endif
 
     /// <summary>
     /// A <see cref="DeSerializationException"/> is thrown the when a deserialization exception is encountered.
     /// </summary>
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+    [Serializable]
+#endif
     public class DeSerializationException : Exception
     {
         /// <summary>
@@ -65,7 +68,7 @@ namespace CDP4JsonSerializer
             : base(message, innerException)
         {
         }
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
         /// <summary>
         /// Initializes a new instance of the <see cref="DeSerializationException"/> class.
         /// </summary>
