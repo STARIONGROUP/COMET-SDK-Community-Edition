@@ -590,6 +590,51 @@ namespace CDP4Dal.NetCore.Tests
             var notSupportedVersion = new Version("2.0.0");
             Assert.IsFalse(this.session.IsVersionSupported(notSupportedVersion));
         }
+
+        [Test]
+        public async Task VerifyThatWriteWorksWithoutEventHandler()
+        {
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+            await this.session.Write(new OperationContainer(context));
+
+            this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public async Task VerifyThatWriteWorksWithEventHandler()
+        {
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+
+            this.session.BeforeWrite += (o, args) =>
+            {
+                args.Cancelled = false;
+            };
+
+            await this.session.Write(new OperationContainer(context));
+
+            this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public async Task VerifyThatCancelWriteWorks()
+        {
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+
+            this.session.BeforeWrite += (o, args) =>
+            {
+                args.Cancelled = true;
+            };
+
+            await this.session.Write(new OperationContainer(context));
+
+            this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(0));
+        }
     }
 
     //[DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]

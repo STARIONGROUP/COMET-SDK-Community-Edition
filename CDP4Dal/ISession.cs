@@ -45,6 +45,11 @@ namespace CDP4Dal
     public interface ISession
     {
         /// <summary>
+        /// Executes just before data from an <see cref="OperationContainer"/> is written to the datastore.
+        /// </summary>
+        event EventHandler<BeforeWriteEventArgs> BeforeWrite;
+
+        /// <summary>
         /// Gets the <see cref="Credentials"/> that are use to connect to the data source
         /// </summary>
         Credentials Credentials { get;  }
