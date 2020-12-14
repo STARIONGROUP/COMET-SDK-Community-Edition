@@ -35,6 +35,7 @@ namespace CDP4Dal
     
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
+    using CDP4Dal.Events;
 
     using Permission;
     

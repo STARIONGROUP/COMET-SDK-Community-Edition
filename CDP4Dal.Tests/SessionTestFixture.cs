@@ -2,7 +2,7 @@
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -31,23 +31,22 @@ namespace CDP4Dal.Tests
     using System.Threading.Tasks;
 
     using CDP4Common.CommonData;
+    using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4Dal.Operations;
     using CDP4Dal.Composition;
+    using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
 
     using Moq;
-
+    
     using NUnit.Framework;
     
     using DomainOfExpertise = CDP4Common.SiteDirectoryData.DomainOfExpertise;
-    using EngineeringModel = CDP4Common.DTO.EngineeringModel;
     using EngineeringModelSetup = CDP4Common.DTO.EngineeringModelSetup;
-    using Iteration = CDP4Common.DTO.Iteration;
     using ModelReferenceDataLibrary = CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary;
     using SiteDirectory = CDP4Common.DTO.SiteDirectory;
     using SiteReferenceDataLibrary = CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary;
@@ -103,9 +102,9 @@ namespace CDP4Dal.Tests
 
             this.mockedDal = new Mock<IDal>();
             this.mockedDal.SetupProperty(d => d.Session);
-            
+
             this.session = new Session(this.mockedDal.Object, credentials);
-            
+
             var openTaskCompletionSource = new TaskCompletionSource<IEnumerable<Thing>>();
             openTaskCompletionSource.SetResult(this.dalOutputs);
             this.mockedDal.Setup(x => x.Open(It.IsAny<Credentials>(), It.IsAny<CancellationToken>())).Returns(openTaskCompletionSource.Task);
@@ -155,7 +154,7 @@ namespace CDP4Dal.Tests
                     endUpdateReceived = true;
                 }
             });
-            
+
             var context = $"/SiteDirectory/{Guid.NewGuid()}";
 
             var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
@@ -306,19 +305,19 @@ namespace CDP4Dal.Tests
         public async Task VerifyThatSiteRdlRequiredByModelRdlCannotBeClosed()
         {
             var rdlDto = new CDP4Common.DTO.SiteReferenceDataLibrary { Iid = Guid.NewGuid() };
-            var siteDirDto = new CDP4Common.DTO.SiteDirectory() { Iid = Guid.NewGuid() };
+            var siteDirDto = new CDP4Common.DTO.SiteDirectory { Iid = Guid.NewGuid() };
             var requiredRdlDto = new CDP4Common.DTO.SiteReferenceDataLibrary() { Iid = Guid.NewGuid() };
             rdlDto.RequiredRdl = requiredRdlDto.Iid;
             siteDirDto.SiteReferenceDataLibrary.Add(rdlDto.Iid);
             siteDirDto.SiteReferenceDataLibrary.Add(requiredRdlDto.Iid);
-
+            
             siteDirDto.Person.Add(this.person.Iid);
 
             var mrdl = new CDP4Common.DTO.ModelReferenceDataLibrary(Guid.NewGuid(), 0) { RequiredRdl = requiredRdlDto.Iid };
             var modelsetup = new EngineeringModelSetup(Guid.NewGuid(), 0);
             modelsetup.RequiredRdl.Add(mrdl.Iid);
 
-            var model = new CDP4Common.DTO.EngineeringModel(Guid.NewGuid(), 0) { EngineeringModelSetup = modelsetup.Iid };
+            var model = new EngineeringModel(Guid.NewGuid(), 0) { EngineeringModelSetup = modelsetup.Iid };
             var iteration = new Iteration(Guid.NewGuid(), 0);
             model.Iteration.Add(iteration.Iid);
 
@@ -381,11 +380,11 @@ namespace CDP4Dal.Tests
             siteDir.Model.Add(containerEngModelSetup);
             modelRdlDto.RequiredRdl = requiredPocoDto.Iid;
             siteDir.Person.Add(JohnDoe);
-
+            
             var credentials = new Credentials("admin", "pass", new Uri("http://www.rheagroup.com"));
             var session2 = new Session(this.mockedDal.Object, credentials);
             session2.GetType().GetProperty("ActivePerson").SetValue(session2, JohnDoe, null);
-            
+
             var modelRdlPoco = new ModelReferenceDataLibrary { Iid = modelRdlDto.Iid, Name = modelRdlDto.Name, ShortName = modelRdlDto.ShortName, Container = containerEngModelSetup, RequiredRdl = requiredPocoRdl };
             var thingsToAdd = new List<Thing>() { siteDirDto, requiredPocoDto, containerEngModelSetupDto, modelRdlDto };
 
@@ -432,7 +431,7 @@ namespace CDP4Dal.Tests
 
             CDP4Common.CommonData.Thing changedObject = null;
             CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(CDP4Common.EngineeringModelData.Iteration)).Subscribe(x => changedObject = x.ChangedThing);
-            session2.CloseIterationSetup(iterationSetup);
+            await session2.CloseIterationSetup(iterationSetup);
             Assert.NotNull(changedObject);
         }
 
@@ -472,7 +471,7 @@ namespace CDP4Dal.Tests
         public async Task VerifyThatReadIterationWorks()
         {
             var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
-            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) {ShortName = "John"};
             var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
             var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
             var mrdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
@@ -517,7 +516,7 @@ namespace CDP4Dal.Tests
             var iterationToOpen = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
             var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
             iterationToOpen.Container = modelToOpen;
-
+            
             await this.session.Read(iterationToOpen, activeDomain);
             this.mockedDal.Verify(x => x.Read(It.Is<Iteration>(i => i.Iid == iterationToOpen.Iid), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>()), Times.Once);
 
@@ -554,7 +553,7 @@ namespace CDP4Dal.Tests
             var activeDomain = new DomainOfExpertise(Guid.NewGuid(), null, null);
             var model = new EngineeringModel(Guid.NewGuid(), 1);
             var iteration = new Iteration(Guid.NewGuid(), 10) { IterationSetup = iterationSetup.Iid };
-
+            
             var iterationToOpen = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
             var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
             iterationToOpen.Container = modelToOpen;
@@ -577,35 +576,6 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public async Task VeriyThatCanCancelWorks()
-        {
-            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), null, null) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
-            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
-            var activeDomain = new DomainOfExpertise(Guid.NewGuid(), null, null);
-            var model = new EngineeringModel(Guid.NewGuid(), 1);
-            var iteration = new Iteration(Guid.NewGuid(), 10) { IterationSetup = iterationSetup.Iid };
-
-            var iterationToOpen = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
-            var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
-
-            this.session.GetType().GetProperty("ActivePerson").SetValue(this.session, JohnDoe, null);
-
-            iterationToOpen.Container = modelToOpen;
-
-            Assert.IsFalse(this.session.CanCancel());
-
-            this.mockedDal.Setup(x => x.Read(It.IsAny<Iteration>(), It.IsAny<CancellationToken>(), null))
-                .Callback(() => Assert.IsTrue(this.session.CanCancel()))
-                .ReturnsAsync(new List<Thing>());
-
-            await this.session.Read(iterationToOpen, activeDomain);
-
-            Assert.IsFalse(this.session.CanCancel());
-
-            this.mockedDal.Verify(x => x.Read(It.IsAny<Iteration>(), It.IsAny<CancellationToken>(), null), Times.Exactly(1));
-        }
-
-        [Test]
         public void VerifyThatIsVersionSupportedReturnsExpectedResult()
         {
             var testDal = new TestDal();
@@ -622,71 +592,52 @@ namespace CDP4Dal.Tests
             Assert.IsFalse(this.session.IsVersionSupported(notSupportedVersion));
         }
 
+        [Test]
+        public async Task VerifyThatWriteWorksWithoutEventHandler()
+        {
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+            await this.session.Write(new OperationContainer(context));
+
+            this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(1));
+        }
 
         [Test]
-        public async Task VerifyThatQueryDomainOfExpertiseWorks()
+        public async Task VerifyThatWriteWorksWithEventHandler()
         {
-            var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
-            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
-            var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
-            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { IterationIid = Guid.NewGuid() };
-            var mrdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
-            var srdl = new SiteReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
-            var activeDomain = new DomainOfExpertise(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
-            mrdl.RequiredRdl = srdl;
-            modelSetup.RequiredRdl.Add(mrdl);
-            modelSetup.IterationSetup.Add(iterationSetup);
-            siteDir.Model.Add(modelSetup);
-            siteDir.SiteReferenceDataLibrary.Add(srdl);
-            siteDir.Domain.Add(activeDomain);
-            siteDir.Person.Add(JohnDoe);
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
 
-            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
-            this.session.Assembler.Cache.TryAdd(new CacheKey(JohnDoe.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => JohnDoe));
-            this.session.Assembler.Cache.TryAdd(new CacheKey(modelSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => modelSetup));
-            this.session.Assembler.Cache.TryAdd(new CacheKey(mrdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => mrdl));
-            this.session.Assembler.Cache.TryAdd(new CacheKey(srdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => srdl));
-            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
-            this.session.Assembler.Cache.TryAdd(new CacheKey(iterationSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => iterationSetup));
-
-            this.session.GetType().GetProperty("ActivePerson").SetValue(this.session, JohnDoe, null);
-
-            var participant = new CDP4Common.SiteDirectoryData.Participant(Guid.NewGuid(), this.session.Assembler.Cache, this.uri){ Person = this.session.ActivePerson };
-            participant.Domain.Add(activeDomain);
-            modelSetup.Participant.Add(participant);
-
-            var model = new EngineeringModel(Guid.NewGuid(), 1);
-            var iteration = new Iteration(iterationSetup.IterationIid, 10) { IterationSetup = iterationSetup.Iid };
-            model.Iteration.Add(iteration.Iid);
-            model.EngineeringModelSetup = modelSetup.Iid;
-
-            var readOutput = new List<Thing>
+            this.session.BeforeWrite += (o, args) =>
             {
-                model,
-                iteration
+                args.Cancelled = false;
             };
 
-            var readTaskCompletionSource = new TaskCompletionSource<IEnumerable<Thing>>();
-            readTaskCompletionSource.SetResult(readOutput);
-            this.mockedDal.Setup(x => x.Read(It.IsAny<Iteration>(), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>())).Returns(readTaskCompletionSource.Task);
+            await this.session.Write(new OperationContainer(context));
 
-            var iterationToOpen = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
-            var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
-            iterationToOpen.Container = modelToOpen;
+            this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(1));
+        }
 
-            await this.session.Read(iterationToOpen, activeDomain);
+        [Test]
+        public async Task VerifyThatCancelWriteWorks()
+        {
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
 
-            var resultDomains = this.session.QueryDomainOfExpertise(iterationToOpen);
+            this.session.BeforeWrite += (o, args) =>
+            {
+                args.Cancelled = true;
+            };
 
-            CollectionAssert.AreEqual(new [] {activeDomain}, resultDomains);
+            await this.session.Write(new OperationContainer(context));
 
-            var unknownIteration = new CDP4Common.EngineeringModelData.Iteration(Guid.NewGuid(), null, null);
-            resultDomains = this.session.QueryDomainOfExpertise(unknownIteration);
-
-            CollectionAssert.IsEmpty(resultDomains);
+            this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(0));
         }
     }
-    
+
     [DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
     internal class TestDal : IDal
     {
@@ -781,7 +732,7 @@ namespace CDP4Dal.Tests
             throw new NotImplementedException();
         }
 
-        public Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
+        public Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -2,7 +2,7 @@
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -36,6 +36,7 @@ namespace CDP4Dal.NetCore.Tests
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
+    using CDP4Dal.Composition;
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
@@ -637,7 +638,7 @@ namespace CDP4Dal.NetCore.Tests
         }
     }
 
-    //[DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
+    [DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
     internal class TestDal : IDal
     {
         public Version SupportedVersion { get {return new Version(1, 0, 0);} }

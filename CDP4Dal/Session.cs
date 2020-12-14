@@ -981,22 +981,4 @@ namespace CDP4Dal
             this.AddRdlToOpenList(modelRdl);
         }
     }
-
-    /// <summary>
-    /// Holds <see cref="EventArgs"/> data for a BeforeWrite event.
-    /// </summary>
-    public class BeforeWriteEventArgs : EventArgs
-    {
-        public OperationContainer OperationContainer { get; }
-
-        public IEnumerable<string> Files { get; }
-
-        public bool Cancelled { get; set; }
-
-        public BeforeWriteEventArgs(OperationContainer operationContainer, IEnumerable<string> files)
-        {
-            this.OperationContainer = operationContainer;
-            this.Files = files;
-        }
-    }
 }
