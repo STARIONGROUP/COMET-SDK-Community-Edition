@@ -28,7 +28,7 @@ namespace CDP4Dal.Tests
     using CDP4Dal.Operations;
 
     using NUnit.Framework;
-    
+
     /// <summary>
     /// Suite of tests for the <see cref="BeforeWriteEventArgs"/> class
     /// </summary>
