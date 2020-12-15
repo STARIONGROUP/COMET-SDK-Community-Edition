@@ -54,6 +54,11 @@ namespace CDP4Dal
     public class Session : ISession
     {
         /// <summary>
+        /// Executes just before data from an <see cref="OperationContainer"/> is written to the datastore.
+        /// </summary>
+        public event EventHandler<BeforeWriteEventArgs> BeforeWrite;
+
+        /// <summary>
         /// The NLog logger
         /// </summary>
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -640,9 +645,11 @@ namespace CDP4Dal
                 throw new InvalidOperationException($"The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
             }
 
-            if (files?.Any() ?? false)
+            var filesList = files?.ToList() ?? new List<string>();
+
+            if (filesList.Any())
             {
-                foreach (var file in files)
+                foreach (var file in filesList)
                 {
                     if (!System.IO.File.Exists(file))
                     {
@@ -651,12 +658,18 @@ namespace CDP4Dal
                 }
             }
 
-            this.Dal.Session = this;
-            var dtoThings = await this.Dal.Write(operationContainer, files);
+            var eventArgs = new BeforeWriteEventArgs(operationContainer, filesList);
+            this.BeforeWrite?.Invoke(operationContainer, eventArgs);
 
-            var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
+            if (!eventArgs.Cancelled)
+            {
+                this.Dal.Session = this;
+                var dtoThings = await this.Dal.Write(operationContainer, filesList);
 
-            await this.AfterReadOrWriteOrUpdate(enumerable);
+                var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
+
+                await this.AfterReadOrWriteOrUpdate(enumerable);
+            }
         }
 
         /// <summary>
