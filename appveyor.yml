@@ -8,13 +8,6 @@ environment:
   TEST_LOG:       'TestResults'
   TEST_RESULT:    'TestResult.xml'
   TEST_COVERAGE:  'CoverResults.xml'
-  SONARCLOUD_URL: 'https://sonarcloud.io'
-  SONARCLOUD_PROJECT_KEY: RHEAGROUP_CDP4-SDK-Community-Edition
-  SONARCLOUD_ORGANIZATION: rheagroup
-  SONARCLOUD_TOKEN:
-    secure: 67KNIhsvMPwHylkTvfGtu39hYkK94X8svR0pxSBeqbm92ffGeViAv7SVDHnC+kbv
-  GITHUB_TOKEN:
-    secure: uS7/WlBplrAs/j9ab9P3SUN7GZyf4QAHZX//YpDOzXG/DZ6o1MGHdIWLHHdDYM5P
 
 skip_branch_with_pr: true
 
@@ -106,8 +99,3 @@ artifacts:
 
     - path: '**\*.nupkg'
       name: builds
-
-notifications:
-  - provider: Email
-    to:
-      - cdp_devs@rheagroup.com
