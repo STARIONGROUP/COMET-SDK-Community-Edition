@@ -49,6 +49,7 @@ namespace CDP4Common.DTO
         public ElementDefinition()
         {
             this.ContainedElement = new List<Guid>();
+            this.OrganizationalParticipant = new List<Guid>();
             this.Parameter = new List<Guid>();
             this.ParameterGroup = new List<Guid>();
             this.ReferencedElement = new List<Guid>();
@@ -66,6 +67,7 @@ namespace CDP4Common.DTO
         public ElementDefinition(Guid iid, int rev) : base(iid: iid, rev: rev)
         {
             this.ContainedElement = new List<Guid>();
+            this.OrganizationalParticipant = new List<Guid>();
             this.Parameter = new List<Guid>();
             this.ParameterGroup = new List<Guid>();
             this.ReferencedElement = new List<Guid>();
@@ -77,6 +79,14 @@ namespace CDP4Common.DTO
         [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public List<Guid> ContainedElement { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of unique identifiers of the referenced OrganizationalParticipant instances.
+        /// </summary>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public List<Guid> OrganizationalParticipant { get; set; }
 
         /// <summary>
         /// Gets or sets the unique identifiers of the contained Parameter instances.
@@ -212,6 +222,12 @@ namespace CDP4Common.DTO
 
             this.Name = original.Name;
 
+            foreach (var guid in original.OrganizationalParticipant)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
+                this.OrganizationalParticipant.Add(copy.Value == null ? guid : copy.Value.Iid);
+            }
+
             var copyOwner = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.Owner);
             this.Owner = copyOwner.Value == null ? original.Owner : copyOwner.Value.Iid;
 
@@ -263,6 +279,16 @@ namespace CDP4Common.DTO
                 if (copy.Key != null)
                 {
                     this.Category[i] = copy.Value.Iid;
+                    hasChanges = true;
+                }
+            }
+
+            for (var i = 0; i < this.OrganizationalParticipant.Count; i++)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == this.OrganizationalParticipant[i]);
+                if (copy.Key != null)
+                {
+                    this.OrganizationalParticipant[i] = copy.Value.Iid;
                     hasChanges = true;
                 }
             }

@@ -82,7 +82,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](sampledFunctionParameterType.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](sampledFunctionParameterType.Iid));
             jsonObject.Add("independentParameterType", this.PropertySerializerMap["independentParameterType"](sampledFunctionParameterType.IndependentParameterType.OrderBy(x => x, this.orderedItemComparer)));
-            jsonObject.Add("interpolationPeriod", this.PropertySerializerMap["interpolationPeriod"](sampledFunctionParameterType.InterpolationPeriod.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("interpolationPeriod", this.PropertySerializerMap["interpolationPeriod"](sampledFunctionParameterType.InterpolationPeriod.OrderBy(x => x)));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](sampledFunctionParameterType.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](sampledFunctionParameterType.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](sampledFunctionParameterType.Name));

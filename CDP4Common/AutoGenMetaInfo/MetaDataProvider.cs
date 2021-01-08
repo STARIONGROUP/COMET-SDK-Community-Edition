@@ -141,6 +141,7 @@ namespace CDP4Common.MetaInfo
             { "OrdinalScale", new OrdinalScaleMetaInfo() },
             { "OrExpression", new OrExpressionMetaInfo() },
             { "Organization", new OrganizationMetaInfo() },
+            { "OrganizationalParticipant", new OrganizationalParticipantMetaInfo() },
             { "OwnedStyle", new OwnedStyleMetaInfo() },
             { "Page", new PageMetaInfo() },
             { "Parameter", new ParameterMetaInfo() },

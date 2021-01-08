@@ -66,6 +66,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             this.ActiveDomain = new List<DomainOfExpertise>();
             this.IterationSetup = new ContainerList<IterationSetup>(this);
+            this.OrganizationalParticipant = new ContainerList<OrganizationalParticipant>(this);
             this.Participant = new ContainerList<Participant>(this);
             this.RequiredRdl = new ContainerList<ModelReferenceDataLibrary>(this);
         }
@@ -88,6 +89,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             this.ActiveDomain = new List<DomainOfExpertise>();
             this.IterationSetup = new ContainerList<IterationSetup>(this);
+            this.OrganizationalParticipant = new ContainerList<OrganizationalParticipant>(this);
             this.Participant = new ContainerList<Participant>(this);
             this.RequiredRdl = new ContainerList<ModelReferenceDataLibrary>(this);
         }
@@ -101,6 +103,19 @@ namespace CDP4Common.SiteDirectoryData
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         public List<DomainOfExpertise> ActiveDomain { get; set; }
+
+        /// <summary>
+        /// Gets or sets the DefaultOrganizationalParticipant.
+        /// </summary>
+        /// <remarks>
+        /// represents a list of OrganizationalParticipant, signifying an Organization's participation in the study.
+        /// NOTE: if no list is empty the EngineeringModel behaves in a normal E-TM-10-25 manner.
+        /// NOTE 2: if list is not empty at least one defaultOrganizationalParticipant must be specified, and should be a member of this list.
+        /// NOTE 3: if defaultOrganizationalParticipant is set, it should not be removable from this list. Clearing this list can only be done by setting defaultOrganizationalParticipant  to null.
+        /// </remarks>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public OrganizationalParticipant DefaultOrganizationalParticipant { get; set; }
 
         /// <summary>
         /// Gets or sets the EngineeringModelIid.
@@ -133,6 +148,19 @@ namespace CDP4Common.SiteDirectoryData
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         public EngineeringModelKind Kind { get; set; }
+
+        /// <summary>
+        /// Gets or sets a list of contained OrganizationalParticipant.
+        /// </summary>
+        /// <remarks>
+        /// represents a list of OrganizationalParticipant, signifying an Organization's participation in the study.
+        /// NOTE: if no list is empty the EngineeringModel behaves in a normal E-TM-10-25 manner.
+        /// NOTE 2: if list is not empty at least one defaultOrganizationalParticipant must be specified, and should be a member of this list.
+        /// NOTE 3: if defaultOrganizationalParticipant is set, it should not be removable from this list. Clearing this list can only be done by setting defaultOrganizationalParticipant  to null.
+        /// </remarks>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public ContainerList<OrganizationalParticipant> OrganizationalParticipant { get; protected set; }
 
         /// <summary>
         /// Gets or sets a list of contained Participant.
@@ -184,6 +212,7 @@ namespace CDP4Common.SiteDirectoryData
             {
                 var containers = new List<IEnumerable>(base.ContainerLists);
                 containers.Add(this.IterationSetup);
+                containers.Add(this.OrganizationalParticipant);
                 containers.Add(this.Participant);
                 containers.Add(this.RequiredRdl);
                 return containers;
@@ -211,6 +240,11 @@ namespace CDP4Common.SiteDirectoryData
             {
                 yield return thing;
             }
+
+            if (this.DefaultOrganizationalParticipant != null)
+            {
+                yield return this.DefaultOrganizationalParticipant;
+            }
         }
 
         /// <summary>
@@ -230,6 +264,7 @@ namespace CDP4Common.SiteDirectoryData
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
             clone.HyperLink = cloneContainedThings ? new ContainerList<HyperLink>(clone) : new ContainerList<HyperLink>(this.HyperLink, clone);
             clone.IterationSetup = cloneContainedThings ? new ContainerList<IterationSetup>(clone) : new ContainerList<IterationSetup>(this.IterationSetup, clone);
+            clone.OrganizationalParticipant = cloneContainedThings ? new ContainerList<OrganizationalParticipant>(clone) : new ContainerList<OrganizationalParticipant>(this.OrganizationalParticipant, clone);
             clone.Participant = cloneContainedThings ? new ContainerList<Participant>(clone) : new ContainerList<Participant>(this.Participant, clone);
             clone.RequiredRdl = cloneContainedThings ? new ContainerList<ModelReferenceDataLibrary>(clone) : new ContainerList<ModelReferenceDataLibrary>(this.RequiredRdl, clone);
 
@@ -239,6 +274,7 @@ namespace CDP4Common.SiteDirectoryData
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
                 clone.IterationSetup.AddRange(this.IterationSetup.Select(x => x.Clone(true)));
+                clone.OrganizationalParticipant.AddRange(this.OrganizationalParticipant.Select(x => x.Clone(true)));
                 clone.Participant.AddRange(this.Participant.Select(x => x.Clone(true)));
                 clone.RequiredRdl.AddRange(this.RequiredRdl.Select(x => x.Clone(true)));
             }
@@ -317,6 +353,7 @@ namespace CDP4Common.SiteDirectoryData
 
             this.ActiveDomain.ResolveList(dto.ActiveDomain, dto.IterationContainerId, this.Cache);
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
+            this.DefaultOrganizationalParticipant = (dto.DefaultOrganizationalParticipant.HasValue) ? this.Cache.Get<OrganizationalParticipant>(dto.DefaultOrganizationalParticipant.Value, dto.IterationContainerId) : null;
             this.Definition.ResolveList(dto.Definition, dto.IterationContainerId, this.Cache);
             this.EngineeringModelIid = dto.EngineeringModelIid;
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
@@ -326,6 +363,7 @@ namespace CDP4Common.SiteDirectoryData
             this.Kind = dto.Kind;
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
+            this.OrganizationalParticipant.ResolveList(dto.OrganizationalParticipant, dto.IterationContainerId, this.Cache);
             this.Participant.ResolveList(dto.Participant, dto.IterationContainerId, this.Cache);
             this.RequiredRdl.ResolveList(dto.RequiredRdl, dto.IterationContainerId, this.Cache);
             this.RevisionNumber = dto.RevisionNumber;
@@ -346,6 +384,7 @@ namespace CDP4Common.SiteDirectoryData
 
             dto.ActiveDomain.AddRange(this.ActiveDomain.Select(x => x.Iid));
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
+            dto.DefaultOrganizationalParticipant = this.DefaultOrganizationalParticipant != null ? (Guid?)this.DefaultOrganizationalParticipant.Iid : null;
             dto.Definition.AddRange(this.Definition.Select(x => x.Iid));
             dto.EngineeringModelIid = this.EngineeringModelIid;
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
@@ -355,6 +394,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.Kind = this.Kind;
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
+            dto.OrganizationalParticipant.AddRange(this.OrganizationalParticipant.Select(x => x.Iid));
             dto.Participant.AddRange(this.Participant.Select(x => x.Iid));
             dto.RequiredRdl.AddRange(this.RequiredRdl.Select(x => x.Iid));
             dto.RevisionNumber = this.RevisionNumber;

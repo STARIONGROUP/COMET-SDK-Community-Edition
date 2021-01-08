@@ -53,6 +53,7 @@ namespace CDP4JsonSerializer
             { "iid", iid => new JValue(iid) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
+            { "organizationalParticipant", organizationalParticipant => new JArray(organizationalParticipant) },
             { "owner", owner => new JValue(owner) },
             { "parameter", parameter => new JArray(parameter) },
             { "parameterGroup", parameterGroup => new JArray(parameterGroup) },
@@ -81,6 +82,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](elementDefinition.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](elementDefinition.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](elementDefinition.Name));
+            jsonObject.Add("organizationalParticipant", this.PropertySerializerMap["organizationalParticipant"](elementDefinition.OrganizationalParticipant.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](elementDefinition.Owner));
             jsonObject.Add("parameter", this.PropertySerializerMap["parameter"](elementDefinition.Parameter.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("parameterGroup", this.PropertySerializerMap["parameterGroup"](elementDefinition.ParameterGroup.OrderBy(x => x, this.guidComparer)));

@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ElementDefinitionMetaInfo.cs" company="RHEA System S.A.">
+// <copyright file="OrganizationalParticipantMetaInfo.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Kamil Wojnowski, 
@@ -42,66 +42,47 @@ namespace CDP4Common.MetaInfo
     using CDP4Common.Validation;
 
     /// <summary>
-    /// This a class that holds meta info for <see cref="ElementDefinition"/>.
+    /// This a class that holds meta info for <see cref="OrganizationalParticipant"/>.
     /// </summary>
-    public partial class ElementDefinitionMetaInfo : IElementDefinitionMetaInfo
+    public partial class OrganizationalParticipantMetaInfo : IOrganizationalParticipantMetaInfo
     {
         /// <summary>
         /// The containment property value map.
         /// </summary>
-        private readonly Dictionary<string, Func<CDP4Common.DTO.ElementDefinition, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.ElementDefinition, IEnumerable<Guid>>>
-        {
-            { "Alias", elementDefinition => elementDefinition.Alias },
-            { "ContainedElement", elementDefinition => elementDefinition.ContainedElement },
-            { "Definition", elementDefinition => elementDefinition.Definition },
-            { "HyperLink", elementDefinition => elementDefinition.HyperLink },
-            { "Parameter", elementDefinition => elementDefinition.Parameter },
-            { "ParameterGroup", elementDefinition => elementDefinition.ParameterGroup },
-        };
+        private readonly Dictionary<string, Func<CDP4Common.DTO.OrganizationalParticipant, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.OrganizationalParticipant, IEnumerable<Guid>>>();
 
         /// <summary>
         /// The ordered containment property value map.
         /// </summary>
-        private readonly Dictionary<string, Func<CDP4Common.DTO.ElementDefinition, IEnumerable<OrderedItem>>> orderedContainmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.ElementDefinition, IEnumerable<OrderedItem>>>();
+        private readonly Dictionary<string, Func<CDP4Common.DTO.OrganizationalParticipant, IEnumerable<OrderedItem>>> orderedContainmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.OrganizationalParticipant, IEnumerable<OrderedItem>>>();
 
         /// <summary>
-        /// The validation rules that should pass for an instance of <see cref="CDP4Common.DTO.ElementDefinition"/>.
+        /// The validation rules that should pass for an instance of <see cref="CDP4Common.DTO.OrganizationalParticipant"/>.
         /// </summary>
-        private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.ElementDefinition>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.ElementDefinition>>
+        private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.OrganizationalParticipant>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.OrganizationalParticipant>>
         {
-            { "Alias", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.Alias != null, "The 'Alias' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "Category", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.Category != null, "The 'Category' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "ContainedElement", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.ContainedElement != null, "The 'ContainedElement' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "Definition", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.Definition != null, "The 'Definition' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "ExcludedPerson", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.ExcludedPerson != null, "The 'ExcludedPerson' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "HyperLink", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.HyperLink != null, "The 'HyperLink' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "Name", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => !string.IsNullOrWhiteSpace(item.Name), "The 'Name' property of a 'ElementDefinition' is mandatory and cannot be empty or null.") },
-            { "OrganizationalParticipant", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.OrganizationalParticipant != null, "The 'OrganizationalParticipant' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "Parameter", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.Parameter != null, "The 'Parameter' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "ParameterGroup", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.ParameterGroup != null, "The 'ParameterGroup' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "ReferencedElement", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.ReferencedElement != null, "The 'ReferencedElement' property of a 'ElementDefinition' is mandatory and cannot be null.") },
-            { "ShortName", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => !string.IsNullOrWhiteSpace(item.ShortName), "The 'ShortName' property of a 'ElementDefinition' is mandatory and cannot be empty or null.") },
+            { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.OrganizationalParticipant>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'OrganizationalParticipant' is mandatory and cannot be null.") },
+            { "ExcludedPerson", new DtoValidationHelper<CDP4Common.DTO.OrganizationalParticipant>(item => item.ExcludedPerson != null, "The 'ExcludedPerson' property of a 'OrganizationalParticipant' is mandatory and cannot be null.") },
         };
 
         /// <summary>
         /// Validates the supplied <see cref="CDP4Common.DTO.Thing"/> by running the business validation rules as per its meta info definition class.
         /// </summary>
-        /// <param name="elementDefinition">
+        /// <param name="organizationalParticipant">
         /// The <see cref="CDP4Common.DTO.Thing"/> for which to run the validation rules.
         /// </param>
         /// <exception cref="Cdp4ModelValidationException">
         /// If any validation rule failed.
         /// </exception>
-        public void Validate(CDP4Common.DTO.Thing elementDefinition)
+        public void Validate(CDP4Common.DTO.Thing organizationalParticipant)
         {
-            this.Validate(elementDefinition, x => true);
+            this.Validate(organizationalParticipant, x => true);
         }
 
         /// <summary>
         /// Validates the supplied <see cref="CDP4Common.DTO.Thing"/> by running the business validation rules as per its meta info definition class.
         /// </summary>
-        /// <param name="elementDefinition">
+        /// <param name="organizationalParticipant">
         /// The <see cref="CDP4Common.DTO.Thing"/> for which to run the validation rules.
         /// </param>
         /// <param name="validateProperty">
@@ -110,32 +91,32 @@ namespace CDP4Common.MetaInfo
         /// <exception cref="Cdp4ModelValidationException">
         /// If any validation rule failed.
         /// </exception>
-        public void Validate(CDP4Common.DTO.Thing elementDefinition, Func<string, bool> validateProperty)
+        public void Validate(CDP4Common.DTO.Thing organizationalParticipant, Func<string, bool> validateProperty)
         {
             foreach (var applicableRule in this.validationRules.Where(x => validateProperty(x.Key)))
             {
-                applicableRule.Value.Validate((CDP4Common.DTO.ElementDefinition)elementDefinition);
+                applicableRule.Value.Validate((CDP4Common.DTO.OrganizationalParticipant)organizationalParticipant);
             }
         }
 
         /// <summary>
         /// Validates the supplied <see cref="Thing"/> by running the business validation rules as per its meta info definition class.
         /// </summary>
-        /// <param name="elementDefinition">
+        /// <param name="organizationalParticipant">
         /// The <see cref="CDP4Common.DTO.Thing"/> for which to run the validation rules.
         /// </param>
         /// <returns>
         /// True if all validation rules have passed or if none are defined.
         /// </returns>
-        public bool TryValidate(CDP4Common.DTO.Thing elementDefinition)
+        public bool TryValidate(CDP4Common.DTO.Thing organizationalParticipant)
         {
-            return this.TryValidate(elementDefinition, x => true);
+            return this.TryValidate(organizationalParticipant, x => true);
         }
 
         /// <summary>
         /// Validates the supplied <see cref="Thing"/> by running the business validation rules as per its meta info definition class.
         /// </summary>
-        /// <param name="elementDefinition">
+        /// <param name="organizationalParticipant">
         /// The <see cref="CDP4Common.DTO.Thing"/> for which to run the validation rules.
         /// </param>
         /// <param name="validateProperty">
@@ -144,18 +125,18 @@ namespace CDP4Common.MetaInfo
         /// <returns>
         /// True if all validation rules have passed or if none are defined.
         /// </returns>
-        public bool TryValidate(CDP4Common.DTO.Thing elementDefinition, Func<string, bool> validateProperty)
+        public bool TryValidate(CDP4Common.DTO.Thing organizationalParticipant, Func<string, bool> validateProperty)
         {
             var applicableValidationRules = this.validationRules.Where(x => validateProperty(x.Key)).Select(x => x.Value);
 
-            return applicableValidationRules.All(applicableRule => applicableRule.TryValidate((CDP4Common.DTO.ElementDefinition)elementDefinition));
+            return applicableValidationRules.All(applicableRule => applicableRule.TryValidate((CDP4Common.DTO.OrganizationalParticipant)organizationalParticipant));
         }
 
         /// <summary>
-        /// Returns the containment property value for the supplied <see cref="CDP4Common.DTO.ElementDefinition"/>.
+        /// Returns the containment property value for the supplied <see cref="CDP4Common.DTO.OrganizationalParticipant"/>.
         /// </summary>
-        /// <param name="elementDefinition">
-        /// The <see cref="CDP4Common.DTO.ElementDefinition"/> for which to return the containment property value.
+        /// <param name="organizationalParticipant">
+        /// The <see cref="CDP4Common.DTO.OrganizationalParticipant"/> for which to return the containment property value.
         /// </param>
         /// <param name="propertyName">
         /// Name of the containment property for which to return the value.
@@ -164,23 +145,23 @@ namespace CDP4Common.MetaInfo
         /// A collection of containment <see cref="Guid"/>.
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// If the property name is not supported for the <see cref="CDP4Common.DTO.ElementDefinition"/>.
+        /// If the property name is not supported for the <see cref="CDP4Common.DTO.OrganizationalParticipant"/>.
         /// </exception>
-        public IEnumerable<Guid> GetContainmentIds(CDP4Common.DTO.Thing elementDefinition, string propertyName)
+        public IEnumerable<Guid> GetContainmentIds(CDP4Common.DTO.Thing organizationalParticipant, string propertyName)
         {
             if (!this.containmentPropertyValueMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'ElementDefinition'", propertyName));
+                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'OrganizationalParticipant'", propertyName));
             }
 
-            return this.containmentPropertyValueMap[propertyName]((CDP4Common.DTO.ElementDefinition)elementDefinition);
+            return this.containmentPropertyValueMap[propertyName]((CDP4Common.DTO.OrganizationalParticipant)organizationalParticipant);
         }
 
         /// <summary>
-        /// Returns the ordered containment property value for the supplied <see cref="CDP4Common.DTO.ElementDefinition"/>.
+        /// Returns the ordered containment property value for the supplied <see cref="CDP4Common.DTO.OrganizationalParticipant"/>.
         /// </summary>
-        /// <param name="elementDefinition">
-        /// The <see cref="CDP4Common.DTO.ElementDefinition"/> for which to return the containment property value.
+        /// <param name="organizationalParticipant">
+        /// The <see cref="CDP4Common.DTO.OrganizationalParticipant"/> for which to return the containment property value.
         /// </param>
         /// <param name="propertyName">
         /// Name of the containment property for which to return the value.
@@ -189,16 +170,16 @@ namespace CDP4Common.MetaInfo
         /// A collection of ordered containment <see cref="OrderedItem"/>.
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// If the property name is not supported for the <see cref="CDP4Common.DTO.ElementDefinition"/>.
+        /// If the property name is not supported for the <see cref="CDP4Common.DTO.OrganizationalParticipant"/>.
         /// </exception>
-        public IEnumerable<OrderedItem> GetOrderedContainmentIds(CDP4Common.DTO.Thing elementDefinition, string propertyName)
+        public IEnumerable<OrderedItem> GetOrderedContainmentIds(CDP4Common.DTO.Thing organizationalParticipant, string propertyName)
         {
             if (!this.orderedContainmentPropertyValueMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'ElementDefinition'", propertyName));
+                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'OrganizationalParticipant'", propertyName));
             }
 
-            return this.orderedContainmentPropertyValueMap[propertyName]((CDP4Common.DTO.ElementDefinition)elementDefinition);
+            return this.orderedContainmentPropertyValueMap[propertyName]((CDP4Common.DTO.OrganizationalParticipant)organizationalParticipant);
         }
 
         /// <summary>
@@ -209,25 +190,16 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
-            { "OrganizationalParticipant", "1.2.0" },
             { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
         /// The containment property to type name map.
         /// </summary>
-        private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
-        {
-            { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ContainedElement", new PropertyMetaInfo("ContainedElement", "ElementUsage", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Parameter", new PropertyMetaInfo("Parameter", "Parameter", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "ParameterGroup", new PropertyMetaInfo("ParameterGroup", "ParameterGroup", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-        };
+        private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>();
 
         /// <summary>
-        /// Gets the <see cref="PropertyMetaInfo"/> for the <see cref="ElementDefinition"/> class
+        /// Gets the <see cref="PropertyMetaInfo"/> for the <see cref="OrganizationalParticipant"/> class
         /// </summary>
         public IEnumerable<PropertyMetaInfo> Properties
         {
@@ -248,26 +220,15 @@ namespace CDP4Common.MetaInfo
         /// <summary>
         /// The property value map.
         /// </summary>
-        private readonly Dictionary<string, Func<CDP4Common.DTO.ElementDefinition, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.ElementDefinition, object>>
+        private readonly Dictionary<string, Func<CDP4Common.DTO.OrganizationalParticipant, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.OrganizationalParticipant, object>>
         {
-            { "Alias", thing => thing.Alias },
-            { "Category", thing => thing.Category },
             { "ClassKind", thing => thing.ClassKind },
-            { "ContainedElement", thing => thing.ContainedElement },
-            { "Definition", thing => thing.Definition },
             { "ExcludedDomain", thing => thing.ExcludedDomain },
             { "ExcludedPerson", thing => thing.ExcludedPerson },
-            { "HyperLink", thing => thing.HyperLink },
             { "Iid", thing => thing.Iid },
             { "ModifiedOn", thing => thing.ModifiedOn },
-            { "Name", thing => thing.Name },
-            { "OrganizationalParticipant", thing => thing.OrganizationalParticipant },
-            { "Owner", thing => thing.Owner },
-            { "Parameter", thing => thing.Parameter },
-            { "ParameterGroup", thing => thing.ParameterGroup },
-            { "ReferencedElement", thing => thing.ReferencedElement },
+            { "Organization", thing => thing.Organization },
             { "RevisionNumber", thing => thing.RevisionNumber },
-            { "ShortName", thing => thing.ShortName },
             { "ThingPreference", thing => thing.ThingPreference },
         };
 
@@ -279,18 +240,13 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Category", new PropertyMetaInfo("Category", "Category", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "OrganizationalParticipant", new PropertyMetaInfo("OrganizationalParticipant", "OrganizationalParticipant", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "ReferencedElement", new PropertyMetaInfo("ReferencedElement", "NestedElement", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "Organization", new PropertyMetaInfo("Organization", "Organization", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
@@ -299,30 +255,19 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
-            { "Alias", (value) => (Guid)value },
-            { "Category", (value) => (Guid)value },
-            { "ContainedElement", (value) => (Guid)value },
-            { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },
             { "ExcludedPerson", (value) => (Guid)value },
-            { "HyperLink", (value) => (Guid)value },
-            { "OrganizationalParticipant", (value) => (Guid)value },
-            { "Parameter", (value) => (Guid)value },
-            { "ParameterGroup", (value) => (Guid)value },
-            { "ReferencedElement", (value) => (Guid)value },
         };
 
         /// <summary>
         /// The property value assignment map.
         /// </summary>
-        private readonly Dictionary<string, Action<CDP4Common.DTO.ElementDefinition, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.ElementDefinition, object>>
+        private readonly Dictionary<string, Action<CDP4Common.DTO.OrganizationalParticipant, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.OrganizationalParticipant, object>>
         {
-            { "Iid", (elementDefinition, value) => elementDefinition.Iid = (Guid)value },
-            { "ModifiedOn", (elementDefinition, value) => elementDefinition.ModifiedOn = (DateTime)value },
-            { "Name", (elementDefinition, value) => elementDefinition.Name = value.ToString() },
-            { "Owner", (elementDefinition, value) => elementDefinition.Owner = (Guid)value },
-            { "ShortName", (elementDefinition, value) => elementDefinition.ShortName = value.ToString() },
-            { "ThingPreference", (elementDefinition, value) => elementDefinition.ThingPreference = value == null ? (string)null : value.ToString() },
+            { "Iid", (organizationalParticipant, value) => organizationalParticipant.Iid = (Guid)value },
+            { "ModifiedOn", (organizationalParticipant, value) => organizationalParticipant.ModifiedOn = (DateTime)value },
+            { "Organization", (organizationalParticipant, value) => organizationalParticipant.Organization = (Guid)value },
+            { "ThingPreference", (organizationalParticipant, value) => organizationalParticipant.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>
@@ -330,7 +275,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
-            { "Iteration", new PropertyMetaInfo("Element", "ElementDefinition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "EngineeringModelSetup", new PropertyMetaInfo("OrganizationalParticipant", "OrganizationalParticipant", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>
@@ -360,7 +305,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         public string BaseType
         {
-            get { return "ElementBase"; }
+            get { return "Thing"; }
         }
 
         /// <summary>
@@ -368,7 +313,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         public string ClassVersion
         {
-            get { return null; }
+            get { return "1.2.0"; }
         }
 
         /// <summary>
@@ -386,7 +331,7 @@ namespace CDP4Common.MetaInfo
         }
 
         /// <summary>
-        /// Returns the <see cref="CDP4Common.DTO.ElementDefinition"/> containment property type from the supplied property name.
+        /// Returns the <see cref="CDP4Common.DTO.OrganizationalParticipant"/> containment property type from the supplied property name.
         /// </summary>
         /// <param name="propertyName">
         /// The containment property name.
@@ -401,14 +346,14 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.containmentTypeMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'ElementDefinition'", propertyName));
+                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'OrganizationalParticipant'", propertyName));
             }
 
             return this.containmentTypeMap[propertyName];
         }
 
         /// <summary>
-        /// Returns the <see cref="CDP4Common.DTO.ElementDefinition"/> property type from the supplied property name.
+        /// Returns the <see cref="CDP4Common.DTO.OrganizationalParticipant"/> property type from the supplied property name.
         /// </summary>
         /// <param name="propertyName">
         /// The property name.
@@ -432,16 +377,16 @@ namespace CDP4Common.MetaInfo
         }
 
         /// <summary>
-        /// Returns the container property for the supplied type name is a possible container for <see cref="CDP4Common.DTO.ElementDefinition"/>.
+        /// Returns the container property for the supplied type name is a possible container for <see cref="CDP4Common.DTO.OrganizationalParticipant"/>.
         /// </summary>
         /// <param name="typeName">
-        /// Name of the type for which to check if it is a container of <see cref="CDP4Common.DTO.ElementDefinition"/>.
+        /// Name of the type for which to check if it is a container of <see cref="CDP4Common.DTO.OrganizationalParticipant"/>.
         /// </param>
         /// <param name="containerProperty">
-        /// Supplied container property info instance that will be set if the supplied type name is a container of <see cref="CDP4Common.DTO.ElementDefinition"/>.
+        /// Supplied container property info instance that will be set if the supplied type name is a container of <see cref="CDP4Common.DTO.OrganizationalParticipant"/>.
         /// </param>
         /// <returns>
-        /// True if the supplied typeName is a container for <see cref="CDP4Common.DTO.ElementDefinition"/> and sets the container property name.
+        /// True if the supplied typeName is a container for <see cref="CDP4Common.DTO.OrganizationalParticipant"/> and sets the container property name.
         /// </returns>
         public bool TryGetContainerProperty(string typeName, out PropertyMetaInfo containerProperty)
         {
@@ -452,7 +397,7 @@ namespace CDP4Common.MetaInfo
         }
 
         /// <summary>
-        /// Check if the supplied property name for <see cref="CDP4Common.DTO.ElementDefinition"/> is scalar.
+        /// Check if the supplied property name for <see cref="CDP4Common.DTO.OrganizationalParticipant"/> is scalar.
         /// </summary>
         /// <param name="propertyName">
         /// Name of the property for which to check if it is scalar.
@@ -493,7 +438,7 @@ namespace CDP4Common.MetaInfo
                 return false;
             }
 
-            this.propertyValueAssignmentMap[propertyName]((CDP4Common.DTO.ElementDefinition)updatableThing, value);
+            this.propertyValueAssignmentMap[propertyName]((CDP4Common.DTO.OrganizationalParticipant)updatableThing, value);
 
             return true;
         }
@@ -517,7 +462,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.collectionPropertyValueDeserializationMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid collection property of 'ElementDefinition'", propertyName));
+                throw new ArgumentException(string.Format("'{0}' is not a valid collection property of 'OrganizationalParticipant'", propertyName));
             }
 
             return this.collectionPropertyValueDeserializationMap[propertyName](value);
@@ -542,10 +487,10 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.propertyValueMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid collection property of 'ElementDefinition'", propertyName));
+                throw new ArgumentException(string.Format("'{0}' is not a valid collection property of 'OrganizationalParticipant'", propertyName));
             }
 
-            return this.propertyValueMap[propertyName]((CDP4Common.DTO.ElementDefinition)thing);
+            return this.propertyValueMap[propertyName]((CDP4Common.DTO.OrganizationalParticipant)thing);
         }
 
         /// <summary>
@@ -559,14 +504,14 @@ namespace CDP4Common.MetaInfo
         }
 
         /// <summary>
-        /// Instantiates a <see cref="CDP4Common.DTO.ElementDefinition"/>
+        /// Instantiates a <see cref="CDP4Common.DTO.OrganizationalParticipant"/>
         /// </summary>
         /// <returns>
         /// The instantiated <see cref="CDP4Common.DTO.Thing"/>
         /// </returns>
         public CDP4Common.DTO.Thing InstantiateDto(Guid guid, int revisionNumber)
         {
-            return new CDP4Common.DTO.ElementDefinition(guid, revisionNumber);
+            return new CDP4Common.DTO.OrganizationalParticipant(guid, revisionNumber);
         }
     }
 }

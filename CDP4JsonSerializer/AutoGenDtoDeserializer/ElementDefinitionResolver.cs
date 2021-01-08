@@ -95,6 +95,11 @@ namespace CDP4JsonSerializer
                 elementDefinition.Name = jObject["name"].ToObject<string>();
             }
 
+            if (!jObject["organizationalParticipant"].IsNullOrEmpty())
+            {
+                elementDefinition.OrganizationalParticipant.AddRange(jObject["organizationalParticipant"].ToObject<IEnumerable<Guid>>());
+            }
+
             if (!jObject["owner"].IsNullOrEmpty())
             {
                 elementDefinition.Owner = jObject["owner"].ToObject<Guid>();

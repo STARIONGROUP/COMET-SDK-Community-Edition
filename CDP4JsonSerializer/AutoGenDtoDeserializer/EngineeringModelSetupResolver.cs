@@ -60,6 +60,11 @@ namespace CDP4JsonSerializer
                 engineeringModelSetup.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["defaultOrganizationalParticipant"].IsNullOrEmpty())
+            {
+                engineeringModelSetup.DefaultOrganizationalParticipant = jObject["defaultOrganizationalParticipant"].ToObject<Guid?>();
+            }
+
             if (!jObject["definition"].IsNullOrEmpty())
             {
                 engineeringModelSetup.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
@@ -103,6 +108,11 @@ namespace CDP4JsonSerializer
             if (!jObject["name"].IsNullOrEmpty())
             {
                 engineeringModelSetup.Name = jObject["name"].ToObject<string>();
+            }
+
+            if (!jObject["organizationalParticipant"].IsNullOrEmpty())
+            {
+                engineeringModelSetup.OrganizationalParticipant.AddRange(jObject["organizationalParticipant"].ToObject<IEnumerable<Guid>>());
             }
 
             if (!jObject["participant"].IsNullOrEmpty())

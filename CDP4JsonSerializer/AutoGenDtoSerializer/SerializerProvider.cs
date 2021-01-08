@@ -118,6 +118,7 @@ namespace CDP4JsonSerializer
             { "OrdinalScale", new OrdinalScaleSerializer() },
             { "OrExpression", new OrExpressionSerializer() },
             { "Organization", new OrganizationSerializer() },
+            { "OrganizationalParticipant", new OrganizationalParticipantSerializer() },
             { "OwnedStyle", new OwnedStyleSerializer() },
             { "Page", new PageSerializer() },
             { "Parameter", new ParameterSerializer() },

@@ -115,6 +115,7 @@ namespace CDP4JsonSerializer
             { "OrdinalScale", OrdinalScaleResolver.FromJsonObject },
             { "OrExpression", OrExpressionResolver.FromJsonObject },
             { "Organization", OrganizationResolver.FromJsonObject },
+            { "OrganizationalParticipant", OrganizationalParticipantResolver.FromJsonObject },
             { "OwnedStyle", OwnedStyleResolver.FromJsonObject },
             { "Page", PageResolver.FromJsonObject },
             { "Parameter", ParameterResolver.FromJsonObject },

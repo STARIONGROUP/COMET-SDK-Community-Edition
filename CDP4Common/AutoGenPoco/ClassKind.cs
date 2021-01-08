@@ -515,6 +515,11 @@ namespace CDP4Common.CommonData
         Organization,
 
         /// <summary>
+        /// Assertion that the Class is an instance of OrganizationalParticipant
+        /// </summary>
+        OrganizationalParticipant,
+
+        /// <summary>
         /// Assertion that the Class is an instance of OwnedStyle
         /// </summary>
         OwnedStyle,

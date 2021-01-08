@@ -58,6 +58,7 @@ namespace CDP4Common
             sentinelProvider.Add("IterationSetup", new IterationSetup(Guid.Empty, null, null));
             sentinelProvider.Add("MeasurementScale", new CyclicRatioScale(Guid.Empty, null, null));
             sentinelProvider.Add("MeasurementUnit", new DerivedUnit(Guid.Empty, null, null));
+            sentinelProvider.Add("Organization", new Organization(Guid.Empty, null, null));
             sentinelProvider.Add("Parameter", new Parameter(Guid.Empty, null, null));
             sentinelProvider.Add("ParameterBase", new Parameter(Guid.Empty, null, null));
             sentinelProvider.Add("ParameterType", new ArrayParameterType(Guid.Empty, null, null));

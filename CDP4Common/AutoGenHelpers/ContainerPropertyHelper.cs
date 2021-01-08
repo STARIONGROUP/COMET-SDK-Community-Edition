@@ -126,6 +126,7 @@ namespace CDP4Common.Helpers
             { "OrdinalScale", new KeyValuePair<string, string>("ReferenceDataLibrary", "scale") },
             { "OrExpression", new KeyValuePair<string, string>("ParametricConstraint", "expression") },
             { "Organization", new KeyValuePair<string, string>("SiteDirectory", "organization") },
+            { "OrganizationalParticipant", new KeyValuePair<string, string>("EngineeringModelSetup", "organizationalParticipant") },
             { "OwnedStyle", new KeyValuePair<string, string>("DiagramElementThing", "localStyle") },
             { "Page", new KeyValuePair<string, string>("Section", "page") },
             { "Parameter", new KeyValuePair<string, string>("ElementDefinition", "parameter") },
