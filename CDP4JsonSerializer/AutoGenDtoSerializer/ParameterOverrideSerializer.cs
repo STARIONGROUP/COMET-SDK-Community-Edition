@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ParameterOverrideSerializer.cs" company="RHEA System S.A.">
+// <copyright file "ParameterOverrideSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="ParameterOverrideSerializer"/> class is to provide a <see cref="ParameterOverride"/> specific serializer
     /// </summary>
@@ -52,6 +51,7 @@ namespace CDP4JsonSerializer
             { "parameter", parameter => new JValue(parameter) },
             { "parameterSubscription", parameterSubscription => new JArray(parameterSubscription) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "valueSet", valueSet => new JArray(valueSet) },
         };
 
@@ -72,6 +72,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("parameter", this.PropertySerializerMap["parameter"](parameterOverride.Parameter));
             jsonObject.Add("parameterSubscription", this.PropertySerializerMap["parameterSubscription"](parameterOverride.ParameterSubscription.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](parameterOverride.RevisionNumber));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](parameterOverride.ThingPreference));
             jsonObject.Add("valueSet", this.PropertySerializerMap["valueSet"](parameterOverride.ValueSet.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }

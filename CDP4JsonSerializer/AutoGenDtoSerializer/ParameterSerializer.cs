@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ParameterSerializer.cs" company="RHEA System S.A.">
+// <copyright file "ParameterSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="ParameterSerializer"/> class is to provide a <see cref="Parameter"/> specific serializer
     /// </summary>
@@ -59,6 +58,7 @@ namespace CDP4JsonSerializer
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "scale", scale => new JValue(scale) },
             { "stateDependence", stateDependence => new JValue(stateDependence) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "valueSet", valueSet => new JArray(valueSet) },
         };
 
@@ -86,6 +86,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](parameter.RevisionNumber));
             jsonObject.Add("scale", this.PropertySerializerMap["scale"](parameter.Scale));
             jsonObject.Add("stateDependence", this.PropertySerializerMap["stateDependence"](parameter.StateDependence));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](parameter.ThingPreference));
             jsonObject.Add("valueSet", this.PropertySerializerMap["valueSet"](parameter.ValueSet.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }

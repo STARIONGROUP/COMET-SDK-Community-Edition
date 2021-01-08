@@ -295,6 +295,7 @@ namespace CDP4Common.EngineeringModelData
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -316,6 +317,7 @@ namespace CDP4Common.EngineeringModelData
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

@@ -180,6 +180,14 @@ namespace CDP4Common.CommonData
         public virtual DateTime ModifiedOn { get; set; }
 
         /// <summary>
+        /// Gets or sets a string that holds data about preferences of a <see cref="Thing"/>
+        /// </summary>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual string ThingPreference { get; set; }
+
+        /// <summary>
         /// revision number of this <see cref="Thing"/>
         /// Note: In this data model a revision numbering approach similar to Subversion is used, see <a href="http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.basic">http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.basic</a>. Therefore the revision number is actually a change set number. At any time that an update to a Thing is made and committed to a persistent data store, the <i>revisionNumber</i> of its TopContainer is incremented by one, and then the <i>revisionNumber</i> of the updated Thing is set to the new TopContainer's <i>revisionNumber</i>. See also TopContainer. When a Thing is first created (in a client application) its <i>revisionNumber</i> is set to zero, implying it has not yet been persisted.
         /// </summary>

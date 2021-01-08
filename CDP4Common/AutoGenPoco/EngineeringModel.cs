@@ -309,6 +309,7 @@ namespace CDP4Common.EngineeringModelData
             this.ModellingAnnotation.ResolveList(dto.ModellingAnnotation, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -332,6 +333,7 @@ namespace CDP4Common.EngineeringModelData
             dto.ModellingAnnotation.AddRange(this.ModellingAnnotation.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -232,6 +233,7 @@ namespace CDP4Common.MetaInfo
             { "Name", thing => thing.Name },
             { "Red", thing => thing.Red },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -252,6 +254,7 @@ namespace CDP4Common.MetaInfo
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Red", new PropertyMetaInfo("Red", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -274,6 +277,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", (color, value) => color.ModifiedOn = (DateTime)value },
             { "Name", (color, value) => color.Name = value.ToString() },
             { "Red", (color, value) => color.Red = (int)value },
+            { "ThingPreference", (color, value) => color.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

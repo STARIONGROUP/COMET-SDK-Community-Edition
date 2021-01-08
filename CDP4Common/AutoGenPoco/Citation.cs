@@ -243,6 +243,7 @@ namespace CDP4Common.CommonData
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
             this.Source = this.Cache.Get<ReferenceSource>(dto.Source, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<ReferenceSource>();
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -263,6 +264,7 @@ namespace CDP4Common.CommonData
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
             dto.Source = this.Source != null ? this.Source.Iid : Guid.Empty;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

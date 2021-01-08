@@ -204,6 +204,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -261,6 +262,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", thing => thing.ShortName },
             { "SourceAnnotation", thing => thing.SourceAnnotation },
             { "Status", thing => thing.Status },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Title", thing => thing.Title },
         };
 
@@ -290,6 +292,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SourceAnnotation", new PropertyMetaInfo("SourceAnnotation", "ModellingAnnotationItem", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Status", new PropertyMetaInfo("Status", "CDP4Common.ReportingData.AnnotationStatusKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Title", new PropertyMetaInfo("Title", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -324,6 +327,7 @@ namespace CDP4Common.MetaInfo
             { "PrimaryAnnotatedThing", (contractChangeNotice, value) => contractChangeNotice.PrimaryAnnotatedThing = value == null ? (Guid?)null : (Guid)value },
             { "ShortName", (contractChangeNotice, value) => contractChangeNotice.ShortName = value.ToString() },
             { "Status", (contractChangeNotice, value) => contractChangeNotice.Status = (AnnotationStatusKind)value },
+            { "ThingPreference", (contractChangeNotice, value) => contractChangeNotice.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Title", (contractChangeNotice, value) => contractChangeNotice.Title = value.ToString() },
         };
 

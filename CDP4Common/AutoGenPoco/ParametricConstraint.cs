@@ -233,6 +233,7 @@ namespace CDP4Common.EngineeringModelData
             this.Expression.ResolveList(dto.Expression, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
             this.TopExpression = (dto.TopExpression.HasValue) ? this.Cache.Get<BooleanExpression>(dto.TopExpression.Value, dto.IterationContainerId) : null;
 
             this.ResolveExtraProperties();
@@ -250,6 +251,7 @@ namespace CDP4Common.EngineeringModelData
             dto.Expression.AddRange(this.Expression.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
             dto.TopExpression = this.TopExpression != null ? (Guid?)this.TopExpression.Iid : null;
 
             dto.IterationContainerId = this.CacheKey.Iteration;

@@ -57,7 +57,7 @@ namespace CDP4Common.ReportingData
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
         /// </summary>
-        public new const ParticipantAccessRightKind DefaultParticipantAccess = ParticipantAccessRightKind.NONE;
+        public new const ParticipantAccessRightKind DefaultParticipantAccess = ParticipantAccessRightKind.NOT_APPLICABLE;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContractDeviation"/> class.

@@ -332,6 +332,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ShortName = dto.ShortName;
             this.SourceEngineeringModelSetupIid = dto.SourceEngineeringModelSetupIid;
             this.StudyPhase = dto.StudyPhase;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -360,6 +361,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ShortName = this.ShortName;
             dto.SourceEngineeringModelSetupIid = this.SourceEngineeringModelSetupIid;
             dto.StudyPhase = this.StudyPhase;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

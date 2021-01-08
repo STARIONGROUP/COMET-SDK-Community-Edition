@@ -212,6 +212,7 @@ namespace CDP4Common.EngineeringModelData
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
             this.StakeholderValueToRequirementRelationship = (dto.StakeholderValueToRequirementRelationship.HasValue) ? this.Cache.Get<BinaryRelationshipRule>(dto.StakeholderValueToRequirementRelationship.Value, dto.IterationContainerId) : null;
+            this.ThingPreference = dto.ThingPreference;
             this.ValueGroupToStakeholderValueRelationship = (dto.ValueGroupToStakeholderValueRelationship.HasValue) ? this.Cache.Get<BinaryRelationshipRule>(dto.ValueGroupToStakeholderValueRelationship.Value, dto.IterationContainerId) : null;
 
             this.ResolveExtraProperties();
@@ -230,6 +231,7 @@ namespace CDP4Common.EngineeringModelData
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
             dto.StakeholderValueToRequirementRelationship = this.StakeholderValueToRequirementRelationship != null ? (Guid?)this.StakeholderValueToRequirementRelationship.Iid : null;
+            dto.ThingPreference = this.ThingPreference;
             dto.ValueGroupToStakeholderValueRelationship = this.ValueGroupToStakeholderValueRelationship != null ? (Guid?)this.ValueGroupToStakeholderValueRelationship.Iid : null;
 
             dto.IterationContainerId = this.CacheKey.Iteration;

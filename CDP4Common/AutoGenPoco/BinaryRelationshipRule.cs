@@ -282,6 +282,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ShortName = dto.ShortName;
             this.SourceCategory = this.Cache.Get<Category>(dto.SourceCategory, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Category>();
             this.TargetCategory = this.Cache.Get<Category>(dto.TargetCategory, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Category>();
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -308,6 +309,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ShortName = this.ShortName;
             dto.SourceCategory = this.SourceCategory != null ? this.SourceCategory.Iid : Guid.Empty;
             dto.TargetCategory = this.TargetCategory != null ? this.TargetCategory.Iid : Guid.Empty;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

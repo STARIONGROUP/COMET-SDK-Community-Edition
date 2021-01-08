@@ -201,6 +201,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -255,6 +256,7 @@ namespace CDP4Common.MetaInfo
             { "Publisher", thing => thing.Publisher },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "VersionDate", thing => thing.VersionDate },
             { "VersionIdentifier", thing => thing.VersionIdentifier },
         };
@@ -282,6 +284,7 @@ namespace CDP4Common.MetaInfo
             { "Publisher", new PropertyMetaInfo("Publisher", "Organization", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "VersionDate", new PropertyMetaInfo("VersionDate", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "VersionIdentifier", new PropertyMetaInfo("VersionIdentifier", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
@@ -314,6 +317,7 @@ namespace CDP4Common.MetaInfo
             { "PublishedIn", (referenceSource, value) => referenceSource.PublishedIn = value == null ? (Guid?)null : (Guid)value },
             { "Publisher", (referenceSource, value) => referenceSource.Publisher = value == null ? (Guid?)null : (Guid)value },
             { "ShortName", (referenceSource, value) => referenceSource.ShortName = value.ToString() },
+            { "ThingPreference", (referenceSource, value) => referenceSource.ThingPreference = value == null ? (string)null : value.ToString() },
             { "VersionDate", (referenceSource, value) => referenceSource.VersionDate = value == null ? (DateTime?)null : (DateTime)value },
             { "VersionIdentifier", (referenceSource, value) => referenceSource.VersionIdentifier = value == null ? (string)null : value.ToString() },
         };

@@ -244,6 +244,7 @@ namespace CDP4Common.EngineeringModelData
             this.ParameterType = this.Cache.Get<ParameterType>(dto.ParameterType, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<ParameterType>();
             this.RevisionNumber = dto.RevisionNumber;
             this.Scale = (dto.Scale.HasValue) ? this.Cache.Get<MeasurementScale>(dto.Scale.Value, dto.IterationContainerId) : null;
+            this.ThingPreference = dto.ThingPreference;
             this.Value = new ValueArray<string>(dto.Value, this);
 
             this.ResolveExtraProperties();
@@ -262,6 +263,7 @@ namespace CDP4Common.EngineeringModelData
             dto.ParameterType = this.ParameterType != null ? this.ParameterType.Iid : Guid.Empty;
             dto.RevisionNumber = this.RevisionNumber;
             dto.Scale = this.Scale != null ? (Guid?)this.Scale.Iid : null;
+            dto.ThingPreference = this.ThingPreference;
             dto.Value = new ValueArray<string>(this.Value, this);
 
             dto.IterationContainerId = this.CacheKey.Iteration;

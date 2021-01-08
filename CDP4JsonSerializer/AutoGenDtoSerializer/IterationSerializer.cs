@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IterationSerializer.cs" company="RHEA System S.A.">
+// <copyright file "IterationSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="IterationSerializer"/> class is to provide a <see cref="Iteration"/> specific serializer
     /// </summary>
@@ -68,6 +67,7 @@ namespace CDP4JsonSerializer
             { "stakeholder", stakeholder => new JArray(stakeholder) },
             { "stakeholderValue", stakeholderValue => new JArray(stakeholderValue) },
             { "stakeholderValueMap", stakeholderValueMap => new JArray(stakeholderValueMap) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "topElement", topElement => new JValue(topElement) },
             { "valueGroup", valueGroup => new JArray(valueGroup) },
         };
@@ -105,6 +105,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("stakeholder", this.PropertySerializerMap["stakeholder"](iteration.Stakeholder.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("stakeholderValue", this.PropertySerializerMap["stakeholderValue"](iteration.StakeholderValue.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("stakeholderValueMap", this.PropertySerializerMap["stakeholderValueMap"](iteration.StakeholderValueMap.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](iteration.ThingPreference));
             jsonObject.Add("topElement", this.PropertySerializerMap["topElement"](iteration.TopElement));
             jsonObject.Add("valueGroup", this.PropertySerializerMap["valueGroup"](iteration.ValueGroup.OrderBy(x => x, this.guidComparer)));
             return jsonObject;

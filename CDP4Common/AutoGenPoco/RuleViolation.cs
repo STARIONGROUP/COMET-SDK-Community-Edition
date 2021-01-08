@@ -179,6 +179,7 @@ namespace CDP4Common.EngineeringModelData
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
             this.ViolatingThing.ClearAndAddRange(dto.ViolatingThing);
 
             this.ResolveExtraProperties();
@@ -196,6 +197,7 @@ namespace CDP4Common.EngineeringModelData
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
             dto.ViolatingThing.AddRange(this.ViolatingThing);
 
             dto.IterationContainerId = this.CacheKey.Iteration;

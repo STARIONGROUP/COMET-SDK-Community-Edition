@@ -191,6 +191,7 @@ namespace CDP4Common.DiagramData
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
             this.Width = dto.Width;
             this.X = dto.X;
             this.Y = dto.Y;
@@ -211,6 +212,7 @@ namespace CDP4Common.DiagramData
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
             dto.Width = this.Width;
             dto.X = this.X;
             dto.Y = this.Y;

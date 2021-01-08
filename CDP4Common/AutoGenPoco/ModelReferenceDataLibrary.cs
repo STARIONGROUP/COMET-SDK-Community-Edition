@@ -196,6 +196,7 @@ namespace CDP4Common.SiteDirectoryData
             this.Rule.ResolveList(dto.Rule, dto.IterationContainerId, this.Cache);
             this.Scale.ResolveList(dto.Scale, dto.IterationContainerId, this.Cache);
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
             this.Unit.ResolveList(dto.Unit, dto.IterationContainerId, this.Cache);
             this.UnitPrefix.ResolveList(dto.UnitPrefix, dto.IterationContainerId, this.Cache);
 
@@ -229,6 +230,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.Rule.AddRange(this.Rule.Select(x => x.Iid));
             dto.Scale.AddRange(this.Scale.Select(x => x.Iid));
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
             dto.Unit.AddRange(this.Unit.Select(x => x.Iid));
             dto.UnitPrefix.AddRange(this.UnitPrefix.Select(x => x.Iid));
 

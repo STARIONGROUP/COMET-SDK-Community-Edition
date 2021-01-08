@@ -200,6 +200,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -247,6 +248,7 @@ namespace CDP4Common.MetaInfo
             { "Name", thing => thing.Name },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -266,6 +268,7 @@ namespace CDP4Common.MetaInfo
             { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -289,6 +292,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", (possibleFiniteState, value) => possibleFiniteState.ModifiedOn = (DateTime)value },
             { "Name", (possibleFiniteState, value) => possibleFiniteState.Name = value.ToString() },
             { "ShortName", (possibleFiniteState, value) => possibleFiniteState.ShortName = value.ToString() },
+            { "ThingPreference", (possibleFiniteState, value) => possibleFiniteState.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

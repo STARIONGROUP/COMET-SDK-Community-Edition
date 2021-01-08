@@ -63,8 +63,10 @@ namespace CDP4Common.EngineeringModelData
         /// </summary>
         public ModelLogEntry()
         {
+            this.AffectedDomainIid = new List<Guid>();
             this.AffectedItemIid = new List<Guid>();
             this.Category = new List<Category>();
+            this.LogEntryChangelogItem = new ContainerList<LogEntryChangelogItem>(this);
         }
 
         /// <summary>
@@ -83,9 +85,20 @@ namespace CDP4Common.EngineeringModelData
         /// </param>
         public ModelLogEntry(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
+            this.AffectedDomainIid = new List<Guid>();
             this.AffectedItemIid = new List<Guid>();
             this.Category = new List<Category>();
+            this.LogEntryChangelogItem = new ContainerList<LogEntryChangelogItem>(this);
         }
+
+        /// <summary>
+        /// Gets or sets a list of Guid.
+        /// </summary>
+        /// <remarks>
+        /// The list of affected Domains of Expertise that this LogEntry.
+        /// </remarks>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public List<Guid> AffectedDomainIid { get; set; }
 
         /// <summary>
         /// Gets or sets a list of Guid.
@@ -155,6 +168,27 @@ namespace CDP4Common.EngineeringModelData
         public LogLevelKind Level { get; set; }
 
         /// <summary>
+        /// Gets or sets a list of contained LogEntryChangelogItem.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public ContainerList<LogEntryChangelogItem> LogEntryChangelogItem { get; protected set; }
+
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{IEnumerable}"/> that references the composite properties of the current <see cref="ModelLogEntry"/>.
+        /// </summary>
+        public override IEnumerable<IEnumerable> ContainerLists
+        {
+            get 
+            {
+                var containers = new List<IEnumerable>(base.ContainerLists);
+                return containers;
+            }
+        }
+
+        /// <summary>
         /// Queries the referenced <see cref="Thing"/>s of the current <see cref="ModelLogEntry"/>
         /// </summary>
         /// <remarks>
@@ -192,13 +226,16 @@ namespace CDP4Common.EngineeringModelData
         protected override Thing GenericClone(bool cloneContainedThings)
         {
             var clone = (ModelLogEntry)this.MemberwiseClone();
+            clone.AffectedDomainIid = new List<Guid>(this.AffectedDomainIid);
             clone.AffectedItemIid = new List<Guid>(this.AffectedItemIid);
             clone.Category = new List<Category>(this.Category);
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
+            clone.LogEntryChangelogItem = cloneContainedThings ? new ContainerList<LogEntryChangelogItem>(clone) : new ContainerList<LogEntryChangelogItem>(this.LogEntryChangelogItem, clone);
 
             if (cloneContainedThings)
             {
+                clone.LogEntryChangelogItem.AddRange(this.LogEntryChangelogItem.Select(x => x.Clone(true)));
             }
 
             clone.Original = this;
@@ -259,6 +296,7 @@ namespace CDP4Common.EngineeringModelData
                 throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ModelLogEntry POCO.", dtoThing.GetType()));
             }
 
+            this.AffectedDomainIid.ClearAndAddRange(dto.AffectedDomainIid);
             this.AffectedItemIid.ClearAndAddRange(dto.AffectedItemIid);
             this.Author = (dto.Author.HasValue) ? this.Cache.Get<Person>(dto.Author.Value, dto.IterationContainerId) : null;
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);
@@ -268,8 +306,10 @@ namespace CDP4Common.EngineeringModelData
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
             this.LanguageCode = dto.LanguageCode;
             this.Level = dto.Level;
+            this.LogEntryChangelogItem.ResolveList(dto.LogEntryChangelogItem, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -281,6 +321,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var dto = new DTO.ModelLogEntry(this.Iid, this.RevisionNumber);
 
+            dto.AffectedDomainIid.AddRange(this.AffectedDomainIid);
             dto.AffectedItemIid.AddRange(this.AffectedItemIid);
             dto.Author = this.Author != null ? (Guid?)this.Author.Iid : null;
             dto.Category.AddRange(this.Category.Select(x => x.Iid));
@@ -290,8 +331,10 @@ namespace CDP4Common.EngineeringModelData
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
             dto.LanguageCode = this.LanguageCode;
             dto.Level = this.Level;
+            dto.LogEntryChangelogItem.AddRange(this.LogEntryChangelogItem.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

@@ -194,6 +194,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -241,6 +242,7 @@ namespace CDP4Common.MetaInfo
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "Scale", thing => thing.Scale },
             { "StateDependence", thing => thing.StateDependence },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -263,6 +265,7 @@ namespace CDP4Common.MetaInfo
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Scale", new PropertyMetaInfo("Scale", "MeasurementScale", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "StateDependence", new PropertyMetaInfo("StateDependence", "ActualFiniteStateList", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -288,6 +291,7 @@ namespace CDP4Common.MetaInfo
             { "ParameterType", (parameterOrOverrideBase, value) => parameterOrOverrideBase.ParameterType = (Guid)value },
             { "Scale", (parameterOrOverrideBase, value) => parameterOrOverrideBase.Scale = value == null ? (Guid?)null : (Guid)value },
             { "StateDependence", (parameterOrOverrideBase, value) => parameterOrOverrideBase.StateDependence = value == null ? (Guid?)null : (Guid)value },
+            { "ThingPreference", (parameterOrOverrideBase, value) => parameterOrOverrideBase.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

@@ -207,6 +207,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -265,6 +266,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", thing => thing.ShortName },
             { "SourceEngineeringModelSetupIid", thing => thing.SourceEngineeringModelSetupIid },
             { "StudyPhase", thing => thing.StudyPhase },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -288,6 +290,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SourceEngineeringModelSetupIid", new PropertyMetaInfo("SourceEngineeringModelSetupIid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "StudyPhase", new PropertyMetaInfo("StudyPhase", "CDP4Common.SiteDirectoryData.StudyPhaseKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -319,6 +322,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", (engineeringModelSetup, value) => engineeringModelSetup.ShortName = value.ToString() },
             { "SourceEngineeringModelSetupIid", (engineeringModelSetup, value) => engineeringModelSetup.SourceEngineeringModelSetupIid = value == null ? (Guid?)null : (Guid)value },
             { "StudyPhase", (engineeringModelSetup, value) => engineeringModelSetup.StudyPhase = (StudyPhaseKind)value },
+            { "ThingPreference", (engineeringModelSetup, value) => engineeringModelSetup.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

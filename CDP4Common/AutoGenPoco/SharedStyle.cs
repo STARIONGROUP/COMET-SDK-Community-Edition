@@ -168,6 +168,7 @@ namespace CDP4Common.DiagramData
             this.StrokeColor = (dto.StrokeColor.HasValue) ? this.Cache.Get<Color>(dto.StrokeColor.Value, dto.IterationContainerId) : null;
             this.StrokeOpacity = dto.StrokeOpacity;
             this.StrokeWidth = dto.StrokeWidth;
+            this.ThingPreference = dto.ThingPreference;
             this.UsedColor.ResolveList(dto.UsedColor, dto.IterationContainerId, this.Cache);
 
             this.ResolveExtraProperties();
@@ -197,6 +198,7 @@ namespace CDP4Common.DiagramData
             dto.StrokeColor = this.StrokeColor != null ? (Guid?)this.StrokeColor.Iid : null;
             dto.StrokeOpacity = this.StrokeOpacity;
             dto.StrokeWidth = this.StrokeWidth;
+            dto.ThingPreference = this.ThingPreference;
             dto.UsedColor.AddRange(this.UsedColor.Select(x => x.Iid));
 
             dto.IterationContainerId = this.CacheKey.Iteration;

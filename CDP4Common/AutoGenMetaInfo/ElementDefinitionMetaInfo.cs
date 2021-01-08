@@ -208,6 +208,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -264,6 +265,7 @@ namespace CDP4Common.MetaInfo
             { "ReferencedElement", thing => thing.ReferencedElement },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -285,6 +287,7 @@ namespace CDP4Common.MetaInfo
             { "ReferencedElement", new PropertyMetaInfo("ReferencedElement", "NestedElement", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -314,6 +317,7 @@ namespace CDP4Common.MetaInfo
             { "Name", (elementDefinition, value) => elementDefinition.Name = value.ToString() },
             { "Owner", (elementDefinition, value) => elementDefinition.Owner = (Guid)value },
             { "ShortName", (elementDefinition, value) => elementDefinition.ShortName = value.ToString() },
+            { "ThingPreference", (elementDefinition, value) => elementDefinition.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

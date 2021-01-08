@@ -202,6 +202,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -255,6 +256,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", thing => thing.ShortName },
             { "SourceCategory", thing => thing.SourceCategory },
             { "TargetCategory", thing => thing.TargetCategory },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -279,6 +281,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SourceCategory", new PropertyMetaInfo("SourceCategory", "Category", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "TargetCategory", new PropertyMetaInfo("TargetCategory", "Category", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -308,6 +311,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", (binaryRelationshipRule, value) => binaryRelationshipRule.ShortName = value.ToString() },
             { "SourceCategory", (binaryRelationshipRule, value) => binaryRelationshipRule.SourceCategory = (Guid)value },
             { "TargetCategory", (binaryRelationshipRule, value) => binaryRelationshipRule.TargetCategory = (Guid)value },
+            { "ThingPreference", (binaryRelationshipRule, value) => binaryRelationshipRule.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

@@ -1,9 +1,8 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IterationResolver.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -20,9 +19,7 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -161,6 +158,11 @@ namespace CDP4JsonSerializer
             if (!jObject["stakeholderValueMap"].IsNullOrEmpty())
             {
                 iteration.StakeholderValueMap.AddRange(jObject["stakeholderValueMap"].ToObject<IEnumerable<Guid>>());
+            }
+
+            if (!jObject["thingPreference"].IsNullOrEmpty())
+            {
+                iteration.ThingPreference = jObject["thingPreference"].ToObject<string>();
             }
 
             if (!jObject["topElement"].IsNullOrEmpty())

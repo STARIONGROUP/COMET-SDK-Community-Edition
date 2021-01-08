@@ -207,6 +207,7 @@ namespace CDP4Common.SiteDirectoryData
             this.Exponent = dto.Exponent;
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
             this.Unit = this.Cache.Get<MeasurementUnit>(dto.Unit, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<MeasurementUnit>();
 
             this.ResolveExtraProperties();
@@ -224,6 +225,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.Exponent = this.Exponent;
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
             dto.Unit = this.Unit != null ? this.Unit.Iid : Guid.Empty;
 
             dto.IterationContainerId = this.CacheKey.Iteration;

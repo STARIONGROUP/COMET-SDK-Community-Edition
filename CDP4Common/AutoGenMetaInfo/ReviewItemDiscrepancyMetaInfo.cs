@@ -206,6 +206,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -264,6 +265,7 @@ namespace CDP4Common.MetaInfo
             { "Solution", thing => thing.Solution },
             { "SourceAnnotation", thing => thing.SourceAnnotation },
             { "Status", thing => thing.Status },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Title", thing => thing.Title },
         };
 
@@ -292,6 +294,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SourceAnnotation", new PropertyMetaInfo("SourceAnnotation", "ModellingAnnotationItem", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Status", new PropertyMetaInfo("Status", "CDP4Common.ReportingData.AnnotationStatusKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Title", new PropertyMetaInfo("Title", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -326,6 +329,7 @@ namespace CDP4Common.MetaInfo
             { "PrimaryAnnotatedThing", (reviewItemDiscrepancy, value) => reviewItemDiscrepancy.PrimaryAnnotatedThing = value == null ? (Guid?)null : (Guid)value },
             { "ShortName", (reviewItemDiscrepancy, value) => reviewItemDiscrepancy.ShortName = value.ToString() },
             { "Status", (reviewItemDiscrepancy, value) => reviewItemDiscrepancy.Status = (AnnotationStatusKind)value },
+            { "ThingPreference", (reviewItemDiscrepancy, value) => reviewItemDiscrepancy.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Title", (reviewItemDiscrepancy, value) => reviewItemDiscrepancy.Title = value.ToString() },
         };
 

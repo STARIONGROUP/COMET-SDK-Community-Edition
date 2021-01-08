@@ -222,6 +222,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -290,6 +291,7 @@ namespace CDP4Common.MetaInfo
             { "Rule", thing => thing.Rule },
             { "Scale", thing => thing.Scale },
             { "ShortName", thing => thing.ShortName },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Unit", thing => thing.Unit },
             { "UnitPrefix", thing => thing.UnitPrefix },
         };
@@ -313,6 +315,7 @@ namespace CDP4Common.MetaInfo
             { "RequiredRdl", new PropertyMetaInfo("RequiredRdl", "SiteReferenceDataLibrary", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -349,6 +352,7 @@ namespace CDP4Common.MetaInfo
             { "Name", (referenceDataLibrary, value) => referenceDataLibrary.Name = value.ToString() },
             { "RequiredRdl", (referenceDataLibrary, value) => referenceDataLibrary.RequiredRdl = value == null ? (Guid?)null : (Guid)value },
             { "ShortName", (referenceDataLibrary, value) => referenceDataLibrary.ShortName = value.ToString() },
+            { "ThingPreference", (referenceDataLibrary, value) => referenceDataLibrary.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -230,6 +231,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "SubscribedValueSet", thing => thing.SubscribedValueSet },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "ValueSwitch", thing => thing.ValueSwitch },
         };
 
@@ -255,6 +257,7 @@ namespace CDP4Common.MetaInfo
             { "Reference", new PropertyMetaInfo("Reference", "string", PropertyKind.ValueArray, AggregationKind.None, true, true, true, 1, "*", false) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SubscribedValueSet", new PropertyMetaInfo("SubscribedValueSet", "ParameterValueSetBase", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "ValueSwitch", new PropertyMetaInfo("ValueSwitch", "CDP4Common.EngineeringModelData.ParameterSwitchKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -276,6 +279,7 @@ namespace CDP4Common.MetaInfo
             { "Manual", (parameterSubscriptionValueSet, value) => parameterSubscriptionValueSet.Manual = (ValueArray<string>)value },
             { "ModifiedOn", (parameterSubscriptionValueSet, value) => parameterSubscriptionValueSet.ModifiedOn = (DateTime)value },
             { "SubscribedValueSet", (parameterSubscriptionValueSet, value) => parameterSubscriptionValueSet.SubscribedValueSet = (Guid)value },
+            { "ThingPreference", (parameterSubscriptionValueSet, value) => parameterSubscriptionValueSet.ThingPreference = value == null ? (string)null : value.ToString() },
             { "ValueSwitch", (parameterSubscriptionValueSet, value) => parameterSubscriptionValueSet.ValueSwitch = (ParameterSwitchKind)value },
         };
 

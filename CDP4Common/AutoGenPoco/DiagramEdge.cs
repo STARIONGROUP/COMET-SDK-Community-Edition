@@ -255,6 +255,7 @@ namespace CDP4Common.DiagramData
             this.SharedStyle = (dto.SharedStyle.HasValue) ? this.Cache.Get<SharedStyle>(dto.SharedStyle.Value, dto.IterationContainerId) : null;
             this.Source = this.Cache.Get<DiagramElementThing>(dto.Source, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DiagramElementThing>();
             this.Target = this.Cache.Get<DiagramElementThing>(dto.Target, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DiagramElementThing>();
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -279,6 +280,7 @@ namespace CDP4Common.DiagramData
             dto.SharedStyle = this.SharedStyle != null ? (Guid?)this.SharedStyle.Iid : null;
             dto.Source = this.Source != null ? this.Source.Iid : Guid.Empty;
             dto.Target = this.Target != null ? this.Target.Iid : Guid.Empty;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

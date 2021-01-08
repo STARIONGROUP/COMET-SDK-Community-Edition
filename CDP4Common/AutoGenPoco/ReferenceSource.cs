@@ -290,6 +290,7 @@ namespace CDP4Common.SiteDirectoryData
             this.Publisher = (dto.Publisher.HasValue) ? this.Cache.Get<Organization>(dto.Publisher.Value, dto.IterationContainerId) : null;
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
             this.VersionDate = dto.VersionDate;
             this.VersionIdentifier = dto.VersionIdentifier;
 
@@ -319,6 +320,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.Publisher = this.Publisher != null ? (Guid?)this.Publisher.Iid : null;
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
             dto.VersionDate = this.VersionDate;
             dto.VersionIdentifier = this.VersionIdentifier;
 

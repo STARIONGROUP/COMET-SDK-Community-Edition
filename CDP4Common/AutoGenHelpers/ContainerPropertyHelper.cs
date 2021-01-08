@@ -1,9 +1,8 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ContainerPropertyHelper.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -20,16 +19,13 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Helpers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using CDP4Common.CommonData;
     using CDP4Common.Polyfills;
 
@@ -75,6 +71,7 @@ namespace CDP4Common.Helpers
             { "DateTimeParameterType", new KeyValuePair<string, string>("ReferenceDataLibrary", "parameterType") },
             { "DecompositionRule", new KeyValuePair<string, string>("ReferenceDataLibrary", "rule") },
             { "Definition", new KeyValuePair<string, string>("DefinedThing", "definition") },
+            { "DependentParameterTypeAssignment", new KeyValuePair<string, string>("SampledFunctionParameterType", "dependentParameterType") },
             { "DerivedQuantityKind", new KeyValuePair<string, string>("ReferenceDataLibrary", "parameterType") },
             { "DerivedUnit", new KeyValuePair<string, string>("ReferenceDataLibrary", "unit") },
             { "DiagramCanvas", new KeyValuePair<string, string>("Iteration", "diagramCanvas") },
@@ -104,11 +101,13 @@ namespace CDP4Common.Helpers
             { "Goal", new KeyValuePair<string, string>("Iteration", "goal") },
             { "HyperLink", new KeyValuePair<string, string>("DefinedThing", "hyperLink") },
             { "IdCorrespondence", new KeyValuePair<string, string>("ExternalIdentifierMap", "correspondence") },
+            { "IndependentParameterTypeAssignment", new KeyValuePair<string, string>("SampledFunctionParameterType", "independentParameterType") },
             { "IntervalScale", new KeyValuePair<string, string>("ReferenceDataLibrary", "scale") },
             { "Iteration", new KeyValuePair<string, string>("EngineeringModel", "iteration") },
             { "IterationSetup", new KeyValuePair<string, string>("EngineeringModelSetup", "iterationSetup") },
             { "LinearConversionUnit", new KeyValuePair<string, string>("ReferenceDataLibrary", "unit") },
             { "LogarithmicScale", new KeyValuePair<string, string>("ReferenceDataLibrary", "scale") },
+            { "LogEntryChangelogItem", new KeyValuePair<string, string>("LogEntry", "logEntryChangelogItem") },
             { "MappingToReferenceScale", new KeyValuePair<string, string>("MeasurementScale", "mappingToReferenceScale") },
             { "MeasurementScale", new KeyValuePair<string, string>("ReferenceDataLibrary", "scale") },
             { "MeasurementUnit", new KeyValuePair<string, string>("ReferenceDataLibrary", "unit") },
@@ -170,6 +169,7 @@ namespace CDP4Common.Helpers
             { "RuleVerification", new KeyValuePair<string, string>("RuleVerificationList", "ruleVerification") },
             { "RuleVerificationList", new KeyValuePair<string, string>("Iteration", "ruleVerificationList") },
             { "RuleViolation", new KeyValuePair<string, string>("RuleVerification", "violation") },
+            { "SampledFunctionParameterType", new KeyValuePair<string, string>("ReferenceDataLibrary", "parameterType") },
             { "ScalarParameterType", new KeyValuePair<string, string>("ReferenceDataLibrary", "parameterType") },
             { "ScaleReferenceQuantityValue", new KeyValuePair<string, string>("LogarithmicScale", "referenceQuantityValue") },
             { "ScaleValueDefinition", new KeyValuePair<string, string>("MeasurementScale", "valueDefinition") },

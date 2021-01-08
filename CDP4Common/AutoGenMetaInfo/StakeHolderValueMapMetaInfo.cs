@@ -207,6 +207,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -260,6 +261,7 @@ namespace CDP4Common.MetaInfo
             { "Settings", thing => thing.Settings },
             { "ShortName", thing => thing.ShortName },
             { "StakeholderValue", thing => thing.StakeholderValue },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "ValueGroup", thing => thing.ValueGroup },
         };
 
@@ -283,6 +285,7 @@ namespace CDP4Common.MetaInfo
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "StakeholderValue", new PropertyMetaInfo("StakeholderValue", "StakeholderValue", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "ValueGroup", new PropertyMetaInfo("ValueGroup", "ValueGroup", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
         };
 
@@ -313,6 +316,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", (stakeHolderValueMap, value) => stakeHolderValueMap.ModifiedOn = (DateTime)value },
             { "Name", (stakeHolderValueMap, value) => stakeHolderValueMap.Name = value.ToString() },
             { "ShortName", (stakeHolderValueMap, value) => stakeHolderValueMap.ShortName = value.ToString() },
+            { "ThingPreference", (stakeHolderValueMap, value) => stakeHolderValueMap.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

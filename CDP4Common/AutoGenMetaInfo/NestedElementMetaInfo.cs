@@ -195,6 +195,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -239,6 +240,7 @@ namespace CDP4Common.MetaInfo
             { "NestedParameter", thing => thing.NestedParameter },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "RootElement", thing => thing.RootElement },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -261,6 +263,7 @@ namespace CDP4Common.MetaInfo
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RootElement", new PropertyMetaInfo("RootElement", "ElementDefinition", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -283,6 +286,7 @@ namespace CDP4Common.MetaInfo
             { "IsVolatile", (nestedElement, value) => nestedElement.IsVolatile = (bool)value },
             { "ModifiedOn", (nestedElement, value) => nestedElement.ModifiedOn = (DateTime)value },
             { "RootElement", (nestedElement, value) => nestedElement.RootElement = (Guid)value },
+            { "ThingPreference", (nestedElement, value) => nestedElement.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -230,6 +231,7 @@ namespace CDP4Common.MetaInfo
             { "InternalThing", thing => thing.InternalThing },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -249,6 +251,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -269,6 +272,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (idCorrespondence, value) => idCorrespondence.Iid = (Guid)value },
             { "InternalThing", (idCorrespondence, value) => idCorrespondence.InternalThing = (Guid)value },
             { "ModifiedOn", (idCorrespondence, value) => idCorrespondence.ModifiedOn = (DateTime)value },
+            { "ThingPreference", (idCorrespondence, value) => idCorrespondence.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

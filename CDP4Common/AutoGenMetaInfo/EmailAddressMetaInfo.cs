@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -228,6 +229,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", thing => thing.Iid },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Value", thing => thing.Value },
             { "VcardType", thing => thing.VcardType },
         };
@@ -246,6 +248,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Value", new PropertyMetaInfo("Value", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "VcardType", new PropertyMetaInfo("VcardType", "CDP4Common.SiteDirectoryData.VcardEmailAddressKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
@@ -266,6 +269,7 @@ namespace CDP4Common.MetaInfo
         {
             { "Iid", (emailAddress, value) => emailAddress.Iid = (Guid)value },
             { "ModifiedOn", (emailAddress, value) => emailAddress.ModifiedOn = (DateTime)value },
+            { "ThingPreference", (emailAddress, value) => emailAddress.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Value", (emailAddress, value) => emailAddress.Value = value.ToString() },
             { "VcardType", (emailAddress, value) => emailAddress.VcardType = (VcardEmailAddressKind)value },
         };

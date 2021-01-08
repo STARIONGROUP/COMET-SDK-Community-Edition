@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConstantSerializer.cs" company="RHEA System S.A.">
+// <copyright file "ConstantSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="ConstantSerializer"/> class is to provide a <see cref="Constant"/> specific serializer
     /// </summary>
@@ -58,6 +57,7 @@ namespace CDP4JsonSerializer
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "scale", scale => new JValue(scale) },
             { "shortName", shortName => new JValue(shortName) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "value", value => new JValue(((ValueArray<string>)value).ToJsonString()) },
         };
 
@@ -84,6 +84,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](constant.RevisionNumber));
             jsonObject.Add("scale", this.PropertySerializerMap["scale"](constant.Scale));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](constant.ShortName));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](constant.ThingPreference));
             jsonObject.Add("value", this.PropertySerializerMap["value"](constant.Value));
             return jsonObject;
         }

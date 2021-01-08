@@ -192,6 +192,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -230,6 +231,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Value", thing => thing.Value },
         };
 
@@ -248,6 +250,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Value", new PropertyMetaInfo("Value", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -268,6 +271,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (userPreference, value) => userPreference.Iid = (Guid)value },
             { "ModifiedOn", (userPreference, value) => userPreference.ModifiedOn = (DateTime)value },
             { "ShortName", (userPreference, value) => userPreference.ShortName = value.ToString() },
+            { "ThingPreference", (userPreference, value) => userPreference.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Value", (userPreference, value) => userPreference.Value = value.ToString() },
         };
 

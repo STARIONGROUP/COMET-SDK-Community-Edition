@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ParameterSubscriptionSerializer.cs" company="RHEA System S.A.">
+// <copyright file "ParameterSubscriptionSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="ParameterSubscriptionSerializer"/> class is to provide a <see cref="ParameterSubscription"/> specific serializer
     /// </summary>
@@ -50,6 +49,7 @@ namespace CDP4JsonSerializer
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "owner", owner => new JValue(owner) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "valueSet", valueSet => new JArray(valueSet) },
         };
 
@@ -68,6 +68,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](parameterSubscription.ModifiedOn));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](parameterSubscription.Owner));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](parameterSubscription.RevisionNumber));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](parameterSubscription.ThingPreference));
             jsonObject.Add("valueSet", this.PropertySerializerMap["valueSet"](parameterSubscription.ValueSet.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }

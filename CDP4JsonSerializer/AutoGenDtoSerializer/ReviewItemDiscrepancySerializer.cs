@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReviewItemDiscrepancySerializer.cs" company="RHEA System S.A.">
+// <copyright file "ReviewItemDiscrepancySerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="ReviewItemDiscrepancySerializer"/> class is to provide a <see cref="ReviewItemDiscrepancy"/> specific serializer
     /// </summary>
@@ -64,6 +63,7 @@ namespace CDP4JsonSerializer
             { "solution", solution => new JArray(solution) },
             { "sourceAnnotation", sourceAnnotation => new JArray(sourceAnnotation) },
             { "status", status => new JValue(status.ToString()) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "title", title => new JValue(title) },
         };
 
@@ -93,9 +93,10 @@ namespace CDP4JsonSerializer
             jsonObject.Add("relatedThing", this.PropertySerializerMap["relatedThing"](reviewItemDiscrepancy.RelatedThing.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](reviewItemDiscrepancy.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](reviewItemDiscrepancy.ShortName));
-            jsonObject.Add("solution", this.PropertySerializerMap["solution"](reviewItemDiscrepancy.Solution.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("solution", this.PropertySerializerMap["solution"](reviewItemDiscrepancy.Solution));
             jsonObject.Add("sourceAnnotation", this.PropertySerializerMap["sourceAnnotation"](reviewItemDiscrepancy.SourceAnnotation.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("status", this.PropertySerializerMap["status"](Enum.GetName(typeof(CDP4Common.ReportingData.AnnotationStatusKind), reviewItemDiscrepancy.Status)));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](reviewItemDiscrepancy.ThingPreference));
             jsonObject.Add("title", this.PropertySerializerMap["title"](reviewItemDiscrepancy.Title));
             return jsonObject;
         }

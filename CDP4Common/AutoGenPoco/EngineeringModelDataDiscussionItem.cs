@@ -197,6 +197,7 @@ namespace CDP4Common.ReportingData
             this.ModifiedOn = dto.ModifiedOn;
             this.ReplyTo = (dto.ReplyTo.HasValue) ? this.Cache.Get<DiscussionItem>(dto.ReplyTo.Value, dto.IterationContainerId) : null;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -217,6 +218,7 @@ namespace CDP4Common.ReportingData
             dto.ModifiedOn = this.ModifiedOn;
             dto.ReplyTo = this.ReplyTo != null ? (Guid?)this.ReplyTo.Iid : null;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

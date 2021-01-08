@@ -221,6 +221,7 @@ namespace CDP4Common.EngineeringModelData
             this.RevisionNumber = dto.RevisionNumber;
             this.Source = this.Cache.Get<Thing>(dto.Source, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Thing>();
             this.Target = this.Cache.Get<Thing>(dto.Target, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Thing>();
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -241,6 +242,7 @@ namespace CDP4Common.EngineeringModelData
             dto.RevisionNumber = this.RevisionNumber;
             dto.Source = this.Source != null ? this.Source.Iid : Guid.Empty;
             dto.Target = this.Target != null ? this.Target.Iid : Guid.Empty;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

@@ -197,6 +197,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
             { "ParameterValue", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -241,6 +242,7 @@ namespace CDP4Common.MetaInfo
             { "ParameterValue", thing => thing.ParameterValue },
             { "RelatedThing", thing => thing.RelatedThing },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -260,6 +262,7 @@ namespace CDP4Common.MetaInfo
             { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RelatedThing", new PropertyMetaInfo("RelatedThing", "Thing", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -282,6 +285,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (multiRelationship, value) => multiRelationship.Iid = (Guid)value },
             { "ModifiedOn", (multiRelationship, value) => multiRelationship.ModifiedOn = (DateTime)value },
             { "Owner", (multiRelationship, value) => multiRelationship.Owner = (Guid)value },
+            { "ThingPreference", (multiRelationship, value) => multiRelationship.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

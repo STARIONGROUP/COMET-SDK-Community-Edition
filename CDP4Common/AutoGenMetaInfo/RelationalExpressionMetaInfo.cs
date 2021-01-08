@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -231,6 +232,7 @@ namespace CDP4Common.MetaInfo
             { "RelationalOperator", thing => thing.RelationalOperator },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "Scale", thing => thing.Scale },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Value", thing => thing.Value },
         };
 
@@ -251,6 +253,7 @@ namespace CDP4Common.MetaInfo
             { "RelationalOperator", new PropertyMetaInfo("RelationalOperator", "CDP4Common.EngineeringModelData.RelationalOperatorKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Scale", new PropertyMetaInfo("Scale", "MeasurementScale", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Value", new PropertyMetaInfo("Value", "string", PropertyKind.ValueArray, AggregationKind.None, false, true, true, 1, "*", true) },
         };
 
@@ -273,6 +276,7 @@ namespace CDP4Common.MetaInfo
             { "ParameterType", (relationalExpression, value) => relationalExpression.ParameterType = (Guid)value },
             { "RelationalOperator", (relationalExpression, value) => relationalExpression.RelationalOperator = (RelationalOperatorKind)value },
             { "Scale", (relationalExpression, value) => relationalExpression.Scale = value == null ? (Guid?)null : (Guid)value },
+            { "ThingPreference", (relationalExpression, value) => relationalExpression.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Value", (relationalExpression, value) => relationalExpression.Value = (ValueArray<string>)value },
         };
 

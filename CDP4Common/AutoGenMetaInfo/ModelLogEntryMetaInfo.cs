@@ -49,7 +49,10 @@ namespace CDP4Common.MetaInfo
         /// <summary>
         /// The containment property value map.
         /// </summary>
-        private readonly Dictionary<string, Func<CDP4Common.DTO.ModelLogEntry, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.ModelLogEntry, IEnumerable<Guid>>>();
+        private readonly Dictionary<string, Func<CDP4Common.DTO.ModelLogEntry, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.ModelLogEntry, IEnumerable<Guid>>>
+        {
+            { "LogEntryChangelogItem", modelLogEntry => modelLogEntry.LogEntryChangelogItem },
+        };
 
         /// <summary>
         /// The ordered containment property value map.
@@ -61,12 +64,14 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.ModelLogEntry>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.ModelLogEntry>>
         {
+            { "AffectedDomainIid", new DtoValidationHelper<CDP4Common.DTO.ModelLogEntry>(item => item.AffectedDomainIid != null, "The 'AffectedDomainIid' property of a 'ModelLogEntry' is mandatory and cannot be null.") },
             { "AffectedItemIid", new DtoValidationHelper<CDP4Common.DTO.ModelLogEntry>(item => item.AffectedItemIid != null, "The 'AffectedItemIid' property of a 'ModelLogEntry' is mandatory and cannot be null.") },
             { "Category", new DtoValidationHelper<CDP4Common.DTO.ModelLogEntry>(item => item.Category != null, "The 'Category' property of a 'ModelLogEntry' is mandatory and cannot be null.") },
             { "Content", new DtoValidationHelper<CDP4Common.DTO.ModelLogEntry>(item => !string.IsNullOrWhiteSpace(item.Content), "The 'Content' property of a 'ModelLogEntry' is mandatory and cannot be empty or null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.ModelLogEntry>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'ModelLogEntry' is mandatory and cannot be null.") },
             { "ExcludedPerson", new DtoValidationHelper<CDP4Common.DTO.ModelLogEntry>(item => item.ExcludedPerson != null, "The 'ExcludedPerson' property of a 'ModelLogEntry' is mandatory and cannot be null.") },
             { "LanguageCode", new DtoValidationHelper<CDP4Common.DTO.ModelLogEntry>(item => !string.IsNullOrWhiteSpace(item.LanguageCode), "The 'LanguageCode' property of a 'ModelLogEntry' is mandatory and cannot be empty or null.") },
+            { "LogEntryChangelogItem", new DtoValidationHelper<CDP4Common.DTO.ModelLogEntry>(item => item.LogEntryChangelogItem != null, "The 'LogEntryChangelogItem' property of a 'ModelLogEntry' is mandatory and cannot be null.") },
         };
 
         /// <summary>
@@ -193,13 +198,18 @@ namespace CDP4Common.MetaInfo
         {
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
+            { "LogEntryChangelogItem", "1.2.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
         /// The containment property to type name map.
         /// </summary>
-        private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>();
+        private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
+        {
+            { "LogEntryChangelogItem", new PropertyMetaInfo("LogEntryChangelogItem", "LogEntryChangelogItem", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+        };
 
         /// <summary>
         /// Gets the <see cref="PropertyMetaInfo"/> for the <see cref="ModelLogEntry"/> class
@@ -225,6 +235,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.ModelLogEntry, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.ModelLogEntry, object>>
         {
+            { "AffectedDomainIid", thing => thing.AffectedDomainIid },
             { "AffectedItemIid", thing => thing.AffectedItemIid },
             { "Author", thing => thing.Author },
             { "Category", thing => thing.Category },
@@ -236,8 +247,10 @@ namespace CDP4Common.MetaInfo
             { "Iid", thing => thing.Iid },
             { "LanguageCode", thing => thing.LanguageCode },
             { "Level", thing => thing.Level },
+            { "LogEntryChangelogItem", thing => thing.LogEntryChangelogItem },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -248,6 +261,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "AffectedDomainIid", new PropertyMetaInfo("AffectedDomainIid", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "AffectedItemIid", new PropertyMetaInfo("AffectedItemIid", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Author", new PropertyMetaInfo("Author", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Category", new PropertyMetaInfo("Category", "Category", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
@@ -261,6 +275,7 @@ namespace CDP4Common.MetaInfo
             { "Level", new PropertyMetaInfo("Level", "CDP4Common.CommonData.LogLevelKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -268,10 +283,12 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
+            { "AffectedDomainIid", (value) => (Guid)value },
             { "AffectedItemIid", (value) => (Guid)value },
             { "Category", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },
             { "ExcludedPerson", (value) => (Guid)value },
+            { "LogEntryChangelogItem", (value) => (Guid)value },
         };
 
         /// <summary>
@@ -286,6 +303,7 @@ namespace CDP4Common.MetaInfo
             { "LanguageCode", (modelLogEntry, value) => modelLogEntry.LanguageCode = value.ToString() },
             { "Level", (modelLogEntry, value) => modelLogEntry.Level = (LogLevelKind)value },
             { "ModifiedOn", (modelLogEntry, value) => modelLogEntry.ModifiedOn = (DateTime)value },
+            { "ThingPreference", (modelLogEntry, value) => modelLogEntry.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

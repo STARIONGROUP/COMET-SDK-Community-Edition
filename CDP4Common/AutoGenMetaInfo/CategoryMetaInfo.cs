@@ -202,6 +202,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -253,6 +254,7 @@ namespace CDP4Common.MetaInfo
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
             { "SuperCategory", thing => thing.SuperCategory },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -275,6 +277,7 @@ namespace CDP4Common.MetaInfo
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SuperCategory", new PropertyMetaInfo("SuperCategory", "Category", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -302,6 +305,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", (category, value) => category.ModifiedOn = (DateTime)value },
             { "Name", (category, value) => category.Name = value.ToString() },
             { "ShortName", (category, value) => category.ShortName = value.ToString() },
+            { "ThingPreference", (category, value) => category.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

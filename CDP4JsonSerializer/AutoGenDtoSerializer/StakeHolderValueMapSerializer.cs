@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StakeHolderValueMapSerializer.cs" company="RHEA System S.A.">
+// <copyright file "StakeHolderValueMapSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="StakeHolderValueMapSerializer"/> class is to provide a <see cref="StakeHolderValueMap"/> specific serializer
     /// </summary>
@@ -59,6 +58,7 @@ namespace CDP4JsonSerializer
             { "settings", settings => new JArray(settings) },
             { "shortName", shortName => new JValue(shortName) },
             { "stakeholderValue", stakeholderValue => new JArray(stakeholderValue) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "valueGroup", valueGroup => new JArray(valueGroup) },
         };
 
@@ -83,9 +83,10 @@ namespace CDP4JsonSerializer
             jsonObject.Add("name", this.PropertySerializerMap["name"](stakeHolderValueMap.Name));
             jsonObject.Add("requirement", this.PropertySerializerMap["requirement"](stakeHolderValueMap.Requirement.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](stakeHolderValueMap.RevisionNumber));
-            jsonObject.Add("settings", this.PropertySerializerMap["settings"](stakeHolderValueMap.Settings.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("settings", this.PropertySerializerMap["settings"](stakeHolderValueMap.Settings));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](stakeHolderValueMap.ShortName));
             jsonObject.Add("stakeholderValue", this.PropertySerializerMap["stakeholderValue"](stakeHolderValueMap.StakeholderValue.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](stakeHolderValueMap.ThingPreference));
             jsonObject.Add("valueGroup", this.PropertySerializerMap["valueGroup"](stakeHolderValueMap.ValueGroup.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }

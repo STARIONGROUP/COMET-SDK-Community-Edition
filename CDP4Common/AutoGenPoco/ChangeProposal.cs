@@ -215,6 +215,7 @@ namespace CDP4Common.ReportingData
             this.ShortName = dto.ShortName;
             this.SourceAnnotation.ResolveList(dto.SourceAnnotation, dto.IterationContainerId, this.Cache);
             this.Status = dto.Status;
+            this.ThingPreference = dto.ThingPreference;
             this.Title = dto.Title;
 
             this.ResolveExtraProperties();
@@ -246,6 +247,7 @@ namespace CDP4Common.ReportingData
             dto.ShortName = this.ShortName;
             dto.SourceAnnotation.AddRange(this.SourceAnnotation.Select(x => x.Iid));
             dto.Status = this.Status;
+            dto.ThingPreference = this.ThingPreference;
             dto.Title = this.Title;
 
             dto.IterationContainerId = this.CacheKey.Iteration;

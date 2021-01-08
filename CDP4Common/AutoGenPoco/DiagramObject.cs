@@ -191,6 +191,7 @@ namespace CDP4Common.DiagramData
             this.Resolution = dto.Resolution;
             this.RevisionNumber = dto.RevisionNumber;
             this.SharedStyle = (dto.SharedStyle.HasValue) ? this.Cache.Get<SharedStyle>(dto.SharedStyle.Value, dto.IterationContainerId) : null;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -214,6 +215,7 @@ namespace CDP4Common.DiagramData
             dto.Resolution = this.Resolution;
             dto.RevisionNumber = this.RevisionNumber;
             dto.SharedStyle = this.SharedStyle != null ? (Guid?)this.SharedStyle.Iid : null;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

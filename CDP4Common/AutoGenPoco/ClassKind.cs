@@ -195,6 +195,11 @@ namespace CDP4Common.CommonData
         Definition,
 
         /// <summary>
+        /// Assertion that the Class is an instance of DependentParameterTypeAssignment
+        /// </summary>
+        DependentParameterTypeAssignment,
+
+        /// <summary>
         /// Assertion that the Class is an instance of DerivedQuantityKind
         /// </summary>
         DerivedQuantityKind,
@@ -380,6 +385,11 @@ namespace CDP4Common.CommonData
         IdCorrespondence,
 
         /// <summary>
+        /// Assertion that the Class is an instance of IndependentParameterTypeAssignment
+        /// </summary>
+        IndependentParameterTypeAssignment,
+
+        /// <summary>
         /// Assertion that the Class is an instance of IntervalScale
         /// </summary>
         IntervalScale,
@@ -403,6 +413,11 @@ namespace CDP4Common.CommonData
         /// Assertion that the Class is an instance of LogarithmicScale
         /// </summary>
         LogarithmicScale,
+
+        /// <summary>
+        /// Assertion that the Class is an instance of LogEntryChangelogItem
+        /// </summary>
+        LogEntryChangelogItem,
 
         /// <summary>
         /// Assertion that the Class is an instance of MappingToReferenceScale
@@ -743,6 +758,11 @@ namespace CDP4Common.CommonData
         /// Assertion that the Class is an instance of RuleViolation
         /// </summary>
         RuleViolation,
+
+        /// <summary>
+        /// Assertion that the Class is an instance of SampledFunctionParameterType
+        /// </summary>
+        SampledFunctionParameterType,
 
         /// <summary>
         /// Assertion that the Class is an instance of ScalarParameterType

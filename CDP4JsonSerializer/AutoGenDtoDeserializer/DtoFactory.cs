@@ -1,9 +1,8 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DtoFactory.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -20,9 +19,7 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -69,6 +66,7 @@ namespace CDP4JsonSerializer
             { "DateTimeParameterType", DateTimeParameterTypeResolver.FromJsonObject },
             { "DecompositionRule", DecompositionRuleResolver.FromJsonObject },
             { "Definition", DefinitionResolver.FromJsonObject },
+            { "DependentParameterTypeAssignment", DependentParameterTypeAssignmentResolver.FromJsonObject },
             { "DerivedQuantityKind", DerivedQuantityKindResolver.FromJsonObject },
             { "DerivedUnit", DerivedUnitResolver.FromJsonObject },
             { "DiagramCanvas", DiagramCanvasResolver.FromJsonObject },
@@ -96,11 +94,13 @@ namespace CDP4JsonSerializer
             { "Goal", GoalResolver.FromJsonObject },
             { "HyperLink", HyperLinkResolver.FromJsonObject },
             { "IdCorrespondence", IdCorrespondenceResolver.FromJsonObject },
+            { "IndependentParameterTypeAssignment", IndependentParameterTypeAssignmentResolver.FromJsonObject },
             { "IntervalScale", IntervalScaleResolver.FromJsonObject },
             { "Iteration", IterationResolver.FromJsonObject },
             { "IterationSetup", IterationSetupResolver.FromJsonObject },
             { "LinearConversionUnit", LinearConversionUnitResolver.FromJsonObject },
             { "LogarithmicScale", LogarithmicScaleResolver.FromJsonObject },
+            { "LogEntryChangelogItem", LogEntryChangelogItemResolver.FromJsonObject },
             { "MappingToReferenceScale", MappingToReferenceScaleResolver.FromJsonObject },
             { "ModellingThingReference", ModellingThingReferenceResolver.FromJsonObject },
             { "ModelLogEntry", ModelLogEntryResolver.FromJsonObject },
@@ -153,6 +153,7 @@ namespace CDP4JsonSerializer
             { "ReviewItemDiscrepancy", ReviewItemDiscrepancyResolver.FromJsonObject },
             { "RuleVerificationList", RuleVerificationListResolver.FromJsonObject },
             { "RuleViolation", RuleViolationResolver.FromJsonObject },
+            { "SampledFunctionParameterType", SampledFunctionParameterTypeResolver.FromJsonObject },
             { "ScaleReferenceQuantityValue", ScaleReferenceQuantityValueResolver.FromJsonObject },
             { "ScaleValueDefinition", ScaleValueDefinitionResolver.FromJsonObject },
             { "Section", SectionResolver.FromJsonObject },

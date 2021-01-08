@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RequestForDeviationSerializer.cs" company="RHEA System S.A.">
+// <copyright file "RequestForDeviationSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="RequestForDeviationSerializer"/> class is to provide a <see cref="RequestForDeviation"/> specific serializer
     /// </summary>
@@ -63,6 +62,7 @@ namespace CDP4JsonSerializer
             { "shortName", shortName => new JValue(shortName) },
             { "sourceAnnotation", sourceAnnotation => new JArray(sourceAnnotation) },
             { "status", status => new JValue(status.ToString()) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "title", title => new JValue(title) },
         };
 
@@ -94,6 +94,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](requestForDeviation.ShortName));
             jsonObject.Add("sourceAnnotation", this.PropertySerializerMap["sourceAnnotation"](requestForDeviation.SourceAnnotation.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("status", this.PropertySerializerMap["status"](Enum.GetName(typeof(CDP4Common.ReportingData.AnnotationStatusKind), requestForDeviation.Status)));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](requestForDeviation.ThingPreference));
             jsonObject.Add("title", this.PropertySerializerMap["title"](requestForDeviation.Title));
             return jsonObject;
         }

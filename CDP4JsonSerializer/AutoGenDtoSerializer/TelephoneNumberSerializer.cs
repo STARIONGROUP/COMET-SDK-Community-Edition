@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TelephoneNumberSerializer.cs" company="RHEA System S.A.">
+// <copyright file "TelephoneNumberSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="TelephoneNumberSerializer"/> class is to provide a <see cref="TelephoneNumber"/> specific serializer
     /// </summary>
@@ -49,6 +48,7 @@ namespace CDP4JsonSerializer
             { "iid", iid => new JValue(iid) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "value", value => new JValue(value) },
             { "vcardType", vcardType => new JArray(vcardType) },
         };
@@ -67,6 +67,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](telephoneNumber.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](telephoneNumber.ModifiedOn));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](telephoneNumber.RevisionNumber));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](telephoneNumber.ThingPreference));
             jsonObject.Add("value", this.PropertySerializerMap["value"](telephoneNumber.Value));
             jsonObject.Add("vcardType", this.PropertySerializerMap["vcardType"](telephoneNumber.VcardType.Select(e => Enum.GetName(typeof(CDP4Common.SiteDirectoryData.VcardTelephoneNumberKind), e))));
             return jsonObject;

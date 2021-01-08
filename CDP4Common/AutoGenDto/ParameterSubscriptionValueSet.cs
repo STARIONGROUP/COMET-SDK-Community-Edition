@@ -1,9 +1,8 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterSubscriptionValueSet.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -20,9 +19,7 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.DTO
 {
@@ -223,6 +220,8 @@ namespace CDP4Common.DTO
 
             var copySubscribedValueSet = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.SubscribedValueSet);
             this.SubscribedValueSet = copySubscribedValueSet.Value == null ? original.SubscribedValueSet : copySubscribedValueSet.Value.Iid;
+
+            this.ThingPreference = original.ThingPreference;
 
             this.ValueSwitch = original.ValueSwitch;
         }

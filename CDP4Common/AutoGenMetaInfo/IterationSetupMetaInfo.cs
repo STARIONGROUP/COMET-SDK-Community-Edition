@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -235,6 +236,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "SourceIterationSetup", thing => thing.SourceIterationSetup },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -258,6 +260,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SourceIterationSetup", new PropertyMetaInfo("SourceIterationSetup", "IterationSetup", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -283,6 +286,7 @@ namespace CDP4Common.MetaInfo
             { "IterationNumber", (iterationSetup, value) => iterationSetup.IterationNumber = (int)value },
             { "ModifiedOn", (iterationSetup, value) => iterationSetup.ModifiedOn = (DateTime)value },
             { "SourceIterationSetup", (iterationSetup, value) => iterationSetup.SourceIterationSetup = value == null ? (Guid?)null : (Guid)value },
+            { "ThingPreference", (iterationSetup, value) => iterationSetup.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

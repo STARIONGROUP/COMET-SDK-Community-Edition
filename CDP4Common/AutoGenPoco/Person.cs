@@ -418,6 +418,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ShortName = dto.ShortName;
             this.Surname = dto.Surname;
             this.TelephoneNumber.ResolveList(dto.TelephoneNumber, dto.IterationContainerId, this.Cache);
+            this.ThingPreference = dto.ThingPreference;
             this.UserPreference.ResolveList(dto.UserPreference, dto.IterationContainerId, this.Cache);
 
             this.ResolveExtraProperties();
@@ -448,6 +449,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ShortName = this.ShortName;
             dto.Surname = this.Surname;
             dto.TelephoneNumber.AddRange(this.TelephoneNumber.Select(x => x.Iid));
+            dto.ThingPreference = this.ThingPreference;
             dto.UserPreference.AddRange(this.UserPreference.Select(x => x.Iid));
 
             dto.IterationContainerId = this.CacheKey.Iteration;

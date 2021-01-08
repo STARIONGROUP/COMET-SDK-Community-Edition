@@ -192,6 +192,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -233,6 +234,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "ReplyTo", thing => thing.ReplyTo },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -253,6 +255,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ReplyTo", new PropertyMetaInfo("ReplyTo", "DiscussionItem", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -275,6 +278,7 @@ namespace CDP4Common.MetaInfo
             { "LanguageCode", (discussionItem, value) => discussionItem.LanguageCode = value.ToString() },
             { "ModifiedOn", (discussionItem, value) => discussionItem.ModifiedOn = (DateTime)value },
             { "ReplyTo", (discussionItem, value) => discussionItem.ReplyTo = value == null ? (Guid?)null : (Guid)value },
+            { "ThingPreference", (discussionItem, value) => discussionItem.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

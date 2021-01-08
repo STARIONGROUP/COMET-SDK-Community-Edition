@@ -200,6 +200,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -246,6 +247,7 @@ namespace CDP4Common.MetaInfo
             { "Owner", thing => thing.Owner },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -267,6 +269,7 @@ namespace CDP4Common.MetaInfo
             { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -291,6 +294,7 @@ namespace CDP4Common.MetaInfo
             { "Name", (page, value) => page.Name = value.ToString() },
             { "Owner", (page, value) => page.Owner = (Guid)value },
             { "ShortName", (page, value) => page.ShortName = value.ToString() },
+            { "ThingPreference", (page, value) => page.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

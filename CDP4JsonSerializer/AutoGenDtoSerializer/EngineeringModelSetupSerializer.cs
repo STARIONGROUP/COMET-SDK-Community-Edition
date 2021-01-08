@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EngineeringModelSetupSerializer.cs" company="RHEA System S.A.">
+// <copyright file "EngineeringModelSetupSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="EngineeringModelSetupSerializer"/> class is to provide a <see cref="EngineeringModelSetup"/> specific serializer
     /// </summary>
@@ -62,6 +61,7 @@ namespace CDP4JsonSerializer
             { "shortName", shortName => new JValue(shortName) },
             { "sourceEngineeringModelSetupIid", sourceEngineeringModelSetupIid => new JValue(sourceEngineeringModelSetupIid) },
             { "studyPhase", studyPhase => new JValue(studyPhase.ToString()) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
 
         /// <summary>
@@ -86,11 +86,12 @@ namespace CDP4JsonSerializer
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](engineeringModelSetup.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](engineeringModelSetup.Name));
             jsonObject.Add("participant", this.PropertySerializerMap["participant"](engineeringModelSetup.Participant.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("requiredRdl", this.PropertySerializerMap["requiredRdl"](engineeringModelSetup.RequiredRdl.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("requiredRdl", this.PropertySerializerMap["requiredRdl"](engineeringModelSetup.RequiredRdl));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](engineeringModelSetup.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](engineeringModelSetup.ShortName));
             jsonObject.Add("sourceEngineeringModelSetupIid", this.PropertySerializerMap["sourceEngineeringModelSetupIid"](engineeringModelSetup.SourceEngineeringModelSetupIid));
             jsonObject.Add("studyPhase", this.PropertySerializerMap["studyPhase"](Enum.GetName(typeof(CDP4Common.SiteDirectoryData.StudyPhaseKind), engineeringModelSetup.StudyPhase)));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](engineeringModelSetup.ThingPreference));
             return jsonObject;
         }
 
