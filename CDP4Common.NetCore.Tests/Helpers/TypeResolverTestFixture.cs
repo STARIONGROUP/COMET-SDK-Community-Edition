@@ -49,7 +49,7 @@ namespace CDP4Common.NetCore.Tests.Helpers
             
             var subtypes = TypeResolver.GetDerivedTypes(subjectType, assembly).ToList();
 
-            Assert.That(subtypes.Count, Is.EqualTo(66));
+            Assert.That(subtypes.Count, Is.EqualTo(67));
         }
 
         [Test]

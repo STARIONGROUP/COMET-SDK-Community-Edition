@@ -90,8 +90,9 @@ namespace CDP4Common.Tests
             Assert.IsTrue(returned.ContainsKey("ExcludedDomain"));
             Assert.IsTrue(returned.ContainsKey("ExcludedPerson"));
             Assert.IsTrue(returned.ContainsKey("Annotation"));
+            Assert.IsTrue(returned.ContainsKey("ThingPreference"));
 
-            Assert.AreEqual(23, returned.Count);
+            Assert.AreEqual(24, returned.Count);
 
             object guid;
             Assert.IsTrue(returned.TryGetValue("DefaultPersonRole", out guid));
