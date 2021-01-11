@@ -67,6 +67,6 @@ namespace CDP4ServicesDal
         /// <summary>
         /// The header that specifies the version of CDP extensions that are accepted
         /// </summary>
-        internal const string AcceptCdpVersionValue = "1.1.0";
+        internal const string AcceptCdpVersionValue = "1.2.0";
     }
 }
