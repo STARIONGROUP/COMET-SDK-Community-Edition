@@ -70,6 +70,11 @@ namespace CDP4JsonSerializer
                 binaryRelationship.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
             }
 
+            if (!jObject["name"].IsNullOrEmpty())
+            {
+                binaryRelationship.Name = jObject["name"].ToObject<string>();
+            }
+
             if (!jObject["owner"].IsNullOrEmpty())
             {
                 binaryRelationship.Owner = jObject["owner"].ToObject<Guid>();

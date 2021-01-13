@@ -98,6 +98,17 @@ namespace CDP4Common.EngineeringModelData
         public virtual List<Category> Category { get; set; }
 
         /// <summary>
+        /// Gets or sets the Name.
+        /// </summary>
+        /// <remarks>
+        /// human readable character string in English by which something can be       referred       to
+        /// Note: The implied LanguageCode of <i>name</i> is "en-GB".
+        /// </remarks>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual string Name { get; set; }
+
+        /// <summary>
         /// Gets or sets the Owner.
         /// </summary>
         /// <remarks>

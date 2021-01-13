@@ -75,6 +75,14 @@ namespace CDP4Common.DTO
         public virtual List<Guid> Category { get; set; }
 
         /// <summary>
+        /// Gets or sets the Name.
+        /// </summary>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual string Name { get; set; }
+
+        /// <summary>
         /// Gets or sets the unique identifier of the referenced Owner.
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]

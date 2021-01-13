@@ -192,6 +192,7 @@ namespace CDP4Common.EngineeringModelData
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
+            this.Name = dto.Name;
             this.Owner = this.Cache.Get<DomainOfExpertise>(dto.Owner, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DomainOfExpertise>();
             this.ParameterValue.ResolveList(dto.ParameterValue, dto.IterationContainerId, this.Cache);
             this.RelatedThing.ResolveList(dto.RelatedThing, dto.IterationContainerId, this.Cache);
@@ -212,6 +213,7 @@ namespace CDP4Common.EngineeringModelData
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
+            dto.Name = this.Name;
             dto.Owner = this.Owner != null ? this.Owner.Iid : Guid.Empty;
             dto.ParameterValue.AddRange(this.ParameterValue.Select(x => x.Iid));
             dto.RelatedThing.AddRange(this.RelatedThing.Select(x => x.Iid));

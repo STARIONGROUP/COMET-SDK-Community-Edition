@@ -124,6 +124,8 @@ namespace CDP4Common.DTO
 
             this.ModifiedOn = original.ModifiedOn;
 
+            this.Name = original.Name;
+
             var copyOwner = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.Owner);
             this.Owner = copyOwner.Value == null ? original.Owner : copyOwner.Value.Iid;
 

@@ -48,6 +48,7 @@ namespace CDP4JsonSerializer
             { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
             { "iid", iid => new JValue(iid) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            { "name", name => new JValue(name) },
             { "owner", owner => new JValue(owner) },
             { "parameterValue", parameterValue => new JArray(parameterValue) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
@@ -70,6 +71,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](binaryRelationship.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](binaryRelationship.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](binaryRelationship.ModifiedOn));
+            jsonObject.Add("name", this.PropertySerializerMap["name"](binaryRelationship.Name));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](binaryRelationship.Owner));
             jsonObject.Add("parameterValue", this.PropertySerializerMap["parameterValue"](binaryRelationship.ParameterValue.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](binaryRelationship.RevisionNumber));

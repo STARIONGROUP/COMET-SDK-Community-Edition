@@ -70,6 +70,11 @@ namespace CDP4JsonSerializer
                 multiRelationship.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
             }
 
+            if (!jObject["name"].IsNullOrEmpty())
+            {
+                multiRelationship.Name = jObject["name"].ToObject<string>();
+            }
+
             if (!jObject["owner"].IsNullOrEmpty())
             {
                 multiRelationship.Owner = jObject["owner"].ToObject<Guid>();

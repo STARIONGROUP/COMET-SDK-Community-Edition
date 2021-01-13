@@ -48,6 +48,7 @@ namespace CDP4JsonSerializer
             { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
             { "iid", iid => new JValue(iid) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            { "name", name => new JValue(name) },
             { "owner", owner => new JValue(owner) },
             { "parameterValue", parameterValue => new JArray(parameterValue) },
             { "relatedThing", relatedThing => new JArray(relatedThing) },
@@ -69,6 +70,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](multiRelationship.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](multiRelationship.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](multiRelationship.ModifiedOn));
+            jsonObject.Add("name", this.PropertySerializerMap["name"](multiRelationship.Name));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](multiRelationship.Owner));
             jsonObject.Add("parameterValue", this.PropertySerializerMap["parameterValue"](multiRelationship.ParameterValue.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("relatedThing", this.PropertySerializerMap["relatedThing"](multiRelationship.RelatedThing.OrderBy(x => x, this.guidComparer)));

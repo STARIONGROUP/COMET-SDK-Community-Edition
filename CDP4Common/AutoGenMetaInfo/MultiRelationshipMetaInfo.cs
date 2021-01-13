@@ -196,6 +196,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "Name", "1.2.0" },
             { "ParameterValue", "1.1.0" },
             { "ThingPreference", "1.2.0" },
         };
@@ -238,6 +239,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedPerson", thing => thing.ExcludedPerson },
             { "Iid", thing => thing.Iid },
             { "ModifiedOn", thing => thing.ModifiedOn },
+            { "Name", thing => thing.Name },
             { "Owner", thing => thing.Owner },
             { "ParameterValue", thing => thing.ParameterValue },
             { "RelatedThing", thing => thing.RelatedThing },
@@ -259,6 +261,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RelatedThing", new PropertyMetaInfo("RelatedThing", "Thing", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
@@ -284,6 +287,7 @@ namespace CDP4Common.MetaInfo
         {
             { "Iid", (multiRelationship, value) => multiRelationship.Iid = (Guid)value },
             { "ModifiedOn", (multiRelationship, value) => multiRelationship.ModifiedOn = (DateTime)value },
+            { "Name", (multiRelationship, value) => multiRelationship.Name = value == null ? (string)null : value.ToString() },
             { "Owner", (multiRelationship, value) => multiRelationship.Owner = (Guid)value },
             { "ThingPreference", (multiRelationship, value) => multiRelationship.ThingPreference = value == null ? (string)null : value.ToString() },
         };
