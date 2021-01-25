@@ -659,7 +659,7 @@ namespace CDP4Dal
             }
 
             var eventArgs = new BeforeWriteEventArgs(operationContainer, filesList);
-            this.BeforeWrite?.Invoke(operationContainer, eventArgs);
+            this.BeforeWrite?.Invoke(this, eventArgs);
 
             if (!eventArgs.Cancelled)
             {
