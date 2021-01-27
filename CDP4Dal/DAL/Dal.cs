@@ -28,6 +28,7 @@ namespace CDP4Dal.DAL
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
@@ -63,6 +64,8 @@ namespace CDP4Dal.DAL
         /// </summary>
         protected Dal()
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+
             this.MetaDataProvider = StaticMetadataProvider.GetMetaDataProvider;
             this.SetCdpVersion();
         }
