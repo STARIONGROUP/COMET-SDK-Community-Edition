@@ -200,6 +200,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -247,6 +248,7 @@ namespace CDP4Common.MetaInfo
             { "Name", thing => thing.Name },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -265,6 +267,7 @@ namespace CDP4Common.MetaInfo
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -288,6 +291,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", (definedThing, value) => definedThing.ModifiedOn = (DateTime)value },
             { "Name", (definedThing, value) => definedThing.Name = value.ToString() },
             { "ShortName", (definedThing, value) => definedThing.ShortName = value.ToString() },
+            { "ThingPreference", (definedThing, value) => definedThing.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

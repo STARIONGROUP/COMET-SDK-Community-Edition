@@ -58,6 +58,7 @@ namespace CDP4Common.Helpers
             ClassKind.FileRevision,
             ClassKind.Folder,
             ClassKind.Iteration,
+            ClassKind.LogEntryChangelogItem,
             ClassKind.ModellingThingReference,
             ClassKind.ModelLogEntry,
             ClassKind.Page,

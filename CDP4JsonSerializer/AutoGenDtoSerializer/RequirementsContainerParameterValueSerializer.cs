@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RequirementsContainerParameterValueSerializer.cs" company="RHEA System S.A.">
+// <copyright file "RequirementsContainerParameterValueSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="RequirementsContainerParameterValueSerializer"/> class is to provide a <see cref="RequirementsContainerParameterValue"/> specific serializer
     /// </summary>
@@ -51,6 +50,7 @@ namespace CDP4JsonSerializer
             { "parameterType", parameterType => new JValue(parameterType) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "scale", scale => new JValue(scale) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "value", value => new JValue(((ValueArray<string>)value).ToJsonString()) },
         };
 
@@ -70,6 +70,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("parameterType", this.PropertySerializerMap["parameterType"](requirementsContainerParameterValue.ParameterType));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](requirementsContainerParameterValue.RevisionNumber));
             jsonObject.Add("scale", this.PropertySerializerMap["scale"](requirementsContainerParameterValue.Scale));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](requirementsContainerParameterValue.ThingPreference));
             jsonObject.Add("value", this.PropertySerializerMap["value"](requirementsContainerParameterValue.Value));
             return jsonObject;
         }

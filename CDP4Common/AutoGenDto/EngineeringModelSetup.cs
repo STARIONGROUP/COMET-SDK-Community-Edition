@@ -1,9 +1,8 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EngineeringModelSetup.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -20,9 +19,7 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.DTO
 {
@@ -53,6 +50,7 @@ namespace CDP4Common.DTO
         {
             this.ActiveDomain = new List<Guid>();
             this.IterationSetup = new List<Guid>();
+            this.OrganizationalParticipant = new List<Guid>();
             this.Participant = new List<Guid>();
             this.RequiredRdl = new List<Guid>();
         }
@@ -70,6 +68,7 @@ namespace CDP4Common.DTO
         {
             this.ActiveDomain = new List<Guid>();
             this.IterationSetup = new List<Guid>();
+            this.OrganizationalParticipant = new List<Guid>();
             this.Participant = new List<Guid>();
             this.RequiredRdl = new List<Guid>();
         }
@@ -80,6 +79,14 @@ namespace CDP4Common.DTO
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public List<Guid> ActiveDomain { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier of the referenced DefaultOrganizationalParticipant.
+        /// </summary>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: true, isPersistent: true)]
+        [DataMember]
+        public Guid? DefaultOrganizationalParticipant { get; set; }
 
         /// <summary>
         /// Gets or sets the unique identifier of the referenced EngineeringModelIid.
@@ -101,6 +108,14 @@ namespace CDP4Common.DTO
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public EngineeringModelKind Kind { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifiers of the contained OrganizationalParticipant instances.
+        /// </summary>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public List<Guid> OrganizationalParticipant { get; set; }
 
         /// <summary>
         /// Gets or sets the unique identifiers of the contained Participant instances.
@@ -147,6 +162,7 @@ namespace CDP4Common.DTO
             {
                 var containers = new List<IEnumerable>(base.ContainerLists);
                 containers.Add(this.IterationSetup);
+                containers.Add(this.OrganizationalParticipant);
                 containers.Add(this.Participant);
                 containers.Add(this.RequiredRdl);
                 return containers;
@@ -193,6 +209,9 @@ namespace CDP4Common.DTO
 
                 this.Alias.Add(copy.Value.Iid);
             }
+
+            var copyDefaultOrganizationalParticipant = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.DefaultOrganizationalParticipant);
+            this.DefaultOrganizationalParticipant = copyDefaultOrganizationalParticipant.Value == null ? original.DefaultOrganizationalParticipant : copyDefaultOrganizationalParticipant.Value.Iid;
 
             foreach (var guid in original.Definition)
             {
@@ -247,6 +266,17 @@ namespace CDP4Common.DTO
 
             this.Name = original.Name;
 
+            foreach (var guid in original.OrganizationalParticipant)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
+                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
+                {
+                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                }
+
+                this.OrganizationalParticipant.Add(copy.Value.Iid);
+            }
+
             foreach (var guid in original.Participant)
             {
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
@@ -274,6 +304,8 @@ namespace CDP4Common.DTO
             this.SourceEngineeringModelSetupIid = original.SourceEngineeringModelSetupIid;
 
             this.StudyPhase = original.StudyPhase;
+
+            this.ThingPreference = original.ThingPreference;
         }
 
         /// <summary>
@@ -284,6 +316,13 @@ namespace CDP4Common.DTO
         public override bool ResolveCopyReference(IReadOnlyDictionary<Thing, Thing> originalCopyMap)
         {
             var hasChanges = false;
+
+            var copyDefaultOrganizationalParticipant = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == this.DefaultOrganizationalParticipant);
+            if (copyDefaultOrganizationalParticipant.Key != null)
+            {
+                this.DefaultOrganizationalParticipant = copyDefaultOrganizationalParticipant.Value.Iid;
+                hasChanges = true;
+            }
 
             return hasChanges;
         }

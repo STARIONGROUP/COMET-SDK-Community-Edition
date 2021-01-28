@@ -257,6 +257,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
             this.SourceIterationSetup = (dto.SourceIterationSetup.HasValue) ? this.Cache.Get<IterationSetup>(dto.SourceIterationSetup.Value, dto.IterationContainerId) : null;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -279,6 +280,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
             dto.SourceIterationSetup = this.SourceIterationSetup != null ? (Guid?)this.SourceIterationSetup.Iid : null;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

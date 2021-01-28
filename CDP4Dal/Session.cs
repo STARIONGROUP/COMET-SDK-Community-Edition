@@ -645,9 +645,9 @@ namespace CDP4Dal
                 throw new InvalidOperationException($"The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
             }
 
-            var filesList = files?.ToList() ?? new List<string>();
+            var filesList = files?.ToList();
 
-            if (filesList.Any())
+            if (filesList != null && filesList.Any())
             {
                 foreach (var file in filesList)
                 {
@@ -659,7 +659,7 @@ namespace CDP4Dal
             }
 
             var eventArgs = new BeforeWriteEventArgs(operationContainer, filesList);
-            this.BeforeWrite?.Invoke(operationContainer, eventArgs);
+            this.BeforeWrite?.Invoke(this, eventArgs);
 
             if (!eventArgs.Cancelled)
             {

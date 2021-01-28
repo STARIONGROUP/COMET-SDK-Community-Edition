@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SiteReferenceDataLibrarySerializer.cs" company="RHEA System S.A.">
+// <copyright file "SiteReferenceDataLibrarySerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="SiteReferenceDataLibrarySerializer"/> class is to provide a <see cref="SiteReferenceDataLibrary"/> specific serializer
     /// </summary>
@@ -66,6 +65,7 @@ namespace CDP4JsonSerializer
             { "rule", rule => new JArray(rule) },
             { "scale", scale => new JArray(scale) },
             { "shortName", shortName => new JValue(shortName) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "unit", unit => new JArray(unit) },
             { "unitPrefix", unitPrefix => new JArray(unitPrefix) },
         };
@@ -101,6 +101,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("rule", this.PropertySerializerMap["rule"](siteReferenceDataLibrary.Rule.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("scale", this.PropertySerializerMap["scale"](siteReferenceDataLibrary.Scale.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](siteReferenceDataLibrary.ShortName));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](siteReferenceDataLibrary.ThingPreference));
             jsonObject.Add("unit", this.PropertySerializerMap["unit"](siteReferenceDataLibrary.Unit.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("unitPrefix", this.PropertySerializerMap["unitPrefix"](siteReferenceDataLibrary.UnitPrefix.OrderBy(x => x, this.guidComparer)));
             return jsonObject;

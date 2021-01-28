@@ -196,6 +196,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -240,6 +241,7 @@ namespace CDP4Common.MetaInfo
             { "Owner", thing => thing.Owner },
             { "PossibleFiniteStateList", thing => thing.PossibleFiniteStateList },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -261,6 +263,7 @@ namespace CDP4Common.MetaInfo
             { "PossibleFiniteStateList", new PropertyMetaInfo("PossibleFiniteStateList", "PossibleFiniteStateList", PropertyKind.OrderedList, AggregationKind.None, false, true, true, 1, "*", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -283,6 +286,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (actualFiniteStateList, value) => actualFiniteStateList.Iid = (Guid)value },
             { "ModifiedOn", (actualFiniteStateList, value) => actualFiniteStateList.ModifiedOn = (DateTime)value },
             { "Owner", (actualFiniteStateList, value) => actualFiniteStateList.Owner = (Guid)value },
+            { "ThingPreference", (actualFiniteStateList, value) => actualFiniteStateList.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

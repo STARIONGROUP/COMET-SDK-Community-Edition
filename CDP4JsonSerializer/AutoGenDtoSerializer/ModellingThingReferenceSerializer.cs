@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModellingThingReferenceSerializer.cs" company="RHEA System S.A.">
+// <copyright file "ModellingThingReferenceSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="ModellingThingReferenceSerializer"/> class is to provide a <see cref="ModellingThingReference"/> specific serializer
     /// </summary>
@@ -51,6 +50,7 @@ namespace CDP4JsonSerializer
             { "referencedRevisionNumber", referencedRevisionNumber => new JValue(referencedRevisionNumber) },
             { "referencedThing", referencedThing => new JValue(referencedThing) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
 
         /// <summary>
@@ -69,6 +69,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("referencedRevisionNumber", this.PropertySerializerMap["referencedRevisionNumber"](modellingThingReference.ReferencedRevisionNumber));
             jsonObject.Add("referencedThing", this.PropertySerializerMap["referencedThing"](modellingThingReference.ReferencedThing));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](modellingThingReference.RevisionNumber));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](modellingThingReference.ThingPreference));
             return jsonObject;
         }
 

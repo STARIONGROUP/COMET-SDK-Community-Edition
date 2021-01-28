@@ -309,6 +309,7 @@ namespace CDP4Common.EngineeringModelData
             this.NestedParameter.ResolveList(dto.NestedParameter, dto.IterationContainerId, this.Cache);
             this.RevisionNumber = dto.RevisionNumber;
             this.RootElement = this.Cache.Get<ElementDefinition>(dto.RootElement, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<ElementDefinition>();
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -328,6 +329,7 @@ namespace CDP4Common.EngineeringModelData
             dto.NestedParameter.AddRange(this.NestedParameter.Select(x => x.Iid));
             dto.RevisionNumber = this.RevisionNumber;
             dto.RootElement = this.RootElement != null ? this.RootElement.Iid : Guid.Empty;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

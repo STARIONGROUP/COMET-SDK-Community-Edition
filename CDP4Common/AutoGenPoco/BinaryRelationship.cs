@@ -216,11 +216,13 @@ namespace CDP4Common.EngineeringModelData
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
+            this.Name = dto.Name;
             this.Owner = this.Cache.Get<DomainOfExpertise>(dto.Owner, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DomainOfExpertise>();
             this.ParameterValue.ResolveList(dto.ParameterValue, dto.IterationContainerId, this.Cache);
             this.RevisionNumber = dto.RevisionNumber;
             this.Source = this.Cache.Get<Thing>(dto.Source, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Thing>();
             this.Target = this.Cache.Get<Thing>(dto.Target, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Thing>();
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -236,11 +238,13 @@ namespace CDP4Common.EngineeringModelData
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
+            dto.Name = this.Name;
             dto.Owner = this.Owner != null ? this.Owner.Iid : Guid.Empty;
             dto.ParameterValue.AddRange(this.ParameterValue.Select(x => x.Iid));
             dto.RevisionNumber = this.RevisionNumber;
             dto.Source = this.Source != null ? this.Source.Iid : Guid.Empty;
             dto.Target = this.Target != null ? this.Target.Iid : Guid.Empty;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

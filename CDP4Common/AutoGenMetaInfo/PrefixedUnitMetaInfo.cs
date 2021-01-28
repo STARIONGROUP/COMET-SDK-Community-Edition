@@ -198,6 +198,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -246,6 +247,7 @@ namespace CDP4Common.MetaInfo
             { "Prefix", thing => thing.Prefix },
             { "ReferenceUnit", thing => thing.ReferenceUnit },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -268,6 +270,7 @@ namespace CDP4Common.MetaInfo
             { "ReferenceUnit", new PropertyMetaInfo("ReferenceUnit", "MeasurementUnit", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -292,6 +295,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", (prefixedUnit, value) => prefixedUnit.ModifiedOn = (DateTime)value },
             { "Prefix", (prefixedUnit, value) => prefixedUnit.Prefix = (Guid)value },
             { "ReferenceUnit", (prefixedUnit, value) => prefixedUnit.ReferenceUnit = (Guid)value },
+            { "ThingPreference", (prefixedUnit, value) => prefixedUnit.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

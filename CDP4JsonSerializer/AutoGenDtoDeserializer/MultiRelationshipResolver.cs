@@ -1,9 +1,8 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MultiRelationshipResolver.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -20,9 +19,7 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -73,6 +70,11 @@ namespace CDP4JsonSerializer
                 multiRelationship.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
             }
 
+            if (!jObject["name"].IsNullOrEmpty())
+            {
+                multiRelationship.Name = jObject["name"].ToObject<string>();
+            }
+
             if (!jObject["owner"].IsNullOrEmpty())
             {
                 multiRelationship.Owner = jObject["owner"].ToObject<Guid>();
@@ -86,6 +88,11 @@ namespace CDP4JsonSerializer
             if (!jObject["relatedThing"].IsNullOrEmpty())
             {
                 multiRelationship.RelatedThing.AddRange(jObject["relatedThing"].ToObject<IEnumerable<Guid>>());
+            }
+
+            if (!jObject["thingPreference"].IsNullOrEmpty())
+            {
+                multiRelationship.ThingPreference = jObject["thingPreference"].ToObject<string>();
             }
 
             return multiRelationship;

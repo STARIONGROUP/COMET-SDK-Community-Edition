@@ -192,6 +192,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -230,6 +231,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", thing => thing.Iid },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "ViolatingThing", thing => thing.ViolatingThing },
         };
 
@@ -248,6 +250,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "ViolatingThing", new PropertyMetaInfo("ViolatingThing", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
         };
 
@@ -269,6 +272,7 @@ namespace CDP4Common.MetaInfo
             { "Description", (ruleViolation, value) => ruleViolation.Description = value.ToString() },
             { "Iid", (ruleViolation, value) => ruleViolation.Iid = (Guid)value },
             { "ModifiedOn", (ruleViolation, value) => ruleViolation.ModifiedOn = (DateTime)value },
+            { "ThingPreference", (ruleViolation, value) => ruleViolation.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

@@ -201,6 +201,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -257,6 +258,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", thing => thing.ShortName },
             { "Surname", thing => thing.Surname },
             { "TelephoneNumber", thing => thing.TelephoneNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "UserPreference", thing => thing.UserPreference },
         };
 
@@ -287,6 +289,7 @@ namespace CDP4Common.MetaInfo
             { "Role", new PropertyMetaInfo("Role", "PersonRole", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Surname", new PropertyMetaInfo("Surname", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -320,6 +323,7 @@ namespace CDP4Common.MetaInfo
             { "Role", (person, value) => person.Role = value == null ? (Guid?)null : (Guid)value },
             { "ShortName", (person, value) => person.ShortName = value.ToString() },
             { "Surname", (person, value) => person.Surname = value.ToString() },
+            { "ThingPreference", (person, value) => person.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

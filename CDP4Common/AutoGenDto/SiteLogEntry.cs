@@ -1,9 +1,8 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteLogEntry.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -20,9 +19,7 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.DTO
 {
@@ -51,8 +48,10 @@ namespace CDP4Common.DTO
         /// </summary>
         public SiteLogEntry()
         {
+            this.AffectedDomainIid = new List<Guid>();
             this.AffectedItemIid = new List<Guid>();
             this.Category = new List<Guid>();
+            this.LogEntryChangelogItem = new List<Guid>();
         }
 
         /// <summary>
@@ -66,9 +65,18 @@ namespace CDP4Common.DTO
         /// </param>
         public SiteLogEntry(Guid iid, int rev) : base(iid: iid, rev: rev)
         {
+            this.AffectedDomainIid = new List<Guid>();
             this.AffectedItemIid = new List<Guid>();
             this.Category = new List<Guid>();
+            this.LogEntryChangelogItem = new List<Guid>();
         }
+
+        /// <summary>
+        /// Gets or sets the list of unique identifiers of the referenced AffectedDomainIid instances.
+        /// </summary>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public List<Guid> AffectedDomainIid { get; set; }
 
         /// <summary>
         /// Gets or sets the list of unique identifiers of the referenced AffectedItemIid instances.
@@ -120,6 +128,14 @@ namespace CDP4Common.DTO
         public LogLevelKind Level { get; set; }
 
         /// <summary>
+        /// Gets or sets the unique identifiers of the contained LogEntryChangelogItem instances.
+        /// </summary>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public List<Guid> LogEntryChangelogItem { get; set; }
+
+        /// <summary>
         /// Gets the route for the current <see ref="SiteLogEntry"/>.
         /// </summary>
         public override string Route
@@ -149,6 +165,12 @@ namespace CDP4Common.DTO
             if (original == null)
             {
                 throw new InvalidOperationException("The originalThing cannot be null or is of the incorrect type");
+            }
+
+            foreach (var guid in original.AffectedDomainIid)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
+                this.AffectedDomainIid.Add(copy.Value == null ? guid : copy.Value.Iid);
             }
 
             foreach (var guid in original.AffectedItemIid)
@@ -186,7 +208,20 @@ namespace CDP4Common.DTO
 
             this.Level = original.Level;
 
+            foreach (var guid in original.LogEntryChangelogItem)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
+                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
+                {
+                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                }
+
+                this.LogEntryChangelogItem.Add(copy.Value.Iid);
+            }
+
             this.ModifiedOn = original.ModifiedOn;
+
+            this.ThingPreference = original.ThingPreference;
         }
 
         /// <summary>

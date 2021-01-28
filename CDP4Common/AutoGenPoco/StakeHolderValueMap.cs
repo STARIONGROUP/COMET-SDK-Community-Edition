@@ -299,6 +299,7 @@ namespace CDP4Common.EngineeringModelData
             this.Settings.ResolveList(dto.Settings, dto.IterationContainerId, this.Cache);
             this.ShortName = dto.ShortName;
             this.StakeholderValue.ResolveList(dto.StakeholderValue, dto.IterationContainerId, this.Cache);
+            this.ThingPreference = dto.ThingPreference;
             this.ValueGroup.ResolveList(dto.ValueGroup, dto.IterationContainerId, this.Cache);
 
             this.ResolveExtraProperties();
@@ -325,6 +326,7 @@ namespace CDP4Common.EngineeringModelData
             dto.Settings.AddRange(this.Settings.Select(x => x.Iid));
             dto.ShortName = this.ShortName;
             dto.StakeholderValue.AddRange(this.StakeholderValue.Select(x => x.Iid));
+            dto.ThingPreference = this.ThingPreference;
             dto.ValueGroup.AddRange(this.ValueGroup.Select(x => x.Iid));
 
             dto.IterationContainerId = this.CacheKey.Iteration;

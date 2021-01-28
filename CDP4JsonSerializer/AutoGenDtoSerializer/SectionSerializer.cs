@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SectionSerializer.cs" company="RHEA System S.A.">
+// <copyright file "SectionSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="SectionSerializer"/> class is to provide a <see cref="Section"/> specific serializer
     /// </summary>
@@ -55,6 +54,7 @@ namespace CDP4JsonSerializer
             { "page", page => new JArray(((IEnumerable)page).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "shortName", shortName => new JValue(shortName) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
 
         /// <summary>
@@ -77,6 +77,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("page", this.PropertySerializerMap["page"](section.Page.OrderBy(x => x, this.orderedItemComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](section.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](section.ShortName));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](section.ThingPreference));
             return jsonObject;
         }
 

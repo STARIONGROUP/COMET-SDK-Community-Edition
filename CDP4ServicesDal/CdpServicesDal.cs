@@ -62,7 +62,7 @@ namespace CDP4ServicesDal
     /// The purpose of the <see cref="CdpServicesDal"/> is to provide the Data Access Layer for CDP4 ECSS-E-TM-10-25
     /// Annex C, REST API
     /// </summary>
-    [DalExport("CDP4 Services", "A CDP4 Services Data Access Layer", "1.1.0", DalType.Web)]
+    [DalExport("CDP4 Services", "A CDP4 Services Data Access Layer", "1.2.0", DalType.Web)]
 #if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif

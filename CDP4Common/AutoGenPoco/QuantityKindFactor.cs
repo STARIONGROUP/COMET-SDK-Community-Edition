@@ -208,6 +208,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ModifiedOn = dto.ModifiedOn;
             this.QuantityKind = this.Cache.Get<QuantityKind>(dto.QuantityKind, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<QuantityKind>();
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -225,6 +226,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ModifiedOn = this.ModifiedOn;
             dto.QuantityKind = this.QuantityKind != null ? this.QuantityKind.Iid : Guid.Empty;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

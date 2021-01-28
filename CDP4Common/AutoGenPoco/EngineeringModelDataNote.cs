@@ -164,6 +164,7 @@ namespace CDP4Common.ReportingData
             this.PrimaryAnnotatedThing = (dto.PrimaryAnnotatedThing.HasValue) ? this.Cache.Get<ModellingThingReference>(dto.PrimaryAnnotatedThing.Value, dto.IterationContainerId) : null;
             this.RelatedThing.ResolveList(dto.RelatedThing, dto.IterationContainerId, this.Cache);
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -186,6 +187,7 @@ namespace CDP4Common.ReportingData
             dto.PrimaryAnnotatedThing = this.PrimaryAnnotatedThing != null ? (Guid?)this.PrimaryAnnotatedThing.Iid : null;
             dto.RelatedThing.AddRange(this.RelatedThing.Select(x => x.Iid));
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

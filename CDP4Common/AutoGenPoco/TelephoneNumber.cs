@@ -182,6 +182,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
             this.Value = dto.Value;
             this.VcardType.ClearAndAddRange(dto.VcardType);
 
@@ -199,6 +200,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
             dto.Value = this.Value;
             dto.VcardType.AddRange(this.VcardType);
 

@@ -321,6 +321,7 @@ namespace CDP4Common.EngineeringModelData
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
             this.SubscribedValueSet = this.Cache.Get<ParameterValueSetBase>(dto.SubscribedValueSet, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<ParameterValueSetBase>();
+            this.ThingPreference = dto.ThingPreference;
             this.ValueSwitch = dto.ValueSwitch;
 
             this.ResolveExtraProperties();
@@ -339,6 +340,7 @@ namespace CDP4Common.EngineeringModelData
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
             dto.SubscribedValueSet = this.SubscribedValueSet != null ? this.SubscribedValueSet.Iid : Guid.Empty;
+            dto.ThingPreference = this.ThingPreference;
             dto.ValueSwitch = this.ValueSwitch;
 
             dto.IterationContainerId = this.CacheKey.Iteration;

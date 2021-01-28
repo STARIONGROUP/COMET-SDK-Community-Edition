@@ -204,6 +204,7 @@ namespace CDP4Common.SiteDirectoryData
             this.Name = dto.Name;
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
             this.UnitFactor.ResolveList(dto.UnitFactor, dto.IterationContainerId, this.Cache);
 
             this.ResolveExtraProperties();
@@ -226,6 +227,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.Name = this.Name;
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
             dto.UnitFactor.AddRange(this.UnitFactor.ToDtoOrderedItemList());
 
             dto.IterationContainerId = this.CacheKey.Iteration;

@@ -217,6 +217,7 @@ namespace CDP4Common.EngineeringModelData
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
             this.StakeholderValue.ResolveList(dto.StakeholderValue, dto.IterationContainerId, this.Cache);
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -239,6 +240,7 @@ namespace CDP4Common.EngineeringModelData
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
             dto.StakeholderValue.AddRange(this.StakeholderValue.Select(x => x.Iid));
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

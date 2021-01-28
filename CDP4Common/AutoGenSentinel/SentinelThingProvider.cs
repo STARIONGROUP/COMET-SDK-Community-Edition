@@ -1,9 +1,8 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SentinelThingProvider.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -20,9 +19,7 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common
 {
@@ -61,6 +58,7 @@ namespace CDP4Common
             sentinelProvider.Add("IterationSetup", new IterationSetup(Guid.Empty, null, null));
             sentinelProvider.Add("MeasurementScale", new CyclicRatioScale(Guid.Empty, null, null));
             sentinelProvider.Add("MeasurementUnit", new DerivedUnit(Guid.Empty, null, null));
+            sentinelProvider.Add("Organization", new Organization(Guid.Empty, null, null));
             sentinelProvider.Add("Parameter", new Parameter(Guid.Empty, null, null));
             sentinelProvider.Add("ParameterBase", new Parameter(Guid.Empty, null, null));
             sentinelProvider.Add("ParameterType", new ArrayParameterType(Guid.Empty, null, null));

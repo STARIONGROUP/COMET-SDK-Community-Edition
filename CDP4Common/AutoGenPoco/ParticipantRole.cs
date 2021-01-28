@@ -203,6 +203,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ParticipantPermission.ResolveList(dto.ParticipantPermission, dto.IterationContainerId, this.Cache);
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -225,6 +226,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ParticipantPermission.AddRange(this.ParticipantPermission.Select(x => x.Iid));
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

@@ -253,6 +253,7 @@ namespace CDP4Common.SiteDirectoryData
             this.Name = dto.Name;
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -278,6 +279,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.Name = this.Name;
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

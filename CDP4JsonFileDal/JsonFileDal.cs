@@ -126,10 +126,10 @@ namespace CDP4JsonFileDal
         /// <summary>
         /// Allow the API user to update the copyright information with custom data
         /// </summary>
-        /// <param name="person">The <see cref="Person"/> that is used to create the <see cref="ExchangeFileHeader"/></param>
+        /// <param name="person">The <see cref="CDP4Common.SiteDirectoryData.Person"/> that is used to create the <see cref="ExchangeFileHeader"/></param>
         /// <param name="headerCopyright">Header copyright text</param>
         /// <param name="headerRemark">Header remark text</param>
-        public void UpdateExchangeFileHeader(Person person, string headerCopyright = null, string headerRemark = null)
+        public void UpdateExchangeFileHeader(CDP4Common.SiteDirectoryData.Person person, string headerCopyright = null, string headerRemark = null)
         {
             var exchangeFileHeader = JsonFileDalUtils.CreateExchangeFileHeader(person);
             exchangeFileHeader.Remark = headerRemark ?? exchangeFileHeader.Remark;
@@ -302,10 +302,10 @@ namespace CDP4JsonFileDal
         /// </exception>
         public override async Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken cancellationToken, IQueryAttributes attributes = null)
         {
-            // only read Iterations in a file Dal
-            if (!(thing is CDP4Common.DTO.Iteration))
+            // only read Iterations,  domains or site reference data libraries in a file Dal
+            if (!(thing is CDP4Common.DTO.Iteration) && !(thing is CDP4Common.DTO.SiteReferenceDataLibrary) && !(thing is CDP4Common.DTO.DomainOfExpertise))
             {
-                throw new NotSupportedException("The JSONFileDal only supports Read on Iteration instances.");
+                throw new NotSupportedException("The JSONFileDal only supports Read on Iteration, SiteReferenceDataLibrary and DomainOfExpertise instances.");
             }
 
             if (this.Credentials.Uri  == null)
@@ -327,63 +327,27 @@ namespace CDP4JsonFileDal
             {
                 // re-read the to extract the reference data libraries that have not yet been fully dereferenced
                 // and that are part of the required RDL's
-                var siteDirectoryData = this.ReadSiteDirectoryJson(filePath, this.Credentials);
+                var siteDirectoryData = this.ReadSiteDirectoryJson(filePath, this.Credentials).ToList();
 
                 // read file, SiteDirectory first.
                 using (var zip = ZipFile.Read(filePath))
                 {
                     // get all relevant info from the selected iteration
                     var siteDir = this.Session.RetrieveSiteDirectory();
-                    var iteration = thing as CDP4Common.DTO.Iteration;
-                    var engineeringModelSetup =
-                        siteDir.Model.SingleOrDefault(x => x.IterationSetup.Any(y => y.IterationIid == iteration.Iid));
 
-                    if (engineeringModelSetup == null)
+                    var returned = new List<Thing>();
+
+                    switch (thing.ClassKind)
                     {
-                        throw new ArgumentException("Could not locate the engineeringModel setup information");
-                    }
-
-                    // read engineeringmodel
-                    var engineeringModelFilePath = $"{engineeringModelSetup.EngineeringModelIid}.json";
-                    var engineeringModelZipEntry =
-                        zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(engineeringModelFilePath));
-                    var returned = this.ReadInfoFromArchiveEntry(engineeringModelZipEntry, this.Credentials.Password);
-
-                    var iterationFilePath = $"{iteration.Iid}.json";
-                    var iterationZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(iterationFilePath));
-                    returned.AddRange(this.ReadIterationArchiveEntry(iterationZipEntry, this.Credentials.Password));
-
-                    // use the loaded sitedirectory information to determine the required model reference data library
-                    var modelRdl = engineeringModelSetup.RequiredRdl.Single();
-
-                    // add the modelRdlDto to the returned collection to make sure it's content gets dereferenced
-                    if (returned.All(x => x.Iid != modelRdl.Iid))
-                    {
-                        var modelRdlDto = siteDirectoryData.Single(x => x.Iid == modelRdl.Iid);
-                        returned.Add(modelRdlDto);
-                    }
-
-                    // based on engineering model setup load rdl chain
-                    var modelRdlFilePath = $"{modelRdl.Iid}.json";
-                    var modelRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(modelRdlFilePath));
-                    var modelRdlItems = this.ReadInfoFromArchiveEntry(modelRdlZipEntry, this.Credentials.Password);
-                    returned.AddRange(modelRdlItems);
-
-                    // load the reference data libraries as per the containment chain
-                    var requiredRdl = modelRdl.RequiredRdl;
-                    while (requiredRdl != null)
-                    {
-                        // add the rdlDto to the returned collection to make sure it's content gets dereferenced
-                        var requiredRdlDto = siteDirectoryData.Single(x => x.Iid == requiredRdl.Iid);
-                        returned.Add(requiredRdlDto);
-
-                        var siteRdlFilePath = $"{requiredRdl.Iid}.json";
-                        var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteRdlFilePath));
-                        var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry, this.Credentials.Password);
-                        returned.AddRange(siteRdlItems);
-
-                        // set the requiredRdl for the next iteration
-                        requiredRdl = requiredRdl.RequiredRdl;
+                        case ClassKind.Iteration:
+                            returned = this.RetrieveIterationThings(thing as CDP4Common.DTO.Iteration, siteDirectoryData, zip, siteDir);
+                            break;
+                        case ClassKind.SiteReferenceDataLibrary:
+                            returned = this.RetrieveSRDLThings(thing as CDP4Common.DTO.SiteReferenceDataLibrary, siteDirectoryData, zip, siteDir);
+                            break;
+                        case ClassKind.DomainOfExpertise:
+                            returned = this.RetrieveDomainOfExpertiseThings(thing as CDP4Common.DTO.DomainOfExpertise, siteDirectoryData, zip, siteDir);
+                            break;
                     }
 
                     return returned;
@@ -404,10 +368,185 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Reads the data related to the provided <see cref="Iteration"/> from the data-source
+        /// Retrieves all data necessary for the transfer of a DomainOfExpertise
+        /// </summary>
+        /// <param name="domain">The <see cref="DomainOfExpertise"/></param>
+        /// <param name="siteDirectoryData">All SiteDirectory DTOs</param>
+        /// <param name="zip">The zip file</param>
+        /// <param name="siteDir">The <see cref="SiteDirectory"/> object</param>
+        /// <returns>List of things contained by the particular srdl</returns>
+        private List<Thing> RetrieveDomainOfExpertiseThings(CDP4Common.DTO.DomainOfExpertise domain, List<Thing> siteDirectoryData, ZipFile zip, CDP4Common.SiteDirectoryData.SiteDirectory siteDir)
+        {
+            var returned = new List<Thing>();
+
+            var domainThing = siteDir.Domain.FirstOrDefault(s => s.Iid.Equals(domain.Iid));
+
+            // wipe categories to avoide potential RDL irresolvable loop
+            domain.Category.Clear();
+
+            returned.Add(domain);
+
+            foreach (var refThing in domain.Alias.ToList())
+            {
+                var thingDto = siteDirectoryData.FirstOrDefault(s => s.Iid.Equals(refThing)) as CDP4Common.DTO.Alias;
+
+                if(thingDto != null)
+                {
+                    thingDto.ExcludedPerson.Clear();
+                    thingDto.ExcludedDomain.Clear();
+                    returned.Add(thingDto);
+                }
+                else
+                {
+                    domain.Alias.Remove(refThing);
+                }
+            }
+
+            foreach (var refThing in domain.HyperLink.ToList())
+            {
+                var thingDto = siteDirectoryData.FirstOrDefault(s => s.Iid.Equals(refThing)) as CDP4Common.DTO.HyperLink;
+
+                if (thingDto != null)
+                {
+                    thingDto.ExcludedPerson.Clear();
+                    thingDto.ExcludedDomain.Clear();
+                    returned.Add(thingDto);
+                }
+                else
+                {
+                    domain.HyperLink.Remove(refThing);
+                }
+            }
+
+            domain.ExcludedPerson.Clear();
+            domain.ExcludedDomain.Clear();
+
+            foreach (var refThing in domain.Definition.ToList())
+            {
+                var thingDto = siteDirectoryData.FirstOrDefault(s => s.Iid.Equals(refThing)) as CDP4Common.DTO.Definition;
+
+                if (thingDto != null)
+                {
+                    thingDto.ExcludedDomain.Clear();
+                    thingDto.ExcludedPerson.Clear();
+
+                    // remove citation due to possible irresolvable loop of references
+                    thingDto.Citation.Clear();
+
+                    returned.Add(thingDto);
+                }
+                else
+                {
+                    domain.ExcludedPerson.Remove(refThing);
+                }
+            }
+
+            return returned;
+        }
+
+        /// <summary>
+        /// Retrieves all data necessary for the transfer of a SRDL
+        /// </summary>
+        /// <param name="siteRdl">The <see cref="SiteReferenceDataLibrary"/></param>
+        /// <param name="siteDirectoryData">All SiteDirectory DTOs</param>
+        /// <param name="zip">The zip file</param>
+        /// <param name="siteDir">The <see cref="SiteDirectory"/> object</param>
+        /// <returns>List of things contained by the particular srdl</returns>
+        private List<Thing> RetrieveSRDLThings(CDP4Common.DTO.SiteReferenceDataLibrary siteRdl, List<Thing> siteDirectoryData, ZipFile zip, CDP4Common.SiteDirectoryData.SiteDirectory siteDir)
+        {
+            var returned = new List<Thing>();
+
+            var srdl = siteDir.SiteReferenceDataLibrary.FirstOrDefault(s => s.Iid.Equals(siteRdl.Iid));
+
+            // load the reference data libraries as per the containment chain
+            var requiredRdl = srdl;
+            while (requiredRdl != null)
+            {
+                // add the rdlDto to the returned collection to make sure it's content gets dereferenced
+                var requiredRdlDto = siteDirectoryData.Single(x => x.Iid == requiredRdl.Iid);
+                returned.Add(requiredRdlDto);
+
+                var siteRdlFilePath = $"{requiredRdl.Iid}.json";
+                var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteRdlFilePath));
+                var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry, this.Credentials.Password);
+                returned.AddRange(siteRdlItems);
+
+                // set the requiredRdl for the next iteration
+                requiredRdl = requiredRdl.RequiredRdl;
+            }
+
+            return returned;
+        }
+
+        /// <summary>
+        /// Retrieves all data necessary for the transfer of an iteration
+        /// </summary>
+        /// <param name="iteration">The <see cref="Iteration"/></param>
+        /// <param name="siteDirectoryData">All SiteDirectory DTOs</param>
+        /// <param name="zip">The zip file</param>
+        /// <param name="siteDir">The <see cref="SiteDirectory"/> object</param>
+        /// <returns>List of things relevant for a particular iteration</returns>
+        private List<Thing> RetrieveIterationThings(CDP4Common.DTO.Iteration iteration, List<Thing> siteDirectoryData, ZipFile zip, CDP4Common.SiteDirectoryData.SiteDirectory siteDir)
+        {
+            var engineeringModelSetup =
+                siteDir.Model.SingleOrDefault(x => x.IterationSetup.Any(y => y.IterationIid == iteration.Iid));
+
+            if (engineeringModelSetup == null)
+            {
+                throw new ArgumentException("Could not locate the engineeringModel setup information");
+            }
+
+            // read engineeringmodel
+            var engineeringModelFilePath = $"{engineeringModelSetup.EngineeringModelIid}.json";
+            var engineeringModelZipEntry =
+                zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(engineeringModelFilePath));
+            var returned = this.ReadInfoFromArchiveEntry(engineeringModelZipEntry, this.Credentials.Password);
+
+            var iterationFilePath = $"{iteration.Iid}.json";
+            var iterationZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(iterationFilePath));
+            returned.AddRange(this.ReadIterationArchiveEntry(iterationZipEntry, this.Credentials.Password));
+
+            // use the loaded sitedirectory information to determine the required model reference data library
+            var modelRdl = engineeringModelSetup.RequiredRdl.Single();
+
+            // add the modelRdlDto to the returned collection to make sure it's content gets dereferenced
+            if (returned.All(x => x.Iid != modelRdl.Iid))
+            {
+                var modelRdlDto = siteDirectoryData.Single(x => x.Iid == modelRdl.Iid);
+                returned.Add(modelRdlDto);
+            }
+
+            // based on engineering model setup load rdl chain
+            var modelRdlFilePath = $"{modelRdl.Iid}.json";
+            var modelRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(modelRdlFilePath));
+            var modelRdlItems = this.ReadInfoFromArchiveEntry(modelRdlZipEntry, this.Credentials.Password);
+            returned.AddRange(modelRdlItems);
+
+            // load the reference data libraries as per the containment chain
+            var requiredRdl = modelRdl.RequiredRdl;
+            while (requiredRdl != null)
+            {
+                // add the rdlDto to the returned collection to make sure it's content gets dereferenced
+                var requiredRdlDto = siteDirectoryData.Single(x => x.Iid == requiredRdl.Iid);
+                returned.Add(requiredRdlDto);
+
+                var siteRdlFilePath = $"{requiredRdl.Iid}.json";
+                var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteRdlFilePath));
+                var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry, this.Credentials.Password);
+                returned.AddRange(siteRdlItems);
+
+                // set the requiredRdl for the next iteration
+                requiredRdl = requiredRdl.RequiredRdl;
+            }
+
+            return returned;
+        }
+
+        /// <summary>
+        /// Reads the data related to the provided <see cref="CDP4Common.EngineeringModelData.Iteration"/> from the data-source
         /// </summary>
         /// <param name="iteration">
-        /// An instance of <see cref="Iteration"/> that needs to be read from the data-source
+        /// An instance of <see cref="CDP4Common.EngineeringModelData.Iteration"/> that needs to be read from the data-source
         /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/>
@@ -416,7 +555,7 @@ namespace CDP4JsonFileDal
         /// An instance of <see cref="IQueryAttributes"/> to be used with the request
         /// </param>
         /// <returns>
-        /// A list of <see cref="Thing"/> that are contained by the provided <see cref="EngineeringModel"/> including the Reference-Data.
+        /// A list of <see cref="Thing"/> that are contained by the provided <see cref="CDP4Common.EngineeringModelData.EngineeringModel"/> including the Reference-Data.
         /// All the <see cref="Thing"/>s that have been updated since the last read will be returned.
         /// </returns>
         public override async Task<IEnumerable<Thing>> Read(CDP4Common.DTO.Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
@@ -846,7 +985,7 @@ namespace CDP4JsonFileDal
         /// the <see cref="Credentials"/> used to read the archive
         /// </param>
         /// <returns>
-        /// an <see cref="IEnumerable{Thing}"/> containing <see cref="SiteDirectory"/> data
+        /// an <see cref="IEnumerable{Thing}"/> containing <see cref="CDP4Common.SiteDirectoryData.SiteDirectory"/> data
         /// </returns>
         private IEnumerable<Thing> ReadSiteDirectoryJson(string filePath, Credentials credentials)
         {

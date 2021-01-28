@@ -204,6 +204,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -260,6 +261,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", thing => thing.ShortName },
             { "SourceAnnotation", thing => thing.SourceAnnotation },
             { "Status", thing => thing.Status },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Title", thing => thing.Title },
         };
 
@@ -288,6 +290,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SourceAnnotation", new PropertyMetaInfo("SourceAnnotation", "ModellingAnnotationItem", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Status", new PropertyMetaInfo("Status", "CDP4Common.ReportingData.AnnotationStatusKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Title", new PropertyMetaInfo("Title", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -321,6 +324,7 @@ namespace CDP4Common.MetaInfo
             { "PrimaryAnnotatedThing", (contractDeviation, value) => contractDeviation.PrimaryAnnotatedThing = value == null ? (Guid?)null : (Guid)value },
             { "ShortName", (contractDeviation, value) => contractDeviation.ShortName = value.ToString() },
             { "Status", (contractDeviation, value) => contractDeviation.Status = (AnnotationStatusKind)value },
+            { "ThingPreference", (contractDeviation, value) => contractDeviation.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Title", (contractDeviation, value) => contractDeviation.Title = value.ToString() },
         };
 

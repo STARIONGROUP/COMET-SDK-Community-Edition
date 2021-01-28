@@ -55,6 +55,7 @@ namespace CDP4Common.MetaInfo
             { "Definition", engineeringModelSetup => engineeringModelSetup.Definition },
             { "HyperLink", engineeringModelSetup => engineeringModelSetup.HyperLink },
             { "IterationSetup", engineeringModelSetup => engineeringModelSetup.IterationSetup },
+            { "OrganizationalParticipant", engineeringModelSetup => engineeringModelSetup.OrganizationalParticipant },
             { "Participant", engineeringModelSetup => engineeringModelSetup.Participant },
             { "RequiredRdl", engineeringModelSetup => engineeringModelSetup.RequiredRdl },
         };
@@ -77,6 +78,7 @@ namespace CDP4Common.MetaInfo
             { "HyperLink", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.HyperLink != null, "The 'HyperLink' property of a 'EngineeringModelSetup' is mandatory and cannot be null.") },
             { "IterationSetup", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.IterationSetup != null && item.IterationSetup.Any(), "The 'IterationSetup' property of a 'EngineeringModelSetup' is mandatory and must have at least one entry.") },
             { "Name", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => !string.IsNullOrWhiteSpace(item.Name), "The 'Name' property of a 'EngineeringModelSetup' is mandatory and cannot be empty or null.") },
+            { "OrganizationalParticipant", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.OrganizationalParticipant != null, "The 'OrganizationalParticipant' property of a 'EngineeringModelSetup' is mandatory and cannot be null.") },
             { "Participant", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.Participant != null && item.Participant.Any(), "The 'Participant' property of a 'EngineeringModelSetup' is mandatory and must have at least one entry.") },
             { "RequiredRdl", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.RequiredRdl != null && item.RequiredRdl.Any(), "The 'RequiredRdl' property of a 'EngineeringModelSetup' is mandatory and must have at least one entry.") },
             { "ShortName", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => !string.IsNullOrWhiteSpace(item.ShortName), "The 'ShortName' property of a 'EngineeringModelSetup' is mandatory and cannot be empty or null.") },
@@ -204,9 +206,12 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "DefaultOrganizationalParticipant", "1.2.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "OrganizationalParticipant", "1.2.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -218,6 +223,7 @@ namespace CDP4Common.MetaInfo
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "IterationSetup", new PropertyMetaInfo("IterationSetup", "IterationSetup", PropertyKind.List, AggregationKind.Composite, false, false, true, 1, "*", true) },
+            { "OrganizationalParticipant", new PropertyMetaInfo("OrganizationalParticipant", "OrganizationalParticipant", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Participant", new PropertyMetaInfo("Participant", "Participant", PropertyKind.List, AggregationKind.Composite, false, false, true, 1, "*", true) },
             { "RequiredRdl", new PropertyMetaInfo("RequiredRdl", "ModelReferenceDataLibrary", PropertyKind.List, AggregationKind.Composite, false, false, true, 1, "1", true) },
         };
@@ -249,6 +255,7 @@ namespace CDP4Common.MetaInfo
             { "ActiveDomain", thing => thing.ActiveDomain },
             { "Alias", thing => thing.Alias },
             { "ClassKind", thing => thing.ClassKind },
+            { "DefaultOrganizationalParticipant", thing => thing.DefaultOrganizationalParticipant },
             { "Definition", thing => thing.Definition },
             { "EngineeringModelIid", thing => thing.EngineeringModelIid },
             { "ExcludedDomain", thing => thing.ExcludedDomain },
@@ -259,12 +266,14 @@ namespace CDP4Common.MetaInfo
             { "Kind", thing => thing.Kind },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "Name", thing => thing.Name },
+            { "OrganizationalParticipant", thing => thing.OrganizationalParticipant },
             { "Participant", thing => thing.Participant },
             { "RequiredRdl", thing => thing.RequiredRdl },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
             { "SourceEngineeringModelSetupIid", thing => thing.SourceEngineeringModelSetupIid },
             { "StudyPhase", thing => thing.StudyPhase },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -277,6 +286,7 @@ namespace CDP4Common.MetaInfo
         {
             { "ActiveDomain", new PropertyMetaInfo("ActiveDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 1, "*", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "DefaultOrganizationalParticipant", new PropertyMetaInfo("DefaultOrganizationalParticipant", "OrganizationalParticipant", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "EngineeringModelIid", new PropertyMetaInfo("EngineeringModelIid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
@@ -288,6 +298,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SourceEngineeringModelSetupIid", new PropertyMetaInfo("SourceEngineeringModelSetupIid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "StudyPhase", new PropertyMetaInfo("StudyPhase", "CDP4Common.SiteDirectoryData.StudyPhaseKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -302,6 +313,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedPerson", (value) => (Guid)value },
             { "HyperLink", (value) => (Guid)value },
             { "IterationSetup", (value) => (Guid)value },
+            { "OrganizationalParticipant", (value) => (Guid)value },
             { "Participant", (value) => (Guid)value },
             { "RequiredRdl", (value) => (Guid)value },
         };
@@ -311,6 +323,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.EngineeringModelSetup, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.EngineeringModelSetup, object>>
         {
+            { "DefaultOrganizationalParticipant", (engineeringModelSetup, value) => engineeringModelSetup.DefaultOrganizationalParticipant = value == null ? (Guid?)null : (Guid)value },
             { "EngineeringModelIid", (engineeringModelSetup, value) => engineeringModelSetup.EngineeringModelIid = (Guid)value },
             { "Iid", (engineeringModelSetup, value) => engineeringModelSetup.Iid = (Guid)value },
             { "Kind", (engineeringModelSetup, value) => engineeringModelSetup.Kind = (EngineeringModelKind)value },
@@ -319,6 +332,7 @@ namespace CDP4Common.MetaInfo
             { "ShortName", (engineeringModelSetup, value) => engineeringModelSetup.ShortName = value.ToString() },
             { "SourceEngineeringModelSetupIid", (engineeringModelSetup, value) => engineeringModelSetup.SourceEngineeringModelSetupIid = value == null ? (Guid?)null : (Guid)value },
             { "StudyPhase", (engineeringModelSetup, value) => engineeringModelSetup.StudyPhase = (StudyPhaseKind)value },
+            { "ThingPreference", (engineeringModelSetup, value) => engineeringModelSetup.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

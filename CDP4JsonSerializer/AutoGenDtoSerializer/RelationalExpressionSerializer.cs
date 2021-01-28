@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RelationalExpressionSerializer.cs" company="RHEA System S.A.">
+// <copyright file "RelationalExpressionSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="RelationalExpressionSerializer"/> class is to provide a <see cref="RelationalExpression"/> specific serializer
     /// </summary>
@@ -52,6 +51,7 @@ namespace CDP4JsonSerializer
             { "relationalOperator", relationalOperator => new JValue(relationalOperator.ToString()) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "scale", scale => new JValue(scale) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "value", value => new JValue(((ValueArray<string>)value).ToJsonString()) },
         };
 
@@ -72,6 +72,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("relationalOperator", this.PropertySerializerMap["relationalOperator"](Enum.GetName(typeof(CDP4Common.EngineeringModelData.RelationalOperatorKind), relationalExpression.RelationalOperator)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](relationalExpression.RevisionNumber));
             jsonObject.Add("scale", this.PropertySerializerMap["scale"](relationalExpression.Scale));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](relationalExpression.ThingPreference));
             jsonObject.Add("value", this.PropertySerializerMap["value"](relationalExpression.Value));
             return jsonObject;
         }

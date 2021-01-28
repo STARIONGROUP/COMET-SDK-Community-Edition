@@ -155,6 +155,7 @@ namespace CDP4Common.ReportingData
             this.ReferencedRevisionNumber = dto.ReferencedRevisionNumber;
             this.ReferencedThing = this.Cache.Get<Thing>(dto.ReferencedThing, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Thing>();
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -172,6 +173,7 @@ namespace CDP4Common.ReportingData
             dto.ReferencedRevisionNumber = this.ReferencedRevisionNumber;
             dto.ReferencedThing = this.ReferencedThing != null ? this.ReferencedThing.Iid : Guid.Empty;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

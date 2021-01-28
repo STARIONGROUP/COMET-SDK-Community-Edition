@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -229,6 +230,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", thing => thing.Iid },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Unit", thing => thing.Unit },
         };
 
@@ -247,6 +249,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Unit", new PropertyMetaInfo("Unit", "MeasurementUnit", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -267,6 +270,7 @@ namespace CDP4Common.MetaInfo
             { "Exponent", (unitFactor, value) => unitFactor.Exponent = value.ToString() },
             { "Iid", (unitFactor, value) => unitFactor.Iid = (Guid)value },
             { "ModifiedOn", (unitFactor, value) => unitFactor.ModifiedOn = (DateTime)value },
+            { "ThingPreference", (unitFactor, value) => unitFactor.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Unit", (unitFactor, value) => unitFactor.Unit = (Guid)value },
         };
 

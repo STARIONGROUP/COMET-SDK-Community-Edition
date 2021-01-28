@@ -204,6 +204,7 @@ namespace CDP4Common.ReportingData
             this.Solution.ResolveList(dto.Solution, dto.IterationContainerId, this.Cache);
             this.SourceAnnotation.ResolveList(dto.SourceAnnotation, dto.IterationContainerId, this.Cache);
             this.Status = dto.Status;
+            this.ThingPreference = dto.ThingPreference;
             this.Title = dto.Title;
 
             this.ResolveExtraProperties();
@@ -235,6 +236,7 @@ namespace CDP4Common.ReportingData
             dto.Solution.AddRange(this.Solution.Select(x => x.Iid));
             dto.SourceAnnotation.AddRange(this.SourceAnnotation.Select(x => x.Iid));
             dto.Status = this.Status;
+            dto.ThingPreference = this.ThingPreference;
             dto.Title = this.Title;
 
             dto.IterationContainerId = this.CacheKey.Iteration;

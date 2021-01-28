@@ -193,6 +193,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -236,6 +237,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "Name", thing => thing.Name },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -259,6 +261,7 @@ namespace CDP4Common.MetaInfo
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Path", new PropertyMetaInfo("Path", "string", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -283,6 +286,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (fileRevision, value) => fileRevision.Iid = (Guid)value },
             { "ModifiedOn", (fileRevision, value) => fileRevision.ModifiedOn = (DateTime)value },
             { "Name", (fileRevision, value) => fileRevision.Name = value.ToString() },
+            { "ThingPreference", (fileRevision, value) => fileRevision.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

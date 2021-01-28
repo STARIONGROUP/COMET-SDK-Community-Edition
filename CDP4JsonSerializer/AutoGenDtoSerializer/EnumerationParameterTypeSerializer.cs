@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EnumerationParameterTypeSerializer.cs" company="RHEA System S.A.">
+// <copyright file "EnumerationParameterTypeSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="EnumerationParameterTypeSerializer"/> class is to provide a <see cref="EnumerationParameterType"/> specific serializer
     /// </summary>
@@ -58,6 +57,7 @@ namespace CDP4JsonSerializer
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "shortName", shortName => new JValue(shortName) },
             { "symbol", symbol => new JValue(symbol) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "valueDefinition", valueDefinition => new JArray(((IEnumerable)valueDefinition).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
         };
 
@@ -84,6 +84,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](enumerationParameterType.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](enumerationParameterType.ShortName));
             jsonObject.Add("symbol", this.PropertySerializerMap["symbol"](enumerationParameterType.Symbol));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](enumerationParameterType.ThingPreference));
             jsonObject.Add("valueDefinition", this.PropertySerializerMap["valueDefinition"](enumerationParameterType.ValueDefinition.OrderBy(x => x, this.orderedItemComparer)));
             return jsonObject;
         }

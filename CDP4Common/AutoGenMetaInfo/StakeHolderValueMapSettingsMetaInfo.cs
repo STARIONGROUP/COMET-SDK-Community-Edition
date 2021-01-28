@@ -190,6 +190,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -229,6 +230,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "StakeholderValueToRequirementRelationship", thing => thing.StakeholderValueToRequirementRelationship },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "ValueGroupToStakeholderValueRelationship", thing => thing.ValueGroupToStakeholderValueRelationship },
         };
 
@@ -248,6 +250,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "StakeholderValueToRequirementRelationship", new PropertyMetaInfo("StakeholderValueToRequirementRelationship", "BinaryRelationshipRule", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "ValueGroupToStakeholderValueRelationship", new PropertyMetaInfo("ValueGroupToStakeholderValueRelationship", "BinaryRelationshipRule", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
@@ -269,6 +272,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (stakeHolderValueMapSettings, value) => stakeHolderValueMapSettings.Iid = (Guid)value },
             { "ModifiedOn", (stakeHolderValueMapSettings, value) => stakeHolderValueMapSettings.ModifiedOn = (DateTime)value },
             { "StakeholderValueToRequirementRelationship", (stakeHolderValueMapSettings, value) => stakeHolderValueMapSettings.StakeholderValueToRequirementRelationship = value == null ? (Guid?)null : (Guid)value },
+            { "ThingPreference", (stakeHolderValueMapSettings, value) => stakeHolderValueMapSettings.ThingPreference = value == null ? (string)null : value.ToString() },
             { "ValueGroupToStakeholderValueRelationship", (stakeHolderValueMapSettings, value) => stakeHolderValueMapSettings.ValueGroupToStakeholderValueRelationship = value == null ? (Guid?)null : (Guid)value },
         };
 

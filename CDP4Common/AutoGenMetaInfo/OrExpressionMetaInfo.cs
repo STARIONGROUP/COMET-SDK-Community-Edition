@@ -190,6 +190,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -228,6 +229,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "Term", thing => thing.Term },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -245,6 +247,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Term", new PropertyMetaInfo("Term", "BooleanExpression", PropertyKind.List, AggregationKind.None, false, false, true, 2, "*", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -264,6 +267,7 @@ namespace CDP4Common.MetaInfo
         {
             { "Iid", (orExpression, value) => orExpression.Iid = (Guid)value },
             { "ModifiedOn", (orExpression, value) => orExpression.ModifiedOn = (DateTime)value },
+            { "ThingPreference", (orExpression, value) => orExpression.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

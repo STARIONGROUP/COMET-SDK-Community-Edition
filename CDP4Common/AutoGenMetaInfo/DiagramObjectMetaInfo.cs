@@ -200,6 +200,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -250,6 +251,7 @@ namespace CDP4Common.MetaInfo
             { "Resolution", thing => thing.Resolution },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "SharedStyle", thing => thing.SharedStyle },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -271,6 +273,7 @@ namespace CDP4Common.MetaInfo
             { "Resolution", new PropertyMetaInfo("Resolution", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SharedStyle", new PropertyMetaInfo("SharedStyle", "SharedStyle", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -297,6 +300,7 @@ namespace CDP4Common.MetaInfo
             { "Name", (diagramObject, value) => diagramObject.Name = value.ToString() },
             { "Resolution", (diagramObject, value) => diagramObject.Resolution = (float)value },
             { "SharedStyle", (diagramObject, value) => diagramObject.SharedStyle = value == null ? (Guid?)null : (Guid)value },
+            { "ThingPreference", (diagramObject, value) => diagramObject.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

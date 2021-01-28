@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -230,6 +231,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "Name", thing => thing.Name },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Width", thing => thing.Width },
             { "X", thing => thing.X },
             { "Y", thing => thing.Y },
@@ -251,6 +253,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Width", new PropertyMetaInfo("Width", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "X", new PropertyMetaInfo("X", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Y", new PropertyMetaInfo("Y", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
@@ -274,6 +277,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (bounds, value) => bounds.Iid = (Guid)value },
             { "ModifiedOn", (bounds, value) => bounds.ModifiedOn = (DateTime)value },
             { "Name", (bounds, value) => bounds.Name = value.ToString() },
+            { "ThingPreference", (bounds, value) => bounds.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Width", (bounds, value) => bounds.Width = (float)value },
             { "X", (bounds, value) => bounds.X = (float)value },
             { "Y", (bounds, value) => bounds.Y = (float)value },

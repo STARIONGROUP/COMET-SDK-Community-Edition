@@ -207,6 +207,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
             this.Scale = this.Cache.Get<MeasurementScale>(dto.Scale, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<MeasurementScale>();
+            this.ThingPreference = dto.ThingPreference;
             this.Value = dto.Value;
 
             this.ResolveExtraProperties();
@@ -224,6 +225,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
             dto.Scale = this.Scale != null ? this.Scale.Iid : Guid.Empty;
+            dto.ThingPreference = this.ThingPreference;
             dto.Value = this.Value;
 
             dto.IterationContainerId = this.CacheKey.Iteration;

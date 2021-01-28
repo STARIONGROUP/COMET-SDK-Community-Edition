@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MappingToReferenceScaleSerializer.cs" company="RHEA System S.A.">
+// <copyright file "MappingToReferenceScaleSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="MappingToReferenceScaleSerializer"/> class is to provide a <see cref="MappingToReferenceScale"/> specific serializer
     /// </summary>
@@ -51,6 +50,7 @@ namespace CDP4JsonSerializer
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "referenceScaleValue", referenceScaleValue => new JValue(referenceScaleValue) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
 
         /// <summary>
@@ -69,6 +69,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](mappingToReferenceScale.ModifiedOn));
             jsonObject.Add("referenceScaleValue", this.PropertySerializerMap["referenceScaleValue"](mappingToReferenceScale.ReferenceScaleValue));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](mappingToReferenceScale.RevisionNumber));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](mappingToReferenceScale.ThingPreference));
             return jsonObject;
         }
 
