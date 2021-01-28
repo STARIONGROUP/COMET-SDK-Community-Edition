@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DiagramEdgeSerializer.cs" company="RHEA System S.A.">
+// <copyright file "DiagramEdgeSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="DiagramEdgeSerializer"/> class is to provide a <see cref="DiagramEdge"/> specific serializer
     /// </summary>
@@ -58,6 +57,7 @@ namespace CDP4JsonSerializer
             { "sharedStyle", sharedStyle => new JValue(sharedStyle) },
             { "source", source => new JValue(source) },
             { "target", target => new JValue(target) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
 
         /// <summary>
@@ -68,14 +68,14 @@ namespace CDP4JsonSerializer
         private JObject Serialize(DiagramEdge diagramEdge)
         {
             var jsonObject = new JObject();
-            jsonObject.Add("bounds", this.PropertySerializerMap["bounds"](diagramEdge.Bounds.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("bounds", this.PropertySerializerMap["bounds"](diagramEdge.Bounds));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), diagramEdge.ClassKind)));
             jsonObject.Add("depictedThing", this.PropertySerializerMap["depictedThing"](diagramEdge.DepictedThing));
             jsonObject.Add("diagramElement", this.PropertySerializerMap["diagramElement"](diagramEdge.DiagramElement.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](diagramEdge.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](diagramEdge.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](diagramEdge.Iid));
-            jsonObject.Add("localStyle", this.PropertySerializerMap["localStyle"](diagramEdge.LocalStyle.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("localStyle", this.PropertySerializerMap["localStyle"](diagramEdge.LocalStyle));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](diagramEdge.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](diagramEdge.Name));
             jsonObject.Add("point", this.PropertySerializerMap["point"](diagramEdge.Point.OrderBy(x => x, this.orderedItemComparer)));
@@ -83,6 +83,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("sharedStyle", this.PropertySerializerMap["sharedStyle"](diagramEdge.SharedStyle));
             jsonObject.Add("source", this.PropertySerializerMap["source"](diagramEdge.Source));
             jsonObject.Add("target", this.PropertySerializerMap["target"](diagramEdge.Target));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](diagramEdge.ThingPreference));
             return jsonObject;
         }
 

@@ -209,6 +209,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
             { "ParameterValue", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -265,6 +266,7 @@ namespace CDP4Common.MetaInfo
             { "Requirement", thing => thing.Requirement },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -286,6 +288,7 @@ namespace CDP4Common.MetaInfo
             { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -315,6 +318,7 @@ namespace CDP4Common.MetaInfo
             { "Name", (requirementsSpecification, value) => requirementsSpecification.Name = value.ToString() },
             { "Owner", (requirementsSpecification, value) => requirementsSpecification.Owner = (Guid)value },
             { "ShortName", (requirementsSpecification, value) => requirementsSpecification.ShortName = value.ToString() },
+            { "ThingPreference", (requirementsSpecification, value) => requirementsSpecification.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

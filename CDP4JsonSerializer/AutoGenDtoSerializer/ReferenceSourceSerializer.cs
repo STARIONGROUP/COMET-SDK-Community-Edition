@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReferenceSourceSerializer.cs" company="RHEA System S.A.">
+// <copyright file "ReferenceSourceSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="ReferenceSourceSerializer"/> class is to provide a <see cref="ReferenceSource"/> specific serializer
     /// </summary>
@@ -61,6 +60,7 @@ namespace CDP4JsonSerializer
             { "publisher", publisher => new JValue(publisher) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "shortName", shortName => new JValue(shortName) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "versionDate", versionDate => new JValue(versionDate != null ? ((DateTime)versionDate).ToString("yyyy-MM-ddTHH:mm:ss.fffZ") : null) },
             { "versionIdentifier", versionIdentifier => new JValue(versionIdentifier) },
         };
@@ -91,6 +91,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("publisher", this.PropertySerializerMap["publisher"](referenceSource.Publisher));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](referenceSource.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](referenceSource.ShortName));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](referenceSource.ThingPreference));
             jsonObject.Add("versionDate", this.PropertySerializerMap["versionDate"](referenceSource.VersionDate));
             jsonObject.Add("versionIdentifier", this.PropertySerializerMap["versionIdentifier"](referenceSource.VersionIdentifier));
             return jsonObject;

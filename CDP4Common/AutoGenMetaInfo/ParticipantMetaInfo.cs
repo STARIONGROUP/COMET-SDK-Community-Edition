@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -233,6 +234,7 @@ namespace CDP4Common.MetaInfo
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "Role", thing => thing.Role },
             { "SelectedDomain", thing => thing.SelectedDomain },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -254,6 +256,7 @@ namespace CDP4Common.MetaInfo
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Role", new PropertyMetaInfo("Role", "ParticipantRole", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SelectedDomain", new PropertyMetaInfo("SelectedDomain", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -277,6 +280,7 @@ namespace CDP4Common.MetaInfo
             { "Person", (participant, value) => participant.Person = (Guid)value },
             { "Role", (participant, value) => participant.Role = (Guid)value },
             { "SelectedDomain", (participant, value) => participant.SelectedDomain = (Guid)value },
+            { "ThingPreference", (participant, value) => participant.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

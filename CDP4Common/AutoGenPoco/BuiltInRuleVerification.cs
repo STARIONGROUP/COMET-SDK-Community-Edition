@@ -157,6 +157,7 @@ namespace CDP4Common.EngineeringModelData
             this.Name = dto.Name;
             this.RevisionNumber = dto.RevisionNumber;
             this.Status = dto.Status;
+            this.ThingPreference = dto.ThingPreference;
             this.Violation.ResolveList(dto.Violation, dto.IterationContainerId, this.Cache);
 
             this.ResolveExtraProperties();
@@ -177,6 +178,7 @@ namespace CDP4Common.EngineeringModelData
             dto.Name = this.Name;
             dto.RevisionNumber = this.RevisionNumber;
             dto.Status = this.Status;
+            dto.ThingPreference = this.ThingPreference;
             dto.Violation.AddRange(this.Violation.Select(x => x.Iid));
 
             dto.IterationContainerId = this.CacheKey.Iteration;

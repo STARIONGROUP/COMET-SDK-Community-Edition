@@ -27,6 +27,10 @@ namespace CDP4Common.Helpers
     using System;
     using System.Security.Cryptography;
 
+    /// <summary>
+    /// The purpose of the <see cref="TokenGenerator"/> is to generate a random token that
+    /// is used to match log statements
+    /// </summary>
     public static class TokenGenerator
     {
         /// <summary>

@@ -235,6 +235,7 @@ namespace CDP4Common.MetaInfo
             { "Stakeholder", "1.1.0" },
             { "StakeholderValue", "1.1.0" },
             { "StakeholderValueMap", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
             { "ValueGroup", "1.1.0" },
         };
 
@@ -311,6 +312,7 @@ namespace CDP4Common.MetaInfo
             { "Stakeholder", thing => thing.Stakeholder },
             { "StakeholderValue", thing => thing.StakeholderValue },
             { "StakeholderValueMap", thing => thing.StakeholderValueMap },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "TopElement", thing => thing.TopElement },
             { "ValueGroup", thing => thing.ValueGroup },
         };
@@ -332,6 +334,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "SourceIterationIid", new PropertyMetaInfo("SourceIterationIid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "TopElement", new PropertyMetaInfo("TopElement", "ElementDefinition", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
@@ -371,6 +374,7 @@ namespace CDP4Common.MetaInfo
             { "IterationSetup", (iteration, value) => iteration.IterationSetup = (Guid)value },
             { "ModifiedOn", (iteration, value) => iteration.ModifiedOn = (DateTime)value },
             { "SourceIterationIid", (iteration, value) => iteration.SourceIterationIid = value == null ? (Guid?)null : (Guid)value },
+            { "ThingPreference", (iteration, value) => iteration.ThingPreference = value == null ? (string)null : value.ToString() },
             { "TopElement", (iteration, value) => iteration.TopElement = value == null ? (Guid?)null : (Guid)value },
         };
 

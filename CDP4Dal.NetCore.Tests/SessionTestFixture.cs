@@ -2,7 +2,7 @@
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2020 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -36,6 +36,7 @@ namespace CDP4Dal.NetCore.Tests
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
+    using CDP4Dal.Composition;
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
@@ -430,7 +431,7 @@ namespace CDP4Dal.NetCore.Tests
 
             CDP4Common.CommonData.Thing changedObject = null;
             CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(CDP4Common.EngineeringModelData.Iteration)).Subscribe(x => changedObject = x.ChangedThing);
-            session2.CloseIterationSetup(iterationSetup);
+            await session2.CloseIterationSetup(iterationSetup);
             Assert.NotNull(changedObject);
         }
 
@@ -546,7 +547,7 @@ namespace CDP4Dal.NetCore.Tests
         }
 
         [Test]
-        public void Verify_that_when_active_person_is_null_Iteration_is_not_read()
+        public async Task Verify_that_when_active_person_is_null_Iteration_is_not_read()
         {
             var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), null, null) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
             var activeDomain = new DomainOfExpertise(Guid.NewGuid(), null, null);
@@ -590,9 +591,54 @@ namespace CDP4Dal.NetCore.Tests
             var notSupportedVersion = new Version("2.0.0");
             Assert.IsFalse(this.session.IsVersionSupported(notSupportedVersion));
         }
+
+        [Test]
+        public async Task VerifyThatWriteWorksWithoutEventHandler()
+        {
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+            await this.session.Write(new OperationContainer(context));
+
+            this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public async Task VerifyThatWriteWorksWithEventHandler()
+        {
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+
+            this.session.BeforeWrite += (o, args) =>
+            {
+                args.Cancelled = false;
+            };
+
+            await this.session.Write(new OperationContainer(context));
+
+            this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public async Task VerifyThatCancelWriteWorks()
+        {
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+
+            this.session.BeforeWrite += (o, args) =>
+            {
+                args.Cancelled = true;
+            };
+
+            await this.session.Write(new OperationContainer(context));
+
+            this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(0));
+        }
     }
 
-    //[DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
+    [DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
     internal class TestDal : IDal
     {
         public Version SupportedVersion { get {return new Version(1, 0, 0);} }

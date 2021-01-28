@@ -195,6 +195,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -238,6 +239,7 @@ namespace CDP4Common.MetaInfo
             { "Published", thing => thing.Published },
             { "Reference", thing => thing.Reference },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "ValueSwitch", thing => thing.ValueSwitch },
         };
 
@@ -265,6 +267,7 @@ namespace CDP4Common.MetaInfo
             { "Published", new PropertyMetaInfo("Published", "string", PropertyKind.ValueArray, AggregationKind.None, false, true, true, 1, "*", true) },
             { "Reference", new PropertyMetaInfo("Reference", "string", PropertyKind.ValueArray, AggregationKind.None, false, true, true, 1, "*", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "ValueSwitch", new PropertyMetaInfo("ValueSwitch", "CDP4Common.EngineeringModelData.ParameterSwitchKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -290,6 +293,7 @@ namespace CDP4Common.MetaInfo
             { "ParameterValueSet", (parameterOverrideValueSet, value) => parameterOverrideValueSet.ParameterValueSet = (Guid)value },
             { "Published", (parameterOverrideValueSet, value) => parameterOverrideValueSet.Published = (ValueArray<string>)value },
             { "Reference", (parameterOverrideValueSet, value) => parameterOverrideValueSet.Reference = (ValueArray<string>)value },
+            { "ThingPreference", (parameterOverrideValueSet, value) => parameterOverrideValueSet.ThingPreference = value == null ? (string)null : value.ToString() },
             { "ValueSwitch", (parameterOverrideValueSet, value) => parameterOverrideValueSet.ValueSwitch = (ParameterSwitchKind)value },
         };
 

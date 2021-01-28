@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PersonSerializer.cs" company="RHEA System S.A.">
+// <copyright file "PersonSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="PersonSerializer"/> class is to provide a <see cref="Person"/> specific serializer
     /// </summary>
@@ -63,6 +62,7 @@ namespace CDP4JsonSerializer
             { "shortName", shortName => new JValue(shortName) },
             { "surname", surname => new JValue(surname) },
             { "telephoneNumber", telephoneNumber => new JArray(telephoneNumber) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "userPreference", userPreference => new JArray(userPreference) },
         };
 
@@ -94,6 +94,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](person.ShortName));
             jsonObject.Add("surname", this.PropertySerializerMap["surname"](person.Surname));
             jsonObject.Add("telephoneNumber", this.PropertySerializerMap["telephoneNumber"](person.TelephoneNumber.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](person.ThingPreference));
             jsonObject.Add("userPreference", this.PropertySerializerMap["userPreference"](person.UserPreference.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }

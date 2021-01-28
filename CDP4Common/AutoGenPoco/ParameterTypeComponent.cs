@@ -230,6 +230,7 @@ namespace CDP4Common.SiteDirectoryData
             this.RevisionNumber = dto.RevisionNumber;
             this.Scale = (dto.Scale.HasValue) ? this.Cache.Get<MeasurementScale>(dto.Scale.Value, dto.IterationContainerId) : null;
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -248,6 +249,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.RevisionNumber = this.RevisionNumber;
             dto.Scale = this.Scale != null ? (Guid?)this.Scale.Iid : null;
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

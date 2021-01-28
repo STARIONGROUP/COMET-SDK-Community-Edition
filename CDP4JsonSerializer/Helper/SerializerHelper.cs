@@ -25,9 +25,11 @@
 namespace CDP4JsonSerializer
 {
     using System.Collections.Generic;
+
     using CDP4Common.Types;
     using CDP4Common.Helpers;
     using Newtonsoft.Json.Linq;
+    
     using NLog;
 
     /// <summary>
@@ -35,11 +37,6 @@ namespace CDP4JsonSerializer
     /// </summary>
     public static class SerializerHelper
     {
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// Convert a string to a <see cref="ValueArray{T}"/>
         /// </summary>

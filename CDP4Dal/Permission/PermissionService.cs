@@ -532,7 +532,7 @@ namespace CDP4Dal.Permission
 
         /// <summary>
         /// Resolves whether the write operation can be performed on a <see cref="Thing"/> of <see cref="Type"/>
-        /// <see cref="thingType"/> based on the superclass of <see cref="thingType"/>
+        /// <paramref name="thingType"/> based on the superclass of <paramref name="thingType"/>
         /// </summary>
         /// <param name="containerThing">The container of the <see cref="Thing"/> that the write operation 
         /// needs to be performed on.</param>

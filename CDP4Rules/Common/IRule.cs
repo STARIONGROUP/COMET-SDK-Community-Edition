@@ -44,7 +44,7 @@ namespace CDP4Rules.Common
         SeverityKind Severity { get; set; }
 
         /// <summary>
-        /// Gets or sets the human readable notes that provide extra information regarding the <see cref="Rule"/>
+        /// Gets or sets the human readable notes that provide extra information regarding the <see cref="IRule"/>
         /// </summary>
         string Notes { get; set; }
     }

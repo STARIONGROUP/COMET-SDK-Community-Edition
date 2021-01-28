@@ -26,9 +26,14 @@ namespace CDP4JsonSerializer
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common.DTO;
+
     using Newtonsoft.Json.Linq;
 
+    /// <summary>
+    /// Definition of the <see cref="IThingSerializer"/> used to serialize instances of <see cref="Thing"/> to a <see cref="JObject"/>
+    /// </summary>
     public interface IThingSerializer
     {
         /// <summary>

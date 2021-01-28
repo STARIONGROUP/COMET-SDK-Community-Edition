@@ -511,6 +511,7 @@ namespace CDP4Common.EngineeringModelData
             this.Stakeholder.ResolveList(dto.Stakeholder, dto.Iid, this.Cache);
             this.StakeholderValue.ResolveList(dto.StakeholderValue, dto.Iid, this.Cache);
             this.StakeholderValueMap.ResolveList(dto.StakeholderValueMap, dto.Iid, this.Cache);
+            this.ThingPreference = dto.ThingPreference;
             this.TopElement = (dto.TopElement.HasValue) ? this.Cache.Get<ElementDefinition>(dto.TopElement.Value, dto.Iid) : null;
             this.ValueGroup.ResolveList(dto.ValueGroup, dto.Iid, this.Cache);
 
@@ -547,6 +548,7 @@ namespace CDP4Common.EngineeringModelData
             dto.Stakeholder.AddRange(this.Stakeholder.Select(x => x.Iid));
             dto.StakeholderValue.AddRange(this.StakeholderValue.Select(x => x.Iid));
             dto.StakeholderValueMap.AddRange(this.StakeholderValueMap.Select(x => x.Iid));
+            dto.ThingPreference = this.ThingPreference;
             dto.TopElement = this.TopElement != null ? (Guid?)this.TopElement.Iid : null;
             dto.ValueGroup.AddRange(this.ValueGroup.Select(x => x.Iid));
 

@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BoundsSerializer.cs" company="RHEA System S.A.">
+// <copyright file "BoundsSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="BoundsSerializer"/> class is to provide a <see cref="Bounds"/> specific serializer
     /// </summary>
@@ -51,6 +50,7 @@ namespace CDP4JsonSerializer
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "width", width => new JValue(width) },
             { "x", x => new JValue(x) },
             { "y", y => new JValue(y) },
@@ -72,6 +72,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](bounds.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](bounds.Name));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](bounds.RevisionNumber));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](bounds.ThingPreference));
             jsonObject.Add("width", this.PropertySerializerMap["width"](bounds.Width));
             jsonObject.Add("x", this.PropertySerializerMap["x"](bounds.X));
             jsonObject.Add("y", this.PropertySerializerMap["y"](bounds.Y));

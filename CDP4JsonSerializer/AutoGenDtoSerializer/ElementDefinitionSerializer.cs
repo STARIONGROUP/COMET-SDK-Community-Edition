@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ElementDefinitionSerializer.cs" company="RHEA System S.A.">
+// <copyright file "ElementDefinitionSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="ElementDefinitionSerializer"/> class is to provide a <see cref="ElementDefinition"/> specific serializer
     /// </summary>
@@ -54,12 +53,14 @@ namespace CDP4JsonSerializer
             { "iid", iid => new JValue(iid) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
+            { "organizationalParticipant", organizationalParticipant => new JArray(organizationalParticipant) },
             { "owner", owner => new JValue(owner) },
             { "parameter", parameter => new JArray(parameter) },
             { "parameterGroup", parameterGroup => new JArray(parameterGroup) },
             { "referencedElement", referencedElement => new JArray(referencedElement) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "shortName", shortName => new JValue(shortName) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
 
         /// <summary>
@@ -81,12 +82,14 @@ namespace CDP4JsonSerializer
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](elementDefinition.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](elementDefinition.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](elementDefinition.Name));
+            jsonObject.Add("organizationalParticipant", this.PropertySerializerMap["organizationalParticipant"](elementDefinition.OrganizationalParticipant.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](elementDefinition.Owner));
             jsonObject.Add("parameter", this.PropertySerializerMap["parameter"](elementDefinition.Parameter.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("parameterGroup", this.PropertySerializerMap["parameterGroup"](elementDefinition.ParameterGroup.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("referencedElement", this.PropertySerializerMap["referencedElement"](elementDefinition.ReferencedElement.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](elementDefinition.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](elementDefinition.ShortName));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](elementDefinition.ThingPreference));
             return jsonObject;
         }
 

@@ -204,6 +204,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -256,6 +257,7 @@ namespace CDP4Common.MetaInfo
             { "SharedStyle", thing => thing.SharedStyle },
             { "Source", thing => thing.Source },
             { "Target", thing => thing.Target },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -277,6 +279,7 @@ namespace CDP4Common.MetaInfo
             { "SharedStyle", new PropertyMetaInfo("SharedStyle", "SharedStyle", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Source", new PropertyMetaInfo("Source", "DiagramElementThing", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Target", new PropertyMetaInfo("Target", "DiagramElementThing", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -304,6 +307,7 @@ namespace CDP4Common.MetaInfo
             { "SharedStyle", (diagramEdge, value) => diagramEdge.SharedStyle = value == null ? (Guid?)null : (Guid)value },
             { "Source", (diagramEdge, value) => diagramEdge.Source = (Guid)value },
             { "Target", (diagramEdge, value) => diagramEdge.Target = (Guid)value },
+            { "ThingPreference", (diagramEdge, value) => diagramEdge.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

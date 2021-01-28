@@ -197,6 +197,7 @@ namespace CDP4Common.CommonData
             this.LanguageCode = dto.LanguageCode;
             this.ModifiedOn = dto.ModifiedOn;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
             this.Uri = dto.Uri;
 
             this.ResolveExtraProperties();
@@ -215,6 +216,7 @@ namespace CDP4Common.CommonData
             dto.LanguageCode = this.LanguageCode;
             dto.ModifiedOn = this.ModifiedOn;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
             dto.Uri = this.Uri;
 
             dto.IterationContainerId = this.CacheKey.Iteration;

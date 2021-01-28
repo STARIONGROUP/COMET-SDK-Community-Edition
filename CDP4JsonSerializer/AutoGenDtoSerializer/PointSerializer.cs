@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PointSerializer.cs" company="RHEA System S.A.">
+// <copyright file "PointSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="PointSerializer"/> class is to provide a <see cref="Point"/> specific serializer
     /// </summary>
@@ -50,6 +49,7 @@ namespace CDP4JsonSerializer
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "x", x => new JValue(x) },
             { "y", y => new JValue(y) },
         };
@@ -69,6 +69,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](point.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](point.Name));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](point.RevisionNumber));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](point.ThingPreference));
             jsonObject.Add("x", this.PropertySerializerMap["x"](point.X));
             jsonObject.Add("y", this.PropertySerializerMap["y"](point.Y));
             return jsonObject;

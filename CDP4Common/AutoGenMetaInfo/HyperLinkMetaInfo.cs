@@ -193,6 +193,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -232,6 +233,7 @@ namespace CDP4Common.MetaInfo
             { "LanguageCode", thing => thing.LanguageCode },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Uri", thing => thing.Uri },
         };
 
@@ -251,6 +253,7 @@ namespace CDP4Common.MetaInfo
             { "LanguageCode", new PropertyMetaInfo("LanguageCode", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Uri", new PropertyMetaInfo("Uri", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -272,6 +275,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (hyperLink, value) => hyperLink.Iid = (Guid)value },
             { "LanguageCode", (hyperLink, value) => hyperLink.LanguageCode = value.ToString() },
             { "ModifiedOn", (hyperLink, value) => hyperLink.ModifiedOn = (DateTime)value },
+            { "ThingPreference", (hyperLink, value) => hyperLink.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Uri", (hyperLink, value) => hyperLink.Uri = value.ToString() },
         };
 
@@ -322,6 +326,7 @@ namespace CDP4Common.MetaInfo
             { "RequirementsGroup", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "RequirementsSpecification", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "RuleVerificationList", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "SampledFunctionParameterType", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "ScaleValueDefinition", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "SimpleQuantityKind", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "SimpleUnit", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },

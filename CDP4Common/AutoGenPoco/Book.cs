@@ -285,6 +285,7 @@ namespace CDP4Common.ReportingData
             this.RevisionNumber = dto.RevisionNumber;
             this.Section.ResolveList(dto.Section, dto.IterationContainerId, this.Cache);
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -306,6 +307,7 @@ namespace CDP4Common.ReportingData
             dto.RevisionNumber = this.RevisionNumber;
             dto.Section.AddRange(this.Section.ToDtoOrderedItemList());
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

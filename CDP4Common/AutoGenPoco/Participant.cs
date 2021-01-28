@@ -277,6 +277,7 @@ namespace CDP4Common.SiteDirectoryData
             this.RevisionNumber = dto.RevisionNumber;
             this.Role = this.Cache.Get<ParticipantRole>(dto.Role, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<ParticipantRole>();
             this.SelectedDomain = this.Cache.Get<DomainOfExpertise>(dto.SelectedDomain, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DomainOfExpertise>();
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -297,6 +298,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.RevisionNumber = this.RevisionNumber;
             dto.Role = this.Role != null ? this.Role.Iid : Guid.Empty;
             dto.SelectedDomain = this.SelectedDomain != null ? this.SelectedDomain.Iid : Guid.Empty;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

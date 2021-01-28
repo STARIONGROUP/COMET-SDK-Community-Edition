@@ -223,6 +223,7 @@ namespace CDP4Common.EngineeringModelData
             this.ModifiedOn = dto.ModifiedOn;
             this.PublishedParameter.ResolveList(dto.PublishedParameter, dto.IterationContainerId, this.Cache);
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -241,6 +242,7 @@ namespace CDP4Common.EngineeringModelData
             dto.ModifiedOn = this.ModifiedOn;
             dto.PublishedParameter.AddRange(this.PublishedParameter.Select(x => x.Iid));
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

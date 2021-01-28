@@ -77,6 +77,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedPerson", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.ExcludedPerson != null, "The 'ExcludedPerson' property of a 'ElementDefinition' is mandatory and cannot be null.") },
             { "HyperLink", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.HyperLink != null, "The 'HyperLink' property of a 'ElementDefinition' is mandatory and cannot be null.") },
             { "Name", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => !string.IsNullOrWhiteSpace(item.Name), "The 'Name' property of a 'ElementDefinition' is mandatory and cannot be empty or null.") },
+            { "OrganizationalParticipant", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.OrganizationalParticipant != null, "The 'OrganizationalParticipant' property of a 'ElementDefinition' is mandatory and cannot be null.") },
             { "Parameter", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.Parameter != null, "The 'Parameter' property of a 'ElementDefinition' is mandatory and cannot be null.") },
             { "ParameterGroup", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.ParameterGroup != null, "The 'ParameterGroup' property of a 'ElementDefinition' is mandatory and cannot be null.") },
             { "ReferencedElement", new DtoValidationHelper<CDP4Common.DTO.ElementDefinition>(item => item.ReferencedElement != null, "The 'ReferencedElement' property of a 'ElementDefinition' is mandatory and cannot be null.") },
@@ -208,6 +209,8 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "OrganizationalParticipant", "1.2.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -258,12 +261,14 @@ namespace CDP4Common.MetaInfo
             { "Iid", thing => thing.Iid },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "Name", thing => thing.Name },
+            { "OrganizationalParticipant", thing => thing.OrganizationalParticipant },
             { "Owner", thing => thing.Owner },
             { "Parameter", thing => thing.Parameter },
             { "ParameterGroup", thing => thing.ParameterGroup },
             { "ReferencedElement", thing => thing.ReferencedElement },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -281,10 +286,12 @@ namespace CDP4Common.MetaInfo
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "OrganizationalParticipant", new PropertyMetaInfo("OrganizationalParticipant", "OrganizationalParticipant", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ReferencedElement", new PropertyMetaInfo("ReferencedElement", "NestedElement", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -299,6 +306,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", (value) => (Guid)value },
             { "ExcludedPerson", (value) => (Guid)value },
             { "HyperLink", (value) => (Guid)value },
+            { "OrganizationalParticipant", (value) => (Guid)value },
             { "Parameter", (value) => (Guid)value },
             { "ParameterGroup", (value) => (Guid)value },
             { "ReferencedElement", (value) => (Guid)value },
@@ -314,6 +322,7 @@ namespace CDP4Common.MetaInfo
             { "Name", (elementDefinition, value) => elementDefinition.Name = value.ToString() },
             { "Owner", (elementDefinition, value) => elementDefinition.Owner = (Guid)value },
             { "ShortName", (elementDefinition, value) => elementDefinition.ShortName = value.ToString() },
+            { "ThingPreference", (elementDefinition, value) => elementDefinition.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

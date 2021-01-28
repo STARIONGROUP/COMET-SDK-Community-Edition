@@ -192,6 +192,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -235,6 +236,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "Owner", thing => thing.Owner },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -258,6 +260,7 @@ namespace CDP4Common.MetaInfo
             { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Path", new PropertyMetaInfo("Path", "string", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -282,6 +285,7 @@ namespace CDP4Common.MetaInfo
             { "IsVolatile", (nestedParameter, value) => nestedParameter.IsVolatile = (bool)value },
             { "ModifiedOn", (nestedParameter, value) => nestedParameter.ModifiedOn = (DateTime)value },
             { "Owner", (nestedParameter, value) => nestedParameter.Owner = (Guid)value },
+            { "ThingPreference", (nestedParameter, value) => nestedParameter.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

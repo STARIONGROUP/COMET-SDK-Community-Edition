@@ -256,6 +256,7 @@ namespace CDP4Common.SiteDirectoryData
             this.Prefix = this.Cache.Get<UnitPrefix>(dto.Prefix, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<UnitPrefix>();
             this.ReferenceUnit = this.Cache.Get<MeasurementUnit>(dto.ReferenceUnit, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<MeasurementUnit>();
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -277,6 +278,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.Prefix = this.Prefix != null ? this.Prefix.Iid : Guid.Empty;
             dto.ReferenceUnit = this.ReferenceUnit != null ? this.ReferenceUnit.Iid : Guid.Empty;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

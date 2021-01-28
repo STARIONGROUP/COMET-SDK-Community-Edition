@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MessageBusTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests
 {
@@ -30,11 +28,16 @@ namespace CDP4Dal.Tests
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using CDP4Common.SiteDirectoryData;
+
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
+
     using Moq;
+
     using NUnit.Framework;
+
     using ElementUsage = CDP4Common.EngineeringModelData.ElementUsage;
     using MeasurementUnit = CDP4Common.SiteDirectoryData.MeasurementUnit;
     using Person = CDP4Common.SiteDirectoryData.Person;
@@ -53,7 +56,6 @@ namespace CDP4Dal.Tests
         private CDP4Common.DTO.Person person;
         private CDP4Common.DTO.Person person2;
 
-        private CDP4Common.DTO.ConversionBasedUnit conversionBasedUnitType;
         private CDP4Common.DTO.LinearConversionUnit linearConversionUnitType;
         private CDP4Common.DTO.PrefixedUnit prefixedUnitType;
         private CDP4Common.DTO.DerivedUnit derivedUnitType;

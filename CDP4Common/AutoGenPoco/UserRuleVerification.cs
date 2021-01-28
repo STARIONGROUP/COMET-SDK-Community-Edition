@@ -211,6 +211,7 @@ namespace CDP4Common.EngineeringModelData
             this.RevisionNumber = dto.RevisionNumber;
             this.Rule = this.Cache.Get<Rule>(dto.Rule, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Rule>();
             this.Status = dto.Status;
+            this.ThingPreference = dto.ThingPreference;
             this.Violation.ResolveList(dto.Violation, dto.IterationContainerId, this.Cache);
 
             this.ResolveExtraProperties();
@@ -231,6 +232,7 @@ namespace CDP4Common.EngineeringModelData
             dto.RevisionNumber = this.RevisionNumber;
             dto.Rule = this.Rule != null ? this.Rule.Iid : Guid.Empty;
             dto.Status = this.Status;
+            dto.ThingPreference = this.ThingPreference;
             dto.Violation.AddRange(this.Violation.Select(x => x.Iid));
 
             dto.IterationContainerId = this.CacheKey.Iteration;

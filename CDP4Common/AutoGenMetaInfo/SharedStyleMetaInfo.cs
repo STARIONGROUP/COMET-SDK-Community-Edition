@@ -195,6 +195,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -248,6 +249,7 @@ namespace CDP4Common.MetaInfo
             { "StrokeColor", thing => thing.StrokeColor },
             { "StrokeOpacity", thing => thing.StrokeOpacity },
             { "StrokeWidth", thing => thing.StrokeWidth },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "UsedColor", thing => thing.UsedColor },
         };
 
@@ -278,6 +280,7 @@ namespace CDP4Common.MetaInfo
             { "StrokeColor", new PropertyMetaInfo("StrokeColor", "Color", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "StrokeOpacity", new PropertyMetaInfo("StrokeOpacity", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "StrokeWidth", new PropertyMetaInfo("StrokeWidth", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -310,6 +313,7 @@ namespace CDP4Common.MetaInfo
             { "StrokeColor", (sharedStyle, value) => sharedStyle.StrokeColor = value == null ? (Guid?)null : (Guid)value },
             { "StrokeOpacity", (sharedStyle, value) => sharedStyle.StrokeOpacity = value == null ? (float?)null : (float)value },
             { "StrokeWidth", (sharedStyle, value) => sharedStyle.StrokeWidth = value == null ? (float?)null : (float)value },
+            { "ThingPreference", (sharedStyle, value) => sharedStyle.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RequirementsSpecificationSerializer.cs" company="RHEA System S.A.">
+// <copyright file "RequirementsSpecificationSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="RequirementsSpecificationSerializer"/> class is to provide a <see cref="RequirementsSpecification"/> specific serializer
     /// </summary>
@@ -60,6 +59,7 @@ namespace CDP4JsonSerializer
             { "requirement", requirement => new JArray(requirement) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "shortName", shortName => new JValue(shortName) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
 
         /// <summary>
@@ -87,6 +87,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("requirement", this.PropertySerializerMap["requirement"](requirementsSpecification.Requirement.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](requirementsSpecification.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](requirementsSpecification.ShortName));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](requirementsSpecification.ThingPreference));
             return jsonObject;
         }
 

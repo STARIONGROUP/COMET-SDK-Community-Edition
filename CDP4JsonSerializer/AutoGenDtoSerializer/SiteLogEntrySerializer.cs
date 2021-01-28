@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SiteLogEntrySerializer.cs" company="RHEA System S.A.">
+// <copyright file "SiteLogEntrySerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="SiteLogEntrySerializer"/> class is to provide a <see cref="SiteLogEntry"/> specific serializer
     /// </summary>
@@ -43,6 +42,7 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
         {
+            { "affectedDomainIid", affectedDomainIid => new JArray(affectedDomainIid) },
             { "affectedItemIid", affectedItemIid => new JArray(affectedItemIid) },
             { "author", author => new JValue(author) },
             { "category", category => new JArray(category) },
@@ -54,8 +54,10 @@ namespace CDP4JsonSerializer
             { "iid", iid => new JValue(iid) },
             { "languageCode", languageCode => new JValue(languageCode) },
             { "level", level => new JValue(level.ToString()) },
+            { "logEntryChangelogItem", logEntryChangelogItem => new JArray(logEntryChangelogItem) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
 
         /// <summary>
@@ -66,6 +68,7 @@ namespace CDP4JsonSerializer
         private JObject Serialize(SiteLogEntry siteLogEntry)
         {
             var jsonObject = new JObject();
+            jsonObject.Add("affectedDomainIid", this.PropertySerializerMap["affectedDomainIid"](siteLogEntry.AffectedDomainIid.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("affectedItemIid", this.PropertySerializerMap["affectedItemIid"](siteLogEntry.AffectedItemIid.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("author", this.PropertySerializerMap["author"](siteLogEntry.Author));
             jsonObject.Add("category", this.PropertySerializerMap["category"](siteLogEntry.Category.OrderBy(x => x, this.guidComparer)));
@@ -77,8 +80,10 @@ namespace CDP4JsonSerializer
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](siteLogEntry.Iid));
             jsonObject.Add("languageCode", this.PropertySerializerMap["languageCode"](siteLogEntry.LanguageCode));
             jsonObject.Add("level", this.PropertySerializerMap["level"](Enum.GetName(typeof(CDP4Common.CommonData.LogLevelKind), siteLogEntry.Level)));
+            jsonObject.Add("logEntryChangelogItem", this.PropertySerializerMap["logEntryChangelogItem"](siteLogEntry.LogEntryChangelogItem.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](siteLogEntry.ModifiedOn));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](siteLogEntry.RevisionNumber));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](siteLogEntry.ThingPreference));
             return jsonObject;
         }
 

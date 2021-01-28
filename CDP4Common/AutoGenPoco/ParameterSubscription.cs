@@ -266,6 +266,7 @@ namespace CDP4Common.EngineeringModelData
             this.ModifiedOn = dto.ModifiedOn;
             this.Owner = this.Cache.Get<DomainOfExpertise>(dto.Owner, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DomainOfExpertise>();
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
             this.ValueSet.ResolveList(dto.ValueSet, dto.IterationContainerId, this.Cache);
 
             this.ResolveExtraProperties();
@@ -283,6 +284,7 @@ namespace CDP4Common.EngineeringModelData
             dto.ModifiedOn = this.ModifiedOn;
             dto.Owner = this.Owner != null ? this.Owner.Iid : Guid.Empty;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
             dto.ValueSet.AddRange(this.ValueSet.Select(x => x.Iid));
 
             dto.IterationContainerId = this.CacheKey.Iteration;

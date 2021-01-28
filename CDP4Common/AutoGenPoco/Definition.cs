@@ -238,6 +238,7 @@ namespace CDP4Common.CommonData
             this.ModifiedOn = dto.ModifiedOn;
             this.Note.ClearAndAddRange(dto.Note);
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -258,6 +259,7 @@ namespace CDP4Common.CommonData
             dto.ModifiedOn = this.ModifiedOn;
             dto.Note.AddRange(this.Note.ToDtoOrderedItemList());
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

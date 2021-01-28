@@ -27,7 +27,7 @@ namespace CDP4Common.Polyfills
     using System;
     using System.Reflection;
 
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
 
     /// <summary>
     /// The purpose of the <see cref="TypePolyfills"/> class is to provide extension methods on the <see cref="Type"/>
@@ -165,9 +165,6 @@ namespace CDP4Common.Polyfills
         /// <summary>
         ///  Determines whether an instance of a specified type can be assigned to the current type instance.
         /// </summary>
-        /// <typeparam name="TType">
-        /// The type to compare with the current type.
-        /// </typeparam>
         /// <param name="type">
         /// The current <see cref="Type"/>
         /// </param>
@@ -176,7 +173,7 @@ namespace CDP4Common.Polyfills
         /// the same type. c is derived either directly or indirectly from the current instance.
         /// The current instance is an interface that c implements. c is a generic type parameter,
         /// and the current instance represents one of the constraints of c. c represents
-        /// a value type, and the current instance represents Nullable<c> .
+        /// a value type, and the current instance represents Nullable.
         /// false if none of these conditions are true, or if c is null.
         /// </returns>
         public static bool QueryIsAssignableFrom(this Type type, Type c)
@@ -184,16 +181,51 @@ namespace CDP4Common.Polyfills
             return type.IsAssignableFrom(c);
         }
 
+        /// <summary>
+        /// Queries the type from which the <paramref name="type"/> directly inherits.
+        /// </summary>
+        /// <param name="type">
+        /// the subject <see cref="Type"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="Type" /> from which the <paramref name="type"/> directly inherits,
+        /// or null <paramref name="type"/> represents the <see cref="System.Object" /> class or an interface.
+        /// </returns>
         public static Type QueryBaseType(this Type type)
         {
             return type.BaseType;
         }
 
+        /// <summary>
+        /// Determines whether the <paramref name="type"/> derives from the specified <see cref="System.Type" />.
+        /// </summary>
+        /// <param name="type">
+        /// the subject <see cref="Type"/>
+        /// </param>
+        /// <param name="c">
+        /// The type to compare with the current type.
+        /// </param>
+        /// <returns>
+        /// true if the current the <paramref name="type"/> derives from <paramref name="c" />; otherwise, false.
+        /// This method also returns false if <paramref name="c" /> and <paramref name="type"/> are equal.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="c" /> is null.
+        /// </exception>
         public static bool QueryIsSubclassOf(this Type type, Type c)
         {
             return type.IsSubclassOf(c);
         }
 
+        /// <summary>
+        /// Searches for the public field with the specified name.
+        /// </summary>
+        /// <param name="name">
+        /// The string containing the name of the data field to get.
+        /// </param>
+        /// <returns>
+        /// An object representing the public field with the specified name, if found; otherwise, null.
+        /// </returns>
         public static FieldInfo QueryField(this Type type, string name)
         {
             return type.GetField(name);
@@ -307,7 +339,19 @@ namespace CDP4Common.Polyfills
 
             return false;
         }
-        
+
+        /// <summary>
+        /// Gets the <see cref="Attribute"/> of the specified type
+        /// </summary>
+        /// <typeparam name="TAttribute">
+        /// The type of the subject <see cref="Attribute"/>
+        /// </typeparam>
+        /// <param name="type">
+        /// The subject <see cref="Type"/>
+        /// </param>
+        /// <returns>
+        /// an instance of the specified <see cref="Attribute"/>; otherwise, null.
+        /// </returns>
         public static Attribute QueryGetCustomAttribute<TAttribute>(this Type type)
         {
             var attributes = type.GetTypeInfo().GetCustomAttributes();
@@ -322,21 +366,70 @@ namespace CDP4Common.Polyfills
             return null;
         }
 
+        /// <summary>
+        ///  Determines whether an instance of a specified type can be assigned to the current type instance.
+        /// </summary>
+        /// <param name="type">
+        /// The current <see cref="Type"/>
+        /// </param>
+        /// <returns>
+        /// true if any of the following conditions is true: c and the current instance represent
+        /// the same type. c is derived either directly or indirectly from the current instance.
+        /// The current instance is an interface that c implements. c is a generic type parameter,
+        /// and the current instance represents one of the constraints of c. c represents
+        /// a value type, and the current instance represents Nullable.
+        /// false if none of these conditions are true, or if c is null.
+        /// </returns>
         public static bool QueryIsAssignableFrom(this Type type, Type c)
         {
             return type.GetTypeInfo().IsAssignableFrom(c);
         }
 
+        /// <summary>
+        /// Queries the type from which the <paramref name="type"/> directly inherits.
+        /// </summary>
+        /// <param name="type">
+        /// the subject <see cref="Type"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="Type" /> from which the <paramref name="type"/> directly inherits,
+        /// or null <paramref name="type"/> represents the <see cref="System.Object" /> class or an interface.
+        /// </returns>
         public static Type QueryBaseType(this Type type)
         {
             return type.GetTypeInfo().BaseType;
         }
 
+        /// <summary>
+        /// Determines whether the <paramref name="type"/> derives from the specified <see cref="System.Type" />.
+        /// </summary>
+        /// <param name="type">
+        /// the subject <see cref="Type"/>
+        /// </param>
+        /// <param name="c">
+        /// The type to compare with the current type.
+        /// </param>
+        /// <returns>
+        /// true if the current the <paramref name="type"/> derives from <paramref name="c" />; otherwise, false.
+        /// This method also returns false if <paramref name="c" /> and <paramref name="type"/> are equal.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="c" /> is null.
+        /// </exception>
         public static bool QueryIsSubclassOf(this Type type, Type c)
         {
             return type.GetTypeInfo().IsSubclassOf(c);
         }
 
+        /// <summary>
+        /// Searches for the public field with the specified name.
+        /// </summary>
+        /// <param name="name">
+        /// The string containing the name of the data field to get.
+        /// </param>
+        /// <returns>
+        /// An object representing the public field with the specified name, if found; otherwise, null.
+        /// </returns>
         public static FieldInfo QueryField(this Type type, string name)
         {
             return type.GetTypeInfo().GetField(name);

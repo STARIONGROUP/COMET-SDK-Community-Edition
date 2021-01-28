@@ -4,10 +4,10 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netstandard1.6;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>6.3.0</VersionPrefix>
+    <VersionPrefix>7.2.0</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathaniel, Kamil</Authors>
+    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Kamil</Authors>
     <PackageId>CDP4Common-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>

@@ -1,9 +1,8 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteLogEntryResolver.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -20,9 +19,7 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer
 {
@@ -52,6 +49,11 @@ namespace CDP4JsonSerializer
             var iid = jObject["iid"].ToObject<Guid>();
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var siteLogEntry = new CDP4Common.DTO.SiteLogEntry(iid, revisionNumber);
+
+            if (!jObject["affectedDomainIid"].IsNullOrEmpty())
+            {
+                siteLogEntry.AffectedDomainIid.AddRange(jObject["affectedDomainIid"].ToObject<IEnumerable<Guid>>());
+            }
 
             if (!jObject["affectedItemIid"].IsNullOrEmpty())
             {
@@ -98,9 +100,19 @@ namespace CDP4JsonSerializer
                 siteLogEntry.Level = jObject["level"].ToObject<LogLevelKind>();
             }
 
+            if (!jObject["logEntryChangelogItem"].IsNullOrEmpty())
+            {
+                siteLogEntry.LogEntryChangelogItem.AddRange(jObject["logEntryChangelogItem"].ToObject<IEnumerable<Guid>>());
+            }
+
             if (!jObject["modifiedOn"].IsNullOrEmpty())
             {
                 siteLogEntry.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+            }
+
+            if (!jObject["thingPreference"].IsNullOrEmpty())
+            {
+                siteLogEntry.ThingPreference = jObject["thingPreference"].ToObject<string>();
             }
 
             return siteLogEntry;

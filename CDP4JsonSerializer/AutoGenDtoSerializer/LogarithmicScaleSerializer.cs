@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogarithmicScaleSerializer.cs" company="RHEA System S.A.">
+// <copyright file "LogarithmicScaleSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="LogarithmicScaleSerializer"/> class is to provide a <see cref="LogarithmicScale"/> specific serializer
     /// </summary>
@@ -68,6 +67,7 @@ namespace CDP4JsonSerializer
             { "referenceQuantityValue", referenceQuantityValue => new JArray(referenceQuantityValue) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "shortName", shortName => new JValue(shortName) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "unit", unit => new JValue(unit) },
             { "valueDefinition", valueDefinition => new JArray(valueDefinition) },
         };
@@ -102,9 +102,10 @@ namespace CDP4JsonSerializer
             jsonObject.Add("numberSet", this.PropertySerializerMap["numberSet"](Enum.GetName(typeof(CDP4Common.SiteDirectoryData.NumberSetKind), logarithmicScale.NumberSet)));
             jsonObject.Add("positiveValueConnotation", this.PropertySerializerMap["positiveValueConnotation"](logarithmicScale.PositiveValueConnotation));
             jsonObject.Add("referenceQuantityKind", this.PropertySerializerMap["referenceQuantityKind"](logarithmicScale.ReferenceQuantityKind));
-            jsonObject.Add("referenceQuantityValue", this.PropertySerializerMap["referenceQuantityValue"](logarithmicScale.ReferenceQuantityValue.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("referenceQuantityValue", this.PropertySerializerMap["referenceQuantityValue"](logarithmicScale.ReferenceQuantityValue));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](logarithmicScale.RevisionNumber));
             jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](logarithmicScale.ShortName));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](logarithmicScale.ThingPreference));
             jsonObject.Add("unit", this.PropertySerializerMap["unit"](logarithmicScale.Unit));
             jsonObject.Add("valueDefinition", this.PropertySerializerMap["valueDefinition"](logarithmicScale.ValueDefinition.OrderBy(x => x, this.guidComparer)));
             return jsonObject;

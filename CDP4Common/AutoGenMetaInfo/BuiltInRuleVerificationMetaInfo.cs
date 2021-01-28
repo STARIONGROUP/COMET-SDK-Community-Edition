@@ -195,6 +195,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -239,6 +240,7 @@ namespace CDP4Common.MetaInfo
             { "Name", thing => thing.Name },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "Status", thing => thing.Status },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Violation", thing => thing.Violation },
         };
 
@@ -261,6 +263,7 @@ namespace CDP4Common.MetaInfo
             { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, true, false, true, 1, "1", false) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Status", new PropertyMetaInfo("Status", "CDP4Common.EngineeringModelData.RuleVerificationStatusKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -284,6 +287,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", (builtInRuleVerification, value) => builtInRuleVerification.ModifiedOn = (DateTime)value },
             { "Name", (builtInRuleVerification, value) => builtInRuleVerification.Name = value.ToString() },
             { "Status", (builtInRuleVerification, value) => builtInRuleVerification.Status = (RuleVerificationStatusKind)value },
+            { "ThingPreference", (builtInRuleVerification, value) => builtInRuleVerification.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

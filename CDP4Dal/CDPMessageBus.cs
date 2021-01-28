@@ -142,11 +142,11 @@ namespace CDP4Dal
         {
             return Disposable.Create(() => this.DisposableDelegate(eventTypeTarget));
         }
-        
+
         /// <summary>
-        /// The method that executes when <see cref="eventTypeTarget"/> needs to be deisposed.
+        /// The method that executes when <paramref name="eventTypeTarget"/> needs to be deisposed.
         /// </summary>
-        /// <param name="eventTypeTarget">The <see cref="eventTypeTarget"/> that the dispose needs to handle.</param>
+        /// <param name="eventTypeTarget">The <paramref name="eventTypeTarget"/> that the dispose needs to handle.</param>
         private void DisposableDelegate(EventTypeTarget eventTypeTarget)
         {
             Lazy<CDPEventSubject> disposablePair;

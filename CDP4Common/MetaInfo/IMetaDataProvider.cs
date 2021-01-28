@@ -38,7 +38,7 @@ namespace CDP4Common.MetaInfo
         /// <returns>
         /// A meta info instance.
         /// </returns>
-        /// <exception cref="TypeLoadException">
+        /// <exception cref="System.TypeLoadException">
         /// If type name not supported
         /// </exception>
         IMetaInfo GetMetaInfo(string typeName);

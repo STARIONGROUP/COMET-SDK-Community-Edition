@@ -310,6 +310,7 @@ namespace CDP4Common.EngineeringModelData
             this.Parameter = this.Cache.Get<Parameter>(dto.Parameter, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Parameter>();
             this.ParameterSubscription.ResolveList(dto.ParameterSubscription, dto.IterationContainerId, this.Cache);
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
             this.ValueSet.ResolveList(dto.ValueSet, dto.IterationContainerId, this.Cache);
 
             this.ResolveExtraProperties();
@@ -329,6 +330,7 @@ namespace CDP4Common.EngineeringModelData
             dto.Parameter = this.Parameter != null ? this.Parameter.Iid : Guid.Empty;
             dto.ParameterSubscription.AddRange(this.ParameterSubscription.Select(x => x.Iid));
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
             dto.ValueSet.AddRange(this.ValueSet.Select(x => x.Iid));
 
             dto.IterationContainerId = this.CacheKey.Iteration;

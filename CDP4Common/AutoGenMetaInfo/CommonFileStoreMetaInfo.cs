@@ -197,6 +197,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -243,6 +244,7 @@ namespace CDP4Common.MetaInfo
             { "Name", thing => thing.Name },
             { "Owner", thing => thing.Owner },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -262,6 +264,7 @@ namespace CDP4Common.MetaInfo
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Owner", new PropertyMetaInfo("Owner", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -285,6 +288,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", (commonFileStore, value) => commonFileStore.ModifiedOn = (DateTime)value },
             { "Name", (commonFileStore, value) => commonFileStore.Name = value.ToString() },
             { "Owner", (commonFileStore, value) => commonFileStore.Owner = (Guid)value },
+            { "ThingPreference", (commonFileStore, value) => commonFileStore.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

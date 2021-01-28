@@ -69,6 +69,7 @@ namespace CDP4Common.EngineeringModelData
         public ElementDefinition()
         {
             this.ContainedElement = new ContainerList<ElementUsage>(this);
+            this.OrganizationalParticipant = new List<OrganizationalParticipant>();
             this.Parameter = new ContainerList<Parameter>(this);
             this.ParameterGroup = new ContainerList<ParameterGroup>(this);
             this.ReferencedElement = new List<NestedElement>();
@@ -91,6 +92,7 @@ namespace CDP4Common.EngineeringModelData
         public ElementDefinition(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.ContainedElement = new ContainerList<ElementUsage>(this);
+            this.OrganizationalParticipant = new List<OrganizationalParticipant>();
             this.Parameter = new ContainerList<Parameter>(this);
             this.ParameterGroup = new ContainerList<ParameterGroup>(this);
             this.ReferencedElement = new List<NestedElement>();
@@ -107,6 +109,19 @@ namespace CDP4Common.EngineeringModelData
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         public ContainerList<ElementUsage> ContainedElement { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a list of OrganizationalParticipant.
+        /// </summary>
+        /// <remarks>
+        /// represents a list of OrganizationalParticipant that are privy to this ElementDefinition. Exclusion of your Organization from this list indicates no access to this ElementDefinition.
+        /// NOTE: defaultOrganizationalParticipant of the containing EngineeringModelSetup bypass this list and are able to see all ElementDefinitions and their contents.
+        /// NOTE 2: the constents of this list must be a subset of the organizationalParticipant list of the EnggineeringModelSetup.
+        /// NOTE 3: if the organizationalParticipant list of the EnggineeringModelSetup is pruned, this list must be cleaned up.
+        /// </remarks>
+        [CDPVersion("1.2.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public List<OrganizationalParticipant> OrganizationalParticipant { get; set; }
 
         /// <summary>
         /// Gets or sets a list of contained Parameter.
@@ -171,6 +186,11 @@ namespace CDP4Common.EngineeringModelData
                 yield return thing;
             }
 
+            foreach (var thing in this.OrganizationalParticipant)
+            {
+                yield return thing;
+            }
+
             foreach (var thing in this.ReferencedElement)
             {
                 yield return thing;
@@ -194,6 +214,7 @@ namespace CDP4Common.EngineeringModelData
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
             clone.HyperLink = cloneContainedThings ? new ContainerList<HyperLink>(clone) : new ContainerList<HyperLink>(this.HyperLink, clone);
+            clone.OrganizationalParticipant = new List<OrganizationalParticipant>(this.OrganizationalParticipant);
             clone.Parameter = cloneContainedThings ? new ContainerList<Parameter>(clone) : new ContainerList<Parameter>(this.Parameter, clone);
             clone.ParameterGroup = cloneContainedThings ? new ContainerList<ParameterGroup>(clone) : new ContainerList<ParameterGroup>(this.ParameterGroup, clone);
             clone.ReferencedElement = new List<NestedElement>(this.ReferencedElement);
@@ -265,12 +286,14 @@ namespace CDP4Common.EngineeringModelData
             this.HyperLink.ResolveList(dto.HyperLink, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
+            this.OrganizationalParticipant.ResolveList(dto.OrganizationalParticipant, dto.IterationContainerId, this.Cache);
             this.Owner = this.Cache.Get<DomainOfExpertise>(dto.Owner, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DomainOfExpertise>();
             this.Parameter.ResolveList(dto.Parameter, dto.IterationContainerId, this.Cache);
             this.ParameterGroup.ResolveList(dto.ParameterGroup, dto.IterationContainerId, this.Cache);
             this.ReferencedElement.ResolveList(dto.ReferencedElement, dto.IterationContainerId, this.Cache);
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -291,12 +314,14 @@ namespace CDP4Common.EngineeringModelData
             dto.HyperLink.AddRange(this.HyperLink.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
+            dto.OrganizationalParticipant.AddRange(this.OrganizationalParticipant.Select(x => x.Iid));
             dto.Owner = this.Owner != null ? this.Owner.Iid : Guid.Empty;
             dto.Parameter.AddRange(this.Parameter.Select(x => x.Iid));
             dto.ParameterGroup.AddRange(this.ParameterGroup.Select(x => x.Iid));
             dto.ReferencedElement.AddRange(this.ReferencedElement.Select(x => x.Iid));
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

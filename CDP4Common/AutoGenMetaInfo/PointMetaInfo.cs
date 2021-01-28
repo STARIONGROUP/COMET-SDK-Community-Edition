@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -229,6 +230,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "Name", thing => thing.Name },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "X", thing => thing.X },
             { "Y", thing => thing.Y },
         };
@@ -248,6 +250,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "X", new PropertyMetaInfo("X", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Y", new PropertyMetaInfo("Y", "float", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
@@ -269,6 +272,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (point, value) => point.Iid = (Guid)value },
             { "ModifiedOn", (point, value) => point.ModifiedOn = (DateTime)value },
             { "Name", (point, value) => point.Name = value.ToString() },
+            { "ThingPreference", (point, value) => point.ThingPreference = value == null ? (string)null : value.ToString() },
             { "X", (point, value) => point.X = (float)value },
             { "Y", (point, value) => point.Y = (float)value },
         };

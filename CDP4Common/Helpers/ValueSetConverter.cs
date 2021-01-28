@@ -32,19 +32,12 @@ namespace CDP4Common.Helpers
 
     using CDP4Common.CommonData;
     using CDP4Common.SiteDirectoryData;
-
-    using NLog;
-
+    
     /// <summary>
     /// Converter used to associate a string value in the ValueArray to an object which type depend on the Parameter-type
     /// </summary>
     public static class ValueSetConverter
     {
-        /// <summary>
-        /// The nlog logger
-        /// </summary>
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// Convert an object to a string to post to the data-source
         /// </summary>

@@ -198,6 +198,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -246,6 +247,7 @@ namespace CDP4Common.MetaInfo
             { "PrimaryAnnotatedThing", thing => thing.PrimaryAnnotatedThing },
             { "RelatedThing", thing => thing.RelatedThing },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -267,6 +269,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "PrimaryAnnotatedThing", new PropertyMetaInfo("PrimaryAnnotatedThing", "ModellingThingReference", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -292,6 +295,7 @@ namespace CDP4Common.MetaInfo
             { "LanguageCode", (engineeringModelDataAnnotation, value) => engineeringModelDataAnnotation.LanguageCode = value.ToString() },
             { "ModifiedOn", (engineeringModelDataAnnotation, value) => engineeringModelDataAnnotation.ModifiedOn = (DateTime)value },
             { "PrimaryAnnotatedThing", (engineeringModelDataAnnotation, value) => engineeringModelDataAnnotation.PrimaryAnnotatedThing = value == null ? (Guid?)null : (Guid)value },
+            { "ThingPreference", (engineeringModelDataAnnotation, value) => engineeringModelDataAnnotation.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

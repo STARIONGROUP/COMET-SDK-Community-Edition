@@ -169,6 +169,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ReferenceUnit = this.Cache.Get<MeasurementUnit>(dto.ReferenceUnit, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<MeasurementUnit>();
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -192,6 +193,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ReferenceUnit = this.ReferenceUnit != null ? this.ReferenceUnit.Iid : Guid.Empty;
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

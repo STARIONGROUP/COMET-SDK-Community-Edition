@@ -249,6 +249,7 @@ namespace CDP4Common.EngineeringModelData
             this.RevisionNumber = dto.RevisionNumber;
             this.Scale = (dto.Scale.HasValue) ? this.Cache.Get<MeasurementScale>(dto.Scale.Value, dto.IterationContainerId) : null;
             this.StateDependence = (dto.StateDependence.HasValue) ? this.Cache.Get<ActualFiniteStateList>(dto.StateDependence.Value, dto.IterationContainerId) : null;
+            this.ThingPreference = dto.ThingPreference;
             this.ValueSet.ResolveList(dto.ValueSet, dto.IterationContainerId, this.Cache);
 
             this.ResolveExtraProperties();
@@ -275,6 +276,7 @@ namespace CDP4Common.EngineeringModelData
             dto.RevisionNumber = this.RevisionNumber;
             dto.Scale = this.Scale != null ? (Guid?)this.Scale.Iid : null;
             dto.StateDependence = this.StateDependence != null ? (Guid?)this.StateDependence.Iid : null;
+            dto.ThingPreference = this.ThingPreference;
             dto.ValueSet.AddRange(this.ValueSet.Select(x => x.Iid));
 
             dto.IterationContainerId = this.CacheKey.Iteration;

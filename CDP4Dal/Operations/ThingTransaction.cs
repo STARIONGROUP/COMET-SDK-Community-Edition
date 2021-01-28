@@ -29,6 +29,7 @@ namespace CDP4Dal.Operations
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+
     using CDP4Common;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
@@ -37,6 +38,7 @@ namespace CDP4Dal.Operations
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.CommonData;
     using CDP4Common.Types;
+    
     using NLog;
 
     /// <summary>

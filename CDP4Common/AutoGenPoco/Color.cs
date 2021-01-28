@@ -183,6 +183,7 @@ namespace CDP4Common.DiagramData
             this.Name = dto.Name;
             this.Red = dto.Red;
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -202,6 +203,7 @@ namespace CDP4Common.DiagramData
             dto.Name = this.Name;
             dto.Red = this.Red;
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

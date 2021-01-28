@@ -26,7 +26,7 @@ namespace CDP4Dal
 {
     using System;
     using System.Collections.Generic;
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     using System.ComponentModel.Composition;
 #endif
     using CDP4Dal.Composition;
@@ -35,7 +35,7 @@ namespace CDP4Dal
     /// <summary>
     /// Instantiated by MEF to provide a list of <see cref="IDal"/> available in the application
     /// </summary>
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
     [Export(typeof(AvailableDals))]
     [PartCreationPolicy(CreationPolicy.Shared)]
 #endif
@@ -45,7 +45,7 @@ namespace CDP4Dal
         /// Initializes a new instance of the <see cref="AvailableDals"/> class
         /// </summary>
         /// <param name="dataAccessLayerKinds">the list of <see cref="IDal"/> in the application</param>
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
         [ImportingConstructor]
         public AvailableDals([ImportMany] IEnumerable<Lazy<IDal, IDalMetaData>> dataAccessLayerKinds)
         {

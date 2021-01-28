@@ -1,9 +1,8 @@
-#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ILogEntry.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2018 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam GerenÃ©, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -20,9 +19,7 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.DTO
 {
@@ -37,6 +34,14 @@ namespace CDP4Common.DTO
     /// </summary>
     public partial interface ILogEntry
     {
+        /// <summary>
+        /// Gets or sets the unique identifiers of the referenced AffectedDomainIid instances.
+        /// </summary>
+        /// <remarks>
+        /// The list of affected Domains of Expertise that this LogEntry.
+        /// </remarks>
+        List<Guid> AffectedDomainIid { get; set; }
+
         /// <summary>
         /// Gets or sets the unique identifiers of the referenced AffectedItemIid instances.
         /// </summary>
@@ -62,5 +67,13 @@ namespace CDP4Common.DTO
         /// Note: The <i>level</i> can be used to filter log entries. Also applications may provide a setting that switches on or off logging log entries of a certain level.
         /// </remarks>
         LogLevelKind Level { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LogEntryChangelogItem.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        [CDPVersion("1.2.0")]
+        List<Guid> LogEntryChangelogItem { get; set; }
     }
 }

@@ -192,6 +192,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -232,6 +233,7 @@ namespace CDP4Common.MetaInfo
             { "LanguageCode", thing => thing.LanguageCode },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -251,6 +253,7 @@ namespace CDP4Common.MetaInfo
             { "LanguageCode", new PropertyMetaInfo("LanguageCode", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -272,6 +275,7 @@ namespace CDP4Common.MetaInfo
             { "IsSynonym", (alias, value) => alias.IsSynonym = (bool)value },
             { "LanguageCode", (alias, value) => alias.LanguageCode = value.ToString() },
             { "ModifiedOn", (alias, value) => alias.ModifiedOn = (DateTime)value },
+            { "ThingPreference", (alias, value) => alias.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>
@@ -321,6 +325,7 @@ namespace CDP4Common.MetaInfo
             { "RequirementsGroup", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "RequirementsSpecification", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "RuleVerificationList", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "SampledFunctionParameterType", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "ScaleValueDefinition", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "SimpleQuantityKind", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "SimpleUnit", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },

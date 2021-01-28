@@ -26,6 +26,7 @@ namespace CDP4Common.MetaInfo
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common.DTO;
     using CDP4Common.Exceptions;
     using CDP4Common.Types;
@@ -265,10 +266,10 @@ namespace CDP4Common.MetaInfo
         IEnumerable<OrderedItem> GetOrderedContainmentIds(Thing thing, string propertyName);
 
         /// <summary>
-        /// Instantiates a <see cref="Dto.Thing"/>
+        /// Instantiates a <see cref="Thing"/>
         /// </summary>
         /// <returns>
-        /// The instantiated <see cref="Dto.Thing"/>
+        /// The instantiated <see cref="Thing"/>
         /// </returns>
         DTO.Thing InstantiateDto(Guid guid, int revisionNumber);
     }

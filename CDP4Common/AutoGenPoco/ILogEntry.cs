@@ -43,6 +43,14 @@ namespace CDP4Common.CommonData
         /// Gets or sets a list of Guid.
         /// </summary>
         /// <remarks>
+        /// The list of affected Domains of Expertise that this LogEntry.
+        /// </remarks>
+        List<Guid> AffectedDomainIid { get; set; }
+
+        /// <summary>
+        /// Gets or sets a list of Guid.
+        /// </summary>
+        /// <remarks>
         /// weak reference to zero or more items that are relevant to or affected by what is described in the content of this LogEntry
         /// Note: Each reference should be an <i>iid</i> of a Thing that exists when the log entry is created. The references are of type Uuid in order to support retaining log entries even when the referenced Thing is later deleted. An implementation of E-TM-10-25 shall support a mechanism to dereference items by Uuid and report when items can not (no longer) be dereferenced.
         /// </remarks>
@@ -64,5 +72,13 @@ namespace CDP4Common.CommonData
         /// Note: The <i>level</i> can be used to filter log entries. Also applications may provide a setting that switches on or off logging log entries of a certain level.
         /// </remarks>
         LogLevelKind Level { get; set; }
+
+        /// <summary>
+        /// Gets a list of contained LogEntryChangelogItem.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        [CDPVersion("1.2.0")]
+        ContainerList<LogEntryChangelogItem> LogEntryChangelogItem { get; }
     }
 }

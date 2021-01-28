@@ -195,6 +195,7 @@ namespace CDP4Common.SiteDirectoryData
             this.PositiveValueConnotation = dto.PositiveValueConnotation;
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
             this.Unit = this.Cache.Get<MeasurementUnit>(dto.Unit, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<MeasurementUnit>();
             this.ValueDefinition.ResolveList(dto.ValueDefinition, dto.IterationContainerId, this.Cache);
 
@@ -226,6 +227,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.PositiveValueConnotation = this.PositiveValueConnotation;
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
             dto.Unit = this.Unit != null ? this.Unit.Iid : Guid.Empty;
             dto.ValueDefinition.AddRange(this.ValueDefinition.Select(x => x.Iid));
 

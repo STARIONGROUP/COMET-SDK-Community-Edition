@@ -288,6 +288,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ReferenceQuantityValue.ResolveList(dto.ReferenceQuantityValue, dto.IterationContainerId, this.Cache);
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
             this.Unit = this.Cache.Get<MeasurementUnit>(dto.Unit, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<MeasurementUnit>();
             this.ValueDefinition.ResolveList(dto.ValueDefinition, dto.IterationContainerId, this.Cache);
 
@@ -324,6 +325,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ReferenceQuantityValue.AddRange(this.ReferenceQuantityValue.Select(x => x.Iid));
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
             dto.Unit = this.Unit != null ? this.Unit.Iid : Guid.Empty;
             dto.ValueDefinition.AddRange(this.ValueDefinition.Select(x => x.Iid));
 

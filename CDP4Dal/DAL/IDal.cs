@@ -28,8 +28,10 @@ namespace CDP4Dal.DAL
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
+
     using CDP4Dal.Operations;
 
     /// <summary>
@@ -102,10 +104,7 @@ namespace CDP4Dal.DAL
         /// </param>
         /// <returns>
         /// A list of <see cref="Thing"/> that are contained by the provided <see cref="Thing"/> including the <see cref="Thing"/>.
-        /// In case the 
-        /// <param name="thing">
-        /// </param>
-        /// is a top container then all the <see cref="Thing"/>s that have been updated since the
+        /// In case the <paramref name="thing"> is a top container then all the <see cref="Thing"/>s that have been updated since the
         /// last read will be returned.
         /// </returns>
         Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken cancellationToken, IQueryAttributes attributes = null) where T : Thing;

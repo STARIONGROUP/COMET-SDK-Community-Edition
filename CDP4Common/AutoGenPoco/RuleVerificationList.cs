@@ -232,6 +232,7 @@ namespace CDP4Common.EngineeringModelData
             this.RevisionNumber = dto.RevisionNumber;
             this.RuleVerification.ResolveList(dto.RuleVerification, dto.IterationContainerId, this.Cache);
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -254,6 +255,7 @@ namespace CDP4Common.EngineeringModelData
             dto.RevisionNumber = this.RevisionNumber;
             dto.RuleVerification.AddRange(this.RuleVerification.ToDtoOrderedItemList());
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

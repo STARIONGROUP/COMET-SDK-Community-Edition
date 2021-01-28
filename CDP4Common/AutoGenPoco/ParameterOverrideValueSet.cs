@@ -235,6 +235,7 @@ namespace CDP4Common.EngineeringModelData
             this.Published = new ValueArray<string>(dto.Published, this);
             this.Reference = new ValueArray<string>(dto.Reference, this);
             this.RevisionNumber = dto.RevisionNumber;
+            this.ThingPreference = dto.ThingPreference;
             this.ValueSwitch = dto.ValueSwitch;
 
             this.ResolveExtraProperties();
@@ -257,6 +258,7 @@ namespace CDP4Common.EngineeringModelData
             dto.Published = new ValueArray<string>(this.Published, this);
             dto.Reference = new ValueArray<string>(this.Reference, this);
             dto.RevisionNumber = this.RevisionNumber;
+            dto.ThingPreference = this.ThingPreference;
             dto.ValueSwitch = this.ValueSwitch;
 
             dto.IterationContainerId = this.CacheKey.Iteration;

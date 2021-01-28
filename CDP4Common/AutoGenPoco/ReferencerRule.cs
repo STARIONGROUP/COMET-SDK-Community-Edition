@@ -251,6 +251,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ReferencingCategory = this.Cache.Get<Category>(dto.ReferencingCategory, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Category>();
             this.RevisionNumber = dto.RevisionNumber;
             this.ShortName = dto.ShortName;
+            this.ThingPreference = dto.ThingPreference;
 
             this.ResolveExtraProperties();
         }
@@ -276,6 +277,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ReferencingCategory = this.ReferencingCategory != null ? this.ReferencingCategory.Iid : Guid.Empty;
             dto.RevisionNumber = this.RevisionNumber;
             dto.ShortName = this.ShortName;
+            dto.ThingPreference = this.ThingPreference;
 
             dto.IterationContainerId = this.CacheKey.Iteration;
             dto.RegisterSourceThing(this);

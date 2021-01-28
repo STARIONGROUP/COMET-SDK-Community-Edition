@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OwnedStyleSerializer.cs" company="RHEA System S.A.">
+// <copyright file "OwnedStyleSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="OwnedStyleSerializer"/> class is to provide a <see cref="OwnedStyle"/> specific serializer
     /// </summary>
@@ -62,6 +61,7 @@ namespace CDP4JsonSerializer
             { "strokeColor", strokeColor => new JValue(strokeColor) },
             { "strokeOpacity", strokeOpacity => new JValue(strokeOpacity) },
             { "strokeWidth", strokeWidth => new JValue(strokeWidth) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "usedColor", usedColor => new JArray(usedColor) },
         };
 
@@ -92,6 +92,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("strokeColor", this.PropertySerializerMap["strokeColor"](ownedStyle.StrokeColor));
             jsonObject.Add("strokeOpacity", this.PropertySerializerMap["strokeOpacity"](ownedStyle.StrokeOpacity));
             jsonObject.Add("strokeWidth", this.PropertySerializerMap["strokeWidth"](ownedStyle.StrokeWidth));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](ownedStyle.ThingPreference));
             jsonObject.Add("usedColor", this.PropertySerializerMap["usedColor"](ownedStyle.UsedColor.OrderBy(x => x, this.guidComparer)));
             return jsonObject;
         }

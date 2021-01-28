@@ -207,6 +207,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -259,6 +260,7 @@ namespace CDP4Common.MetaInfo
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
             { "Symbol", thing => thing.Symbol },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "ValueDefinition", thing => thing.ValueDefinition },
         };
 
@@ -283,6 +285,7 @@ namespace CDP4Common.MetaInfo
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Symbol", new PropertyMetaInfo("Symbol", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -311,6 +314,7 @@ namespace CDP4Common.MetaInfo
             { "Name", (enumerationParameterType, value) => enumerationParameterType.Name = value.ToString() },
             { "ShortName", (enumerationParameterType, value) => enumerationParameterType.ShortName = value.ToString() },
             { "Symbol", (enumerationParameterType, value) => enumerationParameterType.Symbol = value.ToString() },
+            { "ThingPreference", (enumerationParameterType, value) => enumerationParameterType.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>

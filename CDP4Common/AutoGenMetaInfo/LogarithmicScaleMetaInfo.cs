@@ -208,6 +208,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -272,6 +273,7 @@ namespace CDP4Common.MetaInfo
             { "ReferenceQuantityValue", thing => thing.ReferenceQuantityValue },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ShortName", thing => thing.ShortName },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Unit", thing => thing.Unit },
             { "ValueDefinition", thing => thing.ValueDefinition },
         };
@@ -304,6 +306,7 @@ namespace CDP4Common.MetaInfo
             { "ReferenceQuantityKind", new PropertyMetaInfo("ReferenceQuantityKind", "QuantityKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ShortName", new PropertyMetaInfo("ShortName", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Unit", new PropertyMetaInfo("Unit", "MeasurementUnit", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -343,6 +346,7 @@ namespace CDP4Common.MetaInfo
             { "PositiveValueConnotation", (logarithmicScale, value) => logarithmicScale.PositiveValueConnotation = value == null ? (string)null : value.ToString() },
             { "ReferenceQuantityKind", (logarithmicScale, value) => logarithmicScale.ReferenceQuantityKind = (Guid)value },
             { "ShortName", (logarithmicScale, value) => logarithmicScale.ShortName = value.ToString() },
+            { "ThingPreference", (logarithmicScale, value) => logarithmicScale.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Unit", (logarithmicScale, value) => logarithmicScale.Unit = (Guid)value },
         };
 

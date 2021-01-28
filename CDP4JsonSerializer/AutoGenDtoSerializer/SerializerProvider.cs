@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializerProvider.cs" company="RHEA System S.A.">
+// <copyright file "SerializerProvider.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -70,6 +69,7 @@ namespace CDP4JsonSerializer
             { "DateTimeParameterType", new DateTimeParameterTypeSerializer() },
             { "DecompositionRule", new DecompositionRuleSerializer() },
             { "Definition", new DefinitionSerializer() },
+            { "DependentParameterTypeAssignment", new DependentParameterTypeAssignmentSerializer() },
             { "DerivedQuantityKind", new DerivedQuantityKindSerializer() },
             { "DerivedUnit", new DerivedUnitSerializer() },
             { "DiagramCanvas", new DiagramCanvasSerializer() },
@@ -97,11 +97,13 @@ namespace CDP4JsonSerializer
             { "Goal", new GoalSerializer() },
             { "HyperLink", new HyperLinkSerializer() },
             { "IdCorrespondence", new IdCorrespondenceSerializer() },
+            { "IndependentParameterTypeAssignment", new IndependentParameterTypeAssignmentSerializer() },
             { "IntervalScale", new IntervalScaleSerializer() },
             { "Iteration", new IterationSerializer() },
             { "IterationSetup", new IterationSetupSerializer() },
             { "LinearConversionUnit", new LinearConversionUnitSerializer() },
             { "LogarithmicScale", new LogarithmicScaleSerializer() },
+            { "LogEntryChangelogItem", new LogEntryChangelogItemSerializer() },
             { "MappingToReferenceScale", new MappingToReferenceScaleSerializer() },
             { "ModellingThingReference", new ModellingThingReferenceSerializer() },
             { "ModelLogEntry", new ModelLogEntrySerializer() },
@@ -116,6 +118,7 @@ namespace CDP4JsonSerializer
             { "OrdinalScale", new OrdinalScaleSerializer() },
             { "OrExpression", new OrExpressionSerializer() },
             { "Organization", new OrganizationSerializer() },
+            { "OrganizationalParticipant", new OrganizationalParticipantSerializer() },
             { "OwnedStyle", new OwnedStyleSerializer() },
             { "Page", new PageSerializer() },
             { "Parameter", new ParameterSerializer() },
@@ -154,6 +157,7 @@ namespace CDP4JsonSerializer
             { "ReviewItemDiscrepancy", new ReviewItemDiscrepancySerializer() },
             { "RuleVerificationList", new RuleVerificationListSerializer() },
             { "RuleViolation", new RuleViolationSerializer() },
+            { "SampledFunctionParameterType", new SampledFunctionParameterTypeSerializer() },
             { "ScaleReferenceQuantityValue", new ScaleReferenceQuantityValueSerializer() },
             { "ScaleValueDefinition", new ScaleValueDefinitionSerializer() },
             { "Section", new SectionSerializer() },

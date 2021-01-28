@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MultiRelationshipSerializer.cs" company="RHEA System S.A.">
+// <copyright file "MultiRelationshipSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
@@ -20,7 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
@@ -32,7 +31,7 @@ namespace CDP4JsonSerializer
     using CDP4Common.DTO;
     using CDP4Common.Types;
     using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="MultiRelationshipSerializer"/> class is to provide a <see cref="MultiRelationship"/> specific serializer
     /// </summary>
@@ -49,10 +48,12 @@ namespace CDP4JsonSerializer
             { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
             { "iid", iid => new JValue(iid) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            { "name", name => new JValue(name) },
             { "owner", owner => new JValue(owner) },
             { "parameterValue", parameterValue => new JArray(parameterValue) },
             { "relatedThing", relatedThing => new JArray(relatedThing) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
+            { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
 
         /// <summary>
@@ -69,10 +70,12 @@ namespace CDP4JsonSerializer
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](multiRelationship.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](multiRelationship.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](multiRelationship.ModifiedOn));
+            jsonObject.Add("name", this.PropertySerializerMap["name"](multiRelationship.Name));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](multiRelationship.Owner));
             jsonObject.Add("parameterValue", this.PropertySerializerMap["parameterValue"](multiRelationship.ParameterValue.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("relatedThing", this.PropertySerializerMap["relatedThing"](multiRelationship.RelatedThing.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](multiRelationship.RevisionNumber));
+            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](multiRelationship.ThingPreference));
             return jsonObject;
         }
 

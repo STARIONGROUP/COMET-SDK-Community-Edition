@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -229,6 +230,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "Scale", thing => thing.Scale },
+            { "ThingPreference", thing => thing.ThingPreference },
             { "Value", thing => thing.Value },
         };
 
@@ -247,6 +249,7 @@ namespace CDP4Common.MetaInfo
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Scale", new PropertyMetaInfo("Scale", "MeasurementScale", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Value", new PropertyMetaInfo("Value", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
         };
 
@@ -267,6 +270,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (scaleReferenceQuantityValue, value) => scaleReferenceQuantityValue.Iid = (Guid)value },
             { "ModifiedOn", (scaleReferenceQuantityValue, value) => scaleReferenceQuantityValue.ModifiedOn = (DateTime)value },
             { "Scale", (scaleReferenceQuantityValue, value) => scaleReferenceQuantityValue.Scale = (Guid)value },
+            { "ThingPreference", (scaleReferenceQuantityValue, value) => scaleReferenceQuantityValue.ThingPreference = value == null ? (string)null : value.ToString() },
             { "Value", (scaleReferenceQuantityValue, value) => scaleReferenceQuantityValue.Value = value.ToString() },
         };
 

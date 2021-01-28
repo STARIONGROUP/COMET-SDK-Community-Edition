@@ -210,6 +210,7 @@ namespace CDP4Common.MetaInfo
             { "GenericNote", "1.1.0" },
             { "ModellingAnnotation", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
+            { "ThingPreference", "1.2.0" },
         };
 
         /// <summary>
@@ -263,6 +264,7 @@ namespace CDP4Common.MetaInfo
             { "ModellingAnnotation", thing => thing.ModellingAnnotation },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "RevisionNumber", thing => thing.RevisionNumber },
+            { "ThingPreference", thing => thing.ThingPreference },
         };
 
         /// <summary>
@@ -281,6 +283,7 @@ namespace CDP4Common.MetaInfo
             { "LastModifiedOn", new PropertyMetaInfo("LastModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
 
         /// <summary>
@@ -307,6 +310,7 @@ namespace CDP4Common.MetaInfo
             { "Iid", (engineeringModel, value) => engineeringModel.Iid = (Guid)value },
             { "LastModifiedOn", (engineeringModel, value) => engineeringModel.LastModifiedOn = (DateTime)value },
             { "ModifiedOn", (engineeringModel, value) => engineeringModel.ModifiedOn = (DateTime)value },
+            { "ThingPreference", (engineeringModel, value) => engineeringModel.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 
         /// <summary>
