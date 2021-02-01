@@ -97,7 +97,7 @@ namespace CDP4JsonSerializer
 
             if (!jObject["interpolationPeriod"].IsNullOrEmpty())
             {
-                sampledFunctionParameterType.InterpolationPeriod.AddRange(jObject["interpolationPeriod"].ToObject<IEnumerable<string>>());
+                sampledFunctionParameterType.InterpolationPeriod = SerializerHelper.ToValueArray<string>(jObject["interpolationPeriod"].ToString());
             }
 
             if (!jObject["isDeprecated"].IsNullOrEmpty())
