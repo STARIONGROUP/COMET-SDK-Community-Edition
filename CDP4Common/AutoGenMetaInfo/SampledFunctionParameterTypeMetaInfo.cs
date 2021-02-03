@@ -285,7 +285,7 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "InterpolationPeriod", new PropertyMetaInfo("InterpolationPeriod", "string", PropertyKind.List, AggregationKind.None, false, false, true, 1, "*", true) },
+            { "InterpolationPeriod", new PropertyMetaInfo("InterpolationPeriod", "string", PropertyKind.ValueArray, AggregationKind.None, false, true, true, 1, "*", true) },
             { "IsDeprecated", new PropertyMetaInfo("IsDeprecated", "bool", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
@@ -309,7 +309,6 @@ namespace CDP4Common.MetaInfo
             { "ExcludedPerson", (value) => (Guid)value },
             { "HyperLink", (value) => (Guid)value },
             { "IndependentParameterType", (value) => (Guid)value },
-            { "InterpolationPeriod", (value) => (string)value },
         };
 
         /// <summary>
@@ -319,6 +318,7 @@ namespace CDP4Common.MetaInfo
         {
             { "DegreeOfInterpolation", (sampledFunctionParameterType, value) => sampledFunctionParameterType.DegreeOfInterpolation = value == null ? (int?)null : (int)value },
             { "Iid", (sampledFunctionParameterType, value) => sampledFunctionParameterType.Iid = (Guid)value },
+            { "InterpolationPeriod", (sampledFunctionParameterType, value) => sampledFunctionParameterType.InterpolationPeriod = (ValueArray<string>)value },
             { "IsDeprecated", (sampledFunctionParameterType, value) => sampledFunctionParameterType.IsDeprecated = (bool)value },
             { "ModifiedOn", (sampledFunctionParameterType, value) => sampledFunctionParameterType.ModifiedOn = (DateTime)value },
             { "Name", (sampledFunctionParameterType, value) => sampledFunctionParameterType.Name = value.ToString() },

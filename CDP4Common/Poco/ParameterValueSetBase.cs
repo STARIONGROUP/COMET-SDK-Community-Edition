@@ -99,6 +99,33 @@ namespace CDP4Common.EngineeringModelData
             }
 
             var numberOfComponent = container.ParameterType.NumberOfValues;
+
+            // validate number of values for sampled funtion parameter type
+            if(container.ParameterType is SampledFunctionParameterType sampledFunctionParameterType)
+            {
+                if (this.Manual.Count % numberOfComponent != 0)
+                {
+                    errorList.Add($"Wrong number of values in the Manual set for the option: {((this.ActualOption == null) ? "-" : this.ActualOption.Name)}, state: {((this.ActualState == null) ? "-" : this.ActualState.Name)}");
+                }
+
+                if (this.Computed.Count % numberOfComponent != 0)
+                {
+                    errorList.Add($"Wrong number of values in the Computed set for the option: {((this.ActualOption == null) ? "-" : this.ActualOption.Name)}, state: {((this.ActualState == null) ? "-" : this.ActualState.Name)}");
+                }
+
+                if (this.Reference.Count % numberOfComponent != 0)
+                {
+                    errorList.Add($"Wrong number of values in the Reference set for the option: {((this.ActualOption == null) ? "-" : this.ActualOption.Name)}, state: {((this.ActualState == null) ? "-" : this.ActualState.Name)}");
+                }
+
+                if (this.Published.Count % numberOfComponent != 0)
+                {
+                    errorList.Add($"Wrong number of values in the Published set for the option: {((this.ActualOption == null) ? "-" : this.ActualOption.Name)}, state: {((this.ActualState == null) ? "-" : this.ActualState.Name)}");
+                }
+
+                return errorList;
+            }
+
             if (this.Manual.Count != numberOfComponent)
             {
                 errorList.Add($"Wrong number of values in the Manual set for the option: {((this.ActualOption == null) ? "-" : this.ActualOption.Name)}, state: {((this.ActualState == null) ? "-" : this.ActualState.Name)}");

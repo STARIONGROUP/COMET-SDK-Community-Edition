@@ -53,7 +53,7 @@ namespace CDP4JsonSerializer
             { "hyperLink", hyperLink => new JArray(hyperLink) },
             { "iid", iid => new JValue(iid) },
             { "independentParameterType", independentParameterType => new JArray(((IEnumerable)independentParameterType).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            { "interpolationPeriod", interpolationPeriod => new JArray(interpolationPeriod) },
+            { "interpolationPeriod", interpolationPeriod => new JValue(((ValueArray<string>)interpolationPeriod).ToJsonString()) },
             { "isDeprecated", isDeprecated => new JValue(isDeprecated) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
@@ -82,7 +82,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](sampledFunctionParameterType.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](sampledFunctionParameterType.Iid));
             jsonObject.Add("independentParameterType", this.PropertySerializerMap["independentParameterType"](sampledFunctionParameterType.IndependentParameterType.OrderBy(x => x, this.orderedItemComparer)));
-            jsonObject.Add("interpolationPeriod", this.PropertySerializerMap["interpolationPeriod"](sampledFunctionParameterType.InterpolationPeriod.OrderBy(x => x)));
+            jsonObject.Add("interpolationPeriod", this.PropertySerializerMap["interpolationPeriod"](sampledFunctionParameterType.InterpolationPeriod));
             jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](sampledFunctionParameterType.IsDeprecated));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](sampledFunctionParameterType.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](sampledFunctionParameterType.Name));

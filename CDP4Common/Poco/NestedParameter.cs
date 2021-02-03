@@ -88,7 +88,7 @@ namespace CDP4Common.EngineeringModelData
         private string QueryParameterShortName()
         {
             string parameterShortName;
-            if (this.AssociatedParameter.ParameterType is ScalarParameterType)
+            if (this.AssociatedParameter.ParameterType is ScalarParameterType || this.AssociatedParameter.ParameterType is SampledFunctionParameterType)
             {
                 parameterShortName = this.AssociatedParameter.ParameterType.ShortName;
             }

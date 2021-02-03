@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Session.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -661,15 +661,17 @@ namespace CDP4Dal
             var eventArgs = new BeforeWriteEventArgs(operationContainer, filesList);
             this.BeforeWrite?.Invoke(this, eventArgs);
 
-            if (!eventArgs.Cancelled)
+            if (eventArgs.Cancelled)
             {
-                this.Dal.Session = this;
-                var dtoThings = await this.Dal.Write(operationContainer, filesList);
-
-                var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
-
-                await this.AfterReadOrWriteOrUpdate(enumerable);
+                throw new OperationCanceledException($"The Write operation was canceled.");
             }
+
+            this.Dal.Session = this;
+            var dtoThings = await this.Dal.Write(operationContainer, filesList);
+
+            var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
+
+            await this.AfterReadOrWriteOrUpdate(enumerable);
         }
 
         /// <summary>

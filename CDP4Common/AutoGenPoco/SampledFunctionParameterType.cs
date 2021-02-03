@@ -71,7 +71,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             this.DependentParameterType = new OrderedItemList<DependentParameterTypeAssignment>(this, true);
             this.IndependentParameterType = new OrderedItemList<IndependentParameterTypeAssignment>(this, true);
-            this.InterpolationPeriod = new List<string>();
+            this.InterpolationPeriod = new ValueArray<string>(this);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             this.DependentParameterType = new OrderedItemList<DependentParameterTypeAssignment>(this, true);
             this.IndependentParameterType = new OrderedItemList<IndependentParameterTypeAssignment>(this, true);
-            this.InterpolationPeriod = new List<string>();
+            this.InterpolationPeriod = new ValueArray<string>(this);
         }
 
         /// <summary>
@@ -124,15 +124,15 @@ namespace CDP4Common.SiteDirectoryData
         public OrderedItemList<IndependentParameterTypeAssignment> IndependentParameterType { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a list of String.
+        /// Gets or sets a list of ordered String.
         /// </summary>
         /// <remarks>
         /// optional representation of a period in case of a cyclic function to be taken into account for interpolation
         /// Note: The number of values shall be equal to the number of parameter types in the <i>independentParameterType</i> property. An empty value means no cyclic interpolation for the corresponding <i>independentParameterType</i>.
         /// Example: The function could represent the incident albedo flux as a function of mission elapsed time for a spacecraft in a circular orbit.
         /// </remarks>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public List<string> InterpolationPeriod { get; set; }
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: true, isNullable: false, isPersistent: true)]
+        public ValueArray<string> InterpolationPeriod { get; set; }
 
         /// <summary>
         /// Gets an <see cref="IEnumerable{IEnumerable}"/> that references the composite properties of the current <see cref="SampledFunctionParameterType"/>.
@@ -166,7 +166,7 @@ namespace CDP4Common.SiteDirectoryData
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
             clone.HyperLink = cloneContainedThings ? new ContainerList<HyperLink>(clone) : new ContainerList<HyperLink>(this.HyperLink, clone);
             clone.IndependentParameterType = cloneContainedThings ? null : new OrderedItemList<IndependentParameterTypeAssignment>(this.IndependentParameterType, clone);
-            clone.InterpolationPeriod = new List<string>(this.InterpolationPeriod);
+            clone.InterpolationPeriod = new ValueArray<string>(this.InterpolationPeriod, this);
 
             if (cloneContainedThings)
             {
@@ -252,7 +252,7 @@ namespace CDP4Common.SiteDirectoryData
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
             this.HyperLink.ResolveList(dto.HyperLink, dto.IterationContainerId, this.Cache);
             this.IndependentParameterType.ResolveList(dto.IndependentParameterType, dto.IterationContainerId, this.Cache);
-            this.InterpolationPeriod.ClearAndAddRange(dto.InterpolationPeriod);
+            this.InterpolationPeriod = new ValueArray<string>(dto.InterpolationPeriod, this);
             this.IsDeprecated = dto.IsDeprecated;
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
@@ -280,7 +280,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
             dto.HyperLink.AddRange(this.HyperLink.Select(x => x.Iid));
             dto.IndependentParameterType.AddRange(this.IndependentParameterType.ToDtoOrderedItemList());
-            dto.InterpolationPeriod.AddRange(this.InterpolationPeriod);
+            dto.InterpolationPeriod = new ValueArray<string>(this.InterpolationPeriod, this);
             dto.IsDeprecated = this.IsDeprecated;
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;

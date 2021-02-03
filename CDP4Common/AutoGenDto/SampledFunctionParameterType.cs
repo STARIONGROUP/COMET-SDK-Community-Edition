@@ -51,7 +51,7 @@ namespace CDP4Common.DTO
         {
             this.DependentParameterType = new List<OrderedItem>();
             this.IndependentParameterType = new List<OrderedItem>();
-            this.InterpolationPeriod = new List<string>();
+            this.InterpolationPeriod = new ValueArray<string>();
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace CDP4Common.DTO
         {
             this.DependentParameterType = new List<OrderedItem>();
             this.IndependentParameterType = new List<OrderedItem>();
-            this.InterpolationPeriod = new List<string>();
+            this.InterpolationPeriod = new ValueArray<string>();
         }
 
         /// <summary>
@@ -92,11 +92,11 @@ namespace CDP4Common.DTO
         public List<OrderedItem> IndependentParameterType { get; set; }
 
         /// <summary>
-        /// Gets or sets a list of String.
+        /// Gets or sets a list of ordered String.
         /// </summary>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: true, isNullable: false, isPersistent: true)]
         [DataMember]
-        public List<string> InterpolationPeriod { get; set; }
+        public ValueArray<string> InterpolationPeriod { get; set; }
 
         /// <summary>
         /// Gets the route for the current <see ref="SampledFunctionParameterType"/>.
@@ -217,7 +217,7 @@ namespace CDP4Common.DTO
                 this.IndependentParameterType.Add(new OrderedItem { K = orderedItem.K, V = copy.Value.Iid });
             }
 
-            this.InterpolationPeriod.AddRange(original.InterpolationPeriod);
+            this.InterpolationPeriod = original.InterpolationPeriod;
 
             this.IsDeprecated = original.IsDeprecated;
 
