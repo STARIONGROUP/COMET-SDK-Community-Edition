@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
@@ -621,7 +621,7 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public async Task VerifyThatCancelWriteWorks()
+        public void VerifyThatCancelWriteWorks()
         {
             var context = $"/SiteDirectory/{Guid.NewGuid()}";
             var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
@@ -632,7 +632,7 @@ namespace CDP4Dal.Tests
                 args.Cancelled = true;
             };
 
-            await this.session.Write(new OperationContainer(context));
+            Assert.ThrowsAsync<OperationCanceledException>(async () => await this.session.Write(new OperationContainer(context)));
 
             this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(0));
         }
