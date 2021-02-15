@@ -25,6 +25,7 @@
 namespace CDP4Dal
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
@@ -64,9 +65,9 @@ namespace CDP4Dal
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// The cancellation token source.
+        /// The cancellation token source dictionary.
         /// </summary>
-        private CancellationTokenSource cancellationTokenSource;
+        private ConcurrentDictionary<Guid, CancellationTokenSource> cancellationTokenSourceDictionary;
 
         /// <summary>
         /// Backing field for <see cref="OpenReferenceDataLibraries"/>
@@ -96,6 +97,7 @@ namespace CDP4Dal
             this.PermissionService = new PermissionService(this);
             this.openReferenceDataLibraries = new List<ReferenceDataLibrary>();
             this.openIterations = new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>();
+            this.cancellationTokenSourceDictionary = new ConcurrentDictionary<Guid, CancellationTokenSource>();
         }
 
         /// <summary>
@@ -230,7 +232,7 @@ namespace CDP4Dal
 
             return iterationDomainPair.Value == null || iterationDomainPair.Value.Item1 == null ? null : iterationDomainPair.Value.Item1;
         }
-        
+
         /// <summary>
         /// Queries the <see cref="Participant"/>'s <see cref="DomainOfExpertise"/>'s from the session for the provided <see cref="Iteration"/>
         /// </summary>
@@ -307,17 +309,21 @@ namespace CDP4Dal
             logger.Info("Open request {0}", this.DataSourceUri);
 
             // Create the token source
-            this.cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+
             IReadOnlyList<CDP4Common.DTO.Thing> dtoThings;
 
             try
             {
-                dtoThings = (await this.Dal.Open(this.Credentials, this.cancellationTokenSource.Token)).ToList();
+                dtoThings = (await this.Dal.Open(this.Credentials, cancellationTokenSource.Token)).ToList();
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Open request cancelled {0}", this.DataSourceUri);
-                this.cancellationTokenSource = null;
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
                 return;
             }
 
@@ -401,25 +407,28 @@ namespace CDP4Dal
             }
 
             // Create the token source
-            this.cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+
             IEnumerable<CDP4Common.DTO.Thing> dtoThings;
 
             try
             {
                 var iterationDto = (CDP4Common.DTO.Iteration) iteration.ToDto();
                 this.Dal.Session = this;
-                dtoThings = await this.Dal.Read(iterationDto, this.cancellationTokenSource.Token, null);
-                this.cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                dtoThings = await this.Dal.Read(iterationDto, cancellationTokenSource.Token, null);
+                cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.Read {0} {1} cancelled", iteration.ClassKind, iteration.Iid);
-                this.cancellationTokenSource = null;
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
                 return;
             }
             finally
             {
-                this.cancellationTokenSource = null;
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
 
             // proceed if no problem
@@ -491,17 +500,21 @@ namespace CDP4Dal
             var dto = thing.ToDto();
 
             // Create the token source
-            this.cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+
             IEnumerable<CDP4Common.DTO.Thing> dtoThings;
 
             try
             {
-                dtoThings = await this.Dal.Read(dto, this.cancellationTokenSource.Token, queryAttributes);
+                dtoThings = await this.Dal.Read(dto, cancellationTokenSource.Token, queryAttributes);
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.Read {0} {1} cancelled", thing.ClassKind, thing.Iid);
-                this.cancellationTokenSource = null;
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out _);
                 return;
             }
 
@@ -537,6 +550,11 @@ namespace CDP4Dal
 
             var foundThings = new List<CDP4Common.DTO.Thing>();
 
+            // Create the token source
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+
             try
             {
                 // Max 10 async calls at a time, otherwise we could create a sort of a DDOS attack to the DAL/webservice
@@ -546,12 +564,9 @@ namespace CDP4Dal
                 {
                     var tasks = new List<Task<IEnumerable<CDP4Common.DTO.Thing>>>();
 
-                    // Create the token source
-                    this.cancellationTokenSource = new CancellationTokenSource();
-
                     foreach (var thing in thingList.Take(loopCount))
                     {
-                        tasks.Add(this.Dal.Read(thing.ToDto(), this.cancellationTokenSource.Token, queryAttributes));
+                        tasks.Add(this.Dal.Read(thing.ToDto(), cancellationTokenSource.Token, queryAttributes));
                     }
 
                     var newThings = (await Task.WhenAll(tasks.ToArray())).SelectMany(x => x).ToList();
@@ -560,11 +575,13 @@ namespace CDP4Dal
 
                     thingList = thingList.Skip(loopCount).ToList();
                 }
+
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.Read cancelled");
-                this.cancellationTokenSource = null;
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
                 return;
             }
 
@@ -587,17 +604,21 @@ namespace CDP4Dal
             var dto = localFile.ToDto();
 
             // Create the token source
-            this.cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+
             byte[] fileContent;
 
             try
             {
-                fileContent = await this.Dal.ReadFile(dto, this.cancellationTokenSource.Token);
+                fileContent = await this.Dal.ReadFile(dto, cancellationTokenSource.Token);
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.ReadFile {0} {1} cancelled", localFile.ClassKind, localFile.Iid);
-                this.cancellationTokenSource = null;
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out _);
                 return null;
             }
 
@@ -729,15 +750,43 @@ namespace CDP4Dal
         /// <summary>
         /// Can a Cancel action be executed?
         /// </summary>
-        /// <returns>True is Cancel is allowed, otherwise false.</returns>
-        public bool CanCancel()
+        /// <param name="cancellationTokenSource">
+        /// Cancellation token source that will be cancelled <see cref="CancellationTokenSource"/>
+        /// </param>
+        /// <returns>
+        /// True if Cancel is allowed, otherwise false.
+        /// </returns>
+        private static bool CanCancel(CancellationTokenSource cancellationTokenSource)
         {
-            if (this.cancellationTokenSource == null)
+            if (cancellationTokenSource == null)
             {
                 return false;
             }
 
-            return this.cancellationTokenSource.Token.CanBeCanceled && !this.cancellationTokenSource.IsCancellationRequested;
+            return cancellationTokenSource.Token.CanBeCanceled && !cancellationTokenSource.IsCancellationRequested;
+        }
+
+        /// <summary>
+        /// Can a Cancel action be executed?
+        /// </summary>
+        /// <returns>
+        /// True if Cancel is allowed for at least on token, otherwise false.
+        /// </returns>
+        public bool CanCancel()
+        {
+            foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys)
+            {
+                if (!CanCancel(this.cancellationTokenSourceDictionary[cancellationTokenSourceKey]))
+                {
+                    continue;
+                }
+
+                this.cancellationTokenSourceDictionary[cancellationTokenSourceKey].Cancel();
+
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -745,9 +794,12 @@ namespace CDP4Dal
         /// </summary>
         public void Cancel()
         {
-            if (this.CanCancel())
+            foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys)
             {
-                this.cancellationTokenSource.Cancel();
+                if (CanCancel(this.cancellationTokenSourceDictionary[cancellationTokenSourceKey]))
+                {
+                    this.cancellationTokenSourceDictionary[cancellationTokenSourceKey].Cancel();
+                }
             }
         }
 
@@ -835,16 +887,19 @@ namespace CDP4Dal
             var queryAttribute = new DalQueryAttributes { RevisionNumber = revisionNumber };
 
             // Create the token source
-            this.cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
             IEnumerable<CDP4Common.DTO.Thing> dtoThings;
 
             try
             {
-                dtoThings = await this.Dal.Read(thing.ToDto(), this.cancellationTokenSource.Token, queryAttribute);
+                dtoThings = await this.Dal.Read(thing.ToDto(), cancellationTokenSource.Token, queryAttribute);
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
             catch (OperationCanceledException)
             {
-                this.cancellationTokenSource = null;
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out _);
                 return;
             }
 
