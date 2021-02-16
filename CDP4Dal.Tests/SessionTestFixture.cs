@@ -226,6 +226,12 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
+        public void VerifyThatRefreshNotWorksWithoutActivePerson()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Refresh());
+        }
+
+        [Test]
         public async Task VerifythatReloadSynchronizeTheAssembler()
         {
             var updatedTel = new CDP4Common.DTO.TelephoneNumber(this.dalOutputs.OfType<CDP4Common.DTO.TelephoneNumber>().First().Iid, 100);
@@ -249,6 +255,24 @@ namespace CDP4Dal.Tests
             await this.session.Reload();
 
             Assert.IsTrue(eventReceived);
+        }
+
+        [Test]
+        public void VerifyThatReloadNotWorksWithoutActivePerson()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Reload());
+        }
+
+        [Test]
+        public void VerifyThatReadFileNotWorksWithoutActivePerson()
+        {
+            var fileRevision = new CDP4Common.EngineeringModelData.FileRevision
+            {
+                Iid = Guid.NewGuid(),
+                Name = "File"
+            };
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.ReadFile(fileRevision));
         }
 
         /// <summary>
