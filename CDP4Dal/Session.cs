@@ -776,12 +776,14 @@ namespace CDP4Dal
         {
             foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys)
             {
-                if (!CanCancel(this.cancellationTokenSourceDictionary[cancellationTokenSourceKey]))
+                this.cancellationTokenSourceDictionary.TryGetValue(cancellationTokenSourceKey, out var cancellationTokenSource);
+
+                if (!CanCancel(cancellationTokenSource))
                 {
                     continue;
                 }
 
-                this.cancellationTokenSourceDictionary[cancellationTokenSourceKey].Cancel();
+                cancellationTokenSource?.Cancel();
 
                 return true;
             }
