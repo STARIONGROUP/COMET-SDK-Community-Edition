@@ -336,6 +336,56 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
+        public async Task VerifyThatReadRdlNotWorksWithoutActivePerson()
+        {
+            var siteDirectoryPoco = new CDP4Common.SiteDirectoryData.SiteDirectory(this.sieSiteDirectoryDto.Iid, this.session.Assembler.Cache, this.uri);
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            siteDirectoryPoco.Person.Add(johnDoe);
+
+            var rdlDto = new CDP4Common.DTO.SiteReferenceDataLibrary
+            {
+                Iid = Guid.NewGuid()
+            };
+
+            var rdlPoco = new CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary
+            {
+                Iid = rdlDto.Iid,
+                Name = rdlDto.Name,
+                ShortName = rdlDto.ShortName,
+                Container = siteDirectoryPoco
+            };
+
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, null, null);
+            await this.session.Assembler.Synchronize(new List<Thing> { rdlDto });
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(rdlPoco));
+        }
+
+        [Test]
+        public void VerifyThatActivePersonParticipantsIsZeroIfNoIterationIsOpen()
+        {
+            Assert.AreEqual(0, this.session.ActivePersonParticipants.Count());
+        }
+
+        [Test]
+        public void VerifyThatSessionNameIsProperlyNamed()
+        {
+            var siteDirectoryPoco = new CDP4Common.SiteDirectoryData.SiteDirectory(this.sieSiteDirectoryDto.Iid, this.session.Assembler.Cache, this.uri);
+
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri)
+            {
+                Surname = "Doe",
+                GivenName = "John"
+            };
+
+            siteDirectoryPoco.Person.Add(johnDoe);
+
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+
+            Assert.AreEqual("http://www.rheagroup.com/ - John Doe", this.session.Name);
+        }
+
+        [Test]
         public async Task VerifyThatSiteRdlRequiredByModelRdlCannotBeClosed()
         {
             var rdlDto = new CDP4Common.DTO.SiteReferenceDataLibrary { Iid = Guid.NewGuid() };
