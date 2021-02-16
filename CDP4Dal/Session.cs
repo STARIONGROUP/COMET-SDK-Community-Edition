@@ -67,7 +67,7 @@ namespace CDP4Dal
         /// <summary>
         /// The cancellation token source dictionary.
         /// </summary>
-        private ConcurrentDictionary<Guid, CancellationTokenSource> cancellationTokenSourceDictionary;
+        private readonly ConcurrentDictionary<Guid, CancellationTokenSource> cancellationTokenSourceDictionary;
 
         /// <summary>
         /// Backing field for <see cref="OpenReferenceDataLibraries"/>
@@ -417,7 +417,7 @@ namespace CDP4Dal
             {
                 var iterationDto = (CDP4Common.DTO.Iteration) iteration.ToDto();
                 this.Dal.Session = this;
-                dtoThings = await this.Dal.Read(iterationDto, cancellationTokenSource.Token, null);
+                dtoThings = await this.Dal.Read(iterationDto, cancellationTokenSource.Token);
                 cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }
             catch (OperationCanceledException)
@@ -536,14 +536,14 @@ namespace CDP4Dal
         {
             if (this.ActivePerson == null)
             {
-                throw new InvalidOperationException($"The data cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
+                throw new InvalidOperationException("The data cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
             }
 
             var thingList = things.ToList();
 
             if (!thingList.Any())
             {
-                throw new ArgumentException($"The requested list of things is null or empty.");
+                throw new ArgumentException("The requested list of things is null or empty.");
             }
 
             logger.Info("Session.Read {0} things", thingList.Count());
@@ -663,7 +663,7 @@ namespace CDP4Dal
         {
             if (this.ActivePerson == null)
             {
-                throw new InvalidOperationException($"The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+                throw new InvalidOperationException("The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
             }
 
             var filesList = files?.ToList();
@@ -684,7 +684,7 @@ namespace CDP4Dal
 
             if (eventArgs.Cancelled)
             {
-                throw new OperationCanceledException($"The Write operation was canceled.");
+                throw new OperationCanceledException("The Write operation was canceled.");
             }
 
             this.Dal.Session = this;
@@ -719,7 +719,7 @@ namespace CDP4Dal
         {
             if (this.ActivePerson == null)
             {
-                throw new InvalidOperationException($"The Refresh operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+                throw new InvalidOperationException("The Refresh operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
             }
 
             foreach (var topContainer in this.GetSiteDirectoryAndActiveIterations())
@@ -738,7 +738,7 @@ namespace CDP4Dal
         {
             if (this.ActivePerson == null)
             {
-                throw new InvalidOperationException($"The Reload operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+                throw new InvalidOperationException("The Reload operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
             }
 
             foreach (var topContainer in this.GetSiteDirectoryAndActiveIterations())
