@@ -132,18 +132,29 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public async Task VerifyThatOpenCallMightBeCancelled()
+        [Category("WebServicesDependent")]
+        public void VerifyThatOpenCallMightBeCancelled()
         {
-            var tasks = new List<Task>
-            {
-                Task.Run(() =>
-                {
-                    Thread.Sleep(50);
-                    this.session.Open();
-                })
-            };
+            var tasks = new List<Task>();
+            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
+            var adminPerson = new CDP4Common.DTO.Person(Guid.NewGuid(), 22) { ShortName = "admin", GivenName = "admin", Password = "pass", IsActive = true };
+            this.sieSiteDirectoryDto.Person.Add(adminPerson.Iid);
+            this.dalOutputs.Add(adminPerson);
 
-            for (var i = 0; i < 100; i++)
+            this.session = new Session(this.mockedDal.Object, credentials);
+
+            for (var i = 0; i < 50; i++)
+            {
+                var timeout = i;
+
+                tasks.Add(Task.Run(async () =>
+                {
+                    Thread.Sleep(timeout);
+                    await this.session.Open();
+                }));
+            }
+
+            for (var i = 0; i < 50; i++)
             {
                 var timeout = i;
 
@@ -160,7 +171,7 @@ namespace CDP4Dal.Tests
 
             Assert.DoesNotThrowAsync(async () =>
             {
-                await Task.WhenAll(tasks);
+                await Task.WhenAll(tasks.ToArray());
             });
         }
 
