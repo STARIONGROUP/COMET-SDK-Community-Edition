@@ -318,13 +318,15 @@ namespace CDP4Dal
             try
             {
                 dtoThings = (await this.Dal.Open(this.Credentials, cancellationTokenSource.Token)).ToList();
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Open request cancelled {0}", this.DataSourceUri);
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
                 return;
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
 
             if (!dtoThings.Any())
@@ -423,7 +425,6 @@ namespace CDP4Dal
             catch (OperationCanceledException)
             {
                 logger.Info("Session.Read {0} {1} cancelled", iteration.ClassKind, iteration.Iid);
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
                 return;
             }
             finally
@@ -509,13 +510,15 @@ namespace CDP4Dal
             try
             {
                 dtoThings = await this.Dal.Read(dto, cancellationTokenSource.Token, queryAttributes);
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.Read {0} {1} cancelled", thing.ClassKind, thing.Iid);
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out _);
                 return;
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
 
             // proceed if no problem
@@ -575,14 +578,15 @@ namespace CDP4Dal
 
                     thingList = thingList.Skip(loopCount).ToList();
                 }
-
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.Read cancelled");
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
                 return;
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
 
             await this.AfterReadOrWriteOrUpdate(foundThings);
@@ -613,13 +617,15 @@ namespace CDP4Dal
             try
             {
                 fileContent = await this.Dal.ReadFile(dto, cancellationTokenSource.Token);
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
             catch (OperationCanceledException)
             {
                 logger.Info("Session.ReadFile {0} {1} cancelled", localFile.ClassKind, localFile.Iid);
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out _);
                 return null;
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
 
             return fileContent;
@@ -748,7 +754,7 @@ namespace CDP4Dal
         }
 
         /// <summary>
-        /// Can a Cancel action be executed?
+        /// Asserts whether a cancel action can be executed
         /// </summary>
         /// <param name="cancellationTokenSource">
         /// Cancellation token source that will be cancelled <see cref="CancellationTokenSource"/>
@@ -770,7 +776,7 @@ namespace CDP4Dal
         /// Can a Cancel action be executed?
         /// </summary>
         /// <returns>
-        /// True if Cancel is allowed for at least on token, otherwise false.
+        /// True if Cancel is allowed for at least one token, otherwise false.
         /// </returns>
         public bool CanCancel()
         {
@@ -792,7 +798,7 @@ namespace CDP4Dal
         }
 
         /// <summary>
-        /// Cancel any Read or Open operation.
+        /// Cancel all running Read, Open and Write operations that are currently running
         /// </summary>
         public void Cancel()
         {
@@ -873,8 +879,12 @@ namespace CDP4Dal
         }
 
         /// <summary>
-        /// Read the new content of the <see cref="IDal"/>
+        /// Update <see cref="Thing"/> in the associated <see cref="IDal"/>
         /// </summary>
+        /// <remarks>
+        /// A Write Operation can be cancelled which will result in the Session will no longer waiting for the result.
+        /// The operations are already dispatched to the E-TM-10-25 data source and will continue to run and complete there.
+        /// </remarks>
         /// <param name="thing">
         /// The instance of <see cref="Thing"/> that is to be updated
         /// </param>
@@ -897,12 +907,15 @@ namespace CDP4Dal
             try
             {
                 dtoThings = await this.Dal.Read(thing.ToDto(), cancellationTokenSource.Token, queryAttribute);
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
             catch (OperationCanceledException)
             {
-                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out _);
+                logger.Info("Session.Update {0} {1} cancelled", thing.ClassKind, thing.Iid);
                 return;
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
 
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
