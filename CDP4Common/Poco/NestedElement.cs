@@ -149,12 +149,16 @@ namespace CDP4Common.EngineeringModelData
         {
             var level = this.ElementUsage.Count;
 
-            var children = nestedElements.Where(ne => ne.ElementUsage.Count == level + 1);
+            var children = nestedElements.Where(ne => ne.ElementUsage.Count == level + 1).ToList();
 
-            if (level > 0)
+            while (level > 0)
             {
+                var elementUsage = this.ElementUsage[level - 1];
+
                 children = children.Where(ne =>
-                    ne.ElementUsage[level - 1] == this.ElementUsage.LastOrDefault());
+                    ne.ElementUsage[level - 1] == elementUsage).ToList();
+
+                level--;
             }
 
             children = children.ToList();

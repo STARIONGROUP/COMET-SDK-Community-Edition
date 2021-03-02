@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedElementTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Kamil Wojnowski, 
-//            Nathanael Smiechowski
+//            Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -47,9 +47,14 @@ namespace CDP4Common.Tests.Poco
 
         private ElementUsage elementUsage1;
         private ElementUsage elementUsage2;
+        private ElementUsage elementUsage3_1;
+        private ElementUsage elementUsage3_2;
+        private ElementUsage elementUsage4;
         private ElementDefinition rootElementDef;
         private ElementDefinition elementDef1;
         private ElementDefinition elementDef2;
+        private ElementDefinition elementDef3;
+        private ElementDefinition elementDef4;
         private DomainOfExpertise domain;
         private DomainOfExpertise domain2;
         private Category category;
@@ -70,12 +75,20 @@ namespace CDP4Common.Tests.Poco
             this.rootElementDef = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef", ShortName = "Def", Container = this.iteration };
             this.elementDef1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef1", ShortName = "Def1", Container = this.iteration };
             this.elementDef2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef2", ShortName = "Def2", Container = this.iteration };
+            this.elementDef3 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef3", ShortName = "Def3", Container = this.iteration };
+            this.elementDef4 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementDef4", ShortName = "Def4", Container = this.iteration };
             this.elementUsage1 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementUsage", ShortName = "Use1", ElementDefinition = this.elementDef1 };
             this.elementUsage2 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementUsage2", ShortName = "Use2", ElementDefinition = this.elementDef2 };
+            this.elementUsage3_1 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementUsage3_1", ShortName = "Use3_1", ElementDefinition = this.elementDef3 };
+            this.elementUsage3_2 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementUsage3_2", ShortName = "Use3_2", ElementDefinition = this.elementDef3 };
+            this.elementUsage4 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri) { Name = "ElementUsage4", ShortName = "Use4", ElementDefinition = this.elementDef4 };
 
             this.iteration.TopElement = this.rootElementDef;
             this.rootElementDef.ContainedElement.Add(this.elementUsage1);
             this.elementDef1.ContainedElement.Add(this.elementUsage2);
+            this.elementDef1.ContainedElement.Add(this.elementUsage3_1);
+            this.elementDef1.ContainedElement.Add(this.elementUsage3_2);
+            this.elementDef3.ContainedElement.Add(this.elementUsage4);
 
             this.domain = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.uri);
             this.domain2 = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.uri);
@@ -83,6 +96,9 @@ namespace CDP4Common.Tests.Poco
             this.elementUsage1.Owner = this.domain2;
             this.elementUsage2.Owner = this.domain2;
             this.elementUsage2.ElementDefinition = this.elementDef2;
+            this.elementUsage3_1.Owner = this.domain2;
+            this.elementUsage3_2.Owner = this.domain2;
+            this.elementUsage4.Owner = this.domain2;
             this.rootElementDef.Owner = this.domain;
 
             this.nestedElement.RootElement = this.rootElementDef;
@@ -214,15 +230,21 @@ namespace CDP4Common.Tests.Poco
         {
             var nestedElementTreeGenerator = new NestedElementTreeGenerator();
             var nestedElements = nestedElementTreeGenerator.Generate(this.option, this.domain).ToList();
-            Assert.AreEqual(3, nestedElements.Count);
+            Assert.AreEqual(7, nestedElements.Count);
 
             var children = nestedElements.First(x => x.IsRootElement).GetChildren(nestedElements).ToList();
             Assert.AreEqual(1, children.Count);
             Assert.AreEqual(this.elementUsage1.Name, children.First().Name);
 
             var children2 = children.First().GetChildren(nestedElements).ToList();
-            Assert.AreEqual(1, children2.Count);
+            Assert.AreEqual(3, children2.Count);
             Assert.AreEqual(this.elementUsage2.Name, children2.First().Name);
+
+            var sameInstanceElementUsageNestedElement1 = nestedElements.Single(x => x.ElementUsage.LastOrDefault() == this.elementUsage3_1);
+            var sameInstanceElementUsageNestedElement2 = nestedElements.Single(x => x.ElementUsage.LastOrDefault() == this.elementUsage3_2);
+            
+            Assert.AreEqual(1, sameInstanceElementUsageNestedElement1.GetChildren(nestedElements).Count());
+            Assert.AreEqual(1, sameInstanceElementUsageNestedElement2.GetChildren(nestedElements).Count());
         }
     }
 }
