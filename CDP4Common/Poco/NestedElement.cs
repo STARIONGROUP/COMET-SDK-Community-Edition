@@ -137,24 +137,28 @@ namespace CDP4Common.EngineeringModelData
         }
 
         /// <summary>
-        /// Get the children of a <see cref="NestedElement"/>.
+        /// Find and return the first level children of this <see cref="NestedElement"/>.
         /// </summary>
         /// <param name="nestedElements">
-        /// A list containing all <see cref="NestedElement"/>s.
+        /// A list containing all <see cref="NestedElement"/>s in which to search for first-level children of this <see cref="NestedElement"/>.
         /// </param>
         /// <returns>
-        /// An <see cref="IEnumerable{NestedElement}"/> containing all children <see cref="NestedElement"/>s.
+        /// An <see cref="IEnumerable{NestedElement}"/> containing all first level child <see cref="NestedElement"/>s.
         /// </returns>
         public IEnumerable<NestedElement> GetChildren(List<NestedElement> nestedElements)
         {
             var level = this.ElementUsage.Count;
 
-            var children = nestedElements.Where(ne => ne.ElementUsage.Count == level + 1);
+            var children = nestedElements.Where(ne => ne.ElementUsage.Count == level + 1).ToList();
 
-            if (level > 0)
+            while (level > 0)
             {
+                var elementUsage = this.ElementUsage[level - 1];
+
                 children = children.Where(ne =>
-                    ne.ElementUsage[level - 1] == this.ElementUsage.LastOrDefault());
+                    ne.ElementUsage[level - 1] == elementUsage).ToList();
+
+                level--;
             }
 
             children = children.ToList();
