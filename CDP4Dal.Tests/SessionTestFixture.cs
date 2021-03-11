@@ -42,9 +42,9 @@ namespace CDP4Dal.Tests
     using CDP4Dal.Events;
 
     using Moq;
-    
+
     using NUnit.Framework;
-    
+
     using DomainOfExpertise = CDP4Common.SiteDirectoryData.DomainOfExpertise;
     using EngineeringModelSetup = CDP4Common.DTO.EngineeringModelSetup;
     using ModelReferenceDataLibrary = CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary;
@@ -78,6 +78,7 @@ namespace CDP4Dal.Tests
 
             this.sieSiteDirectoryDto = new CDP4Common.DTO.SiteDirectory(Guid.NewGuid(), 22);
             this.person = new CDP4Common.DTO.Person(Guid.NewGuid(), 22) { ShortName = "John", GivenName = "John", Password = "Doe", IsActive = true };
+
             var phone1 = new CDP4Common.DTO.TelephoneNumber(Guid.NewGuid(), 22) { Value = "123" };
             phone1.VcardType.Add(VcardTelephoneNumberKind.HOME);
             var phone2 = new CDP4Common.DTO.TelephoneNumber(Guid.NewGuid(), 22) { Value = "456" };
@@ -131,6 +132,50 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
+        [Category("WebServicesDependent")]
+        public void VerifyThatOpenCallMightBeCancelled()
+        {
+            var tasks = new List<Task>();
+            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
+            var adminPerson = new CDP4Common.DTO.Person(Guid.NewGuid(), 22) { ShortName = "admin", GivenName = "admin", Password = "pass", IsActive = true };
+            this.sieSiteDirectoryDto.Person.Add(adminPerson.Iid);
+            this.dalOutputs.Add(adminPerson);
+
+            this.session = new Session(this.mockedDal.Object, credentials);
+
+            for (var i = 0; i < 50; i++)
+            {
+                var timeout = i;
+
+                tasks.Add(Task.Run(async () =>
+                {
+                    Thread.Sleep(timeout);
+                    await this.session.Open();
+                }));
+            }
+
+            for (var i = 0; i < 50; i++)
+            {
+                var timeout = i;
+
+                tasks.Add(Task.Run(() =>
+                {
+                    Thread.Sleep(timeout);
+
+                    if (this.session.CanCancel())
+                    {
+                        this.session.Cancel();
+                    }
+                }));
+            }
+
+            Assert.DoesNotThrowAsync(async () =>
+            {
+                await Task.WhenAll(tasks.ToArray());
+            });
+        }
+
+        [Test]
         public async Task VerifyThatWriteWithEmptyResponseSendsMessages()
         {
             var beginUpdateReceived = false;
@@ -140,8 +185,8 @@ namespace CDP4Dal.Tests
             writeWithNoResultsTaskCompletionSource.SetResult(new List<Thing>());
             this.mockedDal.Setup(x => x.Open(It.IsAny<Credentials>(), It.IsAny<CancellationToken>())).Returns(writeWithNoResultsTaskCompletionSource.Task);
 
-            CDPMessageBus.Current.Listen<SessionEvent>()                
-                .Subscribe(x => 
+            CDPMessageBus.Current.Listen<SessionEvent>()
+                .Subscribe(x =>
             {
                 if (x.Status == SessionStatus.BeginUpdate)
                 {
@@ -177,7 +222,7 @@ namespace CDP4Dal.Tests
             var readTaskCompletionSource = new TaskCompletionSource<IEnumerable<Thing>>();
             readTaskCompletionSource.SetResult(this.dalOutputs);
             this.mockedDal.Setup(x => x.Read(It.IsAny<Thing>(), It.IsAny<CancellationToken>(), It.Is<IQueryAttributes>(query => query.RevisionNumber == 0))).Returns(readTaskCompletionSource.Task);
-            
+
             await this.session.Open();
 
             CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x =>
@@ -189,6 +234,12 @@ namespace CDP4Dal.Tests
             await this.session.Refresh();
 
             Assert.IsFalse(eventReceived);
+        }
+
+        [Test]
+        public void VerifyThatRefreshNotWorksWithoutActivePerson()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Refresh());
         }
 
         [Test]
@@ -215,6 +266,24 @@ namespace CDP4Dal.Tests
             await this.session.Reload();
 
             Assert.IsTrue(eventReceived);
+        }
+
+        [Test]
+        public void VerifyThatReloadNotWorksWithoutActivePerson()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Reload());
+        }
+
+        [Test]
+        public void VerifyThatReadFileNotWorksWithoutActivePerson()
+        {
+            var fileRevision = new CDP4Common.EngineeringModelData.FileRevision
+            {
+                Iid = Guid.NewGuid(),
+                Name = "File"
+            };
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.ReadFile(fileRevision));
         }
 
         /// <summary>
@@ -268,10 +337,10 @@ namespace CDP4Dal.Tests
 
             var rdlDto = new CDP4Common.DTO.SiteReferenceDataLibrary { Iid = Guid.NewGuid() };
             var rdlPoco = new CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary { Iid = rdlDto.Iid, Name = rdlDto.Name, ShortName = rdlDto.ShortName, Container = siteDirectoryPoco };
-            
+
             var requiredSiteReferenceDataLibraryDto = new CDP4Common.DTO.SiteReferenceDataLibrary() { Iid = Guid.NewGuid() };
             var requiredSiteReferenceDataLibraryPoco = new CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary(requiredSiteReferenceDataLibraryDto.Iid, this.session.Assembler.Cache, this.uri);
-            
+
             rdlDto.RequiredRdl = requiredSiteReferenceDataLibraryDto.Iid;
             rdlPoco.RequiredRdl = requiredSiteReferenceDataLibraryPoco;
 
@@ -294,11 +363,61 @@ namespace CDP4Dal.Tests
             Lazy<CDP4Common.CommonData.Thing> requiredRdlToClose;
             session.Assembler.Cache.TryGetValue(new CacheKey(requiredSiteReferenceDataLibraryPoco.Iid, null), out requiredRdlToClose);
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)requiredRdlToClose.Value);
-            
+
             Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count());
 
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)rdlPocoToClose.Value);
             Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count());
+        }
+
+        [Test]
+        public async Task VerifyThatReadRdlNotWorksWithoutActivePerson()
+        {
+            var siteDirectoryPoco = new CDP4Common.SiteDirectoryData.SiteDirectory(this.sieSiteDirectoryDto.Iid, this.session.Assembler.Cache, this.uri);
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            siteDirectoryPoco.Person.Add(johnDoe);
+
+            var rdlDto = new CDP4Common.DTO.SiteReferenceDataLibrary
+            {
+                Iid = Guid.NewGuid()
+            };
+
+            var rdlPoco = new CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary
+            {
+                Iid = rdlDto.Iid,
+                Name = rdlDto.Name,
+                ShortName = rdlDto.ShortName,
+                Container = siteDirectoryPoco
+            };
+
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, null, null);
+            await this.session.Assembler.Synchronize(new List<Thing> { rdlDto });
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(rdlPoco));
+        }
+
+        [Test]
+        public void VerifyThatActivePersonParticipantsIsZeroIfNoIterationIsOpen()
+        {
+            Assert.AreEqual(0, this.session.ActivePersonParticipants.Count());
+        }
+
+        [Test]
+        public void VerifyThatSessionNameIsProperlyNamed()
+        {
+            var siteDirectoryPoco = new CDP4Common.SiteDirectoryData.SiteDirectory(this.sieSiteDirectoryDto.Iid, this.session.Assembler.Cache, this.uri);
+
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri)
+            {
+                Surname = "Doe",
+                GivenName = "John"
+            };
+
+            siteDirectoryPoco.Person.Add(johnDoe);
+
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+
+            Assert.AreEqual("http://www.rheagroup.com/ - John Doe", this.session.Name);
         }
 
         [Test]
@@ -310,7 +429,7 @@ namespace CDP4Dal.Tests
             rdlDto.RequiredRdl = requiredRdlDto.Iid;
             siteDirDto.SiteReferenceDataLibrary.Add(rdlDto.Iid);
             siteDirDto.SiteReferenceDataLibrary.Add(requiredRdlDto.Iid);
-            
+
             siteDirDto.Person.Add(this.person.Iid);
 
             var mrdl = new CDP4Common.DTO.ModelReferenceDataLibrary(Guid.NewGuid(), 0) { RequiredRdl = requiredRdlDto.Iid };
@@ -356,7 +475,7 @@ namespace CDP4Dal.Tests
             this.session.GetType().GetProperty("ActivePerson").SetValue(this.session, JohnDoe, null);
 
             await this.session.Read(iterationPoco, null);
-            
+
             Assert.AreEqual(2, this.session.OpenReferenceDataLibraries.Count());
 
             Lazy<CDP4Common.CommonData.Thing> requiredRdlToClose;
@@ -380,7 +499,7 @@ namespace CDP4Dal.Tests
             siteDir.Model.Add(containerEngModelSetup);
             modelRdlDto.RequiredRdl = requiredPocoDto.Iid;
             siteDir.Person.Add(JohnDoe);
-            
+
             var credentials = new Credentials("admin", "pass", new Uri("http://www.rheagroup.com"));
             var session2 = new Session(this.mockedDal.Object, credentials);
             session2.GetType().GetProperty("ActivePerson").SetValue(session2, JohnDoe, null);
@@ -516,7 +635,7 @@ namespace CDP4Dal.Tests
             var iterationToOpen = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
             var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
             iterationToOpen.Container = modelToOpen;
-            
+
             await this.session.Read(iterationToOpen, activeDomain);
             this.mockedDal.Verify(x => x.Read(It.Is<Iteration>(i => i.Iid == iterationToOpen.Iid), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>()), Times.Once);
 
@@ -553,7 +672,7 @@ namespace CDP4Dal.Tests
             var activeDomain = new DomainOfExpertise(Guid.NewGuid(), null, null);
             var model = new EngineeringModel(Guid.NewGuid(), 1);
             var iteration = new Iteration(Guid.NewGuid(), 10) { IterationSetup = iterationSetup.Iid };
-            
+
             var iterationToOpen = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
             var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
             iterationToOpen.Container = modelToOpen;
@@ -569,7 +688,7 @@ namespace CDP4Dal.Tests
 
             this.session = new Session(testDal, credentials);
             var version = new Version("1.1.0");
-            
+
             Assert.AreEqual(version.Major, this.session.DalVersion.Major);
             Assert.AreEqual(version.Minor, this.session.DalVersion.Minor);
             Assert.AreEqual(version.Build, this.session.DalVersion.Build);
@@ -700,7 +819,7 @@ namespace CDP4Dal.Tests
         /// </param>
         /// <returns>
         /// A list of <see cref="Thing"/> that are contained by the provided <see cref="Thing"/> including the <see cref="Thing"/>.
-        /// In case the 
+        /// In case the
         /// <param name="thing">
         /// </param>
         /// is a top container then all the <see cref="Thing"/>s that have been updated since the
