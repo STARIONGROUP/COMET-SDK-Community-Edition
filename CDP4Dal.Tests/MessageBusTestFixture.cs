@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MessageBusTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,24 +21,29 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reactive.Linq;
     using System.Threading.Tasks;
+
+    using CDP4Common.CommonData;
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
+
+    using JetBrains.dotMemoryUnit;
+
     using Moq;
+
     using NUnit.Framework;
-    using ElementUsage = CDP4Common.EngineeringModelData.ElementUsage;
-    using MeasurementUnit = CDP4Common.SiteDirectoryData.MeasurementUnit;
-    using Person = CDP4Common.SiteDirectoryData.Person;
+
     using SiteDirectory = CDP4Common.DTO.SiteDirectory;
-    using Thing = CDP4Common.CommonData.Thing;
 
     [TestFixture]
     public class MessageBusTestFixture
@@ -106,6 +110,89 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
+        [DotMemoryUnit(FailIfRunWithoutSupport = false)]
+        public void VerifyMemoryUsage()
+        {
+            var name = "";
+            var disposables = new List<IDisposable>();
+            var disposables2 = new List<IDisposable>();
+            long result1 = 0;
+            long result2 = 0;
+            long result3 = 0;
+            long result4 = 0;
+
+            GC.Collect();
+            dotMemory.Check(x => result1 = x.SizeInBytes);
+            TestContext.WriteLine($"Number of bytes: {result1}");
+
+            var count = 26630;
+            var repeat = 5;
+            var currentCount = CDPMessageBus.Current.ActiveObservableCount;
+            var currentCalls = CDPMessageBus.Current.ListenerCallCount;
+
+            for (var i = 1; i <= count; i++)
+            {
+                var obj = new Person() { ShortName = "User" };
+
+                for (var j = 0; j < repeat; j++)
+                {
+                    disposables.Add(CDPMessageBus.Current.Listen<ObjectChangedEvent>(obj).Where(x => true).Subscribe(x => { name = x.EventKind.ToString(); }));
+                    disposables2.Add(CDPMessageBus.Current.Listen<ObjectChangedEvent>(obj).Where(x => true).Subscribe(x => { name = x.EventKind.ToString(); }));
+                }
+            }
+
+            TestContext.WriteLine($"Count: {CDPMessageBus.Current.ActiveObservableCount}, Calls: {CDPMessageBus.Current.ListenerCallCount}");
+
+            Assert.AreEqual(count + currentCount, CDPMessageBus.Current.ActiveObservableCount);
+            Assert.AreEqual((count * 2 * repeat) + currentCalls, CDPMessageBus.Current.ListenerCallCount);
+
+            GC.Collect();
+
+            dotMemory.Check(x =>
+            {
+                result2 = x.SizeInBytes;
+                Assert.IsTrue(result2 - result1 < 253000000, "CDPMessageBus uses more memory that expected on creation of Observables and Subscriptions");
+            });
+
+            TestContext.WriteLine($"Number of bytes: {result2}");
+
+            foreach (var disposable in disposables)
+            {
+                disposable.Dispose();
+            }
+
+            disposables.Clear();
+
+            GC.Collect();
+
+            dotMemory.Check(x =>
+            {
+                result3 = x.SizeInBytes;
+                Assert.IsTrue(result2 - result3 > 94000000, "CDPMessageBus frees up LESS memory than expected on disposing subscriptions");
+                Assert.IsTrue(result2 - result3 < 98000000, "CDPMessageBus frees up MORE memory than expected on disposing subscriptions");
+            });
+
+            TestContext.WriteLine($"Number of bytes: {result3}");
+
+            foreach (var disposable in disposables2)
+            {
+                disposable.Dispose();
+            }
+
+            disposables2.Clear();
+
+            GC.Collect();
+
+            dotMemory.Check(x =>
+            {
+                result4 = x.SizeInBytes;
+                Assert.IsTrue(result4 - result1 < 6000000, "CDPMessageBus seems to leak some memory.");
+            });
+
+            TestContext.WriteLine($"Number of bytes: {result4}");
+        }
+
+        [Test]
         public async Task VerifyThatSubscribeToTypeGetsEvent()
         {
             // The ViewModel subscribes to events
@@ -144,17 +231,17 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatSubscribeToObjectWorks()
         {
-            var eu1 = new CDP4Common.EngineeringModelData.ElementUsage();
-            var eu2 = new CDP4Common.EngineeringModelData.ElementUsage();
+            var eu1 = new ElementUsage();
+            var eu2 = new ElementUsage();
 
             // The ViewModel subscribes to events
             CDPMessageBus.Current.Listen<ObjectChangedEvent>(eu1).Subscribe(x => this.OnEvent(x.ChangedThing));
 
-            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu1), target: eu1);
-            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu1), target: eu1.GetType());
+            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu1), eu1);
+            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu1), eu1.GetType());
 
-            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu2), target: eu2);
-            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu2), target: eu2.GetType());
+            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu2), eu2);
+            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu2), eu2.GetType());
 
             Assert.AreEqual(1, this.cache.Count);
 
@@ -173,16 +260,16 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatAfterClearHasBeenCalledNoMoreSubscriptionsAreReceived()
         {
-            var eu1 = new CDP4Common.EngineeringModelData.ElementUsage();
+            var eu1 = new ElementUsage();
             CDPMessageBus.Current.Listen<ObjectChangedEvent>(eu1).Subscribe(x => this.OnEvent(x.ChangedThing));
-            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu1), target: eu1);
+            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu1), eu1);
             Assert.AreEqual(1, this.cache.Count);
 
-            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu1), target: eu1);
+            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu1), eu1);
             Assert.AreEqual(2, this.cache.Count);
 
             CDPMessageBus.Current.ClearSubscriptions();
-            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu1), target: eu1);
+            CDPMessageBus.Current.SendMessage(new ObjectChangedEvent(eu1), eu1);
             Assert.AreEqual(2, this.cache.Count);
         }
 
@@ -194,7 +281,7 @@ namespace CDP4Dal.Tests
             var session = new Session(mockedDal.Object, credentials);
             var sessionEvent = new SessionEvent(session, SessionStatus.Open);
             Assert.AreEqual(0, this.messagesReceivedCounter);
-            CDPMessageBus.Current.Listen<SessionEvent>().Subscribe(x => this.MesssageReceived());                   
+            CDPMessageBus.Current.Listen<SessionEvent>().Subscribe(x => this.MesssageReceived());
             CDPMessageBus.Current.SendMessage(sessionEvent, null, null);
             Assert.AreEqual(1, this.messagesReceivedCounter);
         }
