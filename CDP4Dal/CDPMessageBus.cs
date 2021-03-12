@@ -60,6 +60,17 @@ namespace CDP4Dal
         }
 
         /// <summary>
+        /// Number of currently active Observables in the <see cref="messageBus"/>
+        /// </summary>
+        public int ActiveObservableCount => Current.messageBus.Count;
+
+        /// <summary>
+        /// Total number of Calls that have been made to the Listen method
+        /// during the lifetime of this instance of <see cref="CDPMessageBus"/>.
+        /// </summary>
+        public int ListenerCallCount { get; private set; } 
+
+        /// <summary>
         /// Prevents a default instance of the <see cref="CDPMessageBus"/> class from being created. 
         /// </summary>
         private CDPMessageBus()
@@ -87,7 +98,8 @@ namespace CDP4Dal
         /// </returns>
         public IObservable<T> Listen<T>(object target = null, string contract = null)
         {
-            return Observable.Defer(() => this.GetOrAddObservable<T>(new EventTypeTarget(typeof(T), target)));
+            this.ListenerCallCount++;
+            return this.GetOrAddObservable<T>(new EventTypeTarget(typeof(T), target));
         }
 
         /// <summary>
@@ -127,7 +139,7 @@ namespace CDP4Dal
         {
             var subject = new Subject<T>();
 
-            var observable = Observable.Create<T>(o => new CompositeDisposable(subject.Subscribe(o), CreateDisposableFromEvent(eventTypeTarget))).Publish().RefCount().AsObservable();
+            var observable = Observable.Create<T>(o => new CompositeDisposable(subject.Subscribe(o), this.CreateDisposableFromEvent(eventTypeTarget))).Publish().RefCount();
 
             return new CDPEventSubject(subject, observable);
         }
