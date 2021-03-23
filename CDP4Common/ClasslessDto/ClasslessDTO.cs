@@ -24,11 +24,13 @@
 
 namespace CDP4Common
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
     /// A classless Data Transfer Object is a wrapper for a <see cref="Dictionary{TKey,TValue}"/>
     /// </summary>
+    [Serializable]
     public class ClasslessDTO : Dictionary<string, object>
     {
     }

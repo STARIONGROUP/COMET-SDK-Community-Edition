@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
+	<TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Dal Community Edition</Title>
     <VersionPrefix>7.3.0</VersionPrefix>
     <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
+    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
     <PackageId>CDP4Dal-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
@@ -47,7 +47,7 @@
     <PackageReference Include="Rx-Linq" version="2.2.5" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard2.1' Or '$(TargetFramework)' == 'netcoreapp3.1'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard2.1'">
     <PackageReference Include="System.Reactive" Version="4.1.5" />
   </ItemGroup>
 </Project>

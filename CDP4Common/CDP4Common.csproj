@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netstandard1.6;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
     <VersionPrefix>7.3.1</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Kamil</Authors>
+    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
     <PackageId>CDP4Common-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <PropertyGroup>    
@@ -58,7 +58,6 @@
     <PackageReference Include="NLog" Version="4.6.8" />  
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />  
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard1.6'" />
   </ItemGroup>
 
 </Project>
