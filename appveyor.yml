@@ -51,12 +51,12 @@ before_build:
       }
 
 build_script:
-  - cmd: dotnet build CDP4-SDK-NETF.sln --configuration %CONFIGURATION% -v q --framework net45
-  - cmd: dotnet build CDP4-SDK-NETC.sln --configuration %CONFIGURATION% -v q --framework netcoreapp3.1
+  - cmd: dotnet build CDP4-SDK-NETF.sln --configuration %CONFIGURATION% -v q --framework net452
+  - cmd: dotnet build CDP4-SDK-NETC.sln --configuration %CONFIGURATION% -v q
   - ps: >-
       if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
         Write-Host Building Nugets PR# $env:APPVEYOR_PULL_REQUEST_NUMBER
-        dotnet pack CDP4-SDK-NETF.sln --configuration $env:CONFIGURATION -p:TargetFrameworks=net45 --no-build --version-suffix "$env:APPVEYOR_BUILD_NUMBER-PR$env:APPVEYOR_PULL_REQUEST_NUMBER"
+        dotnet pack CDP4-SDK-NETF.sln --configuration $env:CONFIGURATION -p:TargetFrameworks=net452 --no-build --version-suffix "$env:APPVEYOR_BUILD_NUMBER-PR$env:APPVEYOR_PULL_REQUEST_NUMBER"
         nuget sources add -name github -username RHEAGROUP -password $env:GITHUB_TOKEN -source https://nuget.pkg.github.com/RHEAGROUP/index.json
         nuget setApiKey $env:GITHUB_TOKEN -Source "github" -Verbosity quiet
         
@@ -71,7 +71,7 @@ test_script:
       -log:Error
       -register
       -target:"C:\Program Files\dotnet\dotnet.exe"
-      -targetargs:"test CDP4-SDK-NETF.sln --framework net45 --logger ""trx;LogFileName=%TEST_RESULT%"" --filter=""(TestCategory!~WebServicesDependent) & (TestCategory!~AppVeyorExclusion)"" --configuration %CONFIGURATION% -v q"
+      -targetargs:"test CDP4-SDK-NETF.sln --framework net452 --logger ""trx;LogFileName=%TEST_RESULT%"" --filter=""(TestCategory!~WebServicesDependent) & (TestCategory!~AppVeyorExclusion)"" --configuration %CONFIGURATION% -v q"
       -returntargetcode
       -hideskipped:All
       -output:"%TEST_COVERAGE%"
