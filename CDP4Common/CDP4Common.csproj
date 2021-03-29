@@ -44,7 +44,6 @@
     <Folder Include="AutoGenPoco\" />
     <Folder Include="AutoGenSentinel\" />
     <Folder Include="ClasslessDto\" />
-    <Folder Include="Exceptions\" />
     <Folder Include="Poco\" />
     <Folder Include="RuleVerification\" />
     <Folder Include="Validation\" />
