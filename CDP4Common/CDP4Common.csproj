@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>7.3.1</VersionPrefix>
+    <VersionPrefix>7.4.0</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
@@ -16,10 +16,10 @@
     <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
     <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
-    <PackageTags>CDP CDP4 ECSS-E-TM-10-25</PackageTags>
+    <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-   [Fix] NestedElement.GetChildren
+		[Fix] Bugfix NestedElement.GetChildren; fixes #171
     </PackageReleaseNotes>
   </PropertyGroup>
 
