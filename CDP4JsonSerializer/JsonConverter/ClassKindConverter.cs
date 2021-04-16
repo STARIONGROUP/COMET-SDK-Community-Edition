@@ -31,7 +31,7 @@ namespace CDP4JsonSerializer.JsonConverter
     using Newtonsoft.Json.Converters;
 
     /// <summary>
-    /// Specific converter for <see cref="ClassKind"/> values
+    /// Specific converter for <see cref="ClassKind"/> values.
     /// </summary>
     public class ClassKindConverter : StringEnumConverter
     {
