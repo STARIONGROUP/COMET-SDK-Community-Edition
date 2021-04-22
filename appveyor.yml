@@ -89,6 +89,7 @@ deploy:
   - provider: NuGet
     server: https://nuget.pkg.github.com/RHEAGROUP/index.json
     artifact: /.*(\.|\.s)nupkg/
+    symbol_server:
     username: RHEAGROUP
     api_key:
       secure: uS7/WlBplrAs/j9ab9P3SUN7GZyf4QAHZX//YpDOzXG/DZ6o1MGHdIWLHHdDYM5P
