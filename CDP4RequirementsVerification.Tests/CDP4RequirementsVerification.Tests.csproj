@@ -5,7 +5,7 @@
     <Company>RHEA System S.A.</Company>
     <Description>CDP4RequirementsVerification netcore unit tests</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
-    <RepositoryUrl>https://github.com/RHEAGROUP/CDP4-SDK-Community-Edition.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
