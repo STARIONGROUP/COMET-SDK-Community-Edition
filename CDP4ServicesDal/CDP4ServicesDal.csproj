@@ -14,8 +14,6 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageIcon>cdp4-icon.png</PackageIcon>
     <IncludeSource>true</IncludeSource>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RepositoryUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
