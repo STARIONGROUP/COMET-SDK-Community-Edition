@@ -61,7 +61,7 @@ build_script:
         nuget setApiKey $env:GITHUB_TOKEN -Source "github" -Verbosity quiet
         
         Get-ChildItem -Path C:\projects\cdp4-sdk-community-edition\ -Filter *.nupkg -Recurse -File -Name| ForEach-Object {
-          nuget push $_ -Source "github"
+          nuget push $_ -Source "github" -SkipDuplicate
         }
       }
 
@@ -89,7 +89,6 @@ deploy:
   - provider: NuGet
     server: https://nuget.pkg.github.com/RHEAGROUP/index.json
     artifact: /.*(\.|\.s)nupkg/
-    symbol_server:
     username: RHEAGROUP
     api_key:
       secure: uS7/WlBplrAs/j9ab9P3SUN7GZyf4QAHZX//YpDOzXG/DZ6o1MGHdIWLHHdDYM5P
