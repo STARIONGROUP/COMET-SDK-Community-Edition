@@ -19,7 +19,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [Fix] Concurrency issues in Session; fixes #167
+      [Fix] Concurrency issues in Session; fixes #167 
       [Improve] Memory consumption CDPMessageBus; fixes #176
 	</PackageReleaseNotes>
   </PropertyGroup>
