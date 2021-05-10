@@ -21,7 +21,7 @@
     <PackageReleaseNotes>
       [Fix] Concurrency issues in Session; fixes #167 
       [Improve] Memory consumption CDPMessageBus; fixes #176
-	</PackageReleaseNotes>
+ 	  </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
