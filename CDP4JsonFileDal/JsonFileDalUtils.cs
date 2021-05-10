@@ -347,10 +347,6 @@ namespace CDP4JsonFileDal
                         dtos.Add(thing.ToDto());
                     }
                 }
-                if (!domainOfExpertises.Contains(person.DefaultDomain))
-                {
-                    person.DefaultDomain = null;
-                }
                 siteDirectoryDto.Person.Add(person.Iid);
             }
 
