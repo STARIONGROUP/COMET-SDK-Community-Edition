@@ -172,12 +172,16 @@ namespace CDP4JsonFileDal
         /// <param name="organizations">
         /// The target <see cref="HashSet{Organization}"/>
         /// </param>
+        /// <param name="domainOfExpertises">
+        /// The target <see cref="HashSet{DomainOfExpertise}"/>
+        /// </param>
         internal static void AddPersons(
             EngineeringModelSetup engineeringModelSetup,
             ref HashSet<Person> persons,
             ref HashSet<PersonRole> personRoles,
             ref HashSet<ParticipantRole> participantRoles,
-            ref HashSet<Organization> organizations)
+            ref HashSet<Organization> organizations,
+            ref HashSet<DomainOfExpertise> domainOfExpertises)
         {
             foreach (var participant in engineeringModelSetup.Participant)
             {
@@ -199,6 +203,12 @@ namespace CDP4JsonFileDal
                 if (!organizations.Contains(participant.Person.Organization))
                 {
                     organizations.Add(participant.Person.Organization);
+                }
+
+                if (participant.Person.DefaultDomain != null &&
+                    !domainOfExpertises.Contains(participant.Person.DefaultDomain))
+                {
+                    domainOfExpertises.Add(participant.Person.DefaultDomain);
                 }
             }
         }
@@ -337,7 +347,10 @@ namespace CDP4JsonFileDal
                         dtos.Add(thing.ToDto());
                     }
                 }
-
+                if (!domainOfExpertises.Contains(person.DefaultDomain))
+                {
+                    person.DefaultDomain = null;
+                }
                 siteDirectoryDto.Person.Add(person.Iid);
             }
 

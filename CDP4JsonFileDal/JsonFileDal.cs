@@ -210,7 +210,7 @@ namespace CDP4JsonFileDal
                 JsonFileDalUtils.AddDomainsOfExpertise(engineeringModelSetup, ref domainsOfExpertises);
 
                 // add the Persons that are to be included in the File
-                JsonFileDalUtils.AddPersons(engineeringModelSetup, ref persons, ref personRoles, ref participantRoles, ref organizations);
+                JsonFileDalUtils.AddPersons(engineeringModelSetup, ref persons, ref personRoles, ref participantRoles, ref organizations, ref domainsOfExpertises);
 
                 // add organizations that are referrenced by ReferencedSource
                 JsonFileDalUtils.AddOrganizations(iterationRequiredRls, ref organizations);
