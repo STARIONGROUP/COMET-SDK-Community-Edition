@@ -347,6 +347,7 @@ namespace CDP4JsonFileDal
                         dtos.Add(thing.ToDto());
                     }
                 }
+
                 siteDirectoryDto.Person.Add(person.Iid);
             }
 
