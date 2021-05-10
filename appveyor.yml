@@ -52,7 +52,7 @@ before_build:
 
 build_script:
   - cmd: dotnet build CDP4-SDK-NETF.sln --configuration %CONFIGURATION% -v q --framework net452
-  - cmd: dotnet build CDP4-SDK-NETC.sln --configuration %CONFIGURATION% -v q
+  - cmd: dotnet build CDP4-SDK-NETC.sln --configuration %CONFIGURATION% -v q --framework netstandard2.1
   - ps: >-
       if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
         Write-Host Building Nugets PR# $env:APPVEYOR_PULL_REQUEST_NUMBER
