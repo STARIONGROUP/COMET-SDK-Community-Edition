@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Cdp4JsonSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -28,12 +28,16 @@ namespace CDP4JsonSerializer
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
+
     using CDP4Common.MetaInfo;
+
     using CDP4JsonSerializer.JsonConverter;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
+    
     using NLog;
+    
     using Thing = CDP4Common.DTO.Thing;
 
     /// <summary>
@@ -276,6 +280,7 @@ namespace CDP4JsonSerializer
             Logger.Trace("register converters");
             serializer.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
             serializer.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
+            serializer.Converters.Add(new ClassKindConverter());
 
             return serializer;
         }
