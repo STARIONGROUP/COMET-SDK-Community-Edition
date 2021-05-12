@@ -161,12 +161,12 @@ namespace CDP4JsonFileDal
                     {
                         domainsOfExpertise.Add(domainOfExpertise);
                     }
+                }
 
-                    if (participant.Person.DefaultDomain != null &&
-                        !domainsOfExpertise.Contains(participant.Person.DefaultDomain))
-                    {
-                        domainsOfExpertise.Add(participant.Person.DefaultDomain);
-                    }
+                if (participant.Person.DefaultDomain != null &&
+                    !domainsOfExpertise.Contains(participant.Person.DefaultDomain))
+                {
+                    domainsOfExpertise.Add(participant.Person.DefaultDomain);
                 }
             }
         }
