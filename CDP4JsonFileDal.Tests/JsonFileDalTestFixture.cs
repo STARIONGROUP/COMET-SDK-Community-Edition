@@ -292,9 +292,11 @@ namespace CDP4JsonFileDal.Tests
             modelSetup.ActiveDomain.Add(domain);
 
             var requiredRdl = new CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary();
+            requiredRdl.RequiredRdl = new CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary();
 
             var person = new Person { ShortName = "admin" };
             person.Organization = organization;
+            person.DefaultDomain = domain;
             var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) {Person = person};
             participant.Person.Role = role;
             participant.Role = participantRole;
@@ -308,14 +310,17 @@ namespace CDP4JsonFileDal.Tests
             model.EngineeringModelSetup = modelSetup;
             this.siteDirectoryData.Model.Add(modelSetup);
             modelSetup.RequiredRdl.Add(requiredRdl);
+
             modelSetup.IterationSetup.Add(iterationSetupPoco);
             cache.TryAdd(new CacheKey(person.Iid, this.siteDirectoryData.Iid), lazyPerson);
             this.siteDirectoryData.Cache = cache;
             iteration.IterationSetup = iterationSetup.Iid;
+
             var clone1 = iteration.DeepClone<Iteration>();
             operation = new Operation(iteration, clone1, OperationKind.Update);
-            operationContainers = new[] { new OperationContainer("/EngineeringModel/" + model.Iid + "/iteration/" + iteration.Iid, 0) };
-            operationContainers.Single().AddOperation(operation);
+            var operationContainer = new OperationContainer("/EngineeringModel/" + model.Iid + "/iteration/" + iteration.Iid, 0);
+            operationContainer.AddOperation(operation);
+            operationContainers = new[] { operationContainer, operationContainer };
 
             Assert.IsEmpty(await this.dal.Write(operationContainers, files));
         }
