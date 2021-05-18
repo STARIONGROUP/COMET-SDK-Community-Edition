@@ -140,16 +140,16 @@ namespace CDP4JsonFileDal
         /// <param name="engineeringModelSetup">
         /// The <see cref="EngineeringModelSetup"/> that contains the active <see cref="DomainOfExpertise"/> instances.
         /// </param>
-        /// <param name="domainsOfExpertise">
+        /// <param name="domainOfExpertises">
         /// The target <see cref="HashSet{DomainOfExpertise}"/>
         /// </param>
-        internal static void AddDomainsOfExpertise(EngineeringModelSetup engineeringModelSetup, ref HashSet<DomainOfExpertise> domainsOfExpertise)
+        internal static void AddDomainsOfExpertise(EngineeringModelSetup engineeringModelSetup, ref HashSet<DomainOfExpertise> domainOfExpertises)
         {
             foreach (var domainOfExpertise in engineeringModelSetup.ActiveDomain)
             {
-                if (!domainsOfExpertise.Contains(domainOfExpertise))
+                if (!domainOfExpertises.Contains(domainOfExpertise))
                 {
-                    domainsOfExpertise.Add(domainOfExpertise);
+                    domainOfExpertises.Add(domainOfExpertise);
                 }
             }
 
@@ -157,16 +157,16 @@ namespace CDP4JsonFileDal
             {
                 foreach (var domainOfExpertise in participant.Domain)
                 {
-                    if (!domainsOfExpertise.Contains(domainOfExpertise))
+                    if (!domainOfExpertises.Contains(domainOfExpertise))
                     {
-                        domainsOfExpertise.Add(domainOfExpertise);
+                        domainOfExpertises.Add(domainOfExpertise);
                     }
                 }
 
                 if (participant.Person.DefaultDomain != null &&
-                    !domainsOfExpertise.Contains(participant.Person.DefaultDomain))
+                    !domainOfExpertises.Contains(participant.Person.DefaultDomain))
                 {
-                    domainsOfExpertise.Add(participant.Person.DefaultDomain);
+                    domainOfExpertises.Add(participant.Person.DefaultDomain);
                 }
             }
         }
