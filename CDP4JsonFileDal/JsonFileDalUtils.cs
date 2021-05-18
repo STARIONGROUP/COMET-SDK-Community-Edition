@@ -152,6 +152,23 @@ namespace CDP4JsonFileDal
                     domainOfExpertises.Add(domainOfExpertise);
                 }
             }
+
+            foreach (var participant in engineeringModelSetup.Participant)
+            {
+                foreach (var domainOfExpertise in participant.Domain)
+                {
+                    if (!domainOfExpertises.Contains(domainOfExpertise))
+                    {
+                        domainOfExpertises.Add(domainOfExpertise);
+                    }
+                }
+
+                if (participant.Person.DefaultDomain != null &&
+                    !domainOfExpertises.Contains(participant.Person.DefaultDomain))
+                {
+                    domainOfExpertises.Add(participant.Person.DefaultDomain);
+                }
+            }
         }
 
         /// <summary>

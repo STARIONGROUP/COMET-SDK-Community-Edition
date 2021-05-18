@@ -255,8 +255,14 @@ namespace CDP4JsonFileDal.Tests
             var operationContainers = new[] { new OperationContainer("/SiteDirectory/00000000-0000-0000-0000-000000000000", 0) };
             Assert.Throws<ArgumentException>(() => this.dal.Write(operationContainers, files));
 
-            var domain = new DomainOfExpertise(Guid.NewGuid(), cache, this.credentials.Uri) { ShortName = "SYS" };
-            this.siteDirectoryData.Domain.Add(domain);
+            var domainSys = new DomainOfExpertise(Guid.NewGuid(), cache, this.credentials.Uri) { ShortName = "SYS" };
+            this.siteDirectoryData.Domain.Add(domainSys);
+
+            var domainAer = new DomainOfExpertise(Guid.NewGuid(), cache, this.credentials.Uri) { ShortName = "AER" };
+            this.siteDirectoryData.Domain.Add(domainAer);
+
+            var domainProp = new DomainOfExpertise(Guid.NewGuid(), cache, this.credentials.Uri) { ShortName = "PROP" };
+            this.siteDirectoryData.Domain.Add(domainProp);
 
             // PersonRole
             var role = new PersonRole(Guid.NewGuid(), null, null);
@@ -269,8 +275,10 @@ namespace CDP4JsonFileDal.Tests
             this.siteDirectoryData.DefaultParticipantRole = participantRole;
 
             // Organization
-            var organization = new Organization(Guid.NewGuid(), null, null);
-            organization.Container = this.siteDirectoryData;
+            var organization = new Organization(Guid.NewGuid(), null, null)
+            {
+                Container = this.siteDirectoryData
+            };
 
             var sitedirectoryDto = (CDP4Common.DTO.SiteDirectory)this.siteDirectoryData.ToDto();
             var clone = sitedirectoryDto.DeepClone<CDP4Common.DTO.SiteDirectory>();
@@ -289,16 +297,34 @@ namespace CDP4JsonFileDal.Tests
             var iterationSetupPoco = new CDP4Common.SiteDirectoryData.IterationSetup(iterationSetup.Iid, cache, this.credentials.Uri);
             var model = new EngineeringModel(Guid.NewGuid(), cache, this.credentials.Uri);
             var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup();
-            modelSetup.ActiveDomain.Add(domain);
+            modelSetup.ActiveDomain.Add(domainSys);
 
-            var requiredRdl = new CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary();
+            var source = new ReferenceSource(Guid.NewGuid(), cache, this.credentials.Uri)
+            {
+                Publisher = new Organization(Guid.NewGuid(), cache, this.credentials.Uri)
+                {
+                    Container = this.siteDirectoryData
+                }
+            };
 
-            var person = new Person { ShortName = "admin" };
-            person.Organization = organization;
-            var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) {Person = person};
+            var requiredRdl = new ModelReferenceDataLibrary
+            {
+                RequiredRdl = new SiteReferenceDataLibrary(),
+                ReferenceSource = { source }
+            };
+
+            var person = new Person
+            {
+                ShortName = "admin",
+                Organization = organization,
+                DefaultDomain = domainAer
+            };
+
+            var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) { Person = person };
             participant.Person.Role = role;
             participant.Role = participantRole;
-            participant.Domain.Add(domain);
+            participant.Domain.Add(domainSys);
+            participant.Domain.Add(domainProp);
             modelSetup.Participant.Add(participant);
 
             var lazyPerson = new Lazy<Thing>(() => person);
@@ -308,14 +334,17 @@ namespace CDP4JsonFileDal.Tests
             model.EngineeringModelSetup = modelSetup;
             this.siteDirectoryData.Model.Add(modelSetup);
             modelSetup.RequiredRdl.Add(requiredRdl);
+
             modelSetup.IterationSetup.Add(iterationSetupPoco);
             cache.TryAdd(new CacheKey(person.Iid, this.siteDirectoryData.Iid), lazyPerson);
             this.siteDirectoryData.Cache = cache;
             iteration.IterationSetup = iterationSetup.Iid;
+
             var clone1 = iteration.DeepClone<Iteration>();
             operation = new Operation(iteration, clone1, OperationKind.Update);
-            operationContainers = new[] { new OperationContainer("/EngineeringModel/" + model.Iid + "/iteration/" + iteration.Iid, 0) };
-            operationContainers.Single().AddOperation(operation);
+            var operationContainer = new OperationContainer("/EngineeringModel/" + model.Iid + "/iteration/" + iteration.Iid, 0);
+            operationContainer.AddOperation(operation);
+            operationContainers = new[] { operationContainer, operationContainer };
 
             Assert.IsEmpty(await this.dal.Write(operationContainers, files));
         }
