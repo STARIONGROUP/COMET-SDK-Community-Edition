@@ -73,7 +73,7 @@ namespace CDP4Dal
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref="CDPMessageBus"/> is enabled or not
         /// </summary>
-        private bool IsEnabled { get; set; }
+        public bool IsEnabled { get; set; }
 
         /// <summary>
         /// Prevents a default instance of the <see cref="CDPMessageBus"/> class from being created.
