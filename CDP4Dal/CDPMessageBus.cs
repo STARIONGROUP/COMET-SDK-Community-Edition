@@ -71,37 +71,16 @@ namespace CDP4Dal
         public int ListenerCallCount { get; private set; }
 
         /// <summary>
-        /// Backing field for the <see cref="IsActive" />
+        /// Gets or sets a value indicating whether the <see cref="CDPMessageBus"/> is enabled or not
         /// </summary>
-        private bool isActive;
-
-        /// <summary>
-        /// Flag indicates that the messages bus notifications are enabled or not
-        /// </summary>
-        public bool IsActive => this.isActive;
+        private bool IsEnabled { get; set; }
 
         /// <summary>
         /// Prevents a default instance of the <see cref="CDPMessageBus"/> class from being created.
         /// </summary>
         private CDPMessageBus()
         {
-            this.isActive = true;
-        }
-
-        /// <summary>
-        /// Enable message bus notifications sending
-        /// </summary>
-        public void Enable()
-        {
-            this.isActive = true;
-        }
-
-        /// <summary>
-        /// Disable message bus notifications sending
-        /// </summary>
-        public void Disable()
-        {
-            this.isActive = false;
+            this.IsEnabled = true;
         }
 
         /// <summary>
@@ -188,8 +167,7 @@ namespace CDP4Dal
         /// <param name="eventTypeTarget">The <paramref name="eventTypeTarget"/> that the dispose needs to handle.</param>
         private void DisposableDelegate(EventTypeTarget eventTypeTarget)
         {
-            Lazy<CDPEventSubject> disposablePair;
-            this.messageBus.TryRemove(eventTypeTarget, out disposablePair);
+            this.messageBus.TryRemove(eventTypeTarget, out _);
         }
 
         /// <summary>
@@ -214,14 +192,12 @@ namespace CDP4Dal
         /// </param>
         public void SendMessage<T>(T message, object target = null, string contract = null)
         {
-            if (!this.isActive)
+            if (!this.IsEnabled)
             {
                 return;
             }
 
-            Lazy<CDPEventSubject> cdpEventSubject;
-
-            var getObservable = this.messageBus.TryGetValue(new EventTypeTarget(typeof(T), target), out cdpEventSubject);
+            var getObservable = this.messageBus.TryGetValue(new EventTypeTarget(typeof(T), target), out var cdpEventSubject);
 
             if (getObservable)
             {
