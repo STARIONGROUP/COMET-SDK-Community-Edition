@@ -176,6 +176,7 @@ namespace CDP4Dal
         /// <summary>
         /// Open the underlying <see cref="IDal"/> and update the Cache with the retrieved objects.
         /// </summary>
+        /// <param name="activeMessageBus">Specify if the <see cref="CDPMessageBus"/> is used or not to notify listeners</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
@@ -183,19 +184,7 @@ namespace CDP4Dal
         /// The <see cref="CDPMessageBus"/> is used to send messages to notify listeners of <see cref="Thing"/>s that
         /// have been added to the cache.
         /// </remarks>
-        Task Open();
-
-        /// <summary>
-        /// Open the underlying <see cref="IDal"/> and update the Cache with the retrieved objects.
-        /// </summary>
-        /// <returns>
-        /// an await-able <see cref="Task"/>
-        /// </returns>
-        /// <remarks>
-        /// The <see cref="CDPMessageBus"/> is not used to send messages to notify listeners of <see cref="Thing"/>s that
-        /// have been added to the cache.
-        /// </remarks>
-        Task OpenSilently();
+        Task Open(bool activeMessageBus = true);
 
         /// <summary>
         /// Read an <see cref="Iteration"/> from the underlying <see cref="IDal"/> and
@@ -203,6 +192,7 @@ namespace CDP4Dal
         /// </summary>
         /// <param name="iteration">The <see cref="Iteration"/> to read</param>
         /// <param name="domain">The active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/></param>
+        /// <param name="activeMessageBus">Specify if the <see cref="CDPMessageBus"/> is used or not to notify listeners</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
@@ -210,22 +200,7 @@ namespace CDP4Dal
         /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
         /// is used to send messages to notify listeners of updates to the Cache
         /// </remarks>
-        Task Read(Iteration iteration, DomainOfExpertise domain);
-
-        /// <summary>
-        /// Read an <see cref="Iteration"/> from the underlying <see cref="IDal"/> and
-        /// set the active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/>.
-        /// </summary>
-        /// <param name="iteration">The <see cref="Iteration"/> to read</param>
-        /// <param name="domain">The active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/></param>
-        /// <returns>
-        /// an await-able <see cref="Task"/>
-        /// </returns>
-        /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
-        /// is not used to send messages to notify listeners of updates to the Cache
-        /// </remarks>
-        Task ReadSilently(Iteration iteration, DomainOfExpertise domain);
+        Task Read(Iteration iteration, DomainOfExpertise domain, bool activeMessageBus = true);
 
         /// <summary>
         /// Read a <see cref="ReferenceDataLibrary"/> from the underlying <see cref="IDal"/>

@@ -303,7 +303,7 @@ namespace CDP4Dal
         /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
         /// is used or not to send messages to notify listeners of updates to the Cache
         /// </remarks>
-        private async Task Open(bool activeMessageBus)
+        public async Task Open(bool activeMessageBus = true)
         {
             var sw = new Stopwatch();
             sw.Start();
@@ -363,36 +363,6 @@ namespace CDP4Dal
         }
 
         /// <summary>
-        /// Open the underlying <see cref="IDal"/> and update the Cache with the retrieved objects.
-        /// </summary>
-        /// <returns>
-        /// an await-able <see cref="Task"/>
-        /// </returns>
-        /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
-        /// is used to send messages to notify listeners of updates to the Cache
-        /// </remarks>
-        public async Task Open()
-        {
-            await this.Open(true);
-        }
-
-        /// <summary>
-        /// Open the underlying <see cref="IDal"/> and update the Cache with the retrieved objects.
-        /// </summary>
-        /// <returns>
-        /// an await-able <see cref="Task"/>
-        /// </returns>
-        /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
-        /// is not used to send messages to notify listeners of updates to the Cache
-        /// </remarks>
-        public async Task OpenSilently()
-        {
-            await this.Open(false);
-        }
-
-        /// <summary>
         /// Switches the current domain for an iteration
         /// </summary>
         /// <param name="iterationId">The iteration identifier</param>
@@ -423,7 +393,7 @@ namespace CDP4Dal
         /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
         /// is used or not to send messages to notify listeners of updates to the Cache
         /// </remarks>
-        private async Task Read(Iteration iteration, DomainOfExpertise domain, bool activeMessageBus)
+        public async Task Read(Iteration iteration, DomainOfExpertise domain, bool activeMessageBus = true)
         {
             if (this.ActivePerson == null)
             {
@@ -482,42 +452,6 @@ namespace CDP4Dal
 
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
             logger.Info("Synchronization with the {0} server done", this.DataSourceUri);
-        }
-
-        /// <summary>
-        /// Read an <see cref="Iteration"/> from the underlying <see cref="IDal"/> and set the active
-        /// <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/>.
-        /// </summary>
-        /// <param name="iteration">The <see cref="Iteration"/> to read</param>
-        /// <param name="domain">The active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/></param>
-        /// <returns>
-        /// an await-able <see cref="Task"/>
-        /// </returns>
-        /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
-        /// is used to send messages to notify listeners of updates to the Cache
-        /// </remarks>
-        public async Task Read(Iteration iteration, DomainOfExpertise domain)
-        {
-            await this.Read(iteration, domain, true);
-        }
-
-        /// <summary>
-        /// Read an <see cref="Iteration"/> from the underlying <see cref="IDal"/> and set the active
-        /// <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/>.
-        /// </summary>
-        /// <param name="iteration">The <see cref="Iteration"/> to read</param>
-        /// <param name="domain">The active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/></param>
-        /// <returns>
-        /// an await-able <see cref="Task"/>
-        /// </returns>
-        /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
-        /// is not used to send messages to notify listeners of updates to the Cache
-        /// </remarks>
-        public async Task ReadSilently(Iteration iteration, DomainOfExpertise domain)
-        {
-            await this.Read(iteration, domain, false);
         }
 
         /// <summary>
