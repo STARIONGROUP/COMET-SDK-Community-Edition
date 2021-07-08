@@ -32,15 +32,15 @@ namespace CDP4Dal
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
-    
+
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
 
     using Permission;
-    
+
     /// <summary>
-    /// The <see cref="ISession"/> interface encapsulates an <see cref="IDal"/> and 
+    /// The <see cref="ISession"/> interface encapsulates an <see cref="IDal"/> and
     /// the associated <see cref="Assembler"/>
     /// </summary>
     public interface ISession
@@ -59,7 +59,7 @@ namespace CDP4Dal
         /// Gets all the <see cref="Participant"/>s that the active person is linked with.
         /// </summary>
         IEnumerable<Participant> ActivePersonParticipants { get; }
-        
+
         /// <summary>
         /// Gets the <see cref="IDal"/> that the current <see cref="Session"/> communicates with
         /// </summary>
@@ -90,7 +90,7 @@ namespace CDP4Dal
         /// Gets the active <see cref="Person"/> in this <see cref="ISession"/>
         /// </summary>
         Person ActivePerson { get; }
-        
+
         /// <summary>
         /// Gets the <see cref="IPermissionService"/> that handles access permissions for this Session.
         /// </summary>
@@ -134,7 +134,7 @@ namespace CDP4Dal
         /// A <see cref="DomainOfExpertise"/> if has been selected for the <see cref="Iteration"/>, null otherwise.
         /// </returns>
         DomainOfExpertise QuerySelectedDomainOfExpertise(Iteration iteration);
-        
+
         /// <summary>
         /// Queries the <see cref="Participant"/>'s <see cref="DomainOfExpertise"/>'s from the session for the provided <see cref="Iteration"/>
         /// </summary>
@@ -176,6 +176,7 @@ namespace CDP4Dal
         /// <summary>
         /// Open the underlying <see cref="IDal"/> and update the Cache with the retrieved objects.
         /// </summary>
+        /// <param name="activeMessageBus">Specify if the <see cref="CDPMessageBus"/> is used or not to notify listeners</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
@@ -183,20 +184,23 @@ namespace CDP4Dal
         /// The <see cref="CDPMessageBus"/> is used to send messages to notify listeners of <see cref="Thing"/>s that
         /// have been added to the cache.
         /// </remarks>
-        Task Open();
+        Task Open(bool activeMessageBus = true);
 
         /// <summary>
-        /// Read an <see cref="Iteration"/> from the underlying <see cref="IDal"/> and set the active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/>.
+        /// Read an <see cref="Iteration"/> from the underlying <see cref="IDal"/> and
+        /// set the active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/>.
         /// </summary>
         /// <param name="iteration">The <see cref="Iteration"/> to read</param>
         /// <param name="domain">The active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/></param>
+        /// <param name="activeMessageBus">Specify if the <see cref="CDPMessageBus"/> is used or not to notify listeners</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
         /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/> is used to send messages to notify listeners of updates to the Cache
+        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
+        /// is used to send messages to notify listeners of updates to the Cache
         /// </remarks>
-        Task Read(Iteration iteration, DomainOfExpertise domain);
+        Task Read(Iteration iteration, DomainOfExpertise domain, bool activeMessageBus = true);
 
         /// <summary>
         /// Read a <see cref="ReferenceDataLibrary"/> from the underlying <see cref="IDal"/>

@@ -33,7 +33,7 @@ namespace CDP4Dal
 
     using CDP4Common.CommonData;
     using CDP4Common.Helpers;
-    
+
     using Events;
 
     /// <summary>
@@ -68,13 +68,19 @@ namespace CDP4Dal
         /// Total number of Calls that have been made to the Listen method
         /// during the lifetime of this instance of <see cref="CDPMessageBus"/>.
         /// </summary>
-        public int ListenerCallCount { get; private set; } 
+        public int ListenerCallCount { get; private set; }
 
         /// <summary>
-        /// Prevents a default instance of the <see cref="CDPMessageBus"/> class from being created. 
+        /// Gets or sets a value indicating whether the <see cref="CDPMessageBus"/> is enabled or not
+        /// </summary>
+        public bool IsEnabled { get; set; }
+
+        /// <summary>
+        /// Prevents a default instance of the <see cref="CDPMessageBus"/> class from being created.
         /// </summary>
         private CDPMessageBus()
         {
+            this.IsEnabled = true;
         }
 
         /// <summary>
@@ -161,8 +167,7 @@ namespace CDP4Dal
         /// <param name="eventTypeTarget">The <paramref name="eventTypeTarget"/> that the dispose needs to handle.</param>
         private void DisposableDelegate(EventTypeTarget eventTypeTarget)
         {
-            Lazy<CDPEventSubject> disposablePair;
-            this.messageBus.TryRemove(eventTypeTarget, out disposablePair);
+            this.messageBus.TryRemove(eventTypeTarget, out _);
         }
 
         /// <summary>
@@ -187,9 +192,12 @@ namespace CDP4Dal
         /// </param>
         public void SendMessage<T>(T message, object target = null, string contract = null)
         {
-            Lazy<CDPEventSubject> cdpEventSubject;
+            if (!this.IsEnabled)
+            {
+                return;
+            }
 
-            var getObservable = this.messageBus.TryGetValue(new EventTypeTarget(typeof(T), target), out cdpEventSubject);
+            var getObservable = this.messageBus.TryGetValue(new EventTypeTarget(typeof(T), target), out var cdpEventSubject);
 
             if (getObservable)
             {

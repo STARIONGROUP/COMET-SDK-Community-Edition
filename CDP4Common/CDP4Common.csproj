@@ -4,7 +4,7 @@
     <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>7.4.0</VersionPrefix>
+    <VersionPrefix>7.5.0</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
@@ -27,15 +27,15 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
-  <PropertyGroup>    
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>    
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\docs\cdp4-icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Folder Include="Attributes\" />
     <Folder Include="AutoGenDto\" />
@@ -54,8 +54,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.6.8" />  
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />  
+    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
 

@@ -295,14 +295,15 @@ namespace CDP4Dal
         /// <summary>
         /// Open the underlying <see cref="IDal"/> and update the Cache with the retrieved objects.
         /// </summary>
+        /// <param name="activeMessageBus">Specify if the <see cref="CDPMessageBus"/> is used or not to notify listeners</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
         /// <remarks>
-        /// The <see cref="CDPMessageBus"/> is used to send messages to notify listeners of <see cref="Thing"/>s that
-        /// have been added to the cache.
+        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
+        /// is used or not to send messages to notify listeners of updates to the Cache
         /// </remarks>
-        public async Task Open()
+        public async Task Open(bool activeMessageBus = true)
         {
             var sw = new Stopwatch();
             sw.Start();
@@ -335,7 +336,8 @@ namespace CDP4Dal
             }
 
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
-            await this.Assembler.Synchronize(dtoThings);
+
+            await this.Assembler.Synchronize(dtoThings, activeMessageBus);
 
             this.ActivePerson = this.Assembler.Cache.Select(x => x.Value)
                 .Select(lazy => lazy.Value)
@@ -383,13 +385,15 @@ namespace CDP4Dal
         /// </summary>
         /// <param name="iteration">The <see cref="Iteration"/> to read</param>
         /// <param name="domain">The active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/></param>
+        /// <param name="activeMessageBus">Specify if the <see cref="CDPMessageBus"/> is used or not to notify listeners</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
         /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/> is used to send messages to notify listeners of updates to the Cache
+        /// The Cache is updated with the returned objects and the <see cref="CDPMessageBus"/>
+        /// is used or not to send messages to notify listeners of updates to the Cache
         /// </remarks>
-        public async Task Read(Iteration iteration, DomainOfExpertise domain)
+        public async Task Read(Iteration iteration, DomainOfExpertise domain, bool activeMessageBus = true)
         {
             if (this.ActivePerson == null)
             {
@@ -417,7 +421,7 @@ namespace CDP4Dal
 
             try
             {
-                var iterationDto = (CDP4Common.DTO.Iteration) iteration.ToDto();
+                var iterationDto = (CDP4Common.DTO.Iteration)iteration.ToDto();
                 this.Dal.Session = this;
                 dtoThings = await this.Dal.Read(iterationDto, cancellationTokenSource.Token);
                 cancellationTokenSource.Token.ThrowIfCancellationRequested();
@@ -441,7 +445,8 @@ namespace CDP4Dal
             }
 
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
-            await this.Assembler.Synchronize(enumerable);
+
+            await this.Assembler.Synchronize(enumerable, activeMessageBus);
 
             this.AddIterationToOpenList(iteration.Iid, domain);
 
