@@ -28,7 +28,7 @@ for:
 # no "branches" section defined
 configuration: Debug
 install:
-  - choco install opencover.portable
+  - choco install opencover.portable --version=4.7.922
   - dotnet tool install --global dotnet-sonarscanner
 
 before_build:
