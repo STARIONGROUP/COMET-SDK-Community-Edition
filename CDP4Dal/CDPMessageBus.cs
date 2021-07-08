@@ -33,7 +33,7 @@ namespace CDP4Dal
 
     using CDP4Common.CommonData;
     using CDP4Common.Helpers;
-    
+
     using Events;
 
     /// <summary>
@@ -68,13 +68,40 @@ namespace CDP4Dal
         /// Total number of Calls that have been made to the Listen method
         /// during the lifetime of this instance of <see cref="CDPMessageBus"/>.
         /// </summary>
-        public int ListenerCallCount { get; private set; } 
+        public int ListenerCallCount { get; private set; }
 
         /// <summary>
-        /// Prevents a default instance of the <see cref="CDPMessageBus"/> class from being created. 
+        /// Backing field for the <see cref="IsActive" />
+        /// </summary>
+        private bool isActive;
+
+        /// <summary>
+        /// Flag indicates that the messages bus notifications are enabled or not
+        /// </summary>
+        public bool IsActive => this.isActive;
+
+        /// <summary>
+        /// Prevents a default instance of the <see cref="CDPMessageBus"/> class from being created.
         /// </summary>
         private CDPMessageBus()
         {
+            this.isActive = true;
+        }
+
+        /// <summary>
+        /// Enable message bus notifications sending
+        /// </summary>
+        public void Enable()
+        {
+            this.isActive = true;
+        }
+
+        /// <summary>
+        /// Disable message bus notifications sending
+        /// </summary>
+        public void Disable()
+        {
+            this.isActive = false;
         }
 
         /// <summary>
@@ -187,6 +214,11 @@ namespace CDP4Dal
         /// </param>
         public void SendMessage<T>(T message, object target = null, string contract = null)
         {
+            if (!this.isActive)
+            {
+                return;
+            }
+
             Lazy<CDPEventSubject> cdpEventSubject;
 
             var getObservable = this.messageBus.TryGetValue(new EventTypeTarget(typeof(T), target), out cdpEventSubject);
