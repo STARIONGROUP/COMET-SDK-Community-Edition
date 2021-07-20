@@ -54,7 +54,6 @@ namespace CDP4JsonSerializer
             { "iid", iid => new JValue(iid) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
-            { "name", name => new JValue(name) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "script", script => new JValue(script) },
             { "shortName", shortName => new JValue(shortName) },
@@ -80,7 +79,6 @@ namespace CDP4JsonSerializer
             jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](behavior.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](behavior.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](behavior.ModifiedOn));
-            jsonObject.Add("name", this.PropertySerializerMap["name"](behavior.Name));
             jsonObject.Add("name", this.PropertySerializerMap["name"](behavior.Name));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](behavior.RevisionNumber));
             jsonObject.Add("script", this.PropertySerializerMap["script"](behavior.Script));

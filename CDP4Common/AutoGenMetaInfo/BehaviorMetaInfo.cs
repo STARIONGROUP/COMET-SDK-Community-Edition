@@ -70,7 +70,6 @@ namespace CDP4Common.MetaInfo
             { "ExcludedPerson", new DtoValidationHelper<CDP4Common.DTO.Behavior>(item => item.ExcludedPerson != null, "The 'ExcludedPerson' property of a 'Behavior' is mandatory and cannot be null.") },
             { "HyperLink", new DtoValidationHelper<CDP4Common.DTO.Behavior>(item => item.HyperLink != null, "The 'HyperLink' property of a 'Behavior' is mandatory and cannot be null.") },
             { "Name", new DtoValidationHelper<CDP4Common.DTO.Behavior>(item => !string.IsNullOrWhiteSpace(item.Name), "The 'Name' property of a 'Behavior' is mandatory and cannot be empty or null.") },
-            { "Name", new DtoValidationHelper<CDP4Common.DTO.Behavior>(item => !string.IsNullOrWhiteSpace(item.Name), "The 'Name' property of a 'Behavior' is mandatory and cannot be empty or null.") },
             { "ShortName", new DtoValidationHelper<CDP4Common.DTO.Behavior>(item => !string.IsNullOrWhiteSpace(item.ShortName), "The 'ShortName' property of a 'Behavior' is mandatory and cannot be empty or null.") },
         };
 
@@ -249,7 +248,6 @@ namespace CDP4Common.MetaInfo
             { "Iid", thing => thing.Iid },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "Name", thing => thing.Name },
-            { "Name", thing => thing.Name },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "Script", thing => thing.Script },
             { "ShortName", thing => thing.ShortName },
@@ -271,7 +269,6 @@ namespace CDP4Common.MetaInfo
             { "File", new PropertyMetaInfo("File", "File", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Script", new PropertyMetaInfo("Script", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
@@ -301,7 +298,6 @@ namespace CDP4Common.MetaInfo
             { "File", (behavior, value) => behavior.File = value == null ? (Guid?)null : (Guid)value },
             { "Iid", (behavior, value) => behavior.Iid = (Guid)value },
             { "ModifiedOn", (behavior, value) => behavior.ModifiedOn = (DateTime)value },
-            { "Name", (behavior, value) => behavior.Name = value.ToString() },
             { "Name", (behavior, value) => behavior.Name = value.ToString() },
             { "Script", (behavior, value) => behavior.Script = value == null ? (string)null : value.ToString() },
             { "ShortName", (behavior, value) => behavior.ShortName = value.ToString() },
