@@ -32,6 +32,7 @@ namespace CDP4Common.DTO
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using CDP4Common.CommonData;
+    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
@@ -79,6 +80,7 @@ namespace CDP4Common.DTO
         /// <summary>
         /// Gets or sets the unique identifiers of the contained Behavior instances.
         /// </summary>
+        [CDPVersion("1.3.0")]
         [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public List<Guid> Behavior { get; set; }

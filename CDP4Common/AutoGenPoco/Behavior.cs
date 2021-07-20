@@ -44,7 +44,7 @@ namespace CDP4Common.EngineeringModelData
     /// </summary>
     [CDPVersion("1.3.0")]
     [Container(typeof(ElementDefinition), "Behavior")]
-    public sealed partial class Behavior : DefinedThing, INamedThing
+    public sealed partial class Behavior : DefinedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -109,26 +109,6 @@ namespace CDP4Common.EngineeringModelData
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         public File File { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Name.
-        /// </summary>
-        /// <remarks>
-        /// human readable character string in English by which something can be       referred       to
-        /// Note: The implied LanguageCode of <i>name</i> is "en-GB".
-        /// </remarks>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Name.
-        /// </summary>
-        /// <remarks>
-        /// human readable character string in English by which something can be       referred       to
-        /// Note: The implied LanguageCode of <i>name</i> is "en-GB".
-        /// </remarks>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the Script.
@@ -228,16 +208,6 @@ namespace CDP4Common.EngineeringModelData
         {
             var errorList = new List<string>(base.ValidatePocoCardinality());
 
-            if (string.IsNullOrWhiteSpace(this.Name))
-            {
-                errorList.Add("The property Name is null or empty.");
-            }
-
-            if (string.IsNullOrWhiteSpace(this.Name))
-            {
-                errorList.Add("The property Name is null or empty.");
-            }
-
             return errorList;
         }
 
@@ -268,7 +238,6 @@ namespace CDP4Common.EngineeringModelData
             this.HyperLink.ResolveList(dto.HyperLink, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
-            this.Name = dto.Name;
             this.RevisionNumber = dto.RevisionNumber;
             this.Script = dto.Script;
             this.ShortName = dto.ShortName;
@@ -293,7 +262,6 @@ namespace CDP4Common.EngineeringModelData
             dto.File = this.File != null ? (Guid?)this.File.Iid : null;
             dto.HyperLink.AddRange(this.HyperLink.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
-            dto.Name = this.Name;
             dto.Name = this.Name;
             dto.RevisionNumber = this.RevisionNumber;
             dto.Script = this.Script;

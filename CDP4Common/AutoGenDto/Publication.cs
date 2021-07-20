@@ -32,6 +32,7 @@ namespace CDP4Common.DTO
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using CDP4Common.CommonData;
+    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;

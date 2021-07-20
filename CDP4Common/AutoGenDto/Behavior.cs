@@ -32,6 +32,7 @@ namespace CDP4Common.DTO
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using CDP4Common.CommonData;
+    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
@@ -43,7 +44,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.3.0")]
     [Container(typeof(ElementDefinition), "Behavior")]
-    public sealed partial class Behavior : DefinedThing, INamedThing
+    public sealed partial class Behavior : DefinedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Behavior"/> class.
@@ -87,20 +88,6 @@ namespace CDP4Common.DTO
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: true, isPersistent: true)]
         [DataMember]
         public Guid? File { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Name.
-        /// </summary>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        [DataMember]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Name.
-        /// </summary>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        [DataMember]
-        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the Script.
@@ -216,8 +203,6 @@ namespace CDP4Common.DTO
             }
 
             this.ModifiedOn = original.ModifiedOn;
-
-            this.Name = original.Name;
 
             this.Name = original.Name;
 

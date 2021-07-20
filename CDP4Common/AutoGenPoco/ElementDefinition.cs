@@ -102,6 +102,7 @@ namespace CDP4Common.EngineeringModelData
         /// </summary>
         /// <remarks>
         /// </remarks>
+        [CDPVersion("1.3.0")]
         [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         public ContainerList<Behavior> Behavior { get; protected set; }
 
