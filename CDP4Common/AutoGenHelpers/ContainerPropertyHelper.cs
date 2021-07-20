@@ -1,17 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ContainerPropertyHelper.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of COMET-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -46,7 +47,11 @@ namespace CDP4Common.Helpers
             { "Alias", new KeyValuePair<string, string>("DefinedThing", "alias") },
             { "AndExpression", new KeyValuePair<string, string>("ParametricConstraint", "expression") },
             { "Approval", new KeyValuePair<string, string>("ModellingAnnotationItem", "approvedBy") },
+            { "ArchitectureDiagram", new KeyValuePair<string, string>("Iteration", "diagramCanvas") },
+            { "ArchitectureElement", new KeyValuePair<string, string>("DiagramElementContainer", "diagramElement") },
             { "ArrayParameterType", new KeyValuePair<string, string>("ReferenceDataLibrary", "parameterType") },
+            { "Behavior", new KeyValuePair<string, string>("ElementDefinition", "behavior") },
+            { "BehavioralParameter", new KeyValuePair<string, string>("Behavior", "behavioralParameter") },
             { "BinaryNote", new KeyValuePair<string, string>("Page", "note") },
             { "BinaryRelationship", new KeyValuePair<string, string>("Iteration", "relationship") },
             { "BinaryRelationshipRule", new KeyValuePair<string, string>("ReferenceDataLibrary", "rule") },
@@ -77,7 +82,9 @@ namespace CDP4Common.Helpers
             { "DiagramCanvas", new KeyValuePair<string, string>("Iteration", "diagramCanvas") },
             { "DiagramEdge", new KeyValuePair<string, string>("DiagramElementContainer", "diagramElement") },
             { "DiagramElementThing", new KeyValuePair<string, string>("DiagramElementContainer", "diagramElement") },
+            { "DiagramFrame", new KeyValuePair<string, string>("DiagramElementContainer", "diagramElement") },
             { "DiagramObject", new KeyValuePair<string, string>("DiagramElementContainer", "diagramElement") },
+            { "DiagramPort", new KeyValuePair<string, string>("ArchitectureElement", "diagramPort") },
             { "DiagramShape", new KeyValuePair<string, string>("DiagramElementContainer", "diagramElement") },
             { "DomainFileStore", new KeyValuePair<string, string>("Iteration", "domainFileStore") },
             { "DomainOfExpertise", new KeyValuePair<string, string>("SiteDirectory", "domain") },

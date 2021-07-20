@@ -1,18 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DiagramCanvasMetaInfo.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Kamil Wojnowski, 
-//            Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of COMET-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -20,10 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
-// <summary>
-//   This is an auto-generated MetaInfo class. Any manual changes on this file will be overwritten.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Common.MetaInfo
@@ -66,6 +62,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.DiagramCanvas>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.DiagramCanvas>>
         {
             { "Bounds", new DtoValidationHelper<CDP4Common.DTO.DiagramCanvas>(item => item.Bounds != null, "The 'Bounds' property of a 'DiagramCanvas' is mandatory and cannot be null.") },
+            { "Description", new DtoValidationHelper<CDP4Common.DTO.DiagramCanvas>(item => !string.IsNullOrWhiteSpace(item.Description), "The 'Description' property of a 'DiagramCanvas' is mandatory and cannot be empty or null.") },
             { "DiagramElement", new DtoValidationHelper<CDP4Common.DTO.DiagramCanvas>(item => item.DiagramElement != null, "The 'DiagramElement' property of a 'DiagramCanvas' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.DiagramCanvas>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'DiagramCanvas' is mandatory and cannot be null.") },
             { "ExcludedPerson", new DtoValidationHelper<CDP4Common.DTO.DiagramCanvas>(item => item.ExcludedPerson != null, "The 'ExcludedPerson' property of a 'DiagramCanvas' is mandatory and cannot be null.") },
@@ -236,12 +233,15 @@ namespace CDP4Common.MetaInfo
             { "Bounds", thing => thing.Bounds },
             { "ClassKind", thing => thing.ClassKind },
             { "CreatedOn", thing => thing.CreatedOn },
+            { "Description", thing => thing.Description },
             { "DiagramElement", thing => thing.DiagramElement },
             { "ExcludedDomain", thing => thing.ExcludedDomain },
             { "ExcludedPerson", thing => thing.ExcludedPerson },
             { "Iid", thing => thing.Iid },
+            { "IncludedDomain", thing => thing.IncludedDomain },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "Name", thing => thing.Name },
+            { "PublicationState", thing => thing.PublicationState },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ThingPreference", thing => thing.ThingPreference },
         };
@@ -256,11 +256,14 @@ namespace CDP4Common.MetaInfo
         {
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "CreatedOn", new PropertyMetaInfo("CreatedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "Description", new PropertyMetaInfo("Description", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "IncludedDomain", new PropertyMetaInfo("IncludedDomain", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "PublicationState", new PropertyMetaInfo("PublicationState", "CDP4Common.DiagramData.PublicationState", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
@@ -282,9 +285,12 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Action<CDP4Common.DTO.DiagramCanvas, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.DiagramCanvas, object>>
         {
             { "CreatedOn", (diagramCanvas, value) => diagramCanvas.CreatedOn = (DateTime)value },
+            { "Description", (diagramCanvas, value) => diagramCanvas.Description = value.ToString() },
             { "Iid", (diagramCanvas, value) => diagramCanvas.Iid = (Guid)value },
+            { "IncludedDomain", (diagramCanvas, value) => diagramCanvas.IncludedDomain = (Guid)value },
             { "ModifiedOn", (diagramCanvas, value) => diagramCanvas.ModifiedOn = (DateTime)value },
             { "Name", (diagramCanvas, value) => diagramCanvas.Name = value.ToString() },
+            { "PublicationState", (diagramCanvas, value) => diagramCanvas.PublicationState = (PublicationState)value },
             { "ThingPreference", (diagramCanvas, value) => diagramCanvas.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 

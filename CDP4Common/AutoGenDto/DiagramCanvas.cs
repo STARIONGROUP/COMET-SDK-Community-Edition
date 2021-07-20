@@ -1,17 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DiagramCanvas.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2018 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of COMET-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -42,7 +43,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(Iteration), "DiagramCanvas")]
-    public sealed partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
+    public partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DiagramCanvas"/> class.
@@ -69,7 +70,28 @@ namespace CDP4Common.DTO
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
-        public DateTime CreatedOn { get; set; }
+        public virtual DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Description.
+        /// </summary>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier of the referenced IncludedDomain.
+        /// </summary>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual Guid IncludedDomain { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PublicationState.
+        /// </summary>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual PublicationState PublicationState { get; set; }
 
         /// <summary>
         /// Gets the route for the current <see ref="DiagramCanvas"/>.
@@ -116,6 +138,8 @@ namespace CDP4Common.DTO
 
             this.CreatedOn = original.CreatedOn;
 
+            this.Description = original.Description;
+
             foreach (var guid in original.DiagramElement)
             {
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
@@ -139,9 +163,14 @@ namespace CDP4Common.DTO
                 this.ExcludedPerson.Add(copy.Value == null ? guid : copy.Value.Iid);
             }
 
+            var copyIncludedDomain = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.IncludedDomain);
+            this.IncludedDomain = copyIncludedDomain.Value == null ? original.IncludedDomain : copyIncludedDomain.Value.Iid;
+
             this.ModifiedOn = original.ModifiedOn;
 
             this.Name = original.Name;
+
+            this.PublicationState = original.PublicationState;
 
             this.ThingPreference = original.ThingPreference;
         }

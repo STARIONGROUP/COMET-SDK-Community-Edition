@@ -1,10 +1,11 @@
-// -------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DefaultPermissionProvider.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
 //    This file is part of COMET-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
 //    The COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
@@ -19,17 +20,13 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
-// <summary>
-//   This is the auto-generated DefaultPermissionProvider. Any manual changes on this file will be overwritten!
-// </summary>
-// -------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Common.Helpers
 {
     using System;
     using System.Collections.Generic;
-#if NETFRAMEWORK
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
     using System.ComponentModel.Composition;
 #endif
     using CDP4Common.CommonData;
@@ -37,7 +34,7 @@ namespace CDP4Common.Helpers
     /// <summary>
     /// A utility class that supplies common functionalities to the Service layer.
     /// </summary>
-#if NETFRAMEWORK
+#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
     [Export(typeof(IDefaultPermissionProvider))]
     [PartCreationPolicy(CreationPolicy.Shared)]
 #endif
@@ -54,7 +51,11 @@ namespace CDP4Common.Helpers
             { ClassKind.Alias, ParticipantAccessRightKind.SAME_AS_CONTAINER },
             { ClassKind.AndExpression, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.Approval, ParticipantAccessRightKind.NONE },
+            { ClassKind.ArchitectureDiagram, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.ArchitectureElement, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.ArrayParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Behavior, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.BehavioralParameter, ParticipantAccessRightKind.SAME_AS_CONTAINER },
             { ClassKind.BinaryNote, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.BinaryRelationship, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.BinaryRelationshipRule, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
@@ -87,8 +88,10 @@ namespace CDP4Common.Helpers
             { ClassKind.DiagramEdge, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.DiagramElementContainer, ParticipantAccessRightKind.NOT_APPLICABLE },
             { ClassKind.DiagramElementThing, ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { ClassKind.DiagramFrame, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.DiagrammingStyle, ParticipantAccessRightKind.NOT_APPLICABLE },
             { ClassKind.DiagramObject, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.DiagramPort, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.DiagramShape, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.DiagramThingBase, ParticipantAccessRightKind.NOT_APPLICABLE },
             { ClassKind.DiscussionItem, ParticipantAccessRightKind.NOT_APPLICABLE },
@@ -242,7 +245,11 @@ namespace CDP4Common.Helpers
             { "Alias", ParticipantAccessRightKind.SAME_AS_CONTAINER },
             { "AndExpression", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "Approval", ParticipantAccessRightKind.NONE },
+            { "ArchitectureDiagram", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { "ArchitectureElement", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "ArrayParameterType", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { "Behavior", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { "BehavioralParameter", ParticipantAccessRightKind.SAME_AS_CONTAINER },
             { "BinaryNote", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "BinaryRelationship", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "BinaryRelationshipRule", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
@@ -275,8 +282,10 @@ namespace CDP4Common.Helpers
             { "DiagramEdge", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "DiagramElementContainer", ParticipantAccessRightKind.NOT_APPLICABLE },
             { "DiagramElementThing", ParticipantAccessRightKind.SAME_AS_CONTAINER },
+            { "DiagramFrame", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "DiagrammingStyle", ParticipantAccessRightKind.NOT_APPLICABLE },
             { "DiagramObject", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { "DiagramPort", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "DiagramShape", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "DiagramThingBase", ParticipantAccessRightKind.NOT_APPLICABLE },
             { "DiscussionItem", ParticipantAccessRightKind.NOT_APPLICABLE },
@@ -430,7 +439,11 @@ namespace CDP4Common.Helpers
             { ClassKind.Alias, PersonAccessRightKind.SAME_AS_CONTAINER },
             { ClassKind.AndExpression, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.Approval, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ArchitectureDiagram, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.ArchitectureElement, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.ArrayParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Behavior, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.BehavioralParameter, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.BinaryNote, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.BinaryRelationship, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.BinaryRelationshipRule, PersonAccessRightKind.SAME_AS_SUPERCLASS },
@@ -463,8 +476,10 @@ namespace CDP4Common.Helpers
             { ClassKind.DiagramEdge, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.DiagramElementContainer, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.DiagramElementThing, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagramFrame, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.DiagrammingStyle, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.DiagramObject, PersonAccessRightKind.NOT_APPLICABLE },
+            { ClassKind.DiagramPort, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.DiagramShape, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.DiagramThingBase, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.DiscussionItem, PersonAccessRightKind.NOT_APPLICABLE },
@@ -618,7 +633,11 @@ namespace CDP4Common.Helpers
             { "Alias", PersonAccessRightKind.SAME_AS_CONTAINER },
             { "AndExpression", PersonAccessRightKind.NOT_APPLICABLE },
             { "Approval", PersonAccessRightKind.NOT_APPLICABLE },
+            { "ArchitectureDiagram", PersonAccessRightKind.NOT_APPLICABLE },
+            { "ArchitectureElement", PersonAccessRightKind.NOT_APPLICABLE },
             { "ArrayParameterType", PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { "Behavior", PersonAccessRightKind.NOT_APPLICABLE },
+            { "BehavioralParameter", PersonAccessRightKind.NOT_APPLICABLE },
             { "BinaryNote", PersonAccessRightKind.NOT_APPLICABLE },
             { "BinaryRelationship", PersonAccessRightKind.NOT_APPLICABLE },
             { "BinaryRelationshipRule", PersonAccessRightKind.SAME_AS_SUPERCLASS },
@@ -651,8 +670,10 @@ namespace CDP4Common.Helpers
             { "DiagramEdge", PersonAccessRightKind.NOT_APPLICABLE },
             { "DiagramElementContainer", PersonAccessRightKind.NOT_APPLICABLE },
             { "DiagramElementThing", PersonAccessRightKind.NOT_APPLICABLE },
+            { "DiagramFrame", PersonAccessRightKind.NOT_APPLICABLE },
             { "DiagrammingStyle", PersonAccessRightKind.NOT_APPLICABLE },
             { "DiagramObject", PersonAccessRightKind.NOT_APPLICABLE },
+            { "DiagramPort", PersonAccessRightKind.NOT_APPLICABLE },
             { "DiagramShape", PersonAccessRightKind.NOT_APPLICABLE },
             { "DiagramThingBase", PersonAccessRightKind.NOT_APPLICABLE },
             { "DiscussionItem", PersonAccessRightKind.NOT_APPLICABLE },

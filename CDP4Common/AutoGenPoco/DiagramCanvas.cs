@@ -1,17 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DiagramCanvas.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Authors: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov, Smiechowski Nathanael
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of COMET-SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -19,10 +20,6 @@
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// </copyright>
-// <summary>
-//   This is an auto-generated POCO Class. Any manual changes to this file will be overwritten!
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Common.DiagramData
@@ -47,7 +44,7 @@ namespace CDP4Common.DiagramData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(Iteration), "DiagramCanvas")]
-    public sealed partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
+    public partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -92,7 +89,56 @@ namespace CDP4Common.DiagramData
         /// Note 2: All persistent date-and-time-stamps in this model shall be stored in UTC. When local calendar dates and clock times in a specific timezone are needed they shall be converted on the fly from and to UTC by client applications.
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public DateTime CreatedOn { get; set; }
+        public virtual DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Description.
+        /// </summary>
+        /// <remarks>
+        /// Textual description of a DiagramCanvas.
+        /// </remarks>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the IncludedDomain.
+        /// </summary>
+        /// <remarks>
+        /// Collection of DomainOfExpertises that have write access to this object, although normal permissions might be defined otherwise.
+        /// </remarks>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual DomainOfExpertise IncludedDomain { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PublicationState.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual PublicationState PublicationState { get; set; }
+
+        /// <summary>
+        /// Queries the referenced <see cref="Thing"/>s of the current <see cref="DiagramCanvas"/>
+        /// </summary>
+        /// <remarks>
+        /// This does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
+        /// are exposed via the <see cref="ContainerLists"/> property
+        /// </remarks>
+        /// <returns>
+        /// An <see cref="IEnumerable{Thing}"/>
+        /// </returns>
+        public override IEnumerable<Thing> QueryReferencedThings()
+        {
+            foreach (var thing in base.QueryReferencedThings())
+            {
+                yield return thing;
+            }
+
+            if (this.IncludedDomain != null)
+            {
+                yield return this.IncludedDomain;
+            }
+        }
 
         /// <summary>
         /// Creates and returns a copy of this <see cref="DiagramCanvas"/> for edit purpose.
@@ -143,6 +189,18 @@ namespace CDP4Common.DiagramData
         {
             var errorList = new List<string>(base.ValidatePocoCardinality());
 
+            if (string.IsNullOrWhiteSpace(this.Description))
+            {
+                errorList.Add("The property Description is null or empty.");
+            }
+
+            if (this.IncludedDomain == null || this.IncludedDomain.Iid == Guid.Empty)
+            {
+                errorList.Add("The property IncludedDomain is null.");
+                this.IncludedDomain = SentinelThingProvider.GetSentinel<DomainOfExpertise>();
+                this.sentinelResetMap["IncludedDomain"] = () => this.IncludedDomain = null;
+            }
+
             return errorList;
         }
 
@@ -165,11 +223,14 @@ namespace CDP4Common.DiagramData
 
             this.Bounds.ResolveList(dto.Bounds, dto.IterationContainerId, this.Cache);
             this.CreatedOn = dto.CreatedOn;
+            this.Description = dto.Description;
             this.DiagramElement.ResolveList(dto.DiagramElement, dto.IterationContainerId, this.Cache);
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
+            this.IncludedDomain = this.Cache.Get<DomainOfExpertise>(dto.IncludedDomain, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DomainOfExpertise>();
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
+            this.PublicationState = dto.PublicationState;
             this.RevisionNumber = dto.RevisionNumber;
             this.ThingPreference = dto.ThingPreference;
 
@@ -185,11 +246,14 @@ namespace CDP4Common.DiagramData
 
             dto.Bounds.AddRange(this.Bounds.Select(x => x.Iid));
             dto.CreatedOn = this.CreatedOn;
+            dto.Description = this.Description;
             dto.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Iid));
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
+            dto.IncludedDomain = this.IncludedDomain != null ? this.IncludedDomain.Iid : Guid.Empty;
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
+            dto.PublicationState = this.PublicationState;
             dto.RevisionNumber = this.RevisionNumber;
             dto.ThingPreference = this.ThingPreference;
 
