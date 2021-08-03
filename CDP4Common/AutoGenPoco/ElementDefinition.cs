@@ -217,6 +217,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var clone = (ElementDefinition)this.MemberwiseClone();
             clone.Alias = cloneContainedThings ? new ContainerList<Alias>(clone) : new ContainerList<Alias>(this.Alias, clone);
+            clone.Attachment = cloneContainedThings ? new ContainerList<Attachment>(clone) : new ContainerList<Attachment>(this.Attachment, clone);
             clone.Behavior = cloneContainedThings ? new ContainerList<Behavior>(clone) : new ContainerList<Behavior>(this.Behavior, clone);
             clone.Category = new List<Category>(this.Category);
             clone.ContainedElement = cloneContainedThings ? new ContainerList<ElementUsage>(clone) : new ContainerList<ElementUsage>(this.ContainedElement, clone);
@@ -232,6 +233,7 @@ namespace CDP4Common.EngineeringModelData
             if (cloneContainedThings)
             {
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
+                clone.Attachment.AddRange(this.Attachment.Select(x => x.Clone(true)));
                 clone.Behavior.AddRange(this.Behavior.Select(x => x.Clone(true)));
                 clone.ContainedElement.AddRange(this.ContainedElement.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
@@ -289,6 +291,7 @@ namespace CDP4Common.EngineeringModelData
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
+            this.Attachment.ResolveList(dto.Attachment, dto.IterationContainerId, this.Cache);
             this.Behavior.ResolveList(dto.Behavior, dto.IterationContainerId, this.Cache);
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);
             this.ContainedElement.ResolveList(dto.ContainedElement, dto.IterationContainerId, this.Cache);
@@ -318,6 +321,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = new DTO.ElementDefinition(this.Iid, this.RevisionNumber);
 
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
+            dto.Attachment.AddRange(this.Attachment.Select(x => x.Iid));
             dto.Behavior.AddRange(this.Behavior.Select(x => x.Iid));
             dto.Category.AddRange(this.Category.Select(x => x.Iid));
             dto.ContainedElement.AddRange(this.ContainedElement.Select(x => x.Iid));

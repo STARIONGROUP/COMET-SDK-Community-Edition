@@ -82,11 +82,6 @@ namespace CDP4JsonSerializer
                 diagramCanvas.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
             }
 
-            if (!jObject["includedDomain"].IsNullOrEmpty())
-            {
-                diagramCanvas.IncludedDomain = jObject["includedDomain"].ToObject<Guid>();
-            }
-
             if (!jObject["modifiedOn"].IsNullOrEmpty())
             {
                 diagramCanvas.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();

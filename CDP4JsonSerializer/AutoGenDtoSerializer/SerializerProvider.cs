@@ -50,6 +50,7 @@ namespace CDP4JsonSerializer
             { "ArchitectureDiagram", new ArchitectureDiagramSerializer() },
             { "ArchitectureElement", new ArchitectureElementSerializer() },
             { "ArrayParameterType", new ArrayParameterTypeSerializer() },
+            { "Attachment", new AttachmentSerializer() },
             { "Behavior", new BehaviorSerializer() },
             { "BehavioralParameter", new BehavioralParameterSerializer() },
             { "BinaryNote", new BinaryNoteSerializer() },

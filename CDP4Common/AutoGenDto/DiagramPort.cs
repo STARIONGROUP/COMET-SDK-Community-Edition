@@ -43,7 +43,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [CDPVersion("1.3.0")]
-    [Container(typeof(ArchitectureElement), "DiagramPort")]
+    [Container(typeof(DiagramElementContainer), "DiagramElement")]
     public sealed partial class DiagramPort : DiagramShape
     {
         /// <summary>

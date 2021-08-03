@@ -210,7 +210,6 @@ namespace CDP4Common.DiagramData
             this.DiagramElement.ResolveList(dto.DiagramElement, dto.IterationContainerId, this.Cache);
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
-            this.IncludedDomain = this.Cache.Get<DomainOfExpertise>(dto.IncludedDomain, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DomainOfExpertise>();
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
             this.Owner = this.Cache.Get<DomainOfExpertise>(dto.Owner, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DomainOfExpertise>();
@@ -235,7 +234,6 @@ namespace CDP4Common.DiagramData
             dto.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Iid));
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
-            dto.IncludedDomain = this.IncludedDomain != null ? this.IncludedDomain.Iid : Guid.Empty;
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
             dto.Owner = this.Owner != null ? this.Owner.Iid : Guid.Empty;

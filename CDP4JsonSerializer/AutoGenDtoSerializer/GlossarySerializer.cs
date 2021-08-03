@@ -43,6 +43,7 @@ namespace CDP4JsonSerializer
         private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
         {
             { "alias", alias => new JArray(alias) },
+            { "attachment", attachment => new JArray(attachment) },
             { "category", category => new JArray(category) },
             { "classKind", classKind => new JValue(classKind.ToString()) },
             { "definition", definition => new JArray(definition) },
@@ -68,6 +69,7 @@ namespace CDP4JsonSerializer
         {
             var jsonObject = new JObject();
             jsonObject.Add("alias", this.PropertySerializerMap["alias"](glossary.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("attachment", this.PropertySerializerMap["attachment"](glossary.Attachment.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("category", this.PropertySerializerMap["category"](glossary.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), glossary.ClassKind)));
             jsonObject.Add("definition", this.PropertySerializerMap["definition"](glossary.Definition.OrderBy(x => x, this.guidComparer)));

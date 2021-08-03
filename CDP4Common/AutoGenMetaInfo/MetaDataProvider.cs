@@ -51,6 +51,7 @@ namespace CDP4Common.MetaInfo
             { "ArchitectureDiagram", new ArchitectureDiagramMetaInfo() },
             { "ArchitectureElement", new ArchitectureElementMetaInfo() },
             { "ArrayParameterType", new ArrayParameterTypeMetaInfo() },
+            { "Attachment", new AttachmentMetaInfo() },
             { "Behavior", new BehaviorMetaInfo() },
             { "BehavioralParameter", new BehavioralParameterMetaInfo() },
             { "BinaryNote", new BinaryNoteMetaInfo() },

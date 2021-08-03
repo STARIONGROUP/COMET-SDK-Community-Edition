@@ -46,7 +46,6 @@ namespace CDP4JsonSerializer
             { "classKind", classKind => new JValue(classKind.ToString()) },
             { "depictedThing", depictedThing => new JValue(depictedThing) },
             { "diagramElement", diagramElement => new JArray(diagramElement) },
-            { "diagramPort", diagramPort => new JArray(diagramPort) },
             { "documentation", documentation => new JValue(documentation) },
             { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
             { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
@@ -72,7 +71,6 @@ namespace CDP4JsonSerializer
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), architectureElement.ClassKind)));
             jsonObject.Add("depictedThing", this.PropertySerializerMap["depictedThing"](architectureElement.DepictedThing));
             jsonObject.Add("diagramElement", this.PropertySerializerMap["diagramElement"](architectureElement.DiagramElement.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("diagramPort", this.PropertySerializerMap["diagramPort"](architectureElement.DiagramPort.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("documentation", this.PropertySerializerMap["documentation"](architectureElement.Documentation));
             jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](architectureElement.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](architectureElement.ExcludedPerson.OrderBy(x => x, this.guidComparer)));

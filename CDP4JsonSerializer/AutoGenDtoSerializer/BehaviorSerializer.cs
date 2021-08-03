@@ -43,13 +43,13 @@ namespace CDP4JsonSerializer
         private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
         {
             { "alias", alias => new JArray(alias) },
+            { "attachment", attachment => new JArray(attachment) },
             { "behavioralModelKind", behavioralModelKind => new JValue(behavioralModelKind.ToString()) },
             { "behavioralParameter", behavioralParameter => new JArray(behavioralParameter) },
             { "classKind", classKind => new JValue(classKind.ToString()) },
             { "definition", definition => new JArray(definition) },
             { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
             { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
-            { "file", file => new JValue(file) },
             { "hyperLink", hyperLink => new JArray(hyperLink) },
             { "iid", iid => new JValue(iid) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
@@ -69,13 +69,13 @@ namespace CDP4JsonSerializer
         {
             var jsonObject = new JObject();
             jsonObject.Add("alias", this.PropertySerializerMap["alias"](behavior.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("attachment", this.PropertySerializerMap["attachment"](behavior.Attachment.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("behavioralModelKind", this.PropertySerializerMap["behavioralModelKind"](Enum.GetName(typeof(CDP4Common.EngineeringModelData.BehavioralModelKind), behavior.BehavioralModelKind)));
             jsonObject.Add("behavioralParameter", this.PropertySerializerMap["behavioralParameter"](behavior.BehavioralParameter.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), behavior.ClassKind)));
             jsonObject.Add("definition", this.PropertySerializerMap["definition"](behavior.Definition.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](behavior.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](behavior.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("file", this.PropertySerializerMap["file"](behavior.File));
             jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](behavior.HyperLink.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](behavior.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](behavior.ModifiedOn));

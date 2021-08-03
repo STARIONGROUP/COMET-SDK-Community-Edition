@@ -83,13 +83,6 @@ namespace CDP4Common.DTO
         public List<Guid> BehavioralParameter { get; set; }
 
         /// <summary>
-        /// Gets or sets the unique identifier of the referenced File.
-        /// </summary>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: true, isPersistent: true)]
-        [DataMember]
-        public Guid? File { get; set; }
-
-        /// <summary>
         /// Gets or sets the Script.
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
@@ -152,6 +145,17 @@ namespace CDP4Common.DTO
                 this.Alias.Add(copy.Value.Iid);
             }
 
+            foreach (var guid in original.Attachment)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
+                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
+                {
+                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                }
+
+                this.Attachment.Add(copy.Value.Iid);
+            }
+
             this.BehavioralModelKind = original.BehavioralModelKind;
 
             foreach (var guid in original.BehavioralParameter)
@@ -187,9 +191,6 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 this.ExcludedPerson.Add(copy.Value == null ? guid : copy.Value.Iid);
             }
-
-            var copyFile = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.File);
-            this.File = copyFile.Value == null ? original.File : copyFile.Value.Iid;
 
             foreach (var guid in original.HyperLink)
             {

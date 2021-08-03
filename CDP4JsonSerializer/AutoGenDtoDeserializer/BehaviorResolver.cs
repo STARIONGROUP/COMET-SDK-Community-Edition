@@ -57,6 +57,11 @@ namespace CDP4JsonSerializer
                 behavior.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["attachment"].IsNullOrEmpty())
+            {
+                behavior.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
+            }
+
             if (!jObject["behavioralModelKind"].IsNullOrEmpty())
             {
                 behavior.BehavioralModelKind = jObject["behavioralModelKind"].ToObject<BehavioralModelKind>();
@@ -80,11 +85,6 @@ namespace CDP4JsonSerializer
             if (!jObject["excludedPerson"].IsNullOrEmpty())
             {
                 behavior.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
-            }
-
-            if (!jObject["file"].IsNullOrEmpty())
-            {
-                behavior.File = jObject["file"].ToObject<Guid?>();
             }
 
             if (!jObject["hyperLink"].IsNullOrEmpty())

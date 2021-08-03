@@ -48,6 +48,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.Behavior, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.Behavior, IEnumerable<Guid>>>
         {
             { "Alias", behavior => behavior.Alias },
+            { "Attachment", behavior => behavior.Attachment },
             { "BehavioralParameter", behavior => behavior.BehavioralParameter },
             { "Definition", behavior => behavior.Definition },
             { "HyperLink", behavior => behavior.HyperLink },
@@ -64,6 +65,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.Behavior>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.Behavior>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.Behavior>(item => item.Alias != null, "The 'Alias' property of a 'Behavior' is mandatory and cannot be null.") },
+            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.Behavior>(item => item.Attachment != null, "The 'Attachment' property of a 'Behavior' is mandatory and cannot be null.") },
             { "BehavioralParameter", new DtoValidationHelper<CDP4Common.DTO.Behavior>(item => item.BehavioralParameter != null, "The 'BehavioralParameter' property of a 'Behavior' is mandatory and cannot be null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.Behavior>(item => item.Definition != null, "The 'Definition' property of a 'Behavior' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.Behavior>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'Behavior' is mandatory and cannot be null.") },
@@ -207,6 +209,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "BehavioralParameter", new PropertyMetaInfo("BehavioralParameter", "BehavioralParameter", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
@@ -237,13 +240,13 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.Behavior, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.Behavior, object>>
         {
             { "Alias", thing => thing.Alias },
+            { "Attachment", thing => thing.Attachment },
             { "BehavioralModelKind", thing => thing.BehavioralModelKind },
             { "BehavioralParameter", thing => thing.BehavioralParameter },
             { "ClassKind", thing => thing.ClassKind },
             { "Definition", thing => thing.Definition },
             { "ExcludedDomain", thing => thing.ExcludedDomain },
             { "ExcludedPerson", thing => thing.ExcludedPerson },
-            { "File", thing => thing.File },
             { "HyperLink", thing => thing.HyperLink },
             { "Iid", thing => thing.Iid },
             { "ModifiedOn", thing => thing.ModifiedOn },
@@ -266,7 +269,6 @@ namespace CDP4Common.MetaInfo
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
-            { "File", new PropertyMetaInfo("File", "File", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
@@ -282,6 +284,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
+            { "Attachment", (value) => (Guid)value },
             { "BehavioralParameter", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },
@@ -295,7 +298,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Action<CDP4Common.DTO.Behavior, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.Behavior, object>>
         {
             { "BehavioralModelKind", (behavior, value) => behavior.BehavioralModelKind = (BehavioralModelKind)value },
-            { "File", (behavior, value) => behavior.File = value == null ? (Guid?)null : (Guid)value },
             { "Iid", (behavior, value) => behavior.Iid = (Guid)value },
             { "ModifiedOn", (behavior, value) => behavior.ModifiedOn = (DateTime)value },
             { "Name", (behavior, value) => behavior.Name = value.ToString() },

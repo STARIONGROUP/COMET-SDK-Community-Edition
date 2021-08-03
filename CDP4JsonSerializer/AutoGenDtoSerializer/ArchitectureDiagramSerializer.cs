@@ -50,7 +50,6 @@ namespace CDP4JsonSerializer
             { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
             { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
             { "iid", iid => new JValue(iid) },
-            { "includedDomain", includedDomain => new JValue(includedDomain) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
             { "owner", owner => new JValue(owner) },
@@ -76,7 +75,6 @@ namespace CDP4JsonSerializer
             jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](architectureDiagram.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](architectureDiagram.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](architectureDiagram.Iid));
-            jsonObject.Add("includedDomain", this.PropertySerializerMap["includedDomain"](architectureDiagram.IncludedDomain));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](architectureDiagram.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](architectureDiagram.Name));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](architectureDiagram.Owner));

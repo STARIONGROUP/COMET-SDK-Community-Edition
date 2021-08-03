@@ -26,7 +26,7 @@ namespace CDP4Common.Helpers
 {
     using System;
     using System.Collections.Generic;
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NETFRAMEWORK
     using System.ComponentModel.Composition;
 #endif
     using CDP4Common.CommonData;
@@ -34,7 +34,7 @@ namespace CDP4Common.Helpers
     /// <summary>
     /// A utility class that supplies common functionalities to the Service layer.
     /// </summary>
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
+#if NETFRAMEWORK
     [Export(typeof(IDefaultPermissionProvider))]
     [PartCreationPolicy(CreationPolicy.Shared)]
 #endif
@@ -54,6 +54,7 @@ namespace CDP4Common.Helpers
             { ClassKind.ArchitectureDiagram, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.ArchitectureElement, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.ArrayParameterType, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Attachment, ParticipantAccessRightKind.SAME_AS_CONTAINER },
             { ClassKind.Behavior, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { ClassKind.BehavioralParameter, ParticipantAccessRightKind.SAME_AS_CONTAINER },
             { ClassKind.BinaryNote, ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
@@ -248,6 +249,7 @@ namespace CDP4Common.Helpers
             { "ArchitectureDiagram", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "ArchitectureElement", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "ArrayParameterType", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
+            { "Attachment", ParticipantAccessRightKind.SAME_AS_CONTAINER },
             { "Behavior", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
             { "BehavioralParameter", ParticipantAccessRightKind.SAME_AS_CONTAINER },
             { "BinaryNote", ParticipantAccessRightKind.SAME_AS_SUPERCLASS },
@@ -442,6 +444,7 @@ namespace CDP4Common.Helpers
             { ClassKind.ArchitectureDiagram, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.ArchitectureElement, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.ArrayParameterType, PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { ClassKind.Attachment, PersonAccessRightKind.SAME_AS_CONTAINER },
             { ClassKind.Behavior, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.BehavioralParameter, PersonAccessRightKind.NOT_APPLICABLE },
             { ClassKind.BinaryNote, PersonAccessRightKind.NOT_APPLICABLE },
@@ -636,6 +639,7 @@ namespace CDP4Common.Helpers
             { "ArchitectureDiagram", PersonAccessRightKind.NOT_APPLICABLE },
             { "ArchitectureElement", PersonAccessRightKind.NOT_APPLICABLE },
             { "ArrayParameterType", PersonAccessRightKind.SAME_AS_SUPERCLASS },
+            { "Attachment", PersonAccessRightKind.SAME_AS_CONTAINER },
             { "Behavior", PersonAccessRightKind.NOT_APPLICABLE },
             { "BehavioralParameter", PersonAccessRightKind.NOT_APPLICABLE },
             { "BinaryNote", PersonAccessRightKind.NOT_APPLICABLE },

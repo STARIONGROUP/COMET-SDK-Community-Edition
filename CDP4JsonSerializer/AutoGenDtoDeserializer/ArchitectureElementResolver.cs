@@ -67,11 +67,6 @@ namespace CDP4JsonSerializer
                 architectureElement.DiagramElement.AddRange(jObject["diagramElement"].ToObject<IEnumerable<Guid>>());
             }
 
-            if (!jObject["diagramPort"].IsNullOrEmpty())
-            {
-                architectureElement.DiagramPort.AddRange(jObject["diagramPort"].ToObject<IEnumerable<Guid>>());
-            }
-
             if (!jObject["documentation"].IsNullOrEmpty())
             {
                 architectureElement.Documentation = jObject["documentation"].ToObject<string>();

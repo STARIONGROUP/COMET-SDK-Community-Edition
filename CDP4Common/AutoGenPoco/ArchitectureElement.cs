@@ -61,7 +61,6 @@ namespace CDP4Common.DiagramData
         /// </summary>
         public ArchitectureElement()
         {
-            this.DiagramPort = new ContainerList<DiagramPort>(this);
         }
 
         /// <summary>
@@ -80,29 +79,6 @@ namespace CDP4Common.DiagramData
         /// </param>
         public ArchitectureElement(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
-            this.DiagramPort = new ContainerList<DiagramPort>(this);
-        }
-
-        /// <summary>
-        /// Gets or sets a list of contained DiagramPort.
-        /// </summary>
-        /// <remarks>
-        /// A collection of DiagramPorts.
-        /// </remarks>
-        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public ContainerList<DiagramPort> DiagramPort { get; protected set; }
-
-        /// <summary>
-        /// Gets an <see cref="IEnumerable{IEnumerable}"/> that references the composite properties of the current <see cref="ArchitectureElement"/>.
-        /// </summary>
-        public override IEnumerable<IEnumerable> ContainerLists
-        {
-            get 
-            {
-                var containers = new List<IEnumerable>(base.ContainerLists);
-                containers.Add(this.DiagramPort);
-                return containers;
-            }
         }
 
         /// <summary>
@@ -117,7 +93,6 @@ namespace CDP4Common.DiagramData
             var clone = (ArchitectureElement)this.MemberwiseClone();
             clone.Bounds = cloneContainedThings ? new ContainerList<Bounds>(clone) : new ContainerList<Bounds>(this.Bounds, clone);
             clone.DiagramElement = cloneContainedThings ? new ContainerList<DiagramElementThing>(clone) : new ContainerList<DiagramElementThing>(this.DiagramElement, clone);
-            clone.DiagramPort = cloneContainedThings ? new ContainerList<DiagramPort>(clone) : new ContainerList<DiagramPort>(this.DiagramPort, clone);
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
             clone.LocalStyle = cloneContainedThings ? new ContainerList<OwnedStyle>(clone) : new ContainerList<OwnedStyle>(this.LocalStyle, clone);
@@ -126,7 +101,6 @@ namespace CDP4Common.DiagramData
             {
                 clone.Bounds.AddRange(this.Bounds.Select(x => x.Clone(true)));
                 clone.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Clone(true)));
-                clone.DiagramPort.AddRange(this.DiagramPort.Select(x => x.Clone(true)));
                 clone.LocalStyle.AddRange(this.LocalStyle.Select(x => x.Clone(true)));
             }
 
@@ -181,7 +155,6 @@ namespace CDP4Common.DiagramData
             this.Bounds.ResolveList(dto.Bounds, dto.IterationContainerId, this.Cache);
             this.DepictedThing = (dto.DepictedThing.HasValue) ? this.Cache.Get<Thing>(dto.DepictedThing.Value, dto.IterationContainerId) : null;
             this.DiagramElement.ResolveList(dto.DiagramElement, dto.IterationContainerId, this.Cache);
-            this.DiagramPort.ResolveList(dto.DiagramPort, dto.IterationContainerId, this.Cache);
             this.Documentation = dto.Documentation;
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
@@ -206,7 +179,6 @@ namespace CDP4Common.DiagramData
             dto.Bounds.AddRange(this.Bounds.Select(x => x.Iid));
             dto.DepictedThing = this.DepictedThing != null ? (Guid?)this.DepictedThing.Iid : null;
             dto.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Iid));
-            dto.DiagramPort.AddRange(this.DiagramPort.Select(x => x.Iid));
             dto.Documentation = this.Documentation;
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));

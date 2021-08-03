@@ -150,9 +150,6 @@ namespace CDP4Common.DTO
                 this.ExcludedPerson.Add(copy.Value == null ? guid : copy.Value.Iid);
             }
 
-            var copyIncludedDomain = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.IncludedDomain);
-            this.IncludedDomain = copyIncludedDomain.Value == null ? original.IncludedDomain : copyIncludedDomain.Value.Iid;
-
             this.ModifiedOn = original.ModifiedOn;
 
             this.Name = original.Name;

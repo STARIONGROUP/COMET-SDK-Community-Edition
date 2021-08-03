@@ -82,11 +82,6 @@ namespace CDP4JsonSerializer
                 architectureDiagram.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
             }
 
-            if (!jObject["includedDomain"].IsNullOrEmpty())
-            {
-                architectureDiagram.IncludedDomain = jObject["includedDomain"].ToObject<Guid>();
-            }
-
             if (!jObject["modifiedOn"].IsNullOrEmpty())
             {
                 architectureDiagram.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();

@@ -51,7 +51,6 @@ namespace CDP4Common.DTO
         /// </summary>
         public ArchitectureElement()
         {
-            this.DiagramPort = new List<Guid>();
         }
 
         /// <summary>
@@ -65,15 +64,7 @@ namespace CDP4Common.DTO
         /// </param>
         public ArchitectureElement(Guid iid, int rev) : base(iid: iid, rev: rev)
         {
-            this.DiagramPort = new List<Guid>();
         }
-
-        /// <summary>
-        /// Gets or sets the unique identifiers of the contained DiagramPort instances.
-        /// </summary>
-        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        [DataMember]
-        public List<Guid> DiagramPort { get; set; }
 
         /// <summary>
         /// Gets the route for the current <see ref="ArchitectureElement"/>.
@@ -81,19 +72,6 @@ namespace CDP4Common.DTO
         public override string Route
         {
             get { return this.ComputedRoute(); }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="IEnumerable{IEnumerable}"/> that references the composite properties of the current <see cref="ArchitectureElement"/>.
-        /// </summary>
-        public override IEnumerable<IEnumerable> ContainerLists
-        {
-            get 
-            {
-                var containers = new List<IEnumerable>(base.ContainerLists);
-                containers.Add(this.DiagramPort);
-                return containers;
-            }
         }
 
         /// <summary>
@@ -143,17 +121,6 @@ namespace CDP4Common.DTO
                 }
 
                 this.DiagramElement.Add(copy.Value.Iid);
-            }
-
-            foreach (var guid in original.DiagramPort)
-            {
-                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
-                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
-                {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
-                }
-
-                this.DiagramPort.Add(copy.Value.Iid);
             }
 
             this.Documentation = original.Documentation;

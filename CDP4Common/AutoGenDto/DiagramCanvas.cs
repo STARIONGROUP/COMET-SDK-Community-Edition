@@ -81,13 +81,6 @@ namespace CDP4Common.DTO
         public virtual string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the unique identifier of the referenced IncludedDomain.
-        /// </summary>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        [DataMember]
-        public virtual Guid IncludedDomain { get; set; }
-
-        /// <summary>
         /// Gets or sets the PublicationState.
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
@@ -163,9 +156,6 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 this.ExcludedPerson.Add(copy.Value == null ? guid : copy.Value.Iid);
             }
-
-            var copyIncludedDomain = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.IncludedDomain);
-            this.IncludedDomain = copyIncludedDomain.Value == null ? original.IncludedDomain : copyIncludedDomain.Value.Iid;
 
             this.ModifiedOn = original.ModifiedOn;
 

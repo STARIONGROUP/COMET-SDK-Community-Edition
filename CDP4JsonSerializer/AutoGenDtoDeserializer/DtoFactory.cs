@@ -48,6 +48,7 @@ namespace CDP4JsonSerializer
             { "ArchitectureDiagram", ArchitectureDiagramResolver.FromJsonObject },
             { "ArchitectureElement", ArchitectureElementResolver.FromJsonObject },
             { "ArrayParameterType", ArrayParameterTypeResolver.FromJsonObject },
+            { "Attachment", AttachmentResolver.FromJsonObject },
             { "Behavior", BehaviorResolver.FromJsonObject },
             { "BehavioralParameter", BehavioralParameterResolver.FromJsonObject },
             { "BinaryNote", BinaryNoteResolver.FromJsonObject },

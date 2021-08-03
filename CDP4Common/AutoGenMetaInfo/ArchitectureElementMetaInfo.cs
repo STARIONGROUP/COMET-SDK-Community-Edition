@@ -49,7 +49,6 @@ namespace CDP4Common.MetaInfo
         {
             { "Bounds", architectureElement => architectureElement.Bounds },
             { "DiagramElement", architectureElement => architectureElement.DiagramElement },
-            { "DiagramPort", architectureElement => architectureElement.DiagramPort },
             { "LocalStyle", architectureElement => architectureElement.LocalStyle },
         };
 
@@ -65,7 +64,6 @@ namespace CDP4Common.MetaInfo
         {
             { "Bounds", new DtoValidationHelper<CDP4Common.DTO.ArchitectureElement>(item => item.Bounds != null, "The 'Bounds' property of a 'ArchitectureElement' is mandatory and cannot be null.") },
             { "DiagramElement", new DtoValidationHelper<CDP4Common.DTO.ArchitectureElement>(item => item.DiagramElement != null, "The 'DiagramElement' property of a 'ArchitectureElement' is mandatory and cannot be null.") },
-            { "DiagramPort", new DtoValidationHelper<CDP4Common.DTO.ArchitectureElement>(item => item.DiagramPort != null, "The 'DiagramPort' property of a 'ArchitectureElement' is mandatory and cannot be null.") },
             { "Documentation", new DtoValidationHelper<CDP4Common.DTO.ArchitectureElement>(item => !string.IsNullOrWhiteSpace(item.Documentation), "The 'Documentation' property of a 'ArchitectureElement' is mandatory and cannot be empty or null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.ArchitectureElement>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'ArchitectureElement' is mandatory and cannot be null.") },
             { "ExcludedPerson", new DtoValidationHelper<CDP4Common.DTO.ArchitectureElement>(item => item.ExcludedPerson != null, "The 'ExcludedPerson' property of a 'ArchitectureElement' is mandatory and cannot be null.") },
@@ -208,7 +206,6 @@ namespace CDP4Common.MetaInfo
         {
             { "Bounds", new PropertyMetaInfo("Bounds", "Bounds", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
             { "DiagramElement", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "DiagramPort", new PropertyMetaInfo("DiagramPort", "DiagramPort", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "LocalStyle", new PropertyMetaInfo("LocalStyle", "OwnedStyle", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "1", true) },
         };
 
@@ -240,7 +237,6 @@ namespace CDP4Common.MetaInfo
             { "ClassKind", thing => thing.ClassKind },
             { "DepictedThing", thing => thing.DepictedThing },
             { "DiagramElement", thing => thing.DiagramElement },
-            { "DiagramPort", thing => thing.DiagramPort },
             { "Documentation", thing => thing.Documentation },
             { "ExcludedDomain", thing => thing.ExcludedDomain },
             { "ExcludedPerson", thing => thing.ExcludedPerson },
@@ -283,7 +279,6 @@ namespace CDP4Common.MetaInfo
         {
             { "Bounds", (value) => (Guid)value },
             { "DiagramElement", (value) => (Guid)value },
-            { "DiagramPort", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },
             { "ExcludedPerson", (value) => (Guid)value },
             { "LocalStyle", (value) => (Guid)value },

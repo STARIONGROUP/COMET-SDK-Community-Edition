@@ -43,7 +43,7 @@ namespace CDP4Common.DiagramData
     /// DiagramPort is the representation of a connector's start- or endpoint on an ArchitectureElement.
     /// </summary>
     [CDPVersion("1.3.0")]
-    [Container(typeof(ArchitectureElement), "DiagramPort")]
+    [Container(typeof(DiagramElementContainer), "DiagramElement")]
     public sealed partial class DiagramPort : DiagramShape
     {
         /// <summary>

@@ -78,6 +78,11 @@ namespace CDP4Common.CommonData
         ArrayParameterType,
 
         /// <summary>
+        /// Assertion that the Class is an instance of Attachment
+        /// </summary>
+        Attachment,
+
+        /// <summary>
         /// Assertion that the Class is an instance of Behavior
         /// </summary>
         Behavior,

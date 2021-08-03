@@ -50,7 +50,6 @@ namespace CDP4JsonSerializer
             { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
             { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
             { "iid", iid => new JValue(iid) },
-            { "includedDomain", includedDomain => new JValue(includedDomain) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
             { "publicationState", publicationState => new JValue(publicationState.ToString()) },
@@ -74,7 +73,6 @@ namespace CDP4JsonSerializer
             jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](diagramCanvas.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](diagramCanvas.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](diagramCanvas.Iid));
-            jsonObject.Add("includedDomain", this.PropertySerializerMap["includedDomain"](diagramCanvas.IncludedDomain));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](diagramCanvas.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](diagramCanvas.Name));
             jsonObject.Add("publicationState", this.PropertySerializerMap["publicationState"](Enum.GetName(typeof(CDP4Common.DiagramData.PublicationState), diagramCanvas.PublicationState)));

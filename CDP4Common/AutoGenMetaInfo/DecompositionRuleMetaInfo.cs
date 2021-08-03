@@ -48,6 +48,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.DecompositionRule, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.DecompositionRule, IEnumerable<Guid>>>
         {
             { "Alias", decompositionRule => decompositionRule.Alias },
+            { "Attachment", decompositionRule => decompositionRule.Attachment },
             { "Definition", decompositionRule => decompositionRule.Definition },
             { "HyperLink", decompositionRule => decompositionRule.HyperLink },
         };
@@ -63,6 +64,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.DecompositionRule>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.DecompositionRule>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.DecompositionRule>(item => item.Alias != null, "The 'Alias' property of a 'DecompositionRule' is mandatory and cannot be null.") },
+            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.DecompositionRule>(item => item.Attachment != null, "The 'Attachment' property of a 'DecompositionRule' is mandatory and cannot be null.") },
             { "ContainedCategory", new DtoValidationHelper<CDP4Common.DTO.DecompositionRule>(item => item.ContainedCategory != null && item.ContainedCategory.Any(), "The 'ContainedCategory' property of a 'DecompositionRule' is mandatory and must have at least one entry.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.DecompositionRule>(item => item.Definition != null, "The 'Definition' property of a 'DecompositionRule' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.DecompositionRule>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'DecompositionRule' is mandatory and cannot be null.") },
@@ -206,6 +208,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
@@ -235,6 +238,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.DecompositionRule, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.DecompositionRule, object>>
         {
             { "Alias", thing => thing.Alias },
+            { "Attachment", thing => thing.Attachment },
             { "ClassKind", thing => thing.ClassKind },
             { "ContainedCategory", thing => thing.ContainedCategory },
             { "ContainingCategory", thing => thing.ContainingCategory },
@@ -283,6 +287,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
+            { "Attachment", (value) => (Guid)value },
             { "ContainedCategory", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },

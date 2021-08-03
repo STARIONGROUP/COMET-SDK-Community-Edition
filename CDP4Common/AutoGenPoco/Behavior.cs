@@ -102,15 +102,6 @@ namespace CDP4Common.EngineeringModelData
         public ContainerList<BehavioralParameter> BehavioralParameter { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the File.
-        /// </summary>
-        /// <remarks>
-        /// The File that this Behavior is associated with in case its BehavioralModelKind is File.
-        /// </remarks>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public File File { get; set; }
-
-        /// <summary>
         /// Gets or sets the Script.
         /// </summary>
         /// <remarks>
@@ -133,29 +124,6 @@ namespace CDP4Common.EngineeringModelData
         }
 
         /// <summary>
-        /// Queries the referenced <see cref="Thing"/>s of the current <see cref="Behavior"/>
-        /// </summary>
-        /// <remarks>
-        /// This does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
-        /// are exposed via the <see cref="ContainerLists"/> property
-        /// </remarks>
-        /// <returns>
-        /// An <see cref="IEnumerable{Thing}"/>
-        /// </returns>
-        public override IEnumerable<Thing> QueryReferencedThings()
-        {
-            foreach (var thing in base.QueryReferencedThings())
-            {
-                yield return thing;
-            }
-
-            if (this.File != null)
-            {
-                yield return this.File;
-            }
-        }
-
-        /// <summary>
         /// Creates and returns a copy of this <see cref="Behavior"/> for edit purpose.
         /// </summary>
         /// <param name="cloneContainedThings">A value that indicates whether the contained <see cref="Thing"/>s should be cloned or not.</param>
@@ -166,6 +134,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var clone = (Behavior)this.MemberwiseClone();
             clone.Alias = cloneContainedThings ? new ContainerList<Alias>(clone) : new ContainerList<Alias>(this.Alias, clone);
+            clone.Attachment = cloneContainedThings ? new ContainerList<Attachment>(clone) : new ContainerList<Attachment>(this.Attachment, clone);
             clone.BehavioralParameter = cloneContainedThings ? new ContainerList<BehavioralParameter>(clone) : new ContainerList<BehavioralParameter>(this.BehavioralParameter, clone);
             clone.Definition = cloneContainedThings ? new ContainerList<Definition>(clone) : new ContainerList<Definition>(this.Definition, clone);
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
@@ -175,6 +144,7 @@ namespace CDP4Common.EngineeringModelData
             if (cloneContainedThings)
             {
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
+                clone.Attachment.AddRange(this.Attachment.Select(x => x.Clone(true)));
                 clone.BehavioralParameter.AddRange(this.BehavioralParameter.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
@@ -229,12 +199,12 @@ namespace CDP4Common.EngineeringModelData
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
+            this.Attachment.ResolveList(dto.Attachment, dto.IterationContainerId, this.Cache);
             this.BehavioralModelKind = dto.BehavioralModelKind;
             this.BehavioralParameter.ResolveList(dto.BehavioralParameter, dto.IterationContainerId, this.Cache);
             this.Definition.ResolveList(dto.Definition, dto.IterationContainerId, this.Cache);
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
-            this.File = (dto.File.HasValue) ? this.Cache.Get<File>(dto.File.Value, dto.IterationContainerId) : null;
             this.HyperLink.ResolveList(dto.HyperLink, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
@@ -254,12 +224,12 @@ namespace CDP4Common.EngineeringModelData
             var dto = new DTO.Behavior(this.Iid, this.RevisionNumber);
 
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
+            dto.Attachment.AddRange(this.Attachment.Select(x => x.Iid));
             dto.BehavioralModelKind = this.BehavioralModelKind;
             dto.BehavioralParameter.AddRange(this.BehavioralParameter.Select(x => x.Iid));
             dto.Definition.AddRange(this.Definition.Select(x => x.Iid));
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
-            dto.File = this.File != null ? (Guid?)this.File.Iid : null;
             dto.HyperLink.AddRange(this.HyperLink.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
