@@ -88,9 +88,9 @@ deploy:
   - provider: NuGet
     server: https://nuget.pkg.github.com/RHEAGROUP/index.json
     artifact: /.*(\.|\.s)nupkg/
-    username: %GITHUB_USER%
+    username:  '%GITHUB_USER%'
     api_key:
-      secure: %GITHUB_TOKEN%
+      secure: '%GITHUB_TOKEN%'
 
 artifacts:
     - path: '%TEST_LOG%'
