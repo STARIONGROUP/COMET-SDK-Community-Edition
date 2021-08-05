@@ -57,11 +57,6 @@ namespace CDP4JsonSerializer
                 glossary.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
-            if (!jObject["attachment"].IsNullOrEmpty())
-            {
-                glossary.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
-            }
-
             if (!jObject["category"].IsNullOrEmpty())
             {
                 glossary.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());

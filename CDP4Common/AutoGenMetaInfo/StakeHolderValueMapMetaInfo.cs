@@ -48,7 +48,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.StakeHolderValueMap, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.StakeHolderValueMap, IEnumerable<Guid>>>
         {
             { "Alias", stakeHolderValueMap => stakeHolderValueMap.Alias },
-            { "Attachment", stakeHolderValueMap => stakeHolderValueMap.Attachment },
             { "Definition", stakeHolderValueMap => stakeHolderValueMap.Definition },
             { "HyperLink", stakeHolderValueMap => stakeHolderValueMap.HyperLink },
             { "Settings", stakeHolderValueMap => stakeHolderValueMap.Settings },
@@ -65,7 +64,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.StakeHolderValueMap>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.StakeHolderValueMap>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.StakeHolderValueMap>(item => item.Alias != null, "The 'Alias' property of a 'StakeHolderValueMap' is mandatory and cannot be null.") },
-            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.StakeHolderValueMap>(item => item.Attachment != null, "The 'Attachment' property of a 'StakeHolderValueMap' is mandatory and cannot be null.") },
             { "Category", new DtoValidationHelper<CDP4Common.DTO.StakeHolderValueMap>(item => item.Category != null, "The 'Category' property of a 'StakeHolderValueMap' is mandatory and cannot be null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.StakeHolderValueMap>(item => item.Definition != null, "The 'Definition' property of a 'StakeHolderValueMap' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.StakeHolderValueMap>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'StakeHolderValueMap' is mandatory and cannot be null.") },
@@ -214,7 +212,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Settings", new PropertyMetaInfo("Settings", "StakeHolderValueMapSettings", PropertyKind.List, AggregationKind.Composite, false, false, true, 1, "1", true) },
@@ -245,7 +242,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.StakeHolderValueMap, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.StakeHolderValueMap, object>>
         {
             { "Alias", thing => thing.Alias },
-            { "Attachment", thing => thing.Attachment },
             { "Category", thing => thing.Category },
             { "ClassKind", thing => thing.ClassKind },
             { "Definition", thing => thing.Definition },
@@ -295,7 +291,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
-            { "Attachment", (value) => (Guid)value },
             { "Category", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },

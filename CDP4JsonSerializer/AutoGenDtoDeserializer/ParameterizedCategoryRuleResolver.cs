@@ -57,11 +57,6 @@ namespace CDP4JsonSerializer
                 parameterizedCategoryRule.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
-            if (!jObject["attachment"].IsNullOrEmpty())
-            {
-                parameterizedCategoryRule.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
-            }
-
             if (!jObject["category"].IsNullOrEmpty())
             {
                 parameterizedCategoryRule.Category = jObject["category"].ToObject<Guid>();

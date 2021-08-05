@@ -48,7 +48,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.DerivedQuantityKind, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.DerivedQuantityKind, IEnumerable<Guid>>>
         {
             { "Alias", derivedQuantityKind => derivedQuantityKind.Alias },
-            { "Attachment", derivedQuantityKind => derivedQuantityKind.Attachment },
             { "Definition", derivedQuantityKind => derivedQuantityKind.Definition },
             { "HyperLink", derivedQuantityKind => derivedQuantityKind.HyperLink },
             { "QuantityKindFactor", derivedQuantityKind => derivedQuantityKind.QuantityKindFactor.ToIdList() },
@@ -68,7 +67,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.DerivedQuantityKind>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.DerivedQuantityKind>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.DerivedQuantityKind>(item => item.Alias != null, "The 'Alias' property of a 'DerivedQuantityKind' is mandatory and cannot be null.") },
-            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.DerivedQuantityKind>(item => item.Attachment != null, "The 'Attachment' property of a 'DerivedQuantityKind' is mandatory and cannot be null.") },
             { "Category", new DtoValidationHelper<CDP4Common.DTO.DerivedQuantityKind>(item => item.Category != null, "The 'Category' property of a 'DerivedQuantityKind' is mandatory and cannot be null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.DerivedQuantityKind>(item => item.Definition != null, "The 'Definition' property of a 'DerivedQuantityKind' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.DerivedQuantityKind>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'DerivedQuantityKind' is mandatory and cannot be null.") },
@@ -215,7 +213,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "QuantityKindFactor", new PropertyMetaInfo("QuantityKindFactor", "QuantityKindFactor", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 1, "*", true) },
@@ -246,7 +243,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.DerivedQuantityKind, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.DerivedQuantityKind, object>>
         {
             { "Alias", thing => thing.Alias },
-            { "Attachment", thing => thing.Attachment },
             { "Category", thing => thing.Category },
             { "ClassKind", thing => thing.ClassKind },
             { "DefaultScale", thing => thing.DefaultScale },
@@ -302,7 +298,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
-            { "Attachment", (value) => (Guid)value },
             { "Category", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },

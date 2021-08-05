@@ -57,11 +57,6 @@ namespace CDP4JsonSerializer
                 unitPrefix.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
-            if (!jObject["attachment"].IsNullOrEmpty())
-            {
-                unitPrefix.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
-            }
-
             if (!jObject["conversionFactor"].IsNullOrEmpty())
             {
                 unitPrefix.ConversionFactor = jObject["conversionFactor"].ToObject<string>();

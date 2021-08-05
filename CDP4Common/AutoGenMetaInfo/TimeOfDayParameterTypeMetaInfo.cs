@@ -48,7 +48,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.TimeOfDayParameterType, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.TimeOfDayParameterType, IEnumerable<Guid>>>
         {
             { "Alias", timeOfDayParameterType => timeOfDayParameterType.Alias },
-            { "Attachment", timeOfDayParameterType => timeOfDayParameterType.Attachment },
             { "Definition", timeOfDayParameterType => timeOfDayParameterType.Definition },
             { "HyperLink", timeOfDayParameterType => timeOfDayParameterType.HyperLink },
         };
@@ -64,7 +63,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.TimeOfDayParameterType>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.TimeOfDayParameterType>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.TimeOfDayParameterType>(item => item.Alias != null, "The 'Alias' property of a 'TimeOfDayParameterType' is mandatory and cannot be null.") },
-            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.TimeOfDayParameterType>(item => item.Attachment != null, "The 'Attachment' property of a 'TimeOfDayParameterType' is mandatory and cannot be null.") },
             { "Category", new DtoValidationHelper<CDP4Common.DTO.TimeOfDayParameterType>(item => item.Category != null, "The 'Category' property of a 'TimeOfDayParameterType' is mandatory and cannot be null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.TimeOfDayParameterType>(item => item.Definition != null, "The 'Definition' property of a 'TimeOfDayParameterType' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.TimeOfDayParameterType>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'TimeOfDayParameterType' is mandatory and cannot be null.") },
@@ -209,7 +207,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
@@ -239,7 +236,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.TimeOfDayParameterType, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.TimeOfDayParameterType, object>>
         {
             { "Alias", thing => thing.Alias },
-            { "Attachment", thing => thing.Attachment },
             { "Category", thing => thing.Category },
             { "ClassKind", thing => thing.ClassKind },
             { "Definition", thing => thing.Definition },
@@ -285,7 +281,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
-            { "Attachment", (value) => (Guid)value },
             { "Category", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },

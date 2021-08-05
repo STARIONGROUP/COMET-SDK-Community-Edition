@@ -48,7 +48,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.EngineeringModelSetup, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.EngineeringModelSetup, IEnumerable<Guid>>>
         {
             { "Alias", engineeringModelSetup => engineeringModelSetup.Alias },
-            { "Attachment", engineeringModelSetup => engineeringModelSetup.Attachment },
             { "Definition", engineeringModelSetup => engineeringModelSetup.Definition },
             { "HyperLink", engineeringModelSetup => engineeringModelSetup.HyperLink },
             { "IterationSetup", engineeringModelSetup => engineeringModelSetup.IterationSetup },
@@ -69,7 +68,6 @@ namespace CDP4Common.MetaInfo
         {
             { "ActiveDomain", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.ActiveDomain != null && item.ActiveDomain.Any(), "The 'ActiveDomain' property of a 'EngineeringModelSetup' is mandatory and must have at least one entry.") },
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.Alias != null, "The 'Alias' property of a 'EngineeringModelSetup' is mandatory and cannot be null.") },
-            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.Attachment != null, "The 'Attachment' property of a 'EngineeringModelSetup' is mandatory and cannot be null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.Definition != null, "The 'Definition' property of a 'EngineeringModelSetup' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'EngineeringModelSetup' is mandatory and cannot be null.") },
             { "ExcludedPerson", new DtoValidationHelper<CDP4Common.DTO.EngineeringModelSetup>(item => item.ExcludedPerson != null, "The 'ExcludedPerson' property of a 'EngineeringModelSetup' is mandatory and cannot be null.") },
@@ -218,7 +216,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "IterationSetup", new PropertyMetaInfo("IterationSetup", "IterationSetup", PropertyKind.List, AggregationKind.Composite, false, false, true, 1, "*", true) },
@@ -253,7 +250,6 @@ namespace CDP4Common.MetaInfo
         {
             { "ActiveDomain", thing => thing.ActiveDomain },
             { "Alias", thing => thing.Alias },
-            { "Attachment", thing => thing.Attachment },
             { "ClassKind", thing => thing.ClassKind },
             { "DefaultOrganizationalParticipant", thing => thing.DefaultOrganizationalParticipant },
             { "Definition", thing => thing.Definition },
@@ -308,7 +304,6 @@ namespace CDP4Common.MetaInfo
         {
             { "ActiveDomain", (value) => (Guid)value },
             { "Alias", (value) => (Guid)value },
-            { "Attachment", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },
             { "ExcludedPerson", (value) => (Guid)value },

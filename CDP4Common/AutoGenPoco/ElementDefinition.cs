@@ -65,7 +65,6 @@ namespace CDP4Common.EngineeringModelData
         /// </summary>
         public ElementDefinition()
         {
-            this.Behavior = new ContainerList<Behavior>(this);
             this.ContainedElement = new ContainerList<ElementUsage>(this);
             this.OrganizationalParticipant = new List<OrganizationalParticipant>();
             this.Parameter = new ContainerList<Parameter>(this);
@@ -89,22 +88,12 @@ namespace CDP4Common.EngineeringModelData
         /// </param>
         public ElementDefinition(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
-            this.Behavior = new ContainerList<Behavior>(this);
             this.ContainedElement = new ContainerList<ElementUsage>(this);
             this.OrganizationalParticipant = new List<OrganizationalParticipant>();
             this.Parameter = new ContainerList<Parameter>(this);
             this.ParameterGroup = new ContainerList<ParameterGroup>(this);
             this.ReferencedElement = new List<NestedElement>();
         }
-
-        /// <summary>
-        /// Gets or sets a list of contained Behavior.
-        /// </summary>
-        /// <remarks>
-        /// </remarks>
-        [CDPVersion("1.3.0")]
-        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public ContainerList<Behavior> Behavior { get; protected set; }
 
         /// <summary>
         /// Gets or sets a list of contained ElementUsage.
@@ -170,7 +159,6 @@ namespace CDP4Common.EngineeringModelData
             get 
             {
                 var containers = new List<IEnumerable>(base.ContainerLists);
-                containers.Add(this.Behavior);
                 containers.Add(this.ContainedElement);
                 containers.Add(this.Parameter);
                 containers.Add(this.ParameterGroup);
@@ -217,8 +205,6 @@ namespace CDP4Common.EngineeringModelData
         {
             var clone = (ElementDefinition)this.MemberwiseClone();
             clone.Alias = cloneContainedThings ? new ContainerList<Alias>(clone) : new ContainerList<Alias>(this.Alias, clone);
-            clone.Attachment = cloneContainedThings ? new ContainerList<Attachment>(clone) : new ContainerList<Attachment>(this.Attachment, clone);
-            clone.Behavior = cloneContainedThings ? new ContainerList<Behavior>(clone) : new ContainerList<Behavior>(this.Behavior, clone);
             clone.Category = new List<Category>(this.Category);
             clone.ContainedElement = cloneContainedThings ? new ContainerList<ElementUsage>(clone) : new ContainerList<ElementUsage>(this.ContainedElement, clone);
             clone.Definition = cloneContainedThings ? new ContainerList<Definition>(clone) : new ContainerList<Definition>(this.Definition, clone);
@@ -233,8 +219,6 @@ namespace CDP4Common.EngineeringModelData
             if (cloneContainedThings)
             {
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
-                clone.Attachment.AddRange(this.Attachment.Select(x => x.Clone(true)));
-                clone.Behavior.AddRange(this.Behavior.Select(x => x.Clone(true)));
                 clone.ContainedElement.AddRange(this.ContainedElement.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
@@ -291,8 +275,6 @@ namespace CDP4Common.EngineeringModelData
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
-            this.Attachment.ResolveList(dto.Attachment, dto.IterationContainerId, this.Cache);
-            this.Behavior.ResolveList(dto.Behavior, dto.IterationContainerId, this.Cache);
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);
             this.ContainedElement.ResolveList(dto.ContainedElement, dto.IterationContainerId, this.Cache);
             this.Definition.ResolveList(dto.Definition, dto.IterationContainerId, this.Cache);
@@ -321,8 +303,6 @@ namespace CDP4Common.EngineeringModelData
             var dto = new DTO.ElementDefinition(this.Iid, this.RevisionNumber);
 
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
-            dto.Attachment.AddRange(this.Attachment.Select(x => x.Iid));
-            dto.Behavior.AddRange(this.Behavior.Select(x => x.Iid));
             dto.Category.AddRange(this.Category.Select(x => x.Iid));
             dto.ContainedElement.AddRange(this.ContainedElement.Select(x => x.Iid));
             dto.Definition.AddRange(this.Definition.Select(x => x.Iid));

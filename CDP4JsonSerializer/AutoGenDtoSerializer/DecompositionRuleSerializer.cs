@@ -43,7 +43,6 @@ namespace CDP4JsonSerializer
         private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
         {
             { "alias", alias => new JArray(alias) },
-            { "attachment", attachment => new JArray(attachment) },
             { "classKind", classKind => new JValue(classKind.ToString()) },
             { "containedCategory", containedCategory => new JArray(containedCategory) },
             { "containingCategory", containingCategory => new JValue(containingCategory) },
@@ -71,7 +70,6 @@ namespace CDP4JsonSerializer
         {
             var jsonObject = new JObject();
             jsonObject.Add("alias", this.PropertySerializerMap["alias"](decompositionRule.Alias.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("attachment", this.PropertySerializerMap["attachment"](decompositionRule.Attachment.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), decompositionRule.ClassKind)));
             jsonObject.Add("containedCategory", this.PropertySerializerMap["containedCategory"](decompositionRule.ContainedCategory.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("containingCategory", this.PropertySerializerMap["containingCategory"](decompositionRule.ContainingCategory));

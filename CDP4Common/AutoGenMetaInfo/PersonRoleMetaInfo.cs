@@ -48,7 +48,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.PersonRole, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.PersonRole, IEnumerable<Guid>>>
         {
             { "Alias", personRole => personRole.Alias },
-            { "Attachment", personRole => personRole.Attachment },
             { "Definition", personRole => personRole.Definition },
             { "HyperLink", personRole => personRole.HyperLink },
             { "PersonPermission", personRole => personRole.PersonPermission },
@@ -65,7 +64,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.PersonRole>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.PersonRole>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.PersonRole>(item => item.Alias != null, "The 'Alias' property of a 'PersonRole' is mandatory and cannot be null.") },
-            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.PersonRole>(item => item.Attachment != null, "The 'Attachment' property of a 'PersonRole' is mandatory and cannot be null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.PersonRole>(item => item.Definition != null, "The 'Definition' property of a 'PersonRole' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.PersonRole>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'PersonRole' is mandatory and cannot be null.") },
             { "ExcludedPerson", new DtoValidationHelper<CDP4Common.DTO.PersonRole>(item => item.ExcludedPerson != null, "The 'ExcludedPerson' property of a 'PersonRole' is mandatory and cannot be null.") },
@@ -209,7 +207,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "PersonPermission", new PropertyMetaInfo("PersonPermission", "PersonPermission", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
@@ -240,7 +237,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.PersonRole, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.PersonRole, object>>
         {
             { "Alias", thing => thing.Alias },
-            { "Attachment", thing => thing.Attachment },
             { "ClassKind", thing => thing.ClassKind },
             { "Definition", thing => thing.Definition },
             { "ExcludedDomain", thing => thing.ExcludedDomain },
@@ -282,7 +278,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
-            { "Attachment", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },
             { "ExcludedPerson", (value) => (Guid)value },

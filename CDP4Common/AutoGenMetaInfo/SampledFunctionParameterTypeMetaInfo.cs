@@ -48,7 +48,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.SampledFunctionParameterType, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.SampledFunctionParameterType, IEnumerable<Guid>>>
         {
             { "Alias", sampledFunctionParameterType => sampledFunctionParameterType.Alias },
-            { "Attachment", sampledFunctionParameterType => sampledFunctionParameterType.Attachment },
             { "Definition", sampledFunctionParameterType => sampledFunctionParameterType.Definition },
             { "DependentParameterType", sampledFunctionParameterType => sampledFunctionParameterType.DependentParameterType.ToIdList() },
             { "HyperLink", sampledFunctionParameterType => sampledFunctionParameterType.HyperLink },
@@ -70,7 +69,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.SampledFunctionParameterType>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.SampledFunctionParameterType>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.SampledFunctionParameterType>(item => item.Alias != null, "The 'Alias' property of a 'SampledFunctionParameterType' is mandatory and cannot be null.") },
-            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.SampledFunctionParameterType>(item => item.Attachment != null, "The 'Attachment' property of a 'SampledFunctionParameterType' is mandatory and cannot be null.") },
             { "Category", new DtoValidationHelper<CDP4Common.DTO.SampledFunctionParameterType>(item => item.Category != null, "The 'Category' property of a 'SampledFunctionParameterType' is mandatory and cannot be null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.SampledFunctionParameterType>(item => item.Definition != null, "The 'Definition' property of a 'SampledFunctionParameterType' is mandatory and cannot be null.") },
             { "DependentParameterType", new DtoValidationHelper<CDP4Common.DTO.SampledFunctionParameterType>(item => item.DependentParameterType != null && item.DependentParameterType.Any(), "The 'DependentParameterType' property of a 'SampledFunctionParameterType' is mandatory and must have at least one entry.") },
@@ -218,7 +216,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
-            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "DependentParameterType", new PropertyMetaInfo("DependentParameterType", "DependentParameterTypeAssignment", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 1, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
@@ -250,7 +247,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.SampledFunctionParameterType, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.SampledFunctionParameterType, object>>
         {
             { "Alias", thing => thing.Alias },
-            { "Attachment", thing => thing.Attachment },
             { "Category", thing => thing.Category },
             { "ClassKind", thing => thing.ClassKind },
             { "Definition", thing => thing.Definition },
@@ -302,7 +298,6 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
-            { "Attachment", (value) => (Guid)value },
             { "Category", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "DependentParameterType", (value) => (Guid)value },

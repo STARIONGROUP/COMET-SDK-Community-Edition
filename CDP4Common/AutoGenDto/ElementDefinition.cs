@@ -50,7 +50,6 @@ namespace CDP4Common.DTO
         /// </summary>
         public ElementDefinition()
         {
-            this.Behavior = new List<Guid>();
             this.ContainedElement = new List<Guid>();
             this.OrganizationalParticipant = new List<Guid>();
             this.Parameter = new List<Guid>();
@@ -69,21 +68,12 @@ namespace CDP4Common.DTO
         /// </param>
         public ElementDefinition(Guid iid, int rev) : base(iid: iid, rev: rev)
         {
-            this.Behavior = new List<Guid>();
             this.ContainedElement = new List<Guid>();
             this.OrganizationalParticipant = new List<Guid>();
             this.Parameter = new List<Guid>();
             this.ParameterGroup = new List<Guid>();
             this.ReferencedElement = new List<Guid>();
         }
-
-        /// <summary>
-        /// Gets or sets the unique identifiers of the contained Behavior instances.
-        /// </summary>
-        [CDPVersion("1.3.0")]
-        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        [DataMember]
-        public List<Guid> Behavior { get; set; }
 
         /// <summary>
         /// Gets or sets the unique identifiers of the contained ContainedElement instances.
@@ -137,7 +127,6 @@ namespace CDP4Common.DTO
             get 
             {
                 var containers = new List<IEnumerable>(base.ContainerLists);
-                containers.Add(this.Behavior);
                 containers.Add(this.ContainedElement);
                 containers.Add(this.Parameter);
                 containers.Add(this.ParameterGroup);
@@ -178,28 +167,6 @@ namespace CDP4Common.DTO
                 }
 
                 this.Alias.Add(copy.Value.Iid);
-            }
-
-            foreach (var guid in original.Attachment)
-            {
-                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
-                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
-                {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
-                }
-
-                this.Attachment.Add(copy.Value.Iid);
-            }
-
-            foreach (var guid in original.Behavior)
-            {
-                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
-                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
-                {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
-                }
-
-                this.Behavior.Add(copy.Value.Iid);
             }
 
             foreach (var guid in original.Category)

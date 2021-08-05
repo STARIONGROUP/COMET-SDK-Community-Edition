@@ -43,7 +43,6 @@ namespace CDP4JsonSerializer
         private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
         {
             { "alias", alias => new JArray(alias) },
-            { "attachment", attachment => new JArray(attachment) },
             { "classKind", classKind => new JValue(classKind.ToString()) },
             { "definition", definition => new JArray(definition) },
             { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
@@ -78,7 +77,6 @@ namespace CDP4JsonSerializer
         {
             var jsonObject = new JObject();
             jsonObject.Add("alias", this.PropertySerializerMap["alias"](cyclicRatioScale.Alias.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("attachment", this.PropertySerializerMap["attachment"](cyclicRatioScale.Attachment.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), cyclicRatioScale.ClassKind)));
             jsonObject.Add("definition", this.PropertySerializerMap["definition"](cyclicRatioScale.Definition.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](cyclicRatioScale.ExcludedDomain.OrderBy(x => x, this.guidComparer)));

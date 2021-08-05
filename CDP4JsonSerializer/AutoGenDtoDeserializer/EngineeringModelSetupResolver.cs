@@ -62,11 +62,6 @@ namespace CDP4JsonSerializer
                 engineeringModelSetup.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
-            if (!jObject["attachment"].IsNullOrEmpty())
-            {
-                engineeringModelSetup.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
-            }
-
             if (!jObject["defaultOrganizationalParticipant"].IsNullOrEmpty())
             {
                 engineeringModelSetup.DefaultOrganizationalParticipant = jObject["defaultOrganizationalParticipant"].ToObject<Guid?>();

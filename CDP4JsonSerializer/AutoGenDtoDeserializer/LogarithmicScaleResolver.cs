@@ -57,11 +57,6 @@ namespace CDP4JsonSerializer
                 logarithmicScale.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
-            if (!jObject["attachment"].IsNullOrEmpty())
-            {
-                logarithmicScale.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
-            }
-
             if (!jObject["definition"].IsNullOrEmpty())
             {
                 logarithmicScale.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());

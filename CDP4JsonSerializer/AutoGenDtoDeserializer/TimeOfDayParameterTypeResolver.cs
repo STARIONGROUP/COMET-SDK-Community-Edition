@@ -57,11 +57,6 @@ namespace CDP4JsonSerializer
                 timeOfDayParameterType.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
-            if (!jObject["attachment"].IsNullOrEmpty())
-            {
-                timeOfDayParameterType.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
-            }
-
             if (!jObject["category"].IsNullOrEmpty())
             {
                 timeOfDayParameterType.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());

@@ -44,7 +44,7 @@ namespace CDP4Common.DiagramData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(Iteration), "DiagramCanvas")]
-    public partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
+    public sealed partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -89,24 +89,7 @@ namespace CDP4Common.DiagramData
         /// Note 2: All persistent date-and-time-stamps in this model shall be stored in UTC. When local calendar dates and clock times in a specific timezone are needed they shall be converted on the fly from and to UTC by client applications.
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public virtual DateTime CreatedOn { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Description.
-        /// </summary>
-        /// <remarks>
-        /// Textual description of a DiagramCanvas.
-        /// </remarks>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public virtual string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the PublicationState.
-        /// </summary>
-        /// <remarks>
-        /// </remarks>
-        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public virtual PublicationState PublicationState { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         /// <summary>
         /// Creates and returns a copy of this <see cref="DiagramCanvas"/> for edit purpose.
@@ -157,11 +140,6 @@ namespace CDP4Common.DiagramData
         {
             var errorList = new List<string>(base.ValidatePocoCardinality());
 
-            if (string.IsNullOrWhiteSpace(this.Description))
-            {
-                errorList.Add("The property Description is null or empty.");
-            }
-
             return errorList;
         }
 
@@ -184,13 +162,11 @@ namespace CDP4Common.DiagramData
 
             this.Bounds.ResolveList(dto.Bounds, dto.IterationContainerId, this.Cache);
             this.CreatedOn = dto.CreatedOn;
-            this.Description = dto.Description;
             this.DiagramElement.ResolveList(dto.DiagramElement, dto.IterationContainerId, this.Cache);
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
-            this.PublicationState = dto.PublicationState;
             this.RevisionNumber = dto.RevisionNumber;
             this.ThingPreference = dto.ThingPreference;
 
@@ -206,13 +182,11 @@ namespace CDP4Common.DiagramData
 
             dto.Bounds.AddRange(this.Bounds.Select(x => x.Iid));
             dto.CreatedOn = this.CreatedOn;
-            dto.Description = this.Description;
             dto.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Iid));
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
-            dto.PublicationState = this.PublicationState;
             dto.RevisionNumber = this.RevisionNumber;
             dto.ThingPreference = this.ThingPreference;
 

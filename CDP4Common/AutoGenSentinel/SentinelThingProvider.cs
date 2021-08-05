@@ -51,7 +51,7 @@ namespace CDP4Common
             sentinelProvider.Add("Category", new Category(Guid.Empty, null, null));
             sentinelProvider.Add("ChangeProposal", new ChangeProposal(Guid.Empty, null, null));
             sentinelProvider.Add("ChangeRequest", new ChangeRequest(Guid.Empty, null, null));
-            sentinelProvider.Add("DiagramElementThing", new ArchitectureElement(Guid.Empty, null, null));
+            sentinelProvider.Add("DiagramElementThing", new DiagramEdge(Guid.Empty, null, null));
             sentinelProvider.Add("DomainOfExpertise", new DomainOfExpertise(Guid.Empty, null, null));
             sentinelProvider.Add("ElementDefinition", new ElementDefinition(Guid.Empty, null, null));
             sentinelProvider.Add("EngineeringModelSetup", new EngineeringModelSetup(Guid.Empty, null, null));

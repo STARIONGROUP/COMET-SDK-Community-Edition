@@ -57,11 +57,6 @@ namespace CDP4JsonSerializer
                 decompositionRule.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
-            if (!jObject["attachment"].IsNullOrEmpty())
-            {
-                decompositionRule.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
-            }
-
             if (!jObject["containedCategory"].IsNullOrEmpty())
             {
                 decompositionRule.ContainedCategory.AddRange(jObject["containedCategory"].ToObject<IEnumerable<Guid>>());

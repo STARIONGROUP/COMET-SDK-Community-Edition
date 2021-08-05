@@ -44,7 +44,6 @@ namespace CDP4JsonSerializer
         {
             { "alias", alias => new JArray(alias) },
             { "allowMultiSelect", allowMultiSelect => new JValue(allowMultiSelect) },
-            { "attachment", attachment => new JArray(attachment) },
             { "category", category => new JArray(category) },
             { "classKind", classKind => new JValue(classKind.ToString()) },
             { "definition", definition => new JArray(definition) },
@@ -72,7 +71,6 @@ namespace CDP4JsonSerializer
             var jsonObject = new JObject();
             jsonObject.Add("alias", this.PropertySerializerMap["alias"](enumerationParameterType.Alias.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("allowMultiSelect", this.PropertySerializerMap["allowMultiSelect"](enumerationParameterType.AllowMultiSelect));
-            jsonObject.Add("attachment", this.PropertySerializerMap["attachment"](enumerationParameterType.Attachment.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("category", this.PropertySerializerMap["category"](enumerationParameterType.Category.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), enumerationParameterType.ClassKind)));
             jsonObject.Add("definition", this.PropertySerializerMap["definition"](enumerationParameterType.Definition.OrderBy(x => x, this.guidComparer)));

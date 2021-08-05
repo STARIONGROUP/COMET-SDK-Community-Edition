@@ -44,7 +44,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(DiagramElementContainer), "DiagramElement")]
-    public partial class DiagramObject : DiagramShape
+    public sealed partial class DiagramObject : DiagramShape
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DiagramObject"/> class.
@@ -71,14 +71,14 @@ namespace CDP4Common.DTO
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
-        public virtual string Documentation { get; set; }
+        public string Documentation { get; set; }
 
         /// <summary>
         /// Gets or sets the Resolution.
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
-        public virtual float Resolution { get; set; }
+        public float Resolution { get; set; }
 
         /// <summary>
         /// Gets the route for the current <see ref="DiagramObject"/>.
