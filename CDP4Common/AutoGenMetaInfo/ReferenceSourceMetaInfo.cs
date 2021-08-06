@@ -48,6 +48,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.ReferenceSource, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.ReferenceSource, IEnumerable<Guid>>>
         {
             { "Alias", referenceSource => referenceSource.Alias },
+            { "Attachment", referenceSource => referenceSource.Attachment },
             { "Definition", referenceSource => referenceSource.Definition },
             { "HyperLink", referenceSource => referenceSource.HyperLink },
         };
@@ -63,6 +64,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.ReferenceSource>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.ReferenceSource>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.ReferenceSource>(item => item.Alias != null, "The 'Alias' property of a 'ReferenceSource' is mandatory and cannot be null.") },
+            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.ReferenceSource>(item => item.Attachment != null, "The 'Attachment' property of a 'ReferenceSource' is mandatory and cannot be null.") },
             { "Category", new DtoValidationHelper<CDP4Common.DTO.ReferenceSource>(item => item.Category != null, "The 'Category' property of a 'ReferenceSource' is mandatory and cannot be null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.ReferenceSource>(item => item.Definition != null, "The 'Definition' property of a 'ReferenceSource' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.ReferenceSource>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'ReferenceSource' is mandatory and cannot be null.") },
@@ -206,6 +208,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
@@ -235,6 +238,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.ReferenceSource, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.ReferenceSource, object>>
         {
             { "Alias", thing => thing.Alias },
+            { "Attachment", thing => thing.Attachment },
             { "Author", thing => thing.Author },
             { "Category", thing => thing.Category },
             { "ClassKind", thing => thing.ClassKind },
@@ -291,6 +295,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
+            { "Attachment", (value) => (Guid)value },
             { "Category", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },

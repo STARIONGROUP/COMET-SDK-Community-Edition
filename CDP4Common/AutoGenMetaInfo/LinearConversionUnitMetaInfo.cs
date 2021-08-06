@@ -48,6 +48,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.LinearConversionUnit, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.LinearConversionUnit, IEnumerable<Guid>>>
         {
             { "Alias", linearConversionUnit => linearConversionUnit.Alias },
+            { "Attachment", linearConversionUnit => linearConversionUnit.Attachment },
             { "Definition", linearConversionUnit => linearConversionUnit.Definition },
             { "HyperLink", linearConversionUnit => linearConversionUnit.HyperLink },
         };
@@ -63,6 +64,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.LinearConversionUnit>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.LinearConversionUnit>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.LinearConversionUnit>(item => item.Alias != null, "The 'Alias' property of a 'LinearConversionUnit' is mandatory and cannot be null.") },
+            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.LinearConversionUnit>(item => item.Attachment != null, "The 'Attachment' property of a 'LinearConversionUnit' is mandatory and cannot be null.") },
             { "ConversionFactor", new DtoValidationHelper<CDP4Common.DTO.LinearConversionUnit>(item => !string.IsNullOrWhiteSpace(item.ConversionFactor), "The 'ConversionFactor' property of a 'LinearConversionUnit' is mandatory and cannot be empty or null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.LinearConversionUnit>(item => item.Definition != null, "The 'Definition' property of a 'LinearConversionUnit' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.LinearConversionUnit>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'LinearConversionUnit' is mandatory and cannot be null.") },
@@ -206,6 +208,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
@@ -235,6 +238,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.LinearConversionUnit, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.LinearConversionUnit, object>>
         {
             { "Alias", thing => thing.Alias },
+            { "Attachment", thing => thing.Attachment },
             { "ClassKind", thing => thing.ClassKind },
             { "ConversionFactor", thing => thing.ConversionFactor },
             { "Definition", thing => thing.Definition },
@@ -279,6 +283,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
+            { "Attachment", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },
             { "ExcludedPerson", (value) => (Guid)value },

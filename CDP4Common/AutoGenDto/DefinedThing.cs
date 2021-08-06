@@ -50,6 +50,7 @@ namespace CDP4Common.DTO
         protected DefinedThing()
         {
             this.Alias = new List<Guid>();
+            this.Attachment = new List<Guid>();
             this.Definition = new List<Guid>();
             this.HyperLink = new List<Guid>();
         }
@@ -66,6 +67,7 @@ namespace CDP4Common.DTO
         protected DefinedThing(Guid iid, int rev) : base(iid: iid, rev: rev)
         {
             this.Alias = new List<Guid>();
+            this.Attachment = new List<Guid>();
             this.Definition = new List<Guid>();
             this.HyperLink = new List<Guid>();
         }
@@ -76,6 +78,13 @@ namespace CDP4Common.DTO
         [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual List<Guid> Alias { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifiers of the contained Attachment instances.
+        /// </summary>
+        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual List<Guid> Attachment { get; set; }
 
         /// <summary>
         /// Gets or sets the unique identifiers of the contained Definition instances.
@@ -114,6 +123,7 @@ namespace CDP4Common.DTO
             {
                 var containers = new List<IEnumerable>(base.ContainerLists);
                 containers.Add(this.Alias);
+                containers.Add(this.Attachment);
                 containers.Add(this.Definition);
                 containers.Add(this.HyperLink);
                 return containers;

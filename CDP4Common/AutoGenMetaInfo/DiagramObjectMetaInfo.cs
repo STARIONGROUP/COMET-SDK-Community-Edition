@@ -304,9 +304,13 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, PropertyMetaInfo> possibleContainerProperties = new Dictionary<string, PropertyMetaInfo>
         {
+            { "ArchitectureDiagram", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "ArchitectureElement", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "DiagramCanvas", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "DiagramEdge", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DiagramFrame", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "DiagramObject", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "DiagramPort", new PropertyMetaInfo("DiagramElement", "DiagramElementThing", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
         };
 
         /// <summary>
