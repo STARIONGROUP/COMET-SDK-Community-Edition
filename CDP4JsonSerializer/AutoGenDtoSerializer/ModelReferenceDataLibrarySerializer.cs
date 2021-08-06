@@ -43,6 +43,7 @@ namespace CDP4JsonSerializer
         private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
         {
             { "alias", alias => new JArray(alias) },
+            { "attachment", attachment => new JArray(attachment) },
             { "baseQuantityKind", baseQuantityKind => new JArray(((IEnumerable)baseQuantityKind).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
             { "baseUnit", baseUnit => new JArray(baseUnit) },
             { "classKind", classKind => new JValue(classKind.ToString()) },
@@ -78,6 +79,7 @@ namespace CDP4JsonSerializer
         {
             var jsonObject = new JObject();
             jsonObject.Add("alias", this.PropertySerializerMap["alias"](modelReferenceDataLibrary.Alias.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("attachment", this.PropertySerializerMap["attachment"](modelReferenceDataLibrary.Attachment.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("baseQuantityKind", this.PropertySerializerMap["baseQuantityKind"](modelReferenceDataLibrary.BaseQuantityKind.OrderBy(x => x, this.orderedItemComparer)));
             jsonObject.Add("baseUnit", this.PropertySerializerMap["baseUnit"](modelReferenceDataLibrary.BaseUnit.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), modelReferenceDataLibrary.ClassKind)));

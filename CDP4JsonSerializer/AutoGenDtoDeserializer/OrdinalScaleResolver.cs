@@ -57,6 +57,11 @@ namespace CDP4JsonSerializer
                 ordinalScale.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["attachment"].IsNullOrEmpty())
+            {
+                ordinalScale.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
+            }
+
             if (!jObject["definition"].IsNullOrEmpty())
             {
                 ordinalScale.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());

@@ -122,6 +122,17 @@ namespace CDP4Common.DTO
                 this.Alias.Add(copy.Value.Iid);
             }
 
+            foreach (var guid in original.Attachment)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
+                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
+                {
+                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                }
+
+                this.Attachment.Add(copy.Value.Iid);
+            }
+
             foreach (var guid in original.Definition)
             {
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);

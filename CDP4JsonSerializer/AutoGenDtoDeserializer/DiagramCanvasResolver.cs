@@ -62,6 +62,11 @@ namespace CDP4JsonSerializer
                 diagramCanvas.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
             }
 
+            if (!jObject["description"].IsNullOrEmpty())
+            {
+                diagramCanvas.Description = jObject["description"].ToObject<string>();
+            }
+
             if (!jObject["diagramElement"].IsNullOrEmpty())
             {
                 diagramCanvas.DiagramElement.AddRange(jObject["diagramElement"].ToObject<IEnumerable<Guid>>());
@@ -85,6 +90,11 @@ namespace CDP4JsonSerializer
             if (!jObject["name"].IsNullOrEmpty())
             {
                 diagramCanvas.Name = jObject["name"].ToObject<string>();
+            }
+
+            if (!jObject["publicationState"].IsNullOrEmpty())
+            {
+                diagramCanvas.PublicationState = jObject["publicationState"].ToObject<PublicationState>();
             }
 
             if (!jObject["thingPreference"].IsNullOrEmpty())
