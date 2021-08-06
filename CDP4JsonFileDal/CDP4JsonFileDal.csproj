@@ -19,7 +19,8 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [Fix] File headers
+      [Upgrade] DotNetZip 1.14.0
+      [Update] to CDP4Common 7.5.1
 	</PackageReleaseNotes>
   </PropertyGroup>
 

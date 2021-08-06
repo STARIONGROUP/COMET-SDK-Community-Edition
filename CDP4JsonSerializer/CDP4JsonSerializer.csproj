@@ -20,6 +20,7 @@
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
       [Fix] File headers
+      [Upgrade] NewtonSoft.Json 13.0.1
     </PackageReleaseNotes>
   </PropertyGroup>
 
