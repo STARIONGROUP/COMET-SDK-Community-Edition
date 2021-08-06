@@ -57,6 +57,11 @@ namespace CDP4JsonSerializer
                 ratioScale.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["attachment"].IsNullOrEmpty())
+            {
+                ratioScale.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
+            }
+
             if (!jObject["definition"].IsNullOrEmpty())
             {
                 ratioScale.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());

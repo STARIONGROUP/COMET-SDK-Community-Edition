@@ -617,14 +617,14 @@ namespace CDP4Dal.Operations
         }
 
         /// <summary>
-        /// Get all the files that need to be added to the DataStore accoring to the added/changed/deleted <see cref="Thing"/>s
+        /// Get all the files that need to be added to the DataStore according to the added <see cref="Thing"/>s that implement <see cref="ILocalFile"/>.
         /// </summary>
         /// <returns>An Array of strings that contain the local paths in the context of the users' computer</returns>
         public string[] GetFiles()
         {
             var files = new List<string>();
-
-            foreach (var thing in this.AddedThing.OfType<ILocalFile>().Union(this.UpdatedThing.OfType<ILocalFile>()).Where(x => x.LocalPath != null))
+            
+            foreach (var thing in this.AddedThing.OfType<ILocalFile>().Where(x => x.LocalPath != null))
             {
                 if (string.IsNullOrWhiteSpace(thing.ContentHash))
                 {

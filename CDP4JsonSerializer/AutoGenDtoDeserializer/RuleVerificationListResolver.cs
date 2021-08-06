@@ -57,6 +57,11 @@ namespace CDP4JsonSerializer
                 ruleVerificationList.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["attachment"].IsNullOrEmpty())
+            {
+                ruleVerificationList.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
+            }
+
             if (!jObject["definition"].IsNullOrEmpty())
             {
                 ruleVerificationList.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
