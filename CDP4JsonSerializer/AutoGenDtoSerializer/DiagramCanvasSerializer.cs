@@ -45,12 +45,14 @@ namespace CDP4JsonSerializer
             { "bounds", bounds => new JArray(bounds) },
             { "classKind", classKind => new JValue(classKind.ToString()) },
             { "createdOn", createdOn => new JValue(((DateTime)createdOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            { "description", description => new JValue(description) },
             { "diagramElement", diagramElement => new JArray(diagramElement) },
             { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
             { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
             { "iid", iid => new JValue(iid) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
+            { "publicationState", publicationState => new JValue(publicationState.ToString()) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
@@ -66,12 +68,14 @@ namespace CDP4JsonSerializer
             jsonObject.Add("bounds", this.PropertySerializerMap["bounds"](diagramCanvas.Bounds));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), diagramCanvas.ClassKind)));
             jsonObject.Add("createdOn", this.PropertySerializerMap["createdOn"](diagramCanvas.CreatedOn));
+            jsonObject.Add("description", this.PropertySerializerMap["description"](diagramCanvas.Description));
             jsonObject.Add("diagramElement", this.PropertySerializerMap["diagramElement"](diagramCanvas.DiagramElement.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](diagramCanvas.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](diagramCanvas.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](diagramCanvas.Iid));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](diagramCanvas.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](diagramCanvas.Name));
+            jsonObject.Add("publicationState", this.PropertySerializerMap["publicationState"](Enum.GetName(typeof(CDP4Common.DiagramData.PublicationState), diagramCanvas.PublicationState)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](diagramCanvas.RevisionNumber));
             jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](diagramCanvas.ThingPreference));
             return jsonObject;

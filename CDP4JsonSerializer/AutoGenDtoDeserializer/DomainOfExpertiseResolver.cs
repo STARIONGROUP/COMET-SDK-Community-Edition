@@ -57,6 +57,11 @@ namespace CDP4JsonSerializer
                 domainOfExpertise.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["attachment"].IsNullOrEmpty())
+            {
+                domainOfExpertise.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
+            }
+
             if (!jObject["category"].IsNullOrEmpty())
             {
                 domainOfExpertise.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());

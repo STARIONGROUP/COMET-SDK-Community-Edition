@@ -48,6 +48,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.RuleVerificationList, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.RuleVerificationList, IEnumerable<Guid>>>
         {
             { "Alias", ruleVerificationList => ruleVerificationList.Alias },
+            { "Attachment", ruleVerificationList => ruleVerificationList.Attachment },
             { "Definition", ruleVerificationList => ruleVerificationList.Definition },
             { "HyperLink", ruleVerificationList => ruleVerificationList.HyperLink },
             { "RuleVerification", ruleVerificationList => ruleVerificationList.RuleVerification.ToIdList() },
@@ -67,6 +68,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.RuleVerificationList>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.RuleVerificationList>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.RuleVerificationList>(item => item.Alias != null, "The 'Alias' property of a 'RuleVerificationList' is mandatory and cannot be null.") },
+            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.RuleVerificationList>(item => item.Attachment != null, "The 'Attachment' property of a 'RuleVerificationList' is mandatory and cannot be null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.RuleVerificationList>(item => item.Definition != null, "The 'Definition' property of a 'RuleVerificationList' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.RuleVerificationList>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'RuleVerificationList' is mandatory and cannot be null.") },
             { "ExcludedPerson", new DtoValidationHelper<CDP4Common.DTO.RuleVerificationList>(item => item.ExcludedPerson != null, "The 'ExcludedPerson' property of a 'RuleVerificationList' is mandatory and cannot be null.") },
@@ -210,6 +212,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "RuleVerification", new PropertyMetaInfo("RuleVerification", "RuleVerification", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 0, "*", true) },
@@ -240,6 +243,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.RuleVerificationList, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.RuleVerificationList, object>>
         {
             { "Alias", thing => thing.Alias },
+            { "Attachment", thing => thing.Attachment },
             { "ClassKind", thing => thing.ClassKind },
             { "Definition", thing => thing.Definition },
             { "ExcludedDomain", thing => thing.ExcludedDomain },
@@ -281,6 +285,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
+            { "Attachment", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },
             { "ExcludedPerson", (value) => (Guid)value },

@@ -57,6 +57,11 @@ namespace CDP4JsonSerializer
                 dateTimeParameterType.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["attachment"].IsNullOrEmpty())
+            {
+                dateTimeParameterType.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
+            }
+
             if (!jObject["category"].IsNullOrEmpty())
             {
                 dateTimeParameterType.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
