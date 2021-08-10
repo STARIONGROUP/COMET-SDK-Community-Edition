@@ -54,7 +54,7 @@ namespace CDP4Common.EngineeringModelData
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
         /// </summary>
-        public new const ParticipantAccessRightKind DefaultParticipantAccess = ParticipantAccessRightKind.SAME_AS_SUPERCLASS;
+        public new const ParticipantAccessRightKind DefaultParticipantAccess = ParticipantAccessRightKind.SAME_AS_CONTAINER;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Behavior"/> class.
