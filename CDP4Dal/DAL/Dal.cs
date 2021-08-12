@@ -448,7 +448,7 @@ namespace CDP4Dal.DAL
 
                 foreach (var operation in operationContainer.Operations)
                 {
-                    var fileRevision = operation.ModifiedThing as CDP4Common.DTO.FileRevision;
+                    var fileRevision = operation.ModifiedThing as CDP4Common.DTO.ILocalFile;
 
                     if (fileRevision != null && fileRevision.ContentHash == hash)
                     {
