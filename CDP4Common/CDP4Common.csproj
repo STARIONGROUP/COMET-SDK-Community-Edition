@@ -45,7 +45,6 @@
     <Folder Include="AutoGenPoco\" />
     <Folder Include="AutoGenSentinel\" />
     <Folder Include="ClasslessDto\" />
-    <Folder Include="Poco\" />
     <Folder Include="RuleVerification\" />
     <Folder Include="Validation\" />
   </ItemGroup>
