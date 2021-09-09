@@ -65,6 +65,11 @@ namespace CDP4Dal
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// Object used to make sure that only a single Cancel command can be executed at a time
+        /// </summary>
+        private readonly object cancelLock = new object();
+
+        /// <summary>
         /// The cancellation token source dictionary.
         /// </summary>
         private readonly ConcurrentDictionary<Guid, CancellationTokenSource> cancellationTokenSourceDictionary;
@@ -785,7 +790,7 @@ namespace CDP4Dal
         /// </returns>
         public bool CanCancel()
         {
-            foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys)
+            foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys.ToList())
             {
                 this.cancellationTokenSourceDictionary.TryGetValue(cancellationTokenSourceKey, out var cancellationTokenSource);
 
@@ -805,11 +810,14 @@ namespace CDP4Dal
         /// </summary>
         public void Cancel()
         {
-            foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys)
+            lock (this.cancelLock)
             {
-                if (CanCancel(this.cancellationTokenSourceDictionary[cancellationTokenSourceKey]))
+                foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys.ToList())
                 {
-                    this.cancellationTokenSourceDictionary[cancellationTokenSourceKey].Cancel();
+                    if (CanCancel(this.cancellationTokenSourceDictionary[cancellationTokenSourceKey]))
+                    {
+                        this.cancellationTokenSourceDictionary[cancellationTokenSourceKey].Cancel();
+                    }
                 }
             }
         }
