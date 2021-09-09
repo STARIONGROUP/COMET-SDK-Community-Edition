@@ -794,8 +794,6 @@ namespace CDP4Dal
                     continue;
                 }
 
-                cancellationTokenSource?.Cancel();
-
                 return true;
             }
 
