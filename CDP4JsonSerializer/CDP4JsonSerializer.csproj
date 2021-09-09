@@ -19,7 +19,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25 JSON</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [Moved] CDP4Common.ValueArrayUtil methods to CDP4JsonSerializer.SerializerHelper
+      [Add] Attachment functionality
     </PackageReleaseNotes>
   </PropertyGroup>
 
