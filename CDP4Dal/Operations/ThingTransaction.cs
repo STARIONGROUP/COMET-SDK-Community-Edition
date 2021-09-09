@@ -624,7 +624,7 @@ namespace CDP4Dal.Operations
         {
             var files = new List<string>();
             
-            foreach (var thing in this.AddedThing.Where(x => x is ILocalFile).Cast<ILocalFile>().Where(x => x.LocalPath != null))
+            foreach (var thing in this.AddedThing.OfType<ILocalFile>().Where(x => x.LocalPath != null))
             {
                 if (string.IsNullOrWhiteSpace(thing.ContentHash))
                 {
