@@ -33,6 +33,7 @@ namespace CDP4Dal.DAL
     using System.Threading;
     using System.Threading.Tasks;
 
+    using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
@@ -448,9 +449,7 @@ namespace CDP4Dal.DAL
 
                 foreach (var operation in operationContainer.Operations)
                 {
-                    var fileRevision = operation.ModifiedThing as CDP4Common.DTO.FileRevision;
-
-                    if (fileRevision != null && fileRevision.ContentHash == hash)
+                    if (operation.ModifiedThing is ILocalFile localFile && localFile.ContentHash == hash)
                     {
                         contentFoundInAnOperation = true;
                         break;
