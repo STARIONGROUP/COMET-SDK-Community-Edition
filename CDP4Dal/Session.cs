@@ -65,11 +65,6 @@ namespace CDP4Dal
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Object used to make sure that only a single Cancel command can be executed at a time
-        /// </summary>
-        private readonly object cancelLock = new object();
-
-        /// <summary>
         /// The cancellation token source dictionary.
         /// </summary>
         private readonly ConcurrentDictionary<Guid, CancellationTokenSource> cancellationTokenSourceDictionary;
@@ -792,7 +787,10 @@ namespace CDP4Dal
         {
             foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys.ToList())
             {
-                this.cancellationTokenSourceDictionary.TryGetValue(cancellationTokenSourceKey, out var cancellationTokenSource);
+                if (!this.cancellationTokenSourceDictionary.TryGetValue(cancellationTokenSourceKey, out var cancellationTokenSource))
+                {
+                    continue;
+                }
 
                 if (!CanCancel(cancellationTokenSource))
                 {
@@ -810,13 +808,13 @@ namespace CDP4Dal
         /// </summary>
         public void Cancel()
         {
-            lock (this.cancelLock)
+            foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys.ToList())
             {
-                foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys.ToList())
+                if (this.cancellationTokenSourceDictionary.TryGetValue(cancellationTokenSourceKey, out var cancellationTokenSource))
                 {
-                    if (CanCancel(this.cancellationTokenSourceDictionary[cancellationTokenSourceKey]))
+                    if (CanCancel(cancellationTokenSource))
                     {
-                        this.cancellationTokenSourceDictionary[cancellationTokenSourceKey].Cancel();
+                        cancellationTokenSource.Cancel();
                     }
                 }
             }
