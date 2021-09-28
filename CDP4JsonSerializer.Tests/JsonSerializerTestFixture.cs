@@ -455,6 +455,47 @@ namespace CDP4JsonSerializer.Tests
         }
         
         [Test]
+        public void VerifyThatValueSetDeserializationIsCorrectForStringThatRepresentEscapeCharacters()
+        {
+            var engineeringModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
+            var iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
+            engineeringModel.Iteration.Add(iteration);
+
+            var elementDefinition = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
+            iteration.Element.Add(elementDefinition);
+
+            var parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri);
+            elementDefinition.Parameter.Add(parameter);
+
+            var parameterValueSet = new ParameterValueSet(Guid.Parse("049abaf8-d550-44b1-b32b-aa4b358f5d73"), this.cache, this.uri);
+            parameter.ValueSet.Add(parameterValueSet);
+
+            parameterValueSet.ValueSwitch = ParameterSwitchKind.MANUAL;
+            parameterValueSet.Manual = new ValueArray<string>(new[] { @"a\rb", @"a\tb", @"a\nb" });
+                
+            var serializedParameterValueSet = this.serializer.SerializeToString(parameterValueSet, false);
+           
+            IReadOnlyList<Dto.Thing> result;
+
+            using (var stream = StreamHelper.GenerateStreamFromString(serializedParameterValueSet))
+            {
+                result = this.serializer.Deserialize(stream).ToList();
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                this.serializer.SerializeToStream(result, stream);
+                stream.Position = 0;
+
+                using (var reader = new StreamReader(stream))
+                {
+                    var serializerResult = reader.ReadToEnd().Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
+                    Assert.AreEqual(serializerResult.Length, serializedParameterValueSet.Length);
+                }
+            }
+        }
+
+        [Test]
         [Category("Performance")]
         public void PerformanceTest()
         {

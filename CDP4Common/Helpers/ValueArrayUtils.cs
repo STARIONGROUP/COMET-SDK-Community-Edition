@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValueArrayUtils.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -30,6 +30,8 @@ namespace CDP4Common.Helpers
     using System.Collections.Generic;
 
     using CDP4Common.Types;
+
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The purpose of the <see cref="ValueArrayUtils"/> is to provide static helper methods for handling
@@ -115,7 +117,7 @@ namespace CDP4Common.Helpers
 
             foreach (Match match in test)
             {
-                stringValues.Add(UnescapeString(match.Groups[1].Value));
+                stringValues.Add(JsonConvert.DeserializeObject<string>($"\"{match.Groups[1].Value}\""));
             }
 
             var convertedStringList = stringValues.Select(m => (T)Convert.ChangeType(m, typeof(T))).ToList();
@@ -156,60 +158,10 @@ namespace CDP4Common.Helpers
 
             for (var i = 0; i < items.Count; i++)
             {
-                items[i] = $"\"{EscapeString(items[i])}\"";
+                items[i] = $"{JsonConvert.SerializeObject(items[i])}";
             }
 
             return items;
-        }
-
-        /// <summary>
-        /// Contains a list of Keys and Values that can be used to replace each other when escaping and unescaping a <see cref="ValueArray{String}"/>
-        /// Details: Section 9 (String) of file: http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf
-        /// </summary>
-        private static readonly Dictionary<string, string> EscapePairs = new Dictionary<string, string>
-        {
-            {"\\\\", "\\"},
-            {"\\\"", "\""},
-            {"\\b", "\b"},
-            {"\\f", "\f"},
-            {"\\n", "\n"},
-            {"\\r", "\r"},
-            {"\\t", "\t"},
-            {"\\/", "/"}
-        };
-
-        /// <summary>
-        /// Escapes all characters that need to be treated as special characters in a <see cref="ValueArray{String}"/>
-        /// </summary>
-        /// <param name="unescapedString"></param>
-        /// <returns>The escaped string</returns>
-        public static string EscapeString(string unescapedString)
-        {
-            var escapedString = unescapedString;
-
-            foreach (var pair in EscapePairs)
-            {
-                escapedString = escapedString.Replace(pair.Value, pair.Key);
-            }
-
-            return escapedString;
-        }
-
-        /// <summary>
-        /// Unescapes all characters that need to be treated as special characters in a <see cref="ValueArray{String}"/>
-        /// </summary>
-        /// <param name="escapedString"></param>
-        /// <returns>The unescaped string</returns>
-        public static string UnescapeString(string escapedString)
-        {
-            var unescapeString = escapedString;
-
-            foreach (var pair in EscapePairs.Reverse())
-            {
-                unescapeString = unescapeString.Replace(pair.Key, pair.Value);
-            }
-
-            return unescapeString;
         }
     }
 }
