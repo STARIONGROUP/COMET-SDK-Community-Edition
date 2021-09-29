@@ -71,7 +71,7 @@ namespace CDP4JsonSerializer
         /// </summary>
         /// <param name="valueArray">The <see cref="ValueArray{String}"/></param>
         /// <returns>The JSON string</returns>
-        public static string ToJsonString(ValueArray<string> valueArray)
+        public static string ToJsonString(this ValueArray<string> valueArray)
         {
             var items = ValueArrayToStringList(valueArray);
             return $"[{string.Join(",", items)}]";
