@@ -25,13 +25,9 @@
 namespace CDP4Common.Helpers
 {
     using System;
-    using System.Linq;
-    using System.Text.RegularExpressions;
     using System.Collections.Generic;
 
     using CDP4Common.Types;
-
-    using Newtonsoft.Json;
 
     /// <summary>
     /// The purpose of the <see cref="ValueArrayUtils"/> is to provide static helper methods for handling
@@ -65,103 +61,6 @@ namespace CDP4Common.Helpers
             var result = new ValueArray<string>(defaultValue);
 
             return result;
-        }
-
-        /// <summary>
-        /// Regex used for conversion of HStore value to string
-        /// </summary>
-        private static readonly Regex HstoreToValueArrayRegex = new Regex(@"^\{(.*)\}$", RegexOptions.Singleline);
-
-        /// <summary>
-        /// Convert a string to a <see cref="ValueArray{T}"/>
-        /// </summary>
-        /// <typeparam name="T">The generic type of the <see cref="ValueArray{T}"/></typeparam>
-        /// <param name="valueArrayString">The string to convert</param>
-        /// <returns>The <see cref="ValueArray{T}"/></returns>
-        public static ValueArray<T> FromHstoreToValueArray<T>(string valueArrayString) =>
-            ToValueArray<T>(valueArrayString, HstoreToValueArrayRegex);
-
-        /// <summary>
-        /// Regex used for conversion of Json value to string
-        /// </summary>
-        private static readonly Regex JsonToValueArrayRegex = new Regex(@"^\[(.*)\]$", RegexOptions.Singleline);
-
-        /// <summary>
-        /// Convert a string to a <see cref="ValueArray{T}"/>
-        /// </summary>
-        /// <typeparam name="T">The generic type of the <see cref="ValueArray{T}"/></typeparam>
-        /// <param name="valueArrayString">The string to convert</param>
-        /// <returns>The <see cref="ValueArray{T}"/></returns>
-        public static ValueArray<T> FromJsonToValueArray<T>(string valueArrayString) =>
-            ToValueArray<T>(valueArrayString, JsonToValueArrayRegex);
-
-        /// <summary>
-        /// Convert a string to a <see cref="ValueArray{T}"/>
-        /// </summary>
-        /// <typeparam name="T">The generic type of the <see cref="ValueArray{T}"/></typeparam>
-        /// <param name="valueArrayString">The string to convert</param>
-        /// <param name="regex">The Regex use for conversion</param>
-        /// <returns>The <see cref="ValueArray{T}"/></returns>
-        private static ValueArray<T> ToValueArray<T>(string valueArrayString, Regex regex)
-        {
-            var arrayExtractResult = regex.Match(valueArrayString);
-            var extractedArrayString = arrayExtractResult.Groups[1].Value;
-
-            // match within 2 unescape double-quote the following content:
-            // 1) (no special char \ or ") 0..* times
-            // 2) (a pattern that starts with \ followed by any character (special included) and 0..* "non special" characters) 0..* times
-            var valueExtractionRegex = new Regex(@"""([^""\\]*(\\.[^""\\]*)*)""", RegexOptions.Singleline);
-            var test = valueExtractionRegex.Matches(extractedArrayString);
-
-            var stringValues = new List<string>();
-
-            foreach (Match match in test)
-            {
-                stringValues.Add(JsonConvert.DeserializeObject<string>($"\"{match.Groups[1].Value}\""));
-            }
-
-            var convertedStringList = stringValues.Select(m => (T)Convert.ChangeType(m, typeof(T))).ToList();
-
-            return new ValueArray<T>(convertedStringList);
-        }
-
-        /// <summary>
-        /// Convert a <see cref="ValueArray{String}"/> to the JSON format
-        /// </summary>
-        /// <param name="valueArray">The <see cref="ValueArray{String}"/></param>
-        /// <returns>The JSON string</returns>
-        public static string ToJsonString(ValueArray<string> valueArray)
-        {
-            var items = ValueArrayToStringList(valueArray);
-            return $"[{string.Join(",", items)}]";
-        }
-
-        /// <summary>
-        /// Convert a <see cref="ValueArray{String}"/> to the HStore format
-        /// </summary>
-        /// <param name="valueArray">The <see cref="ValueArray{String}"/></param>
-        /// <returns>The HStore string</returns>
-        public static string ToHstoreString(ValueArray<string> valueArray)
-        {
-            var items = ValueArrayToStringList(valueArray);
-            return $"{{{string.Join(";", items)}}}";
-        }
-
-        /// <summary>
-        /// Escape double quote and backslash
-        /// </summary>
-        /// <param name="valueArray"></param>
-        /// <returns>IEnumerable containing escaped strings</returns>
-        private static IEnumerable<string> ValueArrayToStringList(ValueArray<string> valueArray)
-        {
-            var items = valueArray.ToList();
-
-            for (var i = 0; i < items.Count; i++)
-            {
-                items[i] = $"{JsonConvert.SerializeObject(items[i])}";
-            }
-
-            return items;
         }
     }
 }

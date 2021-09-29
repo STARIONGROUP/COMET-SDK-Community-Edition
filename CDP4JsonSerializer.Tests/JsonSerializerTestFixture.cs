@@ -489,7 +489,7 @@ namespace CDP4JsonSerializer.Tests
 
                 using (var reader = new StreamReader(stream))
                 {
-                    var serializerResult = reader.ReadToEnd().Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
+                    var serializerResult = reader.ReadToEnd();
                     Assert.AreEqual(serializerResult.Length, serializedParameterValueSet.Length);
                 }
             }
