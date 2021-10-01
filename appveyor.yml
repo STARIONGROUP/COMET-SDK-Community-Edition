@@ -51,7 +51,7 @@ before_build:
       }
 
 build_script:
-  - cmd: dotnet build CDP4-SDK-NETF.sln --configuration %CONFIGURATION% -v q --framework 472
+  - cmd: dotnet build CDP4-SDK-NETF.sln --configuration %CONFIGURATION% -v q --framework net472
   - cmd: dotnet build CDP4-SDK-NETC.sln --configuration %CONFIGURATION% -v q --framework netcoreapp3.1
   - ps: >-
       if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
