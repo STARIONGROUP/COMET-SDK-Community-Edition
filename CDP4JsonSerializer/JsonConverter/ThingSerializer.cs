@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,18 +21,19 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer.JsonConverter
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Common.Polyfills;
+
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
     using Newtonsoft.Json.Linq;
+
     using NLog;
 
     /// <summary>
@@ -52,6 +52,11 @@ namespace CDP4JsonSerializer.JsonConverter
         private readonly Version dataModelVersion;
 
         /// <summary>
+        /// The <see cref="ThingConverterExtensions"/> used to determine whether a class is to be serialized or not
+        /// </summary>
+        private readonly ThingConverterExtensions thingConverterExtensions;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ThingSerializer"/> class.
         /// </summary>
         /// <param name="metaInfoProvider">
@@ -64,6 +69,8 @@ namespace CDP4JsonSerializer.JsonConverter
         {
             this.MetaInfoProvider = metaInfoProvider;
             this.dataModelVersion = dataModelVersion;
+
+            this.thingConverterExtensions = new ThingConverterExtensions();
         }
 
         /// <summary>
@@ -120,6 +127,12 @@ namespace CDP4JsonSerializer.JsonConverter
             if (classVersion > this.dataModelVersion)
             {
                 // skip type serialization if the data version is larger then the request data model version
+                return;
+            }
+
+            if (!this.thingConverterExtensions.AssertSerialization(value, this.MetaInfoProvider, this.dataModelVersion))
+            {
+                // skip type serialization if the object is not to be included
                 return;
             }
 
