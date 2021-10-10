@@ -1,5 +1,5 @@
 ﻿// <copyright file="ShortNamedThingChecker.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené
 //
@@ -28,8 +28,10 @@ namespace CDP4Rules.RuleCheckers
     using System.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+
     using CDP4Rules.Common;
 
     /// <summary>
@@ -183,13 +185,13 @@ namespace CDP4Rules.RuleCheckers
         {
             if (thing == null)
             {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
+                throw new ArgumentNullException(nameof(thing), $"The {nameof(thing)} may not be null");
             }
 
             var shortNamedThing = thing as IShortNamedThing;
             if (shortNamedThing == null)
             {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IShortNamedThing");
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IShortNamedThing", nameof(thing));
             }
 
             return shortNamedThing;

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IEnumerableExtensions.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -41,7 +41,9 @@ namespace CDP4Common.Extensions
         /// <param name="source">Source sequence</param>
         /// <param name="keySelector">Projection for determining "distinctness"</param>
         /// <returns>A sequence consisting of distinct elements from the source sequence, comparing them by the specified key projection.</returns>
-        /// <see cref="https://github.com/morelinq/MoreLINQ/blob/master/MoreLinq.Test/DistinctByTest.cs"/>
+        /// <remarks>
+        /// inspired by <a href="https://github.com/morelinq/MoreLINQ/blob/master/MoreLinq.Test/DistinctByTest.cs"></a>
+        /// </remarks>
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             var seenKeys = new HashSet<TKey>();

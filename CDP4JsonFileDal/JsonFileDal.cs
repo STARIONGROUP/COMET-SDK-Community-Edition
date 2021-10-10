@@ -346,7 +346,7 @@ namespace CDP4JsonFileDal
                             returned = this.RetrieveSRDLThings(thing as CDP4Common.DTO.SiteReferenceDataLibrary, siteDirectoryData, zip, siteDir);
                             break;
                         case ClassKind.DomainOfExpertise:
-                            returned = this.RetrieveDomainOfExpertiseThings(thing as CDP4Common.DTO.DomainOfExpertise, siteDirectoryData, zip, siteDir);
+                            returned = this.RetrieveDomainOfExpertiseThings(thing as CDP4Common.DTO.DomainOfExpertise, siteDirectoryData, siteDir);
                             break;
                     }
 
@@ -368,18 +368,36 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
+        /// Reads the data related to the provided <see cref="CDP4Common.EngineeringModelData.Iteration"/> from the data-source
+        /// </summary>
+        /// <param name="iteration">
+        /// An instance of <see cref="CDP4Common.EngineeringModelData.Iteration"/> that needs to be read from the data-source
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>
+        /// </param>
+        /// <param name="attributes">
+        /// An instance of <see cref="IQueryAttributes"/> to be used with the request
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="Thing"/> that are contained by the provided <see cref="CDP4Common.EngineeringModelData.EngineeringModel"/> including the Reference-Data.
+        /// All the <see cref="Thing"/>s that have been updated since the last read will be returned.
+        /// </returns>
+        public override async Task<IEnumerable<Thing>> Read(CDP4Common.DTO.Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            return await this.Read((Thing)iteration, cancellationToken, attributes);
+        }
+
+        /// <summary>
         /// Retrieves all data necessary for the transfer of a DomainOfExpertise
         /// </summary>
         /// <param name="domain">The <see cref="DomainOfExpertise"/></param>
         /// <param name="siteDirectoryData">All SiteDirectory DTOs</param>
-        /// <param name="zip">The zip file</param>
         /// <param name="siteDir">The <see cref="SiteDirectory"/> object</param>
         /// <returns>List of things contained by the particular srdl</returns>
-        private List<Thing> RetrieveDomainOfExpertiseThings(CDP4Common.DTO.DomainOfExpertise domain, List<Thing> siteDirectoryData, ZipFile zip, CDP4Common.SiteDirectoryData.SiteDirectory siteDir)
+        private List<Thing> RetrieveDomainOfExpertiseThings(CDP4Common.DTO.DomainOfExpertise domain, List<Thing> siteDirectoryData, CDP4Common.SiteDirectoryData.SiteDirectory siteDir)
         {
             var returned = new List<Thing>();
-
-            var domainThing = siteDir.Domain.FirstOrDefault(s => s.Iid.Equals(domain.Iid));
 
             // wipe categories to avoide potential RDL irresolvable loop
             domain.Category.Clear();
@@ -543,27 +561,6 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Reads the data related to the provided <see cref="CDP4Common.EngineeringModelData.Iteration"/> from the data-source
-        /// </summary>
-        /// <param name="iteration">
-        /// An instance of <see cref="CDP4Common.EngineeringModelData.Iteration"/> that needs to be read from the data-source
-        /// </param>
-        /// <param name="cancellationToken">
-        /// The <see cref="CancellationToken"/>
-        /// </param>
-        /// <param name="attributes">
-        /// An instance of <see cref="IQueryAttributes"/> to be used with the request
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Thing"/> that are contained by the provided <see cref="CDP4Common.EngineeringModelData.EngineeringModel"/> including the Reference-Data.
-        /// All the <see cref="Thing"/>s that have been updated since the last read will be returned.
-        /// </returns>
-        public override async Task<IEnumerable<Thing>> Read(CDP4Common.DTO.Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
-        {
-            return await this.Read((Thing)iteration, cancellationToken, attributes);
-        }
-
-        /// <summary>
         /// Reads a physical file from a DataStore
         /// </summary>
         /// <param name="thing">Download a localfile</param>
@@ -661,8 +658,7 @@ namespace CDP4JsonFileDal
             {
                 var returned = this.ReadSiteDirectoryJson(filePath, credentials).ToList();
 
-                var log = $"The SiteDirectory contains {returned.Count()} Things";
-                Logger.Debug(log);
+                Logger.Debug("The SiteDirectory contains {0} Things", returned.Count);
 
                 // check for credentials in the returned DTO's to see if the current Person is authorised to look into this SiteDirectory
                 var person = returned.SingleOrDefault(p =>

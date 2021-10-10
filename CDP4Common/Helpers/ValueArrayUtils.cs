@@ -48,7 +48,7 @@ namespace CDP4Common.Helpers
         {
             if (size < 1)
             {
-                throw new ArgumentOutOfRangeException($"The {nameof(size)} may not be smaller than 1.", nameof(size));
+                throw new ArgumentOutOfRangeException(nameof(size), $"The {nameof(size)} may not be smaller than 1.");
             }
             
             var defaultValue = new List<string>(size);

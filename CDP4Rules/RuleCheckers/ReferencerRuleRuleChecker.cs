@@ -1,5 +1,5 @@
 ﻿// <copyright file="ReferencerRuleRuleChecker.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené
 //
@@ -27,8 +27,10 @@ namespace CDP4Rules.RuleCheckers
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+
     using CDP4Common.CommonData;
     using CDP4Common.SiteDirectoryData;
+
     using CDP4Rules.Common;
 
     /// <summary>
@@ -149,13 +151,13 @@ namespace CDP4Rules.RuleCheckers
         {
             if (thing == null)
             {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
+                throw new ArgumentNullException(nameof(thing), $"The {nameof(thing)} may not be null");
             }
 
             var referencerRule = thing as ReferencerRule;
             if (referencerRule == null)
             {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an ReferencerRule");
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an ReferencerRule", nameof(thing));
             }
 
             return referencerRule;

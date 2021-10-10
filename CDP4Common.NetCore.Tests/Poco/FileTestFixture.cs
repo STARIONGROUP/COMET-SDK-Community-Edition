@@ -58,30 +58,30 @@ namespace CDP4Common.Tests.Poco
         {
             //When no FileRevision is present, the CurrentContainingFolder is writable
             Assert.DoesNotThrow(() => this.file.CurrentContainingFolder = this.folder1);
-            Assert.AreEqual(this.file.CurrentContainingFolder, this.folder1);
-
+            Assert.That(this.file.CurrentContainingFolder, Is.EqualTo(this.folder1));
+            
             Assert.DoesNotThrow(() => this.file.CurrentContainingFolder = null);
-            Assert.IsNull(this.file.CurrentContainingFolder);
-
+            Assert.That(this.file.CurrentContainingFolder, Is.Null);
+            
             //When any FileRevision is present, the CurrentContainingFolder is readonly and returns the latest FileRevisions folder
             this.file.FileRevision.Add(this.oldFileRevision);
             Assert.Throws<InvalidOperationException>(() => this.file.CurrentContainingFolder = this.folder1);
-            Assert.AreEqual(this.file.CurrentContainingFolder, this.folder1);
+            Assert.That(this.file.CurrentContainingFolder, Is.EqualTo(this.folder1));
 
             this.file.FileRevision.Add(this.newFileRevision);
-            Assert.AreEqual(this.file.CurrentContainingFolder, this.folder2);
+            Assert.That(this.file.CurrentContainingFolder, Is.EqualTo(this.folder2));
         }
 
         [Test]
         public void VerifyCurrentFileRevision()
         {
-            Assert.AreEqual(this.file.CurrentFileRevision, null);
-
+            Assert.That(this.file.CurrentFileRevision, Is.Null);
+            
             this.file.FileRevision.Add(this.oldFileRevision);
-            Assert.AreEqual(this.file.CurrentFileRevision, this.oldFileRevision);
+            Assert.That(this.file.CurrentFileRevision, Is.EqualTo(this.oldFileRevision));
 
             this.file.FileRevision.Add(this.newFileRevision);
-            Assert.AreEqual(this.file.CurrentFileRevision, this.newFileRevision);
+            Assert.That(this.file.CurrentFileRevision, Is.EqualTo(this.newFileRevision));
         }
     }
 }
