@@ -1,0 +1,13 @@
+{
+  "url": "https://username:password@server",
+  "credentials": {
+    "1c2466ed-ddb9-4546-b458-5b3dbcb58924": {
+      "password": "70d3491b7b5033ce7e4f77630058a2b78a8e5a817b7eb957a306490092d4dd83",
+      "salt": "8b747da1d2220d2deb9c153882177727edcf05151b9c575881eea57fce7ecceb"
+    },
+    "cc89eec4-d7ba-486d-854b-8f2407e154e2": {
+      "password": "70d3491b7b5033ce7e4f77630058a2b78a8e5a817b7eb957a306490092d4dd83",
+      "salt": "8b747da1d2220d2deb9c153882177727edcf05151b9c575881eea57fce7ecceb"
+    }
+  }
+}

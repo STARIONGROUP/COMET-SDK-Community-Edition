@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -33,11 +33,12 @@ namespace CDP4JsonFileDal.Tests
     using System.Threading.Tasks;
 
     using CDP4Common.CommonData;
-    using CDP4Common.SiteDirectoryData;
+    using CDP4Common.DTO;
     using CDP4Common.Types;
 
     using CDP4Dal;
     using CDP4Dal.DAL;
+    using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
     using CDP4JsonFileDal;
@@ -50,11 +51,18 @@ namespace CDP4JsonFileDal.Tests
 
     using NUnit.Framework;
 
+    using DomainOfExpertise = CDP4Common.SiteDirectoryData.DomainOfExpertise;
     using EngineeringModel = CDP4Common.EngineeringModelData.EngineeringModel;
     using EngineeringModelSetup = CDP4Common.DTO.EngineeringModelSetup;
-    using Iteration = CDP4Common.DTO.Iteration;
+    using File = System.IO.File;
     using IterationSetup = CDP4Common.DTO.IterationSetup;
+    using ModelReferenceDataLibrary = CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary;
+    using Organization = CDP4Common.SiteDirectoryData.Organization;
+    using Participant = CDP4Common.SiteDirectoryData.Participant;
+    using ParticipantRole = CDP4Common.SiteDirectoryData.ParticipantRole;
     using Person = CDP4Common.SiteDirectoryData.Person;
+    using PersonRole = CDP4Common.SiteDirectoryData.PersonRole;
+    using ReferenceSource = CDP4Common.SiteDirectoryData.ReferenceSource;
     using SiteDirectory = CDP4Common.SiteDirectoryData.SiteDirectory;
     using SiteReferenceDataLibrary = CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary;
     using Thing = CDP4Common.CommonData.Thing;
@@ -128,6 +136,7 @@ namespace CDP4JsonFileDal.Tests
             this.cancelationTokenSource = new CancellationTokenSource();
             this.credentials = new Credentials("admin", "pass", new Uri(path));
             this.session = new Mock<ISession>();
+
             this.dal = new JsonFileDal
             {
                 Session = this.session.Object
@@ -214,7 +223,7 @@ namespace CDP4JsonFileDal.Tests
 
             // setup expected SiteDirectory instance
             var iterationSetupData = new CDP4Common.SiteDirectoryData.IterationSetup { IterationIid = iterationSetupDto.IterationIid };
-            var modelRdlData = new CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary { Iid = engineeringModelSetupDto.RequiredRdl.Single() };
+            var modelRdlData = new ModelReferenceDataLibrary { Iid = engineeringModelSetupDto.RequiredRdl.Single() };
             var engineeringModelSetupData = new CDP4Common.SiteDirectoryData.EngineeringModelSetup { EngineeringModelIid = engineeringModelSetupDto.EngineeringModelIid };
             engineeringModelSetupData.RequiredRdl.Add(modelRdlData);
             engineeringModelSetupData.IterationSetup.Add(iterationSetupData);
@@ -395,7 +404,7 @@ namespace CDP4JsonFileDal.Tests
             this.dal = new JsonFileDal(null);
 
             Assert.That(this.dal.DalVersion.Major, Is.EqualTo(1));
-            Assert.That(this.dal.DalVersion.Minor, Is.EqualTo(1));
+            Assert.That(this.dal.DalVersion.Minor, Is.EqualTo(2));
             Assert.That(this.dal.DalVersion.Build, Is.EqualTo(0));
         }
 
@@ -416,6 +425,30 @@ namespace CDP4JsonFileDal.Tests
             this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" }, COPYRIGHT, REMARK);
             Assert.That(this.dal.FileHeader.Copyright, Is.EqualTo(COPYRIGHT));
             Assert.That(this.dal.FileHeader.Remark, Is.EqualTo(REMARK));
+        }
+
+        [Test]
+        public void VerifyVersionCheckCtor()
+        {
+            var baseDalVersion = new JsonFileDal().DalVersion;
+
+            Assert.DoesNotThrow(
+                () => this.dal = new JsonFileDal(baseDalVersion));
+
+            Assert.DoesNotThrow(
+                () => this.dal = new JsonFileDal(new Version($"{baseDalVersion.Major - 1}.{baseDalVersion.Minor}.{baseDalVersion.Build}")));
+
+            Assert.DoesNotThrow(
+                () => this.dal = new JsonFileDal(new Version($"{baseDalVersion.Major}.{baseDalVersion.Minor - 1}.{baseDalVersion.Build}")));
+
+            Assert.Throws<DalVersionException>(
+                () => this.dal = new JsonFileDal(new Version($"{baseDalVersion.Major + 1}.{baseDalVersion.Minor}.{baseDalVersion.Build}")));
+
+            Assert.Throws<DalVersionException>(
+                () => this.dal = new JsonFileDal(new Version($"{baseDalVersion.Major}.{baseDalVersion.Minor + 1}.{baseDalVersion.Build}")));
+
+            Assert.Throws<DalVersionException>(
+                () => this.dal = new JsonFileDal(new Version($"{baseDalVersion.Major}.{baseDalVersion.Minor}.{baseDalVersion.Build + 1}")));
         }
 
         [Test]
