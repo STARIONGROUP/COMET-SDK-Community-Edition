@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementsContainerVerifierTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -43,7 +43,11 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
         private RequirementsSpecification requirementsSpecification;
 
-        private Requirement requirement;
+        private RequirementsGroup requirementsGroup1;
+
+        private RequirementsGroup requirementsGroup2;
+
+        private Requirement requirement1;
 
         private ParametricConstraint parametricConstraint;
 
@@ -51,6 +55,8 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
         private Iteration iteration;
         private ElementDefinition elementDefinition;
+        private RequirementsContainerVerifier requirementsGroupVerifier1;
+        private RequirementsContainerVerifier requirementsGroupVerifier2;
 
         [SetUp]
         public void SetUp()
@@ -65,15 +71,25 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             this.parametricConstraint.Expression.Add(this.relationalExpression);
 
-            this.requirement = new Requirement(Guid.NewGuid(), null, null);
+            this.requirement1 = new Requirement(Guid.NewGuid(), null, null);
 
-            this.requirement.ParametricConstraint.Add(this.parametricConstraint);
+            this.requirement1.ParametricConstraint.Add(this.parametricConstraint);
 
             this.requirementsSpecification = new RequirementsSpecification(Guid.NewGuid(), null, null);
-            this.requirementsSpecification.Requirement.Add(this.requirement);
+            this.requirementsSpecification.Requirement.Add(this.requirement1);
 
+            this.requirementsGroup1 = new RequirementsGroup(Guid.NewGuid(), null, null);
+            this.requirementsGroup2 = new RequirementsGroup(Guid.NewGuid(), null, null);
+
+            this.requirementsSpecification.Group.Add(this.requirementsGroup1);
+            this.requirementsGroup1.Group.Add(this.requirementsGroup2);
+
+            this.requirement1.Group = this.requirementsGroup1;
 
             this.requirementsContainerVerifier = new RequirementsContainerVerifier(this.requirementsSpecification);
+
+            this.requirementsGroupVerifier1 = new RequirementsContainerVerifier(this.requirementsGroup1);
+            this.requirementsGroupVerifier2 = new RequirementsContainerVerifier(this.requirementsGroup2);
 
             this.iteration = new Iteration(Guid.NewGuid(), null, null);
 
@@ -112,15 +128,27 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
         public async Task Verify_that_state_of_compliances_are_properly_calculated()
         {
             await this.requirementsContainerVerifier.VerifyRequirements(this.iteration);
+            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementsContainerVerifier.RequirementStateOfCompliance);
 
+            await this.requirementsGroupVerifier1.VerifyRequirements(this.iteration);
+            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementsGroupVerifier1.RequirementStateOfCompliance);
+
+            await this.requirementsGroupVerifier2.VerifyRequirements(this.iteration);
+            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementsGroupVerifier2.RequirementStateOfCompliance);
+
+            this.requirementsGroup1.Group.Clear(); // no more inconclusive sub groups.
+
+            await this.requirementsContainerVerifier.VerifyRequirements(this.iteration);
             Assert.AreEqual(RequirementStateOfCompliance.Pass, this.requirementsContainerVerifier.RequirementStateOfCompliance);
 
+            await this.requirementsGroupVerifier1.VerifyRequirements(this.iteration);
+            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.requirementsGroupVerifier1.RequirementStateOfCompliance);
         }
 
         [Test]
         public async Task Verify_that_state_of_compliances_are_properly_calculated_when_requirement_is_deprecated()
         {
-            this.requirement.IsDeprecated = true;
+            this.requirement1.IsDeprecated = true;
             await this.requirementsContainerVerifier.VerifyRequirements(this.iteration);
 
             Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementsContainerVerifier.RequirementStateOfCompliance);
@@ -133,7 +161,6 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
             await this.requirementsContainerVerifier.VerifyRequirements(this.iteration);
 
             Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementsContainerVerifier.RequirementStateOfCompliance);
-
         }
     }
 }
