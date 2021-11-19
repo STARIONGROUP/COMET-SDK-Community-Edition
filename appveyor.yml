@@ -84,14 +84,6 @@ after_test:
       }
   - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_LOG%\"
 
-deploy:
-  - provider: NuGet
-    server: https://nuget.pkg.github.com/RHEAGROUP/index.json
-    artifact: /.*(\.|\.s)nupkg/
-    username:  '%GITHUB_USER%'
-    api_key:
-      secure: '%GITHUB_TOKEN%'
-
 artifacts:
     - path: '%TEST_LOG%'
       name: test logs
