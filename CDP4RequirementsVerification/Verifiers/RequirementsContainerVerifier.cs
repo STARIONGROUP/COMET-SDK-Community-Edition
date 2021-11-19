@@ -108,6 +108,23 @@ namespace CDP4RequirementsVerification.Verifiers
                     tasks.Add(requirementsVerifier.VerifyRequirements(iteration));
                 }
             }
+            else if (this.Container is RequirementsGroup requirementsGroup)
+            {
+                var parentRequirementsSpecification = requirementsGroup.GetContainerOfType<RequirementsSpecification>();
+
+                var allRelatedGroups = requirementsGroup.ContainedGroup().ToList();
+                allRelatedGroups.Add(requirementsGroup);
+
+                foreach (var requirement in this.GetAllowedRequirements(parentRequirementsSpecification.Requirement))
+                {
+                    if (allRelatedGroups.Contains(requirement.Group))
+                    {
+                        var requirementsVerifier = new RequirementVerifier(requirement);
+                        verifiers.Add(requirementsVerifier);
+                        tasks.Add(requirementsVerifier.VerifyRequirements(iteration));
+                    }
+                }
+            }
 
             await Task.WhenAll(tasks.ToArray());
 

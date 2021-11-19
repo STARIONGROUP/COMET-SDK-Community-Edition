@@ -67,10 +67,10 @@ namespace CDP4RequirementsVerification.Verifiers
                 requirementStateOfCompliances.Add(await expressionVerifier.VerifyRequirementStateOfCompliance(booleanExpressionVerifiers, iteration));
             }
 
-            return this.RequirementStateOfCompliance = requirementStateOfCompliances.Any(x => x == RequirementStateOfCompliance.Inconclusive)
-                ? RequirementStateOfCompliance.Inconclusive
-                : requirementStateOfCompliances.Any(x => x == RequirementStateOfCompliance.Pass)
-                    ? RequirementStateOfCompliance.Pass
+            return this.RequirementStateOfCompliance = requirementStateOfCompliances.Any(x => x == RequirementStateOfCompliance.Pass)
+                ? RequirementStateOfCompliance.Pass
+                : requirementStateOfCompliances.Any(x => x == RequirementStateOfCompliance.Inconclusive)
+                    ? RequirementStateOfCompliance.Inconclusive
                     : RequirementStateOfCompliance.Failed;
         }
     }
