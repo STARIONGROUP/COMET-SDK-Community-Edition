@@ -26,6 +26,7 @@ namespace CDP4JsonSerializer.JsonConverter
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
@@ -37,7 +38,7 @@ namespace CDP4JsonSerializer.JsonConverter
     using NLog;
 
     /// <summary>
-    /// The <see cref="JsonConverter"/> that is responsible for (De)serialization on a <see cref="Thing"/> 
+    /// The <see cref="JsonConverter"/> that is responsible for (De)serialization on a <see cref="CDP4Common.DTO.Thing"/> 
     /// </summary>
     public class ThingSerializer : JsonConverter
     {
@@ -76,18 +77,12 @@ namespace CDP4JsonSerializer.JsonConverter
         /// <summary>
         /// Gets a value indicating whether this converter supports JSON read.
         /// </summary>
-        public override bool CanRead
-        {
-            get { return true; }
-        }
+        public override bool CanRead => true;
 
         /// <summary>
         /// Gets a value indicating whether this converter supports JSON write.
         /// </summary>
-        public override bool CanWrite
-        {
-            get { return true; }
-        }
+        public override bool CanWrite => true;
 
         /// <summary>
         /// Gets or sets the meta info provider.
@@ -124,6 +119,7 @@ namespace CDP4JsonSerializer.JsonConverter
         {
             var typeName = value.GetType().Name;
             var classVersion = new Version(this.MetaInfoProvider.GetClassVersion(typeName));
+
             if (classVersion > this.dataModelVersion)
             {
                 // skip type serialization if the data version is larger then the request data model version
@@ -136,25 +132,61 @@ namespace CDP4JsonSerializer.JsonConverter
                 return;
             }
 
+            this.CheckPermissibleClasses(value, typeName);
+
             var jsonObject = ((Thing)value).ToJsonObject();
 
             // remove versioned properties
-            var nonSerializablePropeties = new List<string>();
+            var nonSerializableProperties = new List<string>();
+
             foreach (var kvp in jsonObject)
             {
                 var propertyVersion = new Version(this.MetaInfoProvider.GetPropertyVersion(typeName, Helper.Utils.CapitalizeFirstLetter(kvp.Key)));
+
                 if (propertyVersion > this.dataModelVersion)
                 {
-                    nonSerializablePropeties.Add(kvp.Key);
+                    nonSerializableProperties.Add(kvp.Key);
                 }
             }
 
-            foreach (var nonSerializablePropety in nonSerializablePropeties)
+            foreach (var nonSerializableProperty in nonSerializableProperties)
             {
-                jsonObject.Remove(nonSerializablePropety);
+                jsonObject.Remove(nonSerializableProperty);
             }
 
             jsonObject.WriteTo(writer);
+        }
+
+        /// <summary>
+        /// Checks the <see cref="Category"/>'s <see cref="Category.PermissibleClass"/> property for <see cref="Version"/> compatibility
+        /// </summary>
+        /// <param name="thing">
+        /// The <see cref="object"/> to check
+        /// </param>
+        /// <param name="typeName">
+        /// The name of the <paramref name="thing"/>'s <see cref="Type"/>.
+        /// </param>
+        private void CheckPermissibleClasses(object thing, string typeName)
+        {
+            if (typeName != nameof(Category))
+            {
+                return;
+            }
+
+            var category = thing as Category;
+            var permissibleClasses = category.PermissibleClass.ToList();
+
+            foreach (var permissibleClass in permissibleClasses)
+            {
+                var permissibleClassVersion = new Version(this.MetaInfoProvider.GetClassVersion(permissibleClass.ToString()));
+
+                if (permissibleClassVersion <= this.dataModelVersion)
+                {
+                    continue;
+                }
+
+                category.PermissibleClass.Remove(permissibleClass);
+            }
         }
 
         /// <summary>

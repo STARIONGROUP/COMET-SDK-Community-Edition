@@ -2,7 +2,7 @@
 // <copyright file="JsonSerializerTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -56,16 +56,31 @@ namespace CDP4JsonSerializer.Tests
         private Book book2;
         private Section section1;
         private readonly Uri uri = new Uri("http://www.rheagroup.com");
-        private ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>> cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
+        private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
         private IMetaDataProvider metadataprovider = new MetaDataProvider();
         private Cdp4JsonSerializer serializer;
+        private SiteDirectory siteDir;
+        private SiteReferenceDataLibrary rdl;
+        private Category category1;
+        private Category category2;
 
         [SetUp]
         public void Setup()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
+
+            this.siteDir = new SiteDirectory(Guid.NewGuid(), this.cache, this.uri);
+            this.rdl = new SiteReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri);
+            this.rdl.Container = this.siteDir;
+
+            this.category1 = new Category(Guid.NewGuid(), this.cache, this.uri);
+            this.category2 = new Category(Guid.NewGuid(), this.cache, this.uri);
+            this.rdl.DefinedCategory.AddRange(new[] { this.category1, this.category2 });
+
+            this.category1.PermissibleClass.AddRange(new[] { ClassKind.BinaryRelationship, ClassKind.ElementDefinition });
+            this.category2.PermissibleClass.AddRange(new[] { ClassKind.BinaryRelationship, ClassKind.ElementDefinition, ClassKind.Page });
         }
-        
+
         [Test]
         public void VerifyThatNullDatetimeSerializationWorks()
         {
@@ -73,6 +88,7 @@ namespace CDP4JsonSerializer.Tests
             var iterationsetup = new Dto.IterationSetup(Guid.NewGuid(), 1);
 
             iterationsetup.FrozenOn = null;
+
             using (var memoryStream = new MemoryStream())
             {
                 this.serializer.SerializeToStream(new[] { iterationsetup }, memoryStream);
@@ -90,10 +106,11 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatSerializeTimeCorrectly()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-            
+
             var sitedir = new Dto.SiteDirectory(Guid.NewGuid(), 1);
 
             sitedir.LastModifiedOn = DateTime.Parse("2222-02-02T22:22:22.222222");
+
             using (var memoryStream = new MemoryStream())
             {
                 this.serializer.SerializeToStream(new[] { sitedir }, memoryStream);
@@ -112,10 +129,11 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatSpecialStringcharAreSerializedCorrectly()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-            
+
             var definition = new Dto.Definition(Guid.NewGuid(), 1);
 
             definition.Content = "abc \"hello world\"";
+
             using (var memoryStream = new MemoryStream())
             {
                 this.serializer.SerializeToStream(new[] { definition }, memoryStream);
@@ -133,9 +151,9 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatValueArrayAreSerializedCorrectly()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-            
+
             var parameterValueSet = new Dto.ParameterValueSet(Guid.NewGuid(), 1);
-            var valuearray = new [] {"123", "abc"};
+            var valuearray = new[] { "123", "abc" };
 
             parameterValueSet.Manual = new ValueArray<string>(valuearray);
             parameterValueSet.Computed = new ValueArray<string>(valuearray);
@@ -150,6 +168,7 @@ namespace CDP4JsonSerializer.Tests
                 using (var reader = new StreamReader(memoryStream))
                 {
                     var txt = reader.ReadToEnd();
+
                     // output:  "manual":"[\"123\",\"abc\"]"
                     Assert.IsTrue(txt.Contains("\"manual\":\"[\\\"123\\\",\\\"abc\\\"]\""));
                 }
@@ -177,6 +196,7 @@ namespace CDP4JsonSerializer.Tests
                 using (var reader = new StreamReader(memoryStream))
                 {
                     var txt = reader.ReadToEnd();
+
                     // output:  "manual":"[\"123\",\"abc\"]"
                     Assert.IsTrue(txt.Contains("\"manual\":\"[\\\"123\\\\\\\"(,)\\\\\\\"\\\",\\\"abc\\\\\\\\\\\"]\""));
 
@@ -193,7 +213,6 @@ namespace CDP4JsonSerializer.Tests
 
                     Assert.AreEqual(thing.Published[0], parameterValueSet.Published[0]);
                     Assert.AreEqual(thing.Published[1], parameterValueSet.Published[1]);
-
                 }
             }
         }
@@ -202,14 +221,14 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatEnumAreSeserializeCorrectly()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-            
+
             var email = new Dto.EmailAddress(Guid.NewGuid(), 1);
             email.Value = "test";
             email.VcardType = 0;
 
             using (var memoryStream = new MemoryStream())
             {
-                this.serializer.SerializeToStream(new [] {email}, memoryStream);
+                this.serializer.SerializeToStream(new[] { email }, memoryStream);
                 memoryStream.Position = 0;
 
                 using (var reader = new StreamReader(memoryStream))
@@ -224,7 +243,7 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatEnumAreSeserializeCorrectly2()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-            
+
             var email = new Dto.EmailAddress(Guid.NewGuid(), 1);
             email.Value = "test";
             email.VcardType = VcardEmailAddressKind.HOME;
@@ -246,7 +265,7 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatEnumAreSeserializeCorrectly3()
         {
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
-            
+
             var email = new Dto.TelephoneNumber(Guid.NewGuid(), 1);
             email.Value = "test";
             email.VcardType.Add((VcardTelephoneNumberKind)5);
@@ -365,7 +384,7 @@ namespace CDP4JsonSerializer.Tests
             var parameterSubscription = new ParameterSubscription(Guid.NewGuid(), this.cache, this.uri);
             var valueset = new ParameterValueSet(Guid.NewGuid(), this.cache, this.uri);
             var subscriptionValueset = new ParameterSubscriptionValueSet(Guid.NewGuid(), this.cache, this.uri);
-            var valuearrayvalues = new[] {"123", "456", "789.0"};
+            var valuearrayvalues = new[] { "123", "456", "789.0" };
 
             valueset.Manual = new ValueArray<string>(valuearrayvalues);
             valueset.Reference = new ValueArray<string>(valuearrayvalues);
@@ -419,9 +438,9 @@ namespace CDP4JsonSerializer.Tests
             this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 1, 0));
 
             this.engModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
-            this.book1 = new Book(Guid.NewGuid(), this.cache, this.uri) {Name = "name", ShortName = null};
-            this.book2 = new Book(Guid.NewGuid(), this.cache, this.uri) {Name = "name", ShortName = "shortname"};
-            this.section1 = new Section(Guid.NewGuid(), this.cache, this.uri) {Name = "name", ShortName = "SS1" };
+            this.book1 = new Book(Guid.NewGuid(), this.cache, this.uri) { Name = "name", ShortName = null };
+            this.book2 = new Book(Guid.NewGuid(), this.cache, this.uri) { Name = "name", ShortName = "shortname" };
+            this.section1 = new Section(Guid.NewGuid(), this.cache, this.uri) { Name = "name", ShortName = "SS1" };
 
             this.engModel.Book.Add(this.book1);
             this.engModel.Book.Add(this.book2);
@@ -439,6 +458,7 @@ namespace CDP4JsonSerializer.Tests
         {
             var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/jsonTestSample.json")).Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
             IReadOnlyList<Dto.Thing> result;
+
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
                 result = this.serializer.Deserialize(stream).ToList();
@@ -448,6 +468,7 @@ namespace CDP4JsonSerializer.Tests
             {
                 this.serializer.SerializeToStream(result, stream);
                 stream.Position = 0;
+
                 using (var reader = new StreamReader(stream))
                 {
                     var serializerResult = reader.ReadToEnd().Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
@@ -474,9 +495,9 @@ namespace CDP4JsonSerializer.Tests
 
             parameterValueSet.ValueSwitch = ParameterSwitchKind.MANUAL;
             parameterValueSet.Manual = new ValueArray<string>(new[] { @"a\rb", @"a\tb", @"a\nb" });
-                
+
             var serializedParameterValueSet = this.serializer.SerializeToString(parameterValueSet, false);
-           
+
             IReadOnlyList<Dto.Thing> result;
 
             using (var stream = StreamHelper.GenerateStreamFromString(serializedParameterValueSet))
@@ -498,11 +519,90 @@ namespace CDP4JsonSerializer.Tests
         }
 
         [Test]
+        public void Verify_that_raw_10_25_Category_PermissibleClasses_Are_Serialized_Correctly_for_raw_10_25_ModelVersion()
+        {
+            this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
+
+            var stream = new MemoryStream();
+            this.serializer.SerializeToStream(new[] { this.category1.ToDto() }, stream);
+            stream.Position = 0;
+            var deserializeResult = this.serializer.Deserialize(stream);
+
+            CollectionAssert.AreEquivalent(this.category1.PermissibleClass, (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+        }
+
+        [Test]
+        public void Verify_that_cdp_extension_Category_PermissibleClasses_Are_Serialized_Correctly_for_raw_10_25_ModelVersion()
+        {
+            this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 0, 0));
+
+            var stream = new MemoryStream();
+            this.serializer.SerializeToStream(new[] { this.category2.ToDto() }, stream);
+            stream.Position = 0;
+            var deserializeResult = this.serializer.Deserialize(stream);
+
+            CollectionAssert.AreEquivalent(this.category2.PermissibleClass.Except(new[] { ClassKind.Page }), (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+        }
+
+        [Test]
+        public void Verify_that_raw_10_25_Category_PermissibleClasses_Are_Serialized_Correctly_for_cdp_extension_ModelVersion()
+        {
+            this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 1, 0));
+
+            var stream = new MemoryStream();
+            this.serializer.SerializeToStream(new[] { this.category1.ToDto() }, stream);
+            stream.Position = 0;
+            var deserializeResult = this.serializer.Deserialize(stream);
+
+            CollectionAssert.AreEquivalent(this.category1.PermissibleClass, (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+        }
+
+        [Test]
+        public void Verify_that_cdp_extension_Category_PermissibleClasses_Are_Serialized_Correctly_for_cdp_extension_ModelVersion()
+        {
+            this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 1, 0));
+
+            var stream = new MemoryStream();
+            this.serializer.SerializeToStream(new[] { this.category2.ToDto() }, stream);
+            stream.Position = 0;
+            var deserializeResult = this.serializer.Deserialize(stream);
+
+            CollectionAssert.AreEquivalent(this.category2.PermissibleClass, (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+        }
+
+        [Test]
+        public void Verify_that_raw_10_25_Category_PermissibleClasses_Are_Serialized_Correctly_for_higher_version_cdp_extension_ModelVersion()
+        {
+            this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 2, 0));
+
+            var stream = new MemoryStream();
+            this.serializer.SerializeToStream(new[] { this.category1.ToDto() }, stream);
+            stream.Position = 0;
+            var deserializeResult = this.serializer.Deserialize(stream);
+
+            CollectionAssert.AreEquivalent(this.category1.PermissibleClass, (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+        }
+
+        [Test]
+        public void Verify_that_cdp_extension_Category_PermissibleClasses_Are_Serialized_Correctly_for_higher_version_cdp_extension_ModelVersion()
+        {
+            this.serializer = new Cdp4JsonSerializer(this.metadataprovider, new Version(1, 2, 0));
+
+            var stream = new MemoryStream();
+            this.serializer.SerializeToStream(new[] { this.category2.ToDto() }, stream);
+            stream.Position = 0;
+            var deserializeResult = this.serializer.Deserialize(stream);
+
+            CollectionAssert.AreEquivalent(this.category2.PermissibleClass, (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+        }
+
+        [Test]
         [Category("Performance")]
         public void PerformanceTest()
         {
             var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/bigmodel.json"));
             IReadOnlyList<Dto.Thing> result;
+
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
                 result = this.serializer.Deserialize(stream).ToList();
@@ -521,7 +621,7 @@ namespace CDP4JsonSerializer.Tests
             // code generated implementation about 40% performance improved compared to Newtonsoft generic implementation
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
-        
+
         private class TestPostOperation
         {
             /// <summary>
