@@ -19,7 +19,8 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [Moved] CDP4Common.ValueArrayUtil methods to CDP4JsonSerializer.SerializerHelper
+      [FIX] Beautify code based on SonarCube advice
+
     </PackageReleaseNotes>
   </PropertyGroup>
 

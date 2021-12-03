@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingConverterExtensions.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -25,6 +25,7 @@
 namespace CDP4JsonSerializer.JsonConverter
 {
     using System;
+    using System.Linq;
 
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
@@ -73,6 +74,38 @@ namespace CDP4JsonSerializer.JsonConverter
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Checks the <see cref="Category"/>'s <see cref="Category.PermissibleClass"/> property for <see cref="Version"/> compatibility
+        /// </summary>
+        /// <param name="value">
+        /// the <see cref="object"/> for which the serialization is to be asserted
+        /// </param>
+        /// <param name="metaDataProvider">
+        /// The <see cref="IMetaDataProvider"/> used to provide meta data
+        /// </param>
+        /// <param name="version">
+        /// The data model version to be used to determine whether a class shall be serialized or not
+        /// </param>
+        public void CheckCategoryPermissibleClasses(object value, IMetaDataProvider metaDataProvider, Version version)
+        {
+            if (value is Category category)
+            {
+                var permissibleClasses = category.PermissibleClass.ToList();
+
+                foreach (var permissibleClass in permissibleClasses)
+                {
+                    var permissibleClassVersion = new Version(metaDataProvider.GetClassVersion(permissibleClass.ToString()));
+
+                    if (permissibleClassVersion <= version)
+                    {
+                        continue;
+                    }
+
+                    category.PermissibleClass.Remove(permissibleClass);
+                }
+            }
         }
     }
 }
