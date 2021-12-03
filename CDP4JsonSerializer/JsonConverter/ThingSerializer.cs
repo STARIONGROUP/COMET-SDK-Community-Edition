@@ -132,7 +132,7 @@ namespace CDP4JsonSerializer.JsonConverter
                 return;
             }
 
-            this.CheckPermissibleClasses(value, typeName);
+            this.thingConverterExtensions.CheckCategoryPermissibleClasses(value, this.MetaInfoProvider, this.dataModelVersion);
 
             var jsonObject = ((Thing)value).ToJsonObject();
 
@@ -155,38 +155,6 @@ namespace CDP4JsonSerializer.JsonConverter
             }
 
             jsonObject.WriteTo(writer);
-        }
-
-        /// <summary>
-        /// Checks the <see cref="Category"/>'s <see cref="Category.PermissibleClass"/> property for <see cref="Version"/> compatibility
-        /// </summary>
-        /// <param name="thing">
-        /// The <see cref="object"/> to check
-        /// </param>
-        /// <param name="typeName">
-        /// The name of the <paramref name="thing"/>'s <see cref="Type"/>.
-        /// </param>
-        private void CheckPermissibleClasses(object thing, string typeName)
-        {
-            if (typeName != nameof(Category))
-            {
-                return;
-            }
-
-            var category = thing as Category;
-            var permissibleClasses = category.PermissibleClass.ToList();
-
-            foreach (var permissibleClass in permissibleClasses)
-            {
-                var permissibleClassVersion = new Version(this.MetaInfoProvider.GetClassVersion(permissibleClass.ToString()));
-
-                if (permissibleClassVersion <= this.dataModelVersion)
-                {
-                    continue;
-                }
-
-                category.PermissibleClass.Remove(permissibleClass);
-            }
         }
 
         /// <summary>
