@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonSerializerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer.Tests
 {
@@ -32,6 +30,7 @@ namespace CDP4JsonSerializer.Tests
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+
     using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
@@ -39,8 +38,11 @@ namespace CDP4JsonSerializer.Tests
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+
     using CDP4JsonSerializer.Tests.Helper;
+
     using Newtonsoft.Json;
+
     using NUnit.Framework;
 
     using Dto = CDP4Common.DTO;
@@ -455,6 +457,47 @@ namespace CDP4JsonSerializer.Tests
         }
         
         [Test]
+        public void VerifyThatValueSetDeserializationIsCorrectForStringThatRepresentEscapeCharacters()
+        {
+            var engineeringModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
+            var iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
+            engineeringModel.Iteration.Add(iteration);
+
+            var elementDefinition = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
+            iteration.Element.Add(elementDefinition);
+
+            var parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri);
+            elementDefinition.Parameter.Add(parameter);
+
+            var parameterValueSet = new ParameterValueSet(Guid.Parse("049abaf8-d550-44b1-b32b-aa4b358f5d73"), this.cache, this.uri);
+            parameter.ValueSet.Add(parameterValueSet);
+
+            parameterValueSet.ValueSwitch = ParameterSwitchKind.MANUAL;
+            parameterValueSet.Manual = new ValueArray<string>(new[] { @"a\rb", @"a\tb", @"a\nb" });
+                
+            var serializedParameterValueSet = this.serializer.SerializeToString(parameterValueSet, false);
+           
+            IReadOnlyList<Dto.Thing> result;
+
+            using (var stream = StreamHelper.GenerateStreamFromString(serializedParameterValueSet))
+            {
+                result = this.serializer.Deserialize(stream).ToList();
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                this.serializer.SerializeToStream(result, stream);
+                stream.Position = 0;
+
+                using (var reader = new StreamReader(stream))
+                {
+                    var serializerResult = reader.ReadToEnd();
+                    Assert.AreEqual(serializerResult.Length, serializedParameterValueSet.Length);
+                }
+            }
+        }
+
+        [Test]
         [Category("Performance")]
         public void PerformanceTest()
         {
@@ -471,7 +514,7 @@ namespace CDP4JsonSerializer.Tests
             {
                 using (var stream = new MemoryStream())
                 {
-                    this.serializer.SerializeToStream(result, stream);
+                    Assert.DoesNotThrow(() => this.serializer.SerializeToStream(result, stream));
                 }
             }
 

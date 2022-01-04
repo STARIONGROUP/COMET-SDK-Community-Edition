@@ -1,0 +1,1 @@
+dotnet test CDP4-SDK-NETF.sln --framework net472 --filter="(TestCategory!~WebServicesDependent) & (TestCategory!~AppVeyorExclusion)"

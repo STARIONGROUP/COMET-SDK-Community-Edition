@@ -29,7 +29,6 @@
   <ItemGroup>
     <Folder Include="Helper\" />
     <Folder Include="Deserializer\" />
-    <Folder Include="JsonConverter\" />
     <Folder Include="TestData\" />
   </ItemGroup>
 

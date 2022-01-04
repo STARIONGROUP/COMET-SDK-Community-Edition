@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -47,8 +47,8 @@ namespace CDP4Common.Tests.DTO
         public void VerifyThatContainersCanBeAddedAndTheRouteIsGenerated()
         {
             BooleanParameterType booleanParameterType;
-            string expectedRoute = string.Empty;
-            string computedRoute = string.Empty;
+            var expectedRoute = string.Empty;
+            var computedRoute = string.Empty;
 
             var booleanParameterTypeId = Guid.NewGuid();
             var siteReferenceDataLibraryId = Guid.NewGuid();
@@ -62,19 +62,20 @@ namespace CDP4Common.Tests.DTO
             booleanParameterType.AddContainer(ClassKind.SiteReferenceDataLibrary, siteReferenceDataLibraryId);
             booleanParameterType.AddContainer(ClassKind.SiteDirectory, siteDirectoryId);
 
-            expectedRoute = string.Format("/SiteDirectory/{0}/siteReferenceDataLibrary/{1}/parameterType/{2}", siteDirectoryId, siteReferenceDataLibraryId, booleanParameterTypeId);
+            expectedRoute = $"/SiteDirectory/{siteDirectoryId}/siteReferenceDataLibrary/{siteReferenceDataLibraryId}/parameterType/{booleanParameterTypeId}";
             computedRoute = booleanParameterType.Route;
-            Assert.AreEqual(expectedRoute, computedRoute);
 
+            Assert.That(computedRoute, Is.EqualTo(expectedRoute));
+            
             // test that it works for a parameter type contained in ModelReferenceDataLibrary
             booleanParameterType = new BooleanParameterType(booleanParameterTypeId, 1);
             booleanParameterType.AddContainer(ClassKind.ModelReferenceDataLibrary, modelReferenceDataLibraryId);
             booleanParameterType.AddContainer(ClassKind.EngineeringModelSetup, engineeringModelSetupId);
             booleanParameterType.AddContainer(ClassKind.SiteDirectory, siteDirectoryId);
 
-            expectedRoute = string.Format("/SiteDirectory/{0}/model/{1}/requiredRdl/{2}/parameterType/{3}", siteDirectoryId, engineeringModelSetupId, modelReferenceDataLibraryId, booleanParameterTypeId);
+            expectedRoute = $"/SiteDirectory/{siteDirectoryId}/model/{engineeringModelSetupId}/requiredRdl/{modelReferenceDataLibraryId}/parameterType/{booleanParameterTypeId}";
             computedRoute = booleanParameterType.Route;
-            Assert.AreEqual(expectedRoute, computedRoute);
+            Assert.That(computedRoute, Is.EqualTo(expectedRoute));
         }
 
         [Test]
@@ -129,17 +130,17 @@ namespace CDP4Common.Tests.DTO
             Assert.IsFalse(iteration.Contains(elementDefinition2));
 
             // check ordered items
-            PossibleFiniteState state1 = new PossibleFiniteState(Guid.NewGuid(), 1);
-            PossibleFiniteState state2 = new PossibleFiniteState(Guid.NewGuid(), 1);
-            PossibleFiniteState state3 = new PossibleFiniteState(Guid.NewGuid(), 1);
+            var state1 = new PossibleFiniteState(Guid.NewGuid(), 1);
+            var state2 = new PossibleFiniteState(Guid.NewGuid(), 1);
+            var state3 = new PossibleFiniteState(Guid.NewGuid(), 1);
 
-            PossibleFiniteStateList list = new PossibleFiniteStateList(Guid.NewGuid(), 1);
+            var list = new PossibleFiniteStateList(Guid.NewGuid(), 1);
             list.PossibleState.Add(new OrderedItem { K = 1, V = state1.Iid });
             list.PossibleState.Add(new OrderedItem { K = 100, V = state2.Iid });
 
-            Assert.IsTrue(list.Contains(state1));
-            Assert.IsTrue(list.Contains(state2));
-            Assert.IsFalse(list.Contains(state3));
+            Assert.That(list.Contains(state1), Is.True);
+            Assert.That(list.Contains(state2), Is.True);
+            Assert.That(list.Contains(state3), Is.False);
         }
 
         [Test]
@@ -168,14 +169,13 @@ namespace CDP4Common.Tests.DTO
             section.AddContainer(ClassKind.Book, book.Iid);
             section.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
 
-            Assert.AreEqual(string.Format("/EngineeringModel/{0}", engineeringModelId), book.GetTopContainerRoute());
-            Assert.AreEqual(string.Format("/EngineeringModel/{0}", engineeringModelId), section.GetTopContainerRoute());
-
-
+            Assert.AreEqual($"/EngineeringModel/{engineeringModelId}", book.GetTopContainerRoute());
+            Assert.AreEqual($"/EngineeringModel/{engineeringModelId}", section.GetTopContainerRoute());
+            
             EngineeringModel enModel;
             enModel = new EngineeringModel(Guid.NewGuid(), 1);
 
-            Assert.AreEqual(string.Format("/EngineeringModel/{0}", enModel.Iid), enModel.GetTopContainerRoute());
+            Assert.AreEqual($"/EngineeringModel/{enModel.Iid}", enModel.GetTopContainerRoute());
             
             // site directory thing
             BooleanParameterType booleanParameterType;
@@ -189,8 +189,8 @@ namespace CDP4Common.Tests.DTO
             booleanParameterType.AddContainer(ClassKind.SiteReferenceDataLibrary, siteReferenceDataLibraryId);
             booleanParameterType.AddContainer(ClassKind.SiteDirectory, siteDirectoryId);
 
-            Assert.AreEqual(string.Format("/SiteDirectory/{0}", siteDirectoryId), booleanParameterType.GetTopContainerRoute());
-            Assert.AreEqual(string.Format("/SiteDirectory/{0}", siteDirectoryId), siteDirectory.GetTopContainerRoute());
+            Assert.That(booleanParameterType.GetTopContainerRoute(), Is.EqualTo($"/SiteDirectory/{siteDirectoryId}"));
+            Assert.That(siteDirectory.GetTopContainerRoute(), Is.EqualTo($"/SiteDirectory/{siteDirectoryId}"));
         }
 
         [Test]
@@ -211,10 +211,10 @@ namespace CDP4Common.Tests.DTO
         public void VerifyClassKindIsCorrect()
         {
             var alias = new CDP4Common.CommonData.Alias() as CDP4Common.CommonData.Thing;
-            Assert.AreEqual(ClassKind.Alias, alias.ClassKind);
+            Assert.That(alias.ClassKind, Is.EqualTo(ClassKind.Alias));
 
             var aliasdto = new CDP4Common.DTO.Alias() as CDP4Common.DTO.Thing;
-            Assert.AreEqual(ClassKind.Alias, aliasdto.ClassKind);
+            Assert.That(aliasdto.ClassKind, Is.EqualTo(ClassKind.Alias));
         }
 
         [Test]
@@ -235,11 +235,11 @@ namespace CDP4Common.Tests.DTO
             valueset.Manual = new ValueArray<string>(manual);
 
             var clone = valueset.DeepClone<ParameterValueSet>();
-            Assert.AreEqual(valueset.Iid, clone.Iid);
+            Assert.That(clone.Iid, Is.EqualTo(valueset.Iid));
             
             clone.Manual = new ValueArray<string>();
-            Assert.AreEqual(3, valueset.Manual.Count());
-            Assert.AreEqual(0, clone.Manual.Count());
+            Assert.That(valueset.Manual.Count(), Is.EqualTo(3));
+            Assert.That(clone.Manual.Count(), Is.EqualTo(0));
         }
 
         [Test]
@@ -251,15 +251,15 @@ namespace CDP4Common.Tests.DTO
             actualList.ActualState.Add(Guid.NewGuid());
 
             var clone = actualList.DeepClone<ActualFiniteStateList>();
-            Assert.AreEqual(1, clone.PossibleFiniteStateList.Count);
-            Assert.AreEqual(1, clone.ActualState.Count);
-
+            Assert.That(clone.PossibleFiniteStateList.Count, Is.EqualTo(1));
+            Assert.That(clone.ActualState.Count, Is.EqualTo(1));
+            
             clone.ActualState.Add(Guid.NewGuid());
-            Assert.AreEqual(1, actualList.ActualState.Count);
+            Assert.That(actualList.ActualState.Count, Is.EqualTo(1));
 
             var ordereditem = clone.PossibleFiniteStateList.Single();
-            Assert.AreEqual(ordereditem.K, 1);
-            Assert.AreEqual(ordereditem.V, item.V);
+            Assert.That(ordereditem.K, Is.EqualTo(1));
+            Assert.That(ordereditem.V, Is.EqualTo(item.V));
         }
 
         [Test]
@@ -301,12 +301,14 @@ namespace CDP4Common.Tests.DTO
             copypfsl.ResolveCopy(pfsl, dictionary);
             copyps1.ResolveCopy(ps1, dictionary);
             copyps2.ResolveCopy(ps2, dictionary);
+            
+            Assert.That(copypfsl.PossibleState.Any(ps => ps.V.ToString() == copyps1.Iid.ToString()), Is.True);
+            Assert.That(copypfsl.PossibleState.Any(ps => ps.V.ToString() == copyps2.Iid.ToString()), Is.True);
 
-            Assert.IsTrue(copypfsl.PossibleState.Any(ps => ps.V.ToString() == copyps1.Iid.ToString()));
-            Assert.IsTrue(copypfsl.PossibleState.Any(ps => ps.V.ToString() == copyps2.Iid.ToString()));
-            Assert.AreEqual(pfsl.Name, copypfsl.Name);
-            Assert.AreEqual(pfsl.Owner, copypfsl.Owner);
-            Assert.IsTrue(copypfsl.Category.Contains(pfsl.Category.Single()));
+            Assert.That(copypfsl.Name, Is.EqualTo(pfsl.Name));
+            Assert.That(copypfsl.Owner, Is.EqualTo(pfsl.Owner));
+
+            Assert.That(copypfsl.Category.Contains(pfsl.Category.Single()), Is.True);
         }
 
         [Test]
@@ -315,12 +317,13 @@ namespace CDP4Common.Tests.DTO
             var parameter = new Parameter(Guid.NewGuid(), 1)
             {
                 Owner = Guid.NewGuid(),
-                
             };
+
             var vs1 = new ParameterValueSet(Guid.NewGuid(), 1)
             {
                 Manual = new ValueArray<string>(new [] { "-" })
             };
+
             var vs2 = new ParameterValueSet(Guid.NewGuid(), 1)
             {
                 Computed = new ValueArray<string>(new[] { "-" })
@@ -342,10 +345,10 @@ namespace CDP4Common.Tests.DTO
             copyvs1.ResolveCopy(vs1, dictionary);
             copyvs2.ResolveCopy(vs2, dictionary);
 
-            Assert.IsTrue(copyparam.ValueSet.Contains(copyvs1.Iid));
-            Assert.IsTrue(copyparam.ValueSet.Contains(copyvs2.Iid));
-            Assert.IsTrue(copyvs1.Manual.Any());
-            Assert.IsTrue(copyvs2.Computed.Any());
+            Assert.That(copyparam.ValueSet.Contains(copyvs1.Iid), Is.True);
+            Assert.That(copyparam.ValueSet.Contains(copyvs2.Iid), Is.True);
+            Assert.That(copyvs1.Manual.Any(), Is.True);
+            Assert.That(copyvs2.Computed.Any(), Is.True);
         }
 
         [Test]
@@ -364,7 +367,7 @@ namespace CDP4Common.Tests.DTO
             originalToCopy.Add(pt1, pt2);
 
             parameter.ResolveCopyReference(originalToCopy);
-            Assert.AreEqual(parameter.ParameterType, pt2.Iid);
+            Assert.That(pt2.Iid, Is.EqualTo(parameter.ParameterType));
         }
 
         /// <summary>

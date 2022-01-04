@@ -161,35 +161,35 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyName()
         {
-            Assert.AreEqual("list1 → list2 → list3", this.actualList.Name);
+            Assert.That(this.actualList.Name, Is.EqualTo("list1 → list2 → list3"));
         }
 
         [Test]
         public void VerifyShortName()
         {
-            Assert.AreEqual("1.2.3", this.actualList.ShortName);
+            Assert.That(this.actualList.ShortName, Is.EqualTo("1.2.3"));
         }
 
         [Test]
         public void VerifyOrderStateWorks()
         {
-            Assert.AreNotEqual(this.actualList.ActualState[0].ShortName, "11.21.31");
+            Assert.That(this.actualList.ActualState[0].ShortName, Is.Not.EqualTo("11.21.31"));
 
             this.actualList.ActualState.Sort(new ActualFiniteStateComparer());
             var orderedStates = this.actualList.ActualState;
 
-            Assert.AreEqual(orderedStates[0].ShortName, "11.21.31");
-            Assert.AreEqual(orderedStates[1].ShortName, "11.21.32");
-            Assert.AreEqual(orderedStates[2].ShortName, "11.21.33");
-            Assert.AreEqual(orderedStates[3].ShortName, "11.22.31");
-            Assert.AreEqual(orderedStates[4].ShortName, "11.22.32");
-            Assert.AreEqual(orderedStates[5].ShortName, "11.22.33");
-            Assert.AreEqual(orderedStates[6].ShortName, "12.21.31");
-            Assert.AreEqual(orderedStates[7].ShortName, "12.21.32");
-            Assert.AreEqual(orderedStates[8].ShortName, "12.21.33");
-            Assert.AreEqual(orderedStates[9].ShortName, "12.22.31");
-            Assert.AreEqual(orderedStates[10].ShortName, "12.22.32");
-            Assert.AreEqual(orderedStates[11].ShortName, "12.22.33");
+            Assert.That(orderedStates[0].ShortName, Is.EqualTo("11.21.31"));
+            Assert.That(orderedStates[1].ShortName, Is.EqualTo("11.21.32"));
+            Assert.That(orderedStates[2].ShortName, Is.EqualTo("11.21.33"));
+            Assert.That(orderedStates[3].ShortName, Is.EqualTo("11.22.31"));
+            Assert.That(orderedStates[4].ShortName, Is.EqualTo("11.22.32"));
+            Assert.That(orderedStates[5].ShortName, Is.EqualTo("11.22.33"));
+            Assert.That(orderedStates[6].ShortName, Is.EqualTo("12.21.31"));
+            Assert.That(orderedStates[7].ShortName, Is.EqualTo("12.21.32"));
+            Assert.That(orderedStates[8].ShortName, Is.EqualTo("12.21.33"));
+            Assert.That(orderedStates[9].ShortName, Is.EqualTo("12.22.31"));
+            Assert.That(orderedStates[10].ShortName, Is.EqualTo("12.22.32"));
+            Assert.That(orderedStates[11].ShortName, Is.EqualTo("12.22.33"));
         }
     }
 }

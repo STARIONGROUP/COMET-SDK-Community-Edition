@@ -304,6 +304,12 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
+        public void Verify_that_ReadFile_throws_exception()
+        {
+            Assert.Throws<NotSupportedException>(() => this.dal.ReadFile(null, CancellationToken.None));
+        }
+
+        [Test]
         public async Task Verify_that_Open_with_null_credentials_throws_exception()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await this.dal.Open(null, this.cancelationTokenSource.Token));

@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -168,6 +168,7 @@ namespace CDP4ServicesDal.Tests
         }
 
         [Test]
+        [Category("WebServicesDependent")]
         public async Task VerifyThatIfNotHttpOrHttpsExceptionIsThrown()
         {
             var uri = new Uri("https://cdp4services-test.cdp4.org");

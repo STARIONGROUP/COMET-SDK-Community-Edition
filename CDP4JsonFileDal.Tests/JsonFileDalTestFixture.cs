@@ -31,17 +31,23 @@ namespace CDP4JsonFileDal.Tests
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+
     using CDP4Dal;
     using CDP4Dal.DAL;
     using CDP4Dal.Operations;
+
     using CDP4JsonFileDal;
+
     using Moq;
+
     using NLog;
     using NLog.Config;
     using NLog.Targets;
+
     using NUnit.Framework;
 
     using EngineeringModel = CDP4Common.EngineeringModelData.EngineeringModel;
@@ -164,9 +170,8 @@ namespace CDP4JsonFileDal.Tests
         public async Task VerifyThatOpenCreatesAConnection()
         {
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
-            Assert.NotNull(returned);
-            Assert.IsNotEmpty(returned);
-
+            Assert.That(returned, Is.Not.Null);
+            Assert.That(returned, Is.Not.Empty);
             Assert.DoesNotThrow(() => this.dal.Close());
         }
 
@@ -187,7 +192,7 @@ namespace CDP4JsonFileDal.Tests
         [Test]
         public void VerifyThatAJsonDalThatIsNotOpenCannotBeClosed()
         {
-            Assert.IsNull(this.dal.Credentials);
+            Assert.That(this.dal.Credentials, Is.Null);
             Assert.Throws<InvalidOperationException>(() => this.dal.Close());
         }
 
@@ -220,11 +225,12 @@ namespace CDP4JsonFileDal.Tests
             var readResult = (await this.dal.Read(iterObject, this.cancelationTokenSource.Token)).ToList();
 
             // General assertions for any kind of Thing we read
-            Assert.NotNull(readResult);
-            Assert.IsTrue(readResult.Count() != 1);
+            Assert.That(readResult, Is.Not.Null);
+            Assert.That(readResult.Count(), Is.Not.EqualTo(1));
+            
             var iter1 = readResult.Single(d => d.ClassKind == ClassKind.Iteration);
-            Assert.IsTrue(iterObject.ClassKind == iter1.ClassKind);
-            Assert.IsTrue(iterObject.Iid == iter1.Iid);
+            Assert.That(iter1.ClassKind, Is.EqualTo(iterObject.ClassKind));
+            Assert.That(iter1.Iid, Is.EqualTo(iterObject.Iid));
         }
 
         [Test]
@@ -283,14 +289,15 @@ namespace CDP4JsonFileDal.Tests
             var sitedirectoryDto = (CDP4Common.DTO.SiteDirectory)this.siteDirectoryData.ToDto();
             var clone = sitedirectoryDto.DeepClone<CDP4Common.DTO.SiteDirectory>();
             var operation = new Operation(sitedirectoryDto, clone, OperationKind.Update);
-            Assert.AreEqual(0, operationContainers.Single().Operations.Count());
+
+            Assert.That(operationContainers.Single().Operations.Count(), Is.EqualTo(0));
             operationContainers.Single().AddOperation(operation);
 
-            Assert.AreEqual(1, operationContainers.Single().Operations.Count());
+            Assert.That(operationContainers.Single().Operations.Count(), Is.EqualTo(1));
             Assert.Throws<ArgumentException>(() => this.dal.Write(operationContainers, files));
 
             operationContainers.Single().RemoveOperation(operation);
-            Assert.AreEqual(0, operationContainers.Single().Operations.Count());
+            Assert.That(operationContainers.Single().Operations.Count(), Is.EqualTo(0));
 
             var iterationIid = new Guid("b58ea73d-350d-4520-b9d9-a52c75ac2b5d");
             var iterationSetup = new IterationSetup(Guid.NewGuid(), 0);
@@ -346,7 +353,8 @@ namespace CDP4JsonFileDal.Tests
             operationContainer.AddOperation(operation);
             operationContainers = new[] { operationContainer, operationContainer };
 
-            Assert.IsEmpty(await this.dal.Write(operationContainers, files));
+            var things = await this.dal.Write(operationContainers, files);
+            Assert.That(things, Is.Empty);
         }
 
         [Test]
@@ -364,6 +372,12 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
+        public void Verify_that_ReadFile_throws_exception()
+        {
+            Assert.Throws<NotSupportedException>(() => this.dal.ReadFile(null, CancellationToken.None));
+        }
+
+        [Test]
         public async Task Verify_that_Open_with_null_credentials_throws_exception()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await this.dal.Open(null, this.cancelationTokenSource.Token));
@@ -374,34 +388,34 @@ namespace CDP4JsonFileDal.Tests
         {
             this.dal = new JsonFileDal(new Version("1.0.0"));
 
-            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Major == 1);
-            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Minor == 0);
-            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Build == 0);
+            Assert.That(this.dal.Serializer.RequestDataModelVersion.Major, Is.EqualTo(1));
+            Assert.That(this.dal.Serializer.RequestDataModelVersion.Minor, Is.EqualTo(0));
+            Assert.That(this.dal.Serializer.RequestDataModelVersion.Build, Is.EqualTo(0));
 
             this.dal = new JsonFileDal(null);
 
-            Assert.IsTrue(this.dal.DalVersion.Major == 1);
-            Assert.IsTrue(this.dal.DalVersion.Minor == 1);
-            Assert.IsTrue(this.dal.DalVersion.Build == 0);
+            Assert.That(this.dal.DalVersion.Major, Is.EqualTo(1));
+            Assert.That(this.dal.DalVersion.Minor, Is.EqualTo(1));
+            Assert.That(this.dal.DalVersion.Build, Is.EqualTo(0));
         }
 
         [Test]
         public void VerifyCtorWithVersionAndCopyright()
         {
             this.dal = new JsonFileDal(new Version("1.0.0"));
-            const string COPYRIGHT = "Copyright 2020 © ESA.";
+            const string COPYRIGHT = "Copyright 2020 © RHEA Group.";
             const string REMARK = "This is custom ECSS-E-TM-10-25 exchange file";
 
-            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Major == 1);
-            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Minor == 0);
-            Assert.IsTrue(this.dal.Serializer.RequestDataModelVersion.Build == 0);
-
+            Assert.That(this.dal.Serializer.RequestDataModelVersion.Major, Is.EqualTo(1));
+            Assert.That(this.dal.Serializer.RequestDataModelVersion.Minor, Is.EqualTo(0));
+            Assert.That(this.dal.Serializer.RequestDataModelVersion.Build, Is.EqualTo(0));
+            
             this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" });
-            Assert.IsInstanceOf(typeof(CDP4JsonFileDal.Json.ExchangeFileHeader), this.dal.FileHeader);
+            Assert.That(this.dal.FileHeader, Is.InstanceOf<CDP4JsonFileDal.Json.ExchangeFileHeader>());
 
             this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" }, COPYRIGHT, REMARK);
-            Assert.IsTrue(this.dal.FileHeader.Copyright == COPYRIGHT);
-            Assert.IsTrue(this.dal.FileHeader.Remark == REMARK);
+            Assert.That(this.dal.FileHeader.Copyright, Is.EqualTo(COPYRIGHT));
+            Assert.That(this.dal.FileHeader.Remark, Is.EqualTo(REMARK));
         }
 
         [Test]

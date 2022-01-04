@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonDeserializerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,25 +21,24 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer.Tests
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using CDP4Common;
+
     using CDP4Common.CommonData;
     using CDP4Common.DTO;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.MetaInfo;    
-    using CDP4Common.Types;
+
     using CDP4JsonSerializer.Tests.Helper;
     using CDP4JsonSerializer;
-    using Newtonsoft.Json;
+
     using NUnit.Framework;
+
     using File = System.IO.File;
     using ParameterSubscriptionValueSet = CDP4Common.DTO.ParameterSubscriptionValueSet;
     using PossibleFiniteStateList = CDP4Common.DTO.PossibleFiniteStateList;
@@ -68,7 +66,7 @@ namespace CDP4JsonSerializer.Tests
             {
                 var returnedTested = this.serializer.Deserialize(stream);
                 var def = returnedTested.OfType<CDP4Common.DTO.Definition>().Single();
-                Assert.AreEqual("abc \"hello world\"", def.Content);
+                Assert.That(def.Content, Is.EqualTo("abc \"hello world\""));
             }
         }
 
@@ -80,7 +78,7 @@ namespace CDP4JsonSerializer.Tests
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
                 var returnedTested = this.serializer.Deserialize(stream);
-                Assert.AreEqual(445, returnedTested.Count());
+                Assert.That(returnedTested.Count(), Is.EqualTo(445));
             }
         }
 
@@ -93,7 +91,7 @@ namespace CDP4JsonSerializer.Tests
                 var returned = this.serializer.Deserialize(stream);
                 var statelist = (CDP4Common.DTO.PossibleFiniteStateList)returned.First(dto => dto.ClassKind == ClassKind.PossibleFiniteStateList);
 
-                Assert.IsNotEmpty(statelist.PossibleState);
+                Assert.That(statelist.PossibleState, Is.Not.Empty);
             }
         }
 
@@ -108,8 +106,8 @@ namespace CDP4JsonSerializer.Tests
 
                 var arrayPt = (CDP4Common.DTO.ArrayParameterType)returned.First(dto => dto.ClassKind == ClassKind.ArrayParameterType);
 
-                Assert.IsNotEmpty(arrayPt.Dimension);
-                Assert.AreNotEqual(1, arrayPt.Dimension.Count);
+                Assert.That(arrayPt.Dimension, Is.Not.Empty);
+                Assert.That(arrayPt.Dimension.Count, Is.Not.EqualTo(1));
             }
         }
 
@@ -121,7 +119,8 @@ namespace CDP4JsonSerializer.Tests
             {
                 var returned = this.serializer.Deserialize(stream);
                 var valueset = (CDP4Common.DTO.ParameterValueSet)returned.First(dto => dto.ClassKind == ClassKind.ParameterValueSet);
-                Assert.IsNotEmpty(valueset.Manual);
+
+                Assert.That(valueset.Manual, Is.Not.Empty);
             }
         }
 
@@ -139,19 +138,21 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatValueArrayConverterWorks()
         {
             var returned = CDP4JsonSerializer.SerializerHelper.ToValueArray<string>("[\"1\", \"2\", \"3\"]");
-            Assert.AreEqual(returned[0], "1");
-            Assert.AreEqual(returned[1], "2");
-            Assert.AreEqual(returned[2], "3");
+
+            Assert.That(returned[0], Is.EqualTo("1"));
+            Assert.That(returned[1], Is.EqualTo("2"));
+            Assert.That(returned[2], Is.EqualTo("3"));
         }
 
         [Test]
         public void VerifyThatValueArrayConverterWorksSpecialChar()
         {
             var returned = CDP4JsonSerializer.SerializerHelper.ToValueArray<string>("[\"\\\"1,,,\\\",()\\\\\", \"2\\\"\", \"\\\"3\", \"testsimple\"]");
-            Assert.AreEqual(returned[0], "\"1,,,\",()\\");
-            Assert.AreEqual(returned[1], "2\"");
-            Assert.AreEqual(returned[2], "\"3");
-            Assert.AreEqual(returned[3], "testsimple");
+
+            Assert.That(returned[0], Is.EqualTo("\"1,,,\",()\\"));
+            Assert.That(returned[1], Is.EqualTo("2\""));
+            Assert.That(returned[2], Is.EqualTo("\"3"));
+            Assert.That(returned[3], Is.EqualTo("testsimple"));
         }
 
         [Test]
@@ -165,52 +166,54 @@ namespace CDP4JsonSerializer.Tests
             }
 
             var valueset = result.OfType<ParameterSubscriptionValueSet>().Single();
-            Assert.AreEqual(valueset.Iid, new Guid("049abaf8-d550-44b1-b32b-aa4b358f5d73"));
-            Assert.AreEqual(valueset.RevisionNumber, 2679);
-            Assert.AreEqual(valueset.ValueSwitch, ParameterSwitchKind.MANUAL);
-            Assert.AreEqual(valueset.SubscribedValueSet, new Guid("049abaf8-d550-44b1-b32b-c74b308f5d73"));
-            Assert.AreEqual(valueset.Manual[0], "123");
-            Assert.AreEqual(valueset.Manual[1], "456");
-            Assert.AreEqual(valueset.Manual[2], "789");
 
+            Assert.That(valueset.Iid, Is.EqualTo(new Guid("049abaf8-d550-44b1-b32b-aa4b358f5d73")));
+            Assert.That(valueset.RevisionNumber, Is.EqualTo(2679));
+            Assert.That(valueset.ValueSwitch, Is.EqualTo(ParameterSwitchKind.MANUAL));
+            Assert.That(valueset.SubscribedValueSet, Is.EqualTo(new Guid("049abaf8-d550-44b1-b32b-c74b308f5d73")));
+            Assert.That(valueset.Manual[0], Is.EqualTo("123"));
+            Assert.That(valueset.Manual[1], Is.EqualTo("456"));
+            Assert.That(valueset.Manual[2], Is.EqualTo("789"));
+            
             var pfsl = result.OfType<PossibleFiniteStateList>().Single();
-            Assert.AreEqual(pfsl.Iid, new Guid("049abaf8-d550-44b1-b32b-c74b158f5d73"));
-            Assert.AreEqual(pfsl.RevisionNumber, 2679);
-            Assert.AreEqual(pfsl.Name, "test");
-            Assert.AreEqual(pfsl.ShortName, "test1");
-            Assert.AreEqual(pfsl.Alias.Count, 0);
-            Assert.AreEqual(pfsl.Definition.Count, 0);
-            Assert.AreEqual(pfsl.HyperLink.Single(), new Guid("049abaf8-d550-44b1-b32b-c74b333f5d73"));
-            Assert.AreEqual(pfsl.Category.Count, 0);
-            Assert.AreEqual(pfsl.Owner, new Guid("049abaf8-d550-44b1-3333-c74b358f5d73"));
-            Assert.IsNull(pfsl.DefaultState);
-            Assert.AreEqual(pfsl.PossibleState[0].K, 123);
-            Assert.AreEqual(pfsl.PossibleState[0].V, "049abaf8-9850-44b1-b32b-c74b358f5d73");
-            Assert.AreEqual(pfsl.PossibleState[1].K, 456);
-            Assert.AreEqual(pfsl.PossibleState[1].V, "04978af8-d550-44b1-b32b-c74b358f5d73");
+            Assert.That(pfsl.Iid, Is.EqualTo(new Guid("049abaf8-d550-44b1-b32b-c74b158f5d73")));
+            Assert.That(pfsl.RevisionNumber, Is.EqualTo(2679));
+            Assert.That(pfsl.Name, Is.EqualTo("test"));
+            Assert.That(pfsl.ShortName, Is.EqualTo("test1"));
+            Assert.That(pfsl.Alias, Is.Empty);
+            Assert.That(pfsl.Definition, Is.Empty);
+            Assert.That(pfsl.HyperLink.Single(), Is.EqualTo(new Guid("049abaf8-d550-44b1-b32b-c74b333f5d73")));
+            Assert.That(pfsl.Category, Is.Empty);
+            Assert.That(pfsl.Owner, Is.EqualTo(new Guid("049abaf8-d550-44b1-3333-c74b358f5d73")));
+            Assert.That(pfsl.DefaultState, Is.Null);
+            Assert.That(pfsl.PossibleState[0].K, Is.EqualTo(123));
+            Assert.That(pfsl.PossibleState[0].V, Is.EqualTo("049abaf8-9850-44b1-b32b-c74b358f5d73"));
+            Assert.That(pfsl.PossibleState[1].K, Is.EqualTo(456));
+            Assert.That(pfsl.PossibleState[1].V, Is.EqualTo("04978af8-d550-44b1-b32b-c74b358f5d73"));
 
             var arrayPt = result.OfType<ArrayParameterType>().Single();
-            Assert.AreEqual(arrayPt.Iid, new Guid("049abaf8-d550-44b1-b32b-c74b358a5d73"));
-            Assert.AreEqual(arrayPt.RevisionNumber, 2679);
-            Assert.AreEqual(arrayPt.Name, "array");
-            Assert.AreEqual(arrayPt.ShortName, "array1");
-            Assert.AreEqual(arrayPt.Alias.Count, 0);
-            Assert.AreEqual(arrayPt.Definition.Count, 0);
-            Assert.AreEqual(arrayPt.HyperLink.Count, 0);
-            Assert.AreEqual(arrayPt.Category[0], new Guid("049abaf8-d550-44b1-b32b-c74ab58f5d73"));
-            Assert.AreEqual(arrayPt.Category[1], new Guid("0cdabaf8-d550-44b1-b32b-c74b358f5d73"));
-            Assert.AreEqual(arrayPt.Symbol, "symbol");
-            Assert.AreEqual(arrayPt.Component[0].K, 123);
-            Assert.AreEqual(arrayPt.Component[0].V, "049ab098-d550-44b1-b32b-c74b358f5d73");
-            Assert.IsFalse(arrayPt.IsFinalized);
-            Assert.IsFalse(arrayPt.IsDeprecated);
-            Assert.IsTrue(arrayPt.IsTensor);
-            Assert.AreEqual(arrayPt.Dimension[0].K, 1);
-            Assert.AreEqual(arrayPt.Dimension[1].K, 2);
-            Assert.AreEqual(arrayPt.Dimension[2].K, 3);
-            Assert.AreEqual(arrayPt.Dimension[1].V, "2");
-            Assert.AreEqual(arrayPt.Dimension[0].V, "1");
-            Assert.AreEqual(arrayPt.Dimension[2].V, "3");
+            
+            Assert.That(arrayPt.Iid, Is.EqualTo(new Guid("049abaf8-d550-44b1-b32b-c74b358a5d73")));
+            Assert.That(arrayPt.RevisionNumber, Is.EqualTo(2679));
+            Assert.That(arrayPt.Name, Is.EqualTo("array"));
+            Assert.That(arrayPt.ShortName, Is.EqualTo("array1"));
+            Assert.That(arrayPt.Alias, Is.Empty);
+            Assert.That(arrayPt.Definition, Is.Empty);
+            Assert.That(arrayPt.HyperLink, Is.Empty);
+            Assert.That(arrayPt.Category[0], Is.EqualTo(new Guid("049abaf8-d550-44b1-b32b-c74ab58f5d73")));
+            Assert.That(arrayPt.Category[1], Is.EqualTo(new Guid("0cdabaf8-d550-44b1-b32b-c74b358f5d73")));
+            Assert.That(arrayPt.Symbol, Is.EqualTo("symbol"));
+            Assert.That(arrayPt.Component[0].K, Is.EqualTo(123));
+            Assert.That(arrayPt.Component[0].V, Is.EqualTo("049ab098-d550-44b1-b32b-c74b358f5d73"));
+            Assert.That(arrayPt.IsFinalized, Is.False);
+            Assert.That(arrayPt.IsDeprecated, Is.False);
+            Assert.That(arrayPt.IsTensor, Is.True);
+            Assert.That(arrayPt.Dimension[0].K, Is.EqualTo(1));
+            Assert.That(arrayPt.Dimension[1].K, Is.EqualTo(2));
+            Assert.That(arrayPt.Dimension[2].K, Is.EqualTo(3));
+            Assert.That(arrayPt.Dimension[0].V, Is.EqualTo("1"));
+            Assert.That(arrayPt.Dimension[1].V, Is.EqualTo("2"));
+            Assert.That(arrayPt.Dimension[2].V, Is.EqualTo("3"));
         }
     }
 }

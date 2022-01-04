@@ -135,6 +135,27 @@ namespace CDP4Common.Helpers
         }
 
         /// <summary>
+        /// Resolve the <see cref="List{T}"/> from a <see cref="IEnumerable{Guid}"/>
+        /// </summary>
+        /// <typeparam name="T">A type of <see cref="Thing"/></typeparam>
+        /// <param name="list">The <see cref="List{T}"/> to resolve</param>
+        /// <param name="guidList">The <see cref="IEnumerable{Guid}"/> that contains the <see cref="Guid"/>s of the <see cref="Thing"/>s that shall be contained in <paramref name="list"/></param>
+        /// <param name="iterationId">The <see cref="Iteration"/> <see cref="Guid"/> at the top of the containment tree</param>
+        /// <param name="cache">The cache that stores the <see cref="Thing"/>s</param>
+        internal static void ResolveList<T>(this List<T> list, IEnumerable<Guid> guidList, Guid? iterationId, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache) where T : Thing
+        {
+            list.Clear();
+
+            foreach (var guid in guidList)
+            {
+                if (cache.TryGet(guid, iterationId, out T thing))
+                {
+                    list.Add(thing);
+                }
+            }
+        }
+
+        /// <summary>
         /// Clear and add the item of a source <see cref="IEnumerable{T}"/> to a <see cref="List{T}"/>
         /// </summary>
         /// <typeparam name="T">A type</typeparam>
@@ -157,28 +178,7 @@ namespace CDP4Common.Helpers
             list.Clear();
             list.AddOrderedItems(orderedItemList);
         }
-
-        /// <summary>
-        /// Resolve the <see cref="List{T}"/> from a <see cref="IEnumerable{Guid}"/>
-        /// </summary>
-        /// <typeparam name="T">A type of <see cref="Thing"/></typeparam>
-        /// <param name="list">The <see cref="List{T}"/> to resolve</param>
-        /// <param name="guidList">The <see cref="IEnumerable{Guid}"/> that contains the <see cref="Guid"/>s of the <see cref="Thing"/>s that shall be contained in <paramref name="list"/></param>
-        /// <param name="iterationId">The <see cref="Iteration"/> <see cref="Guid"/> at the top of the containment tree</param>
-        /// <param name="cache">The cache that stores the <see cref="Thing"/>s</param>
-        internal static void ResolveList<T>(this List<T> list, IEnumerable<Guid> guidList, Guid? iterationId, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache) where T : Thing
-        {
-            list.Clear();
-
-            foreach (var guid in guidList)
-            {
-                if (cache.TryGet(guid, iterationId, out T thing))
-                {
-                    list.Add(thing);
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Try to get the <see cref="Thing"/> of type <see cref="Thing"/> corresponding to the given <paramref name="itemIid"/>
         /// </summary>

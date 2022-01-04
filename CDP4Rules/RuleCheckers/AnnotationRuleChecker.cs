@@ -1,5 +1,5 @@
 ﻿// <copyright file="AnnotationRuleChecker.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené
 //
@@ -138,13 +138,13 @@ namespace CDP4Rules.RuleCheckers
         {
             if (thing == null)
             {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null");
+                throw new ArgumentNullException(nameof(thing), $"The {nameof(thing)} may not be null");
             }
 
             var annotation = thing as IAnnotation;
             if (annotation == null)
             {
-                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation");
+                throw new ArgumentException($"{nameof(thing)} with Iid:{thing.Iid} is not an IAnnotation", nameof(thing));
             }
 
             return annotation;
