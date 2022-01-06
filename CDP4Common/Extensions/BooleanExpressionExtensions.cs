@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BooleanExpressionExtensions.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -26,6 +26,7 @@ namespace CDP4Common.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
@@ -73,6 +74,75 @@ namespace CDP4Common.Extensions
             }
 
             return expressionList.Where(x => !notInTerms.Contains(x)).ToList();
+        }
+
+        /// <summary>
+        /// Creates a string that represents a tree of (nested) <see cref="BooleanExpression"/>s.
+        /// </summary>
+        /// <param name="booleanExpression">The <see cref="BooleanExpression"/> for which the tree will be built</param>
+        /// <param name="isTopLevel">Indicates that the current expression is a Top Level expression in the result <see cref="string"/>.</param>
+        /// <returns>A <see cref="string"/> that represents the <see cref="BooleanExpression"/> tree</returns>
+        public static string ToExpressionString(this BooleanExpression booleanExpression, bool isTopLevel = true)
+        {
+            var stringBuilder = new StringBuilder();
+
+            booleanExpression.GetStringExpression(stringBuilder, isTopLevel);
+
+            if (booleanExpression.ClassKind == ClassKind.NotExpression)
+            {
+                stringBuilder.Insert(0, $"{((NotExpression)booleanExpression).StringValue} ");
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Builds a string that represents the whole tree for the <see cref="BooleanExpression"/> of the given row.
+        /// </summary>
+        /// <param name="expression">The <see cref="BooleanExpression"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> to use.</param>
+        /// <param name="isTopLevel">Indicates that the current expression is a Top Level expression in the result <see cref="string"/>.</param>
+        private static void GetStringExpression(this BooleanExpression expression, StringBuilder stringBuilder, bool isTopLevel = false)
+        {
+            if (expression.ClassKind == ClassKind.RelationalExpression)
+            {
+                stringBuilder.Append("(");
+                stringBuilder.Append(expression.StringValue.Trim());
+                stringBuilder.Append(")");
+            }
+            else
+            {
+                if (!isTopLevel)
+                {
+                    stringBuilder.Append("(");
+                }
+
+                var expressions = expression.GetMyExpressions();
+
+                foreach (var containedExpression in expressions)
+                {
+                    if (containedExpression.ClassKind == ClassKind.NotExpression)
+                    {
+                        stringBuilder.Append($" {expression.StringValue} (");
+
+                        containedExpression.GetStringExpression(stringBuilder);
+                    }
+                    else
+                    {
+                        containedExpression.GetStringExpression(stringBuilder);
+
+                        if (containedExpression != expressions.Last())
+                        {
+                            stringBuilder.Append($" {expression.StringValue} ");
+                        }
+                    }
+                }
+
+                if (!isTopLevel)
+                {
+                    stringBuilder.Append(")");
+                }
+            }
         }
     }
 }

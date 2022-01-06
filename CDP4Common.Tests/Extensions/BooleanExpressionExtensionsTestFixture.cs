@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BooleanExpressionExtensionsTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -26,9 +26,13 @@ namespace CDP4Common.Tests.Extensions
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
 
+    using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Extensions;
+    using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     using NUnit.Framework;
 
@@ -36,7 +40,7 @@ namespace CDP4Common.Tests.Extensions
     /// Suite of tests for the <see cref="BooleanExpressionExtensions"/> class
     /// </summary>
     [TestFixture]
-    public class BooleanExpressionTestFixture
+    public class BooleanExpressionExtensionsTestFixture
     {
         private IList<BooleanExpression> booleanExpressions;
 
@@ -98,6 +102,11 @@ namespace CDP4Common.Tests.Extensions
                 { ExpressionNumber.Relational3, this.relationalExpression3 },
                 { ExpressionNumber.Relational4, this.relationalExpression4 }
             };
+
+            this.SetClassKind(this.andExpression, ClassKind.AndExpression);
+            this.SetClassKind(this.orExpression, ClassKind.OrExpression);
+            this.SetClassKind(this.exclusiveOrExpression, ClassKind.ExclusiveOrExpression);
+            this.SetClassKind(this.notExpression, ClassKind.NotExpression);
         }
 
         [Test]
@@ -246,6 +255,59 @@ namespace CDP4Common.Tests.Extensions
             {
                 CollectionAssert.DoesNotContain(toplevelCollection, this.testCaseList[expressionNumber]);
             }
+        }
+
+        [Test]
+        public void VerifyExpressionStringsAtThingLevel()
+        {
+            this.andExpression.Term.Add(this.relationalExpression1);
+            this.andExpression.Term.Add(this.relationalExpression2);
+
+            this.orExpression.Term.Add(this.relationalExpression3);
+            this.orExpression.Term.Add(this.relationalExpression4);
+
+            this.exclusiveOrExpression.Term.Add(this.orExpression);
+            this.exclusiveOrExpression.Term.Add(this.andExpression);
+
+            this.notExpression.Term = this.exclusiveOrExpression;
+
+            this.FillRelationalExpression(this.relationalExpression1, "length", 180);
+            this.FillRelationalExpression(this.relationalExpression2, "width", 40);
+            this.FillRelationalExpression(this.relationalExpression3, "mass", 100);
+            this.FillRelationalExpression(this.relationalExpression4, "accel", "pretty_fast");
+
+            Assert.AreEqual("(length = 180) AND (width = 40)", this.andExpression.ToExpressionString());
+            Assert.AreEqual("(mass = 100) OR (accel = pretty_fast)", this.orExpression.ToExpressionString());
+            Assert.AreEqual("((mass = 100) OR (accel = pretty_fast)) XOR ((length = 180) AND (width = 40))", this.exclusiveOrExpression.ToExpressionString());
+            Assert.AreEqual("NOT (((mass = 100) OR (accel = pretty_fast)) XOR ((length = 180) AND (width = 40)))", this.notExpression.ToExpressionString());
+        }
+
+        /// <summary>
+        /// Fills properties on a <see cref="RelationalExpression"/>
+        /// </summary>
+        /// <param name="relationalExpression">The <see cref="RelationalExpression"/></param>
+        /// <param name="parameterShortName">The <see cref="Parameter"/>'s ShortName'</param>
+        /// <param name="value">The <see cref="Parameter"/>'s Value</param>
+        private void FillRelationalExpression(RelationalExpression relationalExpression, string parameterShortName, object value)
+        {
+            relationalExpression.ParameterType = new SimpleQuantityKind { ShortName = parameterShortName };
+
+            this.SetClassKind(relationalExpression, ClassKind.RelationalExpression);
+
+            relationalExpression.RelationalOperator = RelationalOperatorKind.EQ;
+            relationalExpression.Value = new ValueArray<string>(new[] { value.ToString() });
+        }
+
+        /// <summary>
+        /// Sets the readonly ClassKind property of an object using reflection 
+        /// </summary>
+        /// <typeparam name="T">The <see cref="Type"/> of the object</typeparam>
+        /// <param name="obj">The object</param>
+        /// <param name="classKind">The <see cref="ClassKind"/></param>
+        private void SetClassKind<T>(T obj, ClassKind classKind)
+        {
+            var field = typeof(RelationalExpression).GetField("<ClassKind>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic);
+            field?.SetValue(obj, classKind);
         }
     }
 }

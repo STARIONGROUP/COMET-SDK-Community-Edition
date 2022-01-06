@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OrExpression.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -40,6 +40,6 @@ namespace CDP4Common.EngineeringModelData
         /// Gets the expressions that are direct children of this class
         /// </summary>
         /// <returns><see cref="IReadOnlyList{BooleanExpression}"/> containing <see cref="BooleanExpression"/>s that are direct children of this class</returns>
-        protected override IReadOnlyList<BooleanExpression> GetMyExpressions() => this.Term;
+        public override IReadOnlyList<BooleanExpression> GetMyExpressions() => this.Term;
     }
 }
