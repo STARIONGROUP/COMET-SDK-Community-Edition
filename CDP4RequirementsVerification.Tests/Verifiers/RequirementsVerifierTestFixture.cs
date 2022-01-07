@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementsVerifierTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -21,6 +21,7 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace CDP4RequirementsVerification.Tests.Verifiers
 {
     using System;
@@ -68,7 +69,7 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             this.requirement.ParametricConstraint.Add(this.parametricConstraint);
 
-            this.requirementVerifier = new RequirementVerifier(this.requirement);
+            this.requirementVerifier = new RequirementVerifier(this.requirement, null);
 
             this.iteration = new Iteration(Guid.NewGuid(), null, null);
 
@@ -109,7 +110,6 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
             await this.requirementVerifier.VerifyRequirements(this.iteration);
 
             Assert.AreEqual(RequirementStateOfCompliance.Pass, this.requirementVerifier.RequirementStateOfCompliance);
-
         }
 
         [Test]

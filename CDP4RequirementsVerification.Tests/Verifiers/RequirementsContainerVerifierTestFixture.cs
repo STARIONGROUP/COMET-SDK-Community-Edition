@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementsContainerVerifierTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -21,6 +21,7 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace CDP4RequirementsVerification.Tests.Verifiers
 {
     using System;
@@ -86,10 +87,10 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             this.requirement1.Group = this.requirementsGroup1;
 
-            this.requirementsContainerVerifier = new RequirementsContainerVerifier(this.requirementsSpecification);
+            this.requirementsContainerVerifier = new RequirementsContainerVerifier(this.requirementsSpecification, null);
 
-            this.requirementsGroupVerifier1 = new RequirementsContainerVerifier(this.requirementsGroup1);
-            this.requirementsGroupVerifier2 = new RequirementsContainerVerifier(this.requirementsGroup2);
+            this.requirementsGroupVerifier1 = new RequirementsContainerVerifier(this.requirementsGroup1, null);
+            this.requirementsGroupVerifier2 = new RequirementsContainerVerifier(this.requirementsGroup2, null);
 
             this.iteration = new Iteration(Guid.NewGuid(), null, null);
 

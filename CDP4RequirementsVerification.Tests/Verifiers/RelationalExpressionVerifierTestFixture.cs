@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RelationalExpressionVerifierTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -21,6 +21,7 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace CDP4RequirementsVerification.Tests.Verifiers
 {
     using System;
@@ -78,7 +79,7 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             this.RegisterBinaryRelationShip(parameter, this.relationalExpression);
 
-            this.relationalExpressionVerifier = new RelationalExpressionVerifier(this.relationalExpression);
+            this.relationalExpressionVerifier = new RelationalExpressionVerifier(this.relationalExpression, null);
         }
 
         [TearDown]

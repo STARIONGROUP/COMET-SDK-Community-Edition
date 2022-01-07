@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OrExpressionVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -39,7 +39,8 @@ namespace CDP4RequirementsVerification.Verifiers
         /// Initializes a new instance of the <see cref="OrExpressionVerifier"/> class.
         /// </summary>
         /// <param name="orExpression">The <see cref="OrExpression"/> that is verified.</param>
-        public OrExpressionVerifier(OrExpression orExpression)
+        /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/></param>
+        public OrExpressionVerifier(OrExpression orExpression, IRequirementVerificationConfiguration configuration) : base(configuration)
         {
             this.Expression = orExpression;
         }

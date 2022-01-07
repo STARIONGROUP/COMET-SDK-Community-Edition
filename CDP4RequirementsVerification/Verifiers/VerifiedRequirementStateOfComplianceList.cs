@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementStateOfCompliances.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -36,15 +36,25 @@ namespace CDP4RequirementsVerification.Verifiers
     /// </summary>
     public class VerifiedRequirementStateOfComplianceList : Dictionary<ParameterValueSetBase, RequirementStateOfCompliance>
     {
+        /// <summary>
+        /// The <see cref="IRequirementStateOfComplianceCalculator"/>
+        /// </summary>
         private readonly IRequirementStateOfComplianceCalculator requirementStateOfComplianceCalculator;
+
+        /// <summary>
+        /// The <see cref="IRequirementVerificationConfiguration"/>
+        /// </summary>
+        private readonly IRequirementVerificationConfiguration configuration;
 
         /// <summary>
         /// Initializes an instance of <see cref="VerifiedRequirementStateOfComplianceList"/>
         /// </summary>
         /// <param name="requirementStateOfComplianceCalculator">Implementation of <see cref="IRequirementStateOfComplianceCalculator"/> that will be used to calculate the <see cref="RequirementStateOfCompliance"/></param>
-        public VerifiedRequirementStateOfComplianceList(IRequirementStateOfComplianceCalculator requirementStateOfComplianceCalculator)
+        /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/> to be used when selecting ValueSets to calculate compliance for</param>
+        public VerifiedRequirementStateOfComplianceList(IRequirementStateOfComplianceCalculator requirementStateOfComplianceCalculator, IRequirementVerificationConfiguration configuration)
         {
             this.requirementStateOfComplianceCalculator = requirementStateOfComplianceCalculator;
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -56,7 +66,7 @@ namespace CDP4RequirementsVerification.Verifiers
         {
             foreach (var valueSet in valueSets)
             {
-                if (!this.ContainsKey(valueSet))
+                if (!this.ContainsKey(valueSet) && (this.configuration?.IsValueSetAllowed(valueSet) ?? true))
                 {
                     this.Add(valueSet, this.requirementStateOfComplianceCalculator.Calculate(valueSet, relationalExpression));
                 }

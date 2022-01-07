@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -37,7 +37,7 @@ namespace CDP4RequirementsVerification.Verifiers
     /// <summary>
     /// Class used for the verification if a <see cref="Requirement"/> is compliant to data in an <see cref="Iteration"/>  
     /// </summary>
-    public class RequirementVerifier : IHaveRequirementStateOfCompliance
+    public class RequirementVerifier : BaseVerifier, IHaveRequirementStateOfCompliance
     {
         /// <summary>
         /// The <see cref="Requirement"/> internally used for verification
@@ -79,7 +79,8 @@ namespace CDP4RequirementsVerification.Verifiers
         /// Initializes this instance of <see cref="RequirementVerifier"/> 
         /// </summary>
         /// <param name="requirement">The <see cref="Requirement"/> used for verification</param>
-        public RequirementVerifier(Requirement requirement)
+        /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/></param>
+        public RequirementVerifier(Requirement requirement, IRequirementVerificationConfiguration configuration) : base(configuration)
         {
             this.requirement = requirement;
         }
@@ -99,7 +100,7 @@ namespace CDP4RequirementsVerification.Verifiers
 
             foreach (var parametricConstraint in this.requirement.ParametricConstraint)
             {
-                var parametricConstraintVerifier = new ParametricConstraintVerifier((ParametricConstraint)parametricConstraint);
+                var parametricConstraintVerifier = new ParametricConstraintVerifier((ParametricConstraint)parametricConstraint, this.Configuration);
                 this.parametricConstraintVerifiers.Add(parametricConstraintVerifier);
 
                 tasks.Add(parametricConstraintVerifier.VerifyRequirements(iteration));

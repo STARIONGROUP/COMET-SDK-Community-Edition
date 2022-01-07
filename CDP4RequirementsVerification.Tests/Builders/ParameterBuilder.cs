@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterBuilder.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -21,9 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace CDP4RequirementsVerification.Tests.Builders
 {
     using System;
+    using System.Linq;
 
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
@@ -36,9 +38,9 @@ namespace CDP4RequirementsVerification.Tests.Builders
     public class ParameterBuilder
     {
         /// <summary>
-        /// The <see cref="Option"/>
+        /// The <see cref="Option"/>s
         /// </summary>
-        private Option option;
+        private Option[] options;
 
         /// <summary>
         /// The <see cref="ScalarParameterType"/>
@@ -46,9 +48,9 @@ namespace CDP4RequirementsVerification.Tests.Builders
         private ScalarParameterType parameterType;
 
         /// <summary>
-        /// The <see cref="ValueArray{String}"/>
+        /// The <see cref="ValueArray{T}"/>s
         /// </summary>
-        private ValueArray<string> values;
+        private ValueArray<string>[] values;
 
         /// <summary>
         /// The <see cref="ElementDefinition"/>
@@ -60,9 +62,9 @@ namespace CDP4RequirementsVerification.Tests.Builders
         /// </summary>
         /// <param name="option">The <see cref="Option"/></param>
         /// <returns><see cref="ParameterBuilder"/> "this"</returns>
-        public ParameterBuilder WithOption(Option option)
+        public ParameterBuilder WithOptions(params Option[] options)
         {
-            this.option = option;
+            this.options = options;
 
             return this;
         }
@@ -88,7 +90,19 @@ namespace CDP4RequirementsVerification.Tests.Builders
         /// <returns><see cref="ParameterBuilder"/> "this"</returns>
         public ParameterBuilder WithValue(object value)
         {
-            this.values = new ValueArray<string>(new[] { value.ToString() });
+            this.values = new [] { new ValueArray<string>(new[] { value.ToString() })};
+
+            return this;
+        }
+
+        /// <summary>
+        /// Create a <see cref="ValueArray{String}"/> to be added to the <see cref="Parameter"/> when the <see cref="Build"/> method is used
+        /// </summary>
+        /// <param name="values">The values to be converted to <see cref="ValueArray{String}"/>s</param>
+        /// <returns><see cref="ParameterBuilder"/> "this"</returns>
+        public ParameterBuilder WithValues(params object[] values)
+        {
+            this.values = values.Select(x => new ValueArray<string> (new [] { x.ToString() })).ToArray();
 
             return this;
         }
@@ -116,15 +130,30 @@ namespace CDP4RequirementsVerification.Tests.Builders
                 ParameterType = this.parameterType ?? throw new NullReferenceException($"{nameof(this.parameterType)} not set")
             };
 
-            var parameterValueSet =
-                new ParameterValueSet
-                {
-                    ActualOption = this.option,
-                    ValueSwitch = ParameterSwitchKind.MANUAL,
-                    Manual = this.values ?? throw new NullReferenceException($"{nameof(this.values)} not set")
-                };
+            if (this.values == null)
+            {
+                throw new NullReferenceException($"{nameof(this.values)} not set");
+            }
 
-            parameter.ValueSet.Add(parameterValueSet);
+            for (var i=0; i < this.options.Length;i++)
+            {
+                var option = this.options[i];
+
+                var parameterValueSet =
+                    new ParameterValueSet
+                    {
+                        ActualOption = option,
+                        ValueSwitch = ParameterSwitchKind.MANUAL,
+                        Manual = this.values.Length == 1 ? this.values[0] : this.values[i]
+                    };
+
+                parameter.ValueSet.Add(parameterValueSet);
+            }
+
+            if (this.options.Length > 1)
+            {
+                parameter.IsOptionDependent = true;
+            }
 
             this.elementDefinition?.Parameter.Add(parameter);
 

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementsContainerVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -38,7 +38,7 @@ namespace CDP4RequirementsVerification.Verifiers
     /// <summary>
     /// Class used for the verification if a <see cref="RequirementsContainer"/> is compliant to data in an <see cref="Iteration"/>  
     /// </summary>
-    public class RequirementsContainerVerifier : IHaveRequirementStateOfCompliance
+    public class RequirementsContainerVerifier : BaseVerifier, IHaveRequirementStateOfCompliance
     {
         /// <summary>
         /// The <see cref="RequirementsContainer"/> internally used for verification
@@ -75,7 +75,8 @@ namespace CDP4RequirementsVerification.Verifiers
         /// Initializes this instance of <see cref="RequirementsContainerVerifier"/> 
         /// </summary>
         /// <param name="container">The container <see cref="Thing"/></param>
-        public RequirementsContainerVerifier(RequirementsContainer container)
+        /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/></param>
+        public RequirementsContainerVerifier(RequirementsContainer container, IRequirementVerificationConfiguration configuration) : base(configuration)
         {
             this.Container = container;
         }
@@ -94,7 +95,7 @@ namespace CDP4RequirementsVerification.Verifiers
 
             foreach (var requirementsGroup in this.Container.Group)
             {
-                var requirementsContainerVerifier = new RequirementsContainerVerifier(requirementsGroup);
+                var requirementsContainerVerifier = new RequirementsContainerVerifier(requirementsGroup, this.Configuration);
                 verifiers.Add(requirementsContainerVerifier);
                 tasks.Add(requirementsContainerVerifier.VerifyRequirements(iteration));
             }
@@ -103,7 +104,7 @@ namespace CDP4RequirementsVerification.Verifiers
             {
                 foreach (var requirement in this.GetAllowedRequirements(requirementsSpecification.Requirement))
                 {
-                    var requirementsVerifier = new RequirementVerifier(requirement);
+                    var requirementsVerifier = new RequirementVerifier(requirement, this.Configuration);
                     verifiers.Add(requirementsVerifier);
                     tasks.Add(requirementsVerifier.VerifyRequirements(iteration));
                 }
@@ -119,7 +120,7 @@ namespace CDP4RequirementsVerification.Verifiers
                 {
                     if (allRelatedGroups.Contains(requirement.Group))
                     {
-                        var requirementsVerifier = new RequirementVerifier(requirement);
+                        var requirementsVerifier = new RequirementVerifier(requirement, this.Configuration);
                         verifiers.Add(requirementsVerifier);
                         tasks.Add(requirementsVerifier.VerifyRequirements(iteration));
                     }
