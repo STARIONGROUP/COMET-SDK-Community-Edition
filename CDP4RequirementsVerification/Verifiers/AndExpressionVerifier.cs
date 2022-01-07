@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AndExpressionVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -39,7 +39,8 @@ namespace CDP4RequirementsVerification.Verifiers
         /// Initializes a new instance of the <see cref="AndExpressionVerifier"/> class.
         /// </summary>
         /// <param name="andExpression">The <see cref="AndExpression"/> that is verified.</param>
-        public AndExpressionVerifier(AndExpression andExpression)
+        /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/></param>
+        public AndExpressionVerifier(AndExpression andExpression, IRequirementVerificationConfiguration configuration) : base(configuration)
         {
             this.Expression = andExpression;
         }

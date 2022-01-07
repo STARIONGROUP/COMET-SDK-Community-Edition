@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BooleanExpressionVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -37,7 +37,7 @@ namespace CDP4RequirementsVerification.Verifiers
     /// Base class for the verification if a <see cref="BooleanExpression"/> is compliant to data in an <see cref="Iteration"/>  
     /// </summary>
     /// <typeparam name="T">The type of <see cref="BooleanExpression"/> that is used for this verifier.</typeparam>
-    public abstract class BooleanExpressionVerifier<T> : IBooleanExpressionVerifier where T : BooleanExpression
+    public abstract class BooleanExpressionVerifier<T> : BaseVerifier, IBooleanExpressionVerifier where T : BooleanExpression
     {
         /// <summary>
         /// Backing field for <see cref="RequirementStateOfCompliance"/>
@@ -53,6 +53,14 @@ namespace CDP4RequirementsVerification.Verifiers
         /// Indication that the CDPMessageBus can be used.
         /// </summary>
         protected bool IsMessageBusActive { get; set; } = true;
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="BooleanExpressionVerifier{T}"/> class.
+        /// </summary>
+        /// <param name="configuration"></param>
+        protected BooleanExpressionVerifier(IRequirementVerificationConfiguration configuration) : base(configuration)
+        {
+        }
 
         /// <summary>
         /// The current <see cref="CDP4RequirementsVerification.RequirementStateOfCompliance"/>

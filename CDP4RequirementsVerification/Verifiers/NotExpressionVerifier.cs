@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NotExpressionVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -38,7 +38,8 @@ namespace CDP4RequirementsVerification.Verifiers
         /// Initializes a new instance of the <see cref="AndExpressionVerifier"/> class.
         /// </summary>
         /// <param name="notExpression">The <see cref="AndExpressionVerifier"/> that is verified.</param>
-        public NotExpressionVerifier(NotExpression notExpression)
+        /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/></param>
+        public NotExpressionVerifier(NotExpression notExpression, IRequirementVerificationConfiguration configuration) : base(configuration)
         {
             this.Expression = notExpression;
         }

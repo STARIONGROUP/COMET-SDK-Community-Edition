@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParametricConstraintVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -29,16 +29,16 @@ namespace CDP4RequirementsVerification.Verifiers
     using System.Threading.Tasks;
 
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Extensions;
 
     using CDP4Dal;
 
     using CDP4RequirementsVerification.Events;
-    using CDP4Common.Extensions;
 
     /// <summary>
     /// Class used for the verification if a <see cref="ParametricConstraint"/> is compliant to data in an <see cref="Iteration"/>  
     /// </summary>
-    public class ParametricConstraintVerifier : IBooleanExpressionVerifier
+    public class ParametricConstraintVerifier : BaseVerifier, IBooleanExpressionVerifier
     {
         /// <summary>
         /// The <see cref="ParametricConstraint"/> internally used for verification
@@ -80,7 +80,8 @@ namespace CDP4RequirementsVerification.Verifiers
         /// Initializes this instance of <see cref="ParametricConstraintVerifier"/>
         /// </summary>
         /// <param name="parametricConstraint">The <see cref="ParametricConstraint"/> that is used for verification</param>
-        public ParametricConstraintVerifier(ParametricConstraint parametricConstraint)
+        /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/></param>
+        public ParametricConstraintVerifier(ParametricConstraint parametricConstraint, IRequirementVerificationConfiguration configuration) : base(configuration)
         {
             this.parametricConstraint = parametricConstraint;
         }
@@ -155,27 +156,27 @@ namespace CDP4RequirementsVerification.Verifiers
         {
             if (booleanExpression is NotExpression notExpression)
             {
-                return new NotExpressionVerifier(notExpression);
+                return new NotExpressionVerifier(notExpression, this.Configuration);
             }
 
             if (booleanExpression is AndExpression andExpression)
             {
-                return new AndExpressionVerifier(andExpression);
+                return new AndExpressionVerifier(andExpression, this.Configuration);
             }
 
             if (booleanExpression is OrExpression orExpression)
             {
-                return new OrExpressionVerifier(orExpression);
+                return new OrExpressionVerifier(orExpression, this.Configuration);
             }
 
             if (booleanExpression is ExclusiveOrExpression exclusiveOrExpression)
             {
-                return new ExclusiveOrExpressionVerifier(exclusiveOrExpression);
+                return new ExclusiveOrExpressionVerifier(exclusiveOrExpression, this.Configuration);
             }
 
             if (booleanExpression is RelationalExpression relationalExpression)
             {
-                return new RelationalExpressionVerifier(relationalExpression);
+                return new RelationalExpressionVerifier(relationalExpression, this.Configuration);
             }
 
             return null;
