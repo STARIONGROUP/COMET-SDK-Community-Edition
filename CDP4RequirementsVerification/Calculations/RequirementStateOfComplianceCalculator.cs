@@ -136,7 +136,7 @@ namespace CDP4RequirementsVerification.Calculations
                     break;
 
                 case ClassKind.TextParameterType:
-                    comparer = new DateTimeValueSetComparer();
+                    comparer = new StringValueSetComparer();
 
                     break;
 

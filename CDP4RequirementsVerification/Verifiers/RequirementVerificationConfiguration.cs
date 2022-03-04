@@ -24,8 +24,11 @@
 
 namespace CDP4RequirementsVerification.Verifiers
 {
+    using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Helpers;
 
     /// <summary>
     /// Implements the <see cref="IRequirementVerificationConfiguration"/> for usage as general configuration setting during 
@@ -34,9 +37,41 @@ namespace CDP4RequirementsVerification.Verifiers
     public class RequirementVerificationConfiguration : IRequirementVerificationConfiguration
     {
         /// <summary>
+        /// Backing field for the <see cref="Option"/> property
+        /// </summary>
+        private Option option;
+
+        /// <summary>
         /// The <see cref="Option"/> to use during RelationalExpression verification
         /// </summary>
-        public Option Option { get; set; }
+        /// <remarks>
+        /// For performance reasons, the <see cref="NestedParameters"/> property is set as a side effect to setting this Option property.
+        /// This makes sure that the <see cref="NestedParameters"/> property is "created" only once per Option as the <see cref="IsValueSetAllowed"/>
+        /// method can be run from multiple threads simultaneously.
+        /// </remarks>
+        public Option Option
+        {
+            get => this.option;
+            set
+            {
+                this.option = value;
+
+                if (this.option == null)
+                {
+                    this.NestedParameters = new List<NestedParameter>();
+                    return;
+                }
+
+                var nestedElementTreeGenerator = new NestedElementTreeGenerator();
+
+                this.NestedParameters = nestedElementTreeGenerator.GetNestedParameters(this.option).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Holds a list of NestedParameters for the current option
+        /// </summary>
+        private List<NestedParameter> NestedParameters { get; set; } = new List<NestedParameter>();
 
         /// <summary>
         /// Checks if a <see cref="ParameterValueSetBase"/> is eligible for usage during RelationalExpression verification
@@ -45,9 +80,20 @@ namespace CDP4RequirementsVerification.Verifiers
         /// <returns>A boolean indicating that usage of the <see cref="ParameterValueSetBase"/> is eligible</returns>
         public bool IsValueSetAllowed(ParameterValueSetBase valueSet)
         {
-            if (this.Option != null && ((valueSet.Container as ParameterOrOverrideBase)?.IsOptionDependent ?? false))
+            if (this.Option != null)
             {
-                return valueSet.ActualOption == this.Option;
+                if (valueSet.Container is ParameterOrOverrideBase parameterOrOverrideBase)
+                {
+                    if (parameterOrOverrideBase.IsOptionDependent)
+                    {
+                        return valueSet.ActualOption == this.Option;
+                    }
+
+                    if (this.NestedParameters.All(x => x.AssociatedParameter != parameterOrOverrideBase))
+                    {
+                        return false;
+                    }
+                }
             }
 
             return true;
