@@ -44,6 +44,11 @@ namespace CDP4RequirementsVerification.Verifiers
         /// <summary>
         /// The <see cref="Option"/> to use during RelationalExpression verification
         /// </summary>
+        /// <remarks>
+        /// For performance reasons, the <see cref="NestedParameters"/> property is set as a side effect to setting this Option property.
+        /// This makes sure that the <see cref="NestedParameters"/> property is "created" only once per Option as the <see cref="IsValueSetAllowed"/>
+        /// method can be run from multiple threads simultaneously.
+        /// </remarks>
         public Option Option
         {
             get => this.option;
