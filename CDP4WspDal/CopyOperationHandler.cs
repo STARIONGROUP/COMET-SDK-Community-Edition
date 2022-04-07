@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CopyOperationHandler.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4WspDal
 {
@@ -30,11 +28,14 @@ namespace CDP4WspDal
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
+
     using Poco = CDP4Common.CommonData.Thing;
 
     /// <summary>

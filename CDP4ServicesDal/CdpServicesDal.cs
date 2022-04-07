@@ -24,12 +24,9 @@
 
 namespace CDP4ServicesDal
 {
-#if NETFRAMEWORK
-    using System.ComponentModel.Composition;
-#endif
-
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.Composition;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -63,9 +60,7 @@ namespace CDP4ServicesDal
     /// Annex C, REST API
     /// </summary>
     [DalExport("COMET/CDP4 Services", "A COMET, or CDP4 Services Data Access Layer", "1.2.0", DalType.Web)]
-#if NETFRAMEWORK
     [PartCreationPolicy(CreationPolicy.NonShared)]
-#endif
     public class CdpServicesDal : Dal
     {
         /// <summary>

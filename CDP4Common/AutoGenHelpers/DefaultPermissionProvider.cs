@@ -26,18 +26,14 @@ namespace CDP4Common.Helpers
 {
     using System;
     using System.Collections.Generic;
-#if NETFRAMEWORK
     using System.ComponentModel.Composition;
-#endif
     using CDP4Common.CommonData;
 
     /// <summary>
     /// A utility class that supplies common functionalities to the Service layer.
     /// </summary>
-#if NETFRAMEWORK
     [Export(typeof(IDefaultPermissionProvider))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-#endif
     public class DefaultPermissionProvider : IDefaultPermissionProvider
     {
         /// <summary>
