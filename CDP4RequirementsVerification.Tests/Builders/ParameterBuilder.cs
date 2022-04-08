@@ -135,24 +135,37 @@ namespace CDP4RequirementsVerification.Tests.Builders
                 throw new NullReferenceException($"{nameof(this.values)} not set");
             }
 
-            for (var i=0; i < this.options.Length;i++)
-            {
-                var option = this.options[i];
-
-                var parameterValueSet =
-                    new ParameterValueSet
-                    {
-                        ActualOption = option,
-                        ValueSwitch = ParameterSwitchKind.MANUAL,
-                        Manual = this.values.Length == 1 ? this.values[0] : this.values[i]
-                    };
-
-                parameter.ValueSet.Add(parameterValueSet);
-            }
-
-            if (this.options.Length > 1)
+            if (this.options != null && this.options.Length > 0)
             {
                 parameter.IsOptionDependent = true;
+
+                for (var i=0; i < this.options.Length;i++)
+                {
+                    var option = this.options[i];
+
+                    var parameterValueSet =
+                        new ParameterValueSet
+                        {
+                            ActualOption = option,
+                            ValueSwitch = ParameterSwitchKind.MANUAL,
+                            Manual = this.values.Length == 1 ? this.values[0] : this.values[i],
+                            Formula = new ValueArray<string>(new [] { "-" })
+                        };
+
+                    parameter.ValueSet.Add(parameterValueSet);
+                }
+            }
+            else
+            {
+                var parameterValueSet =
+                   new ParameterValueSet
+                   {
+                       ValueSwitch = ParameterSwitchKind.MANUAL,
+                       Manual = this.values[0],
+                       Formula = new ValueArray<string>(new[] { "-" })
+                   };
+
+                parameter.ValueSet.Add(parameterValueSet);
             }
 
             this.elementDefinition?.Parameter.Add(parameter);

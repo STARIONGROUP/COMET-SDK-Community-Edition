@@ -25,6 +25,7 @@
 namespace CDP4RequirementsVerification.Tests.Verifiers
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using CDP4Common.EngineeringModelData;
@@ -75,7 +76,8 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
         private Option option2;
 
-        private ElementDefinition elementDefinition;
+        private ElementDefinition elementDefinition1;
+        private ElementDefinition elementDefinition2;
         private ParametricConstraintVerifier option1ConfigurationParametricConstraintVerifier;
         private ParametricConstraintVerifier option2ConfigurationParametricConstraintVerifier;
 
@@ -130,36 +132,41 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             this.iteration = new Iteration(Guid.NewGuid(), null, null);
 
-            this.option1 = new Option();
-            this.option2 = new Option();
+            this.option1 = new Option(Guid.NewGuid(), null, null);
+            this.option2 = new Option(Guid.NewGuid(), null, null);
             this.iteration.Option.Add(this.option1);
             this.iteration.Option.Add(this.option2);
 
-            this.nullConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, null);
-            this.option1ConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, new RequirementVerificationConfiguration { Option = this.option1});
-            this.option2ConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, new RequirementVerificationConfiguration { Option = this.option2 });
+            this.elementDefinition1 = new ElementDefinition(Guid.NewGuid(), null, null);
+            this.elementDefinition2 = new ElementDefinition(Guid.NewGuid(), null, null);
 
-            this.elementDefinition = new ElementDefinition(Guid.NewGuid(), null, null);
-            var elementUsage = new ElementUsage(Guid.NewGuid(), null, null) { ElementDefinition = this.elementDefinition };
-            this.elementDefinition.ContainedElement.Add(elementUsage);
+            var elementUsage = new ElementUsage(Guid.NewGuid(), null, null) { ElementDefinition = this.elementDefinition2 };
+            this.elementDefinition1.ContainedElement.Add(elementUsage);
+
+            this.iteration.Element.Add(this.elementDefinition1);
+            this.iteration.TopElement = this.elementDefinition1;
 
             this.parameter =
                 new ParameterBuilder()
                     .WithOptions(this.option1)
                     .WithSimpleQuantityKindParameterType()
                     .WithValues(OkValue)
-                    .AddToElementDefinition(this.elementDefinition)
+                    .AddToElementDefinition(this.elementDefinition1)
                     .Build();
 
-            this.iteration.Element.Add(this.elementDefinition);
-
             var parameterOverride = new ParameterOverride(Guid.NewGuid(), null, null) { Parameter = this.parameter };
-            this.parameterOverrideValueSet = new ParameterOverrideValueSet { ValueSwitch = ParameterSwitchKind.MANUAL, Manual = new ValueArray<string>(new[] { OkValue }) };
+            this.parameterOverrideValueSet = new ParameterOverrideValueSet { ValueSwitch = ParameterSwitchKind.MANUAL, Manual = new ValueArray<string>(new[] { OkValue }), Formula = new ValueArray<string>(new[] { "-" })};
+            this.parameterOverrideValueSet.ParameterValueSet = this.parameter.ValueSet.First();
+
             parameterOverride.ValueSet.Add(this.parameterOverrideValueSet);
             elementUsage.ParameterOverride.Add(parameterOverride);
 
             this.RegisterBinaryRelationShip(this.parameter, this.relationalExpression1);
             this.RegisterBinaryRelationShip(parameterOverride, this.relationalExpression2);
+
+            this.nullConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, null);
+            this.option1ConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, new RequirementVerificationConfiguration { Option = this.option1 });
+            this.option2ConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, new RequirementVerificationConfiguration { Option = this.option2 });
         }
 
         private void RegisterBinaryRelationShip(ParameterOrOverrideBase parameter, RelationalExpression expression)
@@ -284,14 +291,14 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
                 .WithOptions(this.option1)
                 .WithSimpleQuantityKindParameterType()
                 .WithValue(OkValue)
-                .AddToElementDefinition(this.elementDefinition)
+                .AddToElementDefinition(this.elementDefinition1)
                 .Build();
 
             var parameter2 = new ParameterBuilder()
                 .WithOptions(this.option1)
                 .WithSimpleQuantityKindParameterType()
                 .WithValue(OkValue)
-                .AddToElementDefinition(this.elementDefinition)
+                .AddToElementDefinition(this.elementDefinition1)
                 .Build();
 
             this.RegisterBinaryRelationShip(parameter1, this.relationalExpression3);
@@ -329,14 +336,14 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
                 .WithOptions(this.option1)
                 .WithSimpleQuantityKindParameterType()
                 .WithValue(NotOkValue)
-                .AddToElementDefinition(this.elementDefinition)
+                .AddToElementDefinition(this.elementDefinition1)
                 .Build();
 
             var parameter2 = new ParameterBuilder()
                 .WithOptions(this.option1)
                 .WithSimpleQuantityKindParameterType()
                 .WithValue(NotOkValue)
-                .AddToElementDefinition(this.elementDefinition)
+                .AddToElementDefinition(this.elementDefinition1)
                 .Build();
 
             this.RegisterBinaryRelationShip(parameter1, this.relationalExpression3);
@@ -373,14 +380,14 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
                 .WithOptions(this.option1)
                 .WithSimpleQuantityKindParameterType()
                 .WithValue(NotOkValue)
-                .AddToElementDefinition(this.elementDefinition)
+                .AddToElementDefinition(this.elementDefinition1)
                 .Build();
 
             var parameter2 = new ParameterBuilder()
                 .WithOptions(this.option1)
                 .WithSimpleQuantityKindParameterType()
                 .WithValue(OkValue)
-                .AddToElementDefinition(this.elementDefinition)
+                .AddToElementDefinition(this.elementDefinition1)
                 .Build();
 
             this.RegisterBinaryRelationShip(parameter1, this.relationalExpression3);
@@ -417,14 +424,14 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
                 .WithOptions(this.option1, this.option2)
                 .WithSimpleQuantityKindParameterType()
                 .WithValues(NotOkValue, OkValue)
-                .AddToElementDefinition(this.elementDefinition)
+                .AddToElementDefinition(this.elementDefinition1)
                 .Build();
 
             var parameter2 = new ParameterBuilder()
                 .WithOptions(this.option1, this.option2)
                 .WithSimpleQuantityKindParameterType()
                 .WithValues(OkValue, NotOkValue)
-                .AddToElementDefinition(this.elementDefinition)
+                .AddToElementDefinition(this.elementDefinition1)
                 .Build();
 
             this.RegisterBinaryRelationShip(parameter1, this.relationalExpression3);
@@ -461,14 +468,14 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
                 .WithOptions(this.option1, this.option2)
                 .WithSimpleQuantityKindParameterType()
                 .WithValues(OkValue, NotOkValue)
-                .AddToElementDefinition(this.elementDefinition)
+                .AddToElementDefinition(this.elementDefinition1)
                 .Build();
 
             var parameter2 = new ParameterBuilder()
                 .WithOptions(this.option1, this.option2)
                 .WithSimpleQuantityKindParameterType()
                 .WithValues(NotOkValue, OkValue)
-                .AddToElementDefinition(this.elementDefinition)
+                .AddToElementDefinition(this.elementDefinition1)
                 .Build();
 
             this.RegisterBinaryRelationShip(parameter1, this.relationalExpression3);
@@ -478,11 +485,11 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.option2ConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option2ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.option2ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
+            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
+            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
+            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
 
             Assert.AreEqual(RequirementStateOfCompliance.Failed, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
             Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
@@ -494,7 +501,7 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
             this.notExpression.Term = this.exclusiveOrExpression;
             await this.option2ConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.option2ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.option2ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
             Assert.AreEqual(RequirementStateOfCompliance.Failed, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
         }
     }
