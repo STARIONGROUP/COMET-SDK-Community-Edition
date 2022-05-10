@@ -494,7 +494,7 @@ namespace CDP4ServicesDal
 
             var openToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
 
-            this.httpClient = this.CreateHttpClient(credentials);
+            this.httpClient = this.CreateHttpClient(credentials, this.httpClient);
 
             var watch = Stopwatch.StartNew();
             
@@ -548,6 +548,34 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
+        /// Opens a connection to a data source <see cref="Uri"/> speci1fied by the provided <see cref="Credentials"/>
+        /// </summary>
+        /// <param name="credentials">
+        /// The <see cref="Dal.Credentials"/> that are used to connect to the data source such as username, password and <see cref="Uri"/>
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The cancellation Token.
+        /// </param>
+        /// <param name="httpClient">
+        /// The injected <see cref="HttpClient"/> that will be used to set the cached <see cref="HttpClient"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{T}"/> that the services return when connecting to the <see cref="CDP4Common.SiteDirectoryData.SiteDirectory"/>.
+        /// </returns>
+        public async Task<IEnumerable<Thing>> Open(Credentials credentials, CancellationToken cancellationToken, HttpClient httpClient)
+        {
+            if (httpClient == null)
+            {
+                throw new ArgumentNullException(nameof(httpClient), $"The {nameof(httpClient)} may not be null");
+            }
+
+            this.httpClient = httpClient;
+
+            return await this.Open(credentials, cancellationToken);
+        }
+
+
+        /// <summary>
         /// Create a new <see cref="HttpClient"/>
         /// </summary>
         /// <param name="credentials">
@@ -556,15 +584,27 @@ namespace CDP4ServicesDal
         /// <returns>
         /// An instance of <see cref="HttpClient"/> with the DefaultRequestHeaders set
         /// </returns>
-        private HttpClient CreateHttpClient(Credentials credentials)
+        private HttpClient CreateHttpClient(Credentials credentials, HttpClient injectedClient)
         {
             HttpClient result;
+
+            if (credentials.ProxySettings != null && injectedClient != null)
+            {
+                throw new ArgumentException($"The {nameof(credentials)} and {nameof(injectedClient)} are both not null, this is not allowed");
+            }
 
             if (credentials.ProxySettings == null)
             {
                 Logger.Debug("creating HttpClient without proxy");
 
-                result = new HttpClient();
+                if (injectedClient == null)
+                {
+                    result = new HttpClient();
+                }
+                else
+                {
+                    result = injectedClient;
+                }
             }
             else
             {
