@@ -459,7 +459,7 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
-        /// Opens a connection to a data source <see cref="Uri"/> speci1fied by the provided <see cref="Credentials"/>
+        /// Opens a connection to a data source <see cref="Uri"/> specified by the provided <see cref="Credentials"/>
         /// </summary>
         /// <param name="credentials">
         /// The <see cref="Dal.Credentials"/> that are used to connect to the data source such as username, password and <see cref="Uri"/>
@@ -548,7 +548,7 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
-        /// Opens a connection to a data source <see cref="Uri"/> speci1fied by the provided <see cref="Credentials"/>
+        /// Opens a connection to a data source <see cref="Uri"/> specified by the provided <see cref="Credentials"/>
         /// </summary>
         /// <param name="credentials">
         /// The <see cref="Dal.Credentials"/> that are used to connect to the data source such as username, password and <see cref="Uri"/>
@@ -580,6 +580,9 @@ namespace CDP4ServicesDal
         /// </summary>
         /// <param name="credentials">
         /// The <see cref="Credentials"/> used to set the connection and authentication settings as well as the proxy server settings
+        /// </param>
+        /// <param name="injectedClient">
+        /// The injected <see cref="HttpClient"/> that will be used to created the returned <see cref="HttpClient"/>
         /// </param>
         /// <returns>
         /// An instance of <see cref="HttpClient"/> with the DefaultRequestHeaders set

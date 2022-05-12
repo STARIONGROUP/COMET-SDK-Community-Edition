@@ -140,7 +140,47 @@ namespace CDP4ServicesDal.Tests
 
             var amountOfDtos = result.ToList().Count;
 
-            Assert.AreEqual(86, amountOfDtos);
+            Assert.That(amountOfDtos, Is.EqualTo(86));
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
+        public async Task Verify_That_Open_with_provided_httpclient_Returns_DTOs()
+        {
+            var uriBuilder = new UriBuilder(this.credentials.Uri) { Path = "/Data/Restore" };
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
+            await httpClient.PostAsync(uriBuilder.Uri, null);
+
+            httpClient = new HttpClient();
+            var dal = new CdpServicesDal();
+            var result = await dal.Open(this.credentials, new CancellationToken(), httpClient);
+
+            var amountOfDtos = result.ToList().Count;
+
+            Assert.That(amountOfDtos, Is.EqualTo(86));
+        }
+
+        [Test]
+        public void Verify_That_When_Open_with_null_httpclient_throws_exception()
+        {
+            HttpClient httpClient = null;
+            var dal = new CdpServicesDal();
+
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await dal.Open(this.credentials, new CancellationToken(), httpClient));            
+        }
+
+        [Test]
+        public void Verify_That_When_Open_with_httpclient_and_proxysettings_throws_exception()
+        {
+            var httpClient = new HttpClient(); ;
+            var dal = new CdpServicesDal();
+
+            var proxySettings = new ProxySettings(new Uri("http://proxy.com"), "username", "password");
+
+            this.credentials = new Credentials("admin", "pass", this.uri, proxySettings);
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await dal.Open(this.credentials, new CancellationToken(), httpClient));
         }
 
         [Test]
