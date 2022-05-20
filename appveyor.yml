@@ -29,7 +29,7 @@ for:
 configuration: Debug
 install:
   - choco install opencover.portable --version=4.7.922
-  - dotnet tool install --global dotnet-sonarscanner --Version 5.5.3
+  - dotnet tool install --global dotnet-sonarscanner --version 5.5.3
 
 before_build:
   - cmd: nuget restore CDP4-SDK.sln
