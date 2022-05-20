@@ -64,7 +64,7 @@ namespace CDP4Dal.DAL
         /// </summary>
         protected Dal()
         {
-            #if NET45 || NET451 || NET452 || NET46 || NET461 || NET462
+            #if NET46 || NET461 || NET462
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
             #endif
 

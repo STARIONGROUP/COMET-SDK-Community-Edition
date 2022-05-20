@@ -61,6 +61,7 @@ namespace CDP4Dal.Tests
         private CDP4Common.DTO.PrefixedUnit prefixedUnitType;
         private CDP4Common.DTO.DerivedUnit derivedUnitType;
         private CDP4Common.DTO.SimpleUnit simpleUnitUnitType;
+        private CDP4Common.DTO.BinaryRelationship binaryRelationship;
 
         [SetUp]
         public void SetUp()
@@ -83,6 +84,8 @@ namespace CDP4Dal.Tests
             this.derivedUnitType = new CDP4Common.DTO.DerivedUnit(Guid.NewGuid(), 0);
             this.simpleUnitUnitType = new CDP4Common.DTO.SimpleUnit(Guid.NewGuid(), 0);
 
+            this.binaryRelationship = new CDP4Common.DTO.BinaryRelationship(Guid.NewGuid(), 0);
+
             this.person.TelephoneNumber.Add(phone1.Iid);
             this.person.TelephoneNumber.Add(phone2.Iid);
             this.person.TelephoneNumber.Add(phone3.Iid);
@@ -98,6 +101,8 @@ namespace CDP4Dal.Tests
             this.testInput.Add(this.prefixedUnitType);
             this.testInput.Add(this.derivedUnitType);
             this.testInput.Add(this.simpleUnitUnitType);
+
+            this.testInput.Add(this.binaryRelationship);
         }
 
         [TearDown]
@@ -283,6 +288,22 @@ namespace CDP4Dal.Tests
             CDPMessageBus.Current.Listen<SessionEvent>().Subscribe(x => this.MesssageReceived());
             CDPMessageBus.Current.SendMessage(sessionEvent, null, null);
             Assert.AreEqual(1, this.messagesReceivedCounter);
+        }
+
+        [Test]
+        public async Task VerifyThatSubscribeToTypeSuperclassGetsEvent2()
+        {
+            // The ViewModel subscribes to events
+            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(Relationship)).Subscribe(x => this.OnEvent(x.ChangedThing));
+
+            // The assembler will raise and event when something changes
+            var assembler = new Assembler(this.uri);
+            await assembler.Synchronize(this.testInput);
+
+            // Check that the viewModel catches the event
+            Assert.AreEqual(1, this.cache.Count);
+
+            Assert.IsTrue(this.cache.Any(p => p.Iid == this.binaryRelationship.Iid));
         }
 
         [Test]
