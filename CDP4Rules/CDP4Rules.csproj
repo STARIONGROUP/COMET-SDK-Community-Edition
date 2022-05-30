@@ -19,7 +19,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [FIX] Beautify code based on SonarCube advice
+	    [Drop] support for net45;net451;net452
     </PackageReleaseNotes>
   </PropertyGroup>
 

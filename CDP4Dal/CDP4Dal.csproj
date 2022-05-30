@@ -20,6 +20,7 @@
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
       [Update] .Net Framework to System.Reactive 4.1.5
+      [Drop] support for net45;net451;net452
     </PackageReleaseNotes>
   </PropertyGroup>
 
