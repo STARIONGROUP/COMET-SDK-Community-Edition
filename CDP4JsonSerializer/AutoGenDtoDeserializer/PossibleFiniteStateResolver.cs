@@ -57,6 +57,11 @@ namespace CDP4JsonSerializer
                 possibleFiniteState.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["attachment"].IsNullOrEmpty())
+            {
+                possibleFiniteState.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
+            }
+
             if (!jObject["definition"].IsNullOrEmpty())
             {
                 possibleFiniteState.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());

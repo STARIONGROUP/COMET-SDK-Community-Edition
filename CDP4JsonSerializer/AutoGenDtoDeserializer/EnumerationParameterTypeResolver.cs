@@ -62,6 +62,11 @@ namespace CDP4JsonSerializer
                 enumerationParameterType.AllowMultiSelect = jObject["allowMultiSelect"].ToObject<bool>();
             }
 
+            if (!jObject["attachment"].IsNullOrEmpty())
+            {
+                enumerationParameterType.Attachment.AddRange(jObject["attachment"].ToObject<IEnumerable<Guid>>());
+            }
+
             if (!jObject["category"].IsNullOrEmpty())
             {
                 enumerationParameterType.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());

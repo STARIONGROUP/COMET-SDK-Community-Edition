@@ -44,7 +44,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(Iteration), "DiagramCanvas")]
-    public sealed partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
+    public partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DiagramCanvas"/> class.
@@ -71,7 +71,21 @@ namespace CDP4Common.DTO
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
-        public DateTime CreatedOn { get; set; }
+        public virtual DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Description.
+        /// </summary>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PublicationState.
+        /// </summary>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual PublicationState PublicationState { get; set; }
 
         /// <summary>
         /// Gets the route for the current <see ref="DiagramCanvas"/>.
@@ -118,6 +132,8 @@ namespace CDP4Common.DTO
 
             this.CreatedOn = original.CreatedOn;
 
+            this.Description = original.Description;
+
             foreach (var guid in original.DiagramElement)
             {
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
@@ -144,6 +160,8 @@ namespace CDP4Common.DTO
             this.ModifiedOn = original.ModifiedOn;
 
             this.Name = original.Name;
+
+            this.PublicationState = original.PublicationState;
 
             this.ThingPreference = original.ThingPreference;
         }

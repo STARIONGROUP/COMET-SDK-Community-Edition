@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParticipantRoleTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Alex Vorobiev, Naron Phou, Patxi Ozkoidi, Alexander van Delft, Nathanael Smiechowski, Ahmed Ahmed, Simon Wood
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,13 +21,14 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.SiteDirectoryData;
+    
     using NUnit.Framework;
 
     [TestFixture]
@@ -38,7 +38,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyPopulateParticipantPermissions()
         {
             var participantRole = new ParticipantRole();
-            Assert.AreEqual(48, participantRole.ParticipantPermission.Count);
+            Assert.AreEqual(49, participantRole.ParticipantPermission.Count);
             Assert.IsTrue(participantRole.ParticipantPermission.All(x => x.AccessRight == ParticipantAccessRightKind.NONE));
         }
     }
