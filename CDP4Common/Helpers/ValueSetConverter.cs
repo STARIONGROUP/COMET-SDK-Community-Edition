@@ -50,16 +50,6 @@ namespace CDP4Common.Helpers
                 throw new ArgumentNullException(nameof(parameterType));
             }
 
-            if (parameterType.ClassKind == ClassKind.TextParameterType)
-            {
-                if (value == null)
-                {
-                    return string.Empty;
-                }
-
-                return value.ToString();
-            }
-
             if (value == null)
             {
                 return "-";
@@ -68,6 +58,11 @@ namespace CDP4Common.Helpers
             if (value.ToString() == "-")
             {
                 return "-";
+            }
+
+            if (parameterType.ClassKind == ClassKind.TextParameterType)
+            {
+                return value.ToString();
             }
 
             if (value is bool)
@@ -91,18 +86,18 @@ namespace CDP4Common.Helpers
                 var stringValue = value.ToString();
 
                 // try parse double in any culture - allow the user to still use "." as separator
-                if (parameterType is QuantityKind && double.TryParse(stringValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var doubleValue))
+                if (double.TryParse(stringValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var doubleValue))
                 {
                     return doubleValue.ToString(CultureInfo.InvariantCulture);
                 }
 
                 // convert the comma separator to dot
-                if (parameterType is QuantityKind && double.TryParse(stringValue, NumberStyles.Float, CultureInfo.CurrentCulture, out doubleValue))
+                if (double.TryParse(stringValue, NumberStyles.Float, CultureInfo.CurrentCulture, out doubleValue))
                 {
                     return doubleValue.ToString(CultureInfo.InvariantCulture);
                 }
 
-                if (parameterType.ClassKind == ClassKind.BooleanParameterType && bool.TryParse(stringValue, out var booleanValue))
+                if (bool.TryParse(stringValue, out var booleanValue))
                 {
                     return booleanValue ? "true" : "false";
                 }
@@ -111,7 +106,7 @@ namespace CDP4Common.Helpers
             }
 
             // single enum
-            if (parameterType.ClassKind == ClassKind.EnumerationParameterType && value is EnumerationValueDefinition enumValueDef)
+            if (value is EnumerationValueDefinition enumValueDef)
             {
                 return enumValueDef.ShortName;
             }

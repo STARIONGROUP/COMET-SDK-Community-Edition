@@ -115,7 +115,7 @@ namespace CDP4Common.Tests.Helpers
             new object[] { "False", "false", "false", new BooleanParameterType()},
             new object[] { "True", "True", "True", new TextParameterType()},
             new object[] { "False", "False", "False", new TextParameterType()},
-            new object[] { null, string.Empty, string.Empty, new TextParameterType()},
+            new object[] { null, "-", "-", new TextParameterType()},
             new object[] { "true", "true", "true", new TextParameterType()},
             new object[] { "false", "false", "false", new TextParameterType()},
             new object[] { "0000001", "0000001", "0000001", new TextParameterType()},
@@ -135,12 +135,13 @@ namespace CDP4Common.Tests.Helpers
                 {
                     new EnumerationValueDefinition {ShortName = "enumValue1"},
                     new EnumerationValueDefinition {ShortName = "enumValue2"}
-                }, 
+                },
                 $"enumValue1{Constants.PaddedMultiEnumSeparator}enumValue2", $"enumValue1{Constants.PaddedMultiEnumSeparator}enumValue2", new EnumerationParameterType()
             },
             new object[] { DateTime.ParseExact("2020-09-23T12:11:30", "yyyy-MM-ddTHH:mm:ss", null), "2020-09-23T12:11:30", "2020-09-23T12:11:30", new DateTimeParameterType()},
             new object[] { DateTime.ParseExact("2020-09-23T12:11:30", "yyyy-MM-ddTHH:mm:ss", null), "2020-09-23", "2020-09-23", new DateParameterType()},
             new object[] { DateTime.ParseExact("2020-09-23T12:11:30", "yyyy-MM-ddTHH:mm:ss", null), "12:11:30", "12:11:30", new TimeOfDayParameterType()},
+            new object[] { "2020-09-23T12:11:30", "2020-09-23T12:11:30", "2020-09-23T12:11:30", new DateTimeParameterType()},
         };
     }
 }
