@@ -33,8 +33,8 @@ namespace CDP4Common.Helpers
     public static class IterationContainmentClassType
     {
         /// <summary>
-        /// Array consisting of <see cref="ClassKind"/>'s which are contained through a composite aggregation by <see cref= "EngineeringModel"/> and 
-        /// it's subtree, excluding the subtree of the <see cref="Iteration"/> class
+        /// Array consisting of <see cref="ClassKind"/>'s which are contained through a composite aggregation by <see cref= "Iteration"/> and 
+        /// it's subtree
         /// </summary>
         /// <remarks>
         /// The array does not contain any ClassKinds of abstract classes
