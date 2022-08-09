@@ -794,8 +794,6 @@ namespace CDP4Dal
                     continue;
                 }
 
-                cancellationTokenSource?.Cancel();
-
                 return true;
             }
 
@@ -809,9 +807,12 @@ namespace CDP4Dal
         {
             foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys)
             {
-                if (CanCancel(this.cancellationTokenSourceDictionary[cancellationTokenSourceKey]))
+                if (this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenSourceKey, out var cancellationTokenSource))
                 {
-                    this.cancellationTokenSourceDictionary[cancellationTokenSourceKey].Cancel();
+                    if (CanCancel(cancellationTokenSource))
+                    {
+                        cancellationTokenSource?.Cancel();
+                    }
                 }
             }
         }
