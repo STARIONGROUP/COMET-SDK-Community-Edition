@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
+	<TargetFrameworks>net461;net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Dal Community Edition</Title>
     <VersionPrefix>8.3.0</VersionPrefix>
@@ -40,7 +40,7 @@
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' Or '$(TargetFramework)' == 'net48' ">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' Or '$(TargetFramework)' == 'net48' ">
     <Reference Include="System.ComponentModel.Composition" />
     <PackageReference Include="Rx-Core" version="2.2.5" />
     <PackageReference Include="Rx-Interfaces" version="2.2.5" />
