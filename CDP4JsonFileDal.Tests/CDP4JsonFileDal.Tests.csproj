@@ -35,6 +35,9 @@
     <None Update="files\LOFT_ECSS-E-TM-10-25_AnnexC.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="files\migration.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="files\minimalcontent.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -123,7 +123,7 @@ namespace CDP4JsonFileDal.Tests
         public void SetUp()
         {
             var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "LOFT_ECSS-E-TM-10-25_AnnexC.zip");
-            var migrationSourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\files", "migration.json");
+            var migrationSourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "migration.json");
 
             this.annexC3File = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "AnnexC3.zip");
             this.migrationFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "migration.json");
@@ -156,11 +156,6 @@ namespace CDP4JsonFileDal.Tests
             if (File.Exists(this.annexC3File))
             {
                 File.Delete(this.annexC3File);
-            }
-
-            if (File.Exists(this.migrationFile))
-            {
-                File.Delete(this.migrationFile);
             }
         }
 
