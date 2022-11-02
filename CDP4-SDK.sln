@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.87
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Common", "CDP4Common\CDP4Common.csproj", "{66BB2677-B6D6-43F2-A56C-884FADF6ABF9}"
 EndProject
@@ -50,7 +50,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8B27CAF4-B780-43A8-B0CA-768A294C599C}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
-		azure-pipelines.yml = azure-pipelines.yml
 		CDP4-SDK.sln.DotSettings = CDP4-SDK.sln.DotSettings
 		README.md = README.md
 	EndProjectSection
