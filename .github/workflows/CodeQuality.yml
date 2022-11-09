@@ -21,26 +21,27 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore CDP4-SDK.sln
         
-      #- name: Sonarqube Begin
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #  run: |
-      #    dotnet tool install --global dotnet-sonarscanner
-      #    dotnet sonarscanner begin /k:"RHEAGROUP_CDP4-SDK-Community-Edition" /o:"rheagroup" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
+      - name: Sonarqube Begin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet sonarscanner begin /k:"RHEAGROUP_CDP4-SDK-Community-Edition" /o:"rheagroup" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
 
       - name: Build CDP4-SDK
         run: dotnet build CDP4-SDK.sln --no-restore /p:ContinuousIntegrationBuild=true
 
-      #- name: Run Tests and Compute Coverage
-       # run: dotnet test CDP4-SDK.sln --no-restore --no-build --verbosity normal --filter="(TestCategory!~WebServicesDependent) & (TestCategory!~AppVeyorExclusion)" /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
+      - name: Run Tests and Compute Coverage
+        run: dotnet test CDP4-SDK.sln --no-restore --no-build --verbosity normal --filter="(TestCategory!~WebServicesDependent) & (TestCategory!~AppVeyorExclusion)" /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
 
-      #- name: Sonarqube end
-      #  run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+      - name: Sonarqube end
+        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: PR Based Nuget
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          dotnet pack CDP4-SDK.sln --no-build --version-suffix "${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-PR-${{ github.event.pull_request.number }}"
+          dotnet pack CDP4-SDK.sln --no-build --version-suffix "${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-PR-${{ github.event.pull_request.number }}" -o .
+          dotnet nuget push *.nupkg --skip-duplicate --source https://nuget.pkg.github.com/RHEAGROUP/index.json -k ${{ secrets.GITHUB_TOKEN }}
