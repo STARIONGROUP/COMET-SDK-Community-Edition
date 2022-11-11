@@ -29,14 +29,12 @@ CDP4WspDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4WspDal-CE)](https
 
 ## Build status
 
-AppVeyor is used to build and test the C# COMET-SDK
+GitHub actions are used to build and test the libraries
 
 Branch | Build Status
 ------- | :------------
-Master |  [![Build status](https://ci.appveyor.com/api/projects/status/393r6isv68rlpr51/branch/master?svg=true)](https://ci.appveyor.com/project/rheagroup/cdp4-sdk-community-edition/branch/master)
-Development |  [![Build status](https://ci.appveyor.com/api/projects/status/393r6isv68rlpr51/branch/development?svg=true)](https://ci.appveyor.com/project/rheagroup/cdp4-sdk-community-edition/branch/development)
-
-[![Build history](https://buildstats.info/appveyor/chart/rheagroup/cdp4-sdk-community-edition)](https://ci.appveyor.com/project/rheagroup/cdp4-sdk-community-edition/history)
+Master | ![Build Status](https://github.com/RHEAGROUP/COMET-SDK-Community-Edition/actions/workflows/CodeQuality.yml/badge.svg?branch=master)
+Development | ![Build Status](https://github.com/RHEAGROUP/COMET-SDK-Community-Edition/actions/workflows/CodeQuality.yml/badge.svg?branch=development)
 
 ## SonarQube Status:
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=alert_status)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
