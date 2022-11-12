@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WSPDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2922 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -34,15 +34,18 @@ namespace CDP4WspDal.Tests
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+    
     using CDP4Dal;
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Operations;
     using CDP4WspDal;
+    
     using NUnit.Framework;
 
     using File = System.IO.File;
@@ -59,7 +62,6 @@ namespace CDP4WspDal.Tests
         private CancellationTokenSource cancelationTokenSource;
         private Uri uri = new Uri("https://cdp4services-test.cdp4.org");
         private ISession session;
-        private Assembler assembler;
 
         private SiteDirectory siteDirectory;
         private EngineeringModel engineeringModel;
@@ -263,11 +265,15 @@ namespace CDP4WspDal.Tests
             var attributes = new DalQueryAttributes { RevisionNumber = 0 };
             var topcontainers = assembler.Cache.Select(x => x.Value).Where(x => x.Value is CDP4Common.CommonData.TopContainer).ToList();
 
-            foreach (var container in topcontainers)
-            {
-                returned = await this.dal.Read(container.Value.ToDto(), this.cancelationTokenSource.Token, attributes);
-                await assembler.Synchronize(returned);
-            }
+            Assert.That(async () =>
+                {
+                    foreach (var container in topcontainers)
+                    {
+                        returned = await this.dal.Read(container.Value.ToDto(), this.cancelationTokenSource.Token, attributes);
+                        await assembler.Synchronize(returned);
+                    }
+                },
+                Throws.Nothing);
         }
 
         [Test]
@@ -406,15 +412,19 @@ namespace CDP4WspDal.Tests
             const int iterationNumber = 1000;
             var elapsedTimes = new List<long>();
 
-            for (int i = 0; i < iterationNumber; i++)
-            {
-                var assemble = new Assembler(this.uri);
-                var stopwatch = Stopwatch.StartNew();
-                await assemble.Synchronize(returnedlist);
-                elapsedTimes.Add(stopwatch.ElapsedMilliseconds);
-                await assemble.Clear();
-            }
-
+            Assert.That(async () =>
+                {
+                    for (var i = 0; i < iterationNumber; i++)
+                    {
+                        var assemble = new Assembler(this.uri);
+                        var stopwatch = Stopwatch.StartNew();
+                        await assemble.Synchronize(returnedlist);
+                        elapsedTimes.Add(stopwatch.ElapsedMilliseconds);
+                        await assemble.Clear();
+                    }
+                },
+                Throws.Nothing);
+            
             var synchronizeMeanElapsedTime = elapsedTimes.Average();
             var maxElapsedTime = elapsedTimes.Max();
             var minElapsedTime = elapsedTimes.Min();
@@ -517,71 +527,6 @@ namespace CDP4WspDal.Tests
             var operationContainer = new OperationContainer(context);
 
             Assert.That(await dal.Write(operationContainer), Is.Empty);
-        }
-
-        [Test]
-        [Category("WebServicesDependent")]
-        public async Task Verify_that_opens_returns_expected_result()
-        {
-            var uri = new Uri("http://ocdt-dev.rheagroup.com");
-            this.credentials = new Credentials("admin", "pass", uri);
-
-            var wspdal = new WspDal();
-            var result = await wspdal.Open(this.credentials, new CancellationToken());
-
-            Assert.NotNull(result);
-        }
-
-        [Test]
-        [Category("WebServicesDependent")]
-        [Category("AppVeyorExclusion")]
-        public async Task Verify_that_open_with_proxy_returns_expected_result()
-        {
-            var proxySettings = new ProxySettings(new Uri("http://tinyproxy:8888"));
-            
-            var uri = new Uri("http://ocdt-dev.rheagroup.com");
-            this.credentials = new Credentials("admin", "pass", uri, proxySettings);
-
-            var wspdal = new WspDal();
-            var result = await wspdal.Open(this.credentials, new CancellationToken());
-            
-            Assert.NotNull(result);
-        }
-
-        [Test]
-        [Category("WebServicesDependent")]
-        public async Task Verify_that_person_can_be_Posted()
-        {
-            var uri = new Uri("http://ocdt-dev.rheagroup.com");
-            var credentials = new Credentials("admin", "pass", uri);
-
-            var wspdal = new WspDal();
-            var dtos = await wspdal.Open(credentials, this.cancelationTokenSource.Token);
-
-            var siteDirectory = (CDP4Common.DTO.SiteDirectory)dtos.Single(x => x.ClassKind == ClassKind.SiteDirectory);
-
-            var context = siteDirectory.Route;
-            var operationContainer = new OperationContainer(context, siteDirectory.RevisionNumber);
-
-            var person = new CDP4Common.DTO.Person(Guid.NewGuid(), 1);
-            person.ShortName = Guid.NewGuid().ToString();
-            person.Surname = Guid.NewGuid().ToString();
-            person.GivenName = Guid.NewGuid().ToString();
-            person.AddContainer(ClassKind.SiteDirectory, Guid.Parse("eb77f3e1-a0f3-412d-8ed6-b8ce881c0145"));
-
-            var operation1 = new Operation(null, person, OperationKind.Create);
-            operationContainer.AddOperation(operation1);
-
-            var siteDirectoryClone = siteDirectory.DeepClone<CDP4Common.DTO.SiteDirectory>();
-            siteDirectoryClone.Person.Add(person.Iid);
-            var operation2 = new Operation(siteDirectory, siteDirectoryClone, OperationKind.Update);
-            operationContainer.AddOperation(operation2);
-
-            var result = await wspdal.Write(operationContainer);
-
-            var resultPerson = (CDP4Common.DTO.Person)result.Single(x => x.Iid == person.Iid);
-
-            Assert.NotNull(resultPerson);
         }
 
         /// <summary>

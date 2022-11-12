@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -158,7 +158,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         }
 
         [Test]
-        public async Task Verify_that_when_uri_path_does_not_exist_exception_is_thrown()
+        public void Verify_that_when_uri_path_does_not_exist_exception_is_thrown()
         {
             var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "does_not_exist.zip");
             this.credentials = new Credentials("admin", "pass", new Uri(path));
@@ -236,7 +236,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         }
 
         [Test]
-        public async Task VerifyThatReadWithNonIterationInstanceSuppliedThrowsException()
+        public void VerifyThatReadWithNonIterationInstanceSuppliedThrowsException()
         {
             var alias = new CDP4Common.DTO.Alias();
 
@@ -244,7 +244,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         }
 
         [Test]
-        public async Task VerifyThatWriteAsyncOperationContainerThrowsException()
+        public void VerifyThatWriteAsyncOperationContainerThrowsException()
         {
             var operationContainer = new OperationContainer("/SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650", 1);
 
@@ -378,7 +378,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         }
 
         [Test]
-        public async Task Verify_that_Open_with_null_credentials_throws_exception()
+        public void Verify_that_Open_with_null_credentials_throws_exception()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await this.dal.Open(null, this.cancelationTokenSource.Token));
         }

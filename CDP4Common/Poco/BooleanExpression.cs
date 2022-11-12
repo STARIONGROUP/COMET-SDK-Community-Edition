@@ -43,7 +43,8 @@ namespace CDP4Common.EngineeringModelData
         /// Gets the expressions that are direct children of me or are "free" at the toplevel of the <see cref="BooleanExpression"/> tree.
         /// "Free" means not set as a child of another <see cref="BooleanExpression"/>.
         /// </summary>
-        /// <returns><see cref="IReadOnlyList{T}"/> containing <see cref="BooleanExpression"/>s that are direct children of the class in the <see cref="myself"/> parameter or that are not set as a child for another <see cref="BooleanExpression"/></returns>
+        /// <returns><see cref="IReadOnlyList{BooleanExpression}"/> containing <see cref="BooleanExpression"/>s
+        /// </returns>
         public IReadOnlyList<BooleanExpression> GetMyAndFreeExpressions()
         {
             var myExpressions = new List<BooleanExpression>();
@@ -89,6 +90,7 @@ namespace CDP4Common.EngineeringModelData
             }
 
             expressions.Add(this);
+
             foreach (var expression in this.GetMyExpressions())
             {
                 expression.TryAddMeAndMyDescendants(expressions);

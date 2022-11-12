@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,22 +21,15 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
-
-using System.Linq;
 
 namespace CDP4WspDal.Tests
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading;
     using System.Threading.Tasks;
-    using System.Net;
-    using System.Net.Http;
-    using CDP4Common.MetaInfo;
+    
     using CDP4Dal;
     using CDP4Dal.DAL;
-    using Moq;
+    
     using NUnit.Framework;
     
     using Thing = CDP4Common.DTO.Thing;
@@ -59,15 +51,12 @@ namespace CDP4WspDal.Tests
         private Session session;
 
         private Credentials credentials;
-        private CancellationTokenSource tokenSource;
-
+        
         [SetUp]
         public void SetUp()
         {
             this.uri = new Uri("https://cdp4services-test.cdp4.org");
             this.credentials = new Credentials("admin", "pass", this.uri);
-
-            this.tokenSource = new CancellationTokenSource();
         }
 
         [TearDown]
@@ -89,11 +78,11 @@ namespace CDP4WspDal.Tests
             var dal = new WspDal();
             this.session = new Session(dal, this.credentials);
 
-            Assert.AreEqual(0, this.session.Assembler.Cache.Count); 
+            Assert.That(this.session.Assembler.Cache.Count, Is.EqualTo(0));
             
-            await session.Open();
+            await this.session.Open();
 
-            Assert.AreNotEqual(0, this.session.Assembler.Cache.Count);
+            Assert.That(this.session.Assembler.Cache.Count, Is.Not.EqualTo(0));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
@@ -666,7 +666,7 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public async Task Verify_that_when_active_person_is_null_Iteration_is_not_read()
+        public void Verify_that_when_active_person_is_null_Iteration_is_not_read()
         {
             var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), null, null) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
             var activeDomain = new DomainOfExpertise(Guid.NewGuid(), null, null);

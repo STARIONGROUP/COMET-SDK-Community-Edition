@@ -104,7 +104,7 @@ namespace CDP4Dal.DAL
         /// </param>
         /// <returns>
         /// A list of <see cref="Thing"/> that are contained by the provided <see cref="Thing"/> including the <see cref="Thing"/>.
-        /// In case the <paramref name="thing"> is a top container then all the <see cref="Thing"/>s that have been updated since the
+        /// In case the <paramref name="thing" /> is a top container then all the <see cref="Thing"/>s that have been updated since the
         /// last read will be returned.
         /// </returns>
         Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken cancellationToken, IQueryAttributes attributes = null) where T : Thing;

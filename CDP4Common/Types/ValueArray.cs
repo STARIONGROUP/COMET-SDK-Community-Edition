@@ -29,6 +29,7 @@ namespace CDP4Common.Types
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text;
+
     using CDP4Common.CommonData;
     using CDP4Common.Polyfills;
 
@@ -48,7 +49,7 @@ namespace CDP4Common.Types
         /// <summary>
         /// The container of this <see cref="ValueArray{T}"/>
         /// </summary>
-        private Thing container;
+        private readonly Thing container;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValueArray{T}"/> class.

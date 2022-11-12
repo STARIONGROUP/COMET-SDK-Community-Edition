@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValueValidator.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -134,7 +134,7 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
-        /// Validates the <param name="value"></param> to check whether it is a <see cref="Boolean"/>
+        /// Validates the <paramref name="value"/> to check whether it is a <see cref="Boolean"/>
         /// </summary>
         /// <param name="parameterType">
         /// A <see cref="BooleanParameterType"/>
@@ -196,7 +196,7 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
-        /// Validates the <param name="value"></param> to check whether it is a <see cref="DateTime"/> that does not contain any time data.
+        /// Validates the <paramref name="value"/> to check whether it is a <see cref="DateTime"/> that does not contain any time data.
         /// </summary>
         /// <param name="parameterType">
         /// A <see cref="DateParameterType"/>
@@ -253,7 +253,7 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
-        /// Validates the <param name="value"></param> to check whether it is a <see cref="DateTime"/>
+        /// Validates the <paramref name="value"/> to check whether it is a <see cref="DateTime"/>
         /// </summary>
         /// <param name="parameterType">
         /// A <see cref="DateTimeParameterType"/>
@@ -317,7 +317,7 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
-        /// Validates the <param name="value"></param> to check whether it is a valid <see cref="EnumerationValueDefinition"/> of the <see cref="EnumerationParameterType"/>
+        /// Validates the <paramref name="value"/> to check whether it is a valid <see cref="EnumerationValueDefinition"/> of the <see cref="EnumerationParameterType"/>
         /// </summary>
         /// <param name="parameterType">
         /// A <see cref="EnumerationParameterType"/>
@@ -429,7 +429,7 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
-        /// Validates the <param name="value"></param> to check whether it is Text.
+        /// Validates the <paramref name="value"/> to check whether it is Text.
         /// </summary>
         /// <param name="parameterType">
         /// A <see cref="TextParameterType"/>
@@ -459,7 +459,7 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
-        /// Validates the <param name="value"></param> to check whether it is a valid time of day.
+        /// Validates the <paramref name="value"/> to check whether it is a valid time of day.
         /// </summary>
         /// <param name="parameterType">
         /// A <see cref="TimeOfDayParameterType"/>

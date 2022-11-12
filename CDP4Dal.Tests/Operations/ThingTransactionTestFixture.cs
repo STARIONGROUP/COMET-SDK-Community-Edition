@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTransactionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -42,7 +42,6 @@ namespace CDP4Dal.Tests
     /// <summary>
     /// Test suite of the <see cref="ThingTransaction"/> class
     /// </summary>
-
     [TestFixture]
     public class ThingTransactionTestFixture
     {
@@ -183,8 +182,12 @@ namespace CDP4Dal.Tests
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
             var transaction = new ThingTransaction(transactionContext, this.siteDirectory.Clone(false));
             var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);
-            transaction.Create(phone);
-            transaction.Create(phone);
+
+            Assert.That(() =>
+            {
+                transaction.Create(phone);
+                transaction.Create(phone);
+            }, Throws.Nothing);
         }
 
         [Test]
@@ -288,13 +291,13 @@ namespace CDP4Dal.Tests
             personTransaction.Create(person1);
 
             Assert.AreEqual(1, personTransaction.AddedThing.Count());
-            Assert.AreEqual(1, personTransaction.UpdatedThing.Count());
+            Assert.AreEqual(1, personTransaction.UpdatedThing.Count);
 
             // phone dialog
             var phoneTransaction = new ThingTransaction(phone, personTransaction, person1);
             phoneTransaction.Create(phone);
             Assert.AreEqual(2, phoneTransaction.AddedThing.Count());
-            Assert.AreEqual(0, phoneTransaction.UpdatedThing.Count());
+            Assert.AreEqual(0, phoneTransaction.UpdatedThing.Count);
 
             // ok phone, verify that phone is added to the person and to the transaction
             phoneTransaction.FinalizeSubTransaction(phone, person1);
@@ -309,7 +312,7 @@ namespace CDP4Dal.Tests
             Assert.IsTrue(cloneSiteDir.Person.Contains(person1));
 
             Assert.AreEqual(2, rootTransaction.AddedThing.Count());
-            Assert.AreEqual(1, rootTransaction.UpdatedThing.Count());
+            Assert.AreEqual(1, rootTransaction.UpdatedThing.Count);
 
             // update person1
             var person1_1 = person1.Clone(false);
@@ -317,7 +320,7 @@ namespace CDP4Dal.Tests
             person1_1Tr.CreateOrUpdate(person1_1);
 
             Assert.AreEqual(1, person1_1Tr.AddedThing.Count());
-            Assert.AreEqual(1, person1_1Tr.UpdatedThing.Count());
+            Assert.AreEqual(1, person1_1Tr.UpdatedThing.Count);
 
             // add email
             var email = new EmailAddress();
@@ -328,7 +331,7 @@ namespace CDP4Dal.Tests
             // end add email, verify that email is added to person1_1, (the clone of person1)
 
             Assert.AreEqual(2, person1_1Tr.AddedThing.Count());
-            Assert.AreEqual(1, person1_1Tr.UpdatedThing.Count());
+            Assert.AreEqual(1, person1_1Tr.UpdatedThing.Count);
             Assert.IsTrue(person1_1.EmailAddress.Contains(email));
 
             // update phone
@@ -345,13 +348,12 @@ namespace CDP4Dal.Tests
             person1_1Tr.FinalizeSubTransaction(person1_1, cloneSiteDir);
 
             Assert.AreEqual(3, rootTransaction.AddedThing.Count());
-            Assert.AreEqual(1, rootTransaction.UpdatedThing.Count());
+            Assert.AreEqual(1, rootTransaction.UpdatedThing.Count);
             Assert.IsTrue(rootTransaction.AddedThing.Any(x => x == person1_1));
             Assert.IsTrue(cloneSiteDir.Person.Contains(person1_1));
             Assert.IsTrue(rootTransaction.AddedThing.Contains(phone_1));
             Assert.AreEqual(1, cloneSiteDir.Person.Count);
-
-
+            
             // Create new person
             var person2 = new Person();
             var person2Trans = new ThingTransaction(person2, rootTransaction, cloneSiteDir);
@@ -401,7 +403,7 @@ namespace CDP4Dal.Tests
             Assert.AreEqual(2, person1_2.EmailAddress.Count);
 
             Assert.AreEqual(5, rootTransaction.AddedThing.Count());
-            Assert.AreEqual(1, rootTransaction.UpdatedThing.Count());
+            Assert.AreEqual(1, rootTransaction.UpdatedThing.Count);
             var per1 = (Person)rootTransaction.AddedThing.Single(x => x.Iid == person1.Iid);
             var per2 = (Person)rootTransaction.AddedThing.Single(x => x.Iid == person2.Iid);
             var emailad1 = rootTransaction.AddedThing.Single(x => x.Iid == email.Iid);

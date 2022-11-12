@@ -238,8 +238,8 @@ namespace CDP4Common.Tests.DTO
             Assert.That(clone.Iid, Is.EqualTo(valueset.Iid));
             
             clone.Manual = new ValueArray<string>();
-            Assert.That(valueset.Manual.Count(), Is.EqualTo(3));
-            Assert.That(clone.Manual.Count(), Is.EqualTo(0));
+            Assert.That(valueset.Manual.Count, Is.EqualTo(3));
+            Assert.That(clone.Manual.Count, Is.EqualTo(0));
         }
 
         [Test]

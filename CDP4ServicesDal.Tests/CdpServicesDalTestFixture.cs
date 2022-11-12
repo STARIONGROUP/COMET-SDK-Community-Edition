@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -34,15 +34,18 @@ namespace CDP4ServicesDal.Tests
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;    
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;    
+    
     using CDP4Dal;
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
+    
     using NUnit.Framework;
     
     /// <summary>
@@ -53,7 +56,6 @@ namespace CDP4ServicesDal.Tests
     {
         private CdpServicesDal dal;
         private Credentials credentials;
-        private List<Parameter> headers;
         private ISession session;
 
         private readonly Uri uri = new Uri("https://cdp4services-test.cdp4.org");
@@ -160,7 +162,7 @@ namespace CDP4ServicesDal.Tests
         }
 
         [Test]
-        public async Task VerifyThatIfCredentialsAreNullExceptionIsThrown()
+        public void VerifyThatIfCredentialsAreNullExceptionIsThrown()
         {
             var dal = new CdpServicesDal();
 
@@ -169,7 +171,7 @@ namespace CDP4ServicesDal.Tests
 
         [Test]
         [Category("WebServicesDependent")]
-        public async Task VerifyThatIfNotHttpOrHttpsExceptionIsThrown()
+        public void VerifyThatIfNotHttpOrHttpsExceptionIsThrown()
         {
             var uri = new Uri("https://cdp4services-test.cdp4.org");
             var invalidCredentials = new Credentials("John", "a password", uri);
@@ -178,7 +180,7 @@ namespace CDP4ServicesDal.Tests
         }
 
         [Test]
-        public async Task VerifyThatIfCredentialsAreNullOnReadExceptionIsThrown()
+        public void VerifyThatIfCredentialsAreNullOnReadExceptionIsThrown()
         {
             var organizationIid = Guid.Parse("44d1ff16-8195-47d0-abfa-163bbba9bf39");
             var organizationDto = new CDP4Common.DTO.Organization(organizationIid, 0);
@@ -264,11 +266,13 @@ namespace CDP4ServicesDal.Tests
             var attributes = new DalQueryAttributes { RevisionNumber = 0 };
             var topcontainers = assembler.Cache.Select(x => x.Value).Where(x => x.Value is CDP4Common.CommonData.TopContainer).ToList();
 
-            foreach (var container in topcontainers)
-            {
-                returned = await this.dal.Read(container.Value.ToDto(), this.cancelationTokenSource.Token, attributes);
-                await assembler.Synchronize(returned);
-            }
+            Assert.That( async () => {
+                foreach (var container in topcontainers)
+                {
+                    returned = await this.dal.Read(container.Value.ToDto(), this.cancelationTokenSource.Token, attributes);
+                    await assembler.Synchronize(returned);
+                }
+            }, Throws.Nothing);
         }
 
         [Test]
@@ -407,14 +411,17 @@ namespace CDP4ServicesDal.Tests
             const int iterationNumber = 1000;
             var elapsedTimes = new List<long>();
 
-            for (int i = 0; i < iterationNumber; i++)
+            Assert.That(async () =>
             {
-                var assemble = new Assembler(this.uri);
-                var stopwatch = Stopwatch.StartNew();
-                await assemble.Synchronize(returnedlist);
-                elapsedTimes.Add(stopwatch.ElapsedMilliseconds);
-                await assemble.Clear();
-            }
+                for (int i = 0; i < iterationNumber; i++)
+                {
+                    var assembler = new Assembler(this.uri);
+                    var stopwatch = Stopwatch.StartNew();
+                    await assembler.Synchronize(returnedlist);
+                    elapsedTimes.Add(stopwatch.ElapsedMilliseconds);
+                    await assembler.Clear();
+                }
+            }, Throws.Nothing);
 
             var synchronizeMeanElapsedTime = elapsedTimes.Average();
             var maxElapsedTime = elapsedTimes.Max();
@@ -500,7 +507,7 @@ namespace CDP4ServicesDal.Tests
         }
  
         [Test]
-        public async Task VerifyThatSessionMustBeSetToReadIteration()
+        public void VerifyThatSessionMustBeSetToReadIteration()
         {
             var iterationDto = new CDP4Common.DTO.Iteration(Guid.NewGuid(), 0);
 
@@ -628,9 +635,10 @@ namespace CDP4ServicesDal.Tests
             }
 
             var readresult = await dal.Read(siteDirectory, new CancellationToken());
+
+            Assert.That(readresult, Is.Not.Empty);
         }
-
-
+        
         [Test]
         [Category("WebServicesDependent")]
         public async Task Verify_that_person_can_be_Posted()

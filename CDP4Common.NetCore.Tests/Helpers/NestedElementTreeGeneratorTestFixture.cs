@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedElementTreeGeneratorTestFixtre.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -292,7 +292,7 @@ namespace CDP4Common.Tests.Helpers
                 Console.WriteLine(nestedElement.ShortName);
             }
 
-            Assert.AreEqual(2, nestedElements.Count());
+            Assert.AreEqual(2, nestedElements.Count);
         }
 
         [Test]
@@ -308,7 +308,7 @@ namespace CDP4Common.Tests.Helpers
                 Console.WriteLine(nestedElement.ShortName);
             }
 
-            Assert.AreEqual(2, nestedElements.Count());
+            Assert.AreEqual(2, nestedElements.Count);
         }
 
         [Test]
@@ -323,7 +323,7 @@ namespace CDP4Common.Tests.Helpers
                 Console.WriteLine(nestedElement.ShortName);
             }
 
-            Assert.AreEqual(3, nestedElements.Count());
+            Assert.AreEqual(3, nestedElements.Count);
         }
 
         [Test]

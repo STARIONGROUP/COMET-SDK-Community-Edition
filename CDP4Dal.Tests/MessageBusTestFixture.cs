@@ -57,7 +57,6 @@ namespace CDP4Dal.Tests
         private CDP4Common.DTO.Person person;
         private CDP4Common.DTO.Person person2;
 
-        private CDP4Common.DTO.ConversionBasedUnit conversionBasedUnitType;
         private CDP4Common.DTO.LinearConversionUnit linearConversionUnitType;
         private CDP4Common.DTO.PrefixedUnit prefixedUnitType;
         private CDP4Common.DTO.DerivedUnit derivedUnitType;

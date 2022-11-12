@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Thing.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -30,7 +30,6 @@ namespace CDP4Common.CommonData
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using System.Reflection;
     using System.Runtime.Serialization;
 
     using CDP4Common.EngineeringModelData;
@@ -70,7 +69,7 @@ namespace CDP4Common.CommonData
         private readonly List<string> validationErrorList = new List<string>();
 
         /// <summary>
-        /// The <see cref="Dictionary{string, Action}"/> that contains reset method for properties that were replaced by sentinels
+        /// The <see cref="Dictionary{String, Action}"/> that contains reset method for properties that were replaced by sentinels
         /// </summary>
         protected Dictionary<string, Action> sentinelResetMap = new Dictionary<string, Action>();
 

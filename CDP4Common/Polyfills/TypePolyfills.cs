@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="TypePolyfills.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
@@ -163,10 +163,13 @@ namespace CDP4Common.Polyfills
         }
 
         /// <summary>
-        ///  Determines whether an instance of a specified type can be assigned to the current type instance.
+        /// Determines whether an instance of a specified type can be assigned to the current type instance.
         /// </summary>
         /// <param name="type">
         /// The current <see cref="Type"/>
+        /// </param>
+        /// <param name="c">
+        /// The subject <see cref="Type"/>
         /// </param>
         /// <returns>
         /// true if any of the following conditions is true: c and the current instance represent
