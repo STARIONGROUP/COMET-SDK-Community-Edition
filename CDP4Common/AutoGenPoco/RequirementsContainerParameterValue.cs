@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(RequirementsContainer), "ParameterValue")]
-    public sealed partial class RequirementsContainerParameterValue : ParameterValue
+    public partial class RequirementsContainerParameterValue : ParameterValue
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -147,7 +147,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.RequirementsContainerParameterValue;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current RequirementsContainerParameterValue POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current RequirementsContainerParameterValue POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

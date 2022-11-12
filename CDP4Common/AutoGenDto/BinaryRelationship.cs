@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(Iteration), "Relationship")]
-    public sealed partial class BinaryRelationship : Relationship
+    public partial class BinaryRelationship : Relationship
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryRelationship"/> class.
@@ -146,7 +146,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.ParameterValue.Add(copy.Value.Iid);

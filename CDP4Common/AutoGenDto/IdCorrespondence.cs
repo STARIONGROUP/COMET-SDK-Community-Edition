@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(ExternalIdentifierMap), "Correspondence")]
-    public sealed partial class IdCorrespondence : Thing, IOwnedThing
+    public partial class IdCorrespondence : Thing, IOwnedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IdCorrespondence"/> class.

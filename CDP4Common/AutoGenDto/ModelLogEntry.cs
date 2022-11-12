@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(EngineeringModel), "LogEntry")]
-    public sealed partial class ModelLogEntry : Thing, IAnnotation, ICategorizableThing, ILogEntry, ITimeStampedThing
+    public partial class ModelLogEntry : Thing, IAnnotation, ICategorizableThing, ILogEntry, ITimeStampedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelLogEntry"/> class.
@@ -220,7 +220,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.LogEntryChangelogItem.Add(copy.Value.Iid);

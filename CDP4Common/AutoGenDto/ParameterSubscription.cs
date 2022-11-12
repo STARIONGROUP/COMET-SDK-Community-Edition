@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(ParameterOrOverrideBase), "ParameterSubscription")]
-    public sealed partial class ParameterSubscription : ParameterBase
+    public partial class ParameterSubscription : ParameterBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterSubscription"/> class.
@@ -218,7 +218,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.ValueSet.Add(copy.Value.Iid);

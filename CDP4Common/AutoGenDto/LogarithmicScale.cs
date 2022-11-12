@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(ReferenceDataLibrary), "Scale")]
-    public sealed partial class LogarithmicScale : MeasurementScale
+    public partial class LogarithmicScale : MeasurementScale
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LogarithmicScale"/> class.
@@ -157,7 +157,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.Alias.Add(copy.Value.Iid);
@@ -168,7 +168,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.Definition.Add(copy.Value.Iid);
@@ -195,7 +195,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.HyperLink.Add(copy.Value.Iid);
@@ -214,7 +214,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.MappingToReferenceScale.Add(copy.Value.Iid);
@@ -242,7 +242,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.ReferenceQuantityValue.Add(copy.Value.Iid);
@@ -260,7 +260,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.ValueDefinition.Add(copy.Value.Iid);

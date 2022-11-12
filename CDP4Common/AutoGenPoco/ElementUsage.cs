@@ -50,7 +50,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note 4: Both the <i>owner</i> DomainOfExpertise of the <i>containingElement</i> and of the <i>elementDefinition</i> are owner(s) of this ElementUsage, i.e. the union of self.containingElement.owner and self.elementDefinition.owner.
     /// </summary>
     [Container(typeof(ElementDefinition), "ContainedElement")]
-    public sealed partial class ElementUsage : ElementBase, IOptionDependentThing
+    public partial class ElementUsage : ElementBase, IOptionDependentThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -258,7 +258,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.ElementUsage;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ElementUsage POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ElementUsage POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

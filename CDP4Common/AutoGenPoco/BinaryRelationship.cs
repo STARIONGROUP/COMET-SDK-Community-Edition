@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: This allows very generic relationships to be defined between any two Things. In order to make its use controlled and meaningful the semantics of the relationship should be defined by making the BinaryRelationship a member of a Category and defining an applicable BinaryRelationshipRule.
     /// </summary>
     [Container(typeof(Iteration), "Relationship")]
-    public sealed partial class BinaryRelationship : Relationship
+    public partial class BinaryRelationship : Relationship
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -209,7 +209,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.BinaryRelationship;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current BinaryRelationship POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current BinaryRelationship POCO.");
             }
 
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);

@@ -48,7 +48,7 @@ namespace CDP4Common.DiagramData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(DiagramEdge), "Point")]
-    public sealed partial class Point : DiagramThingBase
+    public partial class Point : DiagramThingBase
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -165,7 +165,7 @@ namespace CDP4Common.DiagramData
             var dto = dtoThing as DTO.Point;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Point POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Point POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

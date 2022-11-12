@@ -46,7 +46,7 @@ namespace CDP4Common.SiteDirectoryData
     /// representation of a permission to access a given (sub)set of data in an EngineeringModel
     /// </summary>
     [Container(typeof(ParticipantRole), "ParticipantPermission")]
-    public sealed partial class ParticipantPermission : Thing, IDeprecatableThing
+    public partial class ParticipantPermission : Thing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -172,7 +172,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.ParticipantPermission;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ParticipantPermission POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParticipantPermission POCO.");
             }
 
             this.AccessRight = dto.AccessRight;

@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: The name of a BuiltInRuleVerification shall be set to be the same as the name of the associated constraint in the E-TM-10-25 data model, e.g. with the help of a code generator.
     /// </summary>
     [Container(typeof(RuleVerificationList), "RuleVerification")]
-    public sealed partial class BuiltInRuleVerification : RuleVerification
+    public partial class BuiltInRuleVerification : RuleVerification
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -146,7 +146,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.BuiltInRuleVerification;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current BuiltInRuleVerification POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current BuiltInRuleVerification POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

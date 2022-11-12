@@ -46,7 +46,7 @@ namespace CDP4Common.SiteDirectoryData
     /// representation of a participant in the team working in a concurrent engineering activity on an EngineeringModel
     /// </summary>
     [Container(typeof(EngineeringModelSetup), "Participant")]
-    public sealed partial class Participant : Thing, IParticipantAffectedAccessThing
+    public partial class Participant : Thing, IParticipantAffectedAccessThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -265,7 +265,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.Participant;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Participant POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Participant POCO.");
             }
 
             this.Domain.ResolveList(dto.Domain, dto.IterationContainerId, this.Cache);

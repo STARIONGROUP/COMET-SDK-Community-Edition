@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(DerivedUnit), "UnitFactor")]
-    public sealed partial class UnitFactor : Thing
+    public partial class UnitFactor : Thing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitFactor"/> class.

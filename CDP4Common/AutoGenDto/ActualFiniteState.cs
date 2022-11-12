@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(ActualFiniteStateList), "ActualState")]
-    public sealed partial class ActualFiniteState : Thing, INamedThing, IOwnedThing, IShortNamedThing
+    public partial class ActualFiniteState : Thing, INamedThing, IOwnedThing, IShortNamedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ActualFiniteState"/> class.

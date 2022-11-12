@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: Such an actual finite state may is composed of as many possible finite states as there are PossibleFiniteStateLists associated to the containing ActualFiniteStateList of this ActualFiniteState. An ActualFiniteState can be associated with a ParameterValueSet for a Parameter (or ParameterOverride) that has a <i>stateDependence</i>, as well as for a ParameterSubscriptionValueSet for such a Parameter or ParameterOverride.
     /// </summary>
     [Container(typeof(ActualFiniteStateList), "ActualState")]
-    public sealed partial class ActualFiniteState : Thing, INamedThing, IOwnedThing, IShortNamedThing
+    public partial class ActualFiniteState : Thing, INamedThing, IOwnedThing, IShortNamedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -246,7 +246,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.ActualFiniteState;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ActualFiniteState POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ActualFiniteState POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

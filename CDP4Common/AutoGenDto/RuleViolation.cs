@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(RuleVerification), "Violation")]
-    public sealed partial class RuleViolation : Thing
+    public partial class RuleViolation : Thing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RuleViolation"/> class.

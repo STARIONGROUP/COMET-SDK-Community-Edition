@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note: Implementations may also allow other boolean values such as "Yes" and "No" in end-user client applications, but in persistent datastores values compatible with the native boolean values of the implementation platform shall be used.
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "ParameterType")]
-    public sealed partial class BooleanParameterType : ScalarParameterType
+    public partial class BooleanParameterType : ScalarParameterType
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -153,7 +153,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.BooleanParameterType;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current BooleanParameterType POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current BooleanParameterType POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

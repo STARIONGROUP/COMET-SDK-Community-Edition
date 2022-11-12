@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(EnumerationParameterType), "ValueDefinition")]
-    public sealed partial class EnumerationValueDefinition : DefinedThing
+    public partial class EnumerationValueDefinition : DefinedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EnumerationValueDefinition"/> class.
@@ -107,7 +107,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.Alias.Add(copy.Value.Iid);
@@ -118,7 +118,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.Definition.Add(copy.Value.Iid);
@@ -141,7 +141,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.HyperLink.Add(copy.Value.Iid);

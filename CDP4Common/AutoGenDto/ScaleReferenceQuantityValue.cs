@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(LogarithmicScale), "ReferenceQuantityValue")]
-    public sealed partial class ScaleReferenceQuantityValue : Thing
+    public partial class ScaleReferenceQuantityValue : Thing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleReferenceQuantityValue"/> class.

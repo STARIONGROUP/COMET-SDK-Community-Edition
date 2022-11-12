@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(DiagramElementContainer), "DiagramElement")]
-    public sealed partial class DiagramEdge : DiagramElementThing
+    public partial class DiagramEdge : DiagramElementThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DiagramEdge"/> class.
@@ -144,7 +144,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.Bounds.Add(copy.Value.Iid);
@@ -158,7 +158,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.DiagramElement.Add(copy.Value.Iid);
@@ -181,7 +181,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.LocalStyle.Add(copy.Value.Iid);
@@ -196,7 +196,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == Guid.Parse(orderedItem.V.ToString()));
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", orderedItem.V));
+                    throw new InvalidOperationException($"The copy could not be found for {orderedItem.V}");
                 }
                 this.Point.Add(new OrderedItem { K = orderedItem.K, V = copy.Value.Iid });
             }

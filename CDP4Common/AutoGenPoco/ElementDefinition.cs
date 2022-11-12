@@ -51,7 +51,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note 3: ElementDefinition is the equivalent of the concept of <i>Block</i> in OMG SysML. ElementUsage is the equivalent of the concept of <i>Part</i> in OMG SysML.
     /// </summary>
     [Container(typeof(Iteration), "Element")]
-    public sealed partial class ElementDefinition : ElementBase
+    public partial class ElementDefinition : ElementBase
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -274,7 +274,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.ElementDefinition;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ElementDefinition POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ElementDefinition POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

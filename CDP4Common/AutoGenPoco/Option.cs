@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: An Option in this context constitutes a design alternative that can be compared with one or more other design alternatives defined in other Options, for example to perform a trade analysis.
     /// </summary>
     [Container(typeof(Iteration), "Option")]
-    public sealed partial class Option : DefinedThing, ICategorizableThing
+    public partial class Option : DefinedThing, ICategorizableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -214,7 +214,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.Option;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Option POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Option POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

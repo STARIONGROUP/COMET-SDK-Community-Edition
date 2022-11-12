@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(NestedElement), "NestedParameter")]
-    public sealed partial class NestedParameter : Thing, IOwnedThing, IVolatileThing
+    public partial class NestedParameter : Thing, IOwnedThing, IVolatileThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NestedParameter"/> class.

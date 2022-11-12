@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(ReviewItemDiscrepancy), "Solution")]
-    public sealed partial class Solution : GenericAnnotation, IOwnedThing
+    public partial class Solution : GenericAnnotation, IOwnedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Solution"/> class.

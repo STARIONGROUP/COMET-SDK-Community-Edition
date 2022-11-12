@@ -48,7 +48,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note 2: In space system life cycle activities, typically for each required domain of expertise at least one person in the development or operation team is assigned responsibility for the domain related aspects. However, one person may be responsible for more than one domain / discipline.
     /// </summary>
     [Container(typeof(SiteDirectory), "Domain")]
-    public sealed partial class DomainOfExpertise : DefinedThing, ICategorizableThing, IDeprecatableThing
+    public partial class DomainOfExpertise : DefinedThing, ICategorizableThing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -197,7 +197,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.DomainOfExpertise;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current DomainOfExpertise POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current DomainOfExpertise POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

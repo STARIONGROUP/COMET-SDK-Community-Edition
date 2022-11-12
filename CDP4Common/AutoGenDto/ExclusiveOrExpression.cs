@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(ParametricConstraint), "Expression")]
-    public sealed partial class ExclusiveOrExpression : BooleanExpression
+    public partial class ExclusiveOrExpression : BooleanExpression
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ExclusiveOrExpression"/> class.

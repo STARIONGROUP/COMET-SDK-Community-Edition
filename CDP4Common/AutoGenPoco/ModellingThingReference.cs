@@ -47,7 +47,7 @@ namespace CDP4Common.ReportingData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(EngineeringModelDataAnnotation), "RelatedThing")]
-    public sealed partial class ModellingThingReference : ThingReference
+    public partial class ModellingThingReference : ThingReference
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -146,7 +146,7 @@ namespace CDP4Common.ReportingData
             var dto = dtoThing as DTO.ModellingThingReference;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ModellingThingReference POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ModellingThingReference POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

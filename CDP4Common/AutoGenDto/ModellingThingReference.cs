@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(EngineeringModelDataAnnotation), "RelatedThing")]
-    public sealed partial class ModellingThingReference : ThingReference
+    public partial class ModellingThingReference : ThingReference
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ModellingThingReference"/> class.

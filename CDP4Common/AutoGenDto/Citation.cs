@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(Definition), "Citation")]
-    public sealed partial class Citation : Thing, IShortNamedThing
+    public partial class Citation : Thing, IShortNamedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Citation"/> class.

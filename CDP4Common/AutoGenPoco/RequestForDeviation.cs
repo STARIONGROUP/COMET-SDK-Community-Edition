@@ -48,7 +48,7 @@ namespace CDP4Common.ReportingData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(EngineeringModel), "ModellingAnnotation")]
-    public sealed partial class RequestForDeviation : ContractDeviation
+    public partial class RequestForDeviation : ContractDeviation
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -155,7 +155,7 @@ namespace CDP4Common.ReportingData
             var dto = dtoThing as DTO.RequestForDeviation;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current RequestForDeviation POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current RequestForDeviation POCO.");
             }
 
             this.ApprovedBy.ResolveList(dto.ApprovedBy, dto.IterationContainerId, this.Cache);

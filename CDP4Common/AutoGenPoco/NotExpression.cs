@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: The expression evaluates to true if its term is false, otherwise it evaluates to false.
     /// </summary>
     [Container(typeof(ParametricConstraint), "Expression")]
-    public sealed partial class NotExpression : BooleanExpression
+    public partial class NotExpression : BooleanExpression
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -185,7 +185,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.NotExpression;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current NotExpression POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current NotExpression POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

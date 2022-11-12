@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(DerivedQuantityKind), "QuantityKindFactor")]
-    public sealed partial class QuantityKindFactor : Thing
+    public partial class QuantityKindFactor : Thing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QuantityKindFactor"/> class.

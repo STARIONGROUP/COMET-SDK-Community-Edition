@@ -46,7 +46,7 @@ namespace CDP4Common.SiteDirectoryData
     /// definition of a term in a Glossary of terms
     /// </summary>
     [Container(typeof(Glossary), "Term")]
-    public sealed partial class Term : DefinedThing, IDeprecatableThing
+    public partial class Term : DefinedThing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -160,7 +160,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.Term;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Term POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Term POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

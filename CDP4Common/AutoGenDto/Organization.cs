@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(SiteDirectory), "Organization")]
-    public sealed partial class Organization : Thing, IDeprecatableThing, INamedThing, IShortNamedThing
+    public partial class Organization : Thing, IDeprecatableThing, INamedThing, IShortNamedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Organization"/> class.

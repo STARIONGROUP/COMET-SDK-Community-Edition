@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: See also ExternalIdentifierMap.
     /// </summary>
     [Container(typeof(ExternalIdentifierMap), "Correspondence")]
-    public sealed partial class IdCorrespondence : Thing, IOwnedThing
+    public partial class IdCorrespondence : Thing, IOwnedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -186,7 +186,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.IdCorrespondence;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current IdCorrespondence POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current IdCorrespondence POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

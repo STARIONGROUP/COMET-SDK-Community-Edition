@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(PersonRole), "PersonPermission")]
-    public sealed partial class PersonPermission : Thing, IDeprecatableThing
+    public partial class PersonPermission : Thing, IDeprecatableThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PersonPermission"/> class.

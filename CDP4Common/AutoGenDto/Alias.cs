@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(DefinedThing), "Alias")]
-    public sealed partial class Alias : Thing, IAnnotation
+    public partial class Alias : Thing, IAnnotation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Alias"/> class.

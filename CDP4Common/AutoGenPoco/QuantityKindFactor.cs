@@ -46,7 +46,7 @@ namespace CDP4Common.SiteDirectoryData
     /// representation of a QuantityKind and an exponent that together define one factor in a product of powers of QuantityKinds
     /// </summary>
     [Container(typeof(DerivedQuantityKind), "QuantityKindFactor")]
-    public sealed partial class QuantityKindFactor : Thing
+    public partial class QuantityKindFactor : Thing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -199,7 +199,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.QuantityKindFactor;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current QuantityKindFactor POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current QuantityKindFactor POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

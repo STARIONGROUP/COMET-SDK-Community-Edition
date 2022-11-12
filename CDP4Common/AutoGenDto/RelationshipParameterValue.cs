@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(Relationship), "ParameterValue")]
-    public sealed partial class RelationshipParameterValue : ParameterValue
+    public partial class RelationshipParameterValue : ParameterValue
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationshipParameterValue"/> class.

@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(Parameter), "ValueSet")]
-    public sealed partial class ParameterValueSet : ParameterValueSetBase
+    public partial class ParameterValueSet : ParameterValueSetBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterValueSet"/> class.

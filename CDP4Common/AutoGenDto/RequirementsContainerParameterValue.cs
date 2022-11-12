@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(RequirementsContainer), "ParameterValue")]
-    public sealed partial class RequirementsContainerParameterValue : ParameterValue
+    public partial class RequirementsContainerParameterValue : ParameterValue
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RequirementsContainerParameterValue"/> class.

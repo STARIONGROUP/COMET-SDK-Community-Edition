@@ -48,7 +48,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note 2: The representation of the actual file content of a FileRevision depends on the implementation technology and is not modeled as an explicit property. It may differ between server and client applications. A server application (e.g. a combination of a web services processor and a persistent data store) may store the content partitioned into chunks for reasons of efficiency. A client application may implement an API that provides access to an instance of a retrieved file in a locally accessible file system. There is a FileContentType data type that can be used in code generation or implementation.
     /// </summary>
     [Container(typeof(File), "FileRevision")]
-    public sealed partial class FileRevision : Thing, INamedThing, ITimeStampedThing
+    public partial class FileRevision : Thing, INamedThing, ITimeStampedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -282,7 +282,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.FileRevision;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current FileRevision POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current FileRevision POCO.");
             }
 
             this.ContainingFolder = (dto.ContainingFolder.HasValue) ? this.Cache.Get<Folder>(dto.ContainingFolder.Value, dto.IterationContainerId) : null;

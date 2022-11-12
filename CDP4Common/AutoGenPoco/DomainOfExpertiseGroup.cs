@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note: The purpose of DomainOfExpertiseGroup is to organize related domains of expertise in convenient ways in order to assist setting up and managing domains for EngineeringModelSetups as well as mapping domains when datasets are exchanged between partnering concurrent engineering organizations.
     /// </summary>
     [Container(typeof(SiteDirectory), "DomainGroup")]
-    public sealed partial class DomainOfExpertiseGroup : DefinedThing, IDeprecatableThing
+    public partial class DomainOfExpertiseGroup : DefinedThing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -196,7 +196,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.DomainOfExpertiseGroup;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current DomainOfExpertiseGroup POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current DomainOfExpertiseGroup POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

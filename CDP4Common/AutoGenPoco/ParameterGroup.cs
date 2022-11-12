@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: Grouping of parameters is useful in order to manage and facilitate usage of large sets of parameters. Groups may be nested into a hierarchical structure through the <i>containingGroup</i> property.
     /// </summary>
     [Container(typeof(ElementDefinition), "ParameterGroup")]
-    public sealed partial class ParameterGroup : Thing, INamedThing
+    public partial class ParameterGroup : Thing, INamedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -195,7 +195,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.ParameterGroup;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ParameterGroup POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParameterGroup POCO.");
             }
 
             this.ContainingGroup = (dto.ContainingGroup.HasValue) ? this.Cache.Get<ParameterGroup>(dto.ContainingGroup.Value, dto.IterationContainerId) : null;

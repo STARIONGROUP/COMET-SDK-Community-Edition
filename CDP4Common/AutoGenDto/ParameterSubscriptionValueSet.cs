@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(ParameterSubscription), "ValueSet")]
-    public sealed partial class ParameterSubscriptionValueSet : Thing, IOwnedThing
+    public partial class ParameterSubscriptionValueSet : Thing, IOwnedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterSubscriptionValueSet"/> class.

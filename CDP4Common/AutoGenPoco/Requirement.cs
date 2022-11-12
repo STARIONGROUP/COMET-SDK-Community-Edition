@@ -48,7 +48,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note 2: The textual body of the requirement is specified in the <i>content</i> of the associated Definition.
     /// </summary>
     [Container(typeof(RequirementsSpecification), "Requirement")]
-    public sealed partial class Requirement : SimpleParameterizableThing, ICategorizableThing, IDeprecatableThing
+    public partial class Requirement : SimpleParameterizableThing, ICategorizableThing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -240,7 +240,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.Requirement;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Requirement POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Requirement POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

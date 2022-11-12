@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: This allows attaching "user-defined attributes" to SimpleParameterizableThings by using ParameterTypes defined in a ReferenceDataLibrary, i.e. reusing the concepts already defined for Parameters of ElementDefinitions.
     /// </summary>
     [Container(typeof(SimpleParameterizableThing), "ParameterValue")]
-    public sealed partial class SimpleParameterValue : Thing, IOwnedThing
+    public partial class SimpleParameterValue : Thing, IOwnedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -235,7 +235,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.SimpleParameterValue;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current SimpleParameterValue POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current SimpleParameterValue POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

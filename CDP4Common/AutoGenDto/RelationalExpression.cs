@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(ParametricConstraint), "Expression")]
-    public sealed partial class RelationalExpression : BooleanExpression
+    public partial class RelationalExpression : BooleanExpression
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationalExpression"/> class.

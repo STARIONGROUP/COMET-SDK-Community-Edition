@@ -46,7 +46,7 @@ namespace CDP4Common.EngineeringModelData
     /// representation of the switch setting and all values for a ParameterOverride
     /// </summary>
     [Container(typeof(ParameterOverride), "ValueSet")]
-    public sealed partial class ParameterOverrideValueSet : ParameterValueSetBase
+    public partial class ParameterOverrideValueSet : ParameterValueSetBase
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -222,7 +222,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.ParameterOverrideValueSet;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ParameterOverrideValueSet POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParameterOverrideValueSet POCO.");
             }
 
             this.Computed = new ValueArray<string>(dto.Computed, this);

@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.2.0")]
     [Container(typeof(ReferenceDataLibrary), "ParameterType")]
-    public sealed partial class SampledFunctionParameterType : ParameterType
+    public partial class SampledFunctionParameterType : ParameterType
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampledFunctionParameterType"/> class.
@@ -156,7 +156,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.Alias.Add(copy.Value.Iid);
@@ -173,7 +173,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.Definition.Add(copy.Value.Iid);
@@ -186,7 +186,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == Guid.Parse(orderedItem.V.ToString()));
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", orderedItem.V));
+                    throw new InvalidOperationException($"The copy could not be found for {orderedItem.V}");
                 }
                 this.DependentParameterType.Add(new OrderedItem { K = orderedItem.K, V = copy.Value.Iid });
             }
@@ -208,7 +208,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.HyperLink.Add(copy.Value.Iid);
@@ -219,7 +219,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == Guid.Parse(orderedItem.V.ToString()));
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", orderedItem.V));
+                    throw new InvalidOperationException($"The copy could not be found for {orderedItem.V}");
                 }
                 this.IndependentParameterType.Add(new OrderedItem { K = orderedItem.K, V = copy.Value.Iid });
             }

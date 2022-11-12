@@ -49,7 +49,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Example 2: Components "nr" and  "connector_type" for a CompoundParameterType that defines the number of a certain type of connectors. The "nr" component would be a "count" QuantityKind and the "connector_type" would be a EnumerationParameterType with an enumeration of known connector types.
     /// </summary>
     [Container(typeof(CompoundParameterType), "Component")]
-    public sealed partial class ParameterTypeComponent : Thing, IShortNamedThing
+    public partial class ParameterTypeComponent : Thing, IShortNamedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -220,7 +220,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.ParameterTypeComponent;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ParameterTypeComponent POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParameterTypeComponent POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

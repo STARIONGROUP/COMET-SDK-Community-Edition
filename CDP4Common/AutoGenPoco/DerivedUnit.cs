@@ -54,7 +54,7 @@ namespace CDP4Common.SiteDirectoryData
     /// (SimpleUnit) "metre" to the power minus one.
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "Unit")]
-    public sealed partial class DerivedUnit : MeasurementUnit
+    public partial class DerivedUnit : MeasurementUnit
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -191,7 +191,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.DerivedUnit;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current DerivedUnit POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current DerivedUnit POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

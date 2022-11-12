@@ -48,7 +48,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note 2: A description of the information source may be given in the <i>content</i> property of an associated Definition. Alternative names may be given in associated Aliases. On-line references may be given in associated HyperLinks.
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "ReferenceSource")]
-    public sealed partial class ReferenceSource : DefinedThing, ICategorizableThing, IDeprecatableThing
+    public partial class ReferenceSource : DefinedThing, ICategorizableThing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -271,7 +271,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.ReferenceSource;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ReferenceSource POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ReferenceSource POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

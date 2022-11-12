@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(File), "FileRevision")]
-    public sealed partial class FileRevision : Thing, INamedThing, ITimeStampedThing
+    public partial class FileRevision : Thing, INamedThing, ITimeStampedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FileRevision"/> class.

@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// </summary>
     [CDPVersion("1.2.0")]
     [Container(typeof(EngineeringModelSetup), "OrganizationalParticipant")]
-    public sealed partial class OrganizationalParticipant : Thing
+    public partial class OrganizationalParticipant : Thing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -185,7 +185,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.OrganizationalParticipant;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current OrganizationalParticipant POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current OrganizationalParticipant POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

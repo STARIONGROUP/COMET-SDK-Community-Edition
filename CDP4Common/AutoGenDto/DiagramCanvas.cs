@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(Iteration), "DiagramCanvas")]
-    public sealed partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
+    public partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DiagramCanvas"/> class.
@@ -115,7 +115,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.Bounds.Add(copy.Value.Iid);
@@ -128,7 +128,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.DiagramElement.Add(copy.Value.Iid);

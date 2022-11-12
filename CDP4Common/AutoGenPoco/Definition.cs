@@ -47,7 +47,7 @@ namespace CDP4Common.CommonData
     /// Note: The <i>content</i> property holds the actual text of this Definition.
     /// </summary>
     [Container(typeof(DefinedThing), "Definition")]
-    public sealed partial class Definition : Thing, IAnnotation
+    public partial class Definition : Thing, IAnnotation
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -226,7 +226,7 @@ namespace CDP4Common.CommonData
             var dto = dtoThing as DTO.Definition;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Definition POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Definition POCO.");
             }
 
             this.Citation.ResolveList(dto.Citation, dto.IterationContainerId, this.Cache);

@@ -48,7 +48,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note 2: The Category concept provides additional flexibility to assist in the definition and usage of views and filters on the instances in a population of the data model.
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "DefinedCategory")]
-    public sealed partial class Category : DefinedThing, IDeprecatableThing
+    public partial class Category : DefinedThing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -238,7 +238,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.Category;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Category POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Category POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

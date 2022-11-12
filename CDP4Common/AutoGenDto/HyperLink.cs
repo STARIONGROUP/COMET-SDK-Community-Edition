@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(DefinedThing), "HyperLink")]
-    public sealed partial class HyperLink : Thing, IAnnotation
+    public partial class HyperLink : Thing, IAnnotation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HyperLink"/> class.

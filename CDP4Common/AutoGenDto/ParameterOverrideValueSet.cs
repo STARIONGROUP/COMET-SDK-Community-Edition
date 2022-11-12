@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(ParameterOverride), "ValueSet")]
-    public sealed partial class ParameterOverrideValueSet : ParameterValueSetBase
+    public partial class ParameterOverrideValueSet : ParameterValueSetBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterOverrideValueSet"/> class.

@@ -54,7 +54,7 @@ namespace CDP4Common.EngineeringModelData
     /// with states "SafeMode", "Hibernation", "Operation".
     /// </summary>
     [Container(typeof(Iteration), "PossibleFiniteStateList")]
-    public sealed partial class PossibleFiniteStateList : DefinedThing, ICategorizableThing, IOwnedThing
+    public partial class PossibleFiniteStateList : DefinedThing, ICategorizableThing, IOwnedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -263,7 +263,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.PossibleFiniteStateList;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current PossibleFiniteStateList POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current PossibleFiniteStateList POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

@@ -46,7 +46,7 @@ namespace CDP4Common.CommonData
     /// representation of a hyperlink consisting of a URI and a descriptive text
     /// </summary>
     [Container(typeof(DefinedThing), "HyperLink")]
-    public sealed partial class HyperLink : Thing, IAnnotation
+    public partial class HyperLink : Thing, IAnnotation
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -188,7 +188,7 @@ namespace CDP4Common.CommonData
             var dto = dtoThing as DTO.HyperLink;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current HyperLink POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current HyperLink POCO.");
             }
 
             this.Content = dto.Content;

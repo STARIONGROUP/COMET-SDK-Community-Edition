@@ -50,7 +50,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Example: The mapping between the thermodynamic temperature RatioScale in kelvin (the reference scale) and the Celsius temperature IntervalScale in degree Celsius (the dependent scale) is defined by a MappingToReferenceScale with <i>referenceScaleValue.value</i> = 0.0 [K] and <i>dependentScaleValue.value</i> = -273.15 [°C].
     /// </summary>
     [Container(typeof(MeasurementScale), "MappingToReferenceScale")]
-    public sealed partial class MappingToReferenceScale : Thing
+    public partial class MappingToReferenceScale : Thing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -209,7 +209,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.MappingToReferenceScale;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current MappingToReferenceScale POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current MappingToReferenceScale POCO.");
             }
 
             this.DependentScaleValue = this.Cache.Get<ScaleValueDefinition>(dto.DependentScaleValue, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<ScaleValueDefinition>();

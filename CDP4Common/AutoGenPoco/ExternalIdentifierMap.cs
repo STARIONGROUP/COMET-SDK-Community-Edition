@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: The purpose of such a correspondence mapping is to provide the data to reduce as much as possible the loss of information when performing round trip import / export data transfer between an E-TM-10-25 compliant model and a model in the format of an external tool.
     /// </summary>
     [Container(typeof(Iteration), "ExternalIdentifierMap")]
-    public sealed partial class ExternalIdentifierMap : Thing, INamedThing, IOwnedThing
+    public partial class ExternalIdentifierMap : Thing, INamedThing, IOwnedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -278,7 +278,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.ExternalIdentifierMap;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ExternalIdentifierMap POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ExternalIdentifierMap POCO.");
             }
 
             this.Correspondence.ResolveList(dto.Correspondence, dto.IterationContainerId, this.Cache);

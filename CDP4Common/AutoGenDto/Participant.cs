@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(EngineeringModelSetup), "Participant")]
-    public sealed partial class Participant : Thing, IParticipantAffectedAccessThing
+    public partial class Participant : Thing, IParticipantAffectedAccessThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Participant"/> class.

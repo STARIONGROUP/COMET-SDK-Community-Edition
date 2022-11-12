@@ -48,7 +48,7 @@ namespace CDP4Common.ReportingData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(Book), "Section")]
-    public sealed partial class Section : Thing, ICategorizableThing, INamedThing, IOwnedThing, IShortNamedThing, ITimeStampedThing
+    public partial class Section : Thing, ICategorizableThing, INamedThing, IOwnedThing, IShortNamedThing, ITimeStampedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -272,7 +272,7 @@ namespace CDP4Common.ReportingData
             var dto = dtoThing as DTO.Section;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Section POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Section POCO.");
             }
 
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);

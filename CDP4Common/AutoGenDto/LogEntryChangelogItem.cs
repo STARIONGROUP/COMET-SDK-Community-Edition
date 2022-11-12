@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.2.0")]
     [Container(typeof(ILogEntry), "LogEntryChangelogItem")]
-    public sealed partial class LogEntryChangelogItem : Thing
+    public partial class LogEntryChangelogItem : Thing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LogEntryChangelogItem"/> class.

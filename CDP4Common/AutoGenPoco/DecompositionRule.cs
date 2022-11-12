@@ -48,7 +48,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Example: A rule where the <i>containingCategory</i> is Category "Equipment" and the <i>containedCategory</i> is Category "Subequipment".
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "Rule")]
-    public sealed partial class DecompositionRule : Rule
+    public partial class DecompositionRule : Rule
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -236,7 +236,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.DecompositionRule;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current DecompositionRule POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current DecompositionRule POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: The expression evaluates to true if all its terms are true, otherwise it evaluates to false.
     /// </summary>
     [Container(typeof(ParametricConstraint), "Expression")]
-    public sealed partial class AndExpression : BooleanExpression
+    public partial class AndExpression : BooleanExpression
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -187,7 +187,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.AndExpression;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current AndExpression POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current AndExpression POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

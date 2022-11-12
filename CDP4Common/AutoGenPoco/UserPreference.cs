@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note: The named key of the UserPreference is given by the <i>shortName</i> property. It shall be unique over all UserPreferences contained by one Person.
     /// </summary>
     [Container(typeof(Person), "UserPreference")]
-    public sealed partial class UserPreference : Thing, IShortNamedThing
+    public partial class UserPreference : Thing, IShortNamedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -177,7 +177,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.UserPreference;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current UserPreference POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current UserPreference POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

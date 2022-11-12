@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: A File instance only holds the identification of a File, its owner and an optional lockedBy property. All other properties are held inside a FileRevision.
     /// </summary>
     [Container(typeof(FileStore), "File")]
-    public sealed partial class File : Thing, ICategorizableThing, IOwnedThing
+    public partial class File : Thing, ICategorizableThing, IOwnedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -249,7 +249,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.File;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current File POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current File POCO.");
             }
 
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);

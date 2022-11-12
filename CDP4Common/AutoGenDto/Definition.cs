@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(DefinedThing), "Definition")]
-    public sealed partial class Definition : Thing, IAnnotation
+    public partial class Definition : Thing, IAnnotation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Definition"/> class.
@@ -161,7 +161,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.Citation.Add(copy.Value.Iid);

@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: There is at most one CommonFileStore in an EngineeringModel and its <i>owner</i> is typically a "system" DomainOfExpertise.
     /// </summary>
     [Container(typeof(EngineeringModel), "CommonFileStore")]
-    public sealed partial class CommonFileStore : FileStore
+    public partial class CommonFileStore : FileStore
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -150,7 +150,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.CommonFileStore;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current CommonFileStore POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current CommonFileStore POCO.");
             }
 
             this.CreatedOn = dto.CreatedOn;

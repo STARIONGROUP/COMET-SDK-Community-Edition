@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(DiagrammingStyle), "UsedColor")]
-    public sealed partial class Color : DiagramThingBase
+    public partial class Color : DiagramThingBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Color"/> class.

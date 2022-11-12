@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(Section), "Page")]
-    public sealed partial class Page : Thing, ICategorizableThing, INamedThing, IOwnedThing, IShortNamedThing, ITimeStampedThing
+    public partial class Page : Thing, ICategorizableThing, INamedThing, IOwnedThing, IShortNamedThing, ITimeStampedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Page"/> class.
@@ -191,7 +191,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == Guid.Parse(orderedItem.V.ToString()));
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", orderedItem.V));
+                    throw new InvalidOperationException($"The copy could not be found for {orderedItem.V}");
                 }
                 this.Note.Add(new OrderedItem { K = orderedItem.K, V = copy.Value.Iid });
             }

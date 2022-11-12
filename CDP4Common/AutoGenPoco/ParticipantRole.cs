@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note: When creating a new ParticipantRole, the user shall define ParticipantPermissions for all ClassKinds that have a <i>defaultPersonAccess</i> equal to ParticipantAccessRightKind.NONE. For all ClassKinds that have a <i>defaultParticipantAccess</i> not equal to ParticipantAccessRightKind.NONE, a ParticipantPermission with <i>accessRight</i> equal to <i>defaultParticipantAccess</i> for that ClassKind shall be defined. See ParticipantAccessRightKind for details.
     /// </summary>
     [Container(typeof(SiteDirectory), "ParticipantRole")]
-    public sealed partial class ParticipantRole : DefinedThing, IDeprecatableThing
+    public partial class ParticipantRole : DefinedThing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -189,7 +189,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.ParticipantRole;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ParticipantRole POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParticipantRole POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

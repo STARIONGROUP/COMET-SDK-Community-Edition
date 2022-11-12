@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note: The format of values must comply with ISO 8601 and the DateTime datatype.
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "ParameterType")]
-    public sealed partial class DateTimeParameterType : ScalarParameterType
+    public partial class DateTimeParameterType : ScalarParameterType
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -153,7 +153,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.DateTimeParameterType;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current DateTimeParameterType POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current DateTimeParameterType POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

@@ -46,7 +46,7 @@ namespace CDP4Common.DiagramData
     /// Represents a Color value in the RGB format
     /// </summary>
     [Container(typeof(DiagrammingStyle), "UsedColor")]
-    public sealed partial class Color : DiagramThingBase
+    public partial class Color : DiagramThingBase
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -172,7 +172,7 @@ namespace CDP4Common.DiagramData
             var dto = dtoThing as DTO.Color;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Color POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Color POCO.");
             }
 
             this.Blue = dto.Blue;

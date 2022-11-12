@@ -47,7 +47,7 @@ namespace CDP4Common.ReportingData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(Page), "Note")]
-    public sealed partial class BinaryNote : Note
+    public partial class BinaryNote : Note
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -200,7 +200,7 @@ namespace CDP4Common.ReportingData
             var dto = dtoThing as DTO.BinaryNote;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current BinaryNote POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current BinaryNote POCO.");
             }
 
             this.Caption = dto.Caption;

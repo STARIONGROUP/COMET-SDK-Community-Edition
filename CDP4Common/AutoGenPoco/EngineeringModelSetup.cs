@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note: The data that defines a complete engineering model is split over two containers: EngineeringModelSetup and EngineeringModel. The rationale behind this is as follows: the EngineeringModelSetup contains the minimum information needed to provide an overview of all models available on a site and the associated EngineeringModel contains the actual detailed content of the model. In E-TM-10-25 applications it is then possible that all EngineeringModelSetups reside inside the SiteDirectory database and each EngineeringModel resides in its own separate database.
     /// </summary>
     [Container(typeof(SiteDirectory), "Model")]
-    public sealed partial class EngineeringModelSetup : DefinedThing, IParticipantAffectedAccessThing
+    public partial class EngineeringModelSetup : DefinedThing, IParticipantAffectedAccessThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -348,7 +348,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.EngineeringModelSetup;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current EngineeringModelSetup POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current EngineeringModelSetup POCO.");
             }
 
             this.ActiveDomain.ResolveList(dto.ActiveDomain, dto.IterationContainerId, this.Cache);

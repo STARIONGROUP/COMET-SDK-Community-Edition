@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(Person), "TelephoneNumber")]
-    public sealed partial class TelephoneNumber : Thing
+    public partial class TelephoneNumber : Thing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TelephoneNumber"/> class.

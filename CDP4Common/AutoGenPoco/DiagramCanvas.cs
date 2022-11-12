@@ -47,7 +47,7 @@ namespace CDP4Common.DiagramData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(Iteration), "DiagramCanvas")]
-    public sealed partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
+    public partial class DiagramCanvas : DiagramElementContainer, ITimeStampedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -160,7 +160,7 @@ namespace CDP4Common.DiagramData
             var dto = dtoThing as DTO.DiagramCanvas;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current DiagramCanvas POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current DiagramCanvas POCO.");
             }
 
             this.Bounds.ResolveList(dto.Bounds, dto.IterationContainerId, this.Cache);

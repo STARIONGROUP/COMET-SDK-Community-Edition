@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(DiagramElementThing), "LocalStyle")]
-    public sealed partial class OwnedStyle : DiagrammingStyle
+    public partial class OwnedStyle : DiagrammingStyle
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OwnedStyle"/> class.
@@ -153,7 +153,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.UsedColor.Add(copy.Value.Iid);

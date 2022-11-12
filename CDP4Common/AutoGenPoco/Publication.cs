@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: The purpose of publishing Publications is to isolate all Participants that hold a ParameterSubscription on a particular Parameter or ParameterOverride from continuous (and potential disruptive) changes to the <i>computed</i> values of those ParameterSubscriptions. The <i>computed</i> values in the ParameterSubscriptionValueSets of ParameterSubscriptions are updated to the latest <i>actualValue</i> in the ParameterValueSets of the corresponding Parameter or ParameterOverride only at the point in time when a Publication takes place. This mechanism allows the owners, i.e. Participant(s) representing the owner DomainOfExpertise, of Parameters and ParameterOverrides to freely experiment with their parameter values without disrupting the other Participants.
     /// </summary>
     [Container(typeof(Iteration), "Publication")]
-    public sealed partial class Publication : Thing, ITimeStampedThing
+    public partial class Publication : Thing, ITimeStampedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -213,7 +213,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.Publication;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Publication POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Publication POCO.");
             }
 
             this.CreatedOn = dto.CreatedOn;

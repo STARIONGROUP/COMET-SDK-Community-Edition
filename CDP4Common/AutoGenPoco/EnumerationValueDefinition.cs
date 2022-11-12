@@ -48,7 +48,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note 2: The <i>name</i> can be used as a more extensive description of the meaning of the enumeration value, and could be shown e.g. as a tooltip in a user interface. If needed more detailed information can be provided in the associated <i>definition</i>, <i>hyperLink</i> and <i>alias</i>, but this is optional.
     /// </summary>
     [Container(typeof(EnumerationParameterType), "ValueDefinition")]
-    public sealed partial class EnumerationValueDefinition : DefinedThing
+    public partial class EnumerationValueDefinition : DefinedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -153,7 +153,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.EnumerationValueDefinition;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current EnumerationValueDefinition POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current EnumerationValueDefinition POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

@@ -50,7 +50,7 @@ namespace CDP4Common.EngineeringModelData
     /// Example: Assume a spacecraft with a service module "sm" (an ElementUsage of ElementDefinition "SM") and two solar array wings with three panels each. The NestedElement representing panel 2 on wing 1 would be defined by the <i>topElement</i> ElementDefinition for the spacecraft (the "system-of-interest"), and a list of elementUsages referencing: the "sm" usage, the  "wing1" usage, the "panel2" usage, in that order.
     /// </summary>
     [Container(typeof(Option), "NestedElement")]
-    public sealed partial class NestedElement : Thing, INamedThing, IOwnedThing, IShortNamedThing, IVolatileThing
+    public partial class NestedElement : Thing, INamedThing, IOwnedThing, IShortNamedThing, IVolatileThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -298,7 +298,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.NestedElement;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current NestedElement POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current NestedElement POCO.");
             }
 
             this.ElementUsage.ResolveList(dto.ElementUsage, dto.IterationContainerId, this.Cache);

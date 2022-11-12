@@ -46,7 +46,7 @@ namespace CDP4Common.SiteDirectoryData
     /// ReferenceDataLibrary that is particular to a given EngineeringModel / EngineeringModelSetup
     /// </summary>
     [Container(typeof(EngineeringModelSetup), "RequiredRdl")]
-    public sealed partial class ModelReferenceDataLibrary : ReferenceDataLibrary
+    public partial class ModelReferenceDataLibrary : ReferenceDataLibrary
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -173,7 +173,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.ModelReferenceDataLibrary;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ModelReferenceDataLibrary POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ModelReferenceDataLibrary POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

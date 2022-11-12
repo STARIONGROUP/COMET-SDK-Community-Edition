@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(DiagramElementContainer), "Bounds")]
-    public sealed partial class Bounds : DiagramThingBase
+    public partial class Bounds : DiagramThingBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Bounds"/> class.

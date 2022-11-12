@@ -46,7 +46,7 @@ namespace CDP4Common.SiteDirectoryData
     /// representation of a telephone number
     /// </summary>
     [Container(typeof(Person), "TelephoneNumber")]
-    public sealed partial class TelephoneNumber : Thing
+    public partial class TelephoneNumber : Thing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -175,7 +175,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.TelephoneNumber;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current TelephoneNumber POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current TelephoneNumber POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

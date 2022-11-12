@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(StakeHolderValueMap), "Settings")]
-    public sealed partial class StakeHolderValueMapSettings : Thing
+    public partial class StakeHolderValueMapSettings : Thing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StakeHolderValueMapSettings"/> class.

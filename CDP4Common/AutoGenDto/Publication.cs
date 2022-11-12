@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(Iteration), "Publication")]
-    public sealed partial class Publication : Thing, ITimeStampedThing
+    public partial class Publication : Thing, ITimeStampedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Publication"/> class.

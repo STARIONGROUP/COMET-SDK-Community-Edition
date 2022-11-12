@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(EngineeringModelSetup), "IterationSetup")]
-    public sealed partial class IterationSetup : Thing, IParticipantAffectedAccessThing, ITimeStampedThing
+    public partial class IterationSetup : Thing, IParticipantAffectedAccessThing, ITimeStampedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IterationSetup"/> class.

@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(ElementUsage), "ParameterOverride")]
-    public sealed partial class ParameterOverride : ParameterOrOverrideBase
+    public partial class ParameterOverride : ParameterOrOverrideBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterOverride"/> class.
@@ -226,7 +226,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.ParameterSubscription.Add(copy.Value.Iid);
@@ -239,7 +239,7 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
                 {
-                    throw new InvalidOperationException(string.Format("The copy could not be found for {0}", guid));
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
                 }
 
                 this.ValueSet.Add(copy.Value.Iid);

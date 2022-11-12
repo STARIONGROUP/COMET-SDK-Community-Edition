@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(RuleVerificationList), "RuleVerification")]
-    public sealed partial class UserRuleVerification : RuleVerification
+    public partial class UserRuleVerification : RuleVerification
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserRuleVerification"/> class.

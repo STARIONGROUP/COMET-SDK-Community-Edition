@@ -47,7 +47,7 @@ namespace CDP4Common.DiagramData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(DiagramElementContainer), "Bounds")]
-    public sealed partial class Bounds : DiagramThingBase
+    public partial class Bounds : DiagramThingBase
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -182,7 +182,7 @@ namespace CDP4Common.DiagramData
             var dto = dtoThing as DTO.Bounds;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Bounds POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Bounds POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

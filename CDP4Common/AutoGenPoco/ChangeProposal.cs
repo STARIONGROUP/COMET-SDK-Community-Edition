@@ -47,7 +47,7 @@ namespace CDP4Common.ReportingData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(EngineeringModel), "ModellingAnnotation")]
-    public sealed partial class ChangeProposal : ModellingAnnotationItem
+    public partial class ChangeProposal : ModellingAnnotationItem
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -193,7 +193,7 @@ namespace CDP4Common.ReportingData
             var dto = dtoThing as DTO.ChangeProposal;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ChangeProposal POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ChangeProposal POCO.");
             }
 
             this.ApprovedBy.ResolveList(dto.ApprovedBy, dto.IterationContainerId, this.Cache);

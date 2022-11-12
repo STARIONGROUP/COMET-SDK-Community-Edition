@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(CompoundParameterType), "Component")]
-    public sealed partial class ParameterTypeComponent : Thing, IShortNamedThing
+    public partial class ParameterTypeComponent : Thing, IShortNamedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterTypeComponent"/> class.

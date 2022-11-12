@@ -47,7 +47,7 @@ namespace CDP4Common.ReportingData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(ModellingAnnotationItem), "ApprovedBy")]
-    public sealed partial class Approval : GenericAnnotation, IOwnedThing
+    public partial class Approval : GenericAnnotation, IOwnedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -216,7 +216,7 @@ namespace CDP4Common.ReportingData
             var dto = dtoThing as DTO.Approval;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Approval POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Approval POCO.");
             }
 
             this.Author = this.Cache.Get<Participant>(dto.Author, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Participant>();

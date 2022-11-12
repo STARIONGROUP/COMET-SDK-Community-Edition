@@ -48,7 +48,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note 2: The associated ParameterType (through the parameterType property) provides name, shortName, and optionally alias, definition and hyperLink for this Parameter.
     /// </summary>
     [Container(typeof(ElementDefinition), "Parameter")]
-    public sealed partial class Parameter : ParameterOrOverrideBase
+    public partial class Parameter : ParameterOrOverrideBase
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -232,7 +232,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.Parameter;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Parameter POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Parameter POCO.");
             }
 
             this.AllowDifferentOwnerOfOverride = dto.AllowDifferentOwnerOfOverride;

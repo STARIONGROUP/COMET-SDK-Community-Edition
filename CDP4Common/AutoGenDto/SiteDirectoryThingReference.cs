@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(SiteDirectoryDataAnnotation), "RelatedThing")]
-    public sealed partial class SiteDirectoryThingReference : ThingReference
+    public partial class SiteDirectoryThingReference : ThingReference
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteDirectoryThingReference"/> class.

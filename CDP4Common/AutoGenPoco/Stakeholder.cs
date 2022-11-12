@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(Iteration), "Stakeholder")]
-    public sealed partial class Stakeholder : DefinedThing, ICategorizableThing
+    public partial class Stakeholder : DefinedThing, ICategorizableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -203,7 +203,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.Stakeholder;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Stakeholder POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Stakeholder POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

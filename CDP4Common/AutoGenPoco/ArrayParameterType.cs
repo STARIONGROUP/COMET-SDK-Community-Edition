@@ -46,7 +46,7 @@ namespace CDP4Common.SiteDirectoryData
     /// specialization of CompoundParameterType that specifies a one-dimensional or multi-dimensional array parameter type with elements (components) that are typed by other ScalarParameterTypes
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "ParameterType")]
-    public sealed partial class ArrayParameterType : CompoundParameterType
+    public partial class ArrayParameterType : CompoundParameterType
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -219,7 +219,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.ArrayParameterType;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ArrayParameterType POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ArrayParameterType POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

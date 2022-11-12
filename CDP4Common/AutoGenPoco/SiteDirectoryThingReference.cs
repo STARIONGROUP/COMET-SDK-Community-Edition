@@ -47,7 +47,7 @@ namespace CDP4Common.ReportingData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(SiteDirectoryDataAnnotation), "RelatedThing")]
-    public sealed partial class SiteDirectoryThingReference : ThingReference
+    public partial class SiteDirectoryThingReference : ThingReference
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -146,7 +146,7 @@ namespace CDP4Common.ReportingData
             var dto = dtoThing as DTO.SiteDirectoryThingReference;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current SiteDirectoryThingReference POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current SiteDirectoryThingReference POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

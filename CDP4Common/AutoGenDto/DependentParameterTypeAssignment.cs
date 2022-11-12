@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.2.0")]
     [Container(typeof(SampledFunctionParameterType), "DependentParameterType")]
-    public sealed partial class DependentParameterTypeAssignment : Thing, IParameterTypeAssignment
+    public partial class DependentParameterTypeAssignment : Thing, IParameterTypeAssignment
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DependentParameterTypeAssignment"/> class.

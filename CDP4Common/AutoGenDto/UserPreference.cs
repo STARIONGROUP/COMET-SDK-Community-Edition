@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(Person), "UserPreference")]
-    public sealed partial class UserPreference : Thing, IShortNamedThing
+    public partial class UserPreference : Thing, IShortNamedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserPreference"/> class.

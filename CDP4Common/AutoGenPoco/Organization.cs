@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note: This class maps to the 'organization' object class that is defined       in       LDAP       (<a href="http://datatracker.ietf.org/doc/rfc4519/">IETF       RFC       4519</a>)       as       "the       basis       of       an       entry       that       represents       a       structured       group       of       people".
     /// </summary>
     [Container(typeof(SiteDirectory), "Organization")]
-    public sealed partial class Organization : Thing, IDeprecatableThing, INamedThing, IShortNamedThing
+    public partial class Organization : Thing, IDeprecatableThing, INamedThing, IShortNamedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -187,7 +187,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.Organization;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Organization POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Organization POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

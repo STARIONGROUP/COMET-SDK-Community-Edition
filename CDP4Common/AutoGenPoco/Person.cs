@@ -48,7 +48,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note 2: Property <i>shortName</i> is used as a user account name       for       E-TM-10-25       implementations.       It       maps       to       LDAP attribute       'uid',       as       defined       in       LDAP       (<a href="http://datatracker.ietf.org/doc/rfc4519/">IETF       RFC       4519</a>).
     /// </summary>
     [Container(typeof(SiteDirectory), "Person")]
-    public sealed partial class Person : Thing, IDeprecatableThing, INamedThing, IShortNamedThing
+    public partial class Person : Thing, IDeprecatableThing, INamedThing, IShortNamedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -397,7 +397,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.Person;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Person POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Person POCO.");
             }
 
             this.DefaultDomain = (dto.DefaultDomain.HasValue) ? this.Cache.Get<DomainOfExpertise>(dto.DefaultDomain.Value, dto.IterationContainerId) : null;

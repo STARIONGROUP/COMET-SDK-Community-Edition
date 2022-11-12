@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: ParameterSubscriptions represent parameters used as inputs in concurrent engineering workbooks.
     /// </summary>
     [Container(typeof(ParameterOrOverrideBase), "ParameterSubscription")]
-    public sealed partial class ParameterSubscription : ParameterBase
+    public partial class ParameterSubscription : ParameterBase
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -258,7 +258,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.ParameterSubscription;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ParameterSubscription POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParameterSubscription POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

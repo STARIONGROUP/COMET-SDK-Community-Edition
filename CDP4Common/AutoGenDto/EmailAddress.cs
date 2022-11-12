@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(Person), "EmailAddress")]
-    public sealed partial class EmailAddress : Thing
+    public partial class EmailAddress : Thing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailAddress"/> class.

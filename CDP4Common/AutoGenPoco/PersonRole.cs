@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note: When creating a new PersonRole, the user shall define PersonPermissions for all ClassKinds that have a <i>defaultPersonAccess</i> equal to PersonAccessRightKind.NONE. For all ClassKinds that have a <i>defaultPersonAccess</i> not equal to PersonAccessRightKind.NONE, a PersonPermission with <i>accessRight</i> equal to <i>defaultPersonAccess</i> for that ClassKind shall be defined. See PersonAccessRightKind for details.
     /// </summary>
     [Container(typeof(SiteDirectory), "PersonRole")]
-    public sealed partial class PersonRole : DefinedThing, IDeprecatableThing
+    public partial class PersonRole : DefinedThing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -189,7 +189,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.PersonRole;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current PersonRole POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current PersonRole POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

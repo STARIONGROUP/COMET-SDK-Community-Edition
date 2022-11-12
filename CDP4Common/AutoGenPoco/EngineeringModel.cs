@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note 1: An EngineeringModel also references a chain of one or more ReferenceDataLibraries (through the <i>requiredRdl</i> property of the associated EngineeringModelSetup) that define the reference data that is or can be used in the model.
     /// Note 2: When an EngineeringModel is created for first time, it shall contain one Iteration and one Option (with <i>name</i> and <i>shortName</i> set to "Default"), which shall also be referenced as the <i>defaultOption</i>.
     /// </summary>
-    public sealed partial class EngineeringModel : TopContainer
+    public partial class EngineeringModel : TopContainer
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -294,7 +294,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.EngineeringModel;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current EngineeringModel POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current EngineeringModel POCO.");
             }
 
             this.Book.ResolveList(dto.Book, dto.IterationContainerId, this.Cache);

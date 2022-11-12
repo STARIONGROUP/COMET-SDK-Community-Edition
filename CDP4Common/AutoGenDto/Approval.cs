@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(ModellingAnnotationItem), "ApprovedBy")]
-    public sealed partial class Approval : GenericAnnotation, IOwnedThing
+    public partial class Approval : GenericAnnotation, IOwnedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Approval"/> class.

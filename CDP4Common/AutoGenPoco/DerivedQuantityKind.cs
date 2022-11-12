@@ -49,7 +49,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Example 2: DerivedQuantityKind "linear expansion coefficient" can be specified as the product of "length" to the power one times "length" to the power minus one. So, it is permissible to use the same QuantityKind more than once in the list of <i>quantityKindFactor</i>.
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "ParameterType")]
-    public sealed partial class DerivedQuantityKind : QuantityKind
+    public partial class DerivedQuantityKind : QuantityKind
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -188,7 +188,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.DerivedQuantityKind;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current DerivedQuantityKind POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current DerivedQuantityKind POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

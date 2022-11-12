@@ -49,7 +49,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Example 2: The natural logarithmic measurement scale for "electric field strength" in "neper".
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "Scale")]
-    public sealed partial class LogarithmicScale : MeasurementScale
+    public partial class LogarithmicScale : MeasurementScale
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -262,7 +262,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.LogarithmicScale;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current LogarithmicScale POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current LogarithmicScale POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

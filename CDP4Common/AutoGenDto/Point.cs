@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(DiagramEdge), "Point")]
-    public sealed partial class Point : DiagramThingBase
+    public partial class Point : DiagramThingBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Point"/> class.

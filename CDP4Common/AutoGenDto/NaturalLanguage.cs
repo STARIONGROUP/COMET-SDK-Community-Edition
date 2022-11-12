@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(SiteDirectory), "NaturalLanguage")]
-    public sealed partial class NaturalLanguage : Thing, INamedThing
+    public partial class NaturalLanguage : Thing, INamedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NaturalLanguage"/> class.

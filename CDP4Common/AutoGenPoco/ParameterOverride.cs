@@ -48,7 +48,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note 2: The owner DomainOfExpertise of this ParameterOverride is the same as the owner of the elementDefinition.
     /// </summary>
     [Container(typeof(ElementUsage), "ParameterOverride")]
-    public sealed partial class ParameterOverride : ParameterOrOverrideBase
+    public partial class ParameterOverride : ParameterOrOverrideBase
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -300,7 +300,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.ParameterOverride;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ParameterOverride POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParameterOverride POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

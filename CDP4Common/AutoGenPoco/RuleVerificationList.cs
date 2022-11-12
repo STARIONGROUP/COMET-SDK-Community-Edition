@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: The list allows to define an ordered set of built-in and user defined rules that must be verified for the current state of an Iteration in an EngineeringModel. The contained RuleVerifications can be made active or inactive during a session and can capture the current verification result - e.g. passed or failed - and explanatory information.
     /// </summary>
     [Container(typeof(Iteration), "RuleVerificationList")]
-    public sealed partial class RuleVerificationList : DefinedThing, IOwnedThing
+    public partial class RuleVerificationList : DefinedThing, IOwnedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -218,7 +218,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.RuleVerificationList;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current RuleVerificationList POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current RuleVerificationList POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

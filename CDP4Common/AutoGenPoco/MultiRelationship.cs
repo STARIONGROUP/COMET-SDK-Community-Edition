@@ -48,7 +48,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note 2: MultiRelationship is a similar concept as what is, in computer science or data modelling, often called an "n-ary" relationship, relation or association.
     /// </summary>
     [Container(typeof(Iteration), "Relationship")]
-    public sealed partial class MultiRelationship : Relationship
+    public partial class MultiRelationship : Relationship
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -185,7 +185,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.MultiRelationship;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current MultiRelationship POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current MultiRelationship POCO.");
             }
 
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);

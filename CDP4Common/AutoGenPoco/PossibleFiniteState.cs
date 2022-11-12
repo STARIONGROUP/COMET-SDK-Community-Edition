@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: Finite states are used as a general concept to represent mission phases as well as system, subsystem and equipment modes, and in general any set of discrete states that are useful for a system definition. Parameters may have different values depending on the state that an element of a system is in, see the <i>stateDependence</i> property of Parameter.
     /// </summary>
     [Container(typeof(PossibleFiniteStateList), "PossibleState")]
-    public sealed partial class PossibleFiniteState : DefinedThing, IOwnedThing
+    public partial class PossibleFiniteState : DefinedThing, IOwnedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -169,7 +169,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.PossibleFiniteState;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current PossibleFiniteState POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current PossibleFiniteState POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

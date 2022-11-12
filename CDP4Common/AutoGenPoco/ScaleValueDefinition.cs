@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Note: The measurement scale and unit that apply to this <i>value</i> are defined by the MeasurementScale that contains this ScaleValueDefinition.
     /// </summary>
     [Container(typeof(MeasurementScale), "ValueDefinition")]
-    public sealed partial class ScaleValueDefinition : DefinedThing
+    public partial class ScaleValueDefinition : DefinedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -166,7 +166,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.ScaleValueDefinition;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ScaleValueDefinition POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ScaleValueDefinition POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

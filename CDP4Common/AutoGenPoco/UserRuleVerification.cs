@@ -46,7 +46,7 @@ namespace CDP4Common.EngineeringModelData
     /// representation of the verification of a user-defined Rule in one of the required ReferenceDataLibraries
     /// </summary>
     [Container(typeof(RuleVerificationList), "RuleVerification")]
-    public sealed partial class UserRuleVerification : RuleVerification
+    public partial class UserRuleVerification : RuleVerification
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -200,7 +200,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.UserRuleVerification;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current UserRuleVerification POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current UserRuleVerification POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

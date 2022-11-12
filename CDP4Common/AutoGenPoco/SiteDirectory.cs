@@ -50,7 +50,7 @@ namespace CDP4Common.SiteDirectoryData
     /// instance of a  SiteDirectory which is then a
     /// central administrative resource.
     /// </summary>
-    public sealed partial class SiteDirectory : TopContainer, INamedThing, IShortNamedThing, ITimeStampedThing
+    public partial class SiteDirectory : TopContainer, INamedThing, IShortNamedThing, ITimeStampedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -405,7 +405,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.SiteDirectory;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current SiteDirectory POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current SiteDirectory POCO.");
             }
 
             this.Annotation.ResolveList(dto.Annotation, dto.IterationContainerId, this.Cache);

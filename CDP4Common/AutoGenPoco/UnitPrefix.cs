@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Example: Decimal multiples "kilo", "mega", and decimal submultiples "milli" and "nano", but also binary multiples like "mebi", "gibi" and "tebi". See also <a href="http://www.bipm.org/en/si/si_brochure/chapter3/prefixes.html">http://www.bipm.org/en/si/si_brochure/chapter3/prefixes.html</a> and <a href="http://www.iec.ch/zone/si/si_bytes.htm">http://www.iec.ch/zone/si/si_bytes.htm</a>.
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "UnitPrefix")]
-    public sealed partial class UnitPrefix : DefinedThing, IDeprecatableThing
+    public partial class UnitPrefix : DefinedThing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -175,7 +175,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.UnitPrefix;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current UnitPrefix POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current UnitPrefix POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

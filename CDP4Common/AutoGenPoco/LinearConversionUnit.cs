@@ -49,7 +49,7 @@ namespace CDP4Common.SiteDirectoryData
     /// For example, in the definition of the LinearConversionUnit for "inch" with respect to the referenceUnit "metre", the <i>conversionFactor</i> would be 254/10000, because 0.0254 metre = 1 inch.
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "Unit")]
-    public sealed partial class LinearConversionUnit : ConversionBasedUnit
+    public partial class LinearConversionUnit : ConversionBasedUnit
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -154,7 +154,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.LinearConversionUnit;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current LinearConversionUnit POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current LinearConversionUnit POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

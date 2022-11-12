@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(FileStore), "Folder")]
-    public sealed partial class Folder : Thing, INamedThing, IOwnedThing, ITimeStampedThing
+    public partial class Folder : Thing, INamedThing, IOwnedThing, ITimeStampedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Folder"/> class.

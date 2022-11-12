@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(MeasurementScale), "MappingToReferenceScale")]
-    public sealed partial class MappingToReferenceScale : Thing
+    public partial class MappingToReferenceScale : Thing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MappingToReferenceScale"/> class.

@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(SiteDirectoryDataAnnotation), "Discussion")]
-    public sealed partial class SiteDirectoryDataDiscussionItem : DiscussionItem
+    public partial class SiteDirectoryDataDiscussionItem : DiscussionItem
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteDirectoryDataDiscussionItem"/> class.

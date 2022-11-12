@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// </summary>
     [CDPVersion("1.1.0")]
     [Container(typeof(Iteration), "ValueGroup")]
-    public sealed partial class ValueGroup : DefinedThing, ICategorizableThing
+    public partial class ValueGroup : DefinedThing, ICategorizableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -187,7 +187,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.ValueGroup;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ValueGroup POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ValueGroup POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

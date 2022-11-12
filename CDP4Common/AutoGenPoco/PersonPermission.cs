@@ -46,7 +46,7 @@ namespace CDP4Common.SiteDirectoryData
     /// representation of a permission to access a given (sub)set of data in a SiteDirectory
     /// </summary>
     [Container(typeof(PersonRole), "PersonPermission")]
-    public sealed partial class PersonPermission : Thing, IDeprecatableThing
+    public partial class PersonPermission : Thing, IDeprecatableThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -173,7 +173,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.PersonPermission;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current PersonPermission POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current PersonPermission POCO.");
             }
 
             this.AccessRight = dto.AccessRight;

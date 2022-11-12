@@ -48,7 +48,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Example: Planar angle with modulus 360 degree, therefore an angle of 450 degree is the same as an angle of 90 degree, and -60 degree is the same as 300 degree.
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "Scale")]
-    public sealed partial class CyclicRatioScale : RatioScale
+    public partial class CyclicRatioScale : RatioScale
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -173,7 +173,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.CyclicRatioScale;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current CyclicRatioScale POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current CyclicRatioScale POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

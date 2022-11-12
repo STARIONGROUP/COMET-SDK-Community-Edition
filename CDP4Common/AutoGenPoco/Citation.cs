@@ -47,7 +47,7 @@ namespace CDP4Common.CommonData
     /// Note: The shortName property is used to represent a short human readable identifier for this Citation. This identifier must be unique for the Citations contained in a Definition.
     /// </summary>
     [Container(typeof(Definition), "Citation")]
-    public sealed partial class Citation : Thing, IShortNamedThing
+    public partial class Citation : Thing, IShortNamedThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -231,7 +231,7 @@ namespace CDP4Common.CommonData
             var dto = dtoThing as DTO.Citation;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Citation POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Citation POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

@@ -46,7 +46,7 @@ namespace CDP4Common.SiteDirectoryData
     /// Rule that asserts that one or more parameters of a given ParameterType should be defined for CategorizableThings that are a member of the associated Category
     /// </summary>
     [Container(typeof(ReferenceDataLibrary), "Rule")]
-    public sealed partial class ParameterizedCategoryRule : Rule
+    public partial class ParameterizedCategoryRule : Rule
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -213,7 +213,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.ParameterizedCategoryRule;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ParameterizedCategoryRule POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParameterizedCategoryRule POCO.");
             }
 
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);

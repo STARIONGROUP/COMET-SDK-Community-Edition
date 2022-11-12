@@ -47,7 +47,7 @@ namespace CDP4Common.SiteDirectoryData
     /// </summary>
     [CDPVersion("1.2.0")]
     [Container(typeof(SampledFunctionParameterType), "DependentParameterType")]
-    public sealed partial class DependentParameterTypeAssignment : Thing, IParameterTypeAssignment
+    public partial class DependentParameterTypeAssignment : Thing, IParameterTypeAssignment
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -199,7 +199,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = dtoThing as DTO.DependentParameterTypeAssignment;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current DependentParameterTypeAssignment POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current DependentParameterTypeAssignment POCO.");
             }
 
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);

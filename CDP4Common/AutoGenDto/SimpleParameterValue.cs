@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(SimpleParameterizableThing), "ParameterValue")]
-    public sealed partial class SimpleParameterValue : Thing, IOwnedThing
+    public partial class SimpleParameterValue : Thing, IOwnedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleParameterValue"/> class.

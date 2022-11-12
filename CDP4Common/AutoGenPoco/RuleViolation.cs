@@ -46,7 +46,7 @@ namespace CDP4Common.EngineeringModelData
     /// representing of information concerning the violation of a built-in or user-defined rule
     /// </summary>
     [Container(typeof(RuleVerification), "Violation")]
-    public sealed partial class RuleViolation : Thing
+    public partial class RuleViolation : Thing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -171,7 +171,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.RuleViolation;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current RuleViolation POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current RuleViolation POCO.");
             }
 
             this.Description = dto.Description;

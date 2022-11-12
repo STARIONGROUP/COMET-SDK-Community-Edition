@@ -49,7 +49,7 @@ namespace CDP4Common.DTO
     [DataContract]
     [CDPVersion("1.1.0")]
     [Container(typeof(Page), "Note")]
-    public sealed partial class TextualNote : Note
+    public partial class TextualNote : Note
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TextualNote"/> class.

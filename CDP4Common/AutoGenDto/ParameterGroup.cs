@@ -48,7 +48,7 @@ namespace CDP4Common.DTO
     /// </summary>
     [DataContract]
     [Container(typeof(ElementDefinition), "ParameterGroup")]
-    public sealed partial class ParameterGroup : Thing, INamedThing
+    public partial class ParameterGroup : Thing, INamedThing
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterGroup"/> class.

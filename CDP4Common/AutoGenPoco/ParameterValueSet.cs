@@ -46,7 +46,7 @@ namespace CDP4Common.EngineeringModelData
     /// representation of the switch setting and all values for a Parameter
     /// </summary>
     [Container(typeof(Parameter), "ValueSet")]
-    public sealed partial class ParameterValueSet : ParameterValueSetBase
+    public partial class ParameterValueSet : ParameterValueSetBase
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -150,7 +150,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.ParameterValueSet;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current ParameterValueSet POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParameterValueSet POCO.");
             }
 
             this.ActualOption = (dto.ActualOption.HasValue) ? this.Cache.Get<Option>(dto.ActualOption.Value, dto.IterationContainerId) : null;

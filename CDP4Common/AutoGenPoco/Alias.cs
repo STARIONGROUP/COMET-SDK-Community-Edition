@@ -47,7 +47,7 @@ namespace CDP4Common.CommonData
     /// Note: An alias may be a translation of the <i>name</i> of the referring DefinedThing in a given natural language or a synonym in any natural language. The alias name is stored in the <i>content</i> property.
     /// </summary>
     [Container(typeof(DefinedThing), "Alias")]
-    public sealed partial class Alias : Thing, IAnnotation
+    public partial class Alias : Thing, IAnnotation
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -185,7 +185,7 @@ namespace CDP4Common.CommonData
             var dto = dtoThing as DTO.Alias;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Alias POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Alias POCO.");
             }
 
             this.Content = dto.Content;

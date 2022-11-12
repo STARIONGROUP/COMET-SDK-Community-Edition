@@ -48,7 +48,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note 2: In a concurrent engineering activity the engineering model for the system-of-interest is developed in a number of iterations, where in each iteration the problem specification in the form of the RequirementsSpecification and a design solution in the form of the Options and ElementDefinitions are elaborated and refined. With an iteration the engineering team strives to set one more step in the direction of achieving a converged definition that fulfills the objectives of their activity.
     /// </summary>
     [Container(typeof(EngineeringModel), "Iteration")]
-    public sealed partial class Iteration : Thing
+    public partial class Iteration : Thing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -485,7 +485,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.Iteration;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current Iteration POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Iteration POCO.");
             }
 
             this.ActualFiniteStateList.ResolveList(dto.ActualFiniteStateList, dto.Iid, this.Cache);

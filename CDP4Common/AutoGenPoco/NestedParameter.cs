@@ -47,7 +47,7 @@ namespace CDP4Common.EngineeringModelData
     /// Note: The NestedParameter effectively represents the data on a parameter row of a fully expanded workbook / explicit architectural decomposition for the combination of one DomainOfExpertise and one Option.
     /// </summary>
     [Container(typeof(NestedElement), "NestedParameter")]
-    public sealed partial class NestedParameter : Thing, IOwnedThing, IVolatileThing
+    public partial class NestedParameter : Thing, IOwnedThing, IVolatileThing
     {
         /// <summary>
         /// Representation of the default value for the accessRight property of a PersonPermission for the affected class
@@ -276,7 +276,7 @@ namespace CDP4Common.EngineeringModelData
             var dto = dtoThing as DTO.NestedParameter;
             if (dto == null)
             {
-                throw new InvalidOperationException(string.Format("The DTO type {0} does not match the type of the current NestedParameter POCO.", dtoThing.GetType()));
+                throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current NestedParameter POCO.");
             }
 
             this.ActualState = (dto.ActualState.HasValue) ? this.Cache.Get<ActualFiniteState>(dto.ActualState.Value, dto.IterationContainerId) : null;
