@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DtoFactory.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
@@ -22,13 +22,19 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common.DTO;
+
     using Newtonsoft.Json.Linq;
-    
+
     /// <summary>
     /// Utility class that is responsible for instantiating a <see cref="Thing"/>
     /// </summary>
@@ -205,3 +211,7 @@ namespace CDP4JsonSerializer
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
