@@ -22,6 +22,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4Common.Helpers
 {
     using CDP4Common.CommonData;
@@ -40,65 +44,129 @@ namespace CDP4Common.Helpers
         /// The array does not contain any ClassKinds of abstract classes
         /// </remarks>
         public static readonly ClassKind[] ClassKindArray = new[] {
+
             ClassKind.ActualFiniteState,
+
             ClassKind.ActualFiniteStateList,
+
             ClassKind.Alias,
+
             ClassKind.AndExpression,
+
             ClassKind.BinaryRelationship,
+
             ClassKind.Bounds,
+
             ClassKind.BuiltInRuleVerification,
+
             ClassKind.Citation,
+
             ClassKind.Color,
+
             ClassKind.Definition,
+
             ClassKind.DiagramCanvas,
+
             ClassKind.DiagramEdge,
+
             ClassKind.DiagramObject,
+
             ClassKind.DomainFileStore,
+
             ClassKind.ElementDefinition,
+
             ClassKind.ElementUsage,
+
             ClassKind.ExclusiveOrExpression,
+
             ClassKind.ExternalIdentifierMap,
+
             ClassKind.File,
+
             ClassKind.FileRevision,
+
             ClassKind.Folder,
+
             ClassKind.Goal,
+
             ClassKind.HyperLink,
+
             ClassKind.IdCorrespondence,
+
             ClassKind.MultiRelationship,
+
             ClassKind.NestedElement,
+
             ClassKind.NestedParameter,
+
             ClassKind.NotExpression,
+
             ClassKind.Option,
+
             ClassKind.OrExpression,
+
             ClassKind.OwnedStyle,
+
             ClassKind.Parameter,
+
             ClassKind.ParameterGroup,
+
             ClassKind.ParameterOverride,
+
             ClassKind.ParameterOverrideValueSet,
+
             ClassKind.ParameterSubscription,
+
             ClassKind.ParameterSubscriptionValueSet,
+
             ClassKind.ParameterValueSet,
+
             ClassKind.ParametricConstraint,
+
             ClassKind.Point,
+
             ClassKind.PossibleFiniteState,
+
             ClassKind.PossibleFiniteStateList,
+
             ClassKind.Publication,
+
             ClassKind.RelationalExpression,
+
             ClassKind.RelationshipParameterValue,
+
             ClassKind.Requirement,
+
             ClassKind.RequirementsContainerParameterValue,
+
             ClassKind.RequirementsGroup,
+
             ClassKind.RequirementsSpecification,
+
             ClassKind.RuleVerificationList,
+
             ClassKind.RuleViolation,
+
             ClassKind.SharedStyle,
+
             ClassKind.SimpleParameterValue,
+
             ClassKind.Stakeholder,
+
             ClassKind.StakeholderValue,
+
             ClassKind.StakeHolderValueMap,
+
             ClassKind.StakeHolderValueMapSettings,
+
             ClassKind.UserRuleVerification,
+
             ClassKind.ValueGroup,
+
         };
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
