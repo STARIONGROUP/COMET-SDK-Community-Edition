@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="Cdp4ModelValidationException.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
@@ -31,7 +31,7 @@ namespace CDP4Common.Exceptions
     /// The CDP4 model validation exception.
     /// </summary>
     [Serializable]
-    public class Cdp4ModelValidationException : Exception
+    public class Cdp4ModelValidationException : ModelErrorException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Cdp4ModelValidationException"/> class.

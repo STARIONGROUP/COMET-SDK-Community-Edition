@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OrderedItemList.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -32,6 +32,9 @@ namespace CDP4Common.Types
     using System.Runtime.CompilerServices;
 
     using CDP4Common.CommonData;
+    using CDP4Common.Exceptions;
+
+    using NLog;
 
     /// <summary>
     /// A CDP4 Ordered List
@@ -39,6 +42,11 @@ namespace CDP4Common.Types
     /// <typeparam name="T">The <see cref="Type"/> of the items to sort</typeparam>
     public class OrderedItemList<T> : ICollection<T>
     {
+        /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// The default key interval to be used for initial spacing between keys of adjacent items,
         /// </summary>
@@ -272,17 +280,30 @@ namespace CDP4Common.Types
         {
             foreach (var item in itemsToAdd)
             {
-                if (item.V is T)
+                try
                 {
-                    this.Add(item.K, (T)item.V);
+                    if (item.V is T)
+                    {
+                        this.Add(item.K, (T)item.V);
+                    }
+                    else
+                    {
+                        // Try to convert
+                        var value = item.V.ToString();
+                        var converter = TypeDescriptor.GetConverter(typeof(T));
+                        var convertedValue = (T)converter.ConvertFromInvariantString(value);
+                        this.Add(item.K, convertedValue);
+                    }
                 }
-                else
+                catch (ArgumentException aex)
                 {
-                    // Try to convert
-                    var value = item.V.ToString();
-                    var converter = TypeDescriptor.GetConverter(typeof(T));
-                    var convertedValue = (T)converter.ConvertFromInvariantString(value);
-                    this.Add(item.K, convertedValue);
+                    logger.Error($"{aex.Message}\n\n {aex.StackTrace}");
+                    throw new ModelErrorException($"Adding a sortKey to an OrderedItemList failed. Probably due to duplicate keys.\n{aex.Message}\n\n {aex.StackTrace}", aex);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"{ex.Message}\n\n {ex.StackTrace}");
+                    throw new ModelErrorException($"Adding a sortKey to an OrderedItemList failed. \n{ex.Message}\n\n {ex.StackTrace}", ex);
                 }
             }
         }

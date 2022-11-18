@@ -123,15 +123,7 @@ namespace CDP4Common.Helpers
                 {
                     var ordereditem = new OrderedItem {K = item.K, V = thing};
 
-                    try
-                    {
-                        orderedList.Add(ordereditem);
-                    }
-                    catch (ArgumentException aex)
-                    {
-                        logger.Error($"{aex.Message}\n\n {aex.StackTrace}");
-                        continue;
-                    }
+                    orderedList.Add(ordereditem);
 
                     if (list.IsComposite)
                     {
