@@ -122,7 +122,16 @@ namespace CDP4Common.Helpers
                 if (cache.TryGet(guid, iterationId, out T thing))
                 {
                     var ordereditem = new OrderedItem {K = item.K, V = thing};
-                    orderedList.Add(ordereditem);
+
+                    try
+                    {
+                        orderedList.Add(ordereditem);
+                    }
+                    catch (ArgumentException aex)
+                    {
+                        logger.Error($"{aex.Message}\n\n {aex.StackTrace}");
+                        continue;
+                    }
 
                     if (list.IsComposite)
                     {
