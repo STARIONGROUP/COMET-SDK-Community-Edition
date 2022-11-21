@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.NetCore.Tests.Helpers
+namespace CDP4Common.Tests.Helpers
 {
     using System;
     using System.Collections.Concurrent;
