@@ -34,14 +34,14 @@ namespace CDP4Common.Exceptions
     public class ModelErrorException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="IncompleteModelException"/> class.
+        /// Initializes a new instance of the <see cref="ModelErrorException"/> class.
         /// </summary>
         public ModelErrorException()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IncompleteModelException"/> class.
+        /// Initializes a new instance of the <see cref="ModelErrorException"/> class.
         /// </summary>
         /// <param name="message">
         /// The exception message
@@ -52,7 +52,7 @@ namespace CDP4Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IncompleteModelException"/> class.
+        /// Initializes a new instance of the <see cref="ModelErrorException"/> class.
         /// </summary>
         /// <param name="message">
         /// The exception message
@@ -66,7 +66,7 @@ namespace CDP4Common.Exceptions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IncompleteModelException"/> class.
+        /// Initializes a new instance of the <see cref="ModelErrorException"/> class.
         /// </summary>
         /// <param name="info">
         /// The serialization data
