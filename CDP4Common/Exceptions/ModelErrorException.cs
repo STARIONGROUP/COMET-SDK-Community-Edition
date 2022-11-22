@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="ContainmentException.cs" company="RHEA System S.A.">
+// <copyright file="ModelErrorException.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
@@ -27,35 +27,32 @@ namespace CDP4Common.Exceptions
     using System;
     using System.Runtime.Serialization;
 
-    using CDP4Common.CommonData;
-
     /// <summary>
-    /// A <see cref="ContainmentException"/> is thrown the when Container of a <see cref="Thing"/> is not set and it is 
-    /// requested in an operation.
+    /// The COMET model error exception is an exception that indicates that a model contains errors and model data might be corrupted.
     /// </summary>
     [Serializable]
-    public class ContainmentException : ModelErrorException
+    public class ModelErrorException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContainmentException"/> class.
+        /// Initializes a new instance of the <see cref="ModelErrorException"/> class.
         /// </summary>
-        public ContainmentException()
+        public ModelErrorException()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContainmentException"/> class.
+        /// Initializes a new instance of the <see cref="ModelErrorException"/> class.
         /// </summary>
         /// <param name="message">
         /// The exception message
         /// </param>
-        public ContainmentException(string message)
+        public ModelErrorException(string message)
             : base(message)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContainmentException"/> class.
+        /// Initializes a new instance of the <see cref="ModelErrorException"/> class.
         /// </summary>
         /// <param name="message">
         /// The exception message
@@ -63,13 +60,13 @@ namespace CDP4Common.Exceptions
         /// <param name="innerException">
         /// A reference to the inner <see cref="Exception"/>
         /// </param>
-        public ContainmentException(string message, Exception innerException)
+        public ModelErrorException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContainmentException"/> class.
+        /// Initializes a new instance of the <see cref="ModelErrorException"/> class.
         /// </summary>
         /// <param name="info">
         /// The serialization data
@@ -77,7 +74,7 @@ namespace CDP4Common.Exceptions
         /// <param name="context">
         /// The <see cref="StreamingContext"/>
         /// </param>
-        protected ContainmentException(SerializationInfo info, StreamingContext context)
+        protected ModelErrorException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

@@ -31,6 +31,8 @@ namespace CDP4Common.Tests.Types
     using System.Data;
     using System.Linq;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
+
     using CommonData;
     using SiteDirectoryData;
     using CDP4Common.Types;
@@ -243,7 +245,7 @@ namespace CDP4Common.Tests.Types
 
             this.testList = new OrderedItemList<Thing>(this.person, true);
 
-            Assert.Throws<NotSupportedException>(() => this.testList.AddOrderedItems(listOrderedItem));
+            Assert.Throws<ModelErrorException>(() => this.testList.AddOrderedItems(listOrderedItem));
         }
 
         [Test]

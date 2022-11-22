@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="IncompleteModelException.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2022 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
@@ -34,7 +34,7 @@ namespace CDP4Common.Exceptions
     /// up or down and the model is incomplete.
     /// </summary>
     [Serializable]
-    public class IncompleteModelException : Exception
+    public class IncompleteModelException : ModelErrorException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IncompleteModelException"/> class.
