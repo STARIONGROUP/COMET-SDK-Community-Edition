@@ -18,6 +18,9 @@ jobs:
         with:
           dotnet-version: '7.0.x'
 
+      - name: add DevExpress nuget feed
+        run: dotnet nuget add source https://nuget.devexpress.com/api -n DXFeed -u DevExpress -p ${{ secrets.DEVEXPRESS_NUGET_KEY }} --store-password-in-clear-text
+
       - name: Restore dependencies
         run: dotnet restore CDP4-SDK.sln
         
