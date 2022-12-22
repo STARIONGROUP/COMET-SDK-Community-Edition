@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
@@ -31,14 +31,17 @@ namespace CDP4JsonSerializer_New
 
     using CDP4Common.MetaInfo;
 
-    using CDP4JsonSerializer_New.JsonConverter;
+    using CDP4JsonSerializer_SystemTextJson.JsonConverter;
 
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
+    using System.Text.Json;
     
     using NLog;
     
     using Thing = CDP4Common.DTO.Thing;
+    using System.Runtime.Serialization;
+    using System.Text.Json.Nodes;
+    using CDP4Common.CommonData;
+    using System.Xml.Linq;
 
     /// <summary>
     /// The JSON de-serializer.
@@ -65,7 +68,7 @@ namespace CDP4JsonSerializer_New
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CDP4JsonSerializer_New"/> class.
+        /// Initializes a new instance of the <see cref="CDP4JsonSerializer_SystemTextJson"/> class.
         /// </summary>
         public CDP4JsonSerializer()
         {
@@ -115,14 +118,10 @@ namespace CDP4JsonSerializer_New
 
             var sw = Stopwatch.StartNew();
             
-            var serializer = this.CreateJsonSerializer();
-
-            Logger.Trace("initializing JsonTextWriter");
-            var jsonWriter = new JsonTextWriter(new StreamWriter(outputStream));
-
-            Logger.Trace("Serialize to JsonTextWriter");
-            serializer.Serialize(jsonWriter, collectionSource);
-            jsonWriter.Flush();
+            var serializerOptions = this.CreateJsonSerializerOptions();
+             
+            Logger.Trace("initializing Serialization");
+            JsonSerializer.Serialize(outputStream, collectionSource, serializerOptions);
 
             sw.Stop();
             Logger.Debug("SerializeToStream finished in {0} [ms]", sw.ElapsedMilliseconds);
@@ -247,42 +246,54 @@ namespace CDP4JsonSerializer_New
                 throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
             }
 
-            var serializer = this.CreateJsonSerializer();
-            
-            T data;
-            using (var streamReader = new StreamReader(contentStream))
-            using (var jsonTextReader = new JsonTextReader(streamReader))
-            {
-                var sw = new Stopwatch();
-                sw.Start();
-                data = serializer.Deserialize<T>(jsonTextReader);
-                Logger.Trace("Deserialize from stream in {0} [ms]", sw.ElapsedMilliseconds);
-            }
-
+            var serializerOptions = this.CreateJsonSerializerOptions();
+                        
+            var sw = new Stopwatch();
+            sw.Start();           
+            var data = JsonSerializer.Deserialize<T>(contentStream, serializerOptions);
+            Logger.Trace("Deserialize from stream in {0} [ms]", sw.ElapsedMilliseconds);
             return data;
         }
 
-        /// <summary>
-        /// Create a <see cref="JsonSerializer"/>
-        /// </summary>
-        /// <returns>
-        /// an instance of <see cref="JsonSerializer"/>
-        /// </returns>
-        private JsonSerializer CreateJsonSerializer()
+        private Thing DeserializeObject(JsonElement jElement)
         {
-            Logger.Trace("initializing JsonSerializer");
-            var serializer = new JsonSerializer
+            if (jElement.ValueKind != JsonValueKind.Object)
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            
-            Logger.Trace("register converters");
-            serializer.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
-            serializer.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
-            serializer.Converters.Add(new ClassKindConverter());
+                throw new ArgumentException($"The {nameof(jElement)} must be of type JsonValueKind.Object", nameof(jElement));
+            }
 
-            return serializer;
+            if (jElement.TryGetProperty("classKind", out var typeElement))
+            {
+                 return DtoFactory.ToDto(jElement);
+            }
+
+            throw new SerializationException("The classKind Json property is not available, the DeSerializer cannot be used to deserialize this JsonElement");
+        }
+
+        private IEnumerable<Thing> DeserializeArray(JsonElement jsonArray)
+        {
+            var result = new List<Thing>();
+
+            foreach(var jsonElement in jsonArray.EnumerateArray())
+            {
+                result.Add(DtoFactory.ToDto(jsonElement));
+            }
+
+            return result;
+        }
+
+        private JsonSerializerOptions CreateJsonSerializerOptions()
+        {
+            Logger.Trace("register converters");
+            var serializerOptions = new JsonSerializerOptions()
+            {
+                Converters =
+                {
+                    new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion),
+                    new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion),
+                }
+            };
+            return serializerOptions;
         }
     }
 }

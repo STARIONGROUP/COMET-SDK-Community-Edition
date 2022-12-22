@@ -1,18 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file "LogEntryChangelogItemSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -26,18 +26,17 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json.Nodes;
 
     using CDP4Common.DTO;
     using CDP4Common.Types;
-
-    using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="LogEntryChangelogItemSerializer"/> class is to provide a <see cref="LogEntryChangelogItem"/> specific serializer
     /// </summary>
@@ -46,29 +45,29 @@ namespace CDP4JsonSerializer_New
         /// <summary>
         /// The map containing the serialization methods
         /// </summary>
-        private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
+        private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new Dictionary<string, Func<object, JsonValue>>
         {
-            { "affectedItemIid", affectedItemIid => new JValue(affectedItemIid) },
-            { "affectedReferenceIid", affectedReferenceIid => new JArray(affectedReferenceIid) },
-            { "changeDescription", changeDescription => new JValue(changeDescription) },
-            { "changelogKind", changelogKind => new JValue(changelogKind.ToString()) },
-            { "classKind", classKind => new JValue(classKind.ToString()) },
-            { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
-            { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
-            { "iid", iid => new JValue(iid) },
-            { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
-            { "thingPreference", thingPreference => new JValue(thingPreference) },
+            { "affectedItemIid", affectedItemIid => JsonValue.Create(affectedItemIid) },
+            { "affectedReferenceIid", affectedReferenceIid => JsonValue.Create(affectedReferenceIid) },
+            { "changeDescription", changeDescription => JsonValue.Create(changeDescription) },
+            { "changelogKind", changelogKind => JsonValue.Create(changelogKind.ToString()) },
+            { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
+            { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
+            { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
+            { "iid", iid => JsonValue.Create(iid) },
+            { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
+            { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
         };
 
         /// <summary>
         /// Serialize the <see cref="LogEntryChangelogItem"/>
         /// </summary>
         /// <param name="logEntryChangelogItem">The <see cref="LogEntryChangelogItem"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        private JObject Serialize(LogEntryChangelogItem logEntryChangelogItem)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        private JsonObject Serialize(LogEntryChangelogItem logEntryChangelogItem)
         {
-            var jsonObject = new JObject();
+            var jsonObject = new JsonObject();
             jsonObject.Add("affectedItemIid", this.PropertySerializerMap["affectedItemIid"](logEntryChangelogItem.AffectedItemIid));
             jsonObject.Add("affectedReferenceIid", this.PropertySerializerMap["affectedReferenceIid"](logEntryChangelogItem.AffectedReferenceIid.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("changeDescription", this.PropertySerializerMap["changeDescription"](logEntryChangelogItem.ChangeDescription));
@@ -86,7 +85,7 @@ namespace CDP4JsonSerializer_New
         /// <summary>
         /// Gets the map containing the serialization method for each property of the <see cref="LogEntryChangelogItem"/> class.
         /// </summary>
-        public IReadOnlyDictionary<string, Func<object, JToken>> PropertySerializerMap 
+        public IReadOnlyDictionary<string, Func<object, JsonValue>> PropertySerializerMap 
         {
             get { return this.propertySerializerMap; }
         }
@@ -95,8 +94,8 @@ namespace CDP4JsonSerializer_New
         /// Serialize the <see cref="Thing"/> to JObject
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public JObject Serialize(Thing thing)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        public JsonObject Serialize(Thing thing)
         {
             if (thing == null)
             {
@@ -113,7 +112,3 @@ namespace CDP4JsonSerializer_New
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

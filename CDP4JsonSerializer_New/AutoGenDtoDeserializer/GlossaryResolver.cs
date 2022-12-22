@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="GlossaryResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,104 +21,99 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="GlossaryResolver"/> is to deserialize a JSON object to a <see cref="Glossary"/>
     /// </summary>
     public static class GlossaryResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="Glossary"/>
+        /// Instantiate and deserialize the properties of a <see cref="Glossary"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="Glossary"/> to instantiate</returns>
-        public static CDP4Common.DTO.Glossary FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.Glossary FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var glossary = new CDP4Common.DTO.Glossary(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var glossary = new CDP4Common.DTO.Glossary(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["alias"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                glossary.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                glossary.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                glossary.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                glossary.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                glossary.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                glossary.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                glossary.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                glossary.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                glossary.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                glossary.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                glossary.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                glossary.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["isDeprecated"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                glossary.IsDeprecated = jObject["isDeprecated"].ToObject<bool>();
+                glossary.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                glossary.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                glossary.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                glossary.Name = jObject["name"].ToObject<string>();
+                glossary.Name = nameProperty.Deserialize<string>();
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                glossary.ShortName = jObject["shortName"].ToObject<string>();
+                glossary.ShortName = shortNameProperty.Deserialize<string>();
             }
 
-            if (!jObject["term"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("term", out var termProperty))
             {
-                glossary.Term.AddRange(jObject["term"].ToObject<IEnumerable<Guid>>());
+                glossary.Term.AddRange(termProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                glossary.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                glossary.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
             return glossary;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

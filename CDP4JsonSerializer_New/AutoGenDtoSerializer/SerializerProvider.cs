@@ -1,18 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file "SerializerProvider.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,21 +22,17 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
-
+    using System.Text.Json;
+    using System.Text.Json.Nodes;
+    
     using CDP4Common;
     using CDP4Common.DTO;
-
-    using CDP4JsonSerializer_New.Helper;
-
-    using Newtonsoft.Json.Linq;
+    
+    using CDP4JsonSerializer_SystemTextJson.Helper;
 
     /// <summary>
     /// A static class that provides method to serialize a <see cref="Thing"/> or a <see cref="ClasslessDTO"/>
@@ -200,8 +196,8 @@ namespace CDP4JsonSerializer_New
         /// Serialize a <see cref="Thing"/>
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/></param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public static JObject ToJsonObject(this Thing thing)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        public static JsonObject ToJsonObject(this Thing thing)
         {
             IThingSerializer serializer;
             if(!SerializerMap.TryGetValue(thing.ClassKind.ToString(), out serializer))
@@ -216,8 +212,8 @@ namespace CDP4JsonSerializer_New
         /// Serialize a <see cref="ClasslessDTO"/>
         /// </summary>
         /// <param name="classlessDto">The <see cref="ClasslessDTO"/></param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public static JObject ToJsonObject(this ClasslessDTO classlessDto)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        public static JsonObject ToJsonObject(this ClasslessDTO classlessDto)
         {
             IThingSerializer serializer;
             if(!SerializerMap.TryGetValue(classlessDto["ClassKind"].ToString(), out serializer))
@@ -225,7 +221,7 @@ namespace CDP4JsonSerializer_New
                 throw new NotSupportedException(string.Format("The {0} class is not registered", classlessDto["ClassKind"]));
             }
 
-            var jsonObject = new JObject();
+            var jsonObject = new JsonObject();
             foreach (var keyValue in classlessDto)
             {
                 var key = Utils.LowercaseFirstLetter(keyValue.Key);
@@ -236,7 +232,3 @@ namespace CDP4JsonSerializer_New
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

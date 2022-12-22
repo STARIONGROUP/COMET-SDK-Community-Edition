@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SectionResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,94 +21,97 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="SectionResolver"/> is to deserialize a JSON object to a <see cref="Section"/>
     /// </summary>
     public static class SectionResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="Section"/>
+        /// Instantiate and deserialize the properties of a <see cref="Section"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="Section"/> to instantiate</returns>
-        public static CDP4Common.DTO.Section FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.Section FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var section = new CDP4Common.DTO.Section(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var section = new CDP4Common.DTO.Section(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                section.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                section.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                section.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                section.CreatedOn = createdOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                section.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                section.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                section.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                section.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                section.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                section.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                section.Name = jObject["name"].ToObject<string>();
+                section.Name = nameProperty.Deserialize<string>();
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                section.Owner = jObject["owner"].ToObject<Guid>();
+                section.Owner = ownerProperty.Deserialize<Guid>();
             }
 
-            if (!jObject["page"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("page", out var pageProperty))
             {
-                section.Page.AddRange(jObject["page"].ToOrderedItemCollection());
+                foreach(var arrayItem in pageProperty.EnumerateArray())
+                {
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    if (arrayItemValue != null)
+                    {
+                        section.Page.Add(arrayItemValue);
+                    }
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            
+            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                section.ShortName = jObject["shortName"].ToObject<string>();
+                section.ShortName = shortNameProperty.Deserialize<string>();
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                section.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                section.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
             return section;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

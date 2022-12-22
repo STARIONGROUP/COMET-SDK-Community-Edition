@@ -27,13 +27,13 @@
 using System.Globalization;
 using System.IO;
 
-namespace CDP4JsonSerializer_New.Tests.Deserializer
+namespace CDP4JsonSerializer_SystemTextJson.Tests.Deserializer
 {
     using System;
     using System.Linq;
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;    
-    using CDP4JsonSerializer_New.Tests.Helper;
+    using CDP4JsonSerializer_SystemTextJson.Tests.Helper;
     using NUnit.Framework;
 
     [TestFixture]

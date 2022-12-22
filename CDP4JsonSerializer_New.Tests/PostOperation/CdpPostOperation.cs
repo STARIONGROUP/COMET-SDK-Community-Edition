@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New.Tests.Cdp4PostOperation
+namespace CDP4JsonSerializer_SystemTextJson.Tests.Cdp4PostOperation
 {
     using System.Collections.Generic;
     using CDP4Common;

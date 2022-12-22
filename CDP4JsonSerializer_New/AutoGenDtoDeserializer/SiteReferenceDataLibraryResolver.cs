@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteReferenceDataLibraryResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,159 +21,162 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="SiteReferenceDataLibraryResolver"/> is to deserialize a JSON object to a <see cref="SiteReferenceDataLibrary"/>
     /// </summary>
     public static class SiteReferenceDataLibraryResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="SiteReferenceDataLibrary"/>
+        /// Instantiate and deserialize the properties of a <see cref="SiteReferenceDataLibrary"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="SiteReferenceDataLibrary"/> to instantiate</returns>
-        public static CDP4Common.DTO.SiteReferenceDataLibrary FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.SiteReferenceDataLibrary FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var siteReferenceDataLibrary = new CDP4Common.DTO.SiteReferenceDataLibrary(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var siteReferenceDataLibrary = new CDP4Common.DTO.SiteReferenceDataLibrary(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["alias"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                siteReferenceDataLibrary.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["baseQuantityKind"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("baseQuantityKind", out var baseQuantityKindProperty))
             {
-                siteReferenceDataLibrary.BaseQuantityKind.AddRange(jObject["baseQuantityKind"].ToOrderedItemCollection());
+                foreach(var arrayItem in baseQuantityKindProperty.EnumerateArray())
+                {
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    if (arrayItemValue != null)
+                    {
+                        siteReferenceDataLibrary.BaseQuantityKind.Add(arrayItemValue);
+                    }
+                }
             }
 
-            if (!jObject["baseUnit"].IsNullOrEmpty())
+            
+            if (jObject.TryGetProperty("baseUnit", out var baseUnitProperty))
             {
-                siteReferenceDataLibrary.BaseUnit.AddRange(jObject["baseUnit"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.BaseUnit.AddRange(baseUnitProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["constant"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("constant", out var constantProperty))
             {
-                siteReferenceDataLibrary.Constant.AddRange(jObject["constant"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.Constant.AddRange(constantProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["definedCategory"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("definedCategory", out var definedCategoryProperty))
             {
-                siteReferenceDataLibrary.DefinedCategory.AddRange(jObject["definedCategory"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.DefinedCategory.AddRange(definedCategoryProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                siteReferenceDataLibrary.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                siteReferenceDataLibrary.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                siteReferenceDataLibrary.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["fileType"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fileType", out var fileTypeProperty))
             {
-                siteReferenceDataLibrary.FileType.AddRange(jObject["fileType"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.FileType.AddRange(fileTypeProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["glossary"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("glossary", out var glossaryProperty))
             {
-                siteReferenceDataLibrary.Glossary.AddRange(jObject["glossary"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.Glossary.AddRange(glossaryProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                siteReferenceDataLibrary.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["isDeprecated"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                siteReferenceDataLibrary.IsDeprecated = jObject["isDeprecated"].ToObject<bool>();
+                siteReferenceDataLibrary.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                siteReferenceDataLibrary.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                siteReferenceDataLibrary.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                siteReferenceDataLibrary.Name = jObject["name"].ToObject<string>();
+                siteReferenceDataLibrary.Name = nameProperty.Deserialize<string>();
             }
 
-            if (!jObject["parameterType"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
             {
-                siteReferenceDataLibrary.ParameterType.AddRange(jObject["parameterType"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.ParameterType.AddRange(parameterTypeProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["referenceSource"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("referenceSource", out var referenceSourceProperty))
             {
-                siteReferenceDataLibrary.ReferenceSource.AddRange(jObject["referenceSource"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.ReferenceSource.AddRange(referenceSourceProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["requiredRdl"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("requiredRdl", out var requiredRdlProperty))
             {
-                siteReferenceDataLibrary.RequiredRdl = jObject["requiredRdl"].ToObject<Guid?>();
+                siteReferenceDataLibrary.RequiredRdl = requiredRdlProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["rule"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("rule", out var ruleProperty))
             {
-                siteReferenceDataLibrary.Rule.AddRange(jObject["rule"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.Rule.AddRange(ruleProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["scale"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("scale", out var scaleProperty))
             {
-                siteReferenceDataLibrary.Scale.AddRange(jObject["scale"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.Scale.AddRange(scaleProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                siteReferenceDataLibrary.ShortName = jObject["shortName"].ToObject<string>();
+                siteReferenceDataLibrary.ShortName = shortNameProperty.Deserialize<string>();
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                siteReferenceDataLibrary.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                siteReferenceDataLibrary.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
-            if (!jObject["unit"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("unit", out var unitProperty))
             {
-                siteReferenceDataLibrary.Unit.AddRange(jObject["unit"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.Unit.AddRange(unitProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["unitPrefix"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("unitPrefix", out var unitPrefixProperty))
             {
-                siteReferenceDataLibrary.UnitPrefix.AddRange(jObject["unitPrefix"].ToObject<IEnumerable<Guid>>());
+                siteReferenceDataLibrary.UnitPrefix.AddRange(unitPrefixProperty.Deserialize<IEnumerable<Guid>>());
             }
 
             return siteReferenceDataLibrary;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

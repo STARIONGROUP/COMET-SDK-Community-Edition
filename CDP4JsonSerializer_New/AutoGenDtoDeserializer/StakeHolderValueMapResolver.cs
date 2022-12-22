@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StakeHolderValueMapResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,119 +21,114 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="StakeHolderValueMapResolver"/> is to deserialize a JSON object to a <see cref="StakeHolderValueMap"/>
     /// </summary>
     public static class StakeHolderValueMapResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="StakeHolderValueMap"/>
+        /// Instantiate and deserialize the properties of a <see cref="StakeHolderValueMap"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="StakeHolderValueMap"/> to instantiate</returns>
-        public static CDP4Common.DTO.StakeHolderValueMap FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.StakeHolderValueMap FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var stakeHolderValueMap = new CDP4Common.DTO.StakeHolderValueMap(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var stakeHolderValueMap = new CDP4Common.DTO.StakeHolderValueMap(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["alias"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                stakeHolderValueMap.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                stakeHolderValueMap.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                stakeHolderValueMap.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                stakeHolderValueMap.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                stakeHolderValueMap.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["goal"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("goal", out var goalProperty))
             {
-                stakeHolderValueMap.Goal.AddRange(jObject["goal"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.Goal.AddRange(goalProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                stakeHolderValueMap.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                stakeHolderValueMap.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                stakeHolderValueMap.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                stakeHolderValueMap.Name = jObject["name"].ToObject<string>();
+                stakeHolderValueMap.Name = nameProperty.Deserialize<string>();
             }
 
-            if (!jObject["requirement"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("requirement", out var requirementProperty))
             {
-                stakeHolderValueMap.Requirement.AddRange(jObject["requirement"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.Requirement.AddRange(requirementProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["settings"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("settings", out var settingsProperty))
             {
-                stakeHolderValueMap.Settings.AddRange(jObject["settings"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.Settings.AddRange(settingsProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                stakeHolderValueMap.ShortName = jObject["shortName"].ToObject<string>();
+                stakeHolderValueMap.ShortName = shortNameProperty.Deserialize<string>();
             }
 
-            if (!jObject["stakeholderValue"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("stakeholderValue", out var stakeholderValueProperty))
             {
-                stakeHolderValueMap.StakeholderValue.AddRange(jObject["stakeholderValue"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.StakeholderValue.AddRange(stakeholderValueProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                stakeHolderValueMap.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                stakeHolderValueMap.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
-            if (!jObject["valueGroup"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("valueGroup", out var valueGroupProperty))
             {
-                stakeHolderValueMap.ValueGroup.AddRange(jObject["valueGroup"].ToObject<IEnumerable<Guid>>());
+                stakeHolderValueMap.ValueGroup.AddRange(valueGroupProperty.Deserialize<IEnumerable<Guid>>());
             }
 
             return stakeHolderValueMap;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

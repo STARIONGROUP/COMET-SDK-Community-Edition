@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New.Tests
+namespace CDP4JsonSerializer_SystemTextJson.Tests
 {
     using System;
     using System.Collections.Concurrent;
@@ -39,7 +39,7 @@ namespace CDP4JsonSerializer_New.Tests
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_New.Tests.Helper;
+    using CDP4JsonSerializer_SystemTextJson.Tests.Helper;
 
     using Newtonsoft.Json;
 

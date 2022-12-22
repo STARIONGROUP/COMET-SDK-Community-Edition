@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteLogEntryResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,109 +21,104 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="SiteLogEntryResolver"/> is to deserialize a JSON object to a <see cref="SiteLogEntry"/>
     /// </summary>
     public static class SiteLogEntryResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="SiteLogEntry"/>
+        /// Instantiate and deserialize the properties of a <see cref="SiteLogEntry"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="SiteLogEntry"/> to instantiate</returns>
-        public static CDP4Common.DTO.SiteLogEntry FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.SiteLogEntry FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var siteLogEntry = new CDP4Common.DTO.SiteLogEntry(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var siteLogEntry = new CDP4Common.DTO.SiteLogEntry(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["affectedDomainIid"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("affectedDomainIid", out var affectedDomainIidProperty))
             {
-                siteLogEntry.AffectedDomainIid.AddRange(jObject["affectedDomainIid"].ToObject<IEnumerable<Guid>>());
+                siteLogEntry.AffectedDomainIid.AddRange(affectedDomainIidProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["affectedItemIid"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("affectedItemIid", out var affectedItemIidProperty))
             {
-                siteLogEntry.AffectedItemIid.AddRange(jObject["affectedItemIid"].ToObject<IEnumerable<Guid>>());
+                siteLogEntry.AffectedItemIid.AddRange(affectedItemIidProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["author"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                siteLogEntry.Author = jObject["author"].ToObject<Guid?>();
+                siteLogEntry.Author = authorProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                siteLogEntry.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                siteLogEntry.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["content"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                siteLogEntry.Content = jObject["content"].ToObject<string>();
+                siteLogEntry.Content = contentProperty.Deserialize<string>();
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                siteLogEntry.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                siteLogEntry.CreatedOn = createdOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                siteLogEntry.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                siteLogEntry.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                siteLogEntry.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                siteLogEntry.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["languageCode"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                siteLogEntry.LanguageCode = jObject["languageCode"].ToObject<string>();
+                siteLogEntry.LanguageCode = languageCodeProperty.Deserialize<string>();
             }
 
-            if (!jObject["level"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("level", out var levelProperty))
             {
-                siteLogEntry.Level = jObject["level"].ToObject<LogLevelKind>();
+                siteLogEntry.Level = LogLevelKindDeserializer.Deserialize(levelProperty);
             }
 
-            if (!jObject["logEntryChangelogItem"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("logEntryChangelogItem", out var logEntryChangelogItemProperty))
             {
-                siteLogEntry.LogEntryChangelogItem.AddRange(jObject["logEntryChangelogItem"].ToObject<IEnumerable<Guid>>());
+                siteLogEntry.LogEntryChangelogItem.AddRange(logEntryChangelogItemProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                siteLogEntry.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                siteLogEntry.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                siteLogEntry.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                siteLogEntry.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
             return siteLogEntry;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

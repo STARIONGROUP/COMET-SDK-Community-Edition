@@ -1,18 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file "IterationSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -26,18 +26,17 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json.Nodes;
 
     using CDP4Common.DTO;
     using CDP4Common.Types;
-
-    using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="IterationSerializer"/> class is to provide a <see cref="Iteration"/> specific serializer
     /// </summary>
@@ -46,46 +45,46 @@ namespace CDP4JsonSerializer_New
         /// <summary>
         /// The map containing the serialization methods
         /// </summary>
-        private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
+        private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new Dictionary<string, Func<object, JsonValue>>
         {
-            { "actualFiniteStateList", actualFiniteStateList => new JArray(actualFiniteStateList) },
-            { "classKind", classKind => new JValue(classKind.ToString()) },
-            { "defaultOption", defaultOption => new JValue(defaultOption) },
-            { "diagramCanvas", diagramCanvas => new JArray(diagramCanvas) },
-            { "domainFileStore", domainFileStore => new JArray(domainFileStore) },
-            { "element", element => new JArray(element) },
-            { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
-            { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
-            { "externalIdentifierMap", externalIdentifierMap => new JArray(externalIdentifierMap) },
-            { "goal", goal => new JArray(goal) },
-            { "iid", iid => new JValue(iid) },
-            { "iterationSetup", iterationSetup => new JValue(iterationSetup) },
-            { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            { "option", option => new JArray(((IEnumerable)option).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            { "possibleFiniteStateList", possibleFiniteStateList => new JArray(possibleFiniteStateList) },
-            { "publication", publication => new JArray(publication) },
-            { "relationship", relationship => new JArray(relationship) },
-            { "requirementsSpecification", requirementsSpecification => new JArray(requirementsSpecification) },
-            { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
-            { "ruleVerificationList", ruleVerificationList => new JArray(ruleVerificationList) },
-            { "sharedDiagramStyle", sharedDiagramStyle => new JArray(sharedDiagramStyle) },
-            { "sourceIterationIid", sourceIterationIid => new JValue(sourceIterationIid) },
-            { "stakeholder", stakeholder => new JArray(stakeholder) },
-            { "stakeholderValue", stakeholderValue => new JArray(stakeholderValue) },
-            { "stakeholderValueMap", stakeholderValueMap => new JArray(stakeholderValueMap) },
-            { "thingPreference", thingPreference => new JValue(thingPreference) },
-            { "topElement", topElement => new JValue(topElement) },
-            { "valueGroup", valueGroup => new JArray(valueGroup) },
+            { "actualFiniteStateList", actualFiniteStateList => JsonValue.Create(actualFiniteStateList) },
+            { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
+            { "defaultOption", defaultOption => JsonValue.Create(defaultOption) },
+            { "diagramCanvas", diagramCanvas => JsonValue.Create(diagramCanvas) },
+            { "domainFileStore", domainFileStore => JsonValue.Create(domainFileStore) },
+            { "element", element => JsonValue.Create(element) },
+            { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
+            { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
+            { "externalIdentifierMap", externalIdentifierMap => JsonValue.Create(externalIdentifierMap) },
+            { "goal", goal => JsonValue.Create(goal) },
+            { "iid", iid => JsonValue.Create(iid) },
+            { "iterationSetup", iterationSetup => JsonValue.Create(iterationSetup) },
+            { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            { "option", option => JsonValue.Create(((IEnumerable)option).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
+            { "possibleFiniteStateList", possibleFiniteStateList => JsonValue.Create(possibleFiniteStateList) },
+            { "publication", publication => JsonValue.Create(publication) },
+            { "relationship", relationship => JsonValue.Create(relationship) },
+            { "requirementsSpecification", requirementsSpecification => JsonValue.Create(requirementsSpecification) },
+            { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
+            { "ruleVerificationList", ruleVerificationList => JsonValue.Create(ruleVerificationList) },
+            { "sharedDiagramStyle", sharedDiagramStyle => JsonValue.Create(sharedDiagramStyle) },
+            { "sourceIterationIid", sourceIterationIid => JsonValue.Create(sourceIterationIid) },
+            { "stakeholder", stakeholder => JsonValue.Create(stakeholder) },
+            { "stakeholderValue", stakeholderValue => JsonValue.Create(stakeholderValue) },
+            { "stakeholderValueMap", stakeholderValueMap => JsonValue.Create(stakeholderValueMap) },
+            { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
+            { "topElement", topElement => JsonValue.Create(topElement) },
+            { "valueGroup", valueGroup => JsonValue.Create(valueGroup) },
         };
 
         /// <summary>
         /// Serialize the <see cref="Iteration"/>
         /// </summary>
         /// <param name="iteration">The <see cref="Iteration"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        private JObject Serialize(Iteration iteration)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        private JsonObject Serialize(Iteration iteration)
         {
-            var jsonObject = new JObject();
+            var jsonObject = new JsonObject();
             jsonObject.Add("actualFiniteStateList", this.PropertySerializerMap["actualFiniteStateList"](iteration.ActualFiniteStateList.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), iteration.ClassKind)));
             jsonObject.Add("defaultOption", this.PropertySerializerMap["defaultOption"](iteration.DefaultOption));
@@ -120,7 +119,7 @@ namespace CDP4JsonSerializer_New
         /// <summary>
         /// Gets the map containing the serialization method for each property of the <see cref="Iteration"/> class.
         /// </summary>
-        public IReadOnlyDictionary<string, Func<object, JToken>> PropertySerializerMap 
+        public IReadOnlyDictionary<string, Func<object, JsonValue>> PropertySerializerMap 
         {
             get { return this.propertySerializerMap; }
         }
@@ -129,8 +128,8 @@ namespace CDP4JsonSerializer_New
         /// Serialize the <see cref="Thing"/> to JObject
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public JObject Serialize(Thing thing)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        public JsonObject Serialize(Thing thing)
         {
             if (thing == null)
             {
@@ -147,7 +146,3 @@ namespace CDP4JsonSerializer_New
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

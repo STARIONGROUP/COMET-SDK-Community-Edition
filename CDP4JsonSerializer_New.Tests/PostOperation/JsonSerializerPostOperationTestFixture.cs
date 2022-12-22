@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New.Tests.PostOperation
+namespace CDP4JsonSerializer_SystemTextJson.Tests.PostOperation
 {
     using System;
     using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace CDP4JsonSerializer_New.Tests.PostOperation
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
-    using CDP4JsonSerializer_New.Tests.Cdp4PostOperation;
+    using CDP4JsonSerializer_SystemTextJson.Tests.Cdp4PostOperation;
     using NUnit.Framework;
 
     /// <summary>

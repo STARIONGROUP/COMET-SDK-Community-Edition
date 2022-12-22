@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
@@ -110,6 +110,6 @@ namespace CDP4JsonSerializer_New
         /// <returns>
         /// The the deserialized instance of the specified Type
         /// </returns>
-        T Deserialize<T>(Stream contentStream);
+        //T Deserialize<T>(Stream contentStream);
     }
 }

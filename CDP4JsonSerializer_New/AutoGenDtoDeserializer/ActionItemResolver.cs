@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ActionItemResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,159 +21,154 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="ActionItemResolver"/> is to deserialize a JSON object to a <see cref="ActionItem"/>
     /// </summary>
     public static class ActionItemResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="ActionItem"/>
+        /// Instantiate and deserialize the properties of a <see cref="ActionItem"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="ActionItem"/> to instantiate</returns>
-        public static CDP4Common.DTO.ActionItem FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.ActionItem FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var actionItem = new CDP4Common.DTO.ActionItem(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var actionItem = new CDP4Common.DTO.ActionItem(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["actionee"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("actionee", out var actioneeProperty))
             {
-                actionItem.Actionee = jObject["actionee"].ToObject<Guid>();
+                actionItem.Actionee = actioneeProperty.Deserialize<Guid>();
             }
 
-            if (!jObject["approvedBy"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("approvedBy", out var approvedByProperty))
             {
-                actionItem.ApprovedBy.AddRange(jObject["approvedBy"].ToObject<IEnumerable<Guid>>());
+                actionItem.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["author"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                actionItem.Author = jObject["author"].ToObject<Guid>();
+                actionItem.Author = authorProperty.Deserialize<Guid>();
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                actionItem.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                actionItem.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["classification"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("classification", out var classificationProperty))
             {
-                actionItem.Classification = jObject["classification"].ToObject<AnnotationClassificationKind>();
+                actionItem.Classification = AnnotationClassificationKindDeserializer.Deserialize(classificationProperty);
             }
 
-            if (!jObject["closeOutDate"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("closeOutDate", out var closeOutDateProperty))
             {
-                actionItem.CloseOutDate = jObject["closeOutDate"].ToObject<DateTime?>();
+                actionItem.CloseOutDate = closeOutDateProperty.Deserialize<DateTime?>();
             }
 
-            if (!jObject["closeOutStatement"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("closeOutStatement", out var closeOutStatementProperty))
             {
-                actionItem.CloseOutStatement = jObject["closeOutStatement"].ToObject<string>();
+                actionItem.CloseOutStatement = closeOutStatementProperty.Deserialize<string>();
             }
 
-            if (!jObject["content"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                actionItem.Content = jObject["content"].ToObject<string>();
+                actionItem.Content = contentProperty.Deserialize<string>();
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                actionItem.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                actionItem.CreatedOn = createdOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["discussion"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("discussion", out var discussionProperty))
             {
-                actionItem.Discussion.AddRange(jObject["discussion"].ToObject<IEnumerable<Guid>>());
+                actionItem.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["dueDate"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("dueDate", out var dueDateProperty))
             {
-                actionItem.DueDate = jObject["dueDate"].ToObject<DateTime>();
+                actionItem.DueDate = dueDateProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                actionItem.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                actionItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                actionItem.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                actionItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["languageCode"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                actionItem.LanguageCode = jObject["languageCode"].ToObject<string>();
+                actionItem.LanguageCode = languageCodeProperty.Deserialize<string>();
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                actionItem.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                actionItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                actionItem.Owner = jObject["owner"].ToObject<Guid>();
+                actionItem.Owner = ownerProperty.Deserialize<Guid>();
             }
 
-            if (!jObject["primaryAnnotatedThing"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("primaryAnnotatedThing", out var primaryAnnotatedThingProperty))
             {
-                actionItem.PrimaryAnnotatedThing = jObject["primaryAnnotatedThing"].ToObject<Guid?>();
+                actionItem.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["relatedThing"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
             {
-                actionItem.RelatedThing.AddRange(jObject["relatedThing"].ToObject<IEnumerable<Guid>>());
+                actionItem.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                actionItem.ShortName = jObject["shortName"].ToObject<string>();
+                actionItem.ShortName = shortNameProperty.Deserialize<string>();
             }
 
-            if (!jObject["sourceAnnotation"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("sourceAnnotation", out var sourceAnnotationProperty))
             {
-                actionItem.SourceAnnotation.AddRange(jObject["sourceAnnotation"].ToObject<IEnumerable<Guid>>());
+                actionItem.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["status"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("status", out var statusProperty))
             {
-                actionItem.Status = jObject["status"].ToObject<AnnotationStatusKind>();
+                actionItem.Status = AnnotationStatusKindDeserializer.Deserialize(statusProperty);
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                actionItem.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                actionItem.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
-            if (!jObject["title"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("title", out var titleProperty))
             {
-                actionItem.Title = jObject["title"].ToObject<string>();
+                actionItem.Title = titleProperty.Deserialize<string>();
             }
 
             return actionItem;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

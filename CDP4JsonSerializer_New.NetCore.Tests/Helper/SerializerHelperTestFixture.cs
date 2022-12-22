@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New.Tests.Helper
+namespace CDP4JsonSerializer_SystemTextJson.Tests.Helper
 {
     using System;
     using System.Collections.Generic;
@@ -54,16 +54,16 @@ namespace CDP4JsonSerializer_New.Tests.Helper
             propertyInfo.SetValue(orderedItem, value);
 
             var jObject = SerializerHelper.ToJsonObject(orderedItem);
-            Assert.AreEqual(3, jObject.Properties().Count());
+            Assert.AreEqual(3, jObject.AsEnumerable().Count());
 
-            var k = jObject.Property("k");
-            Assert.IsNotNull(k);            
+            var k = jObject.TryGetPropertyValue("k", out var kNode); 
+            Assert.IsNotNull(kNode);
 
-            var v = jObject.Property("v");
-            Assert.IsNotNull(v);
+            jObject.TryGetPropertyValue("v", out var vNode);
+            Assert.IsNotNull(vNode);
 
-            var m = jObject.Property("m");
-            Assert.IsNotNull(m);
+            jObject.TryGetPropertyValue("m", out var mNode);
+            Assert.IsNotNull(mNode);
         }
 
         [Test]

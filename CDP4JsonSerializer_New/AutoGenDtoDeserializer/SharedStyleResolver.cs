@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SharedStyleResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,134 +21,129 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="SharedStyleResolver"/> is to deserialize a JSON object to a <see cref="SharedStyle"/>
     /// </summary>
     public static class SharedStyleResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="SharedStyle"/>
+        /// Instantiate and deserialize the properties of a <see cref="SharedStyle"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="SharedStyle"/> to instantiate</returns>
-        public static CDP4Common.DTO.SharedStyle FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.SharedStyle FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var sharedStyle = new CDP4Common.DTO.SharedStyle(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var sharedStyle = new CDP4Common.DTO.SharedStyle(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                sharedStyle.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                sharedStyle.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                sharedStyle.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                sharedStyle.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["fillColor"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fillColor", out var fillColorProperty))
             {
-                sharedStyle.FillColor = jObject["fillColor"].ToObject<Guid?>();
+                sharedStyle.FillColor = fillColorProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["fillOpacity"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fillOpacity", out var fillOpacityProperty))
             {
-                sharedStyle.FillOpacity = jObject["fillOpacity"].ToObject<float?>();
+                sharedStyle.FillOpacity = fillOpacityProperty.Deserialize<float?>();
             }
 
-            if (!jObject["fontBold"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontBold", out var fontBoldProperty))
             {
-                sharedStyle.FontBold = jObject["fontBold"].ToObject<bool?>();
+                sharedStyle.FontBold = fontBoldProperty.Deserialize<bool?>();
             }
 
-            if (!jObject["fontColor"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontColor", out var fontColorProperty))
             {
-                sharedStyle.FontColor = jObject["fontColor"].ToObject<Guid?>();
+                sharedStyle.FontColor = fontColorProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["fontItalic"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontItalic", out var fontItalicProperty))
             {
-                sharedStyle.FontItalic = jObject["fontItalic"].ToObject<bool?>();
+                sharedStyle.FontItalic = fontItalicProperty.Deserialize<bool?>();
             }
 
-            if (!jObject["fontName"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontName", out var fontNameProperty))
             {
-                sharedStyle.FontName = jObject["fontName"].ToObject<string>();
+                sharedStyle.FontName = fontNameProperty.Deserialize<string>();
             }
 
-            if (!jObject["fontSize"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontSize", out var fontSizeProperty))
             {
-                sharedStyle.FontSize = jObject["fontSize"].ToObject<float?>();
+                sharedStyle.FontSize = fontSizeProperty.Deserialize<float?>();
             }
 
-            if (!jObject["fontStrokeThrough"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontStrokeThrough", out var fontStrokeThroughProperty))
             {
-                sharedStyle.FontStrokeThrough = jObject["fontStrokeThrough"].ToObject<bool?>();
+                sharedStyle.FontStrokeThrough = fontStrokeThroughProperty.Deserialize<bool?>();
             }
 
-            if (!jObject["fontUnderline"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontUnderline", out var fontUnderlineProperty))
             {
-                sharedStyle.FontUnderline = jObject["fontUnderline"].ToObject<bool?>();
+                sharedStyle.FontUnderline = fontUnderlineProperty.Deserialize<bool?>();
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                sharedStyle.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                sharedStyle.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                sharedStyle.Name = jObject["name"].ToObject<string>();
+                sharedStyle.Name = nameProperty.Deserialize<string>();
             }
 
-            if (!jObject["strokeColor"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("strokeColor", out var strokeColorProperty))
             {
-                sharedStyle.StrokeColor = jObject["strokeColor"].ToObject<Guid?>();
+                sharedStyle.StrokeColor = strokeColorProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["strokeOpacity"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("strokeOpacity", out var strokeOpacityProperty))
             {
-                sharedStyle.StrokeOpacity = jObject["strokeOpacity"].ToObject<float?>();
+                sharedStyle.StrokeOpacity = strokeOpacityProperty.Deserialize<float?>();
             }
 
-            if (!jObject["strokeWidth"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("strokeWidth", out var strokeWidthProperty))
             {
-                sharedStyle.StrokeWidth = jObject["strokeWidth"].ToObject<float?>();
+                sharedStyle.StrokeWidth = strokeWidthProperty.Deserialize<float?>();
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                sharedStyle.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                sharedStyle.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
-            if (!jObject["usedColor"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("usedColor", out var usedColorProperty))
             {
-                sharedStyle.UsedColor.AddRange(jObject["usedColor"].ToObject<IEnumerable<Guid>>());
+                sharedStyle.UsedColor.AddRange(usedColorProperty.Deserialize<IEnumerable<Guid>>());
             }
 
             return sharedStyle;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

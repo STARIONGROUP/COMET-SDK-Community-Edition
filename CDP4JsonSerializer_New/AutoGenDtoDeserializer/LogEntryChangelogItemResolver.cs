@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="LogEntryChangelogItemResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,84 +21,79 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="LogEntryChangelogItemResolver"/> is to deserialize a JSON object to a <see cref="LogEntryChangelogItem"/>
     /// </summary>
     public static class LogEntryChangelogItemResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="LogEntryChangelogItem"/>
+        /// Instantiate and deserialize the properties of a <see cref="LogEntryChangelogItem"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="LogEntryChangelogItem"/> to instantiate</returns>
-        public static CDP4Common.DTO.LogEntryChangelogItem FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.LogEntryChangelogItem FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var logEntryChangelogItem = new CDP4Common.DTO.LogEntryChangelogItem(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var logEntryChangelogItem = new CDP4Common.DTO.LogEntryChangelogItem(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["affectedItemIid"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("affectedItemIid", out var affectedItemIidProperty))
             {
-                logEntryChangelogItem.AffectedItemIid = jObject["affectedItemIid"].ToObject<Guid>();
+                logEntryChangelogItem.AffectedItemIid = affectedItemIidProperty.Deserialize<Guid>();
             }
 
-            if (!jObject["affectedReferenceIid"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("affectedReferenceIid", out var affectedReferenceIidProperty))
             {
-                logEntryChangelogItem.AffectedReferenceIid.AddRange(jObject["affectedReferenceIid"].ToObject<IEnumerable<Guid>>());
+                logEntryChangelogItem.AffectedReferenceIid.AddRange(affectedReferenceIidProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["changeDescription"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("changeDescription", out var changeDescriptionProperty))
             {
-                logEntryChangelogItem.ChangeDescription = jObject["changeDescription"].ToObject<string>();
+                logEntryChangelogItem.ChangeDescription = changeDescriptionProperty.Deserialize<string>();
             }
 
-            if (!jObject["changelogKind"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("changelogKind", out var changelogKindProperty))
             {
-                logEntryChangelogItem.ChangelogKind = jObject["changelogKind"].ToObject<LogEntryChangelogItemKind>();
+                logEntryChangelogItem.ChangelogKind = LogEntryChangelogItemKindDeserializer.Deserialize(changelogKindProperty);
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                logEntryChangelogItem.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                logEntryChangelogItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                logEntryChangelogItem.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                logEntryChangelogItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                logEntryChangelogItem.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                logEntryChangelogItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                logEntryChangelogItem.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                logEntryChangelogItem.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
             return logEntryChangelogItem;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

@@ -24,17 +24,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 #endregion
 
-namespace CDP4JsonSerializer_New.Tests
+namespace CDP4JsonSerializer_SystemTextJson.Tests
 {
     using System;
     using System.IO;
     using CDP4Common.CommonData;
     using CDP4Common.MetaInfo;
-    using CDP4JsonSerializer_New.Tests.Helper;
+    using CDP4JsonSerializer_SystemTextJson.Tests.Helper;
     using NUnit.Framework;
 
     /// <summary>
-    /// Suite of tests for the <see cref="CDP4JsonSerializer_New"/> class
+    /// Suite of tests for the <see cref="CDP4JsonSerializer_SystemTextJson"/> class
     /// </summary>
     [TestFixture]
     public class CDP4JsonSerializer_NewTestFixture

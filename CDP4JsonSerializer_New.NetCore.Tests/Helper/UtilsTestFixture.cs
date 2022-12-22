@@ -24,11 +24,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 #endregion
 
-namespace CDP4JsonSerializer_New.Tests.Helper
+namespace CDP4JsonSerializer_SystemTextJson.Tests.Helper
 {
     using System;
 
-    using CDP4JsonSerializer_New.Helper;
+    using CDP4JsonSerializer_SystemTextJson.Helper;
     using NUnit.Framework;
 
     /// <summary>

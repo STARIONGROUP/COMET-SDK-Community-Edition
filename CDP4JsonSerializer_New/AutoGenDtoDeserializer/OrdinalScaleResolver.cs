@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OrdinalScaleResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,149 +21,144 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="OrdinalScaleResolver"/> is to deserialize a JSON object to a <see cref="OrdinalScale"/>
     /// </summary>
     public static class OrdinalScaleResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="OrdinalScale"/>
+        /// Instantiate and deserialize the properties of a <see cref="OrdinalScale"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="OrdinalScale"/> to instantiate</returns>
-        public static CDP4Common.DTO.OrdinalScale FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.OrdinalScale FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var ordinalScale = new CDP4Common.DTO.OrdinalScale(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var ordinalScale = new CDP4Common.DTO.OrdinalScale(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["alias"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                ordinalScale.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                ordinalScale.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                ordinalScale.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                ordinalScale.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                ordinalScale.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                ordinalScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                ordinalScale.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                ordinalScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                ordinalScale.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                ordinalScale.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["isDeprecated"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                ordinalScale.IsDeprecated = jObject["isDeprecated"].ToObject<bool>();
+                ordinalScale.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
             }
 
-            if (!jObject["isMaximumInclusive"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("isMaximumInclusive", out var isMaximumInclusiveProperty))
             {
-                ordinalScale.IsMaximumInclusive = jObject["isMaximumInclusive"].ToObject<bool>();
+                ordinalScale.IsMaximumInclusive = isMaximumInclusiveProperty.Deserialize<bool>();
             }
 
-            if (!jObject["isMinimumInclusive"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("isMinimumInclusive", out var isMinimumInclusiveProperty))
             {
-                ordinalScale.IsMinimumInclusive = jObject["isMinimumInclusive"].ToObject<bool>();
+                ordinalScale.IsMinimumInclusive = isMinimumInclusiveProperty.Deserialize<bool>();
             }
 
-            if (!jObject["mappingToReferenceScale"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("mappingToReferenceScale", out var mappingToReferenceScaleProperty))
             {
-                ordinalScale.MappingToReferenceScale.AddRange(jObject["mappingToReferenceScale"].ToObject<IEnumerable<Guid>>());
+                ordinalScale.MappingToReferenceScale.AddRange(mappingToReferenceScaleProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["maximumPermissibleValue"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("maximumPermissibleValue", out var maximumPermissibleValueProperty))
             {
-                ordinalScale.MaximumPermissibleValue = jObject["maximumPermissibleValue"].ToObject<string>();
+                ordinalScale.MaximumPermissibleValue = maximumPermissibleValueProperty.Deserialize<string>();
             }
 
-            if (!jObject["minimumPermissibleValue"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("minimumPermissibleValue", out var minimumPermissibleValueProperty))
             {
-                ordinalScale.MinimumPermissibleValue = jObject["minimumPermissibleValue"].ToObject<string>();
+                ordinalScale.MinimumPermissibleValue = minimumPermissibleValueProperty.Deserialize<string>();
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                ordinalScale.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                ordinalScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                ordinalScale.Name = jObject["name"].ToObject<string>();
+                ordinalScale.Name = nameProperty.Deserialize<string>();
             }
 
-            if (!jObject["negativeValueConnotation"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("negativeValueConnotation", out var negativeValueConnotationProperty))
             {
-                ordinalScale.NegativeValueConnotation = jObject["negativeValueConnotation"].ToObject<string>();
+                ordinalScale.NegativeValueConnotation = negativeValueConnotationProperty.Deserialize<string>();
             }
 
-            if (!jObject["numberSet"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("numberSet", out var numberSetProperty))
             {
-                ordinalScale.NumberSet = jObject["numberSet"].ToObject<NumberSetKind>();
+                ordinalScale.NumberSet = NumberSetKindDeserializer.Deserialize(numberSetProperty);
             }
 
-            if (!jObject["positiveValueConnotation"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("positiveValueConnotation", out var positiveValueConnotationProperty))
             {
-                ordinalScale.PositiveValueConnotation = jObject["positiveValueConnotation"].ToObject<string>();
+                ordinalScale.PositiveValueConnotation = positiveValueConnotationProperty.Deserialize<string>();
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                ordinalScale.ShortName = jObject["shortName"].ToObject<string>();
+                ordinalScale.ShortName = shortNameProperty.Deserialize<string>();
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                ordinalScale.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                ordinalScale.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
-            if (!jObject["unit"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("unit", out var unitProperty))
             {
-                ordinalScale.Unit = jObject["unit"].ToObject<Guid>();
+                ordinalScale.Unit = unitProperty.Deserialize<Guid>();
             }
 
-            if (!jObject["useShortNameValues"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("useShortNameValues", out var useShortNameValuesProperty))
             {
-                ordinalScale.UseShortNameValues = jObject["useShortNameValues"].ToObject<bool>();
+                ordinalScale.UseShortNameValues = useShortNameValuesProperty.Deserialize<bool>();
             }
 
-            if (!jObject["valueDefinition"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("valueDefinition", out var valueDefinitionProperty))
             {
-                ordinalScale.ValueDefinition.AddRange(jObject["valueDefinition"].ToObject<IEnumerable<Guid>>());
+                ordinalScale.ValueDefinition.AddRange(valueDefinitionProperty.Deserialize<IEnumerable<Guid>>());
             }
 
             return ordinalScale;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

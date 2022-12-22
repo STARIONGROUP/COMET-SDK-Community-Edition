@@ -21,7 +21,7 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
-namespace CDP4JsonSerializer_New.Helper
+namespace CDP4JsonSerializer_SystemTextJson.Helper
 {
     using System;
     using System.Globalization;

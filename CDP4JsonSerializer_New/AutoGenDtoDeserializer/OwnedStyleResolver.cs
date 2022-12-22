@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OwnedStyleResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,134 +21,129 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="OwnedStyleResolver"/> is to deserialize a JSON object to a <see cref="OwnedStyle"/>
     /// </summary>
     public static class OwnedStyleResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="OwnedStyle"/>
+        /// Instantiate and deserialize the properties of a <see cref="OwnedStyle"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="OwnedStyle"/> to instantiate</returns>
-        public static CDP4Common.DTO.OwnedStyle FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.OwnedStyle FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var ownedStyle = new CDP4Common.DTO.OwnedStyle(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var ownedStyle = new CDP4Common.DTO.OwnedStyle(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                ownedStyle.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                ownedStyle.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                ownedStyle.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                ownedStyle.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["fillColor"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fillColor", out var fillColorProperty))
             {
-                ownedStyle.FillColor = jObject["fillColor"].ToObject<Guid?>();
+                ownedStyle.FillColor = fillColorProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["fillOpacity"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fillOpacity", out var fillOpacityProperty))
             {
-                ownedStyle.FillOpacity = jObject["fillOpacity"].ToObject<float?>();
+                ownedStyle.FillOpacity = fillOpacityProperty.Deserialize<float?>();
             }
 
-            if (!jObject["fontBold"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontBold", out var fontBoldProperty))
             {
-                ownedStyle.FontBold = jObject["fontBold"].ToObject<bool?>();
+                ownedStyle.FontBold = fontBoldProperty.Deserialize<bool?>();
             }
 
-            if (!jObject["fontColor"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontColor", out var fontColorProperty))
             {
-                ownedStyle.FontColor = jObject["fontColor"].ToObject<Guid?>();
+                ownedStyle.FontColor = fontColorProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["fontItalic"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontItalic", out var fontItalicProperty))
             {
-                ownedStyle.FontItalic = jObject["fontItalic"].ToObject<bool?>();
+                ownedStyle.FontItalic = fontItalicProperty.Deserialize<bool?>();
             }
 
-            if (!jObject["fontName"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontName", out var fontNameProperty))
             {
-                ownedStyle.FontName = jObject["fontName"].ToObject<string>();
+                ownedStyle.FontName = fontNameProperty.Deserialize<string>();
             }
 
-            if (!jObject["fontSize"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontSize", out var fontSizeProperty))
             {
-                ownedStyle.FontSize = jObject["fontSize"].ToObject<float?>();
+                ownedStyle.FontSize = fontSizeProperty.Deserialize<float?>();
             }
 
-            if (!jObject["fontStrokeThrough"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontStrokeThrough", out var fontStrokeThroughProperty))
             {
-                ownedStyle.FontStrokeThrough = jObject["fontStrokeThrough"].ToObject<bool?>();
+                ownedStyle.FontStrokeThrough = fontStrokeThroughProperty.Deserialize<bool?>();
             }
 
-            if (!jObject["fontUnderline"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("fontUnderline", out var fontUnderlineProperty))
             {
-                ownedStyle.FontUnderline = jObject["fontUnderline"].ToObject<bool?>();
+                ownedStyle.FontUnderline = fontUnderlineProperty.Deserialize<bool?>();
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                ownedStyle.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                ownedStyle.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                ownedStyle.Name = jObject["name"].ToObject<string>();
+                ownedStyle.Name = nameProperty.Deserialize<string>();
             }
 
-            if (!jObject["strokeColor"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("strokeColor", out var strokeColorProperty))
             {
-                ownedStyle.StrokeColor = jObject["strokeColor"].ToObject<Guid?>();
+                ownedStyle.StrokeColor = strokeColorProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["strokeOpacity"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("strokeOpacity", out var strokeOpacityProperty))
             {
-                ownedStyle.StrokeOpacity = jObject["strokeOpacity"].ToObject<float?>();
+                ownedStyle.StrokeOpacity = strokeOpacityProperty.Deserialize<float?>();
             }
 
-            if (!jObject["strokeWidth"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("strokeWidth", out var strokeWidthProperty))
             {
-                ownedStyle.StrokeWidth = jObject["strokeWidth"].ToObject<float?>();
+                ownedStyle.StrokeWidth = strokeWidthProperty.Deserialize<float?>();
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                ownedStyle.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                ownedStyle.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
-            if (!jObject["usedColor"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("usedColor", out var usedColorProperty))
             {
-                ownedStyle.UsedColor.AddRange(jObject["usedColor"].ToObject<IEnumerable<Guid>>());
+                ownedStyle.UsedColor.AddRange(usedColorProperty.Deserialize<IEnumerable<Guid>>());
             }
 
             return ownedStyle;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

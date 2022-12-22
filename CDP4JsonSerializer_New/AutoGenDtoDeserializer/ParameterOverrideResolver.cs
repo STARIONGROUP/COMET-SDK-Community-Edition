@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterOverrideResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,84 +21,79 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="ParameterOverrideResolver"/> is to deserialize a JSON object to a <see cref="ParameterOverride"/>
     /// </summary>
     public static class ParameterOverrideResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="ParameterOverride"/>
+        /// Instantiate and deserialize the properties of a <see cref="ParameterOverride"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="ParameterOverride"/> to instantiate</returns>
-        public static CDP4Common.DTO.ParameterOverride FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.ParameterOverride FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var parameterOverride = new CDP4Common.DTO.ParameterOverride(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var parameterOverride = new CDP4Common.DTO.ParameterOverride(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parameterOverride.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                parameterOverride.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parameterOverride.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                parameterOverride.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parameterOverride.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                parameterOverride.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                parameterOverride.Owner = jObject["owner"].ToObject<Guid>();
+                parameterOverride.Owner = ownerProperty.Deserialize<Guid>();
             }
 
-            if (!jObject["parameter"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("parameter", out var parameterProperty))
             {
-                parameterOverride.Parameter = jObject["parameter"].ToObject<Guid>();
+                parameterOverride.Parameter = parameterProperty.Deserialize<Guid>();
             }
 
-            if (!jObject["parameterSubscription"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("parameterSubscription", out var parameterSubscriptionProperty))
             {
-                parameterOverride.ParameterSubscription.AddRange(jObject["parameterSubscription"].ToObject<IEnumerable<Guid>>());
+                parameterOverride.ParameterSubscription.AddRange(parameterSubscriptionProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parameterOverride.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                parameterOverride.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
-            if (!jObject["valueSet"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("valueSet", out var valueSetProperty))
             {
-                parameterOverride.ValueSet.AddRange(jObject["valueSet"].ToObject<IEnumerable<Guid>>());
+                parameterOverride.ValueSet.AddRange(valueSetProperty.Deserialize<IEnumerable<Guid>>());
             }
 
             return parameterOverride;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New.JsonConverter
+namespace CDP4JsonSerializer_SystemTextJson.JsonConverter
 {
     using System;
     using System.Linq;

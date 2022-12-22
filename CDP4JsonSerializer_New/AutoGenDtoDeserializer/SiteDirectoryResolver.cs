@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteDirectoryResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,149 +21,144 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="SiteDirectoryResolver"/> is to deserialize a JSON object to a <see cref="SiteDirectory"/>
     /// </summary>
     public static class SiteDirectoryResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="SiteDirectory"/>
+        /// Instantiate and deserialize the properties of a <see cref="SiteDirectory"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="SiteDirectory"/> to instantiate</returns>
-        public static CDP4Common.DTO.SiteDirectory FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.SiteDirectory FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var siteDirectory = new CDP4Common.DTO.SiteDirectory(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var siteDirectory = new CDP4Common.DTO.SiteDirectory(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["annotation"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("annotation", out var annotationProperty))
             {
-                siteDirectory.Annotation.AddRange(jObject["annotation"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.Annotation.AddRange(annotationProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                siteDirectory.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                siteDirectory.CreatedOn = createdOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["defaultParticipantRole"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("defaultParticipantRole", out var defaultParticipantRoleProperty))
             {
-                siteDirectory.DefaultParticipantRole = jObject["defaultParticipantRole"].ToObject<Guid?>();
+                siteDirectory.DefaultParticipantRole = defaultParticipantRoleProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["defaultPersonRole"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("defaultPersonRole", out var defaultPersonRoleProperty))
             {
-                siteDirectory.DefaultPersonRole = jObject["defaultPersonRole"].ToObject<Guid?>();
+                siteDirectory.DefaultPersonRole = defaultPersonRoleProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["domain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("domain", out var domainProperty))
             {
-                siteDirectory.Domain.AddRange(jObject["domain"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.Domain.AddRange(domainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["domainGroup"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("domainGroup", out var domainGroupProperty))
             {
-                siteDirectory.DomainGroup.AddRange(jObject["domainGroup"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.DomainGroup.AddRange(domainGroupProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                siteDirectory.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                siteDirectory.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["lastModifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("lastModifiedOn", out var lastModifiedOnProperty))
             {
-                siteDirectory.LastModifiedOn = jObject["lastModifiedOn"].ToObject<DateTime>();
+                siteDirectory.LastModifiedOn = lastModifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["logEntry"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("logEntry", out var logEntryProperty))
             {
-                siteDirectory.LogEntry.AddRange(jObject["logEntry"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.LogEntry.AddRange(logEntryProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["model"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("model", out var modelProperty))
             {
-                siteDirectory.Model.AddRange(jObject["model"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.Model.AddRange(modelProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                siteDirectory.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                siteDirectory.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                siteDirectory.Name = jObject["name"].ToObject<string>();
+                siteDirectory.Name = nameProperty.Deserialize<string>();
             }
 
-            if (!jObject["naturalLanguage"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("naturalLanguage", out var naturalLanguageProperty))
             {
-                siteDirectory.NaturalLanguage.AddRange(jObject["naturalLanguage"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.NaturalLanguage.AddRange(naturalLanguageProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["organization"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("organization", out var organizationProperty))
             {
-                siteDirectory.Organization.AddRange(jObject["organization"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.Organization.AddRange(organizationProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["participantRole"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("participantRole", out var participantRoleProperty))
             {
-                siteDirectory.ParticipantRole.AddRange(jObject["participantRole"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.ParticipantRole.AddRange(participantRoleProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["person"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("person", out var personProperty))
             {
-                siteDirectory.Person.AddRange(jObject["person"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.Person.AddRange(personProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["personRole"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("personRole", out var personRoleProperty))
             {
-                siteDirectory.PersonRole.AddRange(jObject["personRole"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.PersonRole.AddRange(personRoleProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                siteDirectory.ShortName = jObject["shortName"].ToObject<string>();
+                siteDirectory.ShortName = shortNameProperty.Deserialize<string>();
             }
 
-            if (!jObject["siteReferenceDataLibrary"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("siteReferenceDataLibrary", out var siteReferenceDataLibraryProperty))
             {
-                siteDirectory.SiteReferenceDataLibrary.AddRange(jObject["siteReferenceDataLibrary"].ToObject<IEnumerable<Guid>>());
+                siteDirectory.SiteReferenceDataLibrary.AddRange(siteReferenceDataLibraryProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                siteDirectory.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                siteDirectory.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
             return siteDirectory;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

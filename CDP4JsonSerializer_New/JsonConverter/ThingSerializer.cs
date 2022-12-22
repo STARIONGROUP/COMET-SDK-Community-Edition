@@ -22,25 +22,25 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New.JsonConverter
+namespace CDP4JsonSerializer_SystemTextJson.JsonConverter
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+    using System.Xml.Linq;
 
+    
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Common.Polyfills;
-
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-
+    
     using NLog;
-
+    
     /// <summary>
     /// The <see cref="JsonConverter"/> that is responsible for (De)serialization on a <see cref="CDP4Common.DTO.Thing"/> 
     /// </summary>
-    public class ThingSerializer : JsonConverter
+    public class ThingSerializer : JsonConverter<CDP4Common.DTO.Thing>
     {
         /// <summary>
         /// The NLog logger
@@ -75,19 +75,10 @@ namespace CDP4JsonSerializer_New.JsonConverter
         }
 
         /// <summary>
-        /// Gets a value indicating whether this converter supports JSON read.
-        /// </summary>
-        public override bool CanRead => true;
-
-        /// <summary>
-        /// Gets a value indicating whether this converter supports JSON write.
-        /// </summary>
-        public override bool CanWrite => true;
-
-        /// <summary>
         /// Gets or sets the meta info provider.
         /// </summary>
         private IMetaDataProvider MetaInfoProvider { get; set; }
+
 
         /// <summary>
         /// Override of the can convert type check.
@@ -100,22 +91,37 @@ namespace CDP4JsonSerializer_New.JsonConverter
         /// </returns>
         public override bool CanConvert(Type objectType)
         {
-            return typeof(Thing).QueryIsAssignableFrom(objectType);
+            return typeof(CDP4Common.DTO.Thing).QueryIsAssignableFrom(objectType);
         }
 
         /// <summary>
-        /// Write JSON.
+        /// Tries to deserialize a JSON into a <see cref="CDP4Common.DTO.Thing"/>
         /// </summary>
-        /// <param name="writer">
-        /// The JSON writer.
-        /// </param>
-        /// <param name="value">
-        /// The value object.
-        /// </param>
-        /// <param name="serializer">
-        /// The JSON serializer.
-        /// </param>
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        /// <param name="reader">the <see cref="Utf8JsonReader"/></param>
+        /// <param name="typeToConvert">the <see cref="Type"/> to convert</param>
+        /// <param name="options">the options of the serializer</param>
+        /// <returns>the <see cref="Thing"/></returns>
+        public override Thing Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {            
+            // load object from stream
+            if (!JsonElement.TryParseValue(ref reader, out var jsonElement))
+            {
+                Logger.Error("The data object in the JSON array could not be cast to a JObject type.");
+                throw new NullReferenceException("The data object in the JSON array could not be cast to a JObject type.");
+            }
+                        
+            var newThing = jsonElement?.ToDto();
+
+            return newThing;
+        }
+
+        /// <summary>
+        /// Write a JSON
+        /// </summary>
+        /// <param name="writer">the <see cref="Utf8JsonWriter"/></param>
+        /// <param name="value">the <see cref="CDP4Common.DTO.Thing"/> to serialize</param>
+        /// <param name="options">the options of the serializer</param>
+        public override void Write(Utf8JsonWriter writer, CDP4Common.DTO.Thing value, JsonSerializerOptions options)
         {
             var typeName = value.GetType().Name;
             var classVersion = new Version(this.MetaInfoProvider.GetClassVersion(typeName));
@@ -153,42 +159,7 @@ namespace CDP4JsonSerializer_New.JsonConverter
             {
                 jsonObject.Remove(nonSerializableProperty);
             }
-
             jsonObject.WriteTo(writer);
-        }
-
-        /// <summary>
-        /// Override of the Read JSON method.
-        /// </summary>
-        /// <param name="reader">
-        /// The JSON reader.
-        /// </param>
-        /// <param name="objectType">
-        /// The type information of the object.
-        /// </param>
-        /// <param name="existingValue">
-        /// The existing object value.
-        /// </param>
-        /// <param name="serializer">
-        /// The JSON serializer.
-        /// </param>
-        /// <returns>
-        /// A deserialized instance.
-        /// </returns>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            // load object from stream
-            var jsonObject = JObject.Load(reader);
-
-            if (jsonObject == null)
-            {
-                Logger.Error("The data object in the JSON array could not be cast to a JObject type.");
-                throw new NullReferenceException("The data object in the JSON array could not be cast to a JObject type.");
-            }
-
-            var newThing = jsonObject.ToDto();
-
-            return newThing;
         }
     }
 }

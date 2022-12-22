@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New.Tests
+namespace CDP4JsonSerializer_SystemTextJson.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -34,8 +34,8 @@ namespace CDP4JsonSerializer_New.Tests
     using CDP4Common.EngineeringModelData;
     using CDP4Common.MetaInfo;
 
-    using CDP4JsonSerializer_New.Tests.Helper;
-    using CDP4JsonSerializer_New;
+    using CDP4JsonSerializer_SystemTextJson.Tests.Helper;
+    using CDP4JsonSerializer_SystemTextJson;
 
     using NUnit.Framework;
 
@@ -137,7 +137,7 @@ namespace CDP4JsonSerializer_New.Tests
         [Test]
         public void VerifyThatValueArrayConverterWorks()
         {
-            var returned = CDP4JsonSerializer_New.SerializerHelper.ToValueArray<string>("[\"1\", \"2\", \"3\"]");
+            var returned = CDP4JsonSerializer_SystemTextJson.SerializerHelper.ToValueArray<string>("[\"1\", \"2\", \"3\"]");
 
             Assert.That(returned[0], Is.EqualTo("1"));
             Assert.That(returned[1], Is.EqualTo("2"));
@@ -147,7 +147,7 @@ namespace CDP4JsonSerializer_New.Tests
         [Test]
         public void VerifyThatValueArrayConverterWorksSpecialChar()
         {
-            var returned = CDP4JsonSerializer_New.SerializerHelper.ToValueArray<string>("[\"\\\"1,,,\\\",()\\\\\", \"2\\\"\", \"\\\"3\", \"testsimple\"]");
+            var returned = CDP4JsonSerializer_SystemTextJson.SerializerHelper.ToValueArray<string>("[\"\\\"1,,,\\\",()\\\\\", \"2\\\"\", \"\\\"3\", \"testsimple\"]");
 
             Assert.That(returned[0], Is.EqualTo("\"1,,,\",()\\"));
             Assert.That(returned[1], Is.EqualTo("2\""));

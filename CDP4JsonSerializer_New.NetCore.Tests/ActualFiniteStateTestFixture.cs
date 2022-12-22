@@ -24,7 +24,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 #endregion
 
-namespace CDP4JsonSerializer_New.Tests
+namespace CDP4JsonSerializer_SystemTextJson.Tests
 {
     using System;
     using System.IO;
@@ -35,7 +35,7 @@ namespace CDP4JsonSerializer_New.Tests
     using ActualFiniteState = CDP4Common.DTO.ActualFiniteState;
 
     /// <summary>
-    /// Suite of tests for the <see cref="CDP4JsonSerializer_New.ActualFiniteState"/>
+    /// Suite of tests for the <see cref="CDP4JsonSerializer_SystemTextJson.ActualFiniteState"/>
     /// </summary>
     [TestFixture]
     public  class ActualFiniteStateTestFixture

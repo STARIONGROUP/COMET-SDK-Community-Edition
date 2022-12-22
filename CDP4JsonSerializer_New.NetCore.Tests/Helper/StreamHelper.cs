@@ -24,7 +24,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 #endregion
 
-namespace CDP4JsonSerializer_New.Tests.Helper
+namespace CDP4JsonSerializer_SystemTextJson.Tests.Helper
 {
     using System.IO;
 

@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IndependentParameterTypeAssignmentResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,74 +21,69 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="IndependentParameterTypeAssignmentResolver"/> is to deserialize a JSON object to a <see cref="IndependentParameterTypeAssignment"/>
     /// </summary>
     public static class IndependentParameterTypeAssignmentResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="IndependentParameterTypeAssignment"/>
+        /// Instantiate and deserialize the properties of a <see cref="IndependentParameterTypeAssignment"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="IndependentParameterTypeAssignment"/> to instantiate</returns>
-        public static CDP4Common.DTO.IndependentParameterTypeAssignment FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.IndependentParameterTypeAssignment FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var independentParameterTypeAssignment = new CDP4Common.DTO.IndependentParameterTypeAssignment(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var independentParameterTypeAssignment = new CDP4Common.DTO.IndependentParameterTypeAssignment(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                independentParameterTypeAssignment.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                independentParameterTypeAssignment.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                independentParameterTypeAssignment.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                independentParameterTypeAssignment.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["measurementScale"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("measurementScale", out var measurementScaleProperty))
             {
-                independentParameterTypeAssignment.MeasurementScale = jObject["measurementScale"].ToObject<Guid?>();
+                independentParameterTypeAssignment.MeasurementScale = measurementScaleProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                independentParameterTypeAssignment.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                independentParameterTypeAssignment.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["parameterType"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
             {
-                independentParameterTypeAssignment.ParameterType = jObject["parameterType"].ToObject<Guid>();
+                independentParameterTypeAssignment.ParameterType = parameterTypeProperty.Deserialize<Guid>();
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                independentParameterTypeAssignment.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                independentParameterTypeAssignment.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
             return independentParameterTypeAssignment;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

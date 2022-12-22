@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IterationResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,169 +21,172 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
-
+    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
+    
     /// <summary>
     /// The purpose of the <see cref="IterationResolver"/> is to deserialize a JSON object to a <see cref="Iteration"/>
     /// </summary>
     public static class IterationResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="Iteration"/>
+        /// Instantiate and deserialize the properties of a <see cref="Iteration"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
+        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="Iteration"/> to instantiate</returns>
-        public static CDP4Common.DTO.Iteration FromJsonObject(JObject jObject)
+        public static CDP4Common.DTO.Iteration FromJsonObject(JsonElement jObject)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var iteration = new CDP4Common.DTO.Iteration(iid, revisionNumber);
+            jObject.TryGetProperty("iid", out var iid);
+            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            var iteration = new CDP4Common.DTO.Iteration(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (!jObject["actualFiniteStateList"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("actualFiniteStateList", out var actualFiniteStateListProperty))
             {
-                iteration.ActualFiniteStateList.AddRange(jObject["actualFiniteStateList"].ToObject<IEnumerable<Guid>>());
+                iteration.ActualFiniteStateList.AddRange(actualFiniteStateListProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["defaultOption"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("defaultOption", out var defaultOptionProperty))
             {
-                iteration.DefaultOption = jObject["defaultOption"].ToObject<Guid?>();
+                iteration.DefaultOption = defaultOptionProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["diagramCanvas"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("diagramCanvas", out var diagramCanvasProperty))
             {
-                iteration.DiagramCanvas.AddRange(jObject["diagramCanvas"].ToObject<IEnumerable<Guid>>());
+                iteration.DiagramCanvas.AddRange(diagramCanvasProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["domainFileStore"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("domainFileStore", out var domainFileStoreProperty))
             {
-                iteration.DomainFileStore.AddRange(jObject["domainFileStore"].ToObject<IEnumerable<Guid>>());
+                iteration.DomainFileStore.AddRange(domainFileStoreProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["element"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("element", out var elementProperty))
             {
-                iteration.Element.AddRange(jObject["element"].ToObject<IEnumerable<Guid>>());
+                iteration.Element.AddRange(elementProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                iteration.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                iteration.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                iteration.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                iteration.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["externalIdentifierMap"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("externalIdentifierMap", out var externalIdentifierMapProperty))
             {
-                iteration.ExternalIdentifierMap.AddRange(jObject["externalIdentifierMap"].ToObject<IEnumerable<Guid>>());
+                iteration.ExternalIdentifierMap.AddRange(externalIdentifierMapProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["goal"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("goal", out var goalProperty))
             {
-                iteration.Goal.AddRange(jObject["goal"].ToObject<IEnumerable<Guid>>());
+                iteration.Goal.AddRange(goalProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["iterationSetup"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("iterationSetup", out var iterationSetupProperty))
             {
-                iteration.IterationSetup = jObject["iterationSetup"].ToObject<Guid>();
+                iteration.IterationSetup = iterationSetupProperty.Deserialize<Guid>();
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                iteration.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                iteration.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
             }
 
-            if (!jObject["option"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("option", out var optionProperty))
             {
-                iteration.Option.AddRange(jObject["option"].ToOrderedItemCollection());
+                foreach(var arrayItem in optionProperty.EnumerateArray())
+                {
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    if (arrayItemValue != null)
+                    {
+                        iteration.Option.Add(arrayItemValue);
+                    }
+                }
             }
 
-            if (!jObject["possibleFiniteStateList"].IsNullOrEmpty())
+            
+            if (jObject.TryGetProperty("possibleFiniteStateList", out var possibleFiniteStateListProperty))
             {
-                iteration.PossibleFiniteStateList.AddRange(jObject["possibleFiniteStateList"].ToObject<IEnumerable<Guid>>());
+                iteration.PossibleFiniteStateList.AddRange(possibleFiniteStateListProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["publication"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("publication", out var publicationProperty))
             {
-                iteration.Publication.AddRange(jObject["publication"].ToObject<IEnumerable<Guid>>());
+                iteration.Publication.AddRange(publicationProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["relationship"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("relationship", out var relationshipProperty))
             {
-                iteration.Relationship.AddRange(jObject["relationship"].ToObject<IEnumerable<Guid>>());
+                iteration.Relationship.AddRange(relationshipProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["requirementsSpecification"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("requirementsSpecification", out var requirementsSpecificationProperty))
             {
-                iteration.RequirementsSpecification.AddRange(jObject["requirementsSpecification"].ToObject<IEnumerable<Guid>>());
+                iteration.RequirementsSpecification.AddRange(requirementsSpecificationProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["ruleVerificationList"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("ruleVerificationList", out var ruleVerificationListProperty))
             {
-                iteration.RuleVerificationList.AddRange(jObject["ruleVerificationList"].ToObject<IEnumerable<Guid>>());
+                iteration.RuleVerificationList.AddRange(ruleVerificationListProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["sharedDiagramStyle"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("sharedDiagramStyle", out var sharedDiagramStyleProperty))
             {
-                iteration.SharedDiagramStyle.AddRange(jObject["sharedDiagramStyle"].ToObject<IEnumerable<Guid>>());
+                iteration.SharedDiagramStyle.AddRange(sharedDiagramStyleProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["sourceIterationIid"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("sourceIterationIid", out var sourceIterationIidProperty))
             {
-                iteration.SourceIterationIid = jObject["sourceIterationIid"].ToObject<Guid?>();
+                iteration.SourceIterationIid = sourceIterationIidProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["stakeholder"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("stakeholder", out var stakeholderProperty))
             {
-                iteration.Stakeholder.AddRange(jObject["stakeholder"].ToObject<IEnumerable<Guid>>());
+                iteration.Stakeholder.AddRange(stakeholderProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["stakeholderValue"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("stakeholderValue", out var stakeholderValueProperty))
             {
-                iteration.StakeholderValue.AddRange(jObject["stakeholderValue"].ToObject<IEnumerable<Guid>>());
+                iteration.StakeholderValue.AddRange(stakeholderValueProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["stakeholderValueMap"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("stakeholderValueMap", out var stakeholderValueMapProperty))
             {
-                iteration.StakeholderValueMap.AddRange(jObject["stakeholderValueMap"].ToObject<IEnumerable<Guid>>());
+                iteration.StakeholderValueMap.AddRange(stakeholderValueMapProperty.Deserialize<IEnumerable<Guid>>());
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                iteration.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                iteration.ThingPreference = thingPreferenceProperty.Deserialize<string>();
             }
 
-            if (!jObject["topElement"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("topElement", out var topElementProperty))
             {
-                iteration.TopElement = jObject["topElement"].ToObject<Guid?>();
+                iteration.TopElement = topElementProperty.Deserialize<Guid?>();
             }
 
-            if (!jObject["valueGroup"].IsNullOrEmpty())
+            if (jObject.TryGetProperty("valueGroup", out var valueGroupProperty))
             {
-                iteration.ValueGroup.AddRange(jObject["valueGroup"].ToObject<IEnumerable<Guid>>());
+                iteration.ValueGroup.AddRange(valueGroupProperty.Deserialize<IEnumerable<Guid>>());
             }
 
             return iteration;
         }
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

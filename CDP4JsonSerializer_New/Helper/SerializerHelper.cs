@@ -2,7 +2,7 @@
 // <copyright file="SerializerHelper.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Jaime Bernar
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,18 +22,18 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using System.Text.Json;
 
     using CDP4Common.Types;
+    using System.Text.Json.Nodes;
+    using System.Text.Json.Serialization;
 
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    
     /// <summary>
     /// Utility method to convert a JSON token to a CDP4 type
     /// </summary>
@@ -78,63 +78,52 @@ namespace CDP4JsonSerializer_New
         }
 
         /// <summary>
-        /// Serialize a <see cref="OrderedItem"/> to a <see cref="JObject"/>
+        /// Serialize the <see cref="OrderedItem"/> to a <see cref="JsonObject"/>
         /// </summary>
-        /// <param name="orderedItem">The <see cref="OrderedItem"/></param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public static JObject ToJsonObject(this OrderedItem orderedItem)
+        /// <param name="orderedItem">the <see cref="OrderedItem"/></param>
+        /// <returns>the <see cref="JsonObject"/></returns>
+        public static JsonObject ToJsonObject(this OrderedItem orderedItem)
         {
-            var jsonObject = new JObject();
-            jsonObject.Add("k", new JValue(orderedItem.K));
+            var jsonObject = new JsonObject();                       
 
-            if (orderedItem.M != null)
+            jsonObject.Add("k", JsonValue.Create(orderedItem.K));
+
+            if(orderedItem.M != null)
             {
-                jsonObject.Add("m", new JValue(orderedItem.M));
+                jsonObject.Add("m", JsonValue.Create(orderedItem.M));
             }
 
-            jsonObject.Add("v", new JValue(orderedItem.V));
+            jsonObject.Add("v", JsonValue.Create(orderedItem.V));
             return jsonObject;
         }
 
         /// <summary>
-        /// Instantiate a <see cref="IEnumerable{OrderedItem}"/> from a <see cref="JToken"/>
+        /// Instantiate a <see cref="IEnumerable{OrderedItem}"/> from a <see cref="JsonElement"/>
         /// </summary>
-        /// <param name="jsonToken">The <see cref="JToken"/></param>
+        /// <param name="jsonToken">The <see cref="JsonElement"/></param>
         /// <returns>The <see cref="IEnumerable{OrderedItem}"/></returns>
-        public static IEnumerable<OrderedItem> ToOrderedItemCollection(this JToken jsonToken)
+        public static IEnumerable<OrderedItem> ToOrderedItemCollection(this JsonElement jsonToken)
         {
             var list = new List<OrderedItem>();
-            foreach (var token in jsonToken)
+            foreach(var prop in jsonToken.EnumerateArray())
             {
                 var orderedItem = new OrderedItem
                 {
-                    K = token["k"].ToObject<long>(),
-                    V = token["v"].ToString()
+                    K = prop.GetProperty("k").GetInt64(),
+                    V = prop.GetProperty("v").ToString(),
                 };
 
-                var move = token["m"];
-                if (move != null)
+                var move = prop.GetProperty("m");
+
+                if (move.TryGetProperty("m", out var value))
                 {
-                    //orderedItem.M = move.ToObject<long>();
+                    orderedItem.M = value.GetInt64();
                 }
 
                 list.Add(orderedItem);
             }
 
             return list;
-        }
-
-        /// <summary>
-        /// Assert Whether a <see cref="JToken"/> is null or empty
-        /// </summary>
-        /// <param name="token">The <see cref="JToken"/></param>
-        /// <returns>True if the <see cref="JToken"/> is null or empty</returns>
-        public static bool IsNullOrEmpty(this JToken token)
-        {
-            return (token == null) ||
-                   (token.Type == JTokenType.Array && !token.HasValues) ||
-                   (token.Type == JTokenType.Object && !token.HasValues) ||
-                   (token.Type == JTokenType.Null);
         }
 
         /// <summary>
@@ -159,7 +148,7 @@ namespace CDP4JsonSerializer_New
 
             foreach (Match match in test)
             {
-                stringValues.Add(JsonConvert.DeserializeObject<string>($"\"{match.Groups[1].Value}\""));
+                stringValues.Add(JsonSerializer.Deserialize<string>($"\"{match.Groups[1].Value}\""));
             }
 
             var convertedStringList = stringValues.Select(m => (T)Convert.ChangeType(m, typeof(T))).ToList();
@@ -189,7 +178,7 @@ namespace CDP4JsonSerializer_New
 
             for (var i = 0; i < items.Count; i++)
             {
-                items[i] = $"{JsonConvert.SerializeObject(items[i])}";
+                items[i] = $"{JsonSerializer.Serialize(items[i])}";
             }
 
             return items;

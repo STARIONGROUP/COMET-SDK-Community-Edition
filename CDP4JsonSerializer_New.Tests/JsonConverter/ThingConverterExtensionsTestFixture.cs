@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New.Tests.JsonConverter
+namespace CDP4JsonSerializer_SystemTextJson.Tests.JsonConverter
 {
     using System;
 
@@ -30,7 +30,7 @@ namespace CDP4JsonSerializer_New.Tests.JsonConverter
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
 
-    using CDP4JsonSerializer_New.JsonConverter;
+    using CDP4JsonSerializer_SystemTextJson.JsonConverter;
 
     using NUnit.Framework;
 

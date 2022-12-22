@@ -1,9 +1,8 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ClasslessDtoSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -22,18 +21,23 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
-namespace CDP4JsonSerializer_New.JsonConverter
+namespace CDP4JsonSerializer_SystemTextJson.JsonConverter
 {
     using System;
     using System.Collections.Generic;
+    using System.Text.Json;
+    using System.Text.Json.Nodes;
+    using System.Text.Json.Serialization;
+    using System.Xml.Linq;
+
     using CDP4Common;
     using CDP4Common.MetaInfo;
     using CDP4Common.Polyfills;
-    using CDP4JsonSerializer_New.Helper;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
+    using CDP4Common.Types;
+    
+    using CDP4JsonSerializer_SystemTextJson.Helper;
+    
     using NLog;
 
     using Dto = CDP4Common.DTO;
@@ -41,7 +45,7 @@ namespace CDP4JsonSerializer_New.JsonConverter
     /// <summary>
     /// The <see cref="JsonConverter"/> for <see cref="ClasslessDTO"/>s 
     /// </summary>
-    public class ClasslessDtoSerializer : JsonConverter
+    public class ClasslessDtoSerializer : JsonConverter<ClasslessDTO>
     {
         /// <summary>
         /// The NLog logger
@@ -72,22 +76,6 @@ namespace CDP4JsonSerializer_New.JsonConverter
         }
 
         /// <summary>
-        /// Gets a value indicating whether this converter supports JSON read.
-        /// </summary>
-        public override bool CanRead
-        {
-            get { return true; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this converter supports JSON write.
-        /// </summary>
-        public override bool CanWrite
-        {
-            get { return true; }
-        }
-
-        /// <summary>
         /// Override of the can convert type check.
         /// </summary>
         /// <param name="objectType">
@@ -102,22 +90,56 @@ namespace CDP4JsonSerializer_New.JsonConverter
         }
 
         /// <summary>
-        /// Write JSON.
+        /// Create a <see cref="ClasslessDTO"/> from a <see cref="JObject"/> and a partial <see cref="Dto.Thing"/>
         /// </summary>
-        /// <param name="writer">
-        /// The JSON writer.
-        /// </param>
-        /// <param name="value">
-        /// The value object.
-        /// </param>
-        /// <param name="serializer">
-        /// The JSON serializer.
-        /// </param>
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        /// <param name="jsonObject">The <see cref="JsonObject"/></param>
+        /// <param name="dto">The <see cref="Dto.Thing"/></param>
+        /// <returns>The generated <see cref="ClasslessDTO"/></returns>
+        private ClasslessDTO GenerateClasslessDto(JsonElement jsonObject, Dto.Thing dto)
         {
-            var classlessDto = (ClasslessDTO)value;
+            var metainfo = this.metaDataProvider.GetMetaInfo(dto.ClassKind.ToString());
 
-            var typeName = classlessDto["ClassKind"].ToString();
+            var classlessDto = new ClasslessDTO();                      
+            
+            foreach (var property in jsonObject.EnumerateObject())
+            {         
+                var propertyName = Utils.CapitalizeFirstLetter(property.Name);
+                classlessDto.Add(propertyName, metainfo.GetValue(propertyName, dto));
+            }
+
+            return classlessDto;
+        }
+
+        /// <summary>
+        /// Tries to deserialize a JSON into a <see cref="ClasslessDTO"/>
+        /// </summary>
+        /// <param name="reader">the <see cref="Utf8JsonReader"/></param>
+        /// <param name="typeToConvert">the <see cref="Type"/> to convert</param>
+        /// <param name="options">the options of the serializer</param>
+        /// <returns>the <see cref="ClasslessDTO"/></returns>
+        public override ClasslessDTO Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (!JsonElement.TryParseValue(ref reader, out var jsonElement))
+            {
+                Logger.Error("The data object in the JSON array could not be cast to a JObject type.");
+                throw new NullReferenceException("The data object in the JSON array could not be cast to a JObject type.");
+            }
+
+            var dto = jsonElement?.ToDto();
+            var classlessDto = this.GenerateClasslessDto(jsonElement.Value, dto);
+
+            return classlessDto;
+        }
+
+        /// <summary>
+        /// Write a JSON
+        /// </summary>
+        /// <param name="writer">the <see cref="Utf8JsonWriter"/></param>
+        /// <param name="value">the <see cref="ClasslessDTO"/> to serialize</param>
+        /// <param name="options">the options of the serializer</param>
+        public override void Write(Utf8JsonWriter writer, ClasslessDTO value, JsonSerializerOptions options)
+        {
+            var typeName = value["ClassKind"].ToString();
             var classVersion = new Version(this.metaDataProvider.GetClassVersion(typeName));
             if (classVersion > this.dataModelVersion)
             {
@@ -125,7 +147,7 @@ namespace CDP4JsonSerializer_New.JsonConverter
                 return;
             }
 
-            var jsonObject = ((ClasslessDTO)value).ToJsonObject();
+            var jsonObject = value.ToJsonObject();
 
             var nonSerializablePropeties = new List<string>();
             foreach (var kvp in jsonObject)
@@ -143,61 +165,6 @@ namespace CDP4JsonSerializer_New.JsonConverter
             }
 
             jsonObject.WriteTo(writer);
-        }
-
-        /// <summary>
-        /// Override of the Read JSON method.
-        /// </summary>
-        /// <param name="reader">
-        /// The JSON reader.
-        /// </param>
-        /// <param name="objectType">
-        /// The type information of the object.
-        /// </param>
-        /// <param name="existingValue">
-        /// The existing object value.
-        /// </param>
-        /// <param name="serializer">
-        /// The JSON serializer.
-        /// </param>
-        /// <returns>
-        /// A deserialized instance.
-        /// </returns>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            // load object from stream
-            var jsonObject = JObject.Load(reader);
-
-            if (jsonObject == null)
-            {
-                Logger.Error("The data object in the JSON array could not be cast to a JObject type.");
-                throw new NullReferenceException("The data object in the JSON array could not be cast to a JObject type.");
-            }
-
-            var dto = jsonObject.ToDto();
-            var classlessDto = this.GenerateClasslessDto(jsonObject, dto);
-
-            return classlessDto;
-        }
-
-        /// <summary>
-        /// Create a <see cref="ClasslessDTO"/> from a <see cref="JObject"/> and a partial <see cref="Dto.Thing"/>
-        /// </summary>
-        /// <param name="jsonObject">The <see cref="JObject"/></param>
-        /// <param name="dto">The <see cref="Dto.Thing"/></param>
-        /// <returns>The generated <see cref="ClasslessDTO"/></returns>
-        private ClasslessDTO GenerateClasslessDto(JObject jsonObject, Dto.Thing dto)
-        {
-            var metainfo = this.metaDataProvider.GetMetaInfo(dto.ClassKind.ToString());
-
-            var classlessDto = new ClasslessDTO();
-            foreach (var property in jsonObject.Properties())
-            {
-                var propertyName = Utils.CapitalizeFirstLetter(property.Name);
-                classlessDto.Add(propertyName, metainfo.GetValue(propertyName, dto));
-            }
-
-            return classlessDto;
         }
     }
 }

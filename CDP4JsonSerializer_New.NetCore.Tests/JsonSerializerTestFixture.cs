@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
+//CDP4JsonSerializer_SystemTextJson
 //    This file is part of CDP4-SDK Community Edition
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_New.Tests
+namespace CDP4JsonSerializer_SystemTextJson.Tests
 {
     using System;
     using System.Collections.Concurrent;
@@ -39,8 +39,8 @@ namespace CDP4JsonSerializer_New.Tests
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_New.Tests.Helper;
-
+    using CDP4JsonSerializer_SystemTextJson.Tests.Helper;
+    using CDP4JsonSerializer_SystemTextJson;
     using Newtonsoft.Json;
 
     using NUnit.Framework;
