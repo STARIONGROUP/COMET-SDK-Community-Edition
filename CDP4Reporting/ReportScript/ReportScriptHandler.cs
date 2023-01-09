@@ -363,8 +363,10 @@ namespace CDP4Reporting.ReportScript
         /// Rebuild the report's datasource
         /// </summary>
         /// <param name="notifyParameterChange">Indicates if message should be shown when parameter values have been added, or removed.</param>
+        /// <param name="iteration">The <see cref="Iteration"/></param>
+        /// <param name="session">The <see cref="ISession"/></param>
         /// <returns>true if parameterchange message needs to be sent to the user, otherwise false</returns>
-        public bool RebuildDataSource(bool notifyParameterChange = false) 
+        public bool RebuildDataSource(Iteration iteration, ISession session, bool notifyParameterChange = false) 
         {
             const string dataSourceName = "ReportDataSource";
 
@@ -372,7 +374,7 @@ namespace CDP4Reporting.ReportScript
 
             try
             {
-                dataSource = this.GetDataSource(new Iteration(Guid.NewGuid(), null, null), null);
+                dataSource = this.GetDataSource(iteration, session);
             }
             catch (Exception ex)
             {

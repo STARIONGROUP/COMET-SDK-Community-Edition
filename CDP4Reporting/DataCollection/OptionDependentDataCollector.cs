@@ -22,7 +22,7 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-// The namespace for this class should be Reporting.Common.DataCollection, as this class can have different implementations in
+// The namespace for this class should be CDP4Reporting.DataCollection, as this class can have different implementations in
 // different environments and reports datasource code needs to be 100% compatible in all environments.
 namespace CDP4Reporting.DataCollection
 {

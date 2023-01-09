@@ -24,10 +24,13 @@
 
 namespace CDP4Reporting.Events
 {
+    using System.Diagnostics.CodeAnalysis;
+
     /// <summary>
     /// The purpose of the <see cref="ReportOutputEvent"/> is to notify an observer
     /// that a text should be added to the report designer's output panel.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class ReportOutputEvent
     {
         /// <summary>

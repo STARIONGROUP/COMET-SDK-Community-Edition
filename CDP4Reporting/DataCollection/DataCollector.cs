@@ -24,11 +24,14 @@
 
 namespace CDP4Reporting.DataCollection
 {
+    using System.Diagnostics.CodeAnalysis;
+
     using CDP4Reporting.DynamicTableChecker;
 
     /// <summary>
     /// The abstract base class that implements the <see cref="IDataCollector"/>
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public abstract class DataCollector : IDataCollector
     {
         /// <summary>

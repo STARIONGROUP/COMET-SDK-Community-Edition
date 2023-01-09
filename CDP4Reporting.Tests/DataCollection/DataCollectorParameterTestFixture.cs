@@ -61,6 +61,7 @@ namespace CDP4Reporting.Tests.DataCollection
         private SimpleQuantityKind parameterType2;
         private SimpleQuantityKind parameterType3;
         private SimpleQuantityKind parameterType4;
+        private CompoundParameterType parameterType5;
 
         public ElementDefinition ed1;
         private ElementDefinition ed2;
@@ -271,6 +272,21 @@ namespace CDP4Reporting.Tests.DataCollection
                 Name = "parameter type 4",
             };
 
+            this.parameterType5 = new CompoundParameterType(Guid.NewGuid(), null, null)
+            {
+                ShortName = "type5",
+                Name = "parameter type 5",
+            };
+
+            var param1 = new TextParameterType {ShortName = "param1", Name = "param1"};
+            var param2 = new SimpleQuantityKind {ShortName = "param2", Name = "param2"};
+
+            var paramc1 = new ParameterTypeComponent {ParameterType = param1, ShortName = "param1"};
+            var paramc2 = new ParameterTypeComponent {ParameterType = param2, ShortName = "param2"};
+
+            this.parameterType5.Component.Add(paramc1);
+            this.parameterType5.Component.Add(paramc2);
+
             // Element Definitions
 
             this.ed1 = new ElementDefinition(Guid.NewGuid(), this.cache, null)
@@ -284,6 +300,7 @@ namespace CDP4Reporting.Tests.DataCollection
             this.AddParameter(this.ed1, this.parameterType2, this.parameterOwner, "12");
             this.AddParameter(this.ed1, this.parameterType3, this.parameterOwner, "13");
             this.AddStateDependentParameter(this.ed1, this.parameterType4, this.parameterOwner, this.actualList, "14");
+            this.AddCompoundParameter(this.ed1, this.parameterType5, this.parameterOwner, new [] {"15", "16"});
 
             this.ed2 = new ElementDefinition(Guid.NewGuid(), this.cache, null)
             {
@@ -390,6 +407,35 @@ namespace CDP4Reporting.Tests.DataCollection
 
                 parameter.ValueSet.Add(valueSet);
             }
+
+            elementDefinition.Parameter.Add(parameter);
+
+            return parameter;
+        }
+
+        private Parameter AddCompoundParameter(
+            ElementDefinition elementDefinition,
+            ParameterType parameterType,
+            DomainOfExpertise owner,
+            string[] values)
+        {
+            var parameter = new Parameter(Guid.NewGuid(), this.cache, null)
+            {
+                ParameterType = parameterType,
+                Owner = owner,
+                Scale = this.scale
+            };
+
+            var valueSet = new ParameterValueSet(Guid.NewGuid(), this.cache, null)
+            {
+                Published = new ValueArray<string>(new List<string>(values)),
+                Manual = new ValueArray<string>(new List<string>(values)),
+                Computed = new ValueArray<string>(new List<string>(values)),
+                Formula = new ValueArray<string>(new List<string>(values)),
+                ValueSwitch = ParameterSwitchKind.MANUAL
+            };
+
+            parameter.ValueSet.Add(valueSet);
 
             elementDefinition.Parameter.Add(parameter);
 

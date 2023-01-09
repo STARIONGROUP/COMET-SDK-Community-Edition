@@ -64,4 +64,9 @@
   <ItemGroup>
     <ProjectReference Include="..\CDP4Reporting\CDP4Reporting.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Data\report.rep4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

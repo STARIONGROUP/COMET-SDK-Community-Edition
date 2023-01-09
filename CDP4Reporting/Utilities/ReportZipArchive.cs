@@ -25,11 +25,13 @@
 namespace CDP4Reporting.Utilities
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
 
     /// <summary>
     /// Struct that maps streams on archive zip file path
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public struct ReportZipArchive : IDisposable
     {
         /// <summary>

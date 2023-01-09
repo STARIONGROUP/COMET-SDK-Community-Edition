@@ -24,6 +24,8 @@
 
 namespace CDP4Reporting.DataCollection
 {
+    using System.Diagnostics.CodeAnalysis;
+
     /// <summary>
     /// Class from which state dependent per row double parameter columns
     /// for a <see cref="DataCollectorRow"/> need to derive.
@@ -31,6 +33,7 @@ namespace CDP4Reporting.DataCollection
     /// <typeparam name="TRow">
     /// The type of the associated <see cref="DataCollectorRow"/>.
     /// </typeparam>
+    [ExcludeFromCodeCoverage]
     public class DataCollectorStateDependentPerRowStringParameter<TRow> : DataCollectorStateDependentPerRowParameter<TRow, string>
         where TRow : DataCollectorRow, new()
     {
