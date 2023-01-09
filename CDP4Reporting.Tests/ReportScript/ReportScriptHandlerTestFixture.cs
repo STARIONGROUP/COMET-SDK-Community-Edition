@@ -30,8 +30,6 @@ namespace CDP4Reporting.Tests.DataCollection
 
     using CDP4Reporting.ReportScript;
 
-    using DevExpress.XtraRichEdit.Layout.Engine;
-
     using Moq;
 
     using NUnit.Framework;

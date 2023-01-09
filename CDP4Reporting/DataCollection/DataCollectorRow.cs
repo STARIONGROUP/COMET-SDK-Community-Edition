@@ -24,6 +24,8 @@
 
 namespace CDP4Reporting.DataCollection
 {
+    using System.Runtime.Serialization;
+
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
 
@@ -35,22 +37,26 @@ namespace CDP4Reporting.DataCollection
         /// <summary>
         /// The associated <see cref="ElementBase"/>.
         /// </summary>
+        [IgnoreDataMember]
         public ElementBase ElementBase { get; set; }
 
         /// <summary>
         /// The associated <see cref="NestedElement"/>.
         /// </summary>
+        [IgnoreDataMember]
         public NestedElement NestedElement { get; set; }
 
         /// <summary>
         /// Flag indicating whether the row matches the filtered criteria defined in <see cref="CategoryDecompositionHierarchy"/>.
         /// Note that when this is false, all values will be null on the row.
         /// </summary>
+        [IgnoreDataMember]
         public bool IsVisible { get; set; }
 
         /// <summary>
         /// The owner <see cref="DomainOfExpertise"/> of the associated <see cref="ElementBase"/>.
         /// </summary>
+        [IgnoreDataMember]
         protected DomainOfExpertise ElementBaseOwner => this.ElementBase.Owner;
     }
 }

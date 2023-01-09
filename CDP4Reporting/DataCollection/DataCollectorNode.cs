@@ -29,6 +29,7 @@ namespace CDP4Reporting.DataCollection
     using System.Data;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.Serialization;
 
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
@@ -187,6 +188,7 @@ namespace CDP4Reporting.DataCollection
 
             this.publicGetterProperties = typeof(T).GetProperties()
                 .Where(p => p.GetMethod?.IsPublic == true)
+                .Where(p => p.GetCustomAttribute<IgnoreDataMemberAttribute>() == null)
                 .Except(this.allColumns.Select(x =>x.Key));
         }
 
