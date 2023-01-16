@@ -61,12 +61,12 @@ namespace CDP4JsonSerializer_SystemTextJson
             
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parameterOverrideValueSet.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                parameterOverrideValueSet.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parameterOverrideValueSet.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                parameterOverrideValueSet.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("formula", out var formulaProperty))
@@ -83,12 +83,12 @@ namespace CDP4JsonSerializer_SystemTextJson
             
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parameterOverrideValueSet.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                parameterOverrideValueSet.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterValueSet", out var parameterValueSetProperty))
             {
-                parameterOverrideValueSet.ParameterValueSet = parameterValueSetProperty.Deserialize<Guid>();
+                parameterOverrideValueSet.ParameterValueSet = parameterValueSetProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("published", out var publishedProperty))
@@ -105,7 +105,7 @@ namespace CDP4JsonSerializer_SystemTextJson
             
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parameterOverrideValueSet.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                parameterOverrideValueSet.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueSwitch", out var valueSwitchProperty))

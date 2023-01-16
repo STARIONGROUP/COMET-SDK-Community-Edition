@@ -55,37 +55,37 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                naturalLanguage.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                naturalLanguage.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                naturalLanguage.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                naturalLanguage.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                naturalLanguage.LanguageCode = languageCodeProperty.Deserialize<string>();
+                naturalLanguage.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                naturalLanguage.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                naturalLanguage.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                naturalLanguage.Name = nameProperty.Deserialize<string>();
+                naturalLanguage.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("nativeName", out var nativeNameProperty))
             {
-                naturalLanguage.NativeName = nativeNameProperty.Deserialize<string>();
+                naturalLanguage.NativeName = nativeNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                naturalLanguage.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                naturalLanguage.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return naturalLanguage;

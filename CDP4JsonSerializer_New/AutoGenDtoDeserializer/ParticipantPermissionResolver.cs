@@ -60,22 +60,22 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                participantPermission.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                participantPermission.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                participantPermission.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                participantPermission.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                participantPermission.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                participantPermission.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                participantPermission.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                participantPermission.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("objectClass", out var objectClassProperty))
@@ -85,7 +85,7 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                participantPermission.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                participantPermission.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return participantPermission;

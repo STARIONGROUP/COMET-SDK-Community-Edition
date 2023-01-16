@@ -55,57 +55,57 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                iterationSetup.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                iterationSetup.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("description", out var descriptionProperty))
             {
-                iterationSetup.Description = descriptionProperty.Deserialize<string>();
+                iterationSetup.Description = descriptionProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                iterationSetup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                iterationSetup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                iterationSetup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                iterationSetup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("frozenOn", out var frozenOnProperty))
             {
-                iterationSetup.FrozenOn = frozenOnProperty.Deserialize<DateTime?>();
+                iterationSetup.FrozenOn = frozenOnProperty.Deserialize<DateTime?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isDeleted", out var isDeletedProperty))
             {
-                iterationSetup.IsDeleted = isDeletedProperty.Deserialize<bool>();
+                iterationSetup.IsDeleted = isDeletedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("iterationIid", out var iterationIidProperty))
             {
-                iterationSetup.IterationIid = iterationIidProperty.Deserialize<Guid>();
+                iterationSetup.IterationIid = iterationIidProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("iterationNumber", out var iterationNumberProperty))
             {
-                iterationSetup.IterationNumber = iterationNumberProperty.Deserialize<int>();
+                iterationSetup.IterationNumber = iterationNumberProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                iterationSetup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                iterationSetup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("sourceIterationSetup", out var sourceIterationSetupProperty))
             {
-                iterationSetup.SourceIterationSetup = sourceIterationSetupProperty.Deserialize<Guid?>();
+                iterationSetup.SourceIterationSetup = sourceIterationSetupProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                iterationSetup.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                iterationSetup.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return iterationSetup;

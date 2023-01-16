@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parametricConstraint.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                parametricConstraint.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parametricConstraint.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                parametricConstraint.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("expression", out var expressionProperty))
             {
-                parametricConstraint.Expression.AddRange(expressionProperty.Deserialize<IEnumerable<Guid>>());
+                parametricConstraint.Expression.AddRange(expressionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parametricConstraint.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                parametricConstraint.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parametricConstraint.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                parametricConstraint.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("topExpression", out var topExpressionProperty))
             {
-                parametricConstraint.TopExpression = topExpressionProperty.Deserialize<Guid?>();
+                parametricConstraint.TopExpression = topExpressionProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             return parametricConstraint;

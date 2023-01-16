@@ -55,52 +55,52 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                domainFileStore.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                domainFileStore.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                domainFileStore.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                domainFileStore.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                domainFileStore.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                domainFileStore.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("file", out var fileProperty))
             {
-                domainFileStore.File.AddRange(fileProperty.Deserialize<IEnumerable<Guid>>());
+                domainFileStore.File.AddRange(fileProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("folder", out var folderProperty))
             {
-                domainFileStore.Folder.AddRange(folderProperty.Deserialize<IEnumerable<Guid>>());
+                domainFileStore.Folder.AddRange(folderProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isHidden", out var isHiddenProperty))
             {
-                domainFileStore.IsHidden = isHiddenProperty.Deserialize<bool>();
+                domainFileStore.IsHidden = isHiddenProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                domainFileStore.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                domainFileStore.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                domainFileStore.Name = nameProperty.Deserialize<string>();
+                domainFileStore.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                domainFileStore.Owner = ownerProperty.Deserialize<Guid>();
+                domainFileStore.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                domainFileStore.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                domainFileStore.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return domainFileStore;

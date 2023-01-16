@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("domain", out var domainProperty))
             {
-                participant.Domain.AddRange(domainProperty.Deserialize<IEnumerable<Guid>>());
+                participant.Domain.AddRange(domainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                participant.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                participant.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                participant.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                participant.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isActive", out var isActiveProperty))
             {
-                participant.IsActive = isActiveProperty.Deserialize<bool>();
+                participant.IsActive = isActiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                participant.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                participant.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("person", out var personProperty))
             {
-                participant.Person = personProperty.Deserialize<Guid>();
+                participant.Person = personProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("role", out var roleProperty))
             {
-                participant.Role = roleProperty.Deserialize<Guid>();
+                participant.Role = roleProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("selectedDomain", out var selectedDomainProperty))
             {
-                participant.SelectedDomain = selectedDomainProperty.Deserialize<Guid>();
+                participant.SelectedDomain = selectedDomainProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                participant.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                participant.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return participant;

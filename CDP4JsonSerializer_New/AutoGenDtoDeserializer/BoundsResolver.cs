@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                bounds.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                bounds.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                bounds.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                bounds.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("height", out var heightProperty))
             {
-                bounds.Height = heightProperty.Deserialize<float>();
+                bounds.Height = heightProperty.Deserialize<float>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                bounds.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                bounds.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                bounds.Name = nameProperty.Deserialize<string>();
+                bounds.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                bounds.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                bounds.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("width", out var widthProperty))
             {
-                bounds.Width = widthProperty.Deserialize<float>();
+                bounds.Width = widthProperty.Deserialize<float>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("x", out var xProperty))
             {
-                bounds.X = xProperty.Deserialize<float>();
+                bounds.X = xProperty.Deserialize<float>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("y", out var yProperty))
             {
-                bounds.Y = yProperty.Deserialize<float>();
+                bounds.Y = yProperty.Deserialize<float>(SerializerOptions.Options);
             }
 
             return bounds;

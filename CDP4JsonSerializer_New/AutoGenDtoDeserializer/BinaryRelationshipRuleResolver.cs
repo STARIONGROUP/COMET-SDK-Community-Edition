@@ -55,77 +55,77 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                binaryRelationshipRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                binaryRelationshipRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                binaryRelationshipRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                binaryRelationshipRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                binaryRelationshipRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                binaryRelationshipRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                binaryRelationshipRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                binaryRelationshipRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("forwardRelationshipName", out var forwardRelationshipNameProperty))
             {
-                binaryRelationshipRule.ForwardRelationshipName = forwardRelationshipNameProperty.Deserialize<string>();
+                binaryRelationshipRule.ForwardRelationshipName = forwardRelationshipNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                binaryRelationshipRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                binaryRelationshipRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("inverseRelationshipName", out var inverseRelationshipNameProperty))
             {
-                binaryRelationshipRule.InverseRelationshipName = inverseRelationshipNameProperty.Deserialize<string>();
+                binaryRelationshipRule.InverseRelationshipName = inverseRelationshipNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                binaryRelationshipRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                binaryRelationshipRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                binaryRelationshipRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                binaryRelationshipRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                binaryRelationshipRule.Name = nameProperty.Deserialize<string>();
+                binaryRelationshipRule.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("relationshipCategory", out var relationshipCategoryProperty))
             {
-                binaryRelationshipRule.RelationshipCategory = relationshipCategoryProperty.Deserialize<Guid>();
+                binaryRelationshipRule.RelationshipCategory = relationshipCategoryProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                binaryRelationshipRule.ShortName = shortNameProperty.Deserialize<string>();
+                binaryRelationshipRule.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("sourceCategory", out var sourceCategoryProperty))
             {
-                binaryRelationshipRule.SourceCategory = sourceCategoryProperty.Deserialize<Guid>();
+                binaryRelationshipRule.SourceCategory = sourceCategoryProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("targetCategory", out var targetCategoryProperty))
             {
-                binaryRelationshipRule.TargetCategory = targetCategoryProperty.Deserialize<Guid>();
+                binaryRelationshipRule.TargetCategory = targetCategoryProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                binaryRelationshipRule.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                binaryRelationshipRule.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return binaryRelationshipRule;

@@ -26,5 +26,6 @@
 
 using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("CDP4JsonSerializer_SystemTextJson")]
 [assembly: InternalsVisibleTo("CDP4JsonSerializer_SystemTextJson.Tests")]
 [assembly: InternalsVisibleTo("CDP4JsonSerializer_SystemTextJson.NetCore.Tests")]

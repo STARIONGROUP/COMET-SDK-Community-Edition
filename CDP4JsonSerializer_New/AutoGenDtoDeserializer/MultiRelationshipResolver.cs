@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                multiRelationship.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationship.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                multiRelationship.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationship.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                multiRelationship.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationship.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                multiRelationship.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                multiRelationship.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                multiRelationship.Name = nameProperty.Deserialize<string>();
+                multiRelationship.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                multiRelationship.Owner = ownerProperty.Deserialize<Guid>();
+                multiRelationship.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterValue", out var parameterValueProperty))
             {
-                multiRelationship.ParameterValue.AddRange(parameterValueProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationship.ParameterValue.AddRange(parameterValueProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
             {
-                multiRelationship.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationship.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                multiRelationship.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                multiRelationship.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return multiRelationship;

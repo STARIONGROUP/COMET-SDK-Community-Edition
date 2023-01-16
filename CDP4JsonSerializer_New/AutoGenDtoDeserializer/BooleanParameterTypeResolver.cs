@@ -55,62 +55,62 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                booleanParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                booleanParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                booleanParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                booleanParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                booleanParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                booleanParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                booleanParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                booleanParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                booleanParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                booleanParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                booleanParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                booleanParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                booleanParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                booleanParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                booleanParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                booleanParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                booleanParameterType.Name = nameProperty.Deserialize<string>();
+                booleanParameterType.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                booleanParameterType.ShortName = shortNameProperty.Deserialize<string>();
+                booleanParameterType.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("symbol", out var symbolProperty))
             {
-                booleanParameterType.Symbol = symbolProperty.Deserialize<string>();
+                booleanParameterType.Symbol = symbolProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                booleanParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                booleanParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return booleanParameterType;

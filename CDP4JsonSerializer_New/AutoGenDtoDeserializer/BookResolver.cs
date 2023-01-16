@@ -55,60 +55,59 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                book.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                book.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                book.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                book.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                book.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                book.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                book.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                book.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                book.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                book.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                book.Name = nameProperty.Deserialize<string>();
+                book.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                book.Owner = ownerProperty.Deserialize<Guid>();
+                book.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("section", out var sectionProperty))
             {
                 foreach(var arrayItem in sectionProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         book.Section.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                book.ShortName = shortNameProperty.Deserialize<string>();
+                book.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                book.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                book.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return book;

@@ -55,75 +55,74 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("bounds", out var boundsProperty))
             {
-                diagramEdge.Bounds.AddRange(boundsProperty.Deserialize<IEnumerable<Guid>>());
+                diagramEdge.Bounds.AddRange(boundsProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("depictedThing", out var depictedThingProperty))
             {
-                diagramEdge.DepictedThing = depictedThingProperty.Deserialize<Guid?>();
+                diagramEdge.DepictedThing = depictedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("diagramElement", out var diagramElementProperty))
             {
-                diagramEdge.DiagramElement.AddRange(diagramElementProperty.Deserialize<IEnumerable<Guid>>());
+                diagramEdge.DiagramElement.AddRange(diagramElementProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                diagramEdge.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                diagramEdge.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                diagramEdge.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                diagramEdge.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("localStyle", out var localStyleProperty))
             {
-                diagramEdge.LocalStyle.AddRange(localStyleProperty.Deserialize<IEnumerable<Guid>>());
+                diagramEdge.LocalStyle.AddRange(localStyleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                diagramEdge.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                diagramEdge.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                diagramEdge.Name = nameProperty.Deserialize<string>();
+                diagramEdge.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("point", out var pointProperty))
             {
                 foreach(var arrayItem in pointProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         diagramEdge.Point.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("sharedStyle", out var sharedStyleProperty))
             {
-                diagramEdge.SharedStyle = sharedStyleProperty.Deserialize<Guid?>();
+                diagramEdge.SharedStyle = sharedStyleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("source", out var sourceProperty))
             {
-                diagramEdge.Source = sourceProperty.Deserialize<Guid>();
+                diagramEdge.Source = sourceProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("target", out var targetProperty))
             {
-                diagramEdge.Target = targetProperty.Deserialize<Guid>();
+                diagramEdge.Target = targetProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                diagramEdge.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                diagramEdge.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return diagramEdge;

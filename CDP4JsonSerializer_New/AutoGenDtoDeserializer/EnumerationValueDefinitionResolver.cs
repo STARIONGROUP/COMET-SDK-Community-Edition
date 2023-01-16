@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                enumerationValueDefinition.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationValueDefinition.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                enumerationValueDefinition.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationValueDefinition.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                enumerationValueDefinition.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationValueDefinition.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                enumerationValueDefinition.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationValueDefinition.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                enumerationValueDefinition.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationValueDefinition.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                enumerationValueDefinition.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                enumerationValueDefinition.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                enumerationValueDefinition.Name = nameProperty.Deserialize<string>();
+                enumerationValueDefinition.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                enumerationValueDefinition.ShortName = shortNameProperty.Deserialize<string>();
+                enumerationValueDefinition.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                enumerationValueDefinition.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                enumerationValueDefinition.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return enumerationValueDefinition;

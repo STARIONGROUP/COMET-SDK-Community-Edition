@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("dependentScaleValue", out var dependentScaleValueProperty))
             {
-                mappingToReferenceScale.DependentScaleValue = dependentScaleValueProperty.Deserialize<Guid>();
+                mappingToReferenceScale.DependentScaleValue = dependentScaleValueProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                mappingToReferenceScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                mappingToReferenceScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                mappingToReferenceScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                mappingToReferenceScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                mappingToReferenceScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                mappingToReferenceScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("referenceScaleValue", out var referenceScaleValueProperty))
             {
-                mappingToReferenceScale.ReferenceScaleValue = referenceScaleValueProperty.Deserialize<Guid>();
+                mappingToReferenceScale.ReferenceScaleValue = referenceScaleValueProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                mappingToReferenceScale.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                mappingToReferenceScale.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return mappingToReferenceScale;

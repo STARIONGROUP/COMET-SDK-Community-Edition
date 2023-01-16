@@ -55,72 +55,72 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                multiRelationshipRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationshipRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                multiRelationshipRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationshipRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                multiRelationshipRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationshipRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                multiRelationshipRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationshipRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                multiRelationshipRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationshipRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                multiRelationshipRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                multiRelationshipRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("maxRelated", out var maxRelatedProperty))
             {
-                multiRelationshipRule.MaxRelated = maxRelatedProperty.Deserialize<int>();
+                multiRelationshipRule.MaxRelated = maxRelatedProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("minRelated", out var minRelatedProperty))
             {
-                multiRelationshipRule.MinRelated = minRelatedProperty.Deserialize<int>();
+                multiRelationshipRule.MinRelated = minRelatedProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                multiRelationshipRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                multiRelationshipRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                multiRelationshipRule.Name = nameProperty.Deserialize<string>();
+                multiRelationshipRule.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("relatedCategory", out var relatedCategoryProperty))
             {
-                multiRelationshipRule.RelatedCategory.AddRange(relatedCategoryProperty.Deserialize<IEnumerable<Guid>>());
+                multiRelationshipRule.RelatedCategory.AddRange(relatedCategoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("relationshipCategory", out var relationshipCategoryProperty))
             {
-                multiRelationshipRule.RelationshipCategory = relationshipCategoryProperty.Deserialize<Guid>();
+                multiRelationshipRule.RelationshipCategory = relationshipCategoryProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                multiRelationshipRule.ShortName = shortNameProperty.Deserialize<string>();
+                multiRelationshipRule.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                multiRelationshipRule.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                multiRelationshipRule.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return multiRelationshipRule;

@@ -11,7 +11,7 @@
  
   <ItemGroup>
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-    <ProjectReference Include="..\CDP4JsonSerializer_SystemTextJson\CDP4JsonSerializer_SystemTextJson.csproj" />
+    <ProjectReference Include="..\CDP4JsonSerializer_New\CDP4JsonSerializer_SystemTextJson.csproj" />
   </ItemGroup>
 
   <ItemGroup>

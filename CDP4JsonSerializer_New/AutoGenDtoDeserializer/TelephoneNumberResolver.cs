@@ -55,27 +55,27 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                telephoneNumber.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                telephoneNumber.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                telephoneNumber.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                telephoneNumber.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                telephoneNumber.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                telephoneNumber.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                telephoneNumber.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                telephoneNumber.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("value", out var valueProperty))
             {
-                telephoneNumber.Value = valueProperty.Deserialize<string>();
+                telephoneNumber.Value = valueProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("vcardType", out var vcardTypeProperty))
@@ -85,7 +85,6 @@ namespace CDP4JsonSerializer_SystemTextJson
                     telephoneNumber.VcardType.Add(VcardTelephoneNumberKindDeserializer.Deserialize(element));
                 }
             }
-
             
 
             return telephoneNumber;

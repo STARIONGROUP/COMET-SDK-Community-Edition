@@ -55,52 +55,52 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                valueGroup.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                valueGroup.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                valueGroup.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                valueGroup.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                valueGroup.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                valueGroup.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                valueGroup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                valueGroup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                valueGroup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                valueGroup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                valueGroup.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                valueGroup.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                valueGroup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                valueGroup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                valueGroup.Name = nameProperty.Deserialize<string>();
+                valueGroup.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                valueGroup.ShortName = shortNameProperty.Deserialize<string>();
+                valueGroup.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                valueGroup.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                valueGroup.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return valueGroup;

@@ -60,22 +60,22 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                personPermission.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                personPermission.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                personPermission.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                personPermission.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                personPermission.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                personPermission.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                personPermission.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                personPermission.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("objectClass", out var objectClassProperty))
@@ -85,7 +85,7 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                personPermission.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                personPermission.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return personPermission;

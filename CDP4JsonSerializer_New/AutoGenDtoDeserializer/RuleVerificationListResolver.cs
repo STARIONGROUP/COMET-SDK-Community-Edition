@@ -55,65 +55,64 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                ruleVerificationList.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                ruleVerificationList.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                ruleVerificationList.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                ruleVerificationList.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                ruleVerificationList.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                ruleVerificationList.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                ruleVerificationList.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                ruleVerificationList.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                ruleVerificationList.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                ruleVerificationList.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                ruleVerificationList.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                ruleVerificationList.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                ruleVerificationList.Name = nameProperty.Deserialize<string>();
+                ruleVerificationList.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                ruleVerificationList.Owner = ownerProperty.Deserialize<Guid>();
+                ruleVerificationList.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("ruleVerification", out var ruleVerificationProperty))
             {
                 foreach(var arrayItem in ruleVerificationProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         ruleVerificationList.RuleVerification.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                ruleVerificationList.ShortName = shortNameProperty.Deserialize<string>();
+                ruleVerificationList.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                ruleVerificationList.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                ruleVerificationList.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return ruleVerificationList;

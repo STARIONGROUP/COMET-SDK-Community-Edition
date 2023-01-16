@@ -55,37 +55,37 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                hyperLink.Content = contentProperty.Deserialize<string>();
+                hyperLink.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                hyperLink.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                hyperLink.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                hyperLink.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                hyperLink.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                hyperLink.LanguageCode = languageCodeProperty.Deserialize<string>();
+                hyperLink.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                hyperLink.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                hyperLink.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                hyperLink.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                hyperLink.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("uri", out var uriProperty))
             {
-                hyperLink.Uri = uriProperty.Deserialize<string>();
+                hyperLink.Uri = uriProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return hyperLink;

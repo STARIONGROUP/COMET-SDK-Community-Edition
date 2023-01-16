@@ -55,22 +55,22 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("approvedBy", out var approvedByProperty))
             {
-                contractChangeNotice.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>());
+                contractChangeNotice.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                contractChangeNotice.Author = authorProperty.Deserialize<Guid>();
+                contractChangeNotice.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                contractChangeNotice.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                contractChangeNotice.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("changeProposal", out var changeProposalProperty))
             {
-                contractChangeNotice.ChangeProposal = changeProposalProperty.Deserialize<Guid>();
+                contractChangeNotice.ChangeProposal = changeProposalProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("classification", out var classificationProperty))
@@ -80,62 +80,62 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                contractChangeNotice.Content = contentProperty.Deserialize<string>();
+                contractChangeNotice.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                contractChangeNotice.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                contractChangeNotice.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("discussion", out var discussionProperty))
             {
-                contractChangeNotice.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>());
+                contractChangeNotice.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                contractChangeNotice.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                contractChangeNotice.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                contractChangeNotice.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                contractChangeNotice.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                contractChangeNotice.LanguageCode = languageCodeProperty.Deserialize<string>();
+                contractChangeNotice.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                contractChangeNotice.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                contractChangeNotice.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                contractChangeNotice.Owner = ownerProperty.Deserialize<Guid>();
+                contractChangeNotice.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("primaryAnnotatedThing", out var primaryAnnotatedThingProperty))
             {
-                contractChangeNotice.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>();
+                contractChangeNotice.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
             {
-                contractChangeNotice.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>());
+                contractChangeNotice.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                contractChangeNotice.ShortName = shortNameProperty.Deserialize<string>();
+                contractChangeNotice.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("sourceAnnotation", out var sourceAnnotationProperty))
             {
-                contractChangeNotice.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>());
+                contractChangeNotice.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("status", out var statusProperty))
@@ -145,12 +145,12 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                contractChangeNotice.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                contractChangeNotice.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("title", out var titleProperty))
             {
-                contractChangeNotice.Title = titleProperty.Deserialize<string>();
+                contractChangeNotice.Title = titleProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return contractChangeNotice;

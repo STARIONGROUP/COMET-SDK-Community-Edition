@@ -55,22 +55,22 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("approvedBy", out var approvedByProperty))
             {
-                changeProposal.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>());
+                changeProposal.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                changeProposal.Author = authorProperty.Deserialize<Guid>();
+                changeProposal.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                changeProposal.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                changeProposal.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("changeRequest", out var changeRequestProperty))
             {
-                changeProposal.ChangeRequest = changeRequestProperty.Deserialize<Guid>();
+                changeProposal.ChangeRequest = changeRequestProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("classification", out var classificationProperty))
@@ -80,62 +80,62 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                changeProposal.Content = contentProperty.Deserialize<string>();
+                changeProposal.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                changeProposal.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                changeProposal.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("discussion", out var discussionProperty))
             {
-                changeProposal.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>());
+                changeProposal.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                changeProposal.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                changeProposal.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                changeProposal.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                changeProposal.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                changeProposal.LanguageCode = languageCodeProperty.Deserialize<string>();
+                changeProposal.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                changeProposal.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                changeProposal.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                changeProposal.Owner = ownerProperty.Deserialize<Guid>();
+                changeProposal.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("primaryAnnotatedThing", out var primaryAnnotatedThingProperty))
             {
-                changeProposal.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>();
+                changeProposal.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
             {
-                changeProposal.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>());
+                changeProposal.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                changeProposal.ShortName = shortNameProperty.Deserialize<string>();
+                changeProposal.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("sourceAnnotation", out var sourceAnnotationProperty))
             {
-                changeProposal.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>());
+                changeProposal.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("status", out var statusProperty))
@@ -145,12 +145,12 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                changeProposal.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                changeProposal.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("title", out var titleProperty))
             {
-                changeProposal.Title = titleProperty.Deserialize<string>();
+                changeProposal.Title = titleProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return changeProposal;

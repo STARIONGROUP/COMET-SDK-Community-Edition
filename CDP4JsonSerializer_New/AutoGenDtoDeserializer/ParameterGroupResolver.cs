@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("containingGroup", out var containingGroupProperty))
             {
-                parameterGroup.ContainingGroup = containingGroupProperty.Deserialize<Guid?>();
+                parameterGroup.ContainingGroup = containingGroupProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parameterGroup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                parameterGroup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parameterGroup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                parameterGroup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parameterGroup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                parameterGroup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                parameterGroup.Name = nameProperty.Deserialize<string>();
+                parameterGroup.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parameterGroup.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                parameterGroup.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return parameterGroup;

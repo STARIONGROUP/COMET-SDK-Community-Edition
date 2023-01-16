@@ -55,92 +55,92 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                referenceSource.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                referenceSource.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                referenceSource.Author = authorProperty.Deserialize<string>();
+                referenceSource.Author = authorProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                referenceSource.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                referenceSource.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                referenceSource.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                referenceSource.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                referenceSource.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                referenceSource.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                referenceSource.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                referenceSource.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                referenceSource.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                referenceSource.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                referenceSource.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                referenceSource.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("language", out var languageProperty))
             {
-                referenceSource.Language = languageProperty.Deserialize<string>();
+                referenceSource.Language = languageProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                referenceSource.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                referenceSource.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                referenceSource.Name = nameProperty.Deserialize<string>();
+                referenceSource.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("publicationYear", out var publicationYearProperty))
             {
-                referenceSource.PublicationYear = publicationYearProperty.Deserialize<int?>();
+                referenceSource.PublicationYear = publicationYearProperty.Deserialize<int?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("publishedIn", out var publishedInProperty))
             {
-                referenceSource.PublishedIn = publishedInProperty.Deserialize<Guid?>();
+                referenceSource.PublishedIn = publishedInProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("publisher", out var publisherProperty))
             {
-                referenceSource.Publisher = publisherProperty.Deserialize<Guid?>();
+                referenceSource.Publisher = publisherProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                referenceSource.ShortName = shortNameProperty.Deserialize<string>();
+                referenceSource.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                referenceSource.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                referenceSource.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("versionDate", out var versionDateProperty))
             {
-                referenceSource.VersionDate = versionDateProperty.Deserialize<DateTime?>();
+                referenceSource.VersionDate = versionDateProperty.Deserialize<DateTime?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("versionIdentifier", out var versionIdentifierProperty))
             {
-                referenceSource.VersionIdentifier = versionIdentifierProperty.Deserialize<string>();
+                referenceSource.VersionIdentifier = versionIdentifierProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return referenceSource;

@@ -55,72 +55,72 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                decompositionRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                decompositionRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("containedCategory", out var containedCategoryProperty))
             {
-                decompositionRule.ContainedCategory.AddRange(containedCategoryProperty.Deserialize<IEnumerable<Guid>>());
+                decompositionRule.ContainedCategory.AddRange(containedCategoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("containingCategory", out var containingCategoryProperty))
             {
-                decompositionRule.ContainingCategory = containingCategoryProperty.Deserialize<Guid>();
+                decompositionRule.ContainingCategory = containingCategoryProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                decompositionRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                decompositionRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                decompositionRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                decompositionRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                decompositionRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                decompositionRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                decompositionRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                decompositionRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                decompositionRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                decompositionRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("maxContained", out var maxContainedProperty))
             {
-                decompositionRule.MaxContained = maxContainedProperty.Deserialize<int?>();
+                decompositionRule.MaxContained = maxContainedProperty.Deserialize<int?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("minContained", out var minContainedProperty))
             {
-                decompositionRule.MinContained = minContainedProperty.Deserialize<int>();
+                decompositionRule.MinContained = minContainedProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                decompositionRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                decompositionRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                decompositionRule.Name = nameProperty.Deserialize<string>();
+                decompositionRule.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                decompositionRule.ShortName = shortNameProperty.Deserialize<string>();
+                decompositionRule.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                decompositionRule.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                decompositionRule.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return decompositionRule;

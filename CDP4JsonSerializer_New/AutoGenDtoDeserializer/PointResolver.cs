@@ -55,37 +55,37 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                point.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                point.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                point.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                point.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                point.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                point.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                point.Name = nameProperty.Deserialize<string>();
+                point.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                point.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                point.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("x", out var xProperty))
             {
-                point.X = xProperty.Deserialize<float>();
+                point.X = xProperty.Deserialize<float>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("y", out var yProperty))
             {
-                point.Y = yProperty.Deserialize<float>();
+                point.Y = yProperty.Deserialize<float>(SerializerOptions.Options);
             }
 
             return point;

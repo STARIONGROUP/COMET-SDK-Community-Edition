@@ -55,42 +55,42 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("blue", out var blueProperty))
             {
-                color.Blue = blueProperty.Deserialize<int>();
+                color.Blue = blueProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                color.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                color.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                color.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                color.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("green", out var greenProperty))
             {
-                color.Green = greenProperty.Deserialize<int>();
+                color.Green = greenProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                color.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                color.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                color.Name = nameProperty.Deserialize<string>();
+                color.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("red", out var redProperty))
             {
-                color.Red = redProperty.Deserialize<int>();
+                color.Red = redProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                color.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                color.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return color;

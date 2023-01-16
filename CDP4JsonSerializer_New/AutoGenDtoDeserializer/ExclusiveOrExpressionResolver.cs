@@ -55,27 +55,27 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                exclusiveOrExpression.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                exclusiveOrExpression.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                exclusiveOrExpression.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                exclusiveOrExpression.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                exclusiveOrExpression.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                exclusiveOrExpression.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("term", out var termProperty))
             {
-                exclusiveOrExpression.Term.AddRange(termProperty.Deserialize<IEnumerable<Guid>>());
+                exclusiveOrExpression.Term.AddRange(termProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                exclusiveOrExpression.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                exclusiveOrExpression.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return exclusiveOrExpression;

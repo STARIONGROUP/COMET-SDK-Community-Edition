@@ -55,62 +55,62 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("bounds", out var boundsProperty))
             {
-                diagramObject.Bounds.AddRange(boundsProperty.Deserialize<IEnumerable<Guid>>());
+                diagramObject.Bounds.AddRange(boundsProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("depictedThing", out var depictedThingProperty))
             {
-                diagramObject.DepictedThing = depictedThingProperty.Deserialize<Guid?>();
+                diagramObject.DepictedThing = depictedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("diagramElement", out var diagramElementProperty))
             {
-                diagramObject.DiagramElement.AddRange(diagramElementProperty.Deserialize<IEnumerable<Guid>>());
+                diagramObject.DiagramElement.AddRange(diagramElementProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("documentation", out var documentationProperty))
             {
-                diagramObject.Documentation = documentationProperty.Deserialize<string>();
+                diagramObject.Documentation = documentationProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                diagramObject.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                diagramObject.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                diagramObject.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                diagramObject.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("localStyle", out var localStyleProperty))
             {
-                diagramObject.LocalStyle.AddRange(localStyleProperty.Deserialize<IEnumerable<Guid>>());
+                diagramObject.LocalStyle.AddRange(localStyleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                diagramObject.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                diagramObject.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                diagramObject.Name = nameProperty.Deserialize<string>();
+                diagramObject.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("resolution", out var resolutionProperty))
             {
-                diagramObject.Resolution = resolutionProperty.Deserialize<float>();
+                diagramObject.Resolution = resolutionProperty.Deserialize<float>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("sharedStyle", out var sharedStyleProperty))
             {
-                diagramObject.SharedStyle = sharedStyleProperty.Deserialize<Guid?>();
+                diagramObject.SharedStyle = sharedStyleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                diagramObject.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                diagramObject.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return diagramObject;

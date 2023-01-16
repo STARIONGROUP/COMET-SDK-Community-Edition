@@ -55,12 +55,12 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("actualOption", out var actualOptionProperty))
             {
-                parameterValueSet.ActualOption = actualOptionProperty.Deserialize<Guid?>();
+                parameterValueSet.ActualOption = actualOptionProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("actualState", out var actualStateProperty))
             {
-                parameterValueSet.ActualState = actualStateProperty.Deserialize<Guid?>();
+                parameterValueSet.ActualState = actualStateProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("computed", out var computedProperty))
@@ -71,12 +71,12 @@ namespace CDP4JsonSerializer_SystemTextJson
             
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parameterValueSet.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                parameterValueSet.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parameterValueSet.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                parameterValueSet.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("formula", out var formulaProperty))
@@ -93,7 +93,7 @@ namespace CDP4JsonSerializer_SystemTextJson
             
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parameterValueSet.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                parameterValueSet.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("published", out var publishedProperty))
@@ -110,7 +110,7 @@ namespace CDP4JsonSerializer_SystemTextJson
             
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parameterValueSet.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                parameterValueSet.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueSwitch", out var valueSwitchProperty))

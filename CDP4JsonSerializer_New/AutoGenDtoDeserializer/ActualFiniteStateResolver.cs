@@ -55,12 +55,12 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                actualFiniteState.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                actualFiniteState.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                actualFiniteState.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                actualFiniteState.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("kind", out var kindProperty))
@@ -70,17 +70,17 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                actualFiniteState.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                actualFiniteState.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("possibleState", out var possibleStateProperty))
             {
-                actualFiniteState.PossibleState.AddRange(possibleStateProperty.Deserialize<IEnumerable<Guid>>());
+                actualFiniteState.PossibleState.AddRange(possibleStateProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                actualFiniteState.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                actualFiniteState.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return actualFiniteState;

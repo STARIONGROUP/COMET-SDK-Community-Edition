@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                dependentParameterTypeAssignment.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                dependentParameterTypeAssignment.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                dependentParameterTypeAssignment.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                dependentParameterTypeAssignment.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("measurementScale", out var measurementScaleProperty))
             {
-                dependentParameterTypeAssignment.MeasurementScale = measurementScaleProperty.Deserialize<Guid?>();
+                dependentParameterTypeAssignment.MeasurementScale = measurementScaleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                dependentParameterTypeAssignment.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                dependentParameterTypeAssignment.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
             {
-                dependentParameterTypeAssignment.ParameterType = parameterTypeProperty.Deserialize<Guid>();
+                dependentParameterTypeAssignment.ParameterType = parameterTypeProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                dependentParameterTypeAssignment.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                dependentParameterTypeAssignment.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return dependentParameterTypeAssignment;

@@ -55,77 +55,77 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                simpleQuantityKind.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                simpleQuantityKind.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                simpleQuantityKind.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                simpleQuantityKind.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("defaultScale", out var defaultScaleProperty))
             {
-                simpleQuantityKind.DefaultScale = defaultScaleProperty.Deserialize<Guid>();
+                simpleQuantityKind.DefaultScale = defaultScaleProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                simpleQuantityKind.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                simpleQuantityKind.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                simpleQuantityKind.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                simpleQuantityKind.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                simpleQuantityKind.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                simpleQuantityKind.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                simpleQuantityKind.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                simpleQuantityKind.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                simpleQuantityKind.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                simpleQuantityKind.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                simpleQuantityKind.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                simpleQuantityKind.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                simpleQuantityKind.Name = nameProperty.Deserialize<string>();
+                simpleQuantityKind.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("possibleScale", out var possibleScaleProperty))
             {
-                simpleQuantityKind.PossibleScale.AddRange(possibleScaleProperty.Deserialize<IEnumerable<Guid>>());
+                simpleQuantityKind.PossibleScale.AddRange(possibleScaleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("quantityDimensionSymbol", out var quantityDimensionSymbolProperty))
             {
-                simpleQuantityKind.QuantityDimensionSymbol = quantityDimensionSymbolProperty.Deserialize<string>();
+                simpleQuantityKind.QuantityDimensionSymbol = quantityDimensionSymbolProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                simpleQuantityKind.ShortName = shortNameProperty.Deserialize<string>();
+                simpleQuantityKind.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("symbol", out var symbolProperty))
             {
-                simpleQuantityKind.Symbol = symbolProperty.Deserialize<string>();
+                simpleQuantityKind.Symbol = symbolProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                simpleQuantityKind.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                simpleQuantityKind.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return simpleQuantityKind;

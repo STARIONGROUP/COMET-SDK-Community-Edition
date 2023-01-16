@@ -55,22 +55,22 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("actionee", out var actioneeProperty))
             {
-                actionItem.Actionee = actioneeProperty.Deserialize<Guid>();
+                actionItem.Actionee = actioneeProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("approvedBy", out var approvedByProperty))
             {
-                actionItem.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>());
+                actionItem.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                actionItem.Author = authorProperty.Deserialize<Guid>();
+                actionItem.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                actionItem.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                actionItem.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("classification", out var classificationProperty))
@@ -80,77 +80,77 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("closeOutDate", out var closeOutDateProperty))
             {
-                actionItem.CloseOutDate = closeOutDateProperty.Deserialize<DateTime?>();
+                actionItem.CloseOutDate = closeOutDateProperty.Deserialize<DateTime?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("closeOutStatement", out var closeOutStatementProperty))
             {
-                actionItem.CloseOutStatement = closeOutStatementProperty.Deserialize<string>();
+                actionItem.CloseOutStatement = closeOutStatementProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                actionItem.Content = contentProperty.Deserialize<string>();
+                actionItem.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                actionItem.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                actionItem.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("discussion", out var discussionProperty))
             {
-                actionItem.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>());
+                actionItem.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("dueDate", out var dueDateProperty))
             {
-                actionItem.DueDate = dueDateProperty.Deserialize<DateTime>();
+                actionItem.DueDate = dueDateProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                actionItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                actionItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                actionItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                actionItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                actionItem.LanguageCode = languageCodeProperty.Deserialize<string>();
+                actionItem.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                actionItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                actionItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                actionItem.Owner = ownerProperty.Deserialize<Guid>();
+                actionItem.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("primaryAnnotatedThing", out var primaryAnnotatedThingProperty))
             {
-                actionItem.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>();
+                actionItem.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
             {
-                actionItem.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>());
+                actionItem.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                actionItem.ShortName = shortNameProperty.Deserialize<string>();
+                actionItem.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("sourceAnnotation", out var sourceAnnotationProperty))
             {
-                actionItem.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>());
+                actionItem.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("status", out var statusProperty))
@@ -160,12 +160,12 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                actionItem.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                actionItem.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("title", out var titleProperty))
             {
-                actionItem.Title = titleProperty.Deserialize<string>();
+                actionItem.Title = titleProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return actionItem;

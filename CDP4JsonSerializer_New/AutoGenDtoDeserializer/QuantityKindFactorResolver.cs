@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                quantityKindFactor.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                quantityKindFactor.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                quantityKindFactor.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                quantityKindFactor.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("exponent", out var exponentProperty))
             {
-                quantityKindFactor.Exponent = exponentProperty.Deserialize<string>();
+                quantityKindFactor.Exponent = exponentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                quantityKindFactor.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                quantityKindFactor.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("quantityKind", out var quantityKindProperty))
             {
-                quantityKindFactor.QuantityKind = quantityKindProperty.Deserialize<Guid>();
+                quantityKindFactor.QuantityKind = quantityKindProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                quantityKindFactor.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                quantityKindFactor.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return quantityKindFactor;

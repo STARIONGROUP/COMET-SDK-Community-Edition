@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("affectedDomainIid", out var affectedDomainIidProperty))
             {
-                modelLogEntry.AffectedDomainIid.AddRange(affectedDomainIidProperty.Deserialize<IEnumerable<Guid>>());
+                modelLogEntry.AffectedDomainIid.AddRange(affectedDomainIidProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("affectedItemIid", out var affectedItemIidProperty))
             {
-                modelLogEntry.AffectedItemIid.AddRange(affectedItemIidProperty.Deserialize<IEnumerable<Guid>>());
+                modelLogEntry.AffectedItemIid.AddRange(affectedItemIidProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                modelLogEntry.Author = authorProperty.Deserialize<Guid?>();
+                modelLogEntry.Author = authorProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                modelLogEntry.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                modelLogEntry.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                modelLogEntry.Content = contentProperty.Deserialize<string>();
+                modelLogEntry.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                modelLogEntry.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                modelLogEntry.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                modelLogEntry.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                modelLogEntry.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                modelLogEntry.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                modelLogEntry.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                modelLogEntry.LanguageCode = languageCodeProperty.Deserialize<string>();
+                modelLogEntry.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("level", out var levelProperty))
@@ -105,17 +105,17 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("logEntryChangelogItem", out var logEntryChangelogItemProperty))
             {
-                modelLogEntry.LogEntryChangelogItem.AddRange(logEntryChangelogItemProperty.Deserialize<IEnumerable<Guid>>());
+                modelLogEntry.LogEntryChangelogItem.AddRange(logEntryChangelogItemProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                modelLogEntry.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                modelLogEntry.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                modelLogEntry.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                modelLogEntry.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return modelLogEntry;

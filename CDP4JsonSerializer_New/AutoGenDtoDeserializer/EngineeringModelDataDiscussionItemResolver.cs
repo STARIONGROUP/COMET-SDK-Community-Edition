@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                engineeringModelDataDiscussionItem.Author = authorProperty.Deserialize<Guid>();
+                engineeringModelDataDiscussionItem.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                engineeringModelDataDiscussionItem.Content = contentProperty.Deserialize<string>();
+                engineeringModelDataDiscussionItem.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                engineeringModelDataDiscussionItem.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                engineeringModelDataDiscussionItem.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                engineeringModelDataDiscussionItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelDataDiscussionItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                engineeringModelDataDiscussionItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelDataDiscussionItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                engineeringModelDataDiscussionItem.LanguageCode = languageCodeProperty.Deserialize<string>();
+                engineeringModelDataDiscussionItem.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                engineeringModelDataDiscussionItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                engineeringModelDataDiscussionItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("replyTo", out var replyToProperty))
             {
-                engineeringModelDataDiscussionItem.ReplyTo = replyToProperty.Deserialize<Guid?>();
+                engineeringModelDataDiscussionItem.ReplyTo = replyToProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                engineeringModelDataDiscussionItem.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                engineeringModelDataDiscussionItem.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return engineeringModelDataDiscussionItem;

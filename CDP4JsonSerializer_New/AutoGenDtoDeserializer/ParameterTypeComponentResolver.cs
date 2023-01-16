@@ -55,37 +55,37 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parameterTypeComponent.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                parameterTypeComponent.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parameterTypeComponent.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                parameterTypeComponent.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parameterTypeComponent.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                parameterTypeComponent.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
             {
-                parameterTypeComponent.ParameterType = parameterTypeProperty.Deserialize<Guid>();
+                parameterTypeComponent.ParameterType = parameterTypeProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("scale", out var scaleProperty))
             {
-                parameterTypeComponent.Scale = scaleProperty.Deserialize<Guid?>();
+                parameterTypeComponent.Scale = scaleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                parameterTypeComponent.ShortName = shortNameProperty.Deserialize<string>();
+                parameterTypeComponent.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parameterTypeComponent.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                parameterTypeComponent.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return parameterTypeComponent;

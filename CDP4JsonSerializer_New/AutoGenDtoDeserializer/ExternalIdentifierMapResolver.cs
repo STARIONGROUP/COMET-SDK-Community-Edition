@@ -55,57 +55,57 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("correspondence", out var correspondenceProperty))
             {
-                externalIdentifierMap.Correspondence.AddRange(correspondenceProperty.Deserialize<IEnumerable<Guid>>());
+                externalIdentifierMap.Correspondence.AddRange(correspondenceProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                externalIdentifierMap.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                externalIdentifierMap.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                externalIdentifierMap.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                externalIdentifierMap.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("externalFormat", out var externalFormatProperty))
             {
-                externalIdentifierMap.ExternalFormat = externalFormatProperty.Deserialize<Guid?>();
+                externalIdentifierMap.ExternalFormat = externalFormatProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("externalModelName", out var externalModelNameProperty))
             {
-                externalIdentifierMap.ExternalModelName = externalModelNameProperty.Deserialize<string>();
+                externalIdentifierMap.ExternalModelName = externalModelNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("externalToolName", out var externalToolNameProperty))
             {
-                externalIdentifierMap.ExternalToolName = externalToolNameProperty.Deserialize<string>();
+                externalIdentifierMap.ExternalToolName = externalToolNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("externalToolVersion", out var externalToolVersionProperty))
             {
-                externalIdentifierMap.ExternalToolVersion = externalToolVersionProperty.Deserialize<string>();
+                externalIdentifierMap.ExternalToolVersion = externalToolVersionProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                externalIdentifierMap.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                externalIdentifierMap.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                externalIdentifierMap.Name = nameProperty.Deserialize<string>();
+                externalIdentifierMap.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                externalIdentifierMap.Owner = ownerProperty.Deserialize<Guid>();
+                externalIdentifierMap.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                externalIdentifierMap.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                externalIdentifierMap.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return externalIdentifierMap;

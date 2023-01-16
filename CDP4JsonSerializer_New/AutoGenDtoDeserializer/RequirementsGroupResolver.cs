@@ -55,67 +55,67 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                requirementsGroup.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsGroup.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                requirementsGroup.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsGroup.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                requirementsGroup.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsGroup.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                requirementsGroup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsGroup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                requirementsGroup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsGroup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("group", out var groupProperty))
             {
-                requirementsGroup.Group.AddRange(groupProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsGroup.Group.AddRange(groupProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                requirementsGroup.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsGroup.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                requirementsGroup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                requirementsGroup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                requirementsGroup.Name = nameProperty.Deserialize<string>();
+                requirementsGroup.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                requirementsGroup.Owner = ownerProperty.Deserialize<Guid>();
+                requirementsGroup.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterValue", out var parameterValueProperty))
             {
-                requirementsGroup.ParameterValue.AddRange(parameterValueProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsGroup.ParameterValue.AddRange(parameterValueProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                requirementsGroup.ShortName = shortNameProperty.Deserialize<string>();
+                requirementsGroup.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                requirementsGroup.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                requirementsGroup.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return requirementsGroup;

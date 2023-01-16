@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                modellingThingReference.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                modellingThingReference.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                modellingThingReference.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                modellingThingReference.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                modellingThingReference.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                modellingThingReference.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("referencedRevisionNumber", out var referencedRevisionNumberProperty))
             {
-                modellingThingReference.ReferencedRevisionNumber = referencedRevisionNumberProperty.Deserialize<int>();
+                modellingThingReference.ReferencedRevisionNumber = referencedRevisionNumberProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("referencedThing", out var referencedThingProperty))
             {
-                modellingThingReference.ReferencedThing = referencedThingProperty.Deserialize<Guid>();
+                modellingThingReference.ReferencedThing = referencedThingProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                modellingThingReference.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                modellingThingReference.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return modellingThingReference;

@@ -55,63 +55,61 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("citation", out var citationProperty))
             {
-                definition.Citation.AddRange(citationProperty.Deserialize<IEnumerable<Guid>>());
+                definition.Citation.AddRange(citationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                definition.Content = contentProperty.Deserialize<string>();
+                definition.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("example", out var exampleProperty))
             {
                 foreach(var arrayItem in exampleProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         definition.Example.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                definition.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                definition.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                definition.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                definition.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                definition.LanguageCode = languageCodeProperty.Deserialize<string>();
+                definition.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                definition.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                definition.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("note", out var noteProperty))
             {
                 foreach(var arrayItem in noteProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         definition.Note.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                definition.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                definition.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return definition;

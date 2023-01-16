@@ -55,12 +55,12 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parameterSubscriptionValueSet.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                parameterSubscriptionValueSet.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parameterSubscriptionValueSet.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                parameterSubscriptionValueSet.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("manual", out var manualProperty))
@@ -71,17 +71,17 @@ namespace CDP4JsonSerializer_SystemTextJson
             
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parameterSubscriptionValueSet.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                parameterSubscriptionValueSet.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("subscribedValueSet", out var subscribedValueSetProperty))
             {
-                parameterSubscriptionValueSet.SubscribedValueSet = subscribedValueSetProperty.Deserialize<Guid>();
+                parameterSubscriptionValueSet.SubscribedValueSet = subscribedValueSetProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parameterSubscriptionValueSet.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                parameterSubscriptionValueSet.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueSwitch", out var valueSwitchProperty))

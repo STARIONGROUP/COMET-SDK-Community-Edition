@@ -55,57 +55,57 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("caption", out var captionProperty))
             {
-                binaryNote.Caption = captionProperty.Deserialize<string>();
+                binaryNote.Caption = captionProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                binaryNote.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                binaryNote.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                binaryNote.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                binaryNote.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                binaryNote.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                binaryNote.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                binaryNote.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                binaryNote.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("fileType", out var fileTypeProperty))
             {
-                binaryNote.FileType = fileTypeProperty.Deserialize<Guid>();
+                binaryNote.FileType = fileTypeProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                binaryNote.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                binaryNote.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                binaryNote.Name = nameProperty.Deserialize<string>();
+                binaryNote.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                binaryNote.Owner = ownerProperty.Deserialize<Guid>();
+                binaryNote.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                binaryNote.ShortName = shortNameProperty.Deserialize<string>();
+                binaryNote.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                binaryNote.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                binaryNote.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return binaryNote;

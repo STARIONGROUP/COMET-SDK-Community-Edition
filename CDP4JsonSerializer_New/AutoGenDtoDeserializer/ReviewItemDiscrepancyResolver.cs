@@ -55,17 +55,17 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("approvedBy", out var approvedByProperty))
             {
-                reviewItemDiscrepancy.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>());
+                reviewItemDiscrepancy.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                reviewItemDiscrepancy.Author = authorProperty.Deserialize<Guid>();
+                reviewItemDiscrepancy.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                reviewItemDiscrepancy.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                reviewItemDiscrepancy.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("classification", out var classificationProperty))
@@ -75,67 +75,67 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                reviewItemDiscrepancy.Content = contentProperty.Deserialize<string>();
+                reviewItemDiscrepancy.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                reviewItemDiscrepancy.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                reviewItemDiscrepancy.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("discussion", out var discussionProperty))
             {
-                reviewItemDiscrepancy.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>());
+                reviewItemDiscrepancy.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                reviewItemDiscrepancy.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                reviewItemDiscrepancy.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                reviewItemDiscrepancy.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                reviewItemDiscrepancy.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                reviewItemDiscrepancy.LanguageCode = languageCodeProperty.Deserialize<string>();
+                reviewItemDiscrepancy.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                reviewItemDiscrepancy.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                reviewItemDiscrepancy.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                reviewItemDiscrepancy.Owner = ownerProperty.Deserialize<Guid>();
+                reviewItemDiscrepancy.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("primaryAnnotatedThing", out var primaryAnnotatedThingProperty))
             {
-                reviewItemDiscrepancy.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>();
+                reviewItemDiscrepancy.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
             {
-                reviewItemDiscrepancy.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>());
+                reviewItemDiscrepancy.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                reviewItemDiscrepancy.ShortName = shortNameProperty.Deserialize<string>();
+                reviewItemDiscrepancy.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("solution", out var solutionProperty))
             {
-                reviewItemDiscrepancy.Solution.AddRange(solutionProperty.Deserialize<IEnumerable<Guid>>());
+                reviewItemDiscrepancy.Solution.AddRange(solutionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("sourceAnnotation", out var sourceAnnotationProperty))
             {
-                reviewItemDiscrepancy.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>());
+                reviewItemDiscrepancy.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("status", out var statusProperty))
@@ -145,12 +145,12 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                reviewItemDiscrepancy.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                reviewItemDiscrepancy.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("title", out var titleProperty))
             {
-                reviewItemDiscrepancy.Title = titleProperty.Deserialize<string>();
+                reviewItemDiscrepancy.Title = titleProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return reviewItemDiscrepancy;

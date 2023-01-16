@@ -55,57 +55,57 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                siteDirectoryDataAnnotation.Author = authorProperty.Deserialize<Guid>();
+                siteDirectoryDataAnnotation.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                siteDirectoryDataAnnotation.Content = contentProperty.Deserialize<string>();
+                siteDirectoryDataAnnotation.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                siteDirectoryDataAnnotation.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                siteDirectoryDataAnnotation.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("discussion", out var discussionProperty))
             {
-                siteDirectoryDataAnnotation.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectoryDataAnnotation.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                siteDirectoryDataAnnotation.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectoryDataAnnotation.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                siteDirectoryDataAnnotation.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectoryDataAnnotation.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                siteDirectoryDataAnnotation.LanguageCode = languageCodeProperty.Deserialize<string>();
+                siteDirectoryDataAnnotation.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                siteDirectoryDataAnnotation.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                siteDirectoryDataAnnotation.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("primaryAnnotatedThing", out var primaryAnnotatedThingProperty))
             {
-                siteDirectoryDataAnnotation.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid>();
+                siteDirectoryDataAnnotation.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
             {
-                siteDirectoryDataAnnotation.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectoryDataAnnotation.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                siteDirectoryDataAnnotation.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                siteDirectoryDataAnnotation.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return siteDirectoryDataAnnotation;

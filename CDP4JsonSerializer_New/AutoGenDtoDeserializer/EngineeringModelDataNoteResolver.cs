@@ -55,57 +55,57 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                engineeringModelDataNote.Author = authorProperty.Deserialize<Guid>();
+                engineeringModelDataNote.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                engineeringModelDataNote.Content = contentProperty.Deserialize<string>();
+                engineeringModelDataNote.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                engineeringModelDataNote.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                engineeringModelDataNote.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("discussion", out var discussionProperty))
             {
-                engineeringModelDataNote.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelDataNote.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                engineeringModelDataNote.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelDataNote.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                engineeringModelDataNote.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelDataNote.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                engineeringModelDataNote.LanguageCode = languageCodeProperty.Deserialize<string>();
+                engineeringModelDataNote.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                engineeringModelDataNote.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                engineeringModelDataNote.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("primaryAnnotatedThing", out var primaryAnnotatedThingProperty))
             {
-                engineeringModelDataNote.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>();
+                engineeringModelDataNote.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
             {
-                engineeringModelDataNote.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelDataNote.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                engineeringModelDataNote.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                engineeringModelDataNote.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return engineeringModelDataNote;

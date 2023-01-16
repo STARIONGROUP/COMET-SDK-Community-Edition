@@ -55,81 +55,80 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                enumerationParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("allowMultiSelect", out var allowMultiSelectProperty))
             {
-                enumerationParameterType.AllowMultiSelect = allowMultiSelectProperty.Deserialize<bool>();
+                enumerationParameterType.AllowMultiSelect = allowMultiSelectProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                enumerationParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                enumerationParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                enumerationParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                enumerationParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                enumerationParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                enumerationParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                enumerationParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                enumerationParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                enumerationParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                enumerationParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                enumerationParameterType.Name = nameProperty.Deserialize<string>();
+                enumerationParameterType.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                enumerationParameterType.ShortName = shortNameProperty.Deserialize<string>();
+                enumerationParameterType.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("symbol", out var symbolProperty))
             {
-                enumerationParameterType.Symbol = symbolProperty.Deserialize<string>();
+                enumerationParameterType.Symbol = symbolProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                enumerationParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                enumerationParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueDefinition", out var valueDefinitionProperty))
             {
                 foreach(var arrayItem in valueDefinitionProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         enumerationParameterType.ValueDefinition.Add(arrayItemValue);
                     }
                 }
             }
-
             
 
             return enumerationParameterType;

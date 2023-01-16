@@ -55,17 +55,17 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("approvedBy", out var approvedByProperty))
             {
-                requestForWaiver.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>());
+                requestForWaiver.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                requestForWaiver.Author = authorProperty.Deserialize<Guid>();
+                requestForWaiver.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                requestForWaiver.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                requestForWaiver.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("classification", out var classificationProperty))
@@ -75,62 +75,62 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                requestForWaiver.Content = contentProperty.Deserialize<string>();
+                requestForWaiver.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                requestForWaiver.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                requestForWaiver.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("discussion", out var discussionProperty))
             {
-                requestForWaiver.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>());
+                requestForWaiver.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                requestForWaiver.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                requestForWaiver.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                requestForWaiver.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                requestForWaiver.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                requestForWaiver.LanguageCode = languageCodeProperty.Deserialize<string>();
+                requestForWaiver.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                requestForWaiver.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                requestForWaiver.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                requestForWaiver.Owner = ownerProperty.Deserialize<Guid>();
+                requestForWaiver.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("primaryAnnotatedThing", out var primaryAnnotatedThingProperty))
             {
-                requestForWaiver.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>();
+                requestForWaiver.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
             {
-                requestForWaiver.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>());
+                requestForWaiver.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                requestForWaiver.ShortName = shortNameProperty.Deserialize<string>();
+                requestForWaiver.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("sourceAnnotation", out var sourceAnnotationProperty))
             {
-                requestForWaiver.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>());
+                requestForWaiver.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("status", out var statusProperty))
@@ -140,12 +140,12 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                requestForWaiver.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                requestForWaiver.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("title", out var titleProperty))
             {
-                requestForWaiver.Title = titleProperty.Deserialize<string>();
+                requestForWaiver.Title = titleProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return requestForWaiver;

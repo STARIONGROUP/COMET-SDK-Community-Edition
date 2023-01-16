@@ -55,42 +55,42 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parameterOverride.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                parameterOverride.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parameterOverride.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                parameterOverride.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parameterOverride.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                parameterOverride.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                parameterOverride.Owner = ownerProperty.Deserialize<Guid>();
+                parameterOverride.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameter", out var parameterProperty))
             {
-                parameterOverride.Parameter = parameterProperty.Deserialize<Guid>();
+                parameterOverride.Parameter = parameterProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterSubscription", out var parameterSubscriptionProperty))
             {
-                parameterOverride.ParameterSubscription.AddRange(parameterSubscriptionProperty.Deserialize<IEnumerable<Guid>>());
+                parameterOverride.ParameterSubscription.AddRange(parameterSubscriptionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parameterOverride.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                parameterOverride.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueSet", out var valueSetProperty))
             {
-                parameterOverride.ValueSet.AddRange(valueSetProperty.Deserialize<IEnumerable<Guid>>());
+                parameterOverride.ValueSet.AddRange(valueSetProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return parameterOverride;

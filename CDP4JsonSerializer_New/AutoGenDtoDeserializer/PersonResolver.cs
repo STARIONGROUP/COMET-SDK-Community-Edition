@@ -55,97 +55,97 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("defaultDomain", out var defaultDomainProperty))
             {
-                person.DefaultDomain = defaultDomainProperty.Deserialize<Guid?>();
+                person.DefaultDomain = defaultDomainProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("defaultEmailAddress", out var defaultEmailAddressProperty))
             {
-                person.DefaultEmailAddress = defaultEmailAddressProperty.Deserialize<Guid?>();
+                person.DefaultEmailAddress = defaultEmailAddressProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("defaultTelephoneNumber", out var defaultTelephoneNumberProperty))
             {
-                person.DefaultTelephoneNumber = defaultTelephoneNumberProperty.Deserialize<Guid?>();
+                person.DefaultTelephoneNumber = defaultTelephoneNumberProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("emailAddress", out var emailAddressProperty))
             {
-                person.EmailAddress.AddRange(emailAddressProperty.Deserialize<IEnumerable<Guid>>());
+                person.EmailAddress.AddRange(emailAddressProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                person.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                person.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                person.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                person.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("givenName", out var givenNameProperty))
             {
-                person.GivenName = givenNameProperty.Deserialize<string>();
+                person.GivenName = givenNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isActive", out var isActiveProperty))
             {
-                person.IsActive = isActiveProperty.Deserialize<bool>();
+                person.IsActive = isActiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                person.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                person.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                person.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                person.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("organization", out var organizationProperty))
             {
-                person.Organization = organizationProperty.Deserialize<Guid?>();
+                person.Organization = organizationProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("organizationalUnit", out var organizationalUnitProperty))
             {
-                person.OrganizationalUnit = organizationalUnitProperty.Deserialize<string>();
+                person.OrganizationalUnit = organizationalUnitProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("password", out var passwordProperty))
             {
-                person.Password = passwordProperty.Deserialize<string>();
+                person.Password = passwordProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("role", out var roleProperty))
             {
-                person.Role = roleProperty.Deserialize<Guid?>();
+                person.Role = roleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                person.ShortName = shortNameProperty.Deserialize<string>();
+                person.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("surname", out var surnameProperty))
             {
-                person.Surname = surnameProperty.Deserialize<string>();
+                person.Surname = surnameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("telephoneNumber", out var telephoneNumberProperty))
             {
-                person.TelephoneNumber.AddRange(telephoneNumberProperty.Deserialize<IEnumerable<Guid>>());
+                person.TelephoneNumber.AddRange(telephoneNumberProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                person.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                person.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("userPreference", out var userPreferenceProperty))
             {
-                person.UserPreference.AddRange(userPreferenceProperty.Deserialize<IEnumerable<Guid>>());
+                person.UserPreference.AddRange(userPreferenceProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return person;

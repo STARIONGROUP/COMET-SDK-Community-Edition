@@ -55,77 +55,77 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("allowDifferentOwnerOfOverride", out var allowDifferentOwnerOfOverrideProperty))
             {
-                parameter.AllowDifferentOwnerOfOverride = allowDifferentOwnerOfOverrideProperty.Deserialize<bool>();
+                parameter.AllowDifferentOwnerOfOverride = allowDifferentOwnerOfOverrideProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parameter.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                parameter.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parameter.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                parameter.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("expectsOverride", out var expectsOverrideProperty))
             {
-                parameter.ExpectsOverride = expectsOverrideProperty.Deserialize<bool>();
+                parameter.ExpectsOverride = expectsOverrideProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("group", out var groupProperty))
             {
-                parameter.Group = groupProperty.Deserialize<Guid?>();
+                parameter.Group = groupProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isOptionDependent", out var isOptionDependentProperty))
             {
-                parameter.IsOptionDependent = isOptionDependentProperty.Deserialize<bool>();
+                parameter.IsOptionDependent = isOptionDependentProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parameter.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                parameter.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                parameter.Owner = ownerProperty.Deserialize<Guid>();
+                parameter.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterSubscription", out var parameterSubscriptionProperty))
             {
-                parameter.ParameterSubscription.AddRange(parameterSubscriptionProperty.Deserialize<IEnumerable<Guid>>());
+                parameter.ParameterSubscription.AddRange(parameterSubscriptionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
             {
-                parameter.ParameterType = parameterTypeProperty.Deserialize<Guid>();
+                parameter.ParameterType = parameterTypeProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("requestedBy", out var requestedByProperty))
             {
-                parameter.RequestedBy = requestedByProperty.Deserialize<Guid?>();
+                parameter.RequestedBy = requestedByProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("scale", out var scaleProperty))
             {
-                parameter.Scale = scaleProperty.Deserialize<Guid?>();
+                parameter.Scale = scaleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("stateDependence", out var stateDependenceProperty))
             {
-                parameter.StateDependence = stateDependenceProperty.Deserialize<Guid?>();
+                parameter.StateDependence = stateDependenceProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parameter.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                parameter.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueSet", out var valueSetProperty))
             {
-                parameter.ValueSet.AddRange(valueSetProperty.Deserialize<IEnumerable<Guid>>());
+                parameter.ValueSet.AddRange(valueSetProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return parameter;

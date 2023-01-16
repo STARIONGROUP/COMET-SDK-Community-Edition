@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("affectedDomainIid", out var affectedDomainIidProperty))
             {
-                siteLogEntry.AffectedDomainIid.AddRange(affectedDomainIidProperty.Deserialize<IEnumerable<Guid>>());
+                siteLogEntry.AffectedDomainIid.AddRange(affectedDomainIidProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("affectedItemIid", out var affectedItemIidProperty))
             {
-                siteLogEntry.AffectedItemIid.AddRange(affectedItemIidProperty.Deserialize<IEnumerable<Guid>>());
+                siteLogEntry.AffectedItemIid.AddRange(affectedItemIidProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                siteLogEntry.Author = authorProperty.Deserialize<Guid?>();
+                siteLogEntry.Author = authorProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                siteLogEntry.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                siteLogEntry.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                siteLogEntry.Content = contentProperty.Deserialize<string>();
+                siteLogEntry.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                siteLogEntry.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                siteLogEntry.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                siteLogEntry.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                siteLogEntry.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                siteLogEntry.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                siteLogEntry.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                siteLogEntry.LanguageCode = languageCodeProperty.Deserialize<string>();
+                siteLogEntry.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("level", out var levelProperty))
@@ -105,17 +105,17 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("logEntryChangelogItem", out var logEntryChangelogItemProperty))
             {
-                siteLogEntry.LogEntryChangelogItem.AddRange(logEntryChangelogItemProperty.Deserialize<IEnumerable<Guid>>());
+                siteLogEntry.LogEntryChangelogItem.AddRange(logEntryChangelogItemProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                siteLogEntry.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                siteLogEntry.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                siteLogEntry.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                siteLogEntry.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return siteLogEntry;

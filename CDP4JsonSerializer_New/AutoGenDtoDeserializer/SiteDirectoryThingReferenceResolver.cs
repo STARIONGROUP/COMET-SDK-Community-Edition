@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                siteDirectoryThingReference.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectoryThingReference.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                siteDirectoryThingReference.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectoryThingReference.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                siteDirectoryThingReference.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                siteDirectoryThingReference.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("referencedRevisionNumber", out var referencedRevisionNumberProperty))
             {
-                siteDirectoryThingReference.ReferencedRevisionNumber = referencedRevisionNumberProperty.Deserialize<int>();
+                siteDirectoryThingReference.ReferencedRevisionNumber = referencedRevisionNumberProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("referencedThing", out var referencedThingProperty))
             {
-                siteDirectoryThingReference.ReferencedThing = referencedThingProperty.Deserialize<Guid>();
+                siteDirectoryThingReference.ReferencedThing = referencedThingProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                siteDirectoryThingReference.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                siteDirectoryThingReference.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return siteDirectoryThingReference;

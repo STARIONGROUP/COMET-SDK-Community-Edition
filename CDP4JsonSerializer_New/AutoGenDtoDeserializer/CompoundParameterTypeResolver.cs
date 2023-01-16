@@ -55,80 +55,79 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                compoundParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                compoundParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                compoundParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                compoundParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("component", out var componentProperty))
             {
                 foreach(var arrayItem in componentProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         compoundParameterType.Component.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                compoundParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                compoundParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                compoundParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                compoundParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                compoundParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                compoundParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                compoundParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                compoundParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                compoundParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                compoundParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isFinalized", out var isFinalizedProperty))
             {
-                compoundParameterType.IsFinalized = isFinalizedProperty.Deserialize<bool>();
+                compoundParameterType.IsFinalized = isFinalizedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                compoundParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                compoundParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                compoundParameterType.Name = nameProperty.Deserialize<string>();
+                compoundParameterType.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                compoundParameterType.ShortName = shortNameProperty.Deserialize<string>();
+                compoundParameterType.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("symbol", out var symbolProperty))
             {
-                compoundParameterType.Symbol = symbolProperty.Deserialize<string>();
+                compoundParameterType.Symbol = symbolProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                compoundParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                compoundParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return compoundParameterType;

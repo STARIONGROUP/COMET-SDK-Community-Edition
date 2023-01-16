@@ -46,7 +46,7 @@ namespace CDP4JsonSerializer_SystemTextJson
         /// The map containing the serialization methods
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new Dictionary<string, Func<object, JsonValue>>
-        {
+        {            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },

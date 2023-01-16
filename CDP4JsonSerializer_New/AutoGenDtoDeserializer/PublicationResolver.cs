@@ -55,37 +55,37 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                publication.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                publication.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("domain", out var domainProperty))
             {
-                publication.Domain.AddRange(domainProperty.Deserialize<IEnumerable<Guid>>());
+                publication.Domain.AddRange(domainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                publication.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                publication.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                publication.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                publication.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                publication.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                publication.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("publishedParameter", out var publishedParameterProperty))
             {
-                publication.PublishedParameter.AddRange(publishedParameterProperty.Deserialize<IEnumerable<Guid>>());
+                publication.PublishedParameter.AddRange(publishedParameterProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                publication.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                publication.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return publication;

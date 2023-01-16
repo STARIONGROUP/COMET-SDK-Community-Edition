@@ -55,92 +55,92 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                ownedStyle.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                ownedStyle.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                ownedStyle.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                ownedStyle.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("fillColor", out var fillColorProperty))
             {
-                ownedStyle.FillColor = fillColorProperty.Deserialize<Guid?>();
+                ownedStyle.FillColor = fillColorProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("fillOpacity", out var fillOpacityProperty))
             {
-                ownedStyle.FillOpacity = fillOpacityProperty.Deserialize<float?>();
+                ownedStyle.FillOpacity = fillOpacityProperty.Deserialize<float?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("fontBold", out var fontBoldProperty))
             {
-                ownedStyle.FontBold = fontBoldProperty.Deserialize<bool?>();
+                ownedStyle.FontBold = fontBoldProperty.Deserialize<bool?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("fontColor", out var fontColorProperty))
             {
-                ownedStyle.FontColor = fontColorProperty.Deserialize<Guid?>();
+                ownedStyle.FontColor = fontColorProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("fontItalic", out var fontItalicProperty))
             {
-                ownedStyle.FontItalic = fontItalicProperty.Deserialize<bool?>();
+                ownedStyle.FontItalic = fontItalicProperty.Deserialize<bool?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("fontName", out var fontNameProperty))
             {
-                ownedStyle.FontName = fontNameProperty.Deserialize<string>();
+                ownedStyle.FontName = fontNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("fontSize", out var fontSizeProperty))
             {
-                ownedStyle.FontSize = fontSizeProperty.Deserialize<float?>();
+                ownedStyle.FontSize = fontSizeProperty.Deserialize<float?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("fontStrokeThrough", out var fontStrokeThroughProperty))
             {
-                ownedStyle.FontStrokeThrough = fontStrokeThroughProperty.Deserialize<bool?>();
+                ownedStyle.FontStrokeThrough = fontStrokeThroughProperty.Deserialize<bool?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("fontUnderline", out var fontUnderlineProperty))
             {
-                ownedStyle.FontUnderline = fontUnderlineProperty.Deserialize<bool?>();
+                ownedStyle.FontUnderline = fontUnderlineProperty.Deserialize<bool?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                ownedStyle.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                ownedStyle.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                ownedStyle.Name = nameProperty.Deserialize<string>();
+                ownedStyle.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("strokeColor", out var strokeColorProperty))
             {
-                ownedStyle.StrokeColor = strokeColorProperty.Deserialize<Guid?>();
+                ownedStyle.StrokeColor = strokeColorProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("strokeOpacity", out var strokeOpacityProperty))
             {
-                ownedStyle.StrokeOpacity = strokeOpacityProperty.Deserialize<float?>();
+                ownedStyle.StrokeOpacity = strokeOpacityProperty.Deserialize<float?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("strokeWidth", out var strokeWidthProperty))
             {
-                ownedStyle.StrokeWidth = strokeWidthProperty.Deserialize<float?>();
+                ownedStyle.StrokeWidth = strokeWidthProperty.Deserialize<float?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                ownedStyle.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                ownedStyle.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("usedColor", out var usedColorProperty))
             {
-                ownedStyle.UsedColor.AddRange(usedColorProperty.Deserialize<IEnumerable<Guid>>());
+                ownedStyle.UsedColor.AddRange(usedColorProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return ownedStyle;

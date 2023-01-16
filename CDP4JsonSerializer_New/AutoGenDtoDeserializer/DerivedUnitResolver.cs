@@ -55,66 +55,65 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                derivedUnit.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                derivedUnit.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                derivedUnit.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                derivedUnit.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                derivedUnit.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                derivedUnit.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                derivedUnit.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                derivedUnit.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                derivedUnit.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                derivedUnit.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                derivedUnit.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                derivedUnit.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                derivedUnit.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                derivedUnit.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                derivedUnit.Name = nameProperty.Deserialize<string>();
+                derivedUnit.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                derivedUnit.ShortName = shortNameProperty.Deserialize<string>();
+                derivedUnit.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                derivedUnit.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                derivedUnit.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("unitFactor", out var unitFactorProperty))
             {
                 foreach(var arrayItem in unitFactorProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         derivedUnit.UnitFactor.Add(arrayItemValue);
                     }
                 }
             }
-
             
 
             return derivedUnit;

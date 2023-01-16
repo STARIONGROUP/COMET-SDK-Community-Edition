@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                userRuleVerification.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                userRuleVerification.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                userRuleVerification.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                userRuleVerification.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("executedOn", out var executedOnProperty))
             {
-                userRuleVerification.ExecutedOn = executedOnProperty.Deserialize<DateTime?>();
+                userRuleVerification.ExecutedOn = executedOnProperty.Deserialize<DateTime?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isActive", out var isActiveProperty))
             {
-                userRuleVerification.IsActive = isActiveProperty.Deserialize<bool>();
+                userRuleVerification.IsActive = isActiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                userRuleVerification.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                userRuleVerification.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("rule", out var ruleProperty))
             {
-                userRuleVerification.Rule = ruleProperty.Deserialize<Guid>();
+                userRuleVerification.Rule = ruleProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("status", out var statusProperty))
@@ -90,7 +90,7 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                userRuleVerification.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                userRuleVerification.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return userRuleVerification;

@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                unitFactor.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                unitFactor.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                unitFactor.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                unitFactor.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("exponent", out var exponentProperty))
             {
-                unitFactor.Exponent = exponentProperty.Deserialize<string>();
+                unitFactor.Exponent = exponentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                unitFactor.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                unitFactor.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                unitFactor.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                unitFactor.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("unit", out var unitProperty))
             {
-                unitFactor.Unit = unitProperty.Deserialize<Guid>();
+                unitFactor.Unit = unitProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             return unitFactor;

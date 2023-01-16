@@ -55,72 +55,72 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                ordinalScale.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                ordinalScale.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                ordinalScale.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                ordinalScale.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                ordinalScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                ordinalScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                ordinalScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                ordinalScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                ordinalScale.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                ordinalScale.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                ordinalScale.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                ordinalScale.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isMaximumInclusive", out var isMaximumInclusiveProperty))
             {
-                ordinalScale.IsMaximumInclusive = isMaximumInclusiveProperty.Deserialize<bool>();
+                ordinalScale.IsMaximumInclusive = isMaximumInclusiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isMinimumInclusive", out var isMinimumInclusiveProperty))
             {
-                ordinalScale.IsMinimumInclusive = isMinimumInclusiveProperty.Deserialize<bool>();
+                ordinalScale.IsMinimumInclusive = isMinimumInclusiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("mappingToReferenceScale", out var mappingToReferenceScaleProperty))
             {
-                ordinalScale.MappingToReferenceScale.AddRange(mappingToReferenceScaleProperty.Deserialize<IEnumerable<Guid>>());
+                ordinalScale.MappingToReferenceScale.AddRange(mappingToReferenceScaleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("maximumPermissibleValue", out var maximumPermissibleValueProperty))
             {
-                ordinalScale.MaximumPermissibleValue = maximumPermissibleValueProperty.Deserialize<string>();
+                ordinalScale.MaximumPermissibleValue = maximumPermissibleValueProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("minimumPermissibleValue", out var minimumPermissibleValueProperty))
             {
-                ordinalScale.MinimumPermissibleValue = minimumPermissibleValueProperty.Deserialize<string>();
+                ordinalScale.MinimumPermissibleValue = minimumPermissibleValueProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                ordinalScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                ordinalScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                ordinalScale.Name = nameProperty.Deserialize<string>();
+                ordinalScale.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("negativeValueConnotation", out var negativeValueConnotationProperty))
             {
-                ordinalScale.NegativeValueConnotation = negativeValueConnotationProperty.Deserialize<string>();
+                ordinalScale.NegativeValueConnotation = negativeValueConnotationProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("numberSet", out var numberSetProperty))
@@ -130,32 +130,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("positiveValueConnotation", out var positiveValueConnotationProperty))
             {
-                ordinalScale.PositiveValueConnotation = positiveValueConnotationProperty.Deserialize<string>();
+                ordinalScale.PositiveValueConnotation = positiveValueConnotationProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                ordinalScale.ShortName = shortNameProperty.Deserialize<string>();
+                ordinalScale.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                ordinalScale.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                ordinalScale.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("unit", out var unitProperty))
             {
-                ordinalScale.Unit = unitProperty.Deserialize<Guid>();
+                ordinalScale.Unit = unitProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("useShortNameValues", out var useShortNameValuesProperty))
             {
-                ordinalScale.UseShortNameValues = useShortNameValuesProperty.Deserialize<bool>();
+                ordinalScale.UseShortNameValues = useShortNameValuesProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueDefinition", out var valueDefinitionProperty))
             {
-                ordinalScale.ValueDefinition.AddRange(valueDefinitionProperty.Deserialize<IEnumerable<Guid>>());
+                ordinalScale.ValueDefinition.AddRange(valueDefinitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return ordinalScale;

@@ -55,42 +55,42 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                file.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                file.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                file.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                file.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                file.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                file.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("fileRevision", out var fileRevisionProperty))
             {
-                file.FileRevision.AddRange(fileRevisionProperty.Deserialize<IEnumerable<Guid>>());
+                file.FileRevision.AddRange(fileRevisionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("lockedBy", out var lockedByProperty))
             {
-                file.LockedBy = lockedByProperty.Deserialize<Guid?>();
+                file.LockedBy = lockedByProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                file.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                file.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                file.Owner = ownerProperty.Deserialize<Guid>();
+                file.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                file.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                file.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return file;

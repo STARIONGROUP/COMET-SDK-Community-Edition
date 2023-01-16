@@ -57,48 +57,47 @@ namespace CDP4JsonSerializer_SystemTextJson
             {
                 foreach(var arrayItem in elementUsageProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         nestedElement.ElementUsage.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                nestedElement.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                nestedElement.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                nestedElement.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                nestedElement.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isVolatile", out var isVolatileProperty))
             {
-                nestedElement.IsVolatile = isVolatileProperty.Deserialize<bool>();
+                nestedElement.IsVolatile = isVolatileProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                nestedElement.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                nestedElement.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("nestedParameter", out var nestedParameterProperty))
             {
-                nestedElement.NestedParameter.AddRange(nestedParameterProperty.Deserialize<IEnumerable<Guid>>());
+                nestedElement.NestedParameter.AddRange(nestedParameterProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("rootElement", out var rootElementProperty))
             {
-                nestedElement.RootElement = rootElementProperty.Deserialize<Guid>();
+                nestedElement.RootElement = rootElementProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                nestedElement.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                nestedElement.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return nestedElement;

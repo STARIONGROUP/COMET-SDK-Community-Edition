@@ -112,7 +112,7 @@ namespace CDP4JsonSerializer_SystemTextJson
                     K = prop.GetProperty("k").GetInt64(),
                     V = prop.GetProperty("v").ToString(),
                 };
-
+                
                 var move = prop.GetProperty("m");
 
                 if (move.TryGetProperty("m", out var value))

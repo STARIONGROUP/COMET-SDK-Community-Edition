@@ -55,72 +55,72 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                ratioScale.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                ratioScale.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                ratioScale.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                ratioScale.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                ratioScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                ratioScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                ratioScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                ratioScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                ratioScale.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                ratioScale.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                ratioScale.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                ratioScale.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isMaximumInclusive", out var isMaximumInclusiveProperty))
             {
-                ratioScale.IsMaximumInclusive = isMaximumInclusiveProperty.Deserialize<bool>();
+                ratioScale.IsMaximumInclusive = isMaximumInclusiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isMinimumInclusive", out var isMinimumInclusiveProperty))
             {
-                ratioScale.IsMinimumInclusive = isMinimumInclusiveProperty.Deserialize<bool>();
+                ratioScale.IsMinimumInclusive = isMinimumInclusiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("mappingToReferenceScale", out var mappingToReferenceScaleProperty))
             {
-                ratioScale.MappingToReferenceScale.AddRange(mappingToReferenceScaleProperty.Deserialize<IEnumerable<Guid>>());
+                ratioScale.MappingToReferenceScale.AddRange(mappingToReferenceScaleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("maximumPermissibleValue", out var maximumPermissibleValueProperty))
             {
-                ratioScale.MaximumPermissibleValue = maximumPermissibleValueProperty.Deserialize<string>();
+                ratioScale.MaximumPermissibleValue = maximumPermissibleValueProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("minimumPermissibleValue", out var minimumPermissibleValueProperty))
             {
-                ratioScale.MinimumPermissibleValue = minimumPermissibleValueProperty.Deserialize<string>();
+                ratioScale.MinimumPermissibleValue = minimumPermissibleValueProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                ratioScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                ratioScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                ratioScale.Name = nameProperty.Deserialize<string>();
+                ratioScale.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("negativeValueConnotation", out var negativeValueConnotationProperty))
             {
-                ratioScale.NegativeValueConnotation = negativeValueConnotationProperty.Deserialize<string>();
+                ratioScale.NegativeValueConnotation = negativeValueConnotationProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("numberSet", out var numberSetProperty))
@@ -130,27 +130,27 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("positiveValueConnotation", out var positiveValueConnotationProperty))
             {
-                ratioScale.PositiveValueConnotation = positiveValueConnotationProperty.Deserialize<string>();
+                ratioScale.PositiveValueConnotation = positiveValueConnotationProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                ratioScale.ShortName = shortNameProperty.Deserialize<string>();
+                ratioScale.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                ratioScale.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                ratioScale.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("unit", out var unitProperty))
             {
-                ratioScale.Unit = unitProperty.Deserialize<Guid>();
+                ratioScale.Unit = unitProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueDefinition", out var valueDefinitionProperty))
             {
-                ratioScale.ValueDefinition.AddRange(valueDefinitionProperty.Deserialize<IEnumerable<Guid>>());
+                ratioScale.ValueDefinition.AddRange(valueDefinitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return ratioScale;

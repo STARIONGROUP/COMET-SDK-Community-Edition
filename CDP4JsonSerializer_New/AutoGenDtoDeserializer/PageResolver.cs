@@ -55,60 +55,59 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                page.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                page.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                page.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                page.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                page.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                page.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                page.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                page.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                page.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                page.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                page.Name = nameProperty.Deserialize<string>();
+                page.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("note", out var noteProperty))
             {
                 foreach(var arrayItem in noteProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         page.Note.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                page.Owner = ownerProperty.Deserialize<Guid>();
+                page.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                page.ShortName = shortNameProperty.Deserialize<string>();
+                page.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                page.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                page.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return page;

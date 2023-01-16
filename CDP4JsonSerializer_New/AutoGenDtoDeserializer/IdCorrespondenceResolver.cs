@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                idCorrespondence.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                idCorrespondence.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                idCorrespondence.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                idCorrespondence.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("externalId", out var externalIdProperty))
             {
-                idCorrespondence.ExternalId = externalIdProperty.Deserialize<string>();
+                idCorrespondence.ExternalId = externalIdProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("internalThing", out var internalThingProperty))
             {
-                idCorrespondence.InternalThing = internalThingProperty.Deserialize<Guid>();
+                idCorrespondence.InternalThing = internalThingProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                idCorrespondence.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                idCorrespondence.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                idCorrespondence.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                idCorrespondence.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return idCorrespondence;

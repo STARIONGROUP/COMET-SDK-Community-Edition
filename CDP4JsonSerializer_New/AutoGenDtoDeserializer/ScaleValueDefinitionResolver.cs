@@ -55,52 +55,52 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                scaleValueDefinition.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                scaleValueDefinition.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                scaleValueDefinition.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                scaleValueDefinition.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                scaleValueDefinition.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                scaleValueDefinition.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                scaleValueDefinition.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                scaleValueDefinition.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                scaleValueDefinition.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                scaleValueDefinition.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                scaleValueDefinition.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                scaleValueDefinition.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                scaleValueDefinition.Name = nameProperty.Deserialize<string>();
+                scaleValueDefinition.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                scaleValueDefinition.ShortName = shortNameProperty.Deserialize<string>();
+                scaleValueDefinition.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                scaleValueDefinition.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                scaleValueDefinition.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("value", out var valueProperty))
             {
-                scaleValueDefinition.Value = valueProperty.Deserialize<string>();
+                scaleValueDefinition.Value = valueProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return scaleValueDefinition;

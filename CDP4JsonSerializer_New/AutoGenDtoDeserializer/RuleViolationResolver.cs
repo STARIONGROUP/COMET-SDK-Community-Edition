@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("description", out var descriptionProperty))
             {
-                ruleViolation.Description = descriptionProperty.Deserialize<string>();
+                ruleViolation.Description = descriptionProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                ruleViolation.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                ruleViolation.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                ruleViolation.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                ruleViolation.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                ruleViolation.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                ruleViolation.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                ruleViolation.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                ruleViolation.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("violatingThing", out var violatingThingProperty))
             {
-                ruleViolation.ViolatingThing.AddRange(violatingThingProperty.Deserialize<IEnumerable<Guid>>());
+                ruleViolation.ViolatingThing.AddRange(violatingThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return ruleViolation;

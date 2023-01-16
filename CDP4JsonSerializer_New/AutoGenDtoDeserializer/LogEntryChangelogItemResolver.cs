@@ -55,17 +55,17 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("affectedItemIid", out var affectedItemIidProperty))
             {
-                logEntryChangelogItem.AffectedItemIid = affectedItemIidProperty.Deserialize<Guid>();
+                logEntryChangelogItem.AffectedItemIid = affectedItemIidProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("affectedReferenceIid", out var affectedReferenceIidProperty))
             {
-                logEntryChangelogItem.AffectedReferenceIid.AddRange(affectedReferenceIidProperty.Deserialize<IEnumerable<Guid>>());
+                logEntryChangelogItem.AffectedReferenceIid.AddRange(affectedReferenceIidProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("changeDescription", out var changeDescriptionProperty))
             {
-                logEntryChangelogItem.ChangeDescription = changeDescriptionProperty.Deserialize<string>();
+                logEntryChangelogItem.ChangeDescription = changeDescriptionProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("changelogKind", out var changelogKindProperty))
@@ -75,22 +75,22 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                logEntryChangelogItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                logEntryChangelogItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                logEntryChangelogItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                logEntryChangelogItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                logEntryChangelogItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                logEntryChangelogItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                logEntryChangelogItem.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                logEntryChangelogItem.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return logEntryChangelogItem;

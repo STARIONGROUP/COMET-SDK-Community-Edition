@@ -55,62 +55,62 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                parameterizedCategoryRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                parameterizedCategoryRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                parameterizedCategoryRule.Category = categoryProperty.Deserialize<Guid>();
+                parameterizedCategoryRule.Category = categoryProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                parameterizedCategoryRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                parameterizedCategoryRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parameterizedCategoryRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                parameterizedCategoryRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parameterizedCategoryRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                parameterizedCategoryRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                parameterizedCategoryRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                parameterizedCategoryRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                parameterizedCategoryRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                parameterizedCategoryRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parameterizedCategoryRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                parameterizedCategoryRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                parameterizedCategoryRule.Name = nameProperty.Deserialize<string>();
+                parameterizedCategoryRule.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
             {
-                parameterizedCategoryRule.ParameterType.AddRange(parameterTypeProperty.Deserialize<IEnumerable<Guid>>());
+                parameterizedCategoryRule.ParameterType.AddRange(parameterTypeProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                parameterizedCategoryRule.ShortName = shortNameProperty.Deserialize<string>();
+                parameterizedCategoryRule.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parameterizedCategoryRule.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                parameterizedCategoryRule.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return parameterizedCategoryRule;

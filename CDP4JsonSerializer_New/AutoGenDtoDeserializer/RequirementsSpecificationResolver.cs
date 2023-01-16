@@ -55,77 +55,77 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                requirementsSpecification.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsSpecification.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                requirementsSpecification.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsSpecification.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                requirementsSpecification.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsSpecification.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                requirementsSpecification.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsSpecification.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                requirementsSpecification.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsSpecification.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("group", out var groupProperty))
             {
-                requirementsSpecification.Group.AddRange(groupProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsSpecification.Group.AddRange(groupProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                requirementsSpecification.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsSpecification.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                requirementsSpecification.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                requirementsSpecification.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                requirementsSpecification.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                requirementsSpecification.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                requirementsSpecification.Name = nameProperty.Deserialize<string>();
+                requirementsSpecification.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                requirementsSpecification.Owner = ownerProperty.Deserialize<Guid>();
+                requirementsSpecification.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterValue", out var parameterValueProperty))
             {
-                requirementsSpecification.ParameterValue.AddRange(parameterValueProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsSpecification.ParameterValue.AddRange(parameterValueProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("requirement", out var requirementProperty))
             {
-                requirementsSpecification.Requirement.AddRange(requirementProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsSpecification.Requirement.AddRange(requirementProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                requirementsSpecification.ShortName = shortNameProperty.Deserialize<string>();
+                requirementsSpecification.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                requirementsSpecification.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                requirementsSpecification.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return requirementsSpecification;

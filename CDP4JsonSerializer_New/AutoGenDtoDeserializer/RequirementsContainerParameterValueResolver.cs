@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                requirementsContainerParameterValue.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsContainerParameterValue.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                requirementsContainerParameterValue.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                requirementsContainerParameterValue.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                requirementsContainerParameterValue.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                requirementsContainerParameterValue.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
             {
-                requirementsContainerParameterValue.ParameterType = parameterTypeProperty.Deserialize<Guid>();
+                requirementsContainerParameterValue.ParameterType = parameterTypeProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("scale", out var scaleProperty))
             {
-                requirementsContainerParameterValue.Scale = scaleProperty.Deserialize<Guid?>();
+                requirementsContainerParameterValue.Scale = scaleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                requirementsContainerParameterValue.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                requirementsContainerParameterValue.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("value", out var valueProperty))

@@ -55,37 +55,37 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                stakeHolderValueMapSettings.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMapSettings.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                stakeHolderValueMapSettings.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMapSettings.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("goalToValueGroupRelationship", out var goalToValueGroupRelationshipProperty))
             {
-                stakeHolderValueMapSettings.GoalToValueGroupRelationship = goalToValueGroupRelationshipProperty.Deserialize<Guid?>();
+                stakeHolderValueMapSettings.GoalToValueGroupRelationship = goalToValueGroupRelationshipProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                stakeHolderValueMapSettings.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                stakeHolderValueMapSettings.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("stakeholderValueToRequirementRelationship", out var stakeholderValueToRequirementRelationshipProperty))
             {
-                stakeHolderValueMapSettings.StakeholderValueToRequirementRelationship = stakeholderValueToRequirementRelationshipProperty.Deserialize<Guid?>();
+                stakeHolderValueMapSettings.StakeholderValueToRequirementRelationship = stakeholderValueToRequirementRelationshipProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                stakeHolderValueMapSettings.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                stakeHolderValueMapSettings.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueGroupToStakeholderValueRelationship", out var valueGroupToStakeholderValueRelationshipProperty))
             {
-                stakeHolderValueMapSettings.ValueGroupToStakeholderValueRelationship = valueGroupToStakeholderValueRelationshipProperty.Deserialize<Guid?>();
+                stakeHolderValueMapSettings.ValueGroupToStakeholderValueRelationship = valueGroupToStakeholderValueRelationshipProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             return stakeHolderValueMapSettings;

@@ -55,57 +55,57 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                domainOfExpertiseGroup.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                domainOfExpertiseGroup.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                domainOfExpertiseGroup.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                domainOfExpertiseGroup.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("domain", out var domainProperty))
             {
-                domainOfExpertiseGroup.Domain.AddRange(domainProperty.Deserialize<IEnumerable<Guid>>());
+                domainOfExpertiseGroup.Domain.AddRange(domainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                domainOfExpertiseGroup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                domainOfExpertiseGroup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                domainOfExpertiseGroup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                domainOfExpertiseGroup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                domainOfExpertiseGroup.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                domainOfExpertiseGroup.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                domainOfExpertiseGroup.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                domainOfExpertiseGroup.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                domainOfExpertiseGroup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                domainOfExpertiseGroup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                domainOfExpertiseGroup.Name = nameProperty.Deserialize<string>();
+                domainOfExpertiseGroup.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                domainOfExpertiseGroup.ShortName = shortNameProperty.Deserialize<string>();
+                domainOfExpertiseGroup.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                domainOfExpertiseGroup.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                domainOfExpertiseGroup.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return domainOfExpertiseGroup;

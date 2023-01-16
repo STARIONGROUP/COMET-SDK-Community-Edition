@@ -55,52 +55,52 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                prefixedUnit.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                prefixedUnit.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                prefixedUnit.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                prefixedUnit.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                prefixedUnit.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                prefixedUnit.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                prefixedUnit.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                prefixedUnit.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                prefixedUnit.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                prefixedUnit.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                prefixedUnit.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                prefixedUnit.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                prefixedUnit.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                prefixedUnit.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("prefix", out var prefixProperty))
             {
-                prefixedUnit.Prefix = prefixProperty.Deserialize<Guid>();
+                prefixedUnit.Prefix = prefixProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("referenceUnit", out var referenceUnitProperty))
             {
-                prefixedUnit.ReferenceUnit = referenceUnitProperty.Deserialize<Guid>();
+                prefixedUnit.ReferenceUnit = referenceUnitProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                prefixedUnit.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                prefixedUnit.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return prefixedUnit;

@@ -55,22 +55,22 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                relationalExpression.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                relationalExpression.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                relationalExpression.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                relationalExpression.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                relationalExpression.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                relationalExpression.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
             {
-                relationalExpression.ParameterType = parameterTypeProperty.Deserialize<Guid>();
+                relationalExpression.ParameterType = parameterTypeProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("relationalOperator", out var relationalOperatorProperty))
@@ -80,12 +80,12 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("scale", out var scaleProperty))
             {
-                relationalExpression.Scale = scaleProperty.Deserialize<Guid?>();
+                relationalExpression.Scale = scaleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                relationalExpression.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                relationalExpression.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("value", out var valueProperty))

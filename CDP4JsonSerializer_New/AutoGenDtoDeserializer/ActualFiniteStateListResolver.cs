@@ -55,50 +55,49 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("actualState", out var actualStateProperty))
             {
-                actualFiniteStateList.ActualState.AddRange(actualStateProperty.Deserialize<IEnumerable<Guid>>());
+                actualFiniteStateList.ActualState.AddRange(actualStateProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                actualFiniteStateList.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                actualFiniteStateList.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                actualFiniteStateList.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                actualFiniteStateList.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludeOption", out var excludeOptionProperty))
             {
-                actualFiniteStateList.ExcludeOption.AddRange(excludeOptionProperty.Deserialize<IEnumerable<Guid>>());
+                actualFiniteStateList.ExcludeOption.AddRange(excludeOptionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                actualFiniteStateList.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                actualFiniteStateList.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                actualFiniteStateList.Owner = ownerProperty.Deserialize<Guid>();
+                actualFiniteStateList.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("possibleFiniteStateList", out var possibleFiniteStateListProperty))
             {
                 foreach(var arrayItem in possibleFiniteStateListProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         actualFiniteStateList.PossibleFiniteStateList.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                actualFiniteStateList.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                actualFiniteStateList.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return actualFiniteStateList;

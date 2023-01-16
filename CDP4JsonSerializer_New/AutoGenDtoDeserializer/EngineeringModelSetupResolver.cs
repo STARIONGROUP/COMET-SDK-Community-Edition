@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("activeDomain", out var activeDomainProperty))
             {
-                engineeringModelSetup.ActiveDomain.AddRange(activeDomainProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelSetup.ActiveDomain.AddRange(activeDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                engineeringModelSetup.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelSetup.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("defaultOrganizationalParticipant", out var defaultOrganizationalParticipantProperty))
             {
-                engineeringModelSetup.DefaultOrganizationalParticipant = defaultOrganizationalParticipantProperty.Deserialize<Guid?>();
+                engineeringModelSetup.DefaultOrganizationalParticipant = defaultOrganizationalParticipantProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                engineeringModelSetup.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelSetup.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("engineeringModelIid", out var engineeringModelIidProperty))
             {
-                engineeringModelSetup.EngineeringModelIid = engineeringModelIidProperty.Deserialize<Guid>();
+                engineeringModelSetup.EngineeringModelIid = engineeringModelIidProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                engineeringModelSetup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelSetup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                engineeringModelSetup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelSetup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                engineeringModelSetup.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelSetup.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("iterationSetup", out var iterationSetupProperty))
             {
-                engineeringModelSetup.IterationSetup.AddRange(iterationSetupProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelSetup.IterationSetup.AddRange(iterationSetupProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("kind", out var kindProperty))
@@ -105,37 +105,37 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                engineeringModelSetup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                engineeringModelSetup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                engineeringModelSetup.Name = nameProperty.Deserialize<string>();
+                engineeringModelSetup.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("organizationalParticipant", out var organizationalParticipantProperty))
             {
-                engineeringModelSetup.OrganizationalParticipant.AddRange(organizationalParticipantProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelSetup.OrganizationalParticipant.AddRange(organizationalParticipantProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("participant", out var participantProperty))
             {
-                engineeringModelSetup.Participant.AddRange(participantProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelSetup.Participant.AddRange(participantProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("requiredRdl", out var requiredRdlProperty))
             {
-                engineeringModelSetup.RequiredRdl.AddRange(requiredRdlProperty.Deserialize<IEnumerable<Guid>>());
+                engineeringModelSetup.RequiredRdl.AddRange(requiredRdlProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                engineeringModelSetup.ShortName = shortNameProperty.Deserialize<string>();
+                engineeringModelSetup.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("sourceEngineeringModelSetupIid", out var sourceEngineeringModelSetupIidProperty))
             {
-                engineeringModelSetup.SourceEngineeringModelSetupIid = sourceEngineeringModelSetupIidProperty.Deserialize<Guid?>();
+                engineeringModelSetup.SourceEngineeringModelSetupIid = sourceEngineeringModelSetupIidProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("studyPhase", out var studyPhaseProperty))
@@ -145,7 +145,7 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                engineeringModelSetup.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                engineeringModelSetup.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return engineeringModelSetup;

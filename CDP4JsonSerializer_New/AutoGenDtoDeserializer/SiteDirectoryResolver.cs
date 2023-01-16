@@ -55,107 +55,107 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("annotation", out var annotationProperty))
             {
-                siteDirectory.Annotation.AddRange(annotationProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.Annotation.AddRange(annotationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                siteDirectory.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                siteDirectory.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("defaultParticipantRole", out var defaultParticipantRoleProperty))
             {
-                siteDirectory.DefaultParticipantRole = defaultParticipantRoleProperty.Deserialize<Guid?>();
+                siteDirectory.DefaultParticipantRole = defaultParticipantRoleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("defaultPersonRole", out var defaultPersonRoleProperty))
             {
-                siteDirectory.DefaultPersonRole = defaultPersonRoleProperty.Deserialize<Guid?>();
+                siteDirectory.DefaultPersonRole = defaultPersonRoleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("domain", out var domainProperty))
             {
-                siteDirectory.Domain.AddRange(domainProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.Domain.AddRange(domainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("domainGroup", out var domainGroupProperty))
             {
-                siteDirectory.DomainGroup.AddRange(domainGroupProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.DomainGroup.AddRange(domainGroupProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                siteDirectory.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                siteDirectory.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("lastModifiedOn", out var lastModifiedOnProperty))
             {
-                siteDirectory.LastModifiedOn = lastModifiedOnProperty.Deserialize<DateTime>();
+                siteDirectory.LastModifiedOn = lastModifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("logEntry", out var logEntryProperty))
             {
-                siteDirectory.LogEntry.AddRange(logEntryProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.LogEntry.AddRange(logEntryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("model", out var modelProperty))
             {
-                siteDirectory.Model.AddRange(modelProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.Model.AddRange(modelProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                siteDirectory.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                siteDirectory.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                siteDirectory.Name = nameProperty.Deserialize<string>();
+                siteDirectory.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("naturalLanguage", out var naturalLanguageProperty))
             {
-                siteDirectory.NaturalLanguage.AddRange(naturalLanguageProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.NaturalLanguage.AddRange(naturalLanguageProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("organization", out var organizationProperty))
             {
-                siteDirectory.Organization.AddRange(organizationProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.Organization.AddRange(organizationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("participantRole", out var participantRoleProperty))
             {
-                siteDirectory.ParticipantRole.AddRange(participantRoleProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.ParticipantRole.AddRange(participantRoleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("person", out var personProperty))
             {
-                siteDirectory.Person.AddRange(personProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.Person.AddRange(personProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("personRole", out var personRoleProperty))
             {
-                siteDirectory.PersonRole.AddRange(personRoleProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.PersonRole.AddRange(personRoleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                siteDirectory.ShortName = shortNameProperty.Deserialize<string>();
+                siteDirectory.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("siteReferenceDataLibrary", out var siteReferenceDataLibraryProperty))
             {
-                siteDirectory.SiteReferenceDataLibrary.AddRange(siteReferenceDataLibraryProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectory.SiteReferenceDataLibrary.AddRange(siteReferenceDataLibraryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                siteDirectory.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                siteDirectory.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return siteDirectory;

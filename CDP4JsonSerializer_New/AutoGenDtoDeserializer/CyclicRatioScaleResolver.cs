@@ -55,77 +55,77 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                cyclicRatioScale.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                cyclicRatioScale.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                cyclicRatioScale.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                cyclicRatioScale.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                cyclicRatioScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                cyclicRatioScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                cyclicRatioScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                cyclicRatioScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                cyclicRatioScale.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                cyclicRatioScale.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                cyclicRatioScale.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                cyclicRatioScale.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isMaximumInclusive", out var isMaximumInclusiveProperty))
             {
-                cyclicRatioScale.IsMaximumInclusive = isMaximumInclusiveProperty.Deserialize<bool>();
+                cyclicRatioScale.IsMaximumInclusive = isMaximumInclusiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isMinimumInclusive", out var isMinimumInclusiveProperty))
             {
-                cyclicRatioScale.IsMinimumInclusive = isMinimumInclusiveProperty.Deserialize<bool>();
+                cyclicRatioScale.IsMinimumInclusive = isMinimumInclusiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("mappingToReferenceScale", out var mappingToReferenceScaleProperty))
             {
-                cyclicRatioScale.MappingToReferenceScale.AddRange(mappingToReferenceScaleProperty.Deserialize<IEnumerable<Guid>>());
+                cyclicRatioScale.MappingToReferenceScale.AddRange(mappingToReferenceScaleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("maximumPermissibleValue", out var maximumPermissibleValueProperty))
             {
-                cyclicRatioScale.MaximumPermissibleValue = maximumPermissibleValueProperty.Deserialize<string>();
+                cyclicRatioScale.MaximumPermissibleValue = maximumPermissibleValueProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("minimumPermissibleValue", out var minimumPermissibleValueProperty))
             {
-                cyclicRatioScale.MinimumPermissibleValue = minimumPermissibleValueProperty.Deserialize<string>();
+                cyclicRatioScale.MinimumPermissibleValue = minimumPermissibleValueProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                cyclicRatioScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                cyclicRatioScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modulus", out var modulusProperty))
             {
-                cyclicRatioScale.Modulus = modulusProperty.Deserialize<string>();
+                cyclicRatioScale.Modulus = modulusProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                cyclicRatioScale.Name = nameProperty.Deserialize<string>();
+                cyclicRatioScale.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("negativeValueConnotation", out var negativeValueConnotationProperty))
             {
-                cyclicRatioScale.NegativeValueConnotation = negativeValueConnotationProperty.Deserialize<string>();
+                cyclicRatioScale.NegativeValueConnotation = negativeValueConnotationProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("numberSet", out var numberSetProperty))
@@ -135,27 +135,27 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("positiveValueConnotation", out var positiveValueConnotationProperty))
             {
-                cyclicRatioScale.PositiveValueConnotation = positiveValueConnotationProperty.Deserialize<string>();
+                cyclicRatioScale.PositiveValueConnotation = positiveValueConnotationProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                cyclicRatioScale.ShortName = shortNameProperty.Deserialize<string>();
+                cyclicRatioScale.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                cyclicRatioScale.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                cyclicRatioScale.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("unit", out var unitProperty))
             {
-                cyclicRatioScale.Unit = unitProperty.Deserialize<Guid>();
+                cyclicRatioScale.Unit = unitProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueDefinition", out var valueDefinitionProperty))
             {
-                cyclicRatioScale.ValueDefinition.AddRange(valueDefinitionProperty.Deserialize<IEnumerable<Guid>>());
+                cyclicRatioScale.ValueDefinition.AddRange(valueDefinitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return cyclicRatioScale;

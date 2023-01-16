@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                category.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                category.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                category.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                category.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                category.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                category.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                category.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                category.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                category.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                category.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isAbstract", out var isAbstractProperty))
             {
-                category.IsAbstract = isAbstractProperty.Deserialize<bool>();
+                category.IsAbstract = isAbstractProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                category.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                category.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                category.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                category.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                category.Name = nameProperty.Deserialize<string>();
+                category.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("permissibleClass", out var permissibleClassProperty))
@@ -105,21 +105,20 @@ namespace CDP4JsonSerializer_SystemTextJson
                     category.PermissibleClass.Add(ClassKindDeserializer.Deserialize(element));
                 }
             }
-
             
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                category.ShortName = shortNameProperty.Deserialize<string>();
+                category.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("superCategory", out var superCategoryProperty))
             {
-                category.SuperCategory.AddRange(superCategoryProperty.Deserialize<IEnumerable<Guid>>());
+                category.SuperCategory.AddRange(superCategoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                category.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                category.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return category;

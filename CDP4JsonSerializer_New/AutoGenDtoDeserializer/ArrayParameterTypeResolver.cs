@@ -55,98 +55,96 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                arrayParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                arrayParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                arrayParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                arrayParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("component", out var componentProperty))
             {
                 foreach(var arrayItem in componentProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         arrayParameterType.Component.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                arrayParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                arrayParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("dimension", out var dimensionProperty))
             {
                 foreach(var arrayItem in dimensionProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         arrayParameterType.Dimension.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                arrayParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                arrayParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                arrayParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                arrayParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                arrayParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                arrayParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                arrayParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                arrayParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isFinalized", out var isFinalizedProperty))
             {
-                arrayParameterType.IsFinalized = isFinalizedProperty.Deserialize<bool>();
+                arrayParameterType.IsFinalized = isFinalizedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isTensor", out var isTensorProperty))
             {
-                arrayParameterType.IsTensor = isTensorProperty.Deserialize<bool>();
+                arrayParameterType.IsTensor = isTensorProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                arrayParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                arrayParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                arrayParameterType.Name = nameProperty.Deserialize<string>();
+                arrayParameterType.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                arrayParameterType.ShortName = shortNameProperty.Deserialize<string>();
+                arrayParameterType.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("symbol", out var symbolProperty))
             {
-                arrayParameterType.Symbol = symbolProperty.Deserialize<string>();
+                arrayParameterType.Symbol = symbolProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                arrayParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                arrayParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return arrayParameterType;

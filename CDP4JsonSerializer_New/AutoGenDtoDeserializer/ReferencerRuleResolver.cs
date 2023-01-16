@@ -55,72 +55,72 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                referencerRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                referencerRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                referencerRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                referencerRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                referencerRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                referencerRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                referencerRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                referencerRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                referencerRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                referencerRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                referencerRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                referencerRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("maxReferenced", out var maxReferencedProperty))
             {
-                referencerRule.MaxReferenced = maxReferencedProperty.Deserialize<int>();
+                referencerRule.MaxReferenced = maxReferencedProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("minReferenced", out var minReferencedProperty))
             {
-                referencerRule.MinReferenced = minReferencedProperty.Deserialize<int>();
+                referencerRule.MinReferenced = minReferencedProperty.Deserialize<int>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                referencerRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                referencerRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                referencerRule.Name = nameProperty.Deserialize<string>();
+                referencerRule.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("referencedCategory", out var referencedCategoryProperty))
             {
-                referencerRule.ReferencedCategory.AddRange(referencedCategoryProperty.Deserialize<IEnumerable<Guid>>());
+                referencerRule.ReferencedCategory.AddRange(referencedCategoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("referencingCategory", out var referencingCategoryProperty))
             {
-                referencerRule.ReferencingCategory = referencingCategoryProperty.Deserialize<Guid>();
+                referencerRule.ReferencingCategory = referencingCategoryProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                referencerRule.ShortName = shortNameProperty.Deserialize<string>();
+                referencerRule.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                referencerRule.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                referencerRule.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return referencerRule;

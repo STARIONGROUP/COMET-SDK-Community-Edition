@@ -55,52 +55,52 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                logarithmicScale.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                logarithmicScale.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                logarithmicScale.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                logarithmicScale.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                logarithmicScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                logarithmicScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                logarithmicScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                logarithmicScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("exponent", out var exponentProperty))
             {
-                logarithmicScale.Exponent = exponentProperty.Deserialize<string>();
+                logarithmicScale.Exponent = exponentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("factor", out var factorProperty))
             {
-                logarithmicScale.Factor = factorProperty.Deserialize<string>();
+                logarithmicScale.Factor = factorProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                logarithmicScale.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                logarithmicScale.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                logarithmicScale.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                logarithmicScale.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isMaximumInclusive", out var isMaximumInclusiveProperty))
             {
-                logarithmicScale.IsMaximumInclusive = isMaximumInclusiveProperty.Deserialize<bool>();
+                logarithmicScale.IsMaximumInclusive = isMaximumInclusiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("isMinimumInclusive", out var isMinimumInclusiveProperty))
             {
-                logarithmicScale.IsMinimumInclusive = isMinimumInclusiveProperty.Deserialize<bool>();
+                logarithmicScale.IsMinimumInclusive = isMinimumInclusiveProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("logarithmBase", out var logarithmBaseProperty))
@@ -110,32 +110,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("mappingToReferenceScale", out var mappingToReferenceScaleProperty))
             {
-                logarithmicScale.MappingToReferenceScale.AddRange(mappingToReferenceScaleProperty.Deserialize<IEnumerable<Guid>>());
+                logarithmicScale.MappingToReferenceScale.AddRange(mappingToReferenceScaleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("maximumPermissibleValue", out var maximumPermissibleValueProperty))
             {
-                logarithmicScale.MaximumPermissibleValue = maximumPermissibleValueProperty.Deserialize<string>();
+                logarithmicScale.MaximumPermissibleValue = maximumPermissibleValueProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("minimumPermissibleValue", out var minimumPermissibleValueProperty))
             {
-                logarithmicScale.MinimumPermissibleValue = minimumPermissibleValueProperty.Deserialize<string>();
+                logarithmicScale.MinimumPermissibleValue = minimumPermissibleValueProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                logarithmicScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                logarithmicScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                logarithmicScale.Name = nameProperty.Deserialize<string>();
+                logarithmicScale.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("negativeValueConnotation", out var negativeValueConnotationProperty))
             {
-                logarithmicScale.NegativeValueConnotation = negativeValueConnotationProperty.Deserialize<string>();
+                logarithmicScale.NegativeValueConnotation = negativeValueConnotationProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("numberSet", out var numberSetProperty))
@@ -145,37 +145,37 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("positiveValueConnotation", out var positiveValueConnotationProperty))
             {
-                logarithmicScale.PositiveValueConnotation = positiveValueConnotationProperty.Deserialize<string>();
+                logarithmicScale.PositiveValueConnotation = positiveValueConnotationProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("referenceQuantityKind", out var referenceQuantityKindProperty))
             {
-                logarithmicScale.ReferenceQuantityKind = referenceQuantityKindProperty.Deserialize<Guid>();
+                logarithmicScale.ReferenceQuantityKind = referenceQuantityKindProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("referenceQuantityValue", out var referenceQuantityValueProperty))
             {
-                logarithmicScale.ReferenceQuantityValue.AddRange(referenceQuantityValueProperty.Deserialize<IEnumerable<Guid>>());
+                logarithmicScale.ReferenceQuantityValue.AddRange(referenceQuantityValueProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                logarithmicScale.ShortName = shortNameProperty.Deserialize<string>();
+                logarithmicScale.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                logarithmicScale.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                logarithmicScale.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("unit", out var unitProperty))
             {
-                logarithmicScale.Unit = unitProperty.Deserialize<Guid>();
+                logarithmicScale.Unit = unitProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueDefinition", out var valueDefinitionProperty))
             {
-                logarithmicScale.ValueDefinition.AddRange(valueDefinitionProperty.Deserialize<IEnumerable<Guid>>());
+                logarithmicScale.ValueDefinition.AddRange(valueDefinitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return logarithmicScale;

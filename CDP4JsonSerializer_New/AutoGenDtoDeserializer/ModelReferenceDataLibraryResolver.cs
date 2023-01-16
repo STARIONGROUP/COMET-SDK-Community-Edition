@@ -55,120 +55,119 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                modelReferenceDataLibrary.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("baseQuantityKind", out var baseQuantityKindProperty))
             {
                 foreach(var arrayItem in baseQuantityKindProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         modelReferenceDataLibrary.BaseQuantityKind.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("baseUnit", out var baseUnitProperty))
             {
-                modelReferenceDataLibrary.BaseUnit.AddRange(baseUnitProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.BaseUnit.AddRange(baseUnitProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("constant", out var constantProperty))
             {
-                modelReferenceDataLibrary.Constant.AddRange(constantProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.Constant.AddRange(constantProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definedCategory", out var definedCategoryProperty))
             {
-                modelReferenceDataLibrary.DefinedCategory.AddRange(definedCategoryProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.DefinedCategory.AddRange(definedCategoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                modelReferenceDataLibrary.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                modelReferenceDataLibrary.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                modelReferenceDataLibrary.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("fileType", out var fileTypeProperty))
             {
-                modelReferenceDataLibrary.FileType.AddRange(fileTypeProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.FileType.AddRange(fileTypeProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("glossary", out var glossaryProperty))
             {
-                modelReferenceDataLibrary.Glossary.AddRange(glossaryProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.Glossary.AddRange(glossaryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                modelReferenceDataLibrary.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                modelReferenceDataLibrary.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                modelReferenceDataLibrary.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                modelReferenceDataLibrary.Name = nameProperty.Deserialize<string>();
+                modelReferenceDataLibrary.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
             {
-                modelReferenceDataLibrary.ParameterType.AddRange(parameterTypeProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.ParameterType.AddRange(parameterTypeProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("referenceSource", out var referenceSourceProperty))
             {
-                modelReferenceDataLibrary.ReferenceSource.AddRange(referenceSourceProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.ReferenceSource.AddRange(referenceSourceProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("requiredRdl", out var requiredRdlProperty))
             {
-                modelReferenceDataLibrary.RequiredRdl = requiredRdlProperty.Deserialize<Guid?>();
+                modelReferenceDataLibrary.RequiredRdl = requiredRdlProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("rule", out var ruleProperty))
             {
-                modelReferenceDataLibrary.Rule.AddRange(ruleProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.Rule.AddRange(ruleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("scale", out var scaleProperty))
             {
-                modelReferenceDataLibrary.Scale.AddRange(scaleProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.Scale.AddRange(scaleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                modelReferenceDataLibrary.ShortName = shortNameProperty.Deserialize<string>();
+                modelReferenceDataLibrary.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                modelReferenceDataLibrary.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                modelReferenceDataLibrary.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("unit", out var unitProperty))
             {
-                modelReferenceDataLibrary.Unit.AddRange(unitProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.Unit.AddRange(unitProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("unitPrefix", out var unitPrefixProperty))
             {
-                modelReferenceDataLibrary.UnitPrefix.AddRange(unitPrefixProperty.Deserialize<IEnumerable<Guid>>());
+                modelReferenceDataLibrary.UnitPrefix.AddRange(unitPrefixProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return modelReferenceDataLibrary;

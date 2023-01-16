@@ -30,6 +30,7 @@ namespace CDP4JsonSerializer_SystemTextJson.Tests
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Text.Json.Serialization;
 
     using CDP4Common;
     using CDP4Common.CommonData;
@@ -41,7 +42,6 @@ namespace CDP4JsonSerializer_SystemTextJson.Tests
 
     using CDP4JsonSerializer_SystemTextJson.Tests.Helper;
     using CDP4JsonSerializer_SystemTextJson;
-    using Newtonsoft.Json;
 
     using NUnit.Framework;
 
@@ -170,6 +170,7 @@ namespace CDP4JsonSerializer_SystemTextJson.Tests
                     var txt = reader.ReadToEnd();
 
                     // output:  "manual":"[\"123\",\"abc\"]"
+                                              //\"manual\": \"[\\\"123\\\",\\\"abc\\\"]\" <------- Extra Space...
                     Assert.IsTrue(txt.Contains("\"manual\":\"[\\\"123\\\",\\\"abc\\\"]\""));
                 }
             }
@@ -627,19 +628,19 @@ namespace CDP4JsonSerializer_SystemTextJson.Tests
             /// <summary>
             /// Gets or sets the collection of DTOs to delete.
             /// </summary>
-            [JsonProperty("_delete")]
+            [JsonPropertyName("_delete")]
             public List<ClasslessDTO> Delete { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to create.
             /// </summary>
-            [JsonProperty("_create")]
+            [JsonPropertyName("_create")]
             public List<Dto.Thing> Create { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to update.
             /// </summary>
-            [JsonProperty("_update")]
+            [JsonPropertyName("_update")]
             public List<ClasslessDTO> Update { get; set; }
 
             /// <summary>

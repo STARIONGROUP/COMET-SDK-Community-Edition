@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                parameterSubscription.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                parameterSubscription.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                parameterSubscription.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                parameterSubscription.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                parameterSubscription.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                parameterSubscription.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("owner", out var ownerProperty))
             {
-                parameterSubscription.Owner = ownerProperty.Deserialize<Guid>();
+                parameterSubscription.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                parameterSubscription.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                parameterSubscription.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueSet", out var valueSetProperty))
             {
-                parameterSubscription.ValueSet.AddRange(valueSetProperty.Deserialize<IEnumerable<Guid>>());
+                parameterSubscription.ValueSet.AddRange(valueSetProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return parameterSubscription;

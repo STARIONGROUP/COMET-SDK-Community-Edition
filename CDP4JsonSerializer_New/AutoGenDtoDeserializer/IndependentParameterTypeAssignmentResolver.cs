@@ -55,32 +55,32 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                independentParameterTypeAssignment.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                independentParameterTypeAssignment.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                independentParameterTypeAssignment.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                independentParameterTypeAssignment.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("measurementScale", out var measurementScaleProperty))
             {
-                independentParameterTypeAssignment.MeasurementScale = measurementScaleProperty.Deserialize<Guid?>();
+                independentParameterTypeAssignment.MeasurementScale = measurementScaleProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                independentParameterTypeAssignment.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                independentParameterTypeAssignment.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
             {
-                independentParameterTypeAssignment.ParameterType = parameterTypeProperty.Deserialize<Guid>();
+                independentParameterTypeAssignment.ParameterType = parameterTypeProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                independentParameterTypeAssignment.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                independentParameterTypeAssignment.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return independentParameterTypeAssignment;

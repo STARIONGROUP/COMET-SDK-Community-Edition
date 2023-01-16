@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("author", out var authorProperty))
             {
-                siteDirectoryDataDiscussionItem.Author = authorProperty.Deserialize<Guid>();
+                siteDirectoryDataDiscussionItem.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("content", out var contentProperty))
             {
-                siteDirectoryDataDiscussionItem.Content = contentProperty.Deserialize<string>();
+                siteDirectoryDataDiscussionItem.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                siteDirectoryDataDiscussionItem.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                siteDirectoryDataDiscussionItem.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                siteDirectoryDataDiscussionItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectoryDataDiscussionItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                siteDirectoryDataDiscussionItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                siteDirectoryDataDiscussionItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
             {
-                siteDirectoryDataDiscussionItem.LanguageCode = languageCodeProperty.Deserialize<string>();
+                siteDirectoryDataDiscussionItem.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                siteDirectoryDataDiscussionItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                siteDirectoryDataDiscussionItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("replyTo", out var replyToProperty))
             {
-                siteDirectoryDataDiscussionItem.ReplyTo = replyToProperty.Deserialize<Guid?>();
+                siteDirectoryDataDiscussionItem.ReplyTo = replyToProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                siteDirectoryDataDiscussionItem.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                siteDirectoryDataDiscussionItem.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return siteDirectoryDataDiscussionItem;

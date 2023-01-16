@@ -55,60 +55,59 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("containingFolder", out var containingFolderProperty))
             {
-                fileRevision.ContainingFolder = containingFolderProperty.Deserialize<Guid?>();
+                fileRevision.ContainingFolder = containingFolderProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("contentHash", out var contentHashProperty))
             {
-                fileRevision.ContentHash = contentHashProperty.Deserialize<string>();
+                fileRevision.ContentHash = contentHashProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                fileRevision.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                fileRevision.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("creator", out var creatorProperty))
             {
-                fileRevision.Creator = creatorProperty.Deserialize<Guid>();
+                fileRevision.Creator = creatorProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                fileRevision.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                fileRevision.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                fileRevision.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                fileRevision.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("fileType", out var fileTypeProperty))
             {
                 foreach(var arrayItem in fileTypeProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         fileRevision.FileType.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                fileRevision.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                fileRevision.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                fileRevision.Name = nameProperty.Deserialize<string>();
+                fileRevision.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                fileRevision.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                fileRevision.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return fileRevision;

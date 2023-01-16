@@ -55,64 +55,62 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                sampledFunctionParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                sampledFunctionParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                sampledFunctionParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                sampledFunctionParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                sampledFunctionParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                sampledFunctionParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("degreeOfInterpolation", out var degreeOfInterpolationProperty))
             {
-                sampledFunctionParameterType.DegreeOfInterpolation = degreeOfInterpolationProperty.Deserialize<int?>();
+                sampledFunctionParameterType.DegreeOfInterpolation = degreeOfInterpolationProperty.Deserialize<int?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("dependentParameterType", out var dependentParameterTypeProperty))
             {
                 foreach(var arrayItem in dependentParameterTypeProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         sampledFunctionParameterType.DependentParameterType.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                sampledFunctionParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                sampledFunctionParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                sampledFunctionParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                sampledFunctionParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                sampledFunctionParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                sampledFunctionParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("independentParameterType", out var independentParameterTypeProperty))
             {
                 foreach(var arrayItem in independentParameterTypeProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         sampledFunctionParameterType.IndependentParameterType.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("interpolationPeriod", out var interpolationPeriodProperty))
             {
@@ -122,32 +120,32 @@ namespace CDP4JsonSerializer_SystemTextJson
             
             if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
             {
-                sampledFunctionParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>();
+                sampledFunctionParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                sampledFunctionParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                sampledFunctionParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                sampledFunctionParameterType.Name = nameProperty.Deserialize<string>();
+                sampledFunctionParameterType.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                sampledFunctionParameterType.ShortName = shortNameProperty.Deserialize<string>();
+                sampledFunctionParameterType.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("symbol", out var symbolProperty))
             {
-                sampledFunctionParameterType.Symbol = symbolProperty.Deserialize<string>();
+                sampledFunctionParameterType.Symbol = symbolProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                sampledFunctionParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                sampledFunctionParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return sampledFunctionParameterType;

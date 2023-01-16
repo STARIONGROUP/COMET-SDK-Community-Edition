@@ -28,20 +28,15 @@ namespace CDP4JsonSerializer_SystemTextJson
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Text.Json;
 
     using CDP4Common.MetaInfo;
-
+    
     using CDP4JsonSerializer_SystemTextJson.JsonConverter;
-
-    using System.Text.Json;
     
     using NLog;
     
     using Thing = CDP4Common.DTO.Thing;
-    using System.Runtime.Serialization;
-    using System.Text.Json.Nodes;
-    using CDP4Common.CommonData;
-    using System.Xml.Linq;
 
     /// <summary>
     /// The JSON de-serializer.
@@ -85,6 +80,11 @@ namespace CDP4JsonSerializer_SystemTextJson
         public IMetaDataProvider MetaInfoProvider { get; private set; }
 
         /// <summary>
+        /// Gets or sets the options for the serializer
+        /// </summary>
+        public JsonSerializerOptions JsonSerializerOptions { get; private set; }
+
+        /// <summary>
         /// Initialize this instance with the required <see cref="IMetaDataProvider"/> and supported <see cref="Version"/>
         /// </summary>
         /// <param name="metaInfoProvider">The <see cref="IMetaDataProvider"/></param>
@@ -93,6 +93,10 @@ namespace CDP4JsonSerializer_SystemTextJson
         {
             this.MetaInfoProvider = metaInfoProvider;
             this.RequestDataModelVersion = supportedVersion;
+
+            this.JsonSerializerOptions = SerializerOptions.Copy();
+            this.JsonSerializerOptions.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
+            this.JsonSerializerOptions.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
         }
 
         /// <summary>
@@ -117,11 +121,9 @@ namespace CDP4JsonSerializer_SystemTextJson
             }
 
             var sw = Stopwatch.StartNew();
-            
-            var serializerOptions = this.CreateJsonSerializerOptions();
-             
+                        
             Logger.Trace("initializing Serialization");
-            JsonSerializer.Serialize(outputStream, collectionSource, serializerOptions);
+            JsonSerializer.Serialize(outputStream, collectionSource, this.JsonSerializerOptions);
 
             sw.Stop();
             Logger.Debug("SerializeToStream finished in {0} [ms]", sw.ElapsedMilliseconds);
@@ -245,55 +247,12 @@ namespace CDP4JsonSerializer_SystemTextJson
             {
                 throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
             }
-
-            var serializerOptions = this.CreateJsonSerializerOptions();
-                        
+                       
             var sw = new Stopwatch();
             sw.Start();           
-            var data = JsonSerializer.Deserialize<T>(contentStream, serializerOptions);
+            var data = JsonSerializer.Deserialize<T>(contentStream, this.JsonSerializerOptions);
             Logger.Trace("Deserialize from stream in {0} [ms]", sw.ElapsedMilliseconds);
             return data;
-        }
-
-        private Thing DeserializeObject(JsonElement jElement)
-        {
-            if (jElement.ValueKind != JsonValueKind.Object)
-            {
-                throw new ArgumentException($"The {nameof(jElement)} must be of type JsonValueKind.Object", nameof(jElement));
-            }
-
-            if (jElement.TryGetProperty("classKind", out var typeElement))
-            {
-                 return DtoFactory.ToDto(jElement);
-            }
-
-            throw new SerializationException("The classKind Json property is not available, the DeSerializer cannot be used to deserialize this JsonElement");
-        }
-
-        private IEnumerable<Thing> DeserializeArray(JsonElement jsonArray)
-        {
-            var result = new List<Thing>();
-
-            foreach(var jsonElement in jsonArray.EnumerateArray())
-            {
-                result.Add(DtoFactory.ToDto(jsonElement));
-            }
-
-            return result;
-        }
-
-        private JsonSerializerOptions CreateJsonSerializerOptions()
-        {
-            Logger.Trace("register converters");
-            var serializerOptions = new JsonSerializerOptions()
-            {
-                Converters =
-                {
-                    new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion),
-                    new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion),
-                }
-            };
-            return serializerOptions;
         }
     }
 }

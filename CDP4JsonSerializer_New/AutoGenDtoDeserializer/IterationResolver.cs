@@ -55,135 +55,134 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("actualFiniteStateList", out var actualFiniteStateListProperty))
             {
-                iteration.ActualFiniteStateList.AddRange(actualFiniteStateListProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.ActualFiniteStateList.AddRange(actualFiniteStateListProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("defaultOption", out var defaultOptionProperty))
             {
-                iteration.DefaultOption = defaultOptionProperty.Deserialize<Guid?>();
+                iteration.DefaultOption = defaultOptionProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("diagramCanvas", out var diagramCanvasProperty))
             {
-                iteration.DiagramCanvas.AddRange(diagramCanvasProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.DiagramCanvas.AddRange(diagramCanvasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("domainFileStore", out var domainFileStoreProperty))
             {
-                iteration.DomainFileStore.AddRange(domainFileStoreProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.DomainFileStore.AddRange(domainFileStoreProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("element", out var elementProperty))
             {
-                iteration.Element.AddRange(elementProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.Element.AddRange(elementProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                iteration.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                iteration.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("externalIdentifierMap", out var externalIdentifierMapProperty))
             {
-                iteration.ExternalIdentifierMap.AddRange(externalIdentifierMapProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.ExternalIdentifierMap.AddRange(externalIdentifierMapProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("goal", out var goalProperty))
             {
-                iteration.Goal.AddRange(goalProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.Goal.AddRange(goalProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("iterationSetup", out var iterationSetupProperty))
             {
-                iteration.IterationSetup = iterationSetupProperty.Deserialize<Guid>();
+                iteration.IterationSetup = iterationSetupProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                iteration.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                iteration.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("option", out var optionProperty))
             {
                 foreach(var arrayItem in optionProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>();
+                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
                     if (arrayItemValue != null)
                     {
                         iteration.Option.Add(arrayItemValue);
                     }
                 }
             }
-
             
             if (jObject.TryGetProperty("possibleFiniteStateList", out var possibleFiniteStateListProperty))
             {
-                iteration.PossibleFiniteStateList.AddRange(possibleFiniteStateListProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.PossibleFiniteStateList.AddRange(possibleFiniteStateListProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("publication", out var publicationProperty))
             {
-                iteration.Publication.AddRange(publicationProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.Publication.AddRange(publicationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("relationship", out var relationshipProperty))
             {
-                iteration.Relationship.AddRange(relationshipProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.Relationship.AddRange(relationshipProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("requirementsSpecification", out var requirementsSpecificationProperty))
             {
-                iteration.RequirementsSpecification.AddRange(requirementsSpecificationProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.RequirementsSpecification.AddRange(requirementsSpecificationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("ruleVerificationList", out var ruleVerificationListProperty))
             {
-                iteration.RuleVerificationList.AddRange(ruleVerificationListProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.RuleVerificationList.AddRange(ruleVerificationListProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("sharedDiagramStyle", out var sharedDiagramStyleProperty))
             {
-                iteration.SharedDiagramStyle.AddRange(sharedDiagramStyleProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.SharedDiagramStyle.AddRange(sharedDiagramStyleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("sourceIterationIid", out var sourceIterationIidProperty))
             {
-                iteration.SourceIterationIid = sourceIterationIidProperty.Deserialize<Guid?>();
+                iteration.SourceIterationIid = sourceIterationIidProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("stakeholder", out var stakeholderProperty))
             {
-                iteration.Stakeholder.AddRange(stakeholderProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.Stakeholder.AddRange(stakeholderProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("stakeholderValue", out var stakeholderValueProperty))
             {
-                iteration.StakeholderValue.AddRange(stakeholderValueProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.StakeholderValue.AddRange(stakeholderValueProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("stakeholderValueMap", out var stakeholderValueMapProperty))
             {
-                iteration.StakeholderValueMap.AddRange(stakeholderValueMapProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.StakeholderValueMap.AddRange(stakeholderValueMapProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                iteration.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                iteration.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("topElement", out var topElementProperty))
             {
-                iteration.TopElement = topElementProperty.Deserialize<Guid?>();
+                iteration.TopElement = topElementProperty.Deserialize<Guid?>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueGroup", out var valueGroupProperty))
             {
-                iteration.ValueGroup.AddRange(valueGroupProperty.Deserialize<IEnumerable<Guid>>());
+                iteration.ValueGroup.AddRange(valueGroupProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return iteration;

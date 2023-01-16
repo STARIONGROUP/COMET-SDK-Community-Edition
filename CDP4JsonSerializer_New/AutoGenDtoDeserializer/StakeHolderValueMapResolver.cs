@@ -55,77 +55,77 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("alias", out var aliasProperty))
             {
-                stakeHolderValueMap.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("category", out var categoryProperty))
             {
-                stakeHolderValueMap.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("definition", out var definitionProperty))
             {
-                stakeHolderValueMap.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                stakeHolderValueMap.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                stakeHolderValueMap.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("goal", out var goalProperty))
             {
-                stakeHolderValueMap.Goal.AddRange(goalProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.Goal.AddRange(goalProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
             {
-                stakeHolderValueMap.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                stakeHolderValueMap.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                stakeHolderValueMap.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                stakeHolderValueMap.Name = nameProperty.Deserialize<string>();
+                stakeHolderValueMap.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("requirement", out var requirementProperty))
             {
-                stakeHolderValueMap.Requirement.AddRange(requirementProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.Requirement.AddRange(requirementProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("settings", out var settingsProperty))
             {
-                stakeHolderValueMap.Settings.AddRange(settingsProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.Settings.AddRange(settingsProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                stakeHolderValueMap.ShortName = shortNameProperty.Deserialize<string>();
+                stakeHolderValueMap.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("stakeholderValue", out var stakeholderValueProperty))
             {
-                stakeHolderValueMap.StakeholderValue.AddRange(stakeholderValueProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.StakeholderValue.AddRange(stakeholderValueProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                stakeHolderValueMap.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                stakeHolderValueMap.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("valueGroup", out var valueGroupProperty))
             {
-                stakeHolderValueMap.ValueGroup.AddRange(valueGroupProperty.Deserialize<IEnumerable<Guid>>());
+                stakeHolderValueMap.ValueGroup.AddRange(valueGroupProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             return stakeHolderValueMap;

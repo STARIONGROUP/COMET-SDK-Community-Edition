@@ -55,42 +55,42 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("bounds", out var boundsProperty))
             {
-                diagramCanvas.Bounds.AddRange(boundsProperty.Deserialize<IEnumerable<Guid>>());
+                diagramCanvas.Bounds.AddRange(boundsProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
             {
-                diagramCanvas.CreatedOn = createdOnProperty.Deserialize<DateTime>();
+                diagramCanvas.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("diagramElement", out var diagramElementProperty))
             {
-                diagramCanvas.DiagramElement.AddRange(diagramElementProperty.Deserialize<IEnumerable<Guid>>());
+                diagramCanvas.DiagramElement.AddRange(diagramElementProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                diagramCanvas.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                diagramCanvas.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                diagramCanvas.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                diagramCanvas.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                diagramCanvas.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                diagramCanvas.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("name", out var nameProperty))
             {
-                diagramCanvas.Name = nameProperty.Deserialize<string>();
+                diagramCanvas.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                diagramCanvas.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                diagramCanvas.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return diagramCanvas;

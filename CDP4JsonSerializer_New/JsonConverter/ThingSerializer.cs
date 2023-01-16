@@ -52,6 +52,9 @@ namespace CDP4JsonSerializer_SystemTextJson.JsonConverter
         /// </summary>
         private readonly Version dataModelVersion;
 
+        // Override default null handling
+        public override bool HandleNull => true;
+
         /// <summary>
         /// The <see cref="ThingConverterExtensions"/> used to determine whether a class is to be serialized or not
         /// </summary>
@@ -102,7 +105,7 @@ namespace CDP4JsonSerializer_SystemTextJson.JsonConverter
         /// <param name="options">the options of the serializer</param>
         /// <returns>the <see cref="Thing"/></returns>
         public override Thing Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {            
+        {           
             // load object from stream
             if (!JsonElement.TryParseValue(ref reader, out var jsonElement))
             {

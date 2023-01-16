@@ -55,47 +55,47 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
             {
-                citation.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>());
+                citation.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
             {
-                citation.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>());
+                citation.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
             }
 
             if (jObject.TryGetProperty("isAdaptation", out var isAdaptationProperty))
             {
-                citation.IsAdaptation = isAdaptationProperty.Deserialize<bool>();
+                citation.IsAdaptation = isAdaptationProperty.Deserialize<bool>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("location", out var locationProperty))
             {
-                citation.Location = locationProperty.Deserialize<string>();
+                citation.Location = locationProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
             {
-                citation.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>();
+                citation.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("remark", out var remarkProperty))
             {
-                citation.Remark = remarkProperty.Deserialize<string>();
+                citation.Remark = remarkProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("shortName", out var shortNameProperty))
             {
-                citation.ShortName = shortNameProperty.Deserialize<string>();
+                citation.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("source", out var sourceProperty))
             {
-                citation.Source = sourceProperty.Deserialize<Guid>();
+                citation.Source = sourceProperty.Deserialize<Guid>(SerializerOptions.Options);
             }
 
             if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
             {
-                citation.ThingPreference = thingPreferenceProperty.Deserialize<string>();
+                citation.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
             }
 
             return citation;
