@@ -49,7 +49,6 @@ namespace CDP4Reporting.DataCollection
         /// <returns>
         /// The parsed value.
         /// </returns>
-        [ExcludeFromCodeCoverage] // Remove attribute when more logic is added to this method. It's only SDK functionality now and that is fully covered.
         public override DateTime? Parse(string value)
         {
             var parsedValue = (DateTime?)value.ToValueSetObject(this.ParameterBase?.ParameterType ?? new DateTimeParameterType());

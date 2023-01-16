@@ -24,7 +24,6 @@
 namespace CDP4Reporting.DataCollection
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
 
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
@@ -35,7 +34,6 @@ namespace CDP4Reporting.DataCollection
     /// This class is a base class for classes that can be used in a Report Script that is <see cref="Iteration"/> dependent.
     /// It provides commonly used objects to the script editor.
     /// </summary>
-    [ExcludeFromCodeCoverage]
     public abstract class IterationDependentDataCollector : DataCollector, IIterationDependentDataCollector
     {
         /// <summary>

@@ -26,7 +26,6 @@
 // different environments and reports datasource code needs to be 100% compatible in all environments.
 namespace CDP4Reporting.DataCollection
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using CDP4Common.EngineeringModelData;
@@ -35,7 +34,6 @@ namespace CDP4Reporting.DataCollection
     /// This class is a base class for classes that can be used in a Report Script that is <see cref="CDP4Common.EngineeringModelData.Option"/> dependent.
     /// It provides commonly used objects to the script editor.
     /// </summary>
-    [ExcludeFromCodeCoverage]
     public abstract class OptionDependentDataCollector : IterationDependentDataCollector, IOptionDependentDataCollector
     {
         /// <summary>

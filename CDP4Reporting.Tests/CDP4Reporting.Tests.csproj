@@ -2,10 +2,10 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <AssemblyTitle>CDP4BuiltInRules.Tests</AssemblyTitle>
+    <AssemblyTitle>CDP4Reporting.Tests</AssemblyTitle>
     <Company>RHEA System S.A.</Company>
-    <Product>CDP4BuiltInRules.Tests</Product>
-    <Description>CDP4BuiltInRules Unit Tests</Description>
+    <Product>CDP4Reporting.Tests</Product>
+    <Description>CDP4Reporting Unit Tests</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

@@ -47,7 +47,6 @@ namespace CDP4Reporting.DataCollection
         /// <returns>
         /// The parsed value.
         /// </returns>
-        [ExcludeFromCodeCoverage] // Remove attribute when more logic is added to this method. It's only SDK functionality now and that is fully covered.
         public override double Parse(string value)
         {
             ValueSetConverter.TryParseDouble(value, this.ParameterBase?.ParameterType, out var parsedValue);

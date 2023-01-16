@@ -62,31 +62,4 @@ namespace CDP4Reporting.DynamicTableChecker
         /// </returns>
         DynamicTableCell AddExpressionTableCell(string tableName, string expression);
     }
-
-    public class DynamicTableCell
-    {
-        /// <summary>
-        /// The expression that defines the text of the TableCell
-        /// </summary>
-        public string Expression { get; set; }
-
-        /// <summary>
-        /// The ForecolorExpression
-        /// </summary>
-        public string ForeColorExpression { get; set; }
-
-        /// <summary>
-        /// The BackcolorExpression
-        /// </summary>
-        public string BackColorExpression { get; set; }
-
-        /// <summary>
-        /// Instanciates a new <see cref="DynamicTableCell"/>
-        /// </summary>
-        /// <param name="expression"></param>
-        public DynamicTableCell(string expression)
-        {
-            this.Expression = expression;
-        }
-    }
 }

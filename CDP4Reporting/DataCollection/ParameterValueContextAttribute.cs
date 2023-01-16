@@ -25,14 +25,12 @@
 namespace CDP4Reporting.DataCollection
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
     using CDP4Common.EngineeringModelData;
 
     /// <summary>
     /// Attribute decorating implementations of <see cref="DataCollectorParameter{TRow,TValue}"/> regarding what values to use in a report datasource
     /// </summary>
-    [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.Property)]
     public class ParameterValueContextAttribute : Attribute
     {

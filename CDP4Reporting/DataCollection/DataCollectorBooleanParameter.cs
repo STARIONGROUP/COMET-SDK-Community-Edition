@@ -24,12 +24,10 @@
 
 namespace CDP4Reporting.DataCollection
 {
-    using System.Diagnostics.CodeAnalysis;
-
     using CDP4Common.Helpers;
 
     /// <summary>
-    /// Abstract base class from which all bool parameter columns
+    /// Base class from which all bool parameter columns
     /// for a <see cref="DataCollectorRow"/> need to derive.
     /// </summary>
     /// <typeparam name="TRow">
@@ -47,7 +45,6 @@ namespace CDP4Reporting.DataCollection
         /// <returns>
         /// The parsed value.
         /// </returns>
-        [ExcludeFromCodeCoverage] // Remove attribute when more logic is added to this method. It's only SDK functionality now and that is fully covered.
         public override bool Parse(string value)
         {
             var parsedValue = (bool?)value.ToValueSetObject(this.ParameterBase?.ParameterType);
