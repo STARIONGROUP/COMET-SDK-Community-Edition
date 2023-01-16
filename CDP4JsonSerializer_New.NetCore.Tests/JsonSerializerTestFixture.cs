@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2021 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//CDP4JsonSerializer_SystemTextJson
+//
 //    This file is part of CDP4-SDK Community Edition
 //
 //    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
@@ -169,8 +169,6 @@ namespace CDP4JsonSerializer_SystemTextJson.Tests
                 {
                     var txt = reader.ReadToEnd();
 
-                    // output:  "manual":"[\"123\",\"abc\"]"
-                                              //\"manual\": \"[\\\"123\\\",\\\"abc\\\"]\" <------- Extra Space...
                     Assert.IsTrue(txt.Contains("\"manual\":\"[\\\"123\\\",\\\"abc\\\"]\""));
                 }
             }
