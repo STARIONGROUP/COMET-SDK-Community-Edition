@@ -55,6 +55,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Reporting", "CDP4Reporting\CDP4Reporting.csproj", "{038DAADE-63BF-461F-A20E-F551E19C3FFD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Reporting.Tests", "CDP4Reporting.Tests\CDP4Reporting.Tests.csproj", "{0320A3B7-087A-4AD6-93F7-90F563132399}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +153,14 @@ Global
 		{139C6384-D647-4D04-9265-F51324CE2906}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{139C6384-D647-4D04-9265-F51324CE2906}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{139C6384-D647-4D04-9265-F51324CE2906}.Release|Any CPU.Build.0 = Release|Any CPU
+		{038DAADE-63BF-461F-A20E-F551E19C3FFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{038DAADE-63BF-461F-A20E-F551E19C3FFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{038DAADE-63BF-461F-A20E-F551E19C3FFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{038DAADE-63BF-461F-A20E-F551E19C3FFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0320A3B7-087A-4AD6-93F7-90F563132399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0320A3B7-087A-4AD6-93F7-90F563132399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0320A3B7-087A-4AD6-93F7-90F563132399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0320A3B7-087A-4AD6-93F7-90F563132399}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
