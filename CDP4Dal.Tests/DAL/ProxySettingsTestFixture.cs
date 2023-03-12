@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ProxySettingsTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -25,7 +25,9 @@
 namespace CDP4Dal.Tests.DAL
 {
     using System;
+
     using CDP4Dal.DAL;
+
     using NUnit.Framework;
 
     /// <summary>

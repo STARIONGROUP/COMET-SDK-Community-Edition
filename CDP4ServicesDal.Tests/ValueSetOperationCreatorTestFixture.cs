@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValueSetOperationCreatorTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,22 +21,26 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4ServicesDal.Tests
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
+
     using Moq;
+
     using NUnit.Framework;
+
     using Dto = CDP4Common.DTO;
 
     [TestFixture]
@@ -202,7 +205,6 @@ namespace CDP4ServicesDal.Tests
             this.parameter1 = new Parameter(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.override1 = new ParameterOverride(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.subscription1 = new ParameterSubscription(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            
 
             this.model1.EngineeringModelSetup = this.modelsetup1;
             this.model2.EngineeringModelSetup = this.modelsetup2;
@@ -268,11 +270,6 @@ namespace CDP4ServicesDal.Tests
 
             this.asl1.PossibleFiniteStateList.Add(this.psl1);
             this.as1.PossibleState.Add(this.ps1);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
         }
 
         [Test]

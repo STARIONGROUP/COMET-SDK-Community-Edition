@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Cdp4JsonSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -32,12 +32,13 @@ namespace CDP4JsonSerializer
     using CDP4Common.MetaInfo;
 
     using CDP4JsonSerializer.JsonConverter;
+    
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
-    using Newtonsoft.Json;
+   using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
-    
-    using NLog;
-    
+           
     using Thing = CDP4Common.DTO.Thing;
 
     /// <summary>
@@ -45,23 +46,28 @@ namespace CDP4JsonSerializer
     /// </summary>
     public class Cdp4JsonSerializer : ICdp4JsonSerializer
     {
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+      /// <summary>
+      /// The <see cref="ILogger"/> used to log
+      /// </summary>
+      private readonly ILogger<Cdp4JsonSerializer> logger;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Cdp4JsonSerializer"/> class.
-        /// </summary>
-        /// <param name="metaInfoProvider">
-        /// The meta Info Provider.
-        /// </param>
-        /// <param name="supportedVersion">
-        /// The supported version of the data-model
-        /// </param>
-        public Cdp4JsonSerializer(IMetaDataProvider metaInfoProvider, Version supportedVersion)
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Cdp4JsonSerializer"/> class.
+      /// </summary>
+      /// <param name="metaInfoProvider">
+      /// The meta Info Provider.
+      /// </param>
+      /// <param name="supportedVersion">
+      /// The supported version of the data-model
+      /// </param>
+      /// <param name="loggerFactory">
+      /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+      /// </param>
+      public Cdp4JsonSerializer(IMetaDataProvider metaInfoProvider, Version supportedVersion, ILoggerFactory loggerFactory = null)
         {
-            this.Initialize(metaInfoProvider, supportedVersion);
+           this.logger = loggerFactory == null ? NullLogger<Cdp4JsonSerializer>.Instance : loggerFactory.CreateLogger<Cdp4JsonSerializer>();
+
+         this.Initialize(metaInfoProvider, supportedVersion);
         }
 
         /// <summary>
@@ -116,16 +122,16 @@ namespace CDP4JsonSerializer
             var sw = Stopwatch.StartNew();
             
             var serializer = this.CreateJsonSerializer();
-
-            Logger.Trace("initializing JsonTextWriter");
+            
+            this.logger.LogTrace("initializing JsonTextWriter");
             var jsonWriter = new JsonTextWriter(new StreamWriter(outputStream));
 
-            Logger.Trace("Serialize to JsonTextWriter");
+            this.logger.LogTrace("Serialize to JsonTextWriter");
             serializer.Serialize(jsonWriter, collectionSource);
             jsonWriter.Flush();
 
             sw.Stop();
-            Logger.Debug("SerializeToStream finished in {0} [ms]", sw.ElapsedMilliseconds);
+            this.logger.LogDebug("SerializeToStream finished in {0} [ms]", sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -172,7 +178,7 @@ namespace CDP4JsonSerializer
                 dtos.Add(source.ToDto());
             }
 
-            Logger.Debug("serializing {0} DTO's", dtos.Count);
+            this.logger.LogDebug("serializing {0} DTO's", dtos.Count);
 
             this.SerializeToStream(dtos, outputStream);
         }
@@ -191,23 +197,23 @@ namespace CDP4JsonSerializer
             }
             
             string jsonString;
-            Logger.Trace("initializing MemoryStream");
+            this.logger.LogTrace("initializing MemoryStream");
 
             using (var stream = new MemoryStream())
             {
                 this.SerializeToStream(source, stream, isExtentDeep);
 
-                Logger.Trace("rewind MemoryStream");
+                this.logger.LogTrace("rewind MemoryStream");
                 stream.Position = 0;
 
-                Logger.Trace("initializing StreamReader");
+                this.logger.LogTrace("initializing StreamReader");
                 using (var reader = new StreamReader(stream))
                 {
                     var sw = new Stopwatch();
                     sw.Start();
                     jsonString = reader.ReadToEnd();
                     sw.Stop();
-                    Logger.Trace("write json stream to json string in {0} [ms]", sw.ElapsedMilliseconds);
+                    this.logger.LogTrace("write json stream to json string in {0} [ms]", sw.ElapsedMilliseconds);
                 }
             }
 
@@ -256,7 +262,7 @@ namespace CDP4JsonSerializer
                 var sw = new Stopwatch();
                 sw.Start();
                 data = serializer.Deserialize<T>(jsonTextReader);
-                Logger.Trace("Deserialize from stream in {0} [ms]", sw.ElapsedMilliseconds);
+                this.logger.LogTrace("Deserialize from stream in {0} [ms]", sw.ElapsedMilliseconds);
             }
 
             return data;
@@ -270,14 +276,14 @@ namespace CDP4JsonSerializer
         /// </returns>
         private JsonSerializer CreateJsonSerializer()
         {
-            Logger.Trace("initializing JsonSerializer");
+           this.logger.LogTrace("initializing JsonSerializer");
             var serializer = new JsonSerializer
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore
             };
-            
-            Logger.Trace("register converters");
+
+            this.logger.LogTrace("register converters");
             serializer.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
             serializer.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
             serializer.Converters.Add(new ClassKindConverter());

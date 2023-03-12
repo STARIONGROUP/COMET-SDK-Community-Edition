@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -46,6 +46,8 @@ namespace CDP4ServicesDal.Tests
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
+    using Microsoft.Extensions.Logging;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -54,7 +56,9 @@ namespace CDP4ServicesDal.Tests
     [TestFixture]
     public class CdpServicesDalTestFixture
     {
-        private CdpServicesDal dal;
+       private ILoggerFactory loggerFactory;
+
+      private CdpServicesDal dal;
         private Credentials credentials;
         private ISession session;
 
@@ -72,10 +76,12 @@ namespace CDP4ServicesDal.Tests
         [SetUp]
         public void Setup()
         {
-            this.cancelationTokenSource = new CancellationTokenSource();
+           this.loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+
+         this.cancelationTokenSource = new CancellationTokenSource();
 
             this.credentials = new Credentials("admin", "pass", this.uri);
-            this.dal = new CdpServicesDal();
+            this.dal = new CdpServicesDal(this.loggerFactory);
             this.session = new Session(this.dal, this.credentials);
 
             // Add SiteDirectory to cache

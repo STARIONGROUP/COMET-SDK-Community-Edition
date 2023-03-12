@@ -27,8 +27,10 @@ namespace CDP4WspDal.Tests
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+
     using CDP4Dal;
     using CDP4Dal.DAL;
+
     using NUnit.Framework;
     
     using Thing = CDP4Common.DTO.Thing;
@@ -50,6 +52,7 @@ namespace CDP4WspDal.Tests
         private Session session;
 
         private Credentials credentials;
+
         private CancellationTokenSource tokenSource;
 
         [SetUp]

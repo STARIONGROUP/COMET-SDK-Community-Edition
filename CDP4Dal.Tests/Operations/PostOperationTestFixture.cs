@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PostOperationTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,16 +21,16 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
-
-using CDP4Common;
 
 namespace CDP4Dal.Tests
 {
     using System.Collections.Generic;
-    using CDP4Common.Dto;
+
+    using CDP4Common;
     using CDP4Common.DTO;
+
     using CDP4Dal.Operations;
+
     using NUnit.Framework;
 
     [TestFixture]

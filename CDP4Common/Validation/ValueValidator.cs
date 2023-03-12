@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValueValidator.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -27,12 +27,13 @@ namespace CDP4Common.Validation
     using System;
     using System.Globalization;
     using System.Linq;
-
+    
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
 
-    using NLog;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     /// <summary>
     /// The purpose of the <see cref="ValueValidator"/> is to validate the value of a <see cref="Parameter"/> with respect to 
@@ -43,11 +44,6 @@ namespace CDP4Common.Validation
     /// </remarks>
     public static class ValueValidator
     {
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// The default value that is valid for all <see cref="ParameterType"/>s
         /// </summary>
@@ -73,10 +69,13 @@ namespace CDP4Common.Validation
         /// <param name="provider">
         /// The <see cref="IFormatProvider"/> used to validate, if set to null <see cref="CultureInfo.CurrentCulture"/> will be used.
         /// </param>
+        /// <param name="loggerFactory">
+        /// The <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
         /// <returns>
         /// a <see cref="ValidationResult"/> that carries the <see cref="ValidationResultKind"/> and an optional message.
         /// </returns>
-        public static ValidationResult Validate(this ParameterType parameterType, object value, MeasurementScale measurementScale = null, IFormatProvider provider = null)
+        public static ValidationResult Validate(this ParameterType parameterType, object value, MeasurementScale measurementScale = null, IFormatProvider provider = null, ILoggerFactory loggerFactory = null)
         {
             ValidationResult result;
 
@@ -97,13 +96,13 @@ namespace CDP4Common.Validation
             var dateParameterType = parameterType as DateParameterType;
             if (dateParameterType != null)
             {
-                return dateParameterType.Validate(value);
+                return dateParameterType.Validate(value, loggerFactory);
             }
 
             var dateTimeParameterType = parameterType as DateTimeParameterType;
             if (dateTimeParameterType != null)
             {
-                return dateTimeParameterType.Validate(value);
+                return dateTimeParameterType.Validate(value, loggerFactory);
             }
 
             var enumerationParameterType = parameterType as EnumerationParameterType;
@@ -115,7 +114,7 @@ namespace CDP4Common.Validation
             var quantityKind = parameterType as QuantityKind;
             if (quantityKind != null)
             {
-                return quantityKind.Validate(measurementScale, value, provider);
+                return quantityKind.Validate(measurementScale, value, provider, loggerFactory);
             }
 
             var textParameterType = parameterType as TextParameterType;
@@ -127,7 +126,7 @@ namespace CDP4Common.Validation
             var timeOfDayParameterType = parameterType as TimeOfDayParameterType;
             if (timeOfDayParameterType != null)
             {
-                return timeOfDayParameterType.Validate(value);
+                return timeOfDayParameterType.Validate(value, loggerFactory);
             }
             
             throw new NotSupportedException($"The Validate method is not suported for parameterType: {parameterType}");
@@ -204,11 +203,16 @@ namespace CDP4Common.Validation
         /// <param name="value">
         /// the string representation of a <see cref="DateTime"/> value that only contains date data and not any time data.
         /// </param>
+        /// <param name="loggerFactory">
+        /// The <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
         /// <returns>
         /// a <see cref="ValidationResult"/> that carries the <see cref="ValidationResultKind"/> and an optional message.
         /// </returns>
-        public static ValidationResult Validate(this DateParameterType parameterType, object value)
+        public static ValidationResult Validate(this DateParameterType parameterType, object value, ILoggerFactory loggerFactory = null)
         {
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("ValueValidator");
+
             ValidationResult result;
 
             var stringValue = value as string;
@@ -244,7 +248,7 @@ namespace CDP4Common.Validation
             }
             catch (Exception ex)
             {
-                Logger.Trace(ex);
+                logger.LogTrace(ex, ex.Message);
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
@@ -261,11 +265,16 @@ namespace CDP4Common.Validation
         /// <param name="value">
         /// the string representation of a <see cref="DateTime"/> value
         /// </param>
+        /// <param name="loggerFactory">
+        /// The <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
         /// <returns>
         /// a <see cref="ValidationResult"/> that carries the <see cref="ValidationResultKind"/> and an optional message.
         /// </returns>
-        public static ValidationResult Validate(this DateTimeParameterType parameterType, object value)
+        public static ValidationResult Validate(this DateTimeParameterType parameterType, object value, ILoggerFactory loggerFactory = null)
         {
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("ValueValidator");
+
             ValidationResult result;
 
             var stringValue = value as string;
@@ -281,7 +290,7 @@ namespace CDP4Common.Validation
                 try
                 {
                     var dateTime = DateTime.Parse(stringValue, CultureInfo.InvariantCulture, DateTimeStyles.None);
-                    Logger.Debug("DateTimeParameterType {0} validated", dateTime);
+                    logger.LogDebug("DateTimeParameterType {0} validated", dateTime);
 
                     result.ResultKind = ValidationResultKind.Valid;
                     result.Message = string.Empty;
@@ -289,7 +298,7 @@ namespace CDP4Common.Validation
                 }
                 catch (Exception ex)
                 {
-                    Logger.Debug(ex);
+                    logger.LogWarning(ex, ex.Message);
 
                     result.ResultKind = ValidationResultKind.Invalid;
                     result.Message = $"{stringValue} is not a valid DateTime, valid date-times are specified in ISO 8601, see http://www.w3.org/TR/xmlschema-2/#dateTime.";
@@ -300,7 +309,7 @@ namespace CDP4Common.Validation
             try
             {
                 var dateValue = Convert.ToDateTime(value);
-                Logger.Debug("DateTimeParameterType {0} validated", dateValue);
+                logger.LogDebug("DateTimeParameterType {0} validated", dateValue);
 
                 result.ResultKind = ValidationResultKind.Valid;
                 result.Message = string.Empty;
@@ -308,7 +317,7 @@ namespace CDP4Common.Validation
             }
             catch (Exception ex)
             {
-                Logger.Trace(ex);
+                logger.LogWarning(ex, ex.Message);
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
@@ -401,16 +410,21 @@ namespace CDP4Common.Validation
         /// <param name="provider">
         /// The <see cref="IFormatProvider"/> used to validate, if set to null <see cref="CultureInfo.CurrentCulture"/> will be used.
         /// </param>
+        /// <param name="loggerFactory">
+        /// The <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
         /// <returns>
         /// a <see cref="ValidationResult"/> that carries the <see cref="ValidationResultKind"/> and an optional message.
         /// </returns>
-        public static ValidationResult Validate(this QuantityKind quantityKind, MeasurementScale scale, object value, IFormatProvider provider = null)
+        public static ValidationResult Validate(this QuantityKind quantityKind, MeasurementScale scale, object value, IFormatProvider provider = null, ILoggerFactory loggerFactory = null)
         {
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("ValueValidator");
+
             ValidationResult result;
 
             if (scale == null)
             {
-                Logger.Error("The scale is null with a quantity kind as the parameter type.");
+                logger.LogError( "The scale is null with a quantity kind as the parameter type.");
                 result.ResultKind = ValidationResultKind.Invalid;
                 result.Message = "The scale is null with a quantity kind as the parameter type.";
                 return result;
@@ -424,7 +438,7 @@ namespace CDP4Common.Validation
                 return result;
             }
 
-            result = scale.Validate(value, provider);
+            result = scale.Validate(value, provider, loggerFactory);
             return result;
         }
 
@@ -467,11 +481,16 @@ namespace CDP4Common.Validation
         /// <param name="value">
         /// The string value that is to be validated.
         /// </param>
+        /// <param name="loggerFactory">
+        /// The <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
         /// <returns>
         /// a <see cref="ValidationResult"/> that carries the <see cref="ValidationResultKind"/> and an optional message.
         /// </returns>
-        public static ValidationResult Validate(this TimeOfDayParameterType parameterType, object value)
+        public static ValidationResult Validate(this TimeOfDayParameterType parameterType, object value, ILoggerFactory loggerFactory = null)
         {
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("ValueValidator");
+
             ValidationResult result;
 
             var stringValue = value as string;
@@ -511,7 +530,7 @@ namespace CDP4Common.Validation
             }
             catch (Exception ex)
             {
-                Logger.Trace(ex);
+                logger.LogWarning(ex, ex.Message);
             }
 
             try
@@ -526,7 +545,7 @@ namespace CDP4Common.Validation
             }
             catch (Exception ex)
             {
-                Logger.Trace(ex);
+                logger.LogWarning(ex, ex.Message);
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
@@ -546,11 +565,16 @@ namespace CDP4Common.Validation
         /// <param name="provider">
         /// The <see cref="IFormatProvider"/> used to validate, if set to null <see cref="CultureInfo.CurrentCulture"/> will be used.
         /// </param>
+        /// <param name="loggerFactory">
+        /// The <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
         /// <returns>
         /// a <see cref="ValidationResult"/> that carries the <see cref="ValidationResultKind"/> and an optional message.
         /// </returns>
-        public static ValidationResult Validate(this MeasurementScale measurementScale, object value, IFormatProvider provider = null)
+        public static ValidationResult Validate(this MeasurementScale measurementScale, object value, IFormatProvider provider = null, ILoggerFactory loggerFactory = null)
         {
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("ValueValidator");
+
             ValidationResult result;
 
             bool isMaximumPermissibleValue;
@@ -617,7 +641,7 @@ namespace CDP4Common.Validation
                         }
                         else
                         {
-                            Logger.Warn("The MaximumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MaximumPermissibleValue, measurementScale.Iid);
+                            logger.LogWarning("The MaximumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MaximumPermissibleValue, measurementScale.Iid);
                         }
                     }
 
@@ -643,7 +667,7 @@ namespace CDP4Common.Validation
                         }
                         else
                         {
-                            Logger.Warn("The MinimumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MinimumPermissibleValue, measurementScale.Iid);
+                            logger.LogWarning("The MinimumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MinimumPermissibleValue, measurementScale.Iid);
                         }
                     }
 
@@ -715,7 +739,7 @@ namespace CDP4Common.Validation
                         }
                         else
                         {
-                            Logger.Warn("The MaximumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MaximumPermissibleValue, measurementScale.Iid);
+                            logger.LogWarning("The MaximumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MaximumPermissibleValue, measurementScale.Iid);
                         }
                     }
 
@@ -741,7 +765,7 @@ namespace CDP4Common.Validation
                         }
                         else
                         {
-                            Logger.Warn("The MinimumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MinimumPermissibleValue, measurementScale.Iid);
+                            logger.LogWarning("The MinimumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MinimumPermissibleValue, measurementScale.Iid);
                         }
                     }
 
@@ -751,7 +775,7 @@ namespace CDP4Common.Validation
 
                 case NumberSetKind.RATIONAL_NUMBER_SET:
 
-                    Logger.Warn("RATIONAL NUMBER SET currently not validated and always returns ValidationResultKind.Valid");
+                    logger.LogWarning("RATIONAL NUMBER SET currently not validated and always returns ValidationResultKind.Valid");
 
                     result.ResultKind = ValidationResultKind.Valid;
                     result.Message = "RATIONAL NUMBER SET are not validated";
@@ -814,7 +838,7 @@ namespace CDP4Common.Validation
                         }
                         else
                         {
-                            Logger.Warn("The MaximumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MaximumPermissibleValue, measurementScale.Iid);
+                            logger.LogWarning("The MaximumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MaximumPermissibleValue, measurementScale.Iid);
                         }
                     }
 
@@ -840,7 +864,7 @@ namespace CDP4Common.Validation
                         }
                         else
                         {
-                            Logger.Warn("The MinimumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MinimumPermissibleValue, measurementScale.Iid);
+                            logger.LogWarning("The MinimumPermissibleValue \"{0}\" of MeasurementScale \"{1}\" is not a member of the INTEGER NUMBER SET", measurementScale.MinimumPermissibleValue, measurementScale.Iid);
                         }
                     }
 

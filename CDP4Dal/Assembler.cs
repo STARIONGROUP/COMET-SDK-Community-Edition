@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Assembler.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -42,9 +42,10 @@ namespace CDP4Dal
 
     using Events;
     
-    using NLog;
-
     using Dto = CDP4Common.DTO.Thing;
+
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     /// <summary>
     /// The Assembler orchestrates the interaction with the IDAL and the related Cache
@@ -52,14 +53,14 @@ namespace CDP4Dal
     public class Assembler
     {
         /// <summary>
+        /// The <see cref="ILogger"/> used to log
+        /// </summary>
+        private readonly ILogger<Assembler> logger;
+
+        /// <summary>
         /// The <see cref="Uri"/> associated with this assembler
         /// </summary>
         public readonly Uri IDalUri;
-
-        /// <summary>
-        /// The current logger
-        /// </summary>
-        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// The lock object
@@ -85,8 +86,13 @@ namespace CDP4Dal
         /// Initializes a new instance of the <see cref="Assembler"/> class.
         /// </summary>
         /// <param name="uri">the <see cref="Uri"/> associated with this <see cref="Assembler"/></param>
-        public Assembler(Uri uri)
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        public Assembler(Uri uri, ILoggerFactory loggerFactory = null)
         {
+            this.logger = loggerFactory == null ? NullLogger<Assembler>.Instance : loggerFactory.CreateLogger<Assembler>();
+
             Utils.AssertNotNull(uri, "The Uri may not be mull");
 
             this.Cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
@@ -130,7 +136,7 @@ namespace CDP4Dal
             {
                 var synchronizeStopWatch = Stopwatch.StartNew();
 
-                logger.Info("Start Synchronization of {0}", this.IDalUri);
+                this.logger.LogInformation("Start Synchronization of {0}", this.IDalUri);
 
                 var existentGuid =
                     this.Cache.Select(
@@ -143,7 +149,7 @@ namespace CDP4Dal
 
                 this.thingsMarkedForDeletion = new List<Thing>();
 
-                logger.Trace("Starting Clean-up Unused references");
+                this.logger.LogTrace("Starting Clean-up Unused references");
                 var startwatch = Stopwatch.StartNew();
 
                 this.DtoThingToUpdate = dtoThings.ToList();
@@ -159,23 +165,23 @@ namespace CDP4Dal
                     // marks things for deletion
                     this.ComputeThingsToRemoveInUpdatedThings();
                     startwatch.Stop();
-                    logger.Trace("Clean up Unused references took {0} [ms]", startwatch.ElapsedMilliseconds);
+                    this.logger.LogTrace("Clean up Unused references took {0} [ms]", startwatch.ElapsedMilliseconds);
                 }
 
-                logger.Trace("Start Updating cache");
+                this.logger.LogTrace("Start Updating cache");
                 startwatch = Stopwatch.StartNew();
                 this.AddOrUpdateTheCache(uncachedOrUpdatedOrNewerThingRevisions);
                 startwatch.Stop();
-                logger.Trace("Updating cache took {0} [ms]", startwatch.ElapsedMilliseconds);
+                this.logger.LogTrace("Updating cache took {0} [ms]", startwatch.ElapsedMilliseconds);
 
-                logger.Trace("Start Resolving properties");
+                this.logger.LogTrace("Start Resolving properties");
                 startwatch = Stopwatch.StartNew();
                 PocoThingFactory.ResolveDependencies(uncachedOrUpdatedOrNewerThingRevisions, this.Cache);
                 startwatch.Stop();
-                logger.Trace("Resolving properties took {0} [ms]", startwatch.ElapsedMilliseconds);
+                this.logger.LogTrace("Resolving properties took {0} [ms]", startwatch.ElapsedMilliseconds);
 
                 // validate POCO's
-                logger.Trace("Start validating Things");
+                this.logger.LogTrace("Start validating Things");
                 startwatch = Stopwatch.StartNew();
                 foreach (var dtoThing in this.DtoThingToUpdate)
                 {
@@ -196,12 +202,12 @@ namespace CDP4Dal
                 }
                 
                 startwatch.Stop();
-                logger.Trace("Validating {0} Things took {1} [ms]", this.DtoThingToUpdate.Count, startwatch.ElapsedMilliseconds);
+                this.logger.LogTrace("Validating {0} Things took {1} [ms]", this.DtoThingToUpdate.Count, startwatch.ElapsedMilliseconds);
 
                 // message added and updated POCO's
                 if (activeMessageBus)
                 {
-                    logger.Trace("Start Messaging");
+                    this.logger.LogTrace("Start Messaging");
                     startwatch = Stopwatch.StartNew();
 
                     var messageCounter = 0;
@@ -245,10 +251,10 @@ namespace CDP4Dal
                     }
 
                     startwatch.Stop();
-                    logger.Trace("Messaging {0} Things took {1} [ms]", messageCounter, startwatch.ElapsedMilliseconds);
+                    this.logger.LogTrace("Messaging {0} Things took {1} [ms]", messageCounter, startwatch.ElapsedMilliseconds);
                 }
 
-                logger.Trace("Start Deleting things");
+                this.logger.LogTrace("Start Deleting things");
                 startwatch = Stopwatch.StartNew();
 
                 foreach (var markedThing in this.thingsMarkedForDeletion.Where(x => x.ChangeKind == ChangeKind.Delete))
@@ -277,7 +283,7 @@ namespace CDP4Dal
                 }
 
                 startwatch.Stop();
-                logger.Trace("Deleting things took {0} [ms]", startwatch.ElapsedMilliseconds);
+                this.logger.LogTrace("Deleting things took {0} [ms]", startwatch.ElapsedMilliseconds);
 
                 this.DtoThingToUpdate.Clear();
                 
@@ -287,16 +293,16 @@ namespace CDP4Dal
                     this.siteDirectory = (SiteDirectory)keyvaluepair.Value.Value;
                 }
 
-                logger.Info("Finish Synchronization of {0} in {1} [ms]", this.IDalUri, synchronizeStopWatch.ElapsedMilliseconds);
+                this.logger.LogInformation("Finish Synchronization of {0} in {1} [ms]", this.IDalUri, synchronizeStopWatch.ElapsedMilliseconds);
             }
             catch (Exception e)
             {
-                logger.Error(e);
+                this.logger.LogError(e, e.Message);
             }
             finally
             {
                 this.threadLock.Release();
-                logger.Trace("Assembler thread released");
+                this.logger.LogTrace("Assembler thread released");
             }
         }
         
@@ -332,11 +338,11 @@ namespace CDP4Dal
                         if (!currentThing.Revisions.ContainsKey(currentThing.RevisionNumber))
                         {
                             currentThing.Revisions.Add(currentThing.RevisionNumber, currentThing.Clone(false));
-                            logger.Trace("Revision {0} added to Revisions of {1}:{2}", currentThing.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
+                            this.logger.LogTrace("Revision {0} added to Revisions of {1}:{2}", currentThing.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
                         }
                         else
                         {
-                            logger.Trace("Revision {0} of Thing {1}:{2} already exists in the Thing.Revisions cache", currentThing.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
+                            this.logger.LogTrace("Revision {0} of Thing {1}:{2} already exists in the Thing.Revisions cache", currentThing.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
                         }
 
                         continue;
@@ -344,7 +350,7 @@ namespace CDP4Dal
 
                     if (dto.RevisionNumber == currentThing.RevisionNumber)
                     {
-                        logger.Trace("A DTO with revision {0} equal to the revision of the existing POCO {1}:{2}:{3} has been identified; The data-source has sent a revision of an object that is already present in the cache", 
+                        this.logger.LogTrace("A DTO with revision {0} equal to the revision of the existing POCO {1}:{2}:{3} has been identified; The data-source has sent a revision of an object that is already present in the cache", 
                             dto.RevisionNumber, currentThing.ClassKind, currentThing.CacheKey.Thing, currentThing.CacheKey.Iteration);
 
                         continue;
@@ -360,17 +366,17 @@ namespace CDP4Dal
                         if (!currentThing.Revisions.ContainsKey(dto.RevisionNumber))
                         {
                             currentThing.Revisions.Add(dto.RevisionNumber, poco);
-                            logger.Trace("Revision {0} added to Revisions of {1}:{2}", dto.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
+                            this.logger.LogTrace("Revision {0} added to Revisions of {1}:{2}", dto.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
                         }
                         else
                         {
-                            logger.Trace("Revision {0} of Thing {1}:{2} already exists in the Thing.Revisions cache", currentThing.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
+                            this.logger.LogTrace("Revision {0} of Thing {1}:{2} already exists in the Thing.Revisions cache", currentThing.RevisionNumber, currentThing.ClassKind, currentThing.Iid);
                         }
                     }
                 }
             }
 
-            logger.Info("Updating Thing.Revisions took {0} [ms]", revisionCloneWatch.ElapsedMilliseconds);
+            this.logger.LogInformation("Updating Thing.Revisions took {0} [ms]", revisionCloneWatch.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -394,11 +400,11 @@ namespace CDP4Dal
                     if (iteration.IterationSetup != null)
                     {
                         CDPMessageBus.Current.SendObjectChangeEvent(iteration.IterationSetup, EventKind.Removed);
-                        logger.Trace("IterationSetup with iid {0} removed", iteration.IterationSetup.Iid);
+                        this.logger.LogTrace("IterationSetup with iid {0} removed", iteration.IterationSetup.Iid);
                     }
 
                     CDPMessageBus.Current.SendObjectChangeEvent(iteration, EventKind.Removed);
-                    logger.Trace("Iteration with iid {0} removed", iteration.Iid);
+                    this.logger.LogTrace("Iteration with iid {0} removed", iteration.Iid);
                 }
 
                 var models =
@@ -412,11 +418,11 @@ namespace CDP4Dal
                     if (model.EngineeringModelSetup != null)
                     {
                         CDPMessageBus.Current.SendObjectChangeEvent(model.EngineeringModelSetup, EventKind.Removed);
-                        logger.Trace("EngineeringModelSetup with iid {0} removed", model.EngineeringModelSetup.Iid);
+                        this.logger.LogTrace("EngineeringModelSetup with iid {0} removed", model.EngineeringModelSetup.Iid);
                     }
 
                     CDPMessageBus.Current.SendObjectChangeEvent(model, EventKind.Removed);
-                    logger.Trace("Model with iid {0} removed", model.Iid);
+                    this.logger.LogTrace("Model with iid {0} removed", model.Iid);
                 }
 
                 this.siteDirectory = null;
@@ -424,7 +430,7 @@ namespace CDP4Dal
             }
             catch (Exception e)
             {
-                logger.Error(e.Message);
+                this.logger.LogError(e, e.Message);
             }
             finally
             {
@@ -515,11 +521,11 @@ namespace CDP4Dal
                 CDPMessageBus.Current.SendObjectChangeEvent(rdl, EventKind.Updated);
 
                 this.thingsMarkedForDeletion.Clear();
-                logger.Trace("Finish closing of {0} ({1}) in {2} [ms]", rdl.Name, this.IDalUri, startwatch.ElapsedMilliseconds);
+                this.logger.LogTrace("Finish closing of {0} ({1}) in {2} [ms]", rdl.Name, this.IDalUri, startwatch.ElapsedMilliseconds);
             }
             catch (Exception e)
             {
-                logger.Error(e.Message);
+                this.logger.LogError(e, e.Message);
             }
             finally
             {
@@ -562,7 +568,7 @@ namespace CDP4Dal
             }
             catch (Exception e)
             {
-                logger.Error(e.Message);
+                this.logger.LogError(e, e.Message);
             }
             finally
             {
@@ -591,7 +597,7 @@ namespace CDP4Dal
             }
 
             this.thingsMarkedForDeletion.Clear();
-            logger.Trace("Finish closing iteration {0} ({1}) in {2} [ms]", iteration.Iid, this.IDalUri, startwatch.ElapsedMilliseconds);
+            this.logger.LogTrace("Finish closing iteration {0} ({1}) in {2} [ms]", iteration.Iid, this.IDalUri, startwatch.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -755,7 +761,7 @@ namespace CDP4Dal
                 CDPMessageBus.Current.SendObjectChangeEvent(outLazy.Value, EventKind.Removed);
             }
 
-            logger.Trace("Remove of thing with Iid {0} succeeded : {1}", thingToRemove, succeed);
+            this.logger.LogTrace("Remove of thing with Iid {0} succeeded : {1}", thingToRemove, succeed);
             return succeed;
         }
 

@@ -26,6 +26,7 @@ namespace CDP4Common.Comparers
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common.EngineeringModelData;
 
     /// <summary>

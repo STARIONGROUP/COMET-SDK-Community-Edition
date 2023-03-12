@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CopyOperationHandlerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,21 +21,25 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4ServicesDal.Tests
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
+
     using Moq;
+
     using NUnit.Framework;
+
     using Dto = CDP4Common.DTO;
 
     [TestFixture]
@@ -226,12 +229,7 @@ namespace CDP4ServicesDal.Tests
             this.model2.Iteration.Add(this.iteration2);
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-        }
-
-        [Test]
+      [Test]
         public void VerifyThatModifyShiftCopyOperationsWorks()
         {
             this.permissionService.Setup(x => x.CanWrite(It.IsAny<ClassKind>(), It.IsAny<Thing>())).Returns(true);
@@ -246,7 +244,6 @@ namespace CDP4ServicesDal.Tests
             var defClone = this.rootDef.Clone(false);
             defClone.Iid = Guid.NewGuid();
             iteration2Clone.Element.Add(defClone);
-
             
             var transactionContext = TransactionContextResolver.ResolveContext(this.iteration2);
             var context = transactionContext.ContextRoute();

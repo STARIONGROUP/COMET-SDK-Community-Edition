@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -26,49 +26,54 @@ namespace CDP4JsonSerializer.JsonConverter
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-
+    
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Common.Polyfills;
 
-    using Newtonsoft.Json;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+
+   using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-
-    using NLog;
-
+    
     /// <summary>
     /// The <see cref="JsonConverter"/> that is responsible for (De)serialization on a <see cref="CDP4Common.DTO.Thing"/> 
     /// </summary>
     public class ThingSerializer : JsonConverter
     {
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+      /// <summary>
+      /// The <see cref="ILogger"/> used to log
+      /// </summary>
+      private readonly ILogger<ThingSerializer> logger;
 
-        /// <summary>
-        /// The data model version for this request.
-        /// </summary>
-        private readonly Version dataModelVersion;
+      /// <summary>
+      /// The data model version for this request.
+      /// </summary>
+      private readonly Version dataModelVersion;
 
         /// <summary>
         /// The <see cref="ThingConverterExtensions"/> used to determine whether a class is to be serialized or not
         /// </summary>
         private readonly ThingConverterExtensions thingConverterExtensions;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ThingSerializer"/> class.
-        /// </summary>
-        /// <param name="metaInfoProvider">
-        /// The meta Info Provider.
-        /// </param>
-        /// <param name="dataModelVersion">
-        /// The data model version for this request.
-        /// </param>
-        public ThingSerializer(IMetaDataProvider metaInfoProvider, Version dataModelVersion)
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ThingSerializer"/> class.
+      /// </summary>
+      /// <param name="metaInfoProvider">
+      /// The meta Info Provider.
+      /// </param>
+      /// <param name="dataModelVersion">
+      /// The data model version for this request.
+      /// </param>
+      /// <param name="loggerFactory">
+      /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+      /// </param>
+      public ThingSerializer(IMetaDataProvider metaInfoProvider, Version dataModelVersion, ILoggerFactory loggerFactory = null)
         {
-            this.MetaInfoProvider = metaInfoProvider;
+         this.logger = loggerFactory == null ? NullLogger<ThingSerializer>.Instance : loggerFactory.CreateLogger<ThingSerializer>();
+
+         this.MetaInfoProvider = metaInfoProvider;
             this.dataModelVersion = dataModelVersion;
 
             this.thingConverterExtensions = new ThingConverterExtensions();
@@ -182,7 +187,7 @@ namespace CDP4JsonSerializer.JsonConverter
 
             if (jsonObject == null)
             {
-                Logger.Error("The data object in the JSON array could not be cast to a JObject type.");
+                this.logger.LogError("The data object in the JSON array could not be cast to a JObject type.");
                 throw new NullReferenceException("The data object in the JSON array could not be cast to a JObject type.");
             }
 

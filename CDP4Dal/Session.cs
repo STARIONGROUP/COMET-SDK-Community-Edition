@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Session.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -46,7 +46,8 @@ namespace CDP4Dal
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
 
-    using NLog;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     /// <summary>
     /// The <see cref="Session"/> class encapsulates the <see cref="DAL.Credentials"/>, <see cref="IDal"/> and <see cref="CDP4Dal.Assembler"/>
@@ -55,14 +56,14 @@ namespace CDP4Dal
     public class Session : ISession
     {
         /// <summary>
+        /// The <see cref="ILogger"/> used to log
+        /// </summary>
+        private readonly ILogger<Session> logger;
+
+        /// <summary>
         /// Executes just before data from an <see cref="OperationContainer"/> is written to the datastore.
         /// </summary>
         public event EventHandler<BeforeWriteEventArgs> BeforeWrite;
-
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// The cancellation token source dictionary.
@@ -88,8 +89,13 @@ namespace CDP4Dal
         /// <param name="credentials">
         /// the <see cref="DAL.Credentials"/> associated to the <see cref="IDal"/>
         /// </param>
-        public Session(IDal dal, Credentials credentials)
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        public Session(IDal dal, Credentials credentials, ILoggerFactory loggerFactory = null)
         {
+            this.logger = loggerFactory == null ? NullLogger<Session>.Instance : loggerFactory.CreateLogger<Session>();
+
             this.Credentials = credentials;
             this.Dal = dal;
             this.Dal.Session = this;
@@ -307,7 +313,7 @@ namespace CDP4Dal
         {
             var sw = new Stopwatch();
             sw.Start();
-            logger.Info("Open request {0}", this.DataSourceUri);
+            this.logger.LogInformation("Open request {0}", this.DataSourceUri);
 
             // Create the token source
             var cancellationTokenSource = new CancellationTokenSource();
@@ -322,7 +328,7 @@ namespace CDP4Dal
             }
             catch (OperationCanceledException)
             {
-                logger.Info("Open request cancelled {0}", this.DataSourceUri);
+                this.logger.LogInformation("Open request cancelled {0}", this.DataSourceUri);
                 return;
             }
             finally
@@ -332,7 +338,7 @@ namespace CDP4Dal
 
             if (!dtoThings.Any())
             {
-                logger.Warn("no data returned upon Open on {0}", this.DataSourceUri);
+                this.logger.LogWarning("no data returned upon Open on {0}", this.DataSourceUri);
             }
 
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
@@ -354,12 +360,12 @@ namespace CDP4Dal
 
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
 
-            logger.Info("Synchronization with the {0} server done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
+            this.logger.LogInformation("Synchronization with the {0} server done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
 
             var sessionChange = new SessionEvent(this, SessionStatus.Open);
             CDPMessageBus.Current.SendMessage(sessionChange);
 
-            logger.Info("Session {0} opened successfully in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
+            this.logger.LogInformation("Session {0} opened successfully in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -428,7 +434,7 @@ namespace CDP4Dal
             }
             catch (OperationCanceledException)
             {
-                logger.Info("Session.Read {0} {1} cancelled", iteration.ClassKind, iteration.Iid);
+                this.logger.LogInformation("Session.Read {0} {1} cancelled", iteration.ClassKind, iteration.Iid);
                 return;
             }
             finally
@@ -441,7 +447,7 @@ namespace CDP4Dal
 
             if (!enumerable.Any())
             {
-                logger.Warn("no data returned upon Read on {0}", this.DataSourceUri);
+                this.logger.LogWarning("no data returned upon Read on {0}", this.DataSourceUri);
             }
 
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
@@ -451,7 +457,7 @@ namespace CDP4Dal
             this.AddIterationToOpenList(iteration.Iid, domain);
 
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
-            logger.Info("Synchronization with the {0} server done", this.DataSourceUri);
+            this.logger.LogInformation("Synchronization with the {0} server done", this.DataSourceUri);
         }
 
         /// <summary>
@@ -502,7 +508,7 @@ namespace CDP4Dal
                 throw new InvalidOperationException($"The {thing.ClassKind} cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
             }
 
-            logger.Info("Session.Read {0} {1}", thing.ClassKind, thing.Iid);
+            this.logger.LogInformation("Session.Read {0} {1}", thing.ClassKind, thing.Iid);
             var dto = thing.ToDto();
 
             // Create the token source
@@ -518,7 +524,7 @@ namespace CDP4Dal
             }
             catch (OperationCanceledException)
             {
-                logger.Info("Session.Read {0} {1} cancelled", thing.ClassKind, thing.Iid);
+                this.logger.LogInformation("Session.Read {0} {1} cancelled", thing.ClassKind, thing.Iid);
                 return;
             }
             finally
@@ -554,7 +560,7 @@ namespace CDP4Dal
                 throw new ArgumentException("The requested list of things is null or empty.");
             }
 
-            logger.Info("Session.Read {0} things", thingList.Count());
+            this.logger.LogInformation("Session.Read {0} things", thingList.Count);
 
             var foundThings = new List<CDP4Common.DTO.Thing>();
 
@@ -586,7 +592,7 @@ namespace CDP4Dal
             }
             catch (OperationCanceledException)
             {
-                logger.Info("Session.Read cancelled");
+                this.logger.LogInformation("Session.Read cancelled");
                 return;
             }
             finally
@@ -609,7 +615,7 @@ namespace CDP4Dal
                 throw new InvalidOperationException($"The {localFile.ClassKind} cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
             }
 
-            logger.Info("Session.ReadFile {0} {1}", localFile.ClassKind, localFile.Iid);
+            this.logger.LogInformation("Session.ReadFile {0} {1}", localFile.ClassKind, localFile.Iid);
             var dto = localFile.ToDto();
 
             // Create the token source
@@ -625,7 +631,7 @@ namespace CDP4Dal
             }
             catch (OperationCanceledException)
             {
-                logger.Info("Session.ReadFile {0} {1} cancelled", localFile.ClassKind, localFile.Iid);
+                this.logger.LogInformation("Session.ReadFile {0} {1} cancelled", localFile.ClassKind, localFile.Iid);
                 return null;
             }
             finally
@@ -649,15 +655,15 @@ namespace CDP4Dal
             // proceed if no problem
             if (!things.Any())
             {
-                logger.Warn("no data returned upon Read on {0}", this.DataSourceUri);
+                this.logger.LogWarning("no data returned upon Read on {0}", this.DataSourceUri);
             }
 
             var sw = new Stopwatch();
-            logger.Info($"Synchronization of DTOs for {caller} from/to server {0} started", this.DataSourceUri);
+            this.logger.LogInformation($"Synchronization of DTOs for {caller} from/to server {0} started", this.DataSourceUri);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
             await this.Assembler.Synchronize(things);
             CDPMessageBus.Current.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
-            logger.Info($"Synchronization of DTOs for {caller} from/to server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
+            this.logger.LogInformation($"Synchronization of DTOs for {caller} from/to server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -828,7 +834,7 @@ namespace CDP4Dal
             var sessionChange = new SessionEvent(this, SessionStatus.Closed);
             CDPMessageBus.Current.SendMessage(sessionChange);
 
-            logger.Info("Session {0} closed successfully", this.DataSourceUri);
+            this.logger.LogInformation("Session {0} closed successfully", this.DataSourceUri);
             this.openReferenceDataLibraries.Clear();
 
             this.ActivePerson = null;
@@ -916,7 +922,7 @@ namespace CDP4Dal
             }
             catch (OperationCanceledException)
             {
-                logger.Info("Session.Update {0} {1} cancelled", thing.ClassKind, thing.Iid);
+                this.logger.LogInformation("Session.Update {0} {1} cancelled", thing.ClassKind, thing.Iid);
                 return;
             }
             finally
@@ -1037,7 +1043,7 @@ namespace CDP4Dal
 
             if (iteration == null)
             {
-                logger.Warn("The iteration {iterationId} is not present in the Cache and is therefore not added to the OpenIterations", iterationId);
+                this.logger.LogWarning("The iteration {iterationId} is not present in the Cache and is therefore not added to the OpenIterations", iterationId);
                 return;
             }
 

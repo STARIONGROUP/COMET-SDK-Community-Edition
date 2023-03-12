@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UtilsTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Nathanael Smiechowski
 //
@@ -25,7 +25,9 @@
 namespace CDP4Dal.NetCore.Tests
 {
     using System;
+
     using NUnit.Framework;
+
     using CDP4Dal;
 
     [TestFixture]

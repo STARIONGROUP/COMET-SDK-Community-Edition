@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ContainerList.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -26,6 +26,7 @@ namespace CDP4Common.Types
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common.CommonData;
 
     /// <summary>
@@ -114,7 +115,7 @@ namespace CDP4Common.Types
                 if (index < 0 || index >= base.Count)
                 {
                     throw new ArgumentOutOfRangeException(
-                        "index", $"index is {index}, valid range is 0 to {this.Count - 1}");
+                        nameof(index), $"index is {index}, valid range is 0 to {this.Count - 1}");
                 }
 
                 return base[index];
@@ -125,12 +126,12 @@ namespace CDP4Common.Types
                 if (index < 0 || index >= base.Count)
                 {
                     throw new ArgumentOutOfRangeException(
-                        "index", $"index is {index}, valid range is 0 to {this.Count - 1}");
+                        nameof(index), $"index is {index}, valid range is 0 to {this.Count - 1}");
                 }
 
                 if (value == null)
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 
                 if (this.Contains(value) && base[index] != value)

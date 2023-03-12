@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OperationModifierTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -26,12 +26,16 @@ namespace CDP4ServicesDal.Tests
 {
     using System;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Types;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
+
     using Moq;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -48,11 +52,7 @@ namespace CDP4ServicesDal.Tests
             this.assembler = new Assembler(this.uri);
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
         }
-
-        [TearDown]
-        public void TearDown()
-        { }
-
+        
         [Test]
         public void VerifyThatNoOperationAdded()
         {

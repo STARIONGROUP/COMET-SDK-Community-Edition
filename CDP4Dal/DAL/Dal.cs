@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Dal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -41,9 +41,10 @@ namespace CDP4Dal.DAL
     using CDP4Dal.Composition;
     using CDP4Dal.Exceptions;
     
-    using NLog;
-    
-    using Iteration = CDP4Common.DTO.Iteration;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+
+   using Iteration = CDP4Common.DTO.Iteration;
     using Thing = CDP4Common.DTO.Thing;
 
     /// <summary>
@@ -51,20 +52,22 @@ namespace CDP4Dal.DAL
     /// </summary>
     public abstract class Dal : IDal
     {
-        //TODO: the EngineeringModelKinds property should be generated from the model, the risk by coding it here is that
-        // we forget to update this when we update the uml data-model. -> T1459
+      // TODO: the EngineeringModelKinds property should be generated from the model, the risk by coding it here is that
+      // we forget to update this when we update the uml data-model. -> T1459
+        
+      /// <summary>
+      /// The <see cref="ILogger"/> used to log
+      /// </summary>
+      private readonly ILogger<Dal> logger;
 
-        /// <summary>
-        /// The current logger
-        /// </summary>
-        private static Logger Logger = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Dal"/> class
-        /// </summary>
-        protected Dal()
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Dal"/> class
+      /// </summary>
+      protected Dal(ILoggerFactory loggerFactory = null)
         {
-            #if NET461 || NET462
+           this.logger = loggerFactory == null ? NullLogger<Dal>.Instance : loggerFactory.CreateLogger<Dal>();
+            
+         #if NET462
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
             #endif
 
@@ -381,8 +384,8 @@ namespace CDP4Dal.DAL
             }
             catch (Exception ex)
             {
-                Logger.Warn(ex,"The Iteration identifier could not be exracted from {0}", uri);
-
+                this.logger.LogWarning(ex, "The Iteration identifier could not be exracted from {0}", uri);
+                
                 iterationId = Guid.Empty;
                 return false;
             }

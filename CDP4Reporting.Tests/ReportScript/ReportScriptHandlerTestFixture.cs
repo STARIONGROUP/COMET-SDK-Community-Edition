@@ -81,18 +81,18 @@ using CDP4Common.Helpers;
 /// </summary>
 public class MyDataSource : OptionDependentDataCollector
 {
-	/// <summary>
-	/// A must override method that returns the actual data object.
-	/// A data object could be anything, except a dynamic/ExpandoObject type.
-	/// </summary>
-	/// <returns>
-	/// The data as an object.
-	/// </returns>
-	public override object CreateDataObject()
-	{
-		var list = new List<obj>();
-		var obj1 = new obj();
-		obj1.value1 = ""row1"";
+   /// <summary>
+   /// A must override method that returns the actual data object.
+   /// A data object could be anything, except a dynamic/ExpandoObject type.
+   /// </summary>
+   /// <returns>
+   /// The data as an object.
+   /// </returns>
+   public override object CreateDataObject()
+   {
+      var list = new List<obj>();
+      var obj1 = new obj();
+      obj1.value1 = ""row1"";
             obj1.value2 = ""value1"";
 
             var obj2 = new obj();
@@ -106,14 +106,14 @@ public class MyDataSource : OptionDependentDataCollector
             list.Add(obj1);
             list.Add(obj2);
             list.Add(obj2);
-		
+      
             return list;
         }
-	
+   
         public class obj
         {
             public string value1 {get;set;}
-		
+      
             public string value2 {get;set;}
         }
     }";

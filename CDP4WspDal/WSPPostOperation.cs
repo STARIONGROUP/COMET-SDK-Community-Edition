@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WSPPostOperation.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4WspDal
 {
@@ -30,14 +28,18 @@ namespace CDP4WspDal
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common;
     using CDP4Common.CommonData;
-    using CDP4Common.Dto;
+    using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+
     using CDP4Dal.Operations;
+
     using Newtonsoft.Json;
+
     using DomainOfExpertise = CDP4Common.DTO.DomainOfExpertise;
     using Thing = CDP4Common.DTO.Thing;
 

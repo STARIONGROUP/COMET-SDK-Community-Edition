@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterSubscriptionValueSetComparer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -26,6 +26,7 @@ namespace CDP4Common.Comparers
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common.EngineeringModelData;
 
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedElementTreeGenerator.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -32,7 +32,8 @@ namespace CDP4Common.Helpers
     using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
 
-    using NLog;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     /// <summary>
     /// The purpose of the <see cref="NestedElementTreeGenerator"/> class is to generate the <see cref="NestedElement"/>s
@@ -47,9 +48,20 @@ namespace CDP4Common.Helpers
     public class NestedElementTreeGenerator
     {
         /// <summary>
-        /// The NLog logger
+        /// The <see cref="ILogger"/> used to log
         /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<NestedElementTreeGenerator> logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NestedElementTreeGenerator"/> class.
+        /// </summary>
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        public NestedElementTreeGenerator(ILoggerFactory loggerFactory = null)
+        {
+            this.logger = loggerFactory == null ? NullLogger<NestedElementTreeGenerator>.Instance : loggerFactory.CreateLogger<NestedElementTreeGenerator>();
+        }
 
         /// <summary>
         /// Creates the <see cref="NestedParameter"/>s in a flat list from <see cref="NestedElement"/>s list for the of <see cref="NestedElement"/>s.
@@ -132,11 +144,11 @@ namespace CDP4Common.Helpers
 
             var iteration = (Iteration) option.Container;
 
-            Logger.Debug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise?.ShortName ?? ": All"}");
+            this.logger.LogDebug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise?.ShortName ?? ": All"}");
 
             var nestedElements = this.Generate_Impl(option, domainOfExpertise, updateOption);
 
-            Logger.Debug($"Crearing NestedParameters Iteration: {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise?.ShortName ?? ": All"}");
+            this.logger.LogDebug($"Crearing NestedParameters Iteration: {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise?.ShortName ?? ": All"}");
 
             var flatNestedParameters = nestedElements.SelectMany(np => np.NestedParameter);
 
@@ -227,7 +239,7 @@ namespace CDP4Common.Helpers
                 throw new NestedElementTreeException($"The container Iteration of Option {option.ShortName} does not have a TopElement specified");
             }
 
-            Logger.Debug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise?.ShortName ?? ": All"}");
+            this.logger.LogDebug($"Generating NestedElement for Iteration {iteration.Iid}, Option: {option.ShortName}, DomainOfExpertise {domainOfExpertise?.ShortName ?? ": All"}");
 
             var createNestedElements = this.GenerateNestedElements_Impl(option, domainOfExpertise, rootElement, updateOption);
             return createNestedElements;
@@ -378,7 +390,7 @@ namespace CDP4Common.Helpers
                 // comparison is done based on unique identifiers, not on object level. The provided option may be a clone
                 if (elementUsage.ExcludeOption.Any(x => x.Iid == option.Iid))
                 {
-                    Logger.Debug($"ElementUsage {elementUsage.Iid}:{elementUsage.ShortName} is excluded from the Nested Elements.");
+                    this.logger.LogDebug("ElementUsage {id}:{shortname} is excluded from the Nested Elements.", elementUsage.Iid, elementUsage.ShortName);
                     continue;
                 }
 

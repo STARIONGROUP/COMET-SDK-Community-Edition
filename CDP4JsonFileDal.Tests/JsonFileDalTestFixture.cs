@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -43,12 +43,10 @@ namespace CDP4JsonFileDal.Tests
 
     using CDP4JsonFileDal;
 
-    using Moq;
+    using Microsoft.Extensions.Logging;
 
-    using NLog;
-    using NLog.Config;
-    using NLog.Targets;
-
+   using Moq;
+    
     using NUnit.Framework;
 
     using DomainOfExpertise = CDP4Common.SiteDirectoryData.DomainOfExpertise;
@@ -70,10 +68,12 @@ namespace CDP4JsonFileDal.Tests
     [TestFixture]
     public class JsonFileDalTestFixture
     {
-        /// <summary>
-        /// AnnexC3 file archive
-        /// </summary>
-        private string annexC3File;
+       private ILoggerFactory loggerFactory;
+
+      /// <summary>
+      /// AnnexC3 file archive
+      /// </summary>
+      private string annexC3File;
 
         /// <summary>
         /// Migration file that will be included
@@ -104,25 +104,13 @@ namespace CDP4JsonFileDal.Tests
         /// An instance of site directory data used to be returned from the mocked session.
         /// </summary>
         private SiteDirectory siteDirectoryData;
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            var config = new LoggingConfiguration();
-            var fileTarget = new FileTarget();
-            config.AddTarget("file", fileTarget);
-            fileTarget.FileName = Path.Combine(TestContext.CurrentContext.TestDirectory, "file.txt");
-            fileTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
-            var fileRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
-            config.LoggingRules.Add(fileRule);
-
-            LogManager.Configuration = config;
-        }
-
+        
         [SetUp]
         public void SetUp()
         {
-            var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "LOFT_ECSS-E-TM-10-25_AnnexC.zip");
+           this.loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+
+         var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "LOFT_ECSS-E-TM-10-25_AnnexC.zip");
             var migrationSourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "migration.json");
 
             this.annexC3File = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "AnnexC3.zip");

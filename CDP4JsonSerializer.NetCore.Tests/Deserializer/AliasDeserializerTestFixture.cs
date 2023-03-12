@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AliasDeserializerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer.Tests.Deserializer
 {
@@ -30,9 +28,12 @@ namespace CDP4JsonSerializer.Tests.Deserializer
     using System.Linq;
     using System.Globalization;
     using System.IO;
+
     using CDP4Common.DTO;
-    using CDP4Common.MetaInfo;    
+    using CDP4Common.MetaInfo;
+
     using CDP4JsonSerializer.Tests.Helper;
+
     using NUnit.Framework;
 
     [TestFixture]

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OrderedItemList.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -33,20 +33,13 @@ namespace CDP4Common.Types
 
     using CDP4Common.CommonData;
     using CDP4Common.Exceptions;
-
-    using NLog;
-
+    
     /// <summary>
     /// A CDP4 Ordered List
     /// </summary>
     /// <typeparam name="T">The <see cref="Type"/> of the items to sort</typeparam>
     public class OrderedItemList<T> : ICollection<T>
     {
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// The default key interval to be used for initial spacing between keys of adjacent items,
         /// </summary>
@@ -297,12 +290,10 @@ namespace CDP4Common.Types
                 }
                 catch (ArgumentException aex)
                 {
-                    logger.Error($"{aex.Message}\n\n {aex.StackTrace}");
                     throw new ModelErrorException($"Adding a sortKey to an OrderedItemList failed. Probably due to duplicate keys.\n{aex.Message}\n\n {aex.StackTrace}", aex);
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"{ex.Message}\n\n {ex.StackTrace}");
                     throw new ModelErrorException($"Adding a sortKey to an OrderedItemList failed. \n{ex.Message}\n\n {ex.StackTrace}", ex);
                 }
             }

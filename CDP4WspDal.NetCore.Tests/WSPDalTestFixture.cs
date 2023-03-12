@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WSPDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2922 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -44,9 +44,12 @@ namespace CDP4WspDal.Tests
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Operations;
+
     using CDP4WspDal;
-    
-    using NUnit.Framework;
+
+   using Microsoft.Extensions.Logging;
+
+   using NUnit.Framework;
 
     using File = System.IO.File;
     using Thing = CDP4Common.CommonData.Thing;
@@ -57,7 +60,9 @@ namespace CDP4WspDal.Tests
     [TestFixture]
     public class WspDalTestFixture
     {
-        private WspDal dal;
+       private ILoggerFactory loggerFactory;
+
+      private WspDal dal;
         private Credentials credentials;
         private CancellationTokenSource cancelationTokenSource;
         private Uri uri = new Uri("https://cdp4services-test.cdp4.org");
@@ -74,10 +79,12 @@ namespace CDP4WspDal.Tests
         [SetUp]
         public void SetUp()
         {
-            this.cancelationTokenSource = new CancellationTokenSource();
+           this.loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+
+         this.cancelationTokenSource = new CancellationTokenSource();
 
             this.credentials = new Credentials("admin", "pass", this.uri);
-            this.dal = new WspDal();
+            this.dal = new WspDal(this.loggerFactory);
             this.session = new Session(this.dal, this.credentials);
 
             // Add SiteDirectory to cache

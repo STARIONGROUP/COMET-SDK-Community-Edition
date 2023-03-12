@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AllValueSetTypesTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -29,12 +29,15 @@ namespace CDP4JsonFileDal.NetCore.Tests
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Helpers;
     using CDP4Common.Types;
+
     using CDP4Dal;
     using CDP4Dal.DAL;
+
     using NUnit.Framework;
 
     [TestFixture]

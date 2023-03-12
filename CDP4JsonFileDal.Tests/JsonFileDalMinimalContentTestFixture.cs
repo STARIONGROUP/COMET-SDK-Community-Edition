@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDalMinimalContentTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -25,28 +25,17 @@
 namespace CDP4JsonFileDal.Tests
 {
     using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Reactive.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
 
     using CDP4Common.CommonData;
-    using CDP4Common.MetaInfo;
 
     using CDP4Dal;
     using CDP4Dal.DAL;
-    using CDP4Dal.Events;
-    using CDP4Dal.Operations;
 
     using CDP4JsonFileDal;
-    using CDP4JsonFileDal.Json;
 
-    using Ionic.Zip;
-    
-    using Moq;
     using NUnit.Framework;
 
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DtoThingIidComparer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -24,13 +24,14 @@
 
 namespace CDP4Common.Comparers
 {
-    using CDP4Common.DTO;
     using System.Collections.Generic;
 
-    /// <summary>
-    /// The implementation of customized equality comparison for collections for <see cref="Thing"/>.
-    /// </summary>
-    public class DtoThingIidComparer : IEqualityComparer<Thing>
+    using CDP4Common.DTO;
+
+   /// <summary>
+   /// The implementation of customized equality comparison for collections for <see cref="Thing"/>.
+   /// </summary>
+   public class DtoThingIidComparer : IEqualityComparer<Thing>
     {
         /// <summary>
         /// Determines whether the specified objects are equal.

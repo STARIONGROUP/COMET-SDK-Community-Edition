@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonSerializerPostOperationTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -29,10 +29,13 @@ namespace CDP4JsonSerializer.Tests.PostOperation
     using System.IO;
     using System.Linq;
     using System.Text;
+
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
+
     using CDP4JsonSerializer.Tests.Cdp4PostOperation;
+
     using NUnit.Framework;
 
     /// <summary>

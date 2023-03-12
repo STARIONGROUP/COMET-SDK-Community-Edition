@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PocoThingFactory.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -33,19 +33,12 @@ namespace CDP4Common.Helpers
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Types;
     
-    using NLog;
-
     /// <summary>
     /// Provides static method to instantiate and resolve the properties of all <see cref="Thing"/>s stored in a cache.
     /// Provides internal static helper methods to resolve the properties of a thing.
     /// </summary>
     public static class PocoThingFactory
     {
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// Resolve the POCO <see cref="Thing"/>'s properties using the assiciated DTO <see cref="DTO.Thing"/>'s properties
         /// </summary>
@@ -115,7 +108,6 @@ namespace CDP4Common.Helpers
             {
                 if (!Guid.TryParse(item.V.ToString(), out var guid))
                 {
-                    logger.Error("The ordered item does not represent a Thing.");
                     continue;
                 }
 
@@ -237,8 +229,7 @@ namespace CDP4Common.Helpers
             {
                 return cache.Get<T>(firstKey);
             }
-
-            logger.Debug("The {0} was not found in the cache: {1}", typeof(T).Name, key.Thing);
+            
             return null;
         }
 
@@ -262,7 +253,6 @@ namespace CDP4Common.Helpers
 
             if (!(thing is T))
             {
-                logger.Error("The thing found in the cache with the key is not of the right type, cached id: {0}, {1}", thing.CacheKey.Thing, thing.CacheKey.Iteration);
                 return null;
             }
 

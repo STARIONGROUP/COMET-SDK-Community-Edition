@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CopyOperationHandler.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4WspDal
 {
@@ -30,11 +28,14 @@ namespace CDP4WspDal
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
+
     using Poco = CDP4Common.CommonData.Thing;
 
     /// <summary>
@@ -263,8 +264,7 @@ namespace CDP4WspDal
                 this.operations.Add(operation);
             }
         }
-
-        #region Modify References
+        
         /// <summary>
         /// Modify the references for a <see cref="Poco"/> and all its contained elements
         /// </summary>
@@ -352,8 +352,7 @@ namespace CDP4WspDal
             var copy = (Parameter)this.copyThingMap[parameterOverride.Parameter];
             parameterOverride.Parameter = copy;
         }
-        #endregion
-
+        
         /// <summary>
         /// Changes the <see cref="CDP4Common.DTO.DomainOfExpertise"/> for all <see cref="IOwnedThing"/>s in the current copy operation
         /// </summary>

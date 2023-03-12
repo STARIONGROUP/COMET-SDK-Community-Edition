@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FileType.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -25,6 +25,7 @@
 namespace CDP4Common.SiteDirectoryData
 {
     using System.Collections.Generic;
+
     using CDP4Common.CommonData;
     using CDP4Common.Helpers;
 

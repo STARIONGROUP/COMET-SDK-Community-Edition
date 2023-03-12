@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
@@ -51,13 +51,14 @@ namespace CDP4ServicesDal
     using CDP4Dal.Operations;
     
     using CDP4JsonSerializer;
-    
-    using NLog;
 
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+    
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
     using Thing = CDP4Common.DTO.Thing;
     using UriExtensions = CDP4Dal.UriExtensions;
-
+    
     /// <summary>
     /// The purpose of the <see cref="CdpServicesDal"/> is to provide the Data Access Layer for CDP4 ECSS-E-TM-10-25
     /// Annex C, REST API
@@ -69,9 +70,9 @@ namespace CDP4ServicesDal
     public class CdpServicesDal : Dal
     {
         /// <summary>
-        /// The NLog Logger
+        /// The <see cref="ILogger"/> used to log
         /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<CdpServicesDal> logger;
 
         /// <summary>
         /// The <see cref="HttpClient"/> that is reused for each HTTP request by the current <see cref="Dal"/>.
@@ -81,9 +82,14 @@ namespace CDP4ServicesDal
         /// <summary>
         /// Initializes a new instance of the <see cref="CdpServicesDal"/> class.
         /// </summary>
-        public CdpServicesDal()
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        public CdpServicesDal(ILoggerFactory loggerFactory = null) : base (loggerFactory)
         {
-            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.logger = loggerFactory == null ? NullLogger<CdpServicesDal>.Instance : loggerFactory.CreateLogger<CdpServicesDal>();
+            
+            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion, loggerFactory);
         }
 
         /// <summary>
@@ -120,9 +126,9 @@ namespace CDP4ServicesDal
                 throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
             }
 
-            if (operationContainer.Operations.Count() == 0)
+            if (!operationContainer.Operations.Any())
             {
-                Logger.Debug("The operationContainer is empty, no round trip to the datasource is made");
+                this.logger.LogDebug("The operationContainer is empty, no round trip to the datasource is made");
                 return Enumerable.Empty<Thing>();
             }
 
@@ -145,8 +151,8 @@ namespace CDP4ServicesDal
 
             var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
-            Logger.Debug("Resource Path {0}: {1}", postToken, resourcePath);
-            Logger.Debug("CDP4 Services POST: {0} - {1}", postToken, uriBuilder);
+            this.logger.LogDebug("Resource Path {0}: {1}", postToken, resourcePath);
+            this.logger.LogDebug("CDP4 Services POST: {0} - {1}", postToken, uriBuilder);
 
             var requestContent = this.CreateHttpContent(postToken, operationContainer, files);
 
@@ -154,14 +160,14 @@ namespace CDP4ServicesDal
 
             using (var httpResponseMessage = await this.httpClient.PostAsync(resourcePath, requestContent))
             {
-                Logger.Info("CDP4 Services responded in {0} [ms] to POST {1}", requestsw.ElapsedMilliseconds, postToken);
+                this.logger.LogInformation("CDP4 Services responded in {0} [ms] to POST {1}", requestsw.ElapsedMilliseconds, postToken);
                 requestsw.Stop();
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
                     var msg = $"The CDP4 Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
-                    Logger.Error(msg);
+                    this.logger.LogError(msg);
                     throw new DalWriteException(msg);
                 }
 
@@ -171,8 +177,7 @@ namespace CDP4ServicesDal
                 {
                     result.AddRange(this.Serializer.Deserialize(resultStream));
 
-                    Guid iterationId;
-                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
+                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(result, iterationId);
                     }
@@ -180,7 +185,7 @@ namespace CDP4ServicesDal
             }
 
             watch.Stop();
-            Logger.Info("Write Operation completed in {0} [ms]", watch.ElapsedMilliseconds);
+            this.logger.LogInformation("Write Operation completed in {0} [ms]", watch.ElapsedMilliseconds);
 
             return result;
         }
@@ -283,8 +288,8 @@ namespace CDP4ServicesDal
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
             var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
-            Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
-            Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
+            this.logger.LogDebug("Resource Path {0}: {1}", readToken, resourcePath);
+            this.logger.LogDebug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
 
             var requestsw = Stopwatch.StartNew();
 
@@ -293,13 +298,13 @@ namespace CDP4ServicesDal
 
             using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
-                Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+                this.logger.LogInformation("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
                 requestsw.Stop();
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
-                    Logger.Error(msg);
+                    this.logger.LogError(msg);
                     throw new DalReadException(msg);
                 }
 
@@ -316,7 +321,7 @@ namespace CDP4ServicesDal
                 cancellationToken.ThrowIfCancellationRequested();
 
                 watch.Stop();
-                Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
+                this.logger.LogInformation("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
 
                 return returned;
             }
@@ -368,8 +373,8 @@ namespace CDP4ServicesDal
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
             var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
-            Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
-            Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
+            this.logger.LogDebug("Resource Path {0}: {1}", readToken, resourcePath);
+            this.logger.LogDebug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
 
             var requestsw = Stopwatch.StartNew();
 
@@ -378,13 +383,13 @@ namespace CDP4ServicesDal
 
             using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
-                Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+                this.logger.LogInformation("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
                 requestsw.Stop();
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
-                    Logger.Error(msg);
+                    this.logger.LogError(msg);
                     throw new DalReadException(msg);
                 }
 
@@ -400,7 +405,7 @@ namespace CDP4ServicesDal
                     }
 
                     watch.Stop();
-                    Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
+                    this.logger.LogInformation("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
 
                     return returned;
                 }
@@ -500,8 +505,8 @@ namespace CDP4ServicesDal
             
             var uriBuilder = this.GetUriBuilder(credentials.Uri, ref resourcePath);
 
-            Logger.Debug("Resource Path {0}: {1}", openToken, resourcePath);
-            Logger.Debug("CDP4Services Open {0}: {1}", openToken, uriBuilder);
+            this.logger.LogDebug("Resource Path {0}: {1}", openToken, resourcePath);
+            this.logger.LogDebug("CDP4Services Open {0}: {1}", openToken, uriBuilder);
 
             var requestsw = Stopwatch.StartNew();
 
@@ -510,18 +515,18 @@ namespace CDP4ServicesDal
 
             using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken))            
             {
-                Logger.Info("CDP4 Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
+                this.logger.LogInformation("CDP4 Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
                 requestsw.Stop();
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
-                    Logger.Error(msg);
+                    this.logger.LogError(msg);
                     throw new DalReadException(msg);
                 }
 
                 watch.Stop();
-                Logger.Info("CDP4Services Open {0}: {1} completed in {2} [ms]", openToken, uriBuilder, watch.ElapsedMilliseconds);
+                this.logger.LogInformation("CDP4Services Open {0}: {1} completed in {2} [ms]", openToken, uriBuilder, watch.ElapsedMilliseconds);
 
                 this.ProcessHeaders(httpResponseMessage);
                     
@@ -532,7 +537,7 @@ namespace CDP4ServicesDal
                     var returned = this.Serializer.Deserialize(resultStream);
 
                     watch.Stop();
-                    Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
+                    this.logger.LogInformation("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
 
                     var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
                     if (returnedPerson == null)
@@ -574,7 +579,6 @@ namespace CDP4ServicesDal
             return await this.Open(credentials, cancellationToken);
         }
 
-
         /// <summary>
         /// Create a new <see cref="HttpClient"/>
         /// </summary>
@@ -598,7 +602,7 @@ namespace CDP4ServicesDal
 
             if (credentials.ProxySettings == null)
             {
-                Logger.Debug("creating HttpClient without proxy");
+                this.logger.LogDebug("creating HttpClient without proxy");
 
                 if (injectedClient == null)
                 {
@@ -611,7 +615,7 @@ namespace CDP4ServicesDal
             }
             else
             {
-                Logger.Debug("creating HttpClient with proxy: {0}", credentials.ProxySettings.Address);
+                this.logger.LogDebug("creating HttpClient with proxy: {0}", credentials.ProxySettings.Address);
 
                 var proxy = new WebProxy(credentials.ProxySettings.Address);
                 
@@ -718,8 +722,8 @@ namespace CDP4ServicesDal
 
             this.Serializer.SerializeToStream(postOperation, outputStream);
             outputStream.Position = 0;
-
-            if (Logger.IsTraceEnabled)
+            
+            if (this.logger.IsEnabled(LogLevel.Trace))
             {
                 using (var memoryStream = new MemoryStream())
                 {
@@ -728,7 +732,7 @@ namespace CDP4ServicesDal
                     using (var streamReader = new StreamReader(memoryStream))
                     {
                         var postBody = streamReader.ReadToEnd();
-                        Logger.Trace("POST JSON BODY {0} /r/n {1}", token, postBody);
+                        this.logger.LogTrace("POST JSON BODY {0} /r/n {1}", token, postBody);
                     }
                 }
 

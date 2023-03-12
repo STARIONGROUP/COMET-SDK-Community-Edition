@@ -29,12 +29,14 @@ namespace CDP4Common.DTO
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+
     using CDP4Common.Polyfills;
     using CDP4Common.Types;
+    
     using CommonData;
+
     using Helpers;
 
     /// <summary>

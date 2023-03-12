@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
@@ -53,7 +53,8 @@ namespace CDP4JsonFileDal
 
     using Ionic.Zip;
 
-    using NLog;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     using Thing = CDP4Common.DTO.Thing;
 
@@ -96,26 +97,36 @@ namespace CDP4JsonFileDal
         /// stable serialization
         /// </summary>
         private readonly GuidComparer guidComparer = new GuidComparer();
-
+        
         /// <summary>
-        /// The NLog logger
+        /// The <see cref="ILogger"/> used to log
         /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<JsonFileDal> logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonFileDal"/> class
         /// </summary>
-        public JsonFileDal()
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        public JsonFileDal(ILoggerFactory loggerFactory = null) : base(loggerFactory)
         {
-            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.logger = loggerFactory == null ? NullLogger<JsonFileDal>.Instance : loggerFactory.CreateLogger<JsonFileDal>();
+
+            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion, loggerFactory);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonFileDal"/> class
         /// </summary>
         /// <param name="dalVersion">CDP4 model version <see cref="Version" /></param>
-        public JsonFileDal(Version dalVersion)
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        public JsonFileDal(Version dalVersion, ILoggerFactory loggerFactory = null) : base(loggerFactory)
         {
+            this.logger = loggerFactory == null ? NullLogger<JsonFileDal>.Instance : loggerFactory.CreateLogger<JsonFileDal>();
+
             if (dalVersion > this.DalVersion)
             {
                 throw new DalVersionException($"Model version {dalVersion} is not supported.");
@@ -126,7 +137,7 @@ namespace CDP4JsonFileDal
                 this.DalVersion = dalVersion;
             }
 
-            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion, loggerFactory);
         }
 
         /// <summary>
@@ -258,11 +269,11 @@ namespace CDP4JsonFileDal
                     this.WriteExtensionFilesToZipFile(extensionFiles, zipFile, path);
                 }
 
-                Logger.Info("Successfully exported the open session {1} to {0}.", path, this.Session.Credentials.Uri);
+                this.logger.LogInformation("Successfully exported the open session {1} to {0}.", path, this.Session.Credentials.Uri);
             }
             catch (Exception ex)
             {
-                Logger.Error("Failed to export the open session to {0}. Error: {1}", path, ex.Message);
+                this.logger.LogError("Failed to export the open session to {0}. Error: {1}", path, ex.Message);
             }
 
             return Task.FromResult(Enumerable.Empty<Thing>());
@@ -362,7 +373,7 @@ namespace CDP4JsonFileDal
             catch (Exception ex)
             {
                 var msg = $"Failed to load file. Error: {ex.Message}";
-                Logger.Error(msg);
+                this.logger.LogError(msg);
 
                 if (this.Credentials != null)
                 {
@@ -664,7 +675,7 @@ namespace CDP4JsonFileDal
             {
                 var returned = this.ReadSiteDirectoryJson(filePath, credentials).ToList();
 
-                Logger.Debug("The SiteDirectory contains {0} Things", returned.Count);
+                this.logger.LogDebug("The SiteDirectory contains {0} Things", returned.Count);
 
                 // check for credentials in the returned DTO's to see if the current Person is authorised to look into this SiteDirectory
                 var person = returned.SingleOrDefault(p =>
@@ -675,7 +686,7 @@ namespace CDP4JsonFileDal
                 if (person == null)
                 {
                     var msg = $"{credentials.UserName} is unauthorized";
-                    Logger.Error(msg);
+                    this.logger.LogError(msg);
 
                     throw new UnauthorizedAccessException(msg);
                 }
@@ -687,7 +698,7 @@ namespace CDP4JsonFileDal
             }
             catch (UnauthorizedAccessException ex)
             {
-                Logger.Error(ex);
+                this.logger.LogError(ex, "unauthorized");
                 this.CloseSession();
                 throw;
             }
@@ -696,7 +707,7 @@ namespace CDP4JsonFileDal
                 this.CloseSession();
 
                 var msg = $"Failed to load file. Error: {ex.Message}";
-                Logger.Error(msg);
+                this.logger.LogError(msg);
 
                 throw new FileLoadException(msg, ex);
             }
@@ -1059,13 +1070,13 @@ namespace CDP4JsonFileDal
             catch (Exception ex)
             {
                 var msg = $"{"Failed to open file. Error"}: {ex.Message}";
-                Logger.Error(msg);
+                this.logger.LogError(msg);
 
                 throw new FileLoadException(msg);
             }
 
             watch.Stop();
-            Logger.Info("ZipEntry {0} retrieved in {1} [ms]", zipEntry.FileName, watch.ElapsedMilliseconds);
+            this.logger.LogInformation("ZipEntry {0} retrieved in {1} [ms]", zipEntry.FileName, watch.ElapsedMilliseconds);
 
             watch = Stopwatch.StartNew();
 
@@ -1074,7 +1085,7 @@ namespace CDP4JsonFileDal
 
             stream.Dispose();
             watch.Stop();
-            Logger.Info("JSON Deserializer of {0} completed in {1} [ms]", zipEntry.FileName, watch.ElapsedMilliseconds);
+            this.logger.LogInformation("JSON Deserializer of {0} completed in {1} [ms]", zipEntry.FileName, watch.ElapsedMilliseconds);
             return returned;
         }
     }

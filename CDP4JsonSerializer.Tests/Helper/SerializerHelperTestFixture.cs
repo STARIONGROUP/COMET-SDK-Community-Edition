@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SerializerHelperTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -27,9 +27,11 @@ namespace CDP4JsonSerializer.Tests.Helper
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.EngineeringModelData;
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
+
     using NUnit.Framework;
 
     /// <summary>

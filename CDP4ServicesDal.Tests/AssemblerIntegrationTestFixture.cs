@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblerIntegrationTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -29,12 +29,15 @@ namespace CDP4ServicesDal.Tests
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
+    
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
+    
     using CDP4Dal;
+    
     using File = System.IO.File;
+    
     using NUnit.Framework;
 
     /// <summary>

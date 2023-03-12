@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="WspDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
@@ -50,8 +50,9 @@ namespace CDP4WspDal
     using CDP4Dal.Operations;
     
     using CDP4JsonSerializer;
-    
-    using NLog;
+
+    using Microsoft.Extensions.Logging.Abstractions;
+    using Microsoft.Extensions.Logging;
 
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
     using Thing = CDP4Common.DTO.Thing;
@@ -66,9 +67,9 @@ namespace CDP4WspDal
     public class WspDal : Dal
     {
         /// <summary>
-        /// The NLog Logger
+        /// The <see cref="ILogger"/> used to log
         /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<WspDal> logger;
 
         /// <summary>
         /// The <see cref="HttpClient"/> that is reused for each HTTP request by the current <see cref="Dal"/>.
@@ -78,9 +79,14 @@ namespace CDP4WspDal
         /// <summary>
         /// Initializes a new instance of the <see cref="WspDal"/> class.
         /// </summary>
-        public WspDal()
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        public WspDal(ILoggerFactory loggerFactory = null) : base (loggerFactory)
         {
-            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.logger = loggerFactory == null ? NullLogger<WspDal>.Instance : loggerFactory.CreateLogger<WspDal>();
+
+            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion, loggerFactory);
         }
 
         /// <summary>
@@ -122,7 +128,7 @@ namespace CDP4WspDal
 
             if (operationContainer.Operations.Count() == 0)
             {
-                Logger.Debug("The operationContainer is empty, no round trip to the datasource is made");
+                this.logger.LogDebug("The operationContainer is empty, no round trip to the datasource is made");
                 return Enumerable.Empty<Thing>();
             }
 
@@ -158,8 +164,8 @@ namespace CDP4WspDal
             var resourcePath = $"{operationContainer.Context}{attribute}";
             var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
-            Logger.Debug("Resource Path {0}: {1}", postToken, resourcePath);
-            Logger.Debug("WSP Dal POST: {0} - {1}", postToken, uriBuilder);
+            this.logger.LogDebug("Resource Path {0}: {1}", postToken, resourcePath);
+            this.logger.LogDebug("WSP Dal POST: {0} - {1}", postToken, uriBuilder);
 
             var requestContent = this.CreateHttpContent(postToken, operationContainer, files);
 
@@ -167,14 +173,14 @@ namespace CDP4WspDal
 
             using (var httpResponseMessage = await this.httpClient.PostAsync(resourcePath, requestContent))
             {
-                Logger.Info("The ECSS-E-TM-10-25A Annex C Services responded in {0} [ms] to POST {1}", requestsw.ElapsedMilliseconds, postToken);
+                this.logger.LogInformation("The ECSS-E-TM-10-25A Annex C Services responded in {0} [ms] to POST {1}", requestsw.ElapsedMilliseconds, postToken);
                 requestsw.Stop();
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
                     var msg = $"The ECSS-E-TM-10-25A Annex C Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
-                    Logger.Error(msg);
+                    this.logger.LogError(msg);
                     throw new DalWriteException(msg);
                 }
                 
@@ -209,7 +215,7 @@ namespace CDP4WspDal
             }
 
             watch.Stop();
-            Logger.Info("Write Operation completed in {0} [ms]", watch.ElapsedMilliseconds);
+            this.logger.LogInformation("Write Operation completed in {0} [ms]", watch.ElapsedMilliseconds);
 
             return result;
         }
@@ -342,20 +348,20 @@ namespace CDP4WspDal
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
             var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
-            Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
-            Logger.Debug("WSP GET {0}: {1}", readToken, uriBuilder);
+            this.logger.LogDebug("Resource Path {0}: {1}", readToken, resourcePath);
+            this.logger.LogDebug("WSP GET {0}: {1}", readToken, uriBuilder);
 
             var requestsw = Stopwatch.StartNew();
 
             using (var httpResponseMessage = await this.httpClient.GetAsync(resourcePath, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
-                Logger.Info("The ECSS-E-TM-10-25A Annex C Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+                this.logger.LogInformation("The ECSS-E-TM-10-25A Annex C Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
                 requestsw.Stop();
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
-                    Logger.Error(msg);
+                    this.logger.LogError(msg);
                     throw new DalReadException(msg);
                 }
                 
@@ -370,7 +376,7 @@ namespace CDP4WspDal
                     }
 
                     watch.Stop();
-                    Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
+                    this.logger.LogInformation("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
 
                     return returned;
                 }
@@ -470,25 +476,25 @@ namespace CDP4WspDal
             
             var uriBuilder = this.GetUriBuilder(credentials.Uri, ref resourcePath);
 
-            Logger.Debug("Resource Path {0}: {1}", openToken, resourcePath);
-            Logger.Debug("WSP Open {0}: {1}", openToken, uriBuilder);
+            this.logger.LogDebug("Resource Path {0}: {1}", openToken, resourcePath);
+            this.logger.LogDebug("WSP Open {0}: {1}", openToken, uriBuilder);
 
             var requestsw = Stopwatch.StartNew();
 
             using (var httpResponseMessage = await this.httpClient.GetAsync(resourcePath, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken))
             {
-                Logger.Info("The ECSS-E-TM-10-25A Annex C Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
+                this.logger.LogInformation("The ECSS-E-TM-10-25A Annex C Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
                 requestsw.Stop();
                 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
-                    Logger.Error(msg);
+                    this.logger.LogError(msg);
                     throw new DalReadException(msg);
                 }
 
                 watch.Stop();
-                Logger.Info("WSP DAL Open {0} completed in {1} [ms]", openToken, watch.ElapsedMilliseconds);
+                this.logger.LogInformation("WSP DAL Open {0} completed in {1} [ms]", openToken, watch.ElapsedMilliseconds);
                 
                 watch = Stopwatch.StartNew();
 
@@ -497,7 +503,7 @@ namespace CDP4WspDal
                     var returned = this.Serializer.Deserialize(resultStream);
 
                     watch.Stop();
-                    Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
+                    this.logger.LogInformation("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
 
                     var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
                     if (returnedPerson == null)
@@ -527,13 +533,13 @@ namespace CDP4WspDal
 
             if (credentials.ProxySettings == null)
             {
-                Logger.Debug("creating HttpClient without proxy");
+                this.logger.LogDebug("creating HttpClient without proxy");
 
                 result = new HttpClient();
             }
             else
             {
-                Logger.Debug("creating HttpClient with proxy: {0}", credentials.ProxySettings.Address);
+                this.logger.LogDebug("creating HttpClient with proxy: {0}", credentials.ProxySettings.Address);
 
                 var proxy = new WebProxy(credentials.ProxySettings.Address);
 
@@ -639,7 +645,7 @@ namespace CDP4WspDal
             this.Serializer.SerializeToStream(postOperation, outputStream);
             outputStream.Position = 0;
 
-            if (Logger.IsTraceEnabled)
+            if (this.logger.IsEnabled(LogLevel.Trace))
             {
                 using (var memoryStream = new MemoryStream())
                 {
@@ -648,7 +654,7 @@ namespace CDP4WspDal
                     using (var streamReader = new StreamReader(memoryStream))
                     {
                         var postBody = streamReader.ReadToEnd();
-                        Logger.Trace("POST JSON BODY {0} /r/n {1}", token, postBody);
+                        this.logger.LogTrace("POST JSON BODY {0} /r/n {1}", token, postBody);
                     }
                 }
 

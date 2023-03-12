@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CopyPermissionHelperTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests.Permission
 {
@@ -32,8 +30,11 @@ namespace CDP4Dal.Tests.Permission
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+
     using CDP4Dal.Permission;
+
     using Moq;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -318,7 +319,6 @@ namespace CDP4Dal.Tests.Permission
         }
 
         [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
         public void VerifyException5()
         {
             this.session.Setup(x => x.OpenIterations)

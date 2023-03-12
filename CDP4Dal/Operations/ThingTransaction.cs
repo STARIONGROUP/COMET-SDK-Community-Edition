@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTransaction.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -40,13 +40,19 @@ namespace CDP4Dal.Operations
 
     using CDP4Dal.Exceptions;
 
-    using NLog;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     /// <summary>
     /// The Transaction class contains all requests for the creations, updates, deletions of things
     /// </summary>
     public class ThingTransaction : IThingTransaction
     {
+        /// <summary>
+        /// The <see cref="ILogger"/> used to log
+        /// </summary>
+        private readonly ILogger<ThingTransaction> logger;
+
         /// <summary>
         /// Gets the added <see cref="Thing"/>s
         /// </summary>
@@ -68,11 +74,6 @@ namespace CDP4Dal.Operations
         private readonly Dictionary<Tuple<Thing, Thing>, OperationKind> copiedThing;
 
         /// <summary>
-        /// The current logger
-        /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ThingTransaction"/> class
         /// </summary>
         /// <param name="transactionContext">
@@ -87,11 +88,16 @@ namespace CDP4Dal.Operations
         /// In the context of a single transaction:
         ///    The clone of a <see cref="Thing"/> to add or update.
         /// </param>
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
         /// <remarks>
         /// In the context of sub-transactions, this constructor shall be used for the root-transaction
         /// </remarks>
-        public ThingTransaction(TransactionContext transactionContext, Thing clone = null)
+        public ThingTransaction(TransactionContext transactionContext, Thing clone = null, ILoggerFactory loggerFactory = null)
         {
+            this.logger = loggerFactory == null ? NullLogger<ThingTransaction>.Instance : loggerFactory.CreateLogger<ThingTransaction>();
+
             this.TransactionContext = 
                 transactionContext ?? 
                 throw new ArgumentNullException(nameof(transactionContext), $"The {nameof(transactionContext)} may not be null");
@@ -120,6 +126,9 @@ namespace CDP4Dal.Operations
         /// <param name="containerClone">
         /// The container <see cref="Thing"/> for the current added or updated operation
         /// </param>
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
         /// <remarks>
         /// In the context of sub-transactions:
         ///    This constructor shall be used for sub-transactions.
@@ -131,8 +140,10 @@ namespace CDP4Dal.Operations
         ///    <paramref name="parentTransaction"/> shall be null.
         ///    <paramref name="containerClone"/> shall not be null as it is added as well and updated with the clone.
         /// </remarks>
-        public ThingTransaction(Thing clone, IThingTransaction parentTransaction, Thing containerClone)
+        public ThingTransaction(Thing clone, IThingTransaction parentTransaction, Thing containerClone, ILoggerFactory loggerFactory = null)
         {
+            this.logger = loggerFactory == null ? NullLogger<ThingTransaction>.Instance : loggerFactory.CreateLogger<ThingTransaction>();
+
             if (clone == null)
             {
                 throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null.");
@@ -1199,15 +1210,15 @@ namespace CDP4Dal.Operations
 
                 if (keyValue.Value.RevisionNumber < keyValue.Key.RevisionNumber)
                 {
-                    Logger.Trace("A newer revision {0} than the expected {1} of {2}:{3} exists in the Cache", keyValue.Key.RevisionNumber, keyValue.Value.RevisionNumber, keyValue.Key.ClassKind, keyValue.Key.Iid);
+                    this.logger.LogTrace("A newer revision {0} than the expected {1} of {2}:{3} exists in the Cache", keyValue.Key.RevisionNumber, keyValue.Value.RevisionNumber, keyValue.Key.ClassKind, keyValue.Key.Iid);
 
                     if (keyValue.Key.Revisions.TryGetValue(keyValue.Value.RevisionNumber, out originalThing))
                     {
-                        Logger.Trace("The matching revision {0} of {1}:{2} is used for the Update Operation", keyValue.Value.RevisionNumber, keyValue.Value.ClassKind, keyValue.Value.Iid);
+                        this.logger.LogTrace("The matching revision {0} of {1}:{2} is used for the Update Operation", keyValue.Value.RevisionNumber, keyValue.Value.ClassKind, keyValue.Value.Iid);
                     }
                     else
                     {
-                        Logger.Warn("Revision {0} instead of revision {1} of {2}:{3} is used for the Update Operation", keyValue.Key.RevisionNumber, keyValue.Value.RevisionNumber, keyValue.Value.ClassKind, keyValue.Value.Iid);
+                        this.logger.LogWarning("Revision {0} instead of revision {1} of {2}:{3} is used for the Update Operation", keyValue.Key.RevisionNumber, keyValue.Value.RevisionNumber, keyValue.Value.ClassKind, keyValue.Value.Iid);
                         originalThing = keyValue.Key;
                     }
                 }

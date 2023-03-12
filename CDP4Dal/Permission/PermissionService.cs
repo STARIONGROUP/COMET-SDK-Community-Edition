@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PermissionService.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -34,26 +34,34 @@ namespace CDP4Dal.Permission
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
-    
-    using NLog;
 
-    /// <summary>
-    /// The Permission Service class for the CDP4 application
-    /// </summary>
-    public class PermissionService : IPermissionService
+   using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+
+   /// <summary>
+   /// The Permission Service class for the CDP4 application
+   /// </summary>
+   public class PermissionService : IPermissionService
     {
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+      /// <summary>
+      /// The <see cref="ILogger"/> used to log
+      /// </summary>
+      private readonly ILogger<PermissionService> logger;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PermissionService"/> class.
-        /// </summary>
-        /// <param name="session">The <see cref="ISession"/> that this <see cref="PermissionService"/> is handling.</param>
-        public PermissionService(ISession session)
+      /// <summary>
+      /// Initializes a new instance of the <see cref="PermissionService"/> class.
+      /// </summary>
+      /// <param name="session">
+      /// The <see cref="ISession"/> that this <see cref="PermissionService"/> is handling.
+      /// </param>
+      /// <param name="loggerFactory">
+      /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+      /// </param>
+      public PermissionService(ISession session, ILoggerFactory loggerFactory = null)
         {
-            this.Session = session;
+           this.logger = loggerFactory == null ? NullLogger<PermissionService>.Instance : loggerFactory.CreateLogger<PermissionService>();
+
+           this.Session = session;
         }
 
         /// <summary>
@@ -83,7 +91,7 @@ namespace CDP4Dal.Permission
         /// <returns>True if Read operation can be performed.</returns>
         private bool CanRead(Thing thing, Type thingType)
         {
-            logger.Trace("CanRead invoked on Thing {0} of type {1}", thing, thingType);
+            this.logger.LogTrace("CanRead invoked on Thing {0} of type {1}", thing, thingType);
             var topContainerClassKind = thing.TopContainer.ClassKind;
 
             this.CheckOwnedThing(thing);
@@ -237,7 +245,7 @@ namespace CDP4Dal.Permission
         /// <returns>True if a Write operation can be performed</returns>
         public bool CanWrite(Thing thing)
         {
-            logger.Trace("CanWrite invoked on Thing {0} ", thing);
+           this.logger.LogTrace("CanWrite invoked on Thing {0} ", thing);
 
             return thing != null && !this.Session.Dal.IsReadOnly && !thing.HasSentinelInstances && this.CanWrite(thing, thing.GetType());
         }
@@ -263,7 +271,7 @@ namespace CDP4Dal.Permission
                 case ClassKind.EngineeringModel:
                     return this.CanWriteEngineeringModelContainedThing(thing, thingType);
                 default:
-                    logger.Error("The top container of the {0} could not be resolved", thing.ClassKind);
+                    this.logger.LogError("The top container of the {0} could not be resolved", thing.ClassKind);
                     return false;
             }
         }
@@ -278,7 +286,7 @@ namespace CDP4Dal.Permission
         /// <returns>True if Write operation can be performed.</returns>
         public bool CanWrite(ClassKind classKind, Thing containerThing)
         {
-            logger.Trace("CanWrite invoked on ClassKind {0} and Container {1}", classKind, containerThing);
+           this.logger.LogTrace("CanWrite invoked on ClassKind {0} and Container {1}", classKind, containerThing);
 
             if (this.Session.Dal.IsReadOnly)
             {

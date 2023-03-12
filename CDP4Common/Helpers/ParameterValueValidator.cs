@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterValueValidator.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -27,18 +27,12 @@ namespace CDP4Common.Helpers
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Validation;
-    using NLog;
 
     /// <summary>
     /// A utility class that validates a parameter value using the <see cref="ValueValidator"/>
     /// </summary>
     public static class ParameterValueValidator
     {
-        /// <summary>
-        /// The nlog logger
-        /// </summary>
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// Validates the new value of a <see cref="ParameterValueSetBase"/> or <see cref="ParameterSubscriptionValueSet"/> and return an error if any
         /// </summary>
@@ -50,7 +44,6 @@ namespace CDP4Common.Helpers
         {
             if (parameterType == null)
             {
-                logger.Error("The parameter type is null.");
                 return "Error: The parameter type is null.";
             }
 

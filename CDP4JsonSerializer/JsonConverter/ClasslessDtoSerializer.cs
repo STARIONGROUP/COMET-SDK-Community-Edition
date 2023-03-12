@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ClasslessDtoSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,20 +21,24 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer.JsonConverter
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common;
     using CDP4Common.MetaInfo;
     using CDP4Common.Polyfills;
-    using CDP4JsonSerializer.Helper;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    using NLog;
 
+    using CDP4JsonSerializer.Helper;
+
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+
+   using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    
     using Dto = CDP4Common.DTO;
 
     /// <summary>
@@ -43,31 +46,36 @@ namespace CDP4JsonSerializer.JsonConverter
     /// </summary>
     public class ClasslessDtoSerializer : JsonConverter
     {
-        /// <summary>
-        /// The NLog logger
-        /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+      /// <summary>
+      /// The <see cref="ILogger"/> used to log
+      /// </summary>
+      private readonly ILogger<ClasslessDtoSerializer> logger;
 
-        /// <summary>
-        /// The <see cref="IMetaDataProvider"/>
-        /// </summary>
-        private readonly IMetaDataProvider metaDataProvider;
+      /// <summary>
+      /// The <see cref="IMetaDataProvider"/>
+      /// </summary>
+      private readonly IMetaDataProvider metaDataProvider;
 
         /// <summary>
         /// The data model version for this request.
         /// </summary>
         private readonly Version dataModelVersion;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ClasslessDtoSerializer"/> class.
-        /// </summary>
-        /// <param name="metaDataProvider">
-        /// The <see cref="IMetaDataProvider"/>
-        /// </param>
-        /// <param name="dataModelVersion">The supported <see cref="Version"/></param>
-        public ClasslessDtoSerializer(IMetaDataProvider metaDataProvider, Version dataModelVersion)
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ClasslessDtoSerializer"/> class.
+      /// </summary>
+      /// <param name="metaDataProvider">
+      /// The <see cref="IMetaDataProvider"/>
+      /// </param>
+      /// <param name="dataModelVersion">The supported <see cref="Version"/></param>
+      /// <param name="loggerFactory">
+      /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+      /// </param>
+      public ClasslessDtoSerializer(IMetaDataProvider metaDataProvider, Version dataModelVersion, ILoggerFactory loggerFactory = null)
         {
-            this.metaDataProvider = metaDataProvider;
+           this.logger = loggerFactory == null ? NullLogger<ClasslessDtoSerializer>.Instance : loggerFactory.CreateLogger<ClasslessDtoSerializer>();
+
+         this.metaDataProvider = metaDataProvider;
             this.dataModelVersion = dataModelVersion;
         }
 
@@ -170,7 +178,7 @@ namespace CDP4JsonSerializer.JsonConverter
 
             if (jsonObject == null)
             {
-                Logger.Error("The data object in the JSON array could not be cast to a JObject type.");
+                this.logger.LogError("The data object in the JSON array could not be cast to a JObject type.");
                 throw new NullReferenceException("The data object in the JSON array could not be cast to a JObject type.");
             }
 

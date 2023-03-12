@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OperationContainerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -28,8 +28,10 @@ namespace CDP4Dal.Tests
     using System.Linq;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DTO;    
+    using CDP4Common.DTO;
+
     using CDP4Dal.Operations;
+
     using NUnit.Framework;
     
     [TestFixture]

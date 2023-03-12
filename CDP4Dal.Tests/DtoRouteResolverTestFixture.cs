@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DtoRouteResolverTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,17 +21,21 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests.Helpers
 {
     using System;
-    using System.Collections.Generic;    
+    using System.Collections.Generic;
+
     using CDP4Common.DTO;
     using CDP4Common.Types;
+
     using CDP4Dal.Exceptions;
+
     using Moq;
+
     using NUnit.Framework;
+
     using Poco = CDP4Common.EngineeringModelData;
 
     [TestFixture]
@@ -145,7 +148,6 @@ namespace CDP4Dal.Tests.Helpers
         }
 
         [Test]
-        //[ExpectedException(typeof(InstanceNotFoundException))]
         public void VerifyThatExceptionThrown()
         {
             var list = new List<Thing>
@@ -162,7 +164,6 @@ namespace CDP4Dal.Tests.Helpers
         }
 
         [Test]
-        //[ExpectedException(typeof(InstanceNotFoundException))]
         public void VerifyThatExceptionThrown2()
         {
             var list = new List<Thing>();
@@ -175,7 +176,6 @@ namespace CDP4Dal.Tests.Helpers
         }
 
         [Test]
-        //[ExpectedException(typeof(NullReferenceException))]
         public void VerifyThatExceptionThrown3()
         {
             var list = new List<Thing>
@@ -194,7 +194,6 @@ namespace CDP4Dal.Tests.Helpers
         }
 
         [Test]
-        //[ExpectedException(typeof(NullReferenceException))]
         public void VerifyThatExceptionThrown4()
         {
             var list = new List<Thing>
@@ -213,7 +212,6 @@ namespace CDP4Dal.Tests.Helpers
         }
 
         [Test]
-        //[ExpectedException(typeof(ArgumentNullException))]
         public void VerifyThatArgumentNullExceptionIsThrown()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -223,7 +221,6 @@ namespace CDP4Dal.Tests.Helpers
         }
 
         [Test]
-        //[ExpectedException(typeof(ArgumentNullException))]
         public void VerifyThatArgumentNullExceptionIsThrown2()
         {
             var list = new List<Thing>
