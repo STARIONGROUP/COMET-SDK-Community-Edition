@@ -25,8 +25,10 @@
 namespace CDP4Common.EngineeringModelData
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common.CommonData;
+    using CDP4Common.Extensions;
     using CDP4Common.SiteDirectoryData;
 
     /// <summary>
@@ -60,6 +62,94 @@ namespace CDP4Common.EngineeringModelData
 
                 return requiredRdl;
             }
+        }
+
+        /// <summary>
+        /// Queries all <see cref="ParameterSubscription" /> owned by a given <see cref="DomainOfExpertise" />
+        /// contained into an <see cref="ElementBase" />
+        /// </summary>
+        /// <param name="element">The <see cref="ElementBase" /></param>
+        /// <param name="domain">The <see cref="DomainOfExpertise" /></param>
+        /// <returns>A collection of <see cref="ParameterSubscription" /></returns>
+        public IEnumerable<ParameterSubscription> QueryOwnedParameterSubscriptions(DomainOfExpertise domain)
+        {
+            var subscriptions = new List<ParameterSubscription>();
+
+            switch (this)
+            {
+                case ElementDefinition elementDefinition:
+                    subscriptions.AddRange(elementDefinition.Parameter.QueryOwnedParameterSubscriptions(domain));
+                    break;
+                case ElementUsage elementUsage when !elementUsage.ParameterOverride.Any():
+                    return elementUsage.ElementDefinition.QueryOwnedParameterSubscriptions(domain);
+                case ElementUsage elementUsage:
+                    var notOverridenParameters = elementUsage.ElementDefinition.Parameter.Where(x => elementUsage.ParameterOverride.All(p => p.Parameter.Iid != x.Iid));
+
+                    subscriptions.AddRange(elementUsage.ParameterOverride.QueryOwnedParameterSubscriptions(domain));
+
+                    subscriptions.AddRange(notOverridenParameters.QueryOwnedParameterSubscriptions(domain));
+                    break;
+            }
+
+            return subscriptions;
+        }
+
+        /// <summary>
+        /// Queries owned <see cref="ParameterOrOverrideBase" /> contained into an <see cref="ElementBase" />
+        /// that contains <see cref="ParameterSubscription" /> of other <see cref="DomainOfExpertise" />
+        /// </summary>
+        /// <param name="element">The <see cref="ElementBase" /></param>
+        /// <param name="domain">The <see cref="DomainOfExpertise" /></param>
+        /// <returns>A collection of <see cref="ParameterSubscription" /></returns>
+        public IEnumerable<ParameterOrOverrideBase> QuerySubscribedParameterByOthers(DomainOfExpertise domain)
+        {
+            var subscriptions = new List<ParameterOrOverrideBase>();
+
+            switch (this)
+            {
+                case ElementDefinition elementDefinition:
+                    subscriptions.AddRange(elementDefinition.Parameter.QuerySubscribedParameterByOthers(domain));
+                    break;
+                case ElementUsage elementUsage when !elementUsage.ParameterOverride.Any():
+                    return elementUsage.ElementDefinition.QuerySubscribedParameterByOthers(domain);
+                case ElementUsage elementUsage:
+                    var notOverridenParameters = elementUsage.ElementDefinition.Parameter.Where(x => elementUsage.ParameterOverride.All(p => p.Parameter.Iid != x.Iid));
+                    subscriptions.AddRange(elementUsage.ParameterOverride.QuerySubscribedParameterByOthers(domain));
+                    subscriptions.AddRange(notOverridenParameters.QuerySubscribedParameterByOthers(domain));
+                    break;
+            }
+
+            return subscriptions;
+        }
+
+        /// <summary> 
+        /// Queries the <see cref="ParameterBase"/> that an <see cref="ElementBase"/> uses
+        /// </summary> 
+        /// <returns>
+        /// a <see cref="IEnumerable{T}"/> with the <see cref="ParameterBase"/>
+        /// </returns> 
+        public IEnumerable<ParameterBase> QueryParametersInUse()
+        {
+            var parameters = new List<ParameterBase>();
+
+            if (this is ElementDefinition elementDefinition)
+            {
+                parameters.AddRange(elementDefinition.Parameter.Distinct());
+            }
+            else if (this is ElementUsage elementUsage)
+            {
+                parameters.AddRange(elementUsage.ParameterOverride);
+
+                foreach (var parameter in elementUsage.ElementDefinition.Parameter)
+                {
+                    if (parameters.All(p => p.ParameterType.Iid != parameter.ParameterType.Iid))
+                    {
+                        parameters.Add(parameter);
+                    }
+                }
+            }
+
+            return parameters.OrderBy(x => x.ParameterType.ShortName).ToList();
         }
     }
 }
