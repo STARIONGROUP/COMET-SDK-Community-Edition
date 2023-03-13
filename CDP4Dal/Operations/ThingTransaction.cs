@@ -32,13 +32,14 @@ namespace CDP4Dal.Operations
 
     using CDP4Common;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Exceptions;
     using CDP4Common.Extensions;
     using CDP4Common.Polyfills;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.CommonData;
     using CDP4Common.Types;
-    
+
+    using CDP4Dal.Exceptions;
+
     using NLog;
 
     /// <summary>

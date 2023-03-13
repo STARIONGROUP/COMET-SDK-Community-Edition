@@ -22,7 +22,7 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Exceptions
+namespace CDP4Dal.Exceptions
 {
     using System;
     using System.Runtime.Serialization;
