@@ -29,12 +29,12 @@ namespace CDP4ServicesDal.Tests
     using System.IO;
 
     using CDP4Common;
-   using CDP4Common.CommonData;
+    using CDP4Common.CommonData;
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
 
-   using CDP4JsonSerializer;
+    using CDP4JsonSerializer;
 
     using CDP4Dal.Operations;
 
@@ -45,7 +45,7 @@ namespace CDP4ServicesDal.Tests
     using NUnit.Framework;
 
     using File = System.IO.File;
-    
+
     [TestFixture]
     public class PostOperationTestFixture
     {

@@ -50,12 +50,12 @@ namespace CDP4ServicesDal
     internal class CdpPostOperation : PostOperation
     {
         /// <summary>
-        /// The property name that stores the unique identifier of a <see cref="Thing"/>
+        /// The property name that stores the unique identifier of a <see cref="CDP4Common.DTO.Thing"/>
         /// </summary>
         private const string IID_KEY = "Iid";
 
         /// <summary>
-        /// The property name that stores the classkind of a <see cref="Thing"/>
+        /// The property name that stores the classkind of a <see cref="CDP4Common.DTO.Thing"/>
         /// </summary>
         private const string CLASSKIND_KEY = "ClassKind";
 
@@ -109,8 +109,8 @@ namespace CDP4ServicesDal
         /// provided <see cref="Operation"/>
         /// </summary>
         /// <param name="operation">
-        ///     The <see cref="Operation"/> that contains all the <see cref="Thing"/>s that need to be
-        ///     updated to the data-source
+        /// The <see cref="Operation"/> that contains all the <see cref="CDP4Common.DTO.Thing"/>s that need to be
+        /// updated to the data-source
         /// </param>
         public override void ConstructFromOperation(Operation operation)
         {
