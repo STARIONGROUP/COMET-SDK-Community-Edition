@@ -164,7 +164,7 @@ namespace CDP4WspDal.Tests
         }
 
         [Test]
-        public async Task VerifyThatIfCredentialsAreNullExceptionIsThrown()
+        public void VerifyThatIfCredentialsAreNullExceptionIsThrown()
         {
             var dal = new WspDal();
 
@@ -172,7 +172,7 @@ namespace CDP4WspDal.Tests
         }
 
         [Test]
-        public async Task VerifyThatIfNotHttpOrHttpsExceptionIsThrown()
+        public void VerifyThatIfNotHttpOrHttpsExceptionIsThrown()
         {
             var uri = new Uri("file://somefile");
             var invalidCredentials = new Credentials("John", "a password", uri);
@@ -183,7 +183,7 @@ namespace CDP4WspDal.Tests
         }
 
         [Test]
-        public async Task VerifyThatIfCredentialsAreNullOnReadExceptionIsThrown()
+        public void VerifyThatIfCredentialsAreNullOnReadExceptionIsThrown()
         {
             var organizationIid = Guid.Parse("44d1ff16-8195-47d0-abfa-163bbba9bf39");
             var organizationDto = new CDP4Common.DTO.Organization(organizationIid, 0);

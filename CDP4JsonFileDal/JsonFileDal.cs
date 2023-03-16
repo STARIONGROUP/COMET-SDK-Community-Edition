@@ -363,7 +363,7 @@ namespace CDP4JsonFileDal
                             returned = this.RetrieveSRDLThings(thing as CDP4Common.DTO.SiteReferenceDataLibrary, siteDirectoryData, zip, siteDir);
                             break;
                         case ClassKind.DomainOfExpertise:
-                            returned = this.RetrieveDomainOfExpertiseThings(thing as CDP4Common.DTO.DomainOfExpertise, siteDirectoryData, siteDir);
+                            returned = this.RetrieveDomainOfExpertiseThings(thing as CDP4Common.DTO.DomainOfExpertise, siteDirectoryData);
                             break;
                     }
 
@@ -410,9 +410,8 @@ namespace CDP4JsonFileDal
         /// </summary>
         /// <param name="domain">The <see cref="DomainOfExpertise"/></param>
         /// <param name="siteDirectoryData">All SiteDirectory DTOs</param>
-        /// <param name="siteDir">The <see cref="SiteDirectory"/> object</param>
         /// <returns>List of things contained by the particular srdl</returns>
-        private List<Thing> RetrieveDomainOfExpertiseThings(CDP4Common.DTO.DomainOfExpertise domain, List<Thing> siteDirectoryData, CDP4Common.SiteDirectoryData.SiteDirectory siteDir)
+        private List<Thing> RetrieveDomainOfExpertiseThings(CDP4Common.DTO.DomainOfExpertise domain, List<Thing> siteDirectoryData)
         {
             var returned = new List<Thing>();
 
@@ -658,7 +657,7 @@ namespace CDP4JsonFileDal
             // make sure the uri is not null
             if (credentials == null)
             {
-                throw new ArgumentNullException(nameof(this.Credentials.Uri), $"The Credentials URI may not be null");
+                throw new ArgumentNullException("credentials.Uri", $"The Credentials URI may not be null");
             }
 
             // make sure that the uri is of the correct format

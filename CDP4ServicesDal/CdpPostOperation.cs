@@ -132,7 +132,6 @@ namespace CDP4ServicesDal
                     break;
                 case OperationKind.Move:
                     throw new NotImplementedException();
-                    break;
                 default:
                     this.ResolveCopy(operation);
                     break;

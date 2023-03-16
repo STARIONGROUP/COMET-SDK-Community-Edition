@@ -20,15 +20,15 @@
      <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
      <PackageReleaseNotes>
         [UPGRADE] CDP4Common 10.0.0
-		[Remove] net461 target framework
+        [Remove] net461 target framework
      </PackageReleaseNotes>
      <LangVersion>latest</LangVersion>
-	 <PackageReadmeFile>README.md</PackageReadmeFile>
+     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png" Pack="true" PackagePath="\" />    
-	<None Include="..\README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>

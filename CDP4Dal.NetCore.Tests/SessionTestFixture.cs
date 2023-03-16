@@ -253,7 +253,7 @@ namespace CDP4Dal.NetCore.Tests
 
             await session2.Read(rdlPoco);
 
-            Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count);
 
             await session2.Close();
             Assert.IsEmpty(session2.OpenReferenceDataLibraries);
@@ -390,7 +390,7 @@ namespace CDP4Dal.NetCore.Tests
 
             await session2.Assembler.Synchronize(thingsToAdd);
             await session2.Read(modelRdlPoco);
-            Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count);
 
             Lazy<CDP4Common.CommonData.Thing> rdlPocoToClose;
             session2.Assembler.Cache.TryGetValue(new CacheKey(modelRdlPoco.Iid, null), out rdlPocoToClose);
@@ -398,7 +398,7 @@ namespace CDP4Dal.NetCore.Tests
             await session2.CloseModelRdl((ModelReferenceDataLibrary)rdlPocoToClose.Value);
 
             // Checkt that closing a modelRDL doesn't close it's required SiteRDL
-            Assert.AreEqual(1, session2.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(1, session2.OpenReferenceDataLibraries.ToList().Count);
             Assert.AreEqual(ClassKind.SiteReferenceDataLibrary, session2.OpenReferenceDataLibraries.First().ClassKind);
         }
 

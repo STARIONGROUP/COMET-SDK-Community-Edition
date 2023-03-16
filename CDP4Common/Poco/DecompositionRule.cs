@@ -126,7 +126,6 @@ namespace CDP4Common.SiteDirectoryData
                     if (isElementDefinitionAMember)
                     {
                         isValidUsage = true;
-                        continue;
                     }
                 }
 
