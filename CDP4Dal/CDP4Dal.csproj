@@ -45,13 +45,10 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' Or '$(TargetFramework)' == 'net48' ">
-    <Reference Include="System.ComponentModel.Composition" />
-    <PackageReference Include="Rx-Core" version="2.2.5" />
-    <PackageReference Include="Rx-Interfaces" version="2.2.5" />
-    <PackageReference Include="Rx-Linq" version="2.2.5" />
+	<Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard2.1' Or '$(TargetFramework)' == 'netcoreapp3.1'">
-    <PackageReference Include="System.Reactive" Version="4.1.5" />
+  <ItemGroup>
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 </Project>
