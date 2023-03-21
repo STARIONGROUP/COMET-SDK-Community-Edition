@@ -82,6 +82,9 @@ namespace CDP4WspDal
         /// <param name="loggerFactory">
         /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
+#if NETFRAMEWORK
+        [ImportingConstructor]
+#endif
         public WspDal(ILoggerFactory loggerFactory = null) : base (loggerFactory)
         {
             this.logger = loggerFactory == null ? NullLogger<WspDal>.Instance : loggerFactory.CreateLogger<WspDal>();

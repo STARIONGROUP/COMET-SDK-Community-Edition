@@ -2,16 +2,16 @@
 // <copyright file="NestedElementTreeGenerator.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -20,12 +20,15 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Common.Helpers
 {
     using System;
     using System.Collections.Generic;
+#if NETFRAMEWORK
+    using System.ComponentModel.Composition;
+#endif
     using System.Linq;
 
     using CDP4Common.EngineeringModelData;
@@ -45,7 +48,11 @@ namespace CDP4Common.Helpers
     /// and <see cref="ParameterSubscription"/>s. Each <see cref="ParameterTypeComponent"/> of a <see cref="CompoundParameterType"/> is 
     /// represented by a unique <see cref="NestedParameter"/>.
     /// </remarks>
-    public class NestedElementTreeGenerator
+#if NETFRAMEWORK
+    [Export(typeof(INestedElementTreeGenerator))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+#endif
+    public class NestedElementTreeGenerator : INestedElementTreeGenerator
     {
         /// <summary>
         /// The <see cref="ILogger"/> used to log
@@ -58,6 +65,9 @@ namespace CDP4Common.Helpers
         /// <param name="loggerFactory">
         /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
+#if NETFRAMEWORK
+        [ImportingConstructor]
+#endif
         public NestedElementTreeGenerator(ILoggerFactory loggerFactory = null)
         {
             this.logger = loggerFactory == null ? NullLogger<NestedElementTreeGenerator>.Instance : loggerFactory.CreateLogger<NestedElementTreeGenerator>();

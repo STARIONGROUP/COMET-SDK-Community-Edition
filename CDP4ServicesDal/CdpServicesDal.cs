@@ -85,6 +85,9 @@ namespace CDP4ServicesDal
         /// <param name="loggerFactory">
         /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
+#if NETFRAMEWORK
+        [ImportingConstructor]
+#endif
         public CdpServicesDal(ILoggerFactory loggerFactory = null) : base (loggerFactory)
         {
             this.logger = loggerFactory == null ? NullLogger<CdpServicesDal>.Instance : loggerFactory.CreateLogger<CdpServicesDal>();

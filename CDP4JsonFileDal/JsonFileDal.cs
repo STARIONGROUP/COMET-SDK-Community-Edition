@@ -109,6 +109,9 @@ namespace CDP4JsonFileDal
         /// <param name="loggerFactory">
         /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
+#if NETFRAMEWORK
+        [ImportingConstructor]
+#endif
         public JsonFileDal(ILoggerFactory loggerFactory = null) : base(loggerFactory)
         {
             this.logger = loggerFactory == null ? NullLogger<JsonFileDal>.Instance : loggerFactory.CreateLogger<JsonFileDal>();
