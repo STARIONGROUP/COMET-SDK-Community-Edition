@@ -23,6 +23,7 @@
        [Update] ThingTransaction namespace; fixes #154
        [Remove] net461 target framework
        [UPGRADE] System.Reactive to 5.0.0
+       [UPGRADE] Nlog to 5.1.2
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
