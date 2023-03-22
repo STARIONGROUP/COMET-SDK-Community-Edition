@@ -62,5 +62,35 @@ namespace CDP4Common.Helpers
 
             return result;
         }
+
+        /// <summary>
+        /// Checks if two <see cref="ValueArray{T}"/> contains the same exact values 
+        /// </summary>
+        /// <typeparam name="T">the type of the parameter</typeparam>
+        /// <param name="valueArray">the first value array to compare</param>
+        /// <param name="comparison">the second value array to compare</param>
+        /// <returns>True if the contained values are the same, false otherwise</returns>
+        public static bool ContainsSameValues<T>(this ValueArray<T> valueArray, ValueArray<T> comparison) where T : class
+        {
+            if (comparison is null)
+            {
+                throw new ArgumentNullException(nameof(comparison));
+            }
+
+            if (valueArray.Count != comparison.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < valueArray.Count; i++)
+            {
+                if (valueArray[i] != comparison[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
