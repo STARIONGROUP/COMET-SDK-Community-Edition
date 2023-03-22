@@ -1,34 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>netstandard2.0</TargetFrameworks>
-	  <Company>RHEA System S.A.</Company>
-	  <Title>CDP4Reporting Community Edition</Title>
-	  <VersionPrefix>1.0.0</VersionPrefix>
-	  <Description>CDP4 Reporting</Description>
-	  <Copyright>Copyright © RHEA System S.A.</Copyright>
-	  <Authors>Sam, Alex, Alexander</Authors>
-	  <PackageId>CDP4Reporting-CE</PackageId>
-	  <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-	  <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
-	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
-	  <PackageIcon>cdp4-icon.png</PackageIcon>
-	  <IncludeSource>true</IncludeSource>
-	  <IncludeSymbols>true</IncludeSymbols>
-	  <RepositoryUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
-	  <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
-	  <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
-	  <PackageReleaseNotes>
-		  [ADD] CDP4Reporting 1.0.0
-	  </PackageReleaseNotes>
-	  <LangVersion>latest</LangVersion>
+     <TargetFrameworks>netstandard2.0</TargetFrameworks>
+     <Company>RHEA System S.A.</Company>
+     <Title>CDP4Reporting Community Edition</Title>
+     <VersionPrefix>2.0.0</VersionPrefix>
+     <Description>CDP4 Reporting</Description>
+     <Copyright>Copyright © RHEA System S.A.</Copyright>
+     <Authors>Sam, Alex, Alexander</Authors>
+     <PackageId>CDP4Reporting-CE</PackageId>
+     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+     <PackageProjectUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
+     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+     <PackageIcon>cdp4-icon.png</PackageIcon>
+     <IncludeSource>true</IncludeSource>
+     <IncludeSymbols>true</IncludeSymbols>
+     <RepositoryUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
+     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
+     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+     <PackageReleaseNotes>
+        [UPGRADE] CDP4Common 10.0.0
+		[Remove] net461 target framework
+     </PackageReleaseNotes>
+     <LangVersion>latest</LangVersion>
+	 <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png">
-      <PackagePath>\</PackagePath>
-      <Pack>true</Pack>
-    </None>
+    <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png" Pack="true" PackagePath="\" />    
+	<None Include="..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>
