@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
     <VersionPrefix>10.0.0</VersionPrefix>
@@ -19,7 +19,6 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [Refactor] NLog logging to Microsoft.Extensions.Logging.Abstractions; fixes #219
       [Implement] extension methods from webapp; fixes #251
       [Remove] net461 target framework
     </PackageReleaseNotes>
@@ -53,7 +52,7 @@
     <Folder Include="Validation\" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' Or '$(TargetFramework)' == 'net48'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462' Or '$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' Or '$(TargetFramework)' == 'net48'">
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
 
