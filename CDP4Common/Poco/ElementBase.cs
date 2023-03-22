@@ -68,7 +68,6 @@ namespace CDP4Common.EngineeringModelData
         /// Queries all <see cref="ParameterSubscription" /> owned by a given <see cref="DomainOfExpertise" />
         /// contained into an <see cref="ElementBase" />
         /// </summary>
-        /// <param name="element">The <see cref="ElementBase" /></param>
         /// <param name="domain">The <see cref="DomainOfExpertise" /></param>
         /// <returns>A collection of <see cref="ParameterSubscription" /></returns>
         public IEnumerable<ParameterSubscription> QueryOwnedParameterSubscriptions(DomainOfExpertise domain)

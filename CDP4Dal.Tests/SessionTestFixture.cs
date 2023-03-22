@@ -322,7 +322,7 @@ namespace CDP4Dal.Tests
 
             await session2.Read(rdlPoco);
 
-            Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count);
 
             await session2.Close();
             Assert.IsEmpty(session2.OpenReferenceDataLibraries);
@@ -349,25 +349,25 @@ namespace CDP4Dal.Tests
             session.GetType().GetProperty("ActivePerson").SetValue(session, JohnDoe, null);
             await session.Assembler.Synchronize(thingsToAdd);
             await session.Read(rdlPoco);
-            Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count);
 
             Lazy<CDP4Common.CommonData.Thing> rdlPocoToClose;
             session.Assembler.Cache.TryGetValue(new CacheKey(rdlPoco.Iid, null), out rdlPocoToClose);
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)rdlPocoToClose.Value);
-            Assert.AreEqual(1, session.OpenReferenceDataLibraries.ToList().Count());
-
+            Assert.AreEqual(1, session.OpenReferenceDataLibraries.ToList().Count);
+                
             await session.Read(rdlPoco);
-            Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count);
 
             session.Assembler.Cache.TryGetValue(new CacheKey(rdlPoco.Iid, null), out rdlPocoToClose);
             Lazy<CDP4Common.CommonData.Thing> requiredRdlToClose;
             session.Assembler.Cache.TryGetValue(new CacheKey(requiredSiteReferenceDataLibraryPoco.Iid, null), out requiredRdlToClose);
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)requiredRdlToClose.Value);
 
-            Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count);
 
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)rdlPocoToClose.Value);
-            Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count);
         }
 
         [Test]
@@ -509,7 +509,7 @@ namespace CDP4Dal.Tests
 
             await session2.Assembler.Synchronize(thingsToAdd);
             await session2.Read(modelRdlPoco);
-            Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count);
 
             Lazy<CDP4Common.CommonData.Thing> rdlPocoToClose;
             session2.Assembler.Cache.TryGetValue(new CacheKey(modelRdlPoco.Iid, null), out rdlPocoToClose);
@@ -517,7 +517,7 @@ namespace CDP4Dal.Tests
             await session2.CloseModelRdl((ModelReferenceDataLibrary)rdlPocoToClose.Value);
 
             // Checkt that closing a modelRDL doesn't close it's required SiteRDL
-            Assert.AreEqual(1, session2.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(1, session2.OpenReferenceDataLibraries.ToList().Count);
             Assert.AreEqual(ClassKind.SiteReferenceDataLibrary, session2.OpenReferenceDataLibraries.First().ClassKind);
         }
 

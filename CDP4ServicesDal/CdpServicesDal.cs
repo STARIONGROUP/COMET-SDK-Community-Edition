@@ -98,12 +98,15 @@ namespace CDP4ServicesDal
         {
             get { return false; }
         }
-        
+
         /// <summary>
         /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
         /// </summary>
         /// <param name="operationContainer">
         /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="files">
+        /// The files that are to be uploaded
         /// </param>
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.

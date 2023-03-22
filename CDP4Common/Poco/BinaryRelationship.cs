@@ -54,33 +54,30 @@ namespace CDP4Common.EngineeringModelData
         /// <summary>
         /// Gets the list of <see cref="BinaryRelationshipRule"/> applied to this <see cref="BinaryRelationship"/>
         /// </summary>
-        public IEnumerable<BinaryRelationshipRule> AppliedBinaryRelationshipRules
+        public IEnumerable<BinaryRelationshipRule> QueryAppliedBinaryRelationshipRules()
         {
-            get
+            if (this.Category == null)
             {
-                if (this.Category == null)
-                {
-                    return new List<BinaryRelationshipRule>();
-                }
-
-                var model = this.GetContainerOfType<EngineeringModel>();
-                if (model == null)
-                {
-                    throw new ContainmentException("The Engineering Model container is null.");
-                }
-
-                var mrdl = model.EngineeringModelSetup.RequiredRdl.Single();
-
-                var appliedRules =
-                    new List<BinaryRelationshipRule>(
-                        mrdl.Rule.OfType<BinaryRelationshipRule>()
-                            .Where(c => this.Category.Contains(c.RelationshipCategory)));
-                appliedRules.AddRange(mrdl.GetRequiredRdls()
-                    .SelectMany(rdl => rdl.Rule.OfType<BinaryRelationshipRule>())
-                    .Where(c => this.Category.Contains(c.RelationshipCategory)));
-
-                return appliedRules;
+                return new List<BinaryRelationshipRule>();
             }
+
+            var model = this.GetContainerOfType<EngineeringModel>();
+            if (model == null)
+            {
+                throw new ContainmentException("The Engineering Model container is null.");
+            }
+
+            var mrdl = model.EngineeringModelSetup.RequiredRdl.Single();
+
+            var appliedRules =
+                new List<BinaryRelationshipRule>(
+                    mrdl.Rule.OfType<BinaryRelationshipRule>()
+                        .Where(c => this.Category.Contains(c.RelationshipCategory)));
+            appliedRules.AddRange(mrdl.GetRequiredRdls()
+                .SelectMany(rdl => rdl.Rule.OfType<BinaryRelationshipRule>())
+                .Where(c => this.Category.Contains(c.RelationshipCategory)));
+
+            return appliedRules;
         }
 
         /// <summary>

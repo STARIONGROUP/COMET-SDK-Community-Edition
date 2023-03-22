@@ -20,10 +20,10 @@
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
       [Refactor] NLog logging to Microsoft.Extensions.Logging.Abstractions; fixes #219
-	  [Implement] extension methods from webapp; fixes #251
-	  [Remove] net461 target framework
+      [Implement] extension methods from webapp; fixes #251
+      [Remove] net461 target framework
     </PackageReleaseNotes>
-	<PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,7 +37,7 @@
 
   <ItemGroup>
     <None Include="..\docs\cdp4-icon.png" Pack="true" PackagePath="\" />
-	<None Include="..\README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

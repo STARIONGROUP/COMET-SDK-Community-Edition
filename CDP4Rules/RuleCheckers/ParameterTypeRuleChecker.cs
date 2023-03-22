@@ -40,7 +40,7 @@ namespace CDP4Rules.RuleCheckers
     public class ParameterTypeRuleChecker : RuleChecker
     {
         /// <summary>
-        /// Checks whether the <see cref="ParameterType.ShortName"/> is case-sensitive unique within its containing <see cref="ReferenceDataLibrary"/>
+        /// Checks whether the <see cref="ParameterType"/> Shortname is case-sensitive unique within its containing <see cref="ReferenceDataLibrary"/>
         /// </summary>
         /// <param name="thing">
         /// The subject <see cref="ParameterType"/>
