@@ -158,7 +158,7 @@ namespace CDP4Common.Tests
             constant.Container = this.siteDir;
 
             var dto = constant.ToDto() as CDP4Common.DTO.Constant;
-            Assert.AreEqual(2, dto.Value.Count());
+            Assert.AreEqual(2, dto.Value.Count);
         }
 
         [Test]

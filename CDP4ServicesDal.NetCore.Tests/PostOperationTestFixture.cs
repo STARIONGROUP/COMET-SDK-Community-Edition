@@ -27,19 +27,26 @@ namespace CDP4ServicesDal.Tests
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using CDP4Common;
-    using CDP4Common.Dto;
-    using CDP4Common.MetaInfo;
-    using CDP4JsonSerializer;
-    using CDP4Dal.Operations;
-    using CDP4ServicesDal.Tests.Helper;
-    using Newtonsoft.Json;
-    using NUnit.Framework;
-    using CDP4Common.Types;
-    using File = System.IO.File;
-    using CDP4Common.DTO;
-    using CDP4Common.CommonData;
 
+    using CDP4Common;
+    using CDP4Common.CommonData;
+    using CDP4Common.Dto;
+    using CDP4Common.DTO;
+    using CDP4Common.MetaInfo;
+    using CDP4Common.Types;
+
+    using CDP4JsonSerializer;
+
+    using CDP4Dal.Operations;
+
+    using CDP4ServicesDal.Tests.Helper;
+    
+    using Newtonsoft.Json;
+    
+    using NUnit.Framework;
+    
+    using File = System.IO.File;
+    
     [TestFixture]
     public class PostOperationTestFixture
     {

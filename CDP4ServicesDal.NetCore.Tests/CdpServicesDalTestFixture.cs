@@ -630,7 +630,7 @@ namespace CDP4ServicesDal.Tests
 
             for (int i = 0; i < 9; i++)
             {
-                dal.Read(siteDirectory, new CancellationToken(), queryAttributes);
+                await dal.Read(siteDirectory, new CancellationToken(), queryAttributes);
             }
 
             var readresult = await dal.Read(siteDirectory, new CancellationToken());

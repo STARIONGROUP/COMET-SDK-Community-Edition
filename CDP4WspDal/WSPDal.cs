@@ -120,7 +120,7 @@ namespace CDP4WspDal
                 throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
             }
 
-            if (operationContainer.Operations.Count() == 0)
+            if (!operationContainer.Operations.Any())
             {
                 Logger.Debug("The operationContainer is empty, no round trip to the datasource is made");
                 return Enumerable.Empty<Thing>();

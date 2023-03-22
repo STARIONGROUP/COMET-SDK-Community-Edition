@@ -25,8 +25,10 @@
 namespace CDP4Common.Tests.Helpers
 {
     using System;
+    using System.Collections.Generic;
 
     using CDP4Common.Helpers;
+    using CDP4Common.Types;
 
     using NUnit.Framework;
 
@@ -50,6 +52,24 @@ namespace CDP4Common.Tests.Helpers
             var result = ValueArrayUtils.CreateDefaultValueArray(size);
 
             Assert.AreEqual(size, result.Count);
+        }
+
+        [Test]
+        public void VerifyThatContainsSameValuesWorks()
+        {
+            var valueArray1 = new ValueArray<string>(new List<string>() { "1", "ABC", "Test" });
+            var valueArray2 = new ValueArray<string>(new List<string>() { "1", "ABC", "Test" });
+            var valueArray3 = new ValueArray<string>(new List<string>() { "1", "ABC" });
+            var valueArray4 = new ValueArray<string>(new List<string>() { "1", "ABCa", "Test" });
+            var valueArray5 = new ValueArray<string>(new List<string>() { "1.0", "ABC", "Test" });
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(valueArray1.ContainsSameValues(valueArray2), Is.True);
+                Assert.That(valueArray1.ContainsSameValues(valueArray3), Is.False);
+                Assert.That(valueArray1.ContainsSameValues(valueArray4), Is.False);
+                Assert.That(valueArray1.ContainsSameValues(valueArray5), Is.False);
+            });
         }
     }
 }
