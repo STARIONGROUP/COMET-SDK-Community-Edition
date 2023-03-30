@@ -63,7 +63,7 @@ namespace CDP4Reporting.DataCollection
                 }
                 else
                 {
-                    ReportScript.ReportingSettings.OptionSelector.Invoke(this.Iteration.Option, this.SelectedOption);
+                    this.selectedOption = ReportScript.ReportingSettings.OptionSelector.Invoke(this.Iteration.Option, this.SelectedOption);
                 }
             }
         }
