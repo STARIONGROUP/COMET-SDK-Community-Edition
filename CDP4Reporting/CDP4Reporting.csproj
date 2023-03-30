@@ -19,7 +19,7 @@
      <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
      <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
      <PackageReleaseNotes>
-         [FIX] OptionDependentDataCollector SelectOption should set selected option]
+         [FIX] OptionDependentDataCollector SelectOption should set selected option; fixes #260
      </PackageReleaseNotes>
      <LangVersion>latest</LangVersion>
      <PackageReadmeFile>README.md</PackageReadmeFile>
