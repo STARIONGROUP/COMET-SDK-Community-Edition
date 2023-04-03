@@ -16,7 +16,8 @@
      <IncludeSource>true</IncludeSource>
      <IncludeSymbols>true</IncludeSymbols>
      <RepositoryUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
-     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
+	 <PackageProjectUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
+	 <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
      <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
      <PackageReleaseNotes>
          [FIX] OptionDependentDataCollector SelectOption should set selected option; fixes #260
@@ -26,10 +27,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png">
-      <PackagePath>\</PackagePath>
-      <Pack>true</Pack>
-    </None>
+	 <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png" Pack="true" PackagePath="\" />    
+	 <None Include="..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>
