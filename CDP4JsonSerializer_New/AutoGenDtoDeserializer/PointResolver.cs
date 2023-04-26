@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,60 +39,117 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="PointResolver"/> is to deserialize a JSON object to a <see cref="Point"/>
     /// </summary>
     public static class PointResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="Point"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="Point"/> to instantiate</returns>
-        public static CDP4Common.DTO.Point FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.Point FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var point = new CDP4Common.DTO.Point(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                point.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    point.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                point.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    point.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                point.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the point {id} is null", point.Iid);
+                }
+                else
+                {
+                    point.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                point.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the point {id} is null", point.Iid);
+                }
+                else
+                {
+                    point.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                point.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the point {id} is null", point.Iid);
+                }
+                else
+                {
+                    point.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("x", out var xProperty))
+            if (jsonElement.TryGetProperty("x"u8, out var xProperty))
             {
-                point.X = xProperty.Deserialize<float>(SerializerOptions.Options);
+                if(xProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale x property of the point {id} is null", point.Iid);
+                }
+                else
+                {
+                    point.X = (float)xProperty.GetDouble();
+                }
             }
 
-            if (jObject.TryGetProperty("y", out var yProperty))
+            if (jsonElement.TryGetProperty("y"u8, out var yProperty))
             {
-                point.Y = yProperty.Deserialize<float>(SerializerOptions.Options);
+                if(yProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale y property of the point {id} is null", point.Iid);
+                }
+                else
+                {
+                    point.Y = (float)yProperty.GetDouble();
+                }
             }
-
             return point;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

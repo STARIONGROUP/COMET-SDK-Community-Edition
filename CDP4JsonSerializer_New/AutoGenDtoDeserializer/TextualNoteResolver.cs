@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,80 +39,161 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="TextualNoteResolver"/> is to deserialize a JSON object to a <see cref="TextualNote"/>
     /// </summary>
     public static class TextualNoteResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="TextualNote"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="TextualNote"/> to instantiate</returns>
-        public static CDP4Common.DTO.TextualNote FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.TextualNote FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var textualNote = new CDP4Common.DTO.TextualNote(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("category", out var categoryProperty))
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
             {
-                textualNote.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    textualNote.Category.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("content", out var contentProperty))
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                textualNote.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the textualNote {id} is null", textualNote.Iid);
+                }
+                else
+                {
+                    textualNote.Content = contentProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                textualNote.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the textualNote {id} is null", textualNote.Iid);
+                }
+                else
+                {
+                    textualNote.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                textualNote.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    textualNote.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                textualNote.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    textualNote.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                textualNote.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the textualNote {id} is null", textualNote.Iid);
+                }
+                else
+                {
+                    textualNote.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                textualNote.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the textualNote {id} is null", textualNote.Iid);
+                }
+                else
+                {
+                    textualNote.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                textualNote.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the textualNote {id} is null", textualNote.Iid);
+                }
+                else
+                {
+                    textualNote.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("owner", out var ownerProperty))
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                textualNote.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the textualNote {id} is null", textualNote.Iid);
+                }
+                else
+                {
+                    textualNote.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                textualNote.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the textualNote {id} is null", textualNote.Iid);
+                }
+                else
+                {
+                    textualNote.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                textualNote.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the textualNote {id} is null", textualNote.Iid);
+                }
+                else
+                {
+                    textualNote.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return textualNote;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

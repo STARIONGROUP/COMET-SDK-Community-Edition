@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,50 +39,93 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="OrganizationalParticipantResolver"/> is to deserialize a JSON object to a <see cref="OrganizationalParticipant"/>
     /// </summary>
     public static class OrganizationalParticipantResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="OrganizationalParticipant"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="OrganizationalParticipant"/> to instantiate</returns>
-        public static CDP4Common.DTO.OrganizationalParticipant FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.OrganizationalParticipant FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var organizationalParticipant = new CDP4Common.DTO.OrganizationalParticipant(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                organizationalParticipant.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    organizationalParticipant.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                organizationalParticipant.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    organizationalParticipant.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                organizationalParticipant.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the organizationalParticipant {id} is null", organizationalParticipant.Iid);
+                }
+                else
+                {
+                    organizationalParticipant.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("organization", out var organizationProperty))
+            if (jsonElement.TryGetProperty("organization"u8, out var organizationProperty))
             {
-                organizationalParticipant.Organization = organizationProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(organizationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale organization property of the organizationalParticipant {id} is null", organizationalParticipant.Iid);
+                }
+                else
+                {
+                    organizationalParticipant.Organization = organizationProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                organizationalParticipant.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the organizationalParticipant {id} is null", organizationalParticipant.Iid);
+                }
+                else
+                {
+                    organizationalParticipant.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return organizationalParticipant;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

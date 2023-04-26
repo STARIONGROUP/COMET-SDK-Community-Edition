@@ -46,7 +46,7 @@ namespace CDP4JsonSerializer_SystemTextJson
         /// The map containing the serialization methods
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new Dictionary<string, Func<object, JsonValue>>
-        {            
+        {
             { "actualState", actualState => JsonValue.Create(actualState) },
             { "actualValue", actualValue => JsonValue.Create(actualValue) },
             { "associatedParameter", associatedParameter => JsonValue.Create(associatedParameter) },
@@ -116,3 +116,7 @@ namespace CDP4JsonSerializer_SystemTextJson
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

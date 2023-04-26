@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,120 +39,249 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="PersonResolver"/> is to deserialize a JSON object to a <see cref="Person"/>
     /// </summary>
     public static class PersonResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="Person"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="Person"/> to instantiate</returns>
-        public static CDP4Common.DTO.Person FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.Person FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var person = new CDP4Common.DTO.Person(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("defaultDomain", out var defaultDomainProperty))
+            if (jsonElement.TryGetProperty("defaultDomain"u8, out var defaultDomainProperty))
             {
-                person.DefaultDomain = defaultDomainProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(defaultDomainProperty.ValueKind == JsonValueKind.Null)
+                {
+                    person.DefaultDomain = null;
+                }
+                else
+                {
+                    person.DefaultDomain = defaultDomainProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("defaultEmailAddress", out var defaultEmailAddressProperty))
+            if (jsonElement.TryGetProperty("defaultEmailAddress"u8, out var defaultEmailAddressProperty))
             {
-                person.DefaultEmailAddress = defaultEmailAddressProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(defaultEmailAddressProperty.ValueKind == JsonValueKind.Null)
+                {
+                    person.DefaultEmailAddress = null;
+                }
+                else
+                {
+                    person.DefaultEmailAddress = defaultEmailAddressProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("defaultTelephoneNumber", out var defaultTelephoneNumberProperty))
+            if (jsonElement.TryGetProperty("defaultTelephoneNumber"u8, out var defaultTelephoneNumberProperty))
             {
-                person.DefaultTelephoneNumber = defaultTelephoneNumberProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(defaultTelephoneNumberProperty.ValueKind == JsonValueKind.Null)
+                {
+                    person.DefaultTelephoneNumber = null;
+                }
+                else
+                {
+                    person.DefaultTelephoneNumber = defaultTelephoneNumberProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("emailAddress", out var emailAddressProperty))
+            if (jsonElement.TryGetProperty("emailAddress"u8, out var emailAddressProperty))
             {
-                person.EmailAddress.AddRange(emailAddressProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in emailAddressProperty.EnumerateArray())
+                {
+                    person.EmailAddress.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                person.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    person.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                person.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    person.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("givenName", out var givenNameProperty))
+            if (jsonElement.TryGetProperty("givenName"u8, out var givenNameProperty))
             {
-                person.GivenName = givenNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(givenNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale givenName property of the person {id} is null", person.Iid);
+                }
+                else
+                {
+                    person.GivenName = givenNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("isActive", out var isActiveProperty))
+            if (jsonElement.TryGetProperty("isActive"u8, out var isActiveProperty))
             {
-                person.IsActive = isActiveProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isActiveProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isActive property of the person {id} is null", person.Iid);
+                }
+                else
+                {
+                    person.IsActive = isActiveProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                person.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the person {id} is null", person.Iid);
+                }
+                else
+                {
+                    person.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                person.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the person {id} is null", person.Iid);
+                }
+                else
+                {
+                    person.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("organization", out var organizationProperty))
+            if (jsonElement.TryGetProperty("organization"u8, out var organizationProperty))
             {
-                person.Organization = organizationProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(organizationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    person.Organization = null;
+                }
+                else
+                {
+                    person.Organization = organizationProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("organizationalUnit", out var organizationalUnitProperty))
+            if (jsonElement.TryGetProperty("organizationalUnit"u8, out var organizationalUnitProperty))
             {
-                person.OrganizationalUnit = organizationalUnitProperty.Deserialize<string>(SerializerOptions.Options);
+                if(organizationalUnitProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale organizationalUnit property of the person {id} is null", person.Iid);
+                }
+                else
+                {
+                    person.OrganizationalUnit = organizationalUnitProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("password", out var passwordProperty))
+            if (jsonElement.TryGetProperty("password"u8, out var passwordProperty))
             {
-                person.Password = passwordProperty.Deserialize<string>(SerializerOptions.Options);
+                if(passwordProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale password property of the person {id} is null", person.Iid);
+                }
+                else
+                {
+                    person.Password = passwordProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("role", out var roleProperty))
+            if (jsonElement.TryGetProperty("role"u8, out var roleProperty))
             {
-                person.Role = roleProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(roleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    person.Role = null;
+                }
+                else
+                {
+                    person.Role = roleProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                person.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the person {id} is null", person.Iid);
+                }
+                else
+                {
+                    person.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("surname", out var surnameProperty))
+            if (jsonElement.TryGetProperty("surname"u8, out var surnameProperty))
             {
-                person.Surname = surnameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(surnameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale surname property of the person {id} is null", person.Iid);
+                }
+                else
+                {
+                    person.Surname = surnameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("telephoneNumber", out var telephoneNumberProperty))
+            if (jsonElement.TryGetProperty("telephoneNumber"u8, out var telephoneNumberProperty))
             {
-                person.TelephoneNumber.AddRange(telephoneNumberProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in telephoneNumberProperty.EnumerateArray())
+                {
+                    person.TelephoneNumber.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                person.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the person {id} is null", person.Iid);
+                }
+                else
+                {
+                    person.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("userPreference", out var userPreferenceProperty))
+            if (jsonElement.TryGetProperty("userPreference"u8, out var userPreferenceProperty))
             {
-                person.UserPreference.AddRange(userPreferenceProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in userPreferenceProperty.EnumerateArray())
+                {
+                    person.UserPreference.Add(element.GetGuid());
+                }
             }
-
             return person;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

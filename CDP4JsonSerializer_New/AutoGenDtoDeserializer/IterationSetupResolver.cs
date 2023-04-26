@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,80 +39,165 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="IterationSetupResolver"/> is to deserialize a JSON object to a <see cref="IterationSetup"/>
     /// </summary>
     public static class IterationSetupResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="IterationSetup"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="IterationSetup"/> to instantiate</returns>
-        public static CDP4Common.DTO.IterationSetup FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.IterationSetup FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var iterationSetup = new CDP4Common.DTO.IterationSetup(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                iterationSetup.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the iterationSetup {id} is null", iterationSetup.Iid);
+                }
+                else
+                {
+                    iterationSetup.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("description", out var descriptionProperty))
+            if (jsonElement.TryGetProperty("description"u8, out var descriptionProperty))
             {
-                iterationSetup.Description = descriptionProperty.Deserialize<string>(SerializerOptions.Options);
+                if(descriptionProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale description property of the iterationSetup {id} is null", iterationSetup.Iid);
+                }
+                else
+                {
+                    iterationSetup.Description = descriptionProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                iterationSetup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    iterationSetup.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                iterationSetup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    iterationSetup.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("frozenOn", out var frozenOnProperty))
+            if (jsonElement.TryGetProperty("frozenOn"u8, out var frozenOnProperty))
             {
-                iterationSetup.FrozenOn = frozenOnProperty.Deserialize<DateTime?>(SerializerOptions.Options);
+                if(frozenOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    iterationSetup.FrozenOn = null;
+                }
+                else
+                {
+                    iterationSetup.FrozenOn = frozenOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("isDeleted", out var isDeletedProperty))
+            if (jsonElement.TryGetProperty("isDeleted"u8, out var isDeletedProperty))
             {
-                iterationSetup.IsDeleted = isDeletedProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isDeletedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeleted property of the iterationSetup {id} is null", iterationSetup.Iid);
+                }
+                else
+                {
+                    iterationSetup.IsDeleted = isDeletedProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("iterationIid", out var iterationIidProperty))
+            if (jsonElement.TryGetProperty("iterationIid"u8, out var iterationIidProperty))
             {
-                iterationSetup.IterationIid = iterationIidProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(iterationIidProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale iterationIid property of the iterationSetup {id} is null", iterationSetup.Iid);
+                }
+                else
+                {
+                    iterationSetup.IterationIid = iterationIidProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("iterationNumber", out var iterationNumberProperty))
+            if (jsonElement.TryGetProperty("iterationNumber"u8, out var iterationNumberProperty))
             {
-                iterationSetup.IterationNumber = iterationNumberProperty.Deserialize<int>(SerializerOptions.Options);
+                if(iterationNumberProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale iterationNumber property of the iterationSetup {id} is null", iterationSetup.Iid);
+                }
+                else
+                {
+                    iterationSetup.IterationNumber = iterationNumberProperty.GetInt32();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                iterationSetup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the iterationSetup {id} is null", iterationSetup.Iid);
+                }
+                else
+                {
+                    iterationSetup.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("sourceIterationSetup", out var sourceIterationSetupProperty))
+            if (jsonElement.TryGetProperty("sourceIterationSetup"u8, out var sourceIterationSetupProperty))
             {
-                iterationSetup.SourceIterationSetup = sourceIterationSetupProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(sourceIterationSetupProperty.ValueKind == JsonValueKind.Null)
+                {
+                    iterationSetup.SourceIterationSetup = null;
+                }
+                else
+                {
+                    iterationSetup.SourceIterationSetup = sourceIterationSetupProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                iterationSetup.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the iterationSetup {id} is null", iterationSetup.Iid);
+                }
+                else
+                {
+                    iterationSetup.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return iterationSetup;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

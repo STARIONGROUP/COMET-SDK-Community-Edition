@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,85 +39,161 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="ParameterizedCategoryRuleResolver"/> is to deserialize a JSON object to a <see cref="ParameterizedCategoryRule"/>
     /// </summary>
     public static class ParameterizedCategoryRuleResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="ParameterizedCategoryRule"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="ParameterizedCategoryRule"/> to instantiate</returns>
-        public static CDP4Common.DTO.ParameterizedCategoryRule FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.ParameterizedCategoryRule FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var parameterizedCategoryRule = new CDP4Common.DTO.ParameterizedCategoryRule(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("alias", out var aliasProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty))
             {
-                parameterizedCategoryRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    parameterizedCategoryRule.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("category", out var categoryProperty))
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
             {
-                parameterizedCategoryRule.Category = categoryProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(categoryProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale category property of the parameterizedCategoryRule {id} is null", parameterizedCategoryRule.Iid);
+                }
+                else
+                {
+                    parameterizedCategoryRule.Category = categoryProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("definition", out var definitionProperty))
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
             {
-                parameterizedCategoryRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    parameterizedCategoryRule.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                parameterizedCategoryRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    parameterizedCategoryRule.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                parameterizedCategoryRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    parameterizedCategoryRule.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty))
             {
-                parameterizedCategoryRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    parameterizedCategoryRule.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                parameterizedCategoryRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the parameterizedCategoryRule {id} is null", parameterizedCategoryRule.Iid);
+                }
+                else
+                {
+                    parameterizedCategoryRule.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                parameterizedCategoryRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the parameterizedCategoryRule {id} is null", parameterizedCategoryRule.Iid);
+                }
+                else
+                {
+                    parameterizedCategoryRule.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                parameterizedCategoryRule.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the parameterizedCategoryRule {id} is null", parameterizedCategoryRule.Iid);
+                }
+                else
+                {
+                    parameterizedCategoryRule.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
+            if (jsonElement.TryGetProperty("parameterType"u8, out var parameterTypeProperty))
             {
-                parameterizedCategoryRule.ParameterType.AddRange(parameterTypeProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in parameterTypeProperty.EnumerateArray())
+                {
+                    parameterizedCategoryRule.ParameterType.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                parameterizedCategoryRule.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the parameterizedCategoryRule {id} is null", parameterizedCategoryRule.Iid);
+                }
+                else
+                {
+                    parameterizedCategoryRule.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                parameterizedCategoryRule.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the parameterizedCategoryRule {id} is null", parameterizedCategoryRule.Iid);
+                }
+                else
+                {
+                    parameterizedCategoryRule.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return parameterizedCategoryRule;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

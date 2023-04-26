@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,142 +39,234 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="ModelReferenceDataLibraryResolver"/> is to deserialize a JSON object to a <see cref="ModelReferenceDataLibrary"/>
     /// </summary>
     public static class ModelReferenceDataLibraryResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="ModelReferenceDataLibrary"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="ModelReferenceDataLibrary"/> to instantiate</returns>
-        public static CDP4Common.DTO.ModelReferenceDataLibrary FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.ModelReferenceDataLibrary FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var modelReferenceDataLibrary = new CDP4Common.DTO.ModelReferenceDataLibrary(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("alias", out var aliasProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty))
             {
-                modelReferenceDataLibrary.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("baseQuantityKind", out var baseQuantityKindProperty))
-            {
-                foreach(var arrayItem in baseQuantityKindProperty.EnumerateArray())
+                foreach(var element in aliasProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
-                    if (arrayItemValue != null)
-                    {
-                        modelReferenceDataLibrary.BaseQuantityKind.Add(arrayItemValue);
-                    }
+                    modelReferenceDataLibrary.Alias.Add(element.GetGuid());
                 }
             }
-            
-            if (jObject.TryGetProperty("baseUnit", out var baseUnitProperty))
+
+            if (jsonElement.TryGetProperty("baseQuantityKind"u8, out var baseQuantityKindProperty))
             {
-                modelReferenceDataLibrary.BaseUnit.AddRange(baseUnitProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                modelReferenceDataLibrary.BaseQuantityKind.AddRange(baseQuantityKindProperty.ToOrderedItemCollection());
             }
 
-            if (jObject.TryGetProperty("constant", out var constantProperty))
+            if (jsonElement.TryGetProperty("baseUnit"u8, out var baseUnitProperty))
             {
-                modelReferenceDataLibrary.Constant.AddRange(constantProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in baseUnitProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.BaseUnit.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("definedCategory", out var definedCategoryProperty))
+            if (jsonElement.TryGetProperty("constant"u8, out var constantProperty))
             {
-                modelReferenceDataLibrary.DefinedCategory.AddRange(definedCategoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in constantProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Constant.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("definition", out var definitionProperty))
+            if (jsonElement.TryGetProperty("definedCategory"u8, out var definedCategoryProperty))
             {
-                modelReferenceDataLibrary.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in definedCategoryProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.DefinedCategory.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
             {
-                modelReferenceDataLibrary.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                modelReferenceDataLibrary.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("fileType", out var fileTypeProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                modelReferenceDataLibrary.FileType.AddRange(fileTypeProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("glossary", out var glossaryProperty))
+            if (jsonElement.TryGetProperty("fileType"u8, out var fileTypeProperty))
             {
-                modelReferenceDataLibrary.Glossary.AddRange(glossaryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in fileTypeProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.FileType.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
+            if (jsonElement.TryGetProperty("glossary"u8, out var glossaryProperty))
             {
-                modelReferenceDataLibrary.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in glossaryProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Glossary.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty))
             {
-                modelReferenceDataLibrary.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                modelReferenceDataLibrary.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the modelReferenceDataLibrary {id} is null", modelReferenceDataLibrary.Iid);
+                }
+                else
+                {
+                    modelReferenceDataLibrary.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("parameterType", out var parameterTypeProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                modelReferenceDataLibrary.ParameterType.AddRange(parameterTypeProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the modelReferenceDataLibrary {id} is null", modelReferenceDataLibrary.Iid);
+                }
+                else
+                {
+                    modelReferenceDataLibrary.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("referenceSource", out var referenceSourceProperty))
+            if (jsonElement.TryGetProperty("parameterType"u8, out var parameterTypeProperty))
             {
-                modelReferenceDataLibrary.ReferenceSource.AddRange(referenceSourceProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in parameterTypeProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.ParameterType.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("requiredRdl", out var requiredRdlProperty))
+            if (jsonElement.TryGetProperty("referenceSource"u8, out var referenceSourceProperty))
             {
-                modelReferenceDataLibrary.RequiredRdl = requiredRdlProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                foreach(var element in referenceSourceProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.ReferenceSource.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("rule", out var ruleProperty))
+            if (jsonElement.TryGetProperty("requiredRdl"u8, out var requiredRdlProperty))
             {
-                modelReferenceDataLibrary.Rule.AddRange(ruleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                if(requiredRdlProperty.ValueKind == JsonValueKind.Null)
+                {
+                    modelReferenceDataLibrary.RequiredRdl = null;
+                }
+                else
+                {
+                    modelReferenceDataLibrary.RequiredRdl = requiredRdlProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("scale", out var scaleProperty))
+            if (jsonElement.TryGetProperty("rule"u8, out var ruleProperty))
             {
-                modelReferenceDataLibrary.Scale.AddRange(scaleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in ruleProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Rule.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("scale"u8, out var scaleProperty))
             {
-                modelReferenceDataLibrary.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                foreach(var element in scaleProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Scale.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                modelReferenceDataLibrary.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the modelReferenceDataLibrary {id} is null", modelReferenceDataLibrary.Iid);
+                }
+                else
+                {
+                    modelReferenceDataLibrary.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("unit", out var unitProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                modelReferenceDataLibrary.Unit.AddRange(unitProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the modelReferenceDataLibrary {id} is null", modelReferenceDataLibrary.Iid);
+                }
+                else
+                {
+                    modelReferenceDataLibrary.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("unitPrefix", out var unitPrefixProperty))
+            if (jsonElement.TryGetProperty("unit"u8, out var unitProperty))
             {
-                modelReferenceDataLibrary.UnitPrefix.AddRange(unitPrefixProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in unitProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Unit.Add(element.GetGuid());
+                }
             }
 
+            if (jsonElement.TryGetProperty("unitPrefix"u8, out var unitPrefixProperty))
+            {
+                foreach(var element in unitPrefixProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.UnitPrefix.Add(element.GetGuid());
+                }
+            }
             return modelReferenceDataLibrary;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

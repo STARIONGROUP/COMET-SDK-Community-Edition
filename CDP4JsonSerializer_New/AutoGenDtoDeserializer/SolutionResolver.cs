@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,70 +39,141 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="SolutionResolver"/> is to deserialize a JSON object to a <see cref="Solution"/>
     /// </summary>
     public static class SolutionResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="Solution"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="Solution"/> to instantiate</returns>
-        public static CDP4Common.DTO.Solution FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.Solution FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var solution = new CDP4Common.DTO.Solution(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("author", out var authorProperty))
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                solution.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale author property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("content", out var contentProperty))
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                solution.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.Content = contentProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                solution.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                solution.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    solution.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                solution.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    solution.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                solution.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                solution.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("owner", out var ownerProperty))
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                solution.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                solution.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return solution;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

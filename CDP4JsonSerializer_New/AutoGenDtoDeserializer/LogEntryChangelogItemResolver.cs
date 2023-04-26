@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,65 +39,125 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="LogEntryChangelogItemResolver"/> is to deserialize a JSON object to a <see cref="LogEntryChangelogItem"/>
     /// </summary>
     public static class LogEntryChangelogItemResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="LogEntryChangelogItem"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="LogEntryChangelogItem"/> to instantiate</returns>
-        public static CDP4Common.DTO.LogEntryChangelogItem FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.LogEntryChangelogItem FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var logEntryChangelogItem = new CDP4Common.DTO.LogEntryChangelogItem(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("affectedItemIid", out var affectedItemIidProperty))
+            if (jsonElement.TryGetProperty("affectedItemIid"u8, out var affectedItemIidProperty))
             {
-                logEntryChangelogItem.AffectedItemIid = affectedItemIidProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(affectedItemIidProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale affectedItemIid property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
+                }
+                else
+                {
+                    logEntryChangelogItem.AffectedItemIid = affectedItemIidProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("affectedReferenceIid", out var affectedReferenceIidProperty))
+            if (jsonElement.TryGetProperty("affectedReferenceIid"u8, out var affectedReferenceIidProperty))
             {
-                logEntryChangelogItem.AffectedReferenceIid.AddRange(affectedReferenceIidProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in affectedReferenceIidProperty.EnumerateArray())
+                {
+                    logEntryChangelogItem.AffectedReferenceIid.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("changeDescription", out var changeDescriptionProperty))
+            if (jsonElement.TryGetProperty("changeDescription"u8, out var changeDescriptionProperty))
             {
-                logEntryChangelogItem.ChangeDescription = changeDescriptionProperty.Deserialize<string>(SerializerOptions.Options);
+                if(changeDescriptionProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale changeDescription property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
+                }
+                else
+                {
+                    logEntryChangelogItem.ChangeDescription = changeDescriptionProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("changelogKind", out var changelogKindProperty))
+            if (jsonElement.TryGetProperty("changelogKind"u8, out var changelogKindProperty))
             {
-                logEntryChangelogItem.ChangelogKind = LogEntryChangelogItemKindDeserializer.Deserialize(changelogKindProperty);
+                if(changelogKindProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale changelogKind property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
+                }
+                else
+                {
+                    logEntryChangelogItem.ChangelogKind = LogEntryChangelogItemKindDeserializer.Deserialize(changelogKindProperty);
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                logEntryChangelogItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    logEntryChangelogItem.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                logEntryChangelogItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    logEntryChangelogItem.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                logEntryChangelogItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
+                }
+                else
+                {
+                    logEntryChangelogItem.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                logEntryChangelogItem.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
+                }
+                else
+                {
+                    logEntryChangelogItem.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return logEntryChangelogItem;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

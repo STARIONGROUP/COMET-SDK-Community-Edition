@@ -46,7 +46,7 @@ namespace CDP4JsonSerializer_SystemTextJson
         /// The map containing the serialization methods
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new Dictionary<string, Func<object, JsonValue>>
-        {            
+        {
             { "book", book => JsonValue.Create(((IEnumerable)book).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
             { "commonFileStore", commonFileStore => JsonValue.Create(commonFileStore) },
@@ -120,3 +120,7 @@ namespace CDP4JsonSerializer_SystemTextJson
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,70 +39,141 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="SiteDirectoryDataDiscussionItemResolver"/> is to deserialize a JSON object to a <see cref="SiteDirectoryDataDiscussionItem"/>
     /// </summary>
     public static class SiteDirectoryDataDiscussionItemResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="SiteDirectoryDataDiscussionItem"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="SiteDirectoryDataDiscussionItem"/> to instantiate</returns>
-        public static CDP4Common.DTO.SiteDirectoryDataDiscussionItem FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.SiteDirectoryDataDiscussionItem FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var siteDirectoryDataDiscussionItem = new CDP4Common.DTO.SiteDirectoryDataDiscussionItem(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("author", out var authorProperty))
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                siteDirectoryDataDiscussionItem.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale author property of the siteDirectoryDataDiscussionItem {id} is null", siteDirectoryDataDiscussionItem.Iid);
+                }
+                else
+                {
+                    siteDirectoryDataDiscussionItem.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("content", out var contentProperty))
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                siteDirectoryDataDiscussionItem.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the siteDirectoryDataDiscussionItem {id} is null", siteDirectoryDataDiscussionItem.Iid);
+                }
+                else
+                {
+                    siteDirectoryDataDiscussionItem.Content = contentProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                siteDirectoryDataDiscussionItem.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the siteDirectoryDataDiscussionItem {id} is null", siteDirectoryDataDiscussionItem.Iid);
+                }
+                else
+                {
+                    siteDirectoryDataDiscussionItem.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                siteDirectoryDataDiscussionItem.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    siteDirectoryDataDiscussionItem.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                siteDirectoryDataDiscussionItem.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    siteDirectoryDataDiscussionItem.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                siteDirectoryDataDiscussionItem.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the siteDirectoryDataDiscussionItem {id} is null", siteDirectoryDataDiscussionItem.Iid);
+                }
+                else
+                {
+                    siteDirectoryDataDiscussionItem.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                siteDirectoryDataDiscussionItem.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the siteDirectoryDataDiscussionItem {id} is null", siteDirectoryDataDiscussionItem.Iid);
+                }
+                else
+                {
+                    siteDirectoryDataDiscussionItem.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("replyTo", out var replyToProperty))
+            if (jsonElement.TryGetProperty("replyTo"u8, out var replyToProperty))
             {
-                siteDirectoryDataDiscussionItem.ReplyTo = replyToProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(replyToProperty.ValueKind == JsonValueKind.Null)
+                {
+                    siteDirectoryDataDiscussionItem.ReplyTo = null;
+                }
+                else
+                {
+                    siteDirectoryDataDiscussionItem.ReplyTo = replyToProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                siteDirectoryDataDiscussionItem.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the siteDirectoryDataDiscussionItem {id} is null", siteDirectoryDataDiscussionItem.Iid);
+                }
+                else
+                {
+                    siteDirectoryDataDiscussionItem.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return siteDirectoryDataDiscussionItem;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

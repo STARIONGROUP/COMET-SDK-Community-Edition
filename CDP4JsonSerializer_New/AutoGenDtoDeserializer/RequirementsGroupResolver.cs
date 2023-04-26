@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,90 +39,165 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="RequirementsGroupResolver"/> is to deserialize a JSON object to a <see cref="RequirementsGroup"/>
     /// </summary>
     public static class RequirementsGroupResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="RequirementsGroup"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="RequirementsGroup"/> to instantiate</returns>
-        public static CDP4Common.DTO.RequirementsGroup FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.RequirementsGroup FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var requirementsGroup = new CDP4Common.DTO.RequirementsGroup(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("alias", out var aliasProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty))
             {
-                requirementsGroup.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    requirementsGroup.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("category", out var categoryProperty))
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
             {
-                requirementsGroup.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    requirementsGroup.Category.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("definition", out var definitionProperty))
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
             {
-                requirementsGroup.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    requirementsGroup.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                requirementsGroup.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    requirementsGroup.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                requirementsGroup.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    requirementsGroup.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("group", out var groupProperty))
+            if (jsonElement.TryGetProperty("group"u8, out var groupProperty))
             {
-                requirementsGroup.Group.AddRange(groupProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in groupProperty.EnumerateArray())
+                {
+                    requirementsGroup.Group.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty))
             {
-                requirementsGroup.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    requirementsGroup.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                requirementsGroup.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the requirementsGroup {id} is null", requirementsGroup.Iid);
+                }
+                else
+                {
+                    requirementsGroup.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                requirementsGroup.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the requirementsGroup {id} is null", requirementsGroup.Iid);
+                }
+                else
+                {
+                    requirementsGroup.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("owner", out var ownerProperty))
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                requirementsGroup.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the requirementsGroup {id} is null", requirementsGroup.Iid);
+                }
+                else
+                {
+                    requirementsGroup.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("parameterValue", out var parameterValueProperty))
+            if (jsonElement.TryGetProperty("parameterValue"u8, out var parameterValueProperty))
             {
-                requirementsGroup.ParameterValue.AddRange(parameterValueProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in parameterValueProperty.EnumerateArray())
+                {
+                    requirementsGroup.ParameterValue.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                requirementsGroup.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the requirementsGroup {id} is null", requirementsGroup.Iid);
+                }
+                else
+                {
+                    requirementsGroup.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                requirementsGroup.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the requirementsGroup {id} is null", requirementsGroup.Iid);
+                }
+                else
+                {
+                    requirementsGroup.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return requirementsGroup;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

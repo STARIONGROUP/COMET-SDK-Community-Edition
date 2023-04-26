@@ -21,6 +21,7 @@
     <PackageReleaseNotes>
 	    [UPGRADE] CDP4Common 9.0.0
     </PackageReleaseNotes>
+	<LangVersion>11.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,7 +45,7 @@
   <ItemGroup>
     <Folder Include="AutoGenDtoDeserializer\" />
     <Folder Include="AutoGenDtoSerializer\" />
-    <Folder Include="EnumDeserializers\" />
+    <Folder Include="AutoGenEnumDeserializers\" />
   </ItemGroup>
 
 </Project>

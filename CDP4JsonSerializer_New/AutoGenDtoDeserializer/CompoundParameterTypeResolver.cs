@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,102 +39,178 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="CompoundParameterTypeResolver"/> is to deserialize a JSON object to a <see cref="CompoundParameterType"/>
     /// </summary>
     public static class CompoundParameterTypeResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="CompoundParameterType"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="CompoundParameterType"/> to instantiate</returns>
-        public static CDP4Common.DTO.CompoundParameterType FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.CompoundParameterType FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var compoundParameterType = new CDP4Common.DTO.CompoundParameterType(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("alias", out var aliasProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty))
             {
-                compoundParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("category", out var categoryProperty))
-            {
-                compoundParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("component", out var componentProperty))
-            {
-                foreach(var arrayItem in componentProperty.EnumerateArray())
+                foreach(var element in aliasProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
-                    if (arrayItemValue != null)
-                    {
-                        compoundParameterType.Component.Add(arrayItemValue);
-                    }
+                    compoundParameterType.Alias.Add(element.GetGuid());
                 }
             }
-            
-            if (jObject.TryGetProperty("definition", out var definitionProperty))
+
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
             {
-                compoundParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    compoundParameterType.Category.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("component"u8, out var componentProperty))
             {
-                compoundParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                compoundParameterType.Component.AddRange(componentProperty.ToOrderedItemCollection());
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
             {
-                compoundParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    compoundParameterType.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                compoundParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    compoundParameterType.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                compoundParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    compoundParameterType.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("isFinalized", out var isFinalizedProperty))
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty))
             {
-                compoundParameterType.IsFinalized = isFinalizedProperty.Deserialize<bool>(SerializerOptions.Options);
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    compoundParameterType.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                compoundParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the compoundParameterType {id} is null", compoundParameterType.Iid);
+                }
+                else
+                {
+                    compoundParameterType.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("isFinalized"u8, out var isFinalizedProperty))
             {
-                compoundParameterType.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(isFinalizedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isFinalized property of the compoundParameterType {id} is null", compoundParameterType.Iid);
+                }
+                else
+                {
+                    compoundParameterType.IsFinalized = isFinalizedProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                compoundParameterType.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the compoundParameterType {id} is null", compoundParameterType.Iid);
+                }
+                else
+                {
+                    compoundParameterType.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("symbol", out var symbolProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                compoundParameterType.Symbol = symbolProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the compoundParameterType {id} is null", compoundParameterType.Iid);
+                }
+                else
+                {
+                    compoundParameterType.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                compoundParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the compoundParameterType {id} is null", compoundParameterType.Iid);
+                }
+                else
+                {
+                    compoundParameterType.ShortName = shortNameProperty.GetString();
+                }
             }
 
+            if (jsonElement.TryGetProperty("symbol"u8, out var symbolProperty))
+            {
+                if(symbolProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale symbol property of the compoundParameterType {id} is null", compoundParameterType.Iid);
+                }
+                else
+                {
+                    compoundParameterType.Symbol = symbolProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the compoundParameterType {id} is null", compoundParameterType.Iid);
+                }
+                else
+                {
+                    compoundParameterType.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
             return compoundParameterType;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,95 +39,185 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="DecompositionRuleResolver"/> is to deserialize a JSON object to a <see cref="DecompositionRule"/>
     /// </summary>
     public static class DecompositionRuleResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="DecompositionRule"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="DecompositionRule"/> to instantiate</returns>
-        public static CDP4Common.DTO.DecompositionRule FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.DecompositionRule FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var decompositionRule = new CDP4Common.DTO.DecompositionRule(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("alias", out var aliasProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty))
             {
-                decompositionRule.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    decompositionRule.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("containedCategory", out var containedCategoryProperty))
+            if (jsonElement.TryGetProperty("containedCategory"u8, out var containedCategoryProperty))
             {
-                decompositionRule.ContainedCategory.AddRange(containedCategoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in containedCategoryProperty.EnumerateArray())
+                {
+                    decompositionRule.ContainedCategory.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("containingCategory", out var containingCategoryProperty))
+            if (jsonElement.TryGetProperty("containingCategory"u8, out var containingCategoryProperty))
             {
-                decompositionRule.ContainingCategory = containingCategoryProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(containingCategoryProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale containingCategory property of the decompositionRule {id} is null", decompositionRule.Iid);
+                }
+                else
+                {
+                    decompositionRule.ContainingCategory = containingCategoryProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("definition", out var definitionProperty))
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
             {
-                decompositionRule.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    decompositionRule.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                decompositionRule.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    decompositionRule.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                decompositionRule.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    decompositionRule.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty))
             {
-                decompositionRule.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    decompositionRule.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                decompositionRule.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the decompositionRule {id} is null", decompositionRule.Iid);
+                }
+                else
+                {
+                    decompositionRule.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("maxContained", out var maxContainedProperty))
+            if (jsonElement.TryGetProperty("maxContained"u8, out var maxContainedProperty))
             {
-                decompositionRule.MaxContained = maxContainedProperty.Deserialize<int?>(SerializerOptions.Options);
+                if(maxContainedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    decompositionRule.MaxContained = null;
+                }
+                else
+                {
+                    decompositionRule.MaxContained = maxContainedProperty.GetInt32();
+                }
             }
 
-            if (jObject.TryGetProperty("minContained", out var minContainedProperty))
+            if (jsonElement.TryGetProperty("minContained"u8, out var minContainedProperty))
             {
-                decompositionRule.MinContained = minContainedProperty.Deserialize<int>(SerializerOptions.Options);
+                if(minContainedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale minContained property of the decompositionRule {id} is null", decompositionRule.Iid);
+                }
+                else
+                {
+                    decompositionRule.MinContained = minContainedProperty.GetInt32();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                decompositionRule.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the decompositionRule {id} is null", decompositionRule.Iid);
+                }
+                else
+                {
+                    decompositionRule.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                decompositionRule.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the decompositionRule {id} is null", decompositionRule.Iid);
+                }
+                else
+                {
+                    decompositionRule.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                decompositionRule.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the decompositionRule {id} is null", decompositionRule.Iid);
+                }
+                else
+                {
+                    decompositionRule.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                decompositionRule.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the decompositionRule {id} is null", decompositionRule.Iid);
+                }
+                else
+                {
+                    decompositionRule.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return decompositionRule;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

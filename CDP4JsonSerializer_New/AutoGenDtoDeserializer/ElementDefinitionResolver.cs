@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,105 +39,189 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="ElementDefinitionResolver"/> is to deserialize a JSON object to a <see cref="ElementDefinition"/>
     /// </summary>
     public static class ElementDefinitionResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="ElementDefinition"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="ElementDefinition"/> to instantiate</returns>
-        public static CDP4Common.DTO.ElementDefinition FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.ElementDefinition FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var elementDefinition = new CDP4Common.DTO.ElementDefinition(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("alias", out var aliasProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty))
             {
-                elementDefinition.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    elementDefinition.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("category", out var categoryProperty))
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
             {
-                elementDefinition.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    elementDefinition.Category.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("containedElement", out var containedElementProperty))
+            if (jsonElement.TryGetProperty("containedElement"u8, out var containedElementProperty))
             {
-                elementDefinition.ContainedElement.AddRange(containedElementProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in containedElementProperty.EnumerateArray())
+                {
+                    elementDefinition.ContainedElement.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("definition", out var definitionProperty))
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
             {
-                elementDefinition.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    elementDefinition.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                elementDefinition.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    elementDefinition.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                elementDefinition.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    elementDefinition.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty))
             {
-                elementDefinition.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    elementDefinition.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                elementDefinition.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the elementDefinition {id} is null", elementDefinition.Iid);
+                }
+                else
+                {
+                    elementDefinition.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                elementDefinition.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the elementDefinition {id} is null", elementDefinition.Iid);
+                }
+                else
+                {
+                    elementDefinition.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("organizationalParticipant", out var organizationalParticipantProperty))
+            if (jsonElement.TryGetProperty("organizationalParticipant"u8, out var organizationalParticipantProperty))
             {
-                elementDefinition.OrganizationalParticipant.AddRange(organizationalParticipantProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in organizationalParticipantProperty.EnumerateArray())
+                {
+                    elementDefinition.OrganizationalParticipant.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("owner", out var ownerProperty))
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                elementDefinition.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the elementDefinition {id} is null", elementDefinition.Iid);
+                }
+                else
+                {
+                    elementDefinition.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("parameter", out var parameterProperty))
+            if (jsonElement.TryGetProperty("parameter"u8, out var parameterProperty))
             {
-                elementDefinition.Parameter.AddRange(parameterProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in parameterProperty.EnumerateArray())
+                {
+                    elementDefinition.Parameter.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("parameterGroup", out var parameterGroupProperty))
+            if (jsonElement.TryGetProperty("parameterGroup"u8, out var parameterGroupProperty))
             {
-                elementDefinition.ParameterGroup.AddRange(parameterGroupProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in parameterGroupProperty.EnumerateArray())
+                {
+                    elementDefinition.ParameterGroup.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("referencedElement", out var referencedElementProperty))
+            if (jsonElement.TryGetProperty("referencedElement"u8, out var referencedElementProperty))
             {
-                elementDefinition.ReferencedElement.AddRange(referencedElementProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in referencedElementProperty.EnumerateArray())
+                {
+                    elementDefinition.ReferencedElement.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                elementDefinition.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the elementDefinition {id} is null", elementDefinition.Iid);
+                }
+                else
+                {
+                    elementDefinition.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                elementDefinition.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the elementDefinition {id} is null", elementDefinition.Iid);
+                }
+                else
+                {
+                    elementDefinition.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return elementDefinition;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

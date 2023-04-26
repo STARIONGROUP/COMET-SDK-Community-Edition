@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,100 +39,189 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="ElementUsageResolver"/> is to deserialize a JSON object to a <see cref="ElementUsage"/>
     /// </summary>
     public static class ElementUsageResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="ElementUsage"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="ElementUsage"/> to instantiate</returns>
-        public static CDP4Common.DTO.ElementUsage FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.ElementUsage FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var elementUsage = new CDP4Common.DTO.ElementUsage(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("alias", out var aliasProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty))
             {
-                elementUsage.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    elementUsage.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("category", out var categoryProperty))
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
             {
-                elementUsage.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    elementUsage.Category.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("definition", out var definitionProperty))
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
             {
-                elementUsage.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    elementUsage.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("elementDefinition", out var elementDefinitionProperty))
+            if (jsonElement.TryGetProperty("elementDefinition"u8, out var elementDefinitionProperty))
             {
-                elementUsage.ElementDefinition = elementDefinitionProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(elementDefinitionProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale elementDefinition property of the elementUsage {id} is null", elementUsage.Iid);
+                }
+                else
+                {
+                    elementUsage.ElementDefinition = elementDefinitionProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                elementUsage.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    elementUsage.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                elementUsage.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    elementUsage.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludeOption", out var excludeOptionProperty))
+            if (jsonElement.TryGetProperty("excludeOption"u8, out var excludeOptionProperty))
             {
-                elementUsage.ExcludeOption.AddRange(excludeOptionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludeOptionProperty.EnumerateArray())
+                {
+                    elementUsage.ExcludeOption.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty))
             {
-                elementUsage.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    elementUsage.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("interfaceEnd", out var interfaceEndProperty))
+            if (jsonElement.TryGetProperty("interfaceEnd"u8, out var interfaceEndProperty))
             {
-                elementUsage.InterfaceEnd = InterfaceEndKindDeserializer.Deserialize(interfaceEndProperty);
+                if(interfaceEndProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale interfaceEnd property of the elementUsage {id} is null", elementUsage.Iid);
+                }
+                else
+                {
+                    elementUsage.InterfaceEnd = InterfaceEndKindDeserializer.Deserialize(interfaceEndProperty);
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                elementUsage.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the elementUsage {id} is null", elementUsage.Iid);
+                }
+                else
+                {
+                    elementUsage.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                elementUsage.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the elementUsage {id} is null", elementUsage.Iid);
+                }
+                else
+                {
+                    elementUsage.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("owner", out var ownerProperty))
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                elementUsage.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the elementUsage {id} is null", elementUsage.Iid);
+                }
+                else
+                {
+                    elementUsage.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("parameterOverride", out var parameterOverrideProperty))
+            if (jsonElement.TryGetProperty("parameterOverride"u8, out var parameterOverrideProperty))
             {
-                elementUsage.ParameterOverride.AddRange(parameterOverrideProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in parameterOverrideProperty.EnumerateArray())
+                {
+                    elementUsage.ParameterOverride.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                elementUsage.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the elementUsage {id} is null", elementUsage.Iid);
+                }
+                else
+                {
+                    elementUsage.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                elementUsage.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the elementUsage {id} is null", elementUsage.Iid);
+                }
+                else
+                {
+                    elementUsage.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return elementUsage;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

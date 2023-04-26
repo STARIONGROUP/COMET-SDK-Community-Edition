@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,125 +39,253 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="IntervalScaleResolver"/> is to deserialize a JSON object to a <see cref="IntervalScale"/>
     /// </summary>
     public static class IntervalScaleResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="IntervalScale"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="IntervalScale"/> to instantiate</returns>
-        public static CDP4Common.DTO.IntervalScale FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.IntervalScale FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var intervalScale = new CDP4Common.DTO.IntervalScale(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("alias", out var aliasProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty))
             {
-                intervalScale.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    intervalScale.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("definition", out var definitionProperty))
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
             {
-                intervalScale.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    intervalScale.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                intervalScale.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    intervalScale.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                intervalScale.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    intervalScale.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty))
             {
-                intervalScale.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    intervalScale.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                intervalScale.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("isMaximumInclusive", out var isMaximumInclusiveProperty))
+            if (jsonElement.TryGetProperty("isMaximumInclusive"u8, out var isMaximumInclusiveProperty))
             {
-                intervalScale.IsMaximumInclusive = isMaximumInclusiveProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isMaximumInclusiveProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isMaximumInclusive property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.IsMaximumInclusive = isMaximumInclusiveProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("isMinimumInclusive", out var isMinimumInclusiveProperty))
+            if (jsonElement.TryGetProperty("isMinimumInclusive"u8, out var isMinimumInclusiveProperty))
             {
-                intervalScale.IsMinimumInclusive = isMinimumInclusiveProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isMinimumInclusiveProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isMinimumInclusive property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.IsMinimumInclusive = isMinimumInclusiveProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("mappingToReferenceScale", out var mappingToReferenceScaleProperty))
+            if (jsonElement.TryGetProperty("mappingToReferenceScale"u8, out var mappingToReferenceScaleProperty))
             {
-                intervalScale.MappingToReferenceScale.AddRange(mappingToReferenceScaleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in mappingToReferenceScaleProperty.EnumerateArray())
+                {
+                    intervalScale.MappingToReferenceScale.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("maximumPermissibleValue", out var maximumPermissibleValueProperty))
+            if (jsonElement.TryGetProperty("maximumPermissibleValue"u8, out var maximumPermissibleValueProperty))
             {
-                intervalScale.MaximumPermissibleValue = maximumPermissibleValueProperty.Deserialize<string>(SerializerOptions.Options);
+                if(maximumPermissibleValueProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale maximumPermissibleValue property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.MaximumPermissibleValue = maximumPermissibleValueProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("minimumPermissibleValue", out var minimumPermissibleValueProperty))
+            if (jsonElement.TryGetProperty("minimumPermissibleValue"u8, out var minimumPermissibleValueProperty))
             {
-                intervalScale.MinimumPermissibleValue = minimumPermissibleValueProperty.Deserialize<string>(SerializerOptions.Options);
+                if(minimumPermissibleValueProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale minimumPermissibleValue property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.MinimumPermissibleValue = minimumPermissibleValueProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                intervalScale.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                intervalScale.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("negativeValueConnotation", out var negativeValueConnotationProperty))
+            if (jsonElement.TryGetProperty("negativeValueConnotation"u8, out var negativeValueConnotationProperty))
             {
-                intervalScale.NegativeValueConnotation = negativeValueConnotationProperty.Deserialize<string>(SerializerOptions.Options);
+                if(negativeValueConnotationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale negativeValueConnotation property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.NegativeValueConnotation = negativeValueConnotationProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("numberSet", out var numberSetProperty))
+            if (jsonElement.TryGetProperty("numberSet"u8, out var numberSetProperty))
             {
-                intervalScale.NumberSet = NumberSetKindDeserializer.Deserialize(numberSetProperty);
+                if(numberSetProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale numberSet property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.NumberSet = NumberSetKindDeserializer.Deserialize(numberSetProperty);
+                }
             }
 
-            if (jObject.TryGetProperty("positiveValueConnotation", out var positiveValueConnotationProperty))
+            if (jsonElement.TryGetProperty("positiveValueConnotation"u8, out var positiveValueConnotationProperty))
             {
-                intervalScale.PositiveValueConnotation = positiveValueConnotationProperty.Deserialize<string>(SerializerOptions.Options);
+                if(positiveValueConnotationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale positiveValueConnotation property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.PositiveValueConnotation = positiveValueConnotationProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                intervalScale.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                intervalScale.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("unit", out var unitProperty))
+            if (jsonElement.TryGetProperty("unit"u8, out var unitProperty))
             {
-                intervalScale.Unit = unitProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(unitProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale unit property of the intervalScale {id} is null", intervalScale.Iid);
+                }
+                else
+                {
+                    intervalScale.Unit = unitProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("valueDefinition", out var valueDefinitionProperty))
+            if (jsonElement.TryGetProperty("valueDefinition"u8, out var valueDefinitionProperty))
             {
-                intervalScale.ValueDefinition.AddRange(valueDefinitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in valueDefinitionProperty.EnumerateArray())
+                {
+                    intervalScale.ValueDefinition.Add(element.GetGuid());
+                }
             }
-
             return intervalScale;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,84 +39,123 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="DefinitionResolver"/> is to deserialize a JSON object to a <see cref="Definition"/>
     /// </summary>
     public static class DefinitionResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="Definition"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="Definition"/> to instantiate</returns>
-        public static CDP4Common.DTO.Definition FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.Definition FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var definition = new CDP4Common.DTO.Definition(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("citation", out var citationProperty))
+            if (jsonElement.TryGetProperty("citation"u8, out var citationProperty))
             {
-                definition.Citation.AddRange(citationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("content", out var contentProperty))
-            {
-                definition.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("example", out var exampleProperty))
-            {
-                foreach(var arrayItem in exampleProperty.EnumerateArray())
+                foreach(var element in citationProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
-                    if (arrayItemValue != null)
-                    {
-                        definition.Example.Add(arrayItemValue);
-                    }
+                    definition.Citation.Add(element.GetGuid());
                 }
             }
-            
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
-            {
-                definition.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                definition.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
-            {
-                definition.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
-            {
-                definition.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("note", out var noteProperty))
-            {
-                foreach(var arrayItem in noteProperty.EnumerateArray())
+                if(contentProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
-                    if (arrayItemValue != null)
-                    {
-                        definition.Note.Add(arrayItemValue);
-                    }
+                    Logger.Debug("The non-nullabale content property of the definition {id} is null", definition.Iid);
+                }
+                else
+                {
+                    definition.Content = contentProperty.GetString();
                 }
             }
-            
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+
+            if (jsonElement.TryGetProperty("example"u8, out var exampleProperty))
             {
-                definition.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                definition.Example.AddRange(exampleProperty.ToOrderedItemCollection());
             }
 
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
+            {
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    definition.ExcludedDomain.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
+            {
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    definition.ExcludedPerson.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
+            {
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the definition {id} is null", definition.Iid);
+                }
+                else
+                {
+                    definition.LanguageCode = languageCodeProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
+            {
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the definition {id} is null", definition.Iid);
+                }
+                else
+                {
+                    definition.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("note"u8, out var noteProperty))
+            {
+                definition.Note.AddRange(noteProperty.ToOrderedItemCollection());
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the definition {id} is null", definition.Iid);
+                }
+                else
+                {
+                    definition.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
             return definition;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

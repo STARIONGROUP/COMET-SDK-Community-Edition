@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,60 +39,117 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="PersonPermissionResolver"/> is to deserialize a JSON object to a <see cref="PersonPermission"/>
     /// </summary>
     public static class PersonPermissionResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="PersonPermission"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="PersonPermission"/> to instantiate</returns>
-        public static CDP4Common.DTO.PersonPermission FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.PersonPermission FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var personPermission = new CDP4Common.DTO.PersonPermission(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("accessRight", out var accessRightProperty))
+            if (jsonElement.TryGetProperty("accessRight"u8, out var accessRightProperty))
             {
-                personPermission.AccessRight = PersonAccessRightKindDeserializer.Deserialize(accessRightProperty);
+                if(accessRightProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale accessRight property of the personPermission {id} is null", personPermission.Iid);
+                }
+                else
+                {
+                    personPermission.AccessRight = PersonAccessRightKindDeserializer.Deserialize(accessRightProperty);
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                personPermission.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    personPermission.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                personPermission.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    personPermission.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                personPermission.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the personPermission {id} is null", personPermission.Iid);
+                }
+                else
+                {
+                    personPermission.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                personPermission.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the personPermission {id} is null", personPermission.Iid);
+                }
+                else
+                {
+                    personPermission.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("objectClass", out var objectClassProperty))
+            if (jsonElement.TryGetProperty("objectClass"u8, out var objectClassProperty))
             {
-                personPermission.ObjectClass = ClassKindDeserializer.Deserialize(objectClassProperty);
+                if(objectClassProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale objectClass property of the personPermission {id} is null", personPermission.Iid);
+                }
+                else
+                {
+                    personPermission.ObjectClass = ClassKindDeserializer.Deserialize(objectClassProperty);
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                personPermission.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the personPermission {id} is null", personPermission.Iid);
+                }
+                else
+                {
+                    personPermission.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return personPermission;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

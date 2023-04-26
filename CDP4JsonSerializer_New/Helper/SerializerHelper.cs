@@ -110,12 +110,10 @@ namespace CDP4JsonSerializer_SystemTextJson
                 var orderedItem = new OrderedItem
                 {
                     K = prop.GetProperty("k").GetInt64(),
-                    V = prop.GetProperty("v").ToString(),
+                    V = prop.GetProperty("v").GetString(),
                 };
                 
-                var move = prop.GetProperty("m");
-
-                if (move.TryGetProperty("m", out var value))
+                if (prop.TryGetProperty("m", out var value))
                 {
                     orderedItem.M = value.GetInt64();
                 }
@@ -178,7 +176,7 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             for (var i = 0; i < items.Count; i++)
             {
-                items[i] = $"{JsonSerializer.Serialize(items[i])}";
+                items[i] = $"{JsonSerializer.Serialize(items[i], SerializerOptions.Options)}";
             }
 
             return items;

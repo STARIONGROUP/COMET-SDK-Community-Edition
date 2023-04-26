@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,97 +39,166 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="PossibleFiniteStateListResolver"/> is to deserialize a JSON object to a <see cref="PossibleFiniteStateList"/>
     /// </summary>
     public static class PossibleFiniteStateListResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="PossibleFiniteStateList"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="PossibleFiniteStateList"/> to instantiate</returns>
-        public static CDP4Common.DTO.PossibleFiniteStateList FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.PossibleFiniteStateList FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var possibleFiniteStateList = new CDP4Common.DTO.PossibleFiniteStateList(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("alias", out var aliasProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty))
             {
-                possibleFiniteStateList.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("category", out var categoryProperty))
-            {
-                possibleFiniteStateList.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("defaultState", out var defaultStateProperty))
-            {
-                possibleFiniteStateList.DefaultState = defaultStateProperty.Deserialize<Guid?>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("definition", out var definitionProperty))
-            {
-                possibleFiniteStateList.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
-            {
-                possibleFiniteStateList.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
-            {
-                possibleFiniteStateList.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
-            {
-                possibleFiniteStateList.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
-            {
-                possibleFiniteStateList.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("name", out var nameProperty))
-            {
-                possibleFiniteStateList.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("owner", out var ownerProperty))
-            {
-                possibleFiniteStateList.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("possibleState", out var possibleStateProperty))
-            {
-                foreach(var arrayItem in possibleStateProperty.EnumerateArray())
+                foreach(var element in aliasProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
-                    if (arrayItemValue != null)
-                    {
-                        possibleFiniteStateList.PossibleState.Add(arrayItemValue);
-                    }
+                    possibleFiniteStateList.Alias.Add(element.GetGuid());
                 }
             }
-            
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
             {
-                possibleFiniteStateList.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    possibleFiniteStateList.Category.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("defaultState"u8, out var defaultStateProperty))
             {
-                possibleFiniteStateList.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(defaultStateProperty.ValueKind == JsonValueKind.Null)
+                {
+                    possibleFiniteStateList.DefaultState = null;
+                }
+                else
+                {
+                    possibleFiniteStateList.DefaultState = defaultStateProperty.GetGuid();
+                }
             }
 
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
+            {
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    possibleFiniteStateList.Definition.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
+            {
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    possibleFiniteStateList.ExcludedDomain.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
+            {
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    possibleFiniteStateList.ExcludedPerson.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty))
+            {
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    possibleFiniteStateList.HyperLink.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
+            {
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
+                }
+                else
+                {
+                    possibleFiniteStateList.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
+            {
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
+                }
+                else
+                {
+                    possibleFiniteStateList.Name = nameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
+            {
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
+                }
+                else
+                {
+                    possibleFiniteStateList.Owner = ownerProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("possibleState"u8, out var possibleStateProperty))
+            {
+                possibleFiniteStateList.PossibleState.AddRange(possibleStateProperty.ToOrderedItemCollection());
+            }
+
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
+            {
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
+                }
+                else
+                {
+                    possibleFiniteStateList.ShortName = shortNameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
+                }
+                else
+                {
+                    possibleFiniteStateList.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
             return possibleFiniteStateList;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

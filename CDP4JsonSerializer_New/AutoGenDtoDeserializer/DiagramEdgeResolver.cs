@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,97 +39,170 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="DiagramEdgeResolver"/> is to deserialize a JSON object to a <see cref="DiagramEdge"/>
     /// </summary>
     public static class DiagramEdgeResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="DiagramEdge"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="DiagramEdge"/> to instantiate</returns>
-        public static CDP4Common.DTO.DiagramEdge FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.DiagramEdge FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var diagramEdge = new CDP4Common.DTO.DiagramEdge(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("bounds", out var boundsProperty))
+            if (jsonElement.TryGetProperty("bounds"u8, out var boundsProperty))
             {
-                diagramEdge.Bounds.AddRange(boundsProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("depictedThing", out var depictedThingProperty))
-            {
-                diagramEdge.DepictedThing = depictedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("diagramElement", out var diagramElementProperty))
-            {
-                diagramEdge.DiagramElement.AddRange(diagramElementProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
-            {
-                diagramEdge.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
-            {
-                diagramEdge.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("localStyle", out var localStyleProperty))
-            {
-                diagramEdge.LocalStyle.AddRange(localStyleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
-            {
-                diagramEdge.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("name", out var nameProperty))
-            {
-                diagramEdge.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("point", out var pointProperty))
-            {
-                foreach(var arrayItem in pointProperty.EnumerateArray())
+                foreach(var element in boundsProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
-                    if (arrayItemValue != null)
-                    {
-                        diagramEdge.Point.Add(arrayItemValue);
-                    }
+                    diagramEdge.Bounds.Add(element.GetGuid());
                 }
             }
-            
-            if (jObject.TryGetProperty("sharedStyle", out var sharedStyleProperty))
+
+            if (jsonElement.TryGetProperty("depictedThing"u8, out var depictedThingProperty))
             {
-                diagramEdge.SharedStyle = sharedStyleProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(depictedThingProperty.ValueKind == JsonValueKind.Null)
+                {
+                    diagramEdge.DepictedThing = null;
+                }
+                else
+                {
+                    diagramEdge.DepictedThing = depictedThingProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("source", out var sourceProperty))
+            if (jsonElement.TryGetProperty("diagramElement"u8, out var diagramElementProperty))
             {
-                diagramEdge.Source = sourceProperty.Deserialize<Guid>(SerializerOptions.Options);
+                foreach(var element in diagramElementProperty.EnumerateArray())
+                {
+                    diagramEdge.DiagramElement.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("target", out var targetProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                diagramEdge.Target = targetProperty.Deserialize<Guid>(SerializerOptions.Options);
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    diagramEdge.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                diagramEdge.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    diagramEdge.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
+            if (jsonElement.TryGetProperty("localStyle"u8, out var localStyleProperty))
+            {
+                foreach(var element in localStyleProperty.EnumerateArray())
+                {
+                    diagramEdge.LocalStyle.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
+            {
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the diagramEdge {id} is null", diagramEdge.Iid);
+                }
+                else
+                {
+                    diagramEdge.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
+            {
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the diagramEdge {id} is null", diagramEdge.Iid);
+                }
+                else
+                {
+                    diagramEdge.Name = nameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("point"u8, out var pointProperty))
+            {
+                diagramEdge.Point.AddRange(pointProperty.ToOrderedItemCollection());
+            }
+
+            if (jsonElement.TryGetProperty("sharedStyle"u8, out var sharedStyleProperty))
+            {
+                if(sharedStyleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    diagramEdge.SharedStyle = null;
+                }
+                else
+                {
+                    diagramEdge.SharedStyle = sharedStyleProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
+            {
+                if(sourceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale source property of the diagramEdge {id} is null", diagramEdge.Iid);
+                }
+                else
+                {
+                    diagramEdge.Source = sourceProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
+            {
+                if(targetProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale target property of the diagramEdge {id} is null", diagramEdge.Iid);
+                }
+                else
+                {
+                    diagramEdge.Target = targetProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the diagramEdge {id} is null", diagramEdge.Iid);
+                }
+                else
+                {
+                    diagramEdge.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
             return diagramEdge;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

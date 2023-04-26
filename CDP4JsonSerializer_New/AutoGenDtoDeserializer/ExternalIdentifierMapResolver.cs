@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,80 +39,161 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="ExternalIdentifierMapResolver"/> is to deserialize a JSON object to a <see cref="ExternalIdentifierMap"/>
     /// </summary>
     public static class ExternalIdentifierMapResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="ExternalIdentifierMap"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="ExternalIdentifierMap"/> to instantiate</returns>
-        public static CDP4Common.DTO.ExternalIdentifierMap FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.ExternalIdentifierMap FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var externalIdentifierMap = new CDP4Common.DTO.ExternalIdentifierMap(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("correspondence", out var correspondenceProperty))
+            if (jsonElement.TryGetProperty("correspondence"u8, out var correspondenceProperty))
             {
-                externalIdentifierMap.Correspondence.AddRange(correspondenceProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in correspondenceProperty.EnumerateArray())
+                {
+                    externalIdentifierMap.Correspondence.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                externalIdentifierMap.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    externalIdentifierMap.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                externalIdentifierMap.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    externalIdentifierMap.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("externalFormat", out var externalFormatProperty))
+            if (jsonElement.TryGetProperty("externalFormat"u8, out var externalFormatProperty))
             {
-                externalIdentifierMap.ExternalFormat = externalFormatProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(externalFormatProperty.ValueKind == JsonValueKind.Null)
+                {
+                    externalIdentifierMap.ExternalFormat = null;
+                }
+                else
+                {
+                    externalIdentifierMap.ExternalFormat = externalFormatProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("externalModelName", out var externalModelNameProperty))
+            if (jsonElement.TryGetProperty("externalModelName"u8, out var externalModelNameProperty))
             {
-                externalIdentifierMap.ExternalModelName = externalModelNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(externalModelNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale externalModelName property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                }
+                else
+                {
+                    externalIdentifierMap.ExternalModelName = externalModelNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("externalToolName", out var externalToolNameProperty))
+            if (jsonElement.TryGetProperty("externalToolName"u8, out var externalToolNameProperty))
             {
-                externalIdentifierMap.ExternalToolName = externalToolNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(externalToolNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale externalToolName property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                }
+                else
+                {
+                    externalIdentifierMap.ExternalToolName = externalToolNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("externalToolVersion", out var externalToolVersionProperty))
+            if (jsonElement.TryGetProperty("externalToolVersion"u8, out var externalToolVersionProperty))
             {
-                externalIdentifierMap.ExternalToolVersion = externalToolVersionProperty.Deserialize<string>(SerializerOptions.Options);
+                if(externalToolVersionProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale externalToolVersion property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                }
+                else
+                {
+                    externalIdentifierMap.ExternalToolVersion = externalToolVersionProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                externalIdentifierMap.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                }
+                else
+                {
+                    externalIdentifierMap.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                externalIdentifierMap.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                }
+                else
+                {
+                    externalIdentifierMap.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("owner", out var ownerProperty))
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                externalIdentifierMap.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                }
+                else
+                {
+                    externalIdentifierMap.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                externalIdentifierMap.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                }
+                else
+                {
+                    externalIdentifierMap.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return externalIdentifierMap;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

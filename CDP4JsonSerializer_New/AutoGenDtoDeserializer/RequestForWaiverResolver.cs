@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,120 +39,241 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="RequestForWaiverResolver"/> is to deserialize a JSON object to a <see cref="RequestForWaiver"/>
     /// </summary>
     public static class RequestForWaiverResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="RequestForWaiver"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="RequestForWaiver"/> to instantiate</returns>
-        public static CDP4Common.DTO.RequestForWaiver FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.RequestForWaiver FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var requestForWaiver = new CDP4Common.DTO.RequestForWaiver(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("approvedBy", out var approvedByProperty))
+            if (jsonElement.TryGetProperty("approvedBy"u8, out var approvedByProperty))
             {
-                requestForWaiver.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in approvedByProperty.EnumerateArray())
+                {
+                    requestForWaiver.ApprovedBy.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("author", out var authorProperty))
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                requestForWaiver.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale author property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("category", out var categoryProperty))
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
             {
-                requestForWaiver.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    requestForWaiver.Category.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("classification", out var classificationProperty))
+            if (jsonElement.TryGetProperty("classification"u8, out var classificationProperty))
             {
-                requestForWaiver.Classification = AnnotationClassificationKindDeserializer.Deserialize(classificationProperty);
+                if(classificationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale classification property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.Classification = AnnotationClassificationKindDeserializer.Deserialize(classificationProperty);
+                }
             }
 
-            if (jObject.TryGetProperty("content", out var contentProperty))
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                requestForWaiver.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.Content = contentProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                requestForWaiver.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("discussion", out var discussionProperty))
+            if (jsonElement.TryGetProperty("discussion"u8, out var discussionProperty))
             {
-                requestForWaiver.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in discussionProperty.EnumerateArray())
+                {
+                    requestForWaiver.Discussion.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                requestForWaiver.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    requestForWaiver.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                requestForWaiver.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    requestForWaiver.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                requestForWaiver.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                requestForWaiver.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("owner", out var ownerProperty))
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                requestForWaiver.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("primaryAnnotatedThing", out var primaryAnnotatedThingProperty))
+            if (jsonElement.TryGetProperty("primaryAnnotatedThing"u8, out var primaryAnnotatedThingProperty))
             {
-                requestForWaiver.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(primaryAnnotatedThingProperty.ValueKind == JsonValueKind.Null)
+                {
+                    requestForWaiver.PrimaryAnnotatedThing = null;
+                }
+                else
+                {
+                    requestForWaiver.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
+            if (jsonElement.TryGetProperty("relatedThing"u8, out var relatedThingProperty))
             {
-                requestForWaiver.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in relatedThingProperty.EnumerateArray())
+                {
+                    requestForWaiver.RelatedThing.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                requestForWaiver.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("sourceAnnotation", out var sourceAnnotationProperty))
+            if (jsonElement.TryGetProperty("sourceAnnotation"u8, out var sourceAnnotationProperty))
             {
-                requestForWaiver.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in sourceAnnotationProperty.EnumerateArray())
+                {
+                    requestForWaiver.SourceAnnotation.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("status", out var statusProperty))
+            if (jsonElement.TryGetProperty("status"u8, out var statusProperty))
             {
-                requestForWaiver.Status = AnnotationStatusKindDeserializer.Deserialize(statusProperty);
+                if(statusProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale status property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.Status = AnnotationStatusKindDeserializer.Deserialize(statusProperty);
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                requestForWaiver.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("title", out var titleProperty))
+            if (jsonElement.TryGetProperty("title"u8, out var titleProperty))
             {
-                requestForWaiver.Title = titleProperty.Deserialize<string>(SerializerOptions.Options);
+                if(titleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale title property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                }
+                else
+                {
+                    requestForWaiver.Title = titleProperty.GetString();
+                }
             }
-
             return requestForWaiver;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

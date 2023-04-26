@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,125 +39,249 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="ReviewItemDiscrepancyResolver"/> is to deserialize a JSON object to a <see cref="ReviewItemDiscrepancy"/>
     /// </summary>
     public static class ReviewItemDiscrepancyResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="ReviewItemDiscrepancy"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="ReviewItemDiscrepancy"/> to instantiate</returns>
-        public static CDP4Common.DTO.ReviewItemDiscrepancy FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.ReviewItemDiscrepancy FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var reviewItemDiscrepancy = new CDP4Common.DTO.ReviewItemDiscrepancy(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("approvedBy", out var approvedByProperty))
+            if (jsonElement.TryGetProperty("approvedBy"u8, out var approvedByProperty))
             {
-                reviewItemDiscrepancy.ApprovedBy.AddRange(approvedByProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in approvedByProperty.EnumerateArray())
+                {
+                    reviewItemDiscrepancy.ApprovedBy.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("author", out var authorProperty))
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                reviewItemDiscrepancy.Author = authorProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale author property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("category", out var categoryProperty))
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
             {
-                reviewItemDiscrepancy.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    reviewItemDiscrepancy.Category.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("classification", out var classificationProperty))
+            if (jsonElement.TryGetProperty("classification"u8, out var classificationProperty))
             {
-                reviewItemDiscrepancy.Classification = AnnotationClassificationKindDeserializer.Deserialize(classificationProperty);
+                if(classificationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale classification property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.Classification = AnnotationClassificationKindDeserializer.Deserialize(classificationProperty);
+                }
             }
 
-            if (jObject.TryGetProperty("content", out var contentProperty))
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                reviewItemDiscrepancy.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.Content = contentProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                reviewItemDiscrepancy.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("discussion", out var discussionProperty))
+            if (jsonElement.TryGetProperty("discussion"u8, out var discussionProperty))
             {
-                reviewItemDiscrepancy.Discussion.AddRange(discussionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in discussionProperty.EnumerateArray())
+                {
+                    reviewItemDiscrepancy.Discussion.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                reviewItemDiscrepancy.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    reviewItemDiscrepancy.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                reviewItemDiscrepancy.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    reviewItemDiscrepancy.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                reviewItemDiscrepancy.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                reviewItemDiscrepancy.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("owner", out var ownerProperty))
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                reviewItemDiscrepancy.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("primaryAnnotatedThing", out var primaryAnnotatedThingProperty))
+            if (jsonElement.TryGetProperty("primaryAnnotatedThing"u8, out var primaryAnnotatedThingProperty))
             {
-                reviewItemDiscrepancy.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(primaryAnnotatedThingProperty.ValueKind == JsonValueKind.Null)
+                {
+                    reviewItemDiscrepancy.PrimaryAnnotatedThing = null;
+                }
+                else
+                {
+                    reviewItemDiscrepancy.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("relatedThing", out var relatedThingProperty))
+            if (jsonElement.TryGetProperty("relatedThing"u8, out var relatedThingProperty))
             {
-                reviewItemDiscrepancy.RelatedThing.AddRange(relatedThingProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in relatedThingProperty.EnumerateArray())
+                {
+                    reviewItemDiscrepancy.RelatedThing.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                reviewItemDiscrepancy.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("solution", out var solutionProperty))
+            if (jsonElement.TryGetProperty("solution"u8, out var solutionProperty))
             {
-                reviewItemDiscrepancy.Solution.AddRange(solutionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in solutionProperty.EnumerateArray())
+                {
+                    reviewItemDiscrepancy.Solution.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("sourceAnnotation", out var sourceAnnotationProperty))
+            if (jsonElement.TryGetProperty("sourceAnnotation"u8, out var sourceAnnotationProperty))
             {
-                reviewItemDiscrepancy.SourceAnnotation.AddRange(sourceAnnotationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in sourceAnnotationProperty.EnumerateArray())
+                {
+                    reviewItemDiscrepancy.SourceAnnotation.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("status", out var statusProperty))
+            if (jsonElement.TryGetProperty("status"u8, out var statusProperty))
             {
-                reviewItemDiscrepancy.Status = AnnotationStatusKindDeserializer.Deserialize(statusProperty);
+                if(statusProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale status property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.Status = AnnotationStatusKindDeserializer.Deserialize(statusProperty);
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                reviewItemDiscrepancy.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("title", out var titleProperty))
+            if (jsonElement.TryGetProperty("title"u8, out var titleProperty))
             {
-                reviewItemDiscrepancy.Title = titleProperty.Deserialize<string>(SerializerOptions.Options);
+                if(titleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale title property of the reviewItemDiscrepancy {id} is null", reviewItemDiscrepancy.Iid);
+                }
+                else
+                {
+                    reviewItemDiscrepancy.Title = titleProperty.GetString();
+                }
             }
-
             return reviewItemDiscrepancy;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,75 +39,153 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="NestedParameterResolver"/> is to deserialize a JSON object to a <see cref="NestedParameter"/>
     /// </summary>
     public static class NestedParameterResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="NestedParameter"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="NestedParameter"/> to instantiate</returns>
-        public static CDP4Common.DTO.NestedParameter FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.NestedParameter FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var nestedParameter = new CDP4Common.DTO.NestedParameter(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("actualState", out var actualStateProperty))
+            if (jsonElement.TryGetProperty("actualState"u8, out var actualStateProperty))
             {
-                nestedParameter.ActualState = actualStateProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(actualStateProperty.ValueKind == JsonValueKind.Null)
+                {
+                    nestedParameter.ActualState = null;
+                }
+                else
+                {
+                    nestedParameter.ActualState = actualStateProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("actualValue", out var actualValueProperty))
+            if (jsonElement.TryGetProperty("actualValue"u8, out var actualValueProperty))
             {
-                nestedParameter.ActualValue = actualValueProperty.Deserialize<string>(SerializerOptions.Options);
+                if(actualValueProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale actualValue property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.ActualValue = actualValueProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("associatedParameter", out var associatedParameterProperty))
+            if (jsonElement.TryGetProperty("associatedParameter"u8, out var associatedParameterProperty))
             {
-                nestedParameter.AssociatedParameter = associatedParameterProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(associatedParameterProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale associatedParameter property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.AssociatedParameter = associatedParameterProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                nestedParameter.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    nestedParameter.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                nestedParameter.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    nestedParameter.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("formula", out var formulaProperty))
+            if (jsonElement.TryGetProperty("formula"u8, out var formulaProperty))
             {
-                nestedParameter.Formula = formulaProperty.Deserialize<string>(SerializerOptions.Options);
+                if(formulaProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale formula property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.Formula = formulaProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("isVolatile", out var isVolatileProperty))
+            if (jsonElement.TryGetProperty("isVolatile"u8, out var isVolatileProperty))
             {
-                nestedParameter.IsVolatile = isVolatileProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isVolatileProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isVolatile property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.IsVolatile = isVolatileProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                nestedParameter.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("owner", out var ownerProperty))
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                nestedParameter.Owner = ownerProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                nestedParameter.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return nestedParameter;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

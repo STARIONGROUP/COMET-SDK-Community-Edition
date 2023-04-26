@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RuleVerificationStatusKindDeserializer.cs" company="RHEA System S.A.">
+// <copyright file="VcardEmailAddressKindDeserializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
@@ -21,7 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_SystemTextJson.EnumDeserializers
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
@@ -33,25 +37,29 @@ namespace CDP4JsonSerializer_SystemTextJson.EnumDeserializers
     using CDP4Common.SiteDirectoryData;
 
     /// <summary>
-    /// The purpose of the <see cref="RuleVerificationStatusKindDeserializer"/> is to deserialize a JSON object to a <see cref="RuleVerificationStatusKind"/>
+    /// The purpose of the <see cref="VcardEmailAddressKindDeserializer"/> is to deserialize a JSON object to a <see cref="VcardEmailAddressKind"/>
     /// </summary>
-    internal static class RuleVerificationStatusKindDeserializer
+    internal static class VcardEmailAddressKindDeserializer
     {
         /// <summary>
-        /// Deserializes the <see cref="JsonElement"/> into a <see cref="RuleVerificationStatusKind"/>
+        /// Deserializes the <see cref="JsonElement"/> into a <see cref="VcardEmailAddressKind"/>
         /// </summary>
         /// <param name="jsonElement">the element to deserialize</param>
-        /// <returns>the <see cref="RuleVerificationStatusKind"/></returns>
-        /// <exception cref="ArgumentException">if the <see cref="JsonElement"/> can't be parsed into the <see cref="RuleVerificationStatusKind"/></exception>
-        internal static RuleVerificationStatusKind Deserialize(JsonElement jsonElement)
+        /// <returns>the <see cref="VcardEmailAddressKind"/></returns>
+        /// <exception cref="ArgumentException">if the <see cref="JsonElement"/> can't be parsed into the <see cref="VcardEmailAddressKind"/></exception>
+        internal static VcardEmailAddressKind Deserialize(JsonElement jsonElement)
         {
             var value = jsonElement.GetString();
 
-            if(Enum.TryParse(value, out RuleVerificationStatusKind result))
+            if(Enum.TryParse(value, out VcardEmailAddressKind result))
             {
                 return result;
             }
-            throw new ArgumentException($"{value} is not a valid RuleVerificationStatusKind", nameof(value));
+            throw new ArgumentException($"{value} is not a valid VcardEmailAddressKind", nameof(value));
         }        
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

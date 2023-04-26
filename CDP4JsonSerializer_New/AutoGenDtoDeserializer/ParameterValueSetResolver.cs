@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,90 +39,137 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="ParameterValueSetResolver"/> is to deserialize a JSON object to a <see cref="ParameterValueSet"/>
     /// </summary>
     public static class ParameterValueSetResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="ParameterValueSet"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="ParameterValueSet"/> to instantiate</returns>
-        public static CDP4Common.DTO.ParameterValueSet FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.ParameterValueSet FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var parameterValueSet = new CDP4Common.DTO.ParameterValueSet(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("actualOption", out var actualOptionProperty))
+            if (jsonElement.TryGetProperty("actualOption"u8, out var actualOptionProperty))
             {
-                parameterValueSet.ActualOption = actualOptionProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(actualOptionProperty.ValueKind == JsonValueKind.Null)
+                {
+                    parameterValueSet.ActualOption = null;
+                }
+                else
+                {
+                    parameterValueSet.ActualOption = actualOptionProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("actualState", out var actualStateProperty))
+            if (jsonElement.TryGetProperty("actualState"u8, out var actualStateProperty))
             {
-                parameterValueSet.ActualState = actualStateProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(actualStateProperty.ValueKind == JsonValueKind.Null)
+                {
+                    parameterValueSet.ActualState = null;
+                }
+                else
+                {
+                    parameterValueSet.ActualState = actualStateProperty.GetGuid();
+                }
             }
-
-            if (jObject.TryGetProperty("computed", out var computedProperty))
+            if (jsonElement.TryGetProperty("computed"u8, out var computedProperty))
             {
                 parameterValueSet.Computed = SerializerHelper.ToValueArray<string>(computedProperty.GetString());
             }
 
-            
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                parameterValueSet.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    parameterValueSet.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                parameterValueSet.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    parameterValueSet.ExcludedPerson.Add(element.GetGuid());
+                }
             }
-
-            if (jObject.TryGetProperty("formula", out var formulaProperty))
+            if (jsonElement.TryGetProperty("formula"u8, out var formulaProperty))
             {
                 parameterValueSet.Formula = SerializerHelper.ToValueArray<string>(formulaProperty.GetString());
             }
-
-            
-            if (jObject.TryGetProperty("manual", out var manualProperty))
+            if (jsonElement.TryGetProperty("manual"u8, out var manualProperty))
             {
                 parameterValueSet.Manual = SerializerHelper.ToValueArray<string>(manualProperty.GetString());
             }
 
-            
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                parameterValueSet.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the parameterValueSet {id} is null", parameterValueSet.Iid);
+                }
+                else
+                {
+                    parameterValueSet.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
-
-            if (jObject.TryGetProperty("published", out var publishedProperty))
+            if (jsonElement.TryGetProperty("published"u8, out var publishedProperty))
             {
                 parameterValueSet.Published = SerializerHelper.ToValueArray<string>(publishedProperty.GetString());
             }
-
-            
-            if (jObject.TryGetProperty("reference", out var referenceProperty))
+            if (jsonElement.TryGetProperty("reference"u8, out var referenceProperty))
             {
                 parameterValueSet.Reference = SerializerHelper.ToValueArray<string>(referenceProperty.GetString());
             }
 
-            
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                parameterValueSet.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the parameterValueSet {id} is null", parameterValueSet.Iid);
+                }
+                else
+                {
+                    parameterValueSet.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("valueSwitch", out var valueSwitchProperty))
+            if (jsonElement.TryGetProperty("valueSwitch"u8, out var valueSwitchProperty))
             {
-                parameterValueSet.ValueSwitch = ParameterSwitchKindDeserializer.Deserialize(valueSwitchProperty);
+                if(valueSwitchProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale valueSwitch property of the parameterValueSet {id} is null", parameterValueSet.Iid);
+                }
+                else
+                {
+                    parameterValueSet.ValueSwitch = ParameterSwitchKindDeserializer.Deserialize(valueSwitchProperty);
+                }
             }
-
             return parameterValueSet;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,103 +39,178 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="EnumerationParameterTypeResolver"/> is to deserialize a JSON object to a <see cref="EnumerationParameterType"/>
     /// </summary>
     public static class EnumerationParameterTypeResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="EnumerationParameterType"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="EnumerationParameterType"/> to instantiate</returns>
-        public static CDP4Common.DTO.EnumerationParameterType FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.EnumerationParameterType FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var enumerationParameterType = new CDP4Common.DTO.EnumerationParameterType(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("alias", out var aliasProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty))
             {
-                enumerationParameterType.Alias.AddRange(aliasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("allowMultiSelect", out var allowMultiSelectProperty))
-            {
-                enumerationParameterType.AllowMultiSelect = allowMultiSelectProperty.Deserialize<bool>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("category", out var categoryProperty))
-            {
-                enumerationParameterType.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("definition", out var definitionProperty))
-            {
-                enumerationParameterType.Definition.AddRange(definitionProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
-            {
-                enumerationParameterType.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
-            {
-                enumerationParameterType.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("hyperLink", out var hyperLinkProperty))
-            {
-                enumerationParameterType.HyperLink.AddRange(hyperLinkProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("isDeprecated", out var isDeprecatedProperty))
-            {
-                enumerationParameterType.IsDeprecated = isDeprecatedProperty.Deserialize<bool>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
-            {
-                enumerationParameterType.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("name", out var nameProperty))
-            {
-                enumerationParameterType.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("shortName", out var shortNameProperty))
-            {
-                enumerationParameterType.ShortName = shortNameProperty.Deserialize<string>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("symbol", out var symbolProperty))
-            {
-                enumerationParameterType.Symbol = symbolProperty.Deserialize<string>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
-            {
-                enumerationParameterType.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("valueDefinition", out var valueDefinitionProperty))
-            {
-                foreach(var arrayItem in valueDefinitionProperty.EnumerateArray())
+                foreach(var element in aliasProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
-                    if (arrayItemValue != null)
-                    {
-                        enumerationParameterType.ValueDefinition.Add(arrayItemValue);
-                    }
+                    enumerationParameterType.Alias.Add(element.GetGuid());
                 }
             }
-            
 
+            if (jsonElement.TryGetProperty("allowMultiSelect"u8, out var allowMultiSelectProperty))
+            {
+                if(allowMultiSelectProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale allowMultiSelect property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.AllowMultiSelect = allowMultiSelectProperty.GetBoolean();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
+            {
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    enumerationParameterType.Category.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
+            {
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    enumerationParameterType.Definition.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
+            {
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    enumerationParameterType.ExcludedDomain.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
+            {
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    enumerationParameterType.ExcludedPerson.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty))
+            {
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    enumerationParameterType.HyperLink.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
+            {
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
+            {
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
+            {
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.Name = nameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
+            {
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.ShortName = shortNameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("symbol"u8, out var symbolProperty))
+            {
+                if(symbolProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale symbol property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.Symbol = symbolProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("valueDefinition"u8, out var valueDefinitionProperty))
+            {
+                enumerationParameterType.ValueDefinition.AddRange(valueDefinitionProperty.ToOrderedItemCollection());
+            }
             return enumerationParameterType;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,90 +39,173 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="ModelLogEntryResolver"/> is to deserialize a JSON object to a <see cref="ModelLogEntry"/>
     /// </summary>
     public static class ModelLogEntryResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="ModelLogEntry"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="ModelLogEntry"/> to instantiate</returns>
-        public static CDP4Common.DTO.ModelLogEntry FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.ModelLogEntry FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var modelLogEntry = new CDP4Common.DTO.ModelLogEntry(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("affectedDomainIid", out var affectedDomainIidProperty))
+            if (jsonElement.TryGetProperty("affectedDomainIid"u8, out var affectedDomainIidProperty))
             {
-                modelLogEntry.AffectedDomainIid.AddRange(affectedDomainIidProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in affectedDomainIidProperty.EnumerateArray())
+                {
+                    modelLogEntry.AffectedDomainIid.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("affectedItemIid", out var affectedItemIidProperty))
+            if (jsonElement.TryGetProperty("affectedItemIid"u8, out var affectedItemIidProperty))
             {
-                modelLogEntry.AffectedItemIid.AddRange(affectedItemIidProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in affectedItemIidProperty.EnumerateArray())
+                {
+                    modelLogEntry.AffectedItemIid.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("author", out var authorProperty))
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                modelLogEntry.Author = authorProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    modelLogEntry.Author = null;
+                }
+                else
+                {
+                    modelLogEntry.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("category", out var categoryProperty))
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty))
             {
-                modelLogEntry.Category.AddRange(categoryProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    modelLogEntry.Category.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("content", out var contentProperty))
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                modelLogEntry.Content = contentProperty.Deserialize<string>(SerializerOptions.Options);
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the modelLogEntry {id} is null", modelLogEntry.Iid);
+                }
+                else
+                {
+                    modelLogEntry.Content = contentProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("createdOn", out var createdOnProperty))
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                modelLogEntry.CreatedOn = createdOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the modelLogEntry {id} is null", modelLogEntry.Iid);
+                }
+                else
+                {
+                    modelLogEntry.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                modelLogEntry.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    modelLogEntry.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                modelLogEntry.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    modelLogEntry.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("languageCode", out var languageCodeProperty))
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                modelLogEntry.LanguageCode = languageCodeProperty.Deserialize<string>(SerializerOptions.Options);
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the modelLogEntry {id} is null", modelLogEntry.Iid);
+                }
+                else
+                {
+                    modelLogEntry.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("level", out var levelProperty))
+            if (jsonElement.TryGetProperty("level"u8, out var levelProperty))
             {
-                modelLogEntry.Level = LogLevelKindDeserializer.Deserialize(levelProperty);
+                if(levelProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale level property of the modelLogEntry {id} is null", modelLogEntry.Iid);
+                }
+                else
+                {
+                    modelLogEntry.Level = LogLevelKindDeserializer.Deserialize(levelProperty);
+                }
             }
 
-            if (jObject.TryGetProperty("logEntryChangelogItem", out var logEntryChangelogItemProperty))
+            if (jsonElement.TryGetProperty("logEntryChangelogItem"u8, out var logEntryChangelogItemProperty))
             {
-                modelLogEntry.LogEntryChangelogItem.AddRange(logEntryChangelogItemProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in logEntryChangelogItemProperty.EnumerateArray())
+                {
+                    modelLogEntry.LogEntryChangelogItem.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                modelLogEntry.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the modelLogEntry {id} is null", modelLogEntry.Iid);
+                }
+                else
+                {
+                    modelLogEntry.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                modelLogEntry.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the modelLogEntry {id} is null", modelLogEntry.Iid);
+                }
+                else
+                {
+                    modelLogEntry.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return modelLogEntry;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

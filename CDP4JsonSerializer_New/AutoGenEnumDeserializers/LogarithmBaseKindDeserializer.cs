@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogEntryChangelogItemKindDeserializer.cs" company="RHEA System S.A.">
+// <copyright file="LogarithmBaseKindDeserializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
@@ -21,7 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_SystemTextJson.EnumDeserializers
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
@@ -33,25 +37,29 @@ namespace CDP4JsonSerializer_SystemTextJson.EnumDeserializers
     using CDP4Common.SiteDirectoryData;
 
     /// <summary>
-    /// The purpose of the <see cref="LogEntryChangelogItemKindDeserializer"/> is to deserialize a JSON object to a <see cref="LogEntryChangelogItemKind"/>
+    /// The purpose of the <see cref="LogarithmBaseKindDeserializer"/> is to deserialize a JSON object to a <see cref="LogarithmBaseKind"/>
     /// </summary>
-    internal static class LogEntryChangelogItemKindDeserializer
+    internal static class LogarithmBaseKindDeserializer
     {
         /// <summary>
-        /// Deserializes the <see cref="JsonElement"/> into a <see cref="LogEntryChangelogItemKind"/>
+        /// Deserializes the <see cref="JsonElement"/> into a <see cref="LogarithmBaseKind"/>
         /// </summary>
         /// <param name="jsonElement">the element to deserialize</param>
-        /// <returns>the <see cref="LogEntryChangelogItemKind"/></returns>
-        /// <exception cref="ArgumentException">if the <see cref="JsonElement"/> can't be parsed into the <see cref="LogEntryChangelogItemKind"/></exception>
-        internal static LogEntryChangelogItemKind Deserialize(JsonElement jsonElement)
+        /// <returns>the <see cref="LogarithmBaseKind"/></returns>
+        /// <exception cref="ArgumentException">if the <see cref="JsonElement"/> can't be parsed into the <see cref="LogarithmBaseKind"/></exception>
+        internal static LogarithmBaseKind Deserialize(JsonElement jsonElement)
         {
             var value = jsonElement.GetString();
 
-            if(Enum.TryParse(value, out LogEntryChangelogItemKind result))
+            if(Enum.TryParse(value, out LogarithmBaseKind result))
             {
                 return result;
             }
-            throw new ArgumentException($"{value} is not a valid LogEntryChangelogItemKind", nameof(value));
+            throw new ArgumentException($"{value} is not a valid LogarithmBaseKind", nameof(value));
         }        
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

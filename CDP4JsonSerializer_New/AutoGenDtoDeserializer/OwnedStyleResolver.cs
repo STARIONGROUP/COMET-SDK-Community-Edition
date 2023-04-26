@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,115 +39,245 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="OwnedStyleResolver"/> is to deserialize a JSON object to a <see cref="OwnedStyle"/>
     /// </summary>
     public static class OwnedStyleResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="OwnedStyle"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="OwnedStyle"/> to instantiate</returns>
-        public static CDP4Common.DTO.OwnedStyle FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.OwnedStyle FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var ownedStyle = new CDP4Common.DTO.OwnedStyle(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                ownedStyle.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    ownedStyle.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                ownedStyle.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    ownedStyle.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("fillColor", out var fillColorProperty))
+            if (jsonElement.TryGetProperty("fillColor"u8, out var fillColorProperty))
             {
-                ownedStyle.FillColor = fillColorProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(fillColorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FillColor = null;
+                }
+                else
+                {
+                    ownedStyle.FillColor = fillColorProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("fillOpacity", out var fillOpacityProperty))
+            if (jsonElement.TryGetProperty("fillOpacity"u8, out var fillOpacityProperty))
             {
-                ownedStyle.FillOpacity = fillOpacityProperty.Deserialize<float?>(SerializerOptions.Options);
+                if(fillOpacityProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FillOpacity = null;
+                }
+                else
+                {
+                    ownedStyle.FillOpacity = (float)fillOpacityProperty.GetDouble();
+                }
             }
 
-            if (jObject.TryGetProperty("fontBold", out var fontBoldProperty))
+            if (jsonElement.TryGetProperty("fontBold"u8, out var fontBoldProperty))
             {
-                ownedStyle.FontBold = fontBoldProperty.Deserialize<bool?>(SerializerOptions.Options);
+                if(fontBoldProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontBold = null;
+                }
+                else
+                {
+                    ownedStyle.FontBold = fontBoldProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("fontColor", out var fontColorProperty))
+            if (jsonElement.TryGetProperty("fontColor"u8, out var fontColorProperty))
             {
-                ownedStyle.FontColor = fontColorProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(fontColorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontColor = null;
+                }
+                else
+                {
+                    ownedStyle.FontColor = fontColorProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("fontItalic", out var fontItalicProperty))
+            if (jsonElement.TryGetProperty("fontItalic"u8, out var fontItalicProperty))
             {
-                ownedStyle.FontItalic = fontItalicProperty.Deserialize<bool?>(SerializerOptions.Options);
+                if(fontItalicProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontItalic = null;
+                }
+                else
+                {
+                    ownedStyle.FontItalic = fontItalicProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("fontName", out var fontNameProperty))
+            if (jsonElement.TryGetProperty("fontName"u8, out var fontNameProperty))
             {
-                ownedStyle.FontName = fontNameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(fontNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale fontName property of the ownedStyle {id} is null", ownedStyle.Iid);
+                }
+                else
+                {
+                    ownedStyle.FontName = fontNameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("fontSize", out var fontSizeProperty))
+            if (jsonElement.TryGetProperty("fontSize"u8, out var fontSizeProperty))
             {
-                ownedStyle.FontSize = fontSizeProperty.Deserialize<float?>(SerializerOptions.Options);
+                if(fontSizeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontSize = null;
+                }
+                else
+                {
+                    ownedStyle.FontSize = (float)fontSizeProperty.GetDouble();
+                }
             }
 
-            if (jObject.TryGetProperty("fontStrokeThrough", out var fontStrokeThroughProperty))
+            if (jsonElement.TryGetProperty("fontStrokeThrough"u8, out var fontStrokeThroughProperty))
             {
-                ownedStyle.FontStrokeThrough = fontStrokeThroughProperty.Deserialize<bool?>(SerializerOptions.Options);
+                if(fontStrokeThroughProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontStrokeThrough = null;
+                }
+                else
+                {
+                    ownedStyle.FontStrokeThrough = fontStrokeThroughProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("fontUnderline", out var fontUnderlineProperty))
+            if (jsonElement.TryGetProperty("fontUnderline"u8, out var fontUnderlineProperty))
             {
-                ownedStyle.FontUnderline = fontUnderlineProperty.Deserialize<bool?>(SerializerOptions.Options);
+                if(fontUnderlineProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontUnderline = null;
+                }
+                else
+                {
+                    ownedStyle.FontUnderline = fontUnderlineProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                ownedStyle.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the ownedStyle {id} is null", ownedStyle.Iid);
+                }
+                else
+                {
+                    ownedStyle.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                ownedStyle.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the ownedStyle {id} is null", ownedStyle.Iid);
+                }
+                else
+                {
+                    ownedStyle.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("strokeColor", out var strokeColorProperty))
+            if (jsonElement.TryGetProperty("strokeColor"u8, out var strokeColorProperty))
             {
-                ownedStyle.StrokeColor = strokeColorProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                if(strokeColorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.StrokeColor = null;
+                }
+                else
+                {
+                    ownedStyle.StrokeColor = strokeColorProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("strokeOpacity", out var strokeOpacityProperty))
+            if (jsonElement.TryGetProperty("strokeOpacity"u8, out var strokeOpacityProperty))
             {
-                ownedStyle.StrokeOpacity = strokeOpacityProperty.Deserialize<float?>(SerializerOptions.Options);
+                if(strokeOpacityProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.StrokeOpacity = null;
+                }
+                else
+                {
+                    ownedStyle.StrokeOpacity = (float)strokeOpacityProperty.GetDouble();
+                }
             }
 
-            if (jObject.TryGetProperty("strokeWidth", out var strokeWidthProperty))
+            if (jsonElement.TryGetProperty("strokeWidth"u8, out var strokeWidthProperty))
             {
-                ownedStyle.StrokeWidth = strokeWidthProperty.Deserialize<float?>(SerializerOptions.Options);
+                if(strokeWidthProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.StrokeWidth = null;
+                }
+                else
+                {
+                    ownedStyle.StrokeWidth = (float)strokeWidthProperty.GetDouble();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                ownedStyle.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the ownedStyle {id} is null", ownedStyle.Iid);
+                }
+                else
+                {
+                    ownedStyle.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("usedColor", out var usedColorProperty))
+            if (jsonElement.TryGetProperty("usedColor"u8, out var usedColorProperty))
             {
-                ownedStyle.UsedColor.AddRange(usedColorProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in usedColorProperty.EnumerateArray())
+                {
+                    ownedStyle.UsedColor.Add(element.GetGuid());
+                }
             }
-
             return ownedStyle;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

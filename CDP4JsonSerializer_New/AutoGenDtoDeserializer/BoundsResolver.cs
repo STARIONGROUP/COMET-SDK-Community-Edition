@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,70 +39,141 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="BoundsResolver"/> is to deserialize a JSON object to a <see cref="Bounds"/>
     /// </summary>
     public static class BoundsResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="Bounds"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="Bounds"/> to instantiate</returns>
-        public static CDP4Common.DTO.Bounds FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.Bounds FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var bounds = new CDP4Common.DTO.Bounds(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                bounds.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    bounds.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                bounds.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    bounds.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("height", out var heightProperty))
+            if (jsonElement.TryGetProperty("height"u8, out var heightProperty))
             {
-                bounds.Height = heightProperty.Deserialize<float>(SerializerOptions.Options);
+                if(heightProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale height property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.Height = (float)heightProperty.GetDouble();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                bounds.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("name", out var nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                bounds.Name = nameProperty.Deserialize<string>(SerializerOptions.Options);
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.Name = nameProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                bounds.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (jObject.TryGetProperty("width", out var widthProperty))
+            if (jsonElement.TryGetProperty("width"u8, out var widthProperty))
             {
-                bounds.Width = widthProperty.Deserialize<float>(SerializerOptions.Options);
+                if(widthProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale width property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.Width = (float)widthProperty.GetDouble();
+                }
             }
 
-            if (jObject.TryGetProperty("x", out var xProperty))
+            if (jsonElement.TryGetProperty("x"u8, out var xProperty))
             {
-                bounds.X = xProperty.Deserialize<float>(SerializerOptions.Options);
+                if(xProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale x property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.X = (float)xProperty.GetDouble();
+                }
             }
 
-            if (jObject.TryGetProperty("y", out var yProperty))
+            if (jsonElement.TryGetProperty("y"u8, out var yProperty))
             {
-                bounds.Y = yProperty.Deserialize<float>(SerializerOptions.Options);
+                if(yProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale y property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.Y = (float)yProperty.GetDouble();
+                }
             }
-
             return bounds;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

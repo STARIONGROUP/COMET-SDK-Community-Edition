@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,157 +39,262 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="IterationResolver"/> is to deserialize a JSON object to a <see cref="Iteration"/>
     /// </summary>
     public static class IterationResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="Iteration"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="Iteration"/> to instantiate</returns>
-        public static CDP4Common.DTO.Iteration FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.Iteration FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var iteration = new CDP4Common.DTO.Iteration(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("actualFiniteStateList", out var actualFiniteStateListProperty))
+            if (jsonElement.TryGetProperty("actualFiniteStateList"u8, out var actualFiniteStateListProperty))
             {
-                iteration.ActualFiniteStateList.AddRange(actualFiniteStateListProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("defaultOption", out var defaultOptionProperty))
-            {
-                iteration.DefaultOption = defaultOptionProperty.Deserialize<Guid?>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("diagramCanvas", out var diagramCanvasProperty))
-            {
-                iteration.DiagramCanvas.AddRange(diagramCanvasProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("domainFileStore", out var domainFileStoreProperty))
-            {
-                iteration.DomainFileStore.AddRange(domainFileStoreProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("element", out var elementProperty))
-            {
-                iteration.Element.AddRange(elementProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
-            {
-                iteration.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
-            {
-                iteration.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("externalIdentifierMap", out var externalIdentifierMapProperty))
-            {
-                iteration.ExternalIdentifierMap.AddRange(externalIdentifierMapProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("goal", out var goalProperty))
-            {
-                iteration.Goal.AddRange(goalProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
-            }
-
-            if (jObject.TryGetProperty("iterationSetup", out var iterationSetupProperty))
-            {
-                iteration.IterationSetup = iterationSetupProperty.Deserialize<Guid>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
-            {
-                iteration.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
-            }
-
-            if (jObject.TryGetProperty("option", out var optionProperty))
-            {
-                foreach(var arrayItem in optionProperty.EnumerateArray())
+                foreach(var element in actualFiniteStateListProperty.EnumerateArray())
                 {
-                    var arrayItemValue = arrayItem.Deserialize<OrderedItem>(SerializerOptions.Options);
-                    if (arrayItemValue != null)
-                    {
-                        iteration.Option.Add(arrayItemValue);
-                    }
+                    iteration.ActualFiniteStateList.Add(element.GetGuid());
                 }
             }
-            
-            if (jObject.TryGetProperty("possibleFiniteStateList", out var possibleFiniteStateListProperty))
+
+            if (jsonElement.TryGetProperty("defaultOption"u8, out var defaultOptionProperty))
             {
-                iteration.PossibleFiniteStateList.AddRange(possibleFiniteStateListProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                if(defaultOptionProperty.ValueKind == JsonValueKind.Null)
+                {
+                    iteration.DefaultOption = null;
+                }
+                else
+                {
+                    iteration.DefaultOption = defaultOptionProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("publication", out var publicationProperty))
+            if (jsonElement.TryGetProperty("diagramCanvas"u8, out var diagramCanvasProperty))
             {
-                iteration.Publication.AddRange(publicationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in diagramCanvasProperty.EnumerateArray())
+                {
+                    iteration.DiagramCanvas.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("relationship", out var relationshipProperty))
+            if (jsonElement.TryGetProperty("domainFileStore"u8, out var domainFileStoreProperty))
             {
-                iteration.Relationship.AddRange(relationshipProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in domainFileStoreProperty.EnumerateArray())
+                {
+                    iteration.DomainFileStore.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("requirementsSpecification", out var requirementsSpecificationProperty))
+            if (jsonElement.TryGetProperty("element"u8, out var elementProperty))
             {
-                iteration.RequirementsSpecification.AddRange(requirementsSpecificationProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in elementProperty.EnumerateArray())
+                {
+                    iteration.Element.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("ruleVerificationList", out var ruleVerificationListProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                iteration.RuleVerificationList.AddRange(ruleVerificationListProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    iteration.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("sharedDiagramStyle", out var sharedDiagramStyleProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                iteration.SharedDiagramStyle.AddRange(sharedDiagramStyleProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    iteration.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("sourceIterationIid", out var sourceIterationIidProperty))
+            if (jsonElement.TryGetProperty("externalIdentifierMap"u8, out var externalIdentifierMapProperty))
             {
-                iteration.SourceIterationIid = sourceIterationIidProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                foreach(var element in externalIdentifierMapProperty.EnumerateArray())
+                {
+                    iteration.ExternalIdentifierMap.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("stakeholder", out var stakeholderProperty))
+            if (jsonElement.TryGetProperty("goal"u8, out var goalProperty))
             {
-                iteration.Stakeholder.AddRange(stakeholderProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in goalProperty.EnumerateArray())
+                {
+                    iteration.Goal.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("stakeholderValue", out var stakeholderValueProperty))
+            if (jsonElement.TryGetProperty("iterationSetup"u8, out var iterationSetupProperty))
             {
-                iteration.StakeholderValue.AddRange(stakeholderValueProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                if(iterationSetupProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale iterationSetup property of the iteration {id} is null", iteration.Iid);
+                }
+                else
+                {
+                    iteration.IterationSetup = iterationSetupProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("stakeholderValueMap", out var stakeholderValueMapProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                iteration.StakeholderValueMap.AddRange(stakeholderValueMapProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the iteration {id} is null", iteration.Iid);
+                }
+                else
+                {
+                    iteration.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("option"u8, out var optionProperty))
             {
-                iteration.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                iteration.Option.AddRange(optionProperty.ToOrderedItemCollection());
             }
 
-            if (jObject.TryGetProperty("topElement", out var topElementProperty))
+            if (jsonElement.TryGetProperty("possibleFiniteStateList"u8, out var possibleFiniteStateListProperty))
             {
-                iteration.TopElement = topElementProperty.Deserialize<Guid?>(SerializerOptions.Options);
+                foreach(var element in possibleFiniteStateListProperty.EnumerateArray())
+                {
+                    iteration.PossibleFiniteStateList.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("valueGroup", out var valueGroupProperty))
+            if (jsonElement.TryGetProperty("publication"u8, out var publicationProperty))
             {
-                iteration.ValueGroup.AddRange(valueGroupProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in publicationProperty.EnumerateArray())
+                {
+                    iteration.Publication.Add(element.GetGuid());
+                }
             }
 
+            if (jsonElement.TryGetProperty("relationship"u8, out var relationshipProperty))
+            {
+                foreach(var element in relationshipProperty.EnumerateArray())
+                {
+                    iteration.Relationship.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("requirementsSpecification"u8, out var requirementsSpecificationProperty))
+            {
+                foreach(var element in requirementsSpecificationProperty.EnumerateArray())
+                {
+                    iteration.RequirementsSpecification.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("ruleVerificationList"u8, out var ruleVerificationListProperty))
+            {
+                foreach(var element in ruleVerificationListProperty.EnumerateArray())
+                {
+                    iteration.RuleVerificationList.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("sharedDiagramStyle"u8, out var sharedDiagramStyleProperty))
+            {
+                foreach(var element in sharedDiagramStyleProperty.EnumerateArray())
+                {
+                    iteration.SharedDiagramStyle.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("sourceIterationIid"u8, out var sourceIterationIidProperty))
+            {
+                if(sourceIterationIidProperty.ValueKind == JsonValueKind.Null)
+                {
+                    iteration.SourceIterationIid = null;
+                }
+                else
+                {
+                    iteration.SourceIterationIid = sourceIterationIidProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("stakeholder"u8, out var stakeholderProperty))
+            {
+                foreach(var element in stakeholderProperty.EnumerateArray())
+                {
+                    iteration.Stakeholder.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("stakeholderValue"u8, out var stakeholderValueProperty))
+            {
+                foreach(var element in stakeholderValueProperty.EnumerateArray())
+                {
+                    iteration.StakeholderValue.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("stakeholderValueMap"u8, out var stakeholderValueMapProperty))
+            {
+                foreach(var element in stakeholderValueMapProperty.EnumerateArray())
+                {
+                    iteration.StakeholderValueMap.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the iteration {id} is null", iteration.Iid);
+                }
+                else
+                {
+                    iteration.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("topElement"u8, out var topElementProperty))
+            {
+                if(topElementProperty.ValueKind == JsonValueKind.Null)
+                {
+                    iteration.TopElement = null;
+                }
+                else
+                {
+                    iteration.TopElement = topElementProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("valueGroup"u8, out var valueGroupProperty))
+            {
+                foreach(var element in valueGroupProperty.EnumerateArray())
+                {
+                    iteration.ValueGroup.Add(element.GetGuid());
+                }
+            }
             return iteration;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

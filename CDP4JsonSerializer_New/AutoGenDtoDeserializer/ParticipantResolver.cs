@@ -21,6 +21,10 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
@@ -35,70 +39,137 @@ namespace CDP4JsonSerializer_SystemTextJson
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer_SystemTextJson.EnumDeserializers;
-    
+    using NLog;
+
     /// <summary>
     /// The purpose of the <see cref="ParticipantResolver"/> is to deserialize a JSON object to a <see cref="Participant"/>
     /// </summary>
     public static class ParticipantResolver
     {
         /// <summary>
+        /// The NLog logger
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Instantiate and deserialize the properties of a <see cref="Participant"/>
         /// </summary>
-        /// <param name="jObject">The <see cref="JsonElement"/> containing the data</param>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
         /// <returns>The <see cref="Participant"/> to instantiate</returns>
-        public static CDP4Common.DTO.Participant FromJsonObject(JsonElement jObject)
+        public static CDP4Common.DTO.Participant FromJsonObject(JsonElement jsonElement)
         {
-            jObject.TryGetProperty("iid", out var iid);
-            jObject.TryGetProperty("revisionNumber", out var revisionNumber);
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
+            {
+                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+            }
+
             var participant = new CDP4Common.DTO.Participant(iid.GetGuid(), revisionNumber.GetInt32());
 
-            if (jObject.TryGetProperty("domain", out var domainProperty))
+            if (jsonElement.TryGetProperty("domain"u8, out var domainProperty))
             {
-                participant.Domain.AddRange(domainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in domainProperty.EnumerateArray())
+                {
+                    participant.Domain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedDomain", out var excludedDomainProperty))
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty))
             {
-                participant.ExcludedDomain.AddRange(excludedDomainProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    participant.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("excludedPerson", out var excludedPersonProperty))
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty))
             {
-                participant.ExcludedPerson.AddRange(excludedPersonProperty.Deserialize<IEnumerable<Guid>>(SerializerOptions.Options));
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    participant.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (jObject.TryGetProperty("isActive", out var isActiveProperty))
+            if (jsonElement.TryGetProperty("isActive"u8, out var isActiveProperty))
             {
-                participant.IsActive = isActiveProperty.Deserialize<bool>(SerializerOptions.Options);
+                if(isActiveProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isActive property of the participant {id} is null", participant.Iid);
+                }
+                else
+                {
+                    participant.IsActive = isActiveProperty.GetBoolean();
+                }
             }
 
-            if (jObject.TryGetProperty("modifiedOn", out var modifiedOnProperty))
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                participant.ModifiedOn = modifiedOnProperty.Deserialize<DateTime>(SerializerOptions.Options);
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the participant {id} is null", participant.Iid);
+                }
+                else
+                {
+                    participant.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (jObject.TryGetProperty("person", out var personProperty))
+            if (jsonElement.TryGetProperty("person"u8, out var personProperty))
             {
-                participant.Person = personProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(personProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale person property of the participant {id} is null", participant.Iid);
+                }
+                else
+                {
+                    participant.Person = personProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("role", out var roleProperty))
+            if (jsonElement.TryGetProperty("role"u8, out var roleProperty))
             {
-                participant.Role = roleProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(roleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale role property of the participant {id} is null", participant.Iid);
+                }
+                else
+                {
+                    participant.Role = roleProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("selectedDomain", out var selectedDomainProperty))
+            if (jsonElement.TryGetProperty("selectedDomain"u8, out var selectedDomainProperty))
             {
-                participant.SelectedDomain = selectedDomainProperty.Deserialize<Guid>(SerializerOptions.Options);
+                if(selectedDomainProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale selectedDomain property of the participant {id} is null", participant.Iid);
+                }
+                else
+                {
+                    participant.SelectedDomain = selectedDomainProperty.GetGuid();
+                }
             }
 
-            if (jObject.TryGetProperty("thingPreference", out var thingPreferenceProperty))
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                participant.ThingPreference = thingPreferenceProperty.Deserialize<string>(SerializerOptions.Options);
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the participant {id} is null", participant.Iid);
+                }
+                else
+                {
+                    participant.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
-
             return participant;
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

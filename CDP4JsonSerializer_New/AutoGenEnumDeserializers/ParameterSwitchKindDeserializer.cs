@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AnnotationStatusKindDeserializer.cs" company="RHEA System S.A.">
+// <copyright file="ParameterSwitchKindDeserializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
@@ -21,7 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer_SystemTextJson.EnumDeserializers
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace CDP4JsonSerializer_SystemTextJson
 {
     using System;
     using System.Collections.Generic;
@@ -33,25 +37,29 @@ namespace CDP4JsonSerializer_SystemTextJson.EnumDeserializers
     using CDP4Common.SiteDirectoryData;
 
     /// <summary>
-    /// The purpose of the <see cref="AnnotationStatusKindDeserializer"/> is to deserialize a JSON object to a <see cref="AnnotationStatusKind"/>
+    /// The purpose of the <see cref="ParameterSwitchKindDeserializer"/> is to deserialize a JSON object to a <see cref="ParameterSwitchKind"/>
     /// </summary>
-    internal static class AnnotationStatusKindDeserializer
+    internal static class ParameterSwitchKindDeserializer
     {
         /// <summary>
-        /// Deserializes the <see cref="JsonElement"/> into a <see cref="AnnotationStatusKind"/>
+        /// Deserializes the <see cref="JsonElement"/> into a <see cref="ParameterSwitchKind"/>
         /// </summary>
         /// <param name="jsonElement">the element to deserialize</param>
-        /// <returns>the <see cref="AnnotationStatusKind"/></returns>
-        /// <exception cref="ArgumentException">if the <see cref="JsonElement"/> can't be parsed into the <see cref="AnnotationStatusKind"/></exception>
-        internal static AnnotationStatusKind Deserialize(JsonElement jsonElement)
+        /// <returns>the <see cref="ParameterSwitchKind"/></returns>
+        /// <exception cref="ArgumentException">if the <see cref="JsonElement"/> can't be parsed into the <see cref="ParameterSwitchKind"/></exception>
+        internal static ParameterSwitchKind Deserialize(JsonElement jsonElement)
         {
             var value = jsonElement.GetString();
 
-            if(Enum.TryParse(value, out AnnotationStatusKind result))
+            if(Enum.TryParse(value, out ParameterSwitchKind result))
             {
                 return result;
             }
-            throw new ArgumentException($"{value} is not a valid AnnotationStatusKind", nameof(value));
+            throw new ArgumentException($"{value} is not a valid ParameterSwitchKind", nameof(value));
         }        
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
