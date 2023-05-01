@@ -105,11 +105,12 @@ namespace CDP4JsonSerializer_SystemTextJson
         public static IEnumerable<OrderedItem> ToOrderedItemCollection(this JsonElement jsonToken)
         {
             var list = new List<OrderedItem>();
-            foreach(var prop in jsonToken.EnumerateArray())
+
+            foreach (var prop in jsonToken.EnumerateArray())
             {
                 var orderedItem = new OrderedItem
                 {
-                    K = prop.GetProperty("k").GetInt64(),
+                    K = prop.GetProperty("k").GetInt64(),//JsonSerializer.Deserialize<long>(prop.GetProperty("k").GetRawText(), SerializerOptions.Options),
                     V = prop.GetProperty("v").GetString(),
                 };
                 
@@ -117,7 +118,7 @@ namespace CDP4JsonSerializer_SystemTextJson
                 {
                     orderedItem.M = value.GetInt64();
                 }
-
+                
                 list.Add(orderedItem);
             }
 

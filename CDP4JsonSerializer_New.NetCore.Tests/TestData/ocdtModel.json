@@ -2755,7 +2755,7 @@
         "isDeprecated": false,
         "unitFactor": [
             {
-                "k": "-7803379",
+                "k": -7803379,
                 "v": "b39fd8dd-b637-4c5e-925d-8fa9ba5f4476"
             }
         ]
@@ -2775,15 +2775,15 @@
         "allowMultiSelect": false,
         "valueDefinition": [
             {
-                "k": "12240213",
+                "k": 12240213,
                 "v": "e84d70de-2437-401d-89bd-afce630e9838"
             },
             {
-                "k": "128390159",
+                "k": 128390159,
                 "v": "e7f5997b-ddb2-4901-a3a4-60a9e109b0e0"
             },
             {
-                "k": "231619203",
+                "k": 231619203,
                 "v": "67b83055-16da-483f-8aed-15f861f0ac34"
             }
         ]
@@ -2803,15 +2803,15 @@
         "allowMultiSelect": false,
         "valueDefinition": [
             {
-                "k": "5508952",
+                "k": 5508952,
                 "v": "215bb477-ba37-46c3-8bdb-0ea10d021003"
             },
             {
-                "k": "104826782",
+                "k": 104826782,
                 "v": "a7416604-bc75-4672-8ced-bd8dd4c871a6"
             },
             {
-                "k": "211290511",
+                "k": 211290511,
                 "v": "0c845316-d1a8-4234-a85e-4652041d97a5"
             }
         ]
@@ -3064,15 +3064,15 @@
         "category": [],
         "component": [
             {
-                "k": "-10131894",
+                "k": -10131894,
                 "v": "ec7b3773-0cc3-4f93-ab5f-0ebea07c7ab5"
             },
             {
-                "k": "83710806",
+                "k": 83710806,
                 "v": "bcc30e9d-6a31-4d33-b0d6-0881fc3bc8d1"
             },
             {
-                "k": "196244756",
+                "k": 196244756,
                 "v": "c0e4439b-034a-48aa-b68e-b5d81087f81a"
             }
         ],
@@ -3092,15 +3092,15 @@
         "category": [],
         "component": [
             {
-                "k": "-10227419",
+                "k": -10227419,
                 "v": "69b2a815-8f9b-4352-b264-7a45448ee792"
             },
             {
-                "k": "83748573",
+                "k": 83748573,
                 "v": "8432d89b-ec3f-49b3-8d30-5c3751c8ed65"
             },
             {
-                "k": "185460969",
+                "k": 185460969,
                 "v": "31b3e54c-dc89-41b4-9589-654d958bf2be"
             }
         ],
@@ -3120,30 +3120,30 @@
         "category": [],
         "component": [
             {
-                "k": "-5678849",
+                "k": -5678849,
                 "v": "aa7623e4-d76b-4411-b498-96345ecfc067"
             },
             {
-                "k": "100185425",
+                "k": 100185425,
                 "v": "d9051d07-52c3-4e19-9bcf-0f8c42714fe6"
             },
             {
-                "k": "209446726",
+                "k": 209446726,
                 "v": "72e55afd-a0ad-4427-bd56-120e2cd5f0af"
             }
         ],
         "isFinalized": true,
         "dimension": [
             {
-                "k": "-9674520",
+                "k": -9674520,
                 "v": "1"
             },
             {
-                "k": "70656890",
+                "k": 70656890,
                 "v": "3"
             },
             {
-                "k": "183534761",
+                "k": 183534761,
                 "v": "1"
             }
         ],
@@ -3163,22 +3163,22 @@
         "category": [],
         "component": [
             {
-                "k": "-4303905",
+                "k": -4303905,
                 "v": "1e89cf9d-ec6d-4848-aba8-0b994db6da64"
             }
         ],
         "isFinalized": false,
         "dimension": [
             {
-                "k": "18150595",
+                "k": 18150595,
                 "v": "1"
             },
             {
-                "k": "131798233",
+                "k": 131798233,
                 "v": "1"
             },
             {
-                "k": "226105839",
+                "k": 226105839,
                 "v": "1"
             }
         ],
@@ -3205,7 +3205,7 @@
         "quantityDimensionSymbol": "L",
         "quantityKindFactor": [
             {
-                "k": "4088630",
+                "k": 4088630,
                 "v": "619989ca-55f1-4aea-a222-b2e655c2d208"
             }
         ]
@@ -3230,7 +3230,7 @@
         "quantityDimensionSymbol": "",
         "quantityKindFactor": [
             {
-                "k": "-19726468",
+                "k": -19726468,
                 "v": "fe9376c8-2ea5-46ef-99f3-1a5eae3cc220"
             }
         ]
@@ -3255,7 +3255,7 @@
         "quantityDimensionSymbol": "",
         "quantityKindFactor": [
             {
-                "k": "-18953691",
+                "k": -18953691,
                 "v": "103119cd-1eaa-4ca9-bbc1-8b99e91f07ea"
             }
         ]
@@ -3280,7 +3280,7 @@
         "quantityDimensionSymbol": "",
         "quantityKindFactor": [
             {
-                "k": "-19726468",
+                "k": -19726468,
                 "v": "4f2ea7f4-cd7b-4d3a-b431-14c92ab406cd"
             }
         ]
@@ -3304,11 +3304,11 @@
         "quantityDimensionSymbol": "",
         "quantityKindFactor": [
             {
-                "k": "-7155923",
+                "k": -7155923,
                 "v": "c31f847a-30d7-415d-9bac-7aec98685a99"
             },
             {
-                "k": "102835214",
+                "k": 102835214,
                 "v": "32b8057c-79ce-4e45-81d6-3bf4c2b61787"
             }
         ]
@@ -3334,7 +3334,7 @@
         "quantityDimensionSymbol": "",
         "quantityKindFactor": [
             {
-                "k": "-6091909",
+                "k": -6091909,
                 "v": "8b35b1b3-92fe-46e5-a226-5c65e897a3d9"
             }
         ]
@@ -3359,7 +3359,7 @@
         "quantityDimensionSymbol": "",
         "quantityKindFactor": [
             {
-                "k": "15483233",
+                "k": 15483233,
                 "v": "fecfd308-86ac-4e0c-8a98-84feac77950f"
             }
         ]
@@ -3384,7 +3384,7 @@
         "quantityDimensionSymbol": "",
         "quantityKindFactor": [
             {
-                "k": "-18953691",
+                "k": -18953691,
                 "v": "742b6c81-1656-4402-89c7-dadbc0173bc4"
             }
         ]
@@ -3409,7 +3409,7 @@
         "quantityDimensionSymbol": "",
         "quantityKindFactor": [
             {
-                "k": "15483233",
+                "k": 15483233,
                 "v": "318951aa-1a05-412e-8e05-7e819ff5be0f"
             }
         ]
@@ -3435,7 +3435,7 @@
         "quantityDimensionSymbol": "L",
         "quantityKindFactor": [
             {
-                "k": "4088630",
+                "k": 4088630,
                 "v": "73caa6ba-007f-43b4-bf00-306570d968cb"
             }
         ]

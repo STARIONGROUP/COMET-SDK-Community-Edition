@@ -42,7 +42,7 @@ namespace CDP4JsonSerializer_SystemTextJson
     using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="QuantityKindFactorResolver"/> is to deserialize a JSON object to a <see cref="QuantityKindFactor"/>
+    /// The purpose of the <see cref="QuantityKindFactorResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.QuantityKindFactor"/>
     /// </summary>
     public static class QuantityKindFactorResolver
     {
@@ -52,20 +52,20 @@ namespace CDP4JsonSerializer_SystemTextJson
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Instantiate and deserialize the properties of a <see cref="QuantityKindFactor"/>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.QuantityKindFactor"/>
         /// </summary>
         /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
-        /// <returns>The <see cref="QuantityKindFactor"/> to instantiate</returns>
+        /// <returns>The <see cref="CDP4Common.DTO.QuantityKindFactor"/> to instantiate</returns>
         public static CDP4Common.DTO.QuantityKindFactor FromJsonObject(JsonElement jsonElement)
         {
             if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+                throw new DeSerializationException("the mandatory iid property is not available, the QuantityKindFactorResolver cannot be used to deserialize this JsonElement");
             }
 
             if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the QuantityKindFactorResolver cannot be used to deserialize this JsonElement");
             }
 
             var quantityKindFactor = new CDP4Common.DTO.QuantityKindFactor(iid.GetGuid(), revisionNumber.GetInt32());

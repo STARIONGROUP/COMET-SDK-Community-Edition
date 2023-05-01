@@ -42,7 +42,7 @@ namespace CDP4JsonSerializer_SystemTextJson
     using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="SiteDirectoryThingReferenceResolver"/> is to deserialize a JSON object to a <see cref="SiteDirectoryThingReference"/>
+    /// The purpose of the <see cref="SiteDirectoryThingReferenceResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.SiteDirectoryThingReference"/>
     /// </summary>
     public static class SiteDirectoryThingReferenceResolver
     {
@@ -52,20 +52,20 @@ namespace CDP4JsonSerializer_SystemTextJson
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Instantiate and deserialize the properties of a <see cref="SiteDirectoryThingReference"/>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.SiteDirectoryThingReference"/>
         /// </summary>
         /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
-        /// <returns>The <see cref="SiteDirectoryThingReference"/> to instantiate</returns>
+        /// <returns>The <see cref="CDP4Common.DTO.SiteDirectoryThingReference"/> to instantiate</returns>
         public static CDP4Common.DTO.SiteDirectoryThingReference FromJsonObject(JsonElement jsonElement)
         {
             if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+                throw new DeSerializationException("the mandatory iid property is not available, the SiteDirectoryThingReferenceResolver cannot be used to deserialize this JsonElement");
             }
 
             if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the SiteDirectoryThingReferenceResolver cannot be used to deserialize this JsonElement");
             }
 
             var siteDirectoryThingReference = new CDP4Common.DTO.SiteDirectoryThingReference(iid.GetGuid(), revisionNumber.GetInt32());

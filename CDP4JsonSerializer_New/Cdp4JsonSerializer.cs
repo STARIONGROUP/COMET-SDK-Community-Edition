@@ -63,7 +63,7 @@ namespace CDP4JsonSerializer_SystemTextJson
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CDP4JsonSerializer_SystemTextJson"/> class.
+        /// Initializes a new instance of the <see cref="CDP4JsonSerializer"/> class.
         /// </summary>
         public CDP4JsonSerializer()
         {

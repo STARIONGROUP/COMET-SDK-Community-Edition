@@ -42,7 +42,7 @@ namespace CDP4JsonSerializer_SystemTextJson
     using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="SharedStyleResolver"/> is to deserialize a JSON object to a <see cref="SharedStyle"/>
+    /// The purpose of the <see cref="SharedStyleResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.SharedStyle"/>
     /// </summary>
     public static class SharedStyleResolver
     {
@@ -52,20 +52,20 @@ namespace CDP4JsonSerializer_SystemTextJson
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Instantiate and deserialize the properties of a <see cref="SharedStyle"/>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.SharedStyle"/>
         /// </summary>
         /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
-        /// <returns>The <see cref="SharedStyle"/> to instantiate</returns>
+        /// <returns>The <see cref="CDP4Common.DTO.SharedStyle"/> to instantiate</returns>
         public static CDP4Common.DTO.SharedStyle FromJsonObject(JsonElement jsonElement)
         {
             if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+                throw new DeSerializationException("the mandatory iid property is not available, the SharedStyleResolver cannot be used to deserialize this JsonElement");
             }
 
             if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the SharedStyleResolver cannot be used to deserialize this JsonElement");
             }
 
             var sharedStyle = new CDP4Common.DTO.SharedStyle(iid.GetGuid(), revisionNumber.GetInt32());
@@ -106,7 +106,7 @@ namespace CDP4JsonSerializer_SystemTextJson
                 }
                 else
                 {
-                    sharedStyle.FillOpacity = (float)fillOpacityProperty.GetDouble();
+                    sharedStyle.FillOpacity = fillOpacityProperty.GetSingle();
                 }
             }
 
@@ -166,7 +166,7 @@ namespace CDP4JsonSerializer_SystemTextJson
                 }
                 else
                 {
-                    sharedStyle.FontSize = (float)fontSizeProperty.GetDouble();
+                    sharedStyle.FontSize = fontSizeProperty.GetSingle();
                 }
             }
 
@@ -238,7 +238,7 @@ namespace CDP4JsonSerializer_SystemTextJson
                 }
                 else
                 {
-                    sharedStyle.StrokeOpacity = (float)strokeOpacityProperty.GetDouble();
+                    sharedStyle.StrokeOpacity = strokeOpacityProperty.GetSingle();
                 }
             }
 
@@ -250,7 +250,7 @@ namespace CDP4JsonSerializer_SystemTextJson
                 }
                 else
                 {
-                    sharedStyle.StrokeWidth = (float)strokeWidthProperty.GetDouble();
+                    sharedStyle.StrokeWidth = strokeWidthProperty.GetSingle();
                 }
             }
 

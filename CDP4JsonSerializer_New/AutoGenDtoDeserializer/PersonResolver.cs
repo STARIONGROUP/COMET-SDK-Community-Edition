@@ -42,7 +42,7 @@ namespace CDP4JsonSerializer_SystemTextJson
     using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="PersonResolver"/> is to deserialize a JSON object to a <see cref="Person"/>
+    /// The purpose of the <see cref="PersonResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.Person"/>
     /// </summary>
     public static class PersonResolver
     {
@@ -52,10 +52,10 @@ namespace CDP4JsonSerializer_SystemTextJson
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Instantiate and deserialize the properties of a <see cref="Person"/>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.Person"/>
         /// </summary>
         /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
-        /// <returns>The <see cref="Person"/> to instantiate</returns>
+        /// <returns>The <see cref="CDP4Common.DTO.Person"/> to instantiate</returns>
         public static CDP4Common.DTO.Person FromJsonObject(JsonElement jsonElement)
         {
             if (!jsonElement.TryGetProperty("iid"u8, out var iid))

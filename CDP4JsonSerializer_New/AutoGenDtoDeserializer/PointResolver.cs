@@ -42,7 +42,7 @@ namespace CDP4JsonSerializer_SystemTextJson
     using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="PointResolver"/> is to deserialize a JSON object to a <see cref="Point"/>
+    /// The purpose of the <see cref="PointResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.Point"/>
     /// </summary>
     public static class PointResolver
     {
@@ -52,20 +52,20 @@ namespace CDP4JsonSerializer_SystemTextJson
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Instantiate and deserialize the properties of a <see cref="Point"/>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.Point"/>
         /// </summary>
         /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
-        /// <returns>The <see cref="Point"/> to instantiate</returns>
+        /// <returns>The <see cref="CDP4Common.DTO.Point"/> to instantiate</returns>
         public static CDP4Common.DTO.Point FromJsonObject(JsonElement jsonElement)
         {
             if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+                throw new DeSerializationException("the mandatory iid property is not available, the PointResolver cannot be used to deserialize this JsonElement");
             }
 
             if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PointResolver cannot be used to deserialize this JsonElement");
             }
 
             var point = new CDP4Common.DTO.Point(iid.GetGuid(), revisionNumber.GetInt32());
@@ -130,7 +130,7 @@ namespace CDP4JsonSerializer_SystemTextJson
                 }
                 else
                 {
-                    point.X = (float)xProperty.GetDouble();
+                    point.X = xProperty.GetSingle();
                 }
             }
 
@@ -142,7 +142,7 @@ namespace CDP4JsonSerializer_SystemTextJson
                 }
                 else
                 {
-                    point.Y = (float)yProperty.GetDouble();
+                    point.Y = yProperty.GetSingle();
                 }
             }
             return point;

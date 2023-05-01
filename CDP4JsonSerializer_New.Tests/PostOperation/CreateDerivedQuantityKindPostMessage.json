@@ -55,7 +55,8 @@
     {
       "classKind": "SiteReferenceDataLibrary",
       "iid": "bff9f871-3b7f-4e57-ac82-5ab499f9baf5",
-      "parameterType": [ "08c130ca-a270-408f-8069-b7e1d00659f0" ]
+      "parameterType": [ "08c130ca-a270-408f-8069-b7e1d00659f0" ],
+      "revisionNumber": 0
     }
   ],
   "_copy": []

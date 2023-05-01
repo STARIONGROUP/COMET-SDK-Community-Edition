@@ -42,7 +42,7 @@ namespace CDP4JsonSerializer_SystemTextJson
     using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="RuleVerificationListResolver"/> is to deserialize a JSON object to a <see cref="RuleVerificationList"/>
+    /// The purpose of the <see cref="RuleVerificationListResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.RuleVerificationList"/>
     /// </summary>
     public static class RuleVerificationListResolver
     {
@@ -52,20 +52,20 @@ namespace CDP4JsonSerializer_SystemTextJson
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Instantiate and deserialize the properties of a <see cref="RuleVerificationList"/>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.RuleVerificationList"/>
         /// </summary>
         /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
-        /// <returns>The <see cref="RuleVerificationList"/> to instantiate</returns>
+        /// <returns>The <see cref="CDP4Common.DTO.RuleVerificationList"/> to instantiate</returns>
         public static CDP4Common.DTO.RuleVerificationList FromJsonObject(JsonElement jsonElement)
         {
             if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                throw new DeSerializationException("the mandatory iid property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+                throw new DeSerializationException("the mandatory iid property is not available, the RuleVerificationListResolver cannot be used to deserialize this JsonElement");
             }
 
             if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                throw new DeSerializationException("the mandatory revisionNumber property is not available, the PersonResolver cannot be used to deserialize this JsonElement");
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the RuleVerificationListResolver cannot be used to deserialize this JsonElement");
             }
 
             var ruleVerificationList = new CDP4Common.DTO.RuleVerificationList(iid.GetGuid(), revisionNumber.GetInt32());
