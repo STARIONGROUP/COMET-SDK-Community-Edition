@@ -59,8 +59,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Reporting", "CDP4Report
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Reporting.Tests", "CDP4Reporting.Tests\CDP4Reporting.Tests.csproj", "{0320A3B7-087A-4AD6-93F7-90F563132399}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer_New", "CDP4JsonSerializer_New\CDP4JsonSerializer_New.csproj", "{37C99DC2-B9B1-4AA8-B26C-415803B38E39}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer_SystemTextJson", "CDP4JsonSerializer_New\CDP4JsonSerializer_SystemTextJson.csproj", "{8A0202C4-5C6B-45F3-823B-15B7A55A8222}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer_SystemTextJson.NetCore.Tests", "CDP4JsonSerializer_New.NetCore.Tests\CDP4JsonSerializer_SystemTextJson.NetCore.Tests.csproj", "{1CE434DE-ACD3-4883-A6D6-19E4308997DE}"
@@ -169,10 +167,6 @@ Global
 		{0320A3B7-087A-4AD6-93F7-90F563132399}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0320A3B7-087A-4AD6-93F7-90F563132399}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0320A3B7-087A-4AD6-93F7-90F563132399}.Release|Any CPU.Build.0 = Release|Any CPU
-		{37C99DC2-B9B1-4AA8-B26C-415803B38E39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{37C99DC2-B9B1-4AA8-B26C-415803B38E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{37C99DC2-B9B1-4AA8-B26C-415803B38E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{37C99DC2-B9B1-4AA8-B26C-415803B38E39}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8A0202C4-5C6B-45F3-823B-15B7A55A8222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8A0202C4-5C6B-45F3-823B-15B7A55A8222}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A0202C4-5C6B-45F3-823B-15B7A55A8222}.Release|Any CPU.ActiveCfg = Release|Any CPU
