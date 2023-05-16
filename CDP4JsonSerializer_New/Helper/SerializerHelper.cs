@@ -108,9 +108,22 @@ namespace CDP4JsonSerializer_SystemTextJson
 
             foreach (var prop in jsonToken.EnumerateArray())
             {
+                var keyProp = prop.GetProperty("k");
+                var valueKind = keyProp.ValueKind;
+                var key = long.MinValue;
+
+                if (valueKind == JsonValueKind.String)
+                {
+                    key = Convert.ToInt64(keyProp.GetString());
+                }
+                else if (valueKind == JsonValueKind.Number)
+                {
+                    key = keyProp.GetInt64();
+                }
+                
                 var orderedItem = new OrderedItem
                 {
-                    K = prop.GetProperty("k").GetInt64(),//JsonSerializer.Deserialize<long>(prop.GetProperty("k").GetRawText(), SerializerOptions.Options),
+                    K = key,
                     V = prop.GetProperty("v").GetString(),
                 };
                 
