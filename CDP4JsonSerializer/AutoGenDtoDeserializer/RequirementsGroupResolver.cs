@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementsGroupResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,96 +27,161 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="RequirementsGroupResolver"/> is to deserialize a JSON object to a <see cref="RequirementsGroup"/>
+    /// The purpose of the <see cref="RequirementsGroupResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.RequirementsGroup"/>
     /// </summary>
     public static class RequirementsGroupResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="RequirementsGroup"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="RequirementsGroup"/> to instantiate</returns>
-        public static CDP4Common.DTO.RequirementsGroup FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.RequirementsGroup"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.RequirementsGroup"/> to instantiate</returns>
+        public static CDP4Common.DTO.RequirementsGroup FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var requirementsGroup = new CDP4Common.DTO.RequirementsGroup(iid, revisionNumber);
-
-            if (!jObject["alias"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                requirementsGroup.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the RequirementsGroupResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                requirementsGroup.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the RequirementsGroupResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            var requirementsGroup = new CDP4Common.DTO.RequirementsGroup(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                requirementsGroup.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    requirementsGroup.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty) && categoryProperty.ValueKind != JsonValueKind.Null)
             {
-                requirementsGroup.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    requirementsGroup.Category.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                requirementsGroup.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    requirementsGroup.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["group"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                requirementsGroup.Group.AddRange(jObject["group"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    requirementsGroup.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                requirementsGroup.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    requirementsGroup.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("group"u8, out var groupProperty) && groupProperty.ValueKind != JsonValueKind.Null)
             {
-                requirementsGroup.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in groupProperty.EnumerateArray())
+                {
+                    requirementsGroup.Group.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                requirementsGroup.Name = jObject["name"].ToObject<string>();
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    requirementsGroup.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                requirementsGroup.Owner = jObject["owner"].ToObject<Guid>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the requirementsGroup {id} is null", requirementsGroup.Iid);
+                }
+                else
+                {
+                    requirementsGroup.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["parameterValue"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                requirementsGroup.ParameterValue.AddRange(jObject["parameterValue"].ToObject<IEnumerable<Guid>>());
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the requirementsGroup {id} is null", requirementsGroup.Iid);
+                }
+                else
+                {
+                    requirementsGroup.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                requirementsGroup.ShortName = jObject["shortName"].ToObject<string>();
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the requirementsGroup {id} is null", requirementsGroup.Iid);
+                }
+                else
+                {
+                    requirementsGroup.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("parameterValue"u8, out var parameterValueProperty) && parameterValueProperty.ValueKind != JsonValueKind.Null)
             {
-                requirementsGroup.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                foreach(var element in parameterValueProperty.EnumerateArray())
+                {
+                    requirementsGroup.ParameterValue.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
+            {
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the requirementsGroup {id} is null", requirementsGroup.Iid);
+                }
+                else
+                {
+                    requirementsGroup.ShortName = shortNameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the requirementsGroup {id} is null", requirementsGroup.Iid);
+                }
+                else
+                {
+                    requirementsGroup.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return requirementsGroup;

@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer.NetCore.Tests.JsonConverter
+namespace CDP4JsonSerializer.Tests.JsonConverter
 {
     using System;
     

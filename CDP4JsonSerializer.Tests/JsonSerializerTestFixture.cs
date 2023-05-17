@@ -30,7 +30,8 @@ namespace CDP4JsonSerializer.Tests
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
     using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
@@ -40,8 +41,6 @@ namespace CDP4JsonSerializer.Tests
     using CDP4Common.Types;
 
     using CDP4JsonSerializer.Tests.Helper;
-
-    using Newtonsoft.Json;
 
     using NUnit.Framework;
 
@@ -614,19 +613,19 @@ namespace CDP4JsonSerializer.Tests
             /// <summary>
             /// Gets or sets the collection of DTOs to delete.
             /// </summary>
-            [JsonProperty("_delete")]
+            [JsonPropertyName("_delete")]
             public List<ClasslessDTO> Delete { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to create.
             /// </summary>
-            [JsonProperty("_create")]
+            [JsonPropertyName("_create")]
             public List<Dto.Thing> Create { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to update.
             /// </summary>
-            [JsonProperty("_update")]
+            [JsonPropertyName("_update")]
             public List<ClasslessDTO> Update { get; set; }
 
             /// <summary>

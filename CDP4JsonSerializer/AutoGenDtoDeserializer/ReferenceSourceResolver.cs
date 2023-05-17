@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReferenceSourceResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,121 +27,229 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="ReferenceSourceResolver"/> is to deserialize a JSON object to a <see cref="ReferenceSource"/>
+    /// The purpose of the <see cref="ReferenceSourceResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.ReferenceSource"/>
     /// </summary>
     public static class ReferenceSourceResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="ReferenceSource"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="ReferenceSource"/> to instantiate</returns>
-        public static CDP4Common.DTO.ReferenceSource FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.ReferenceSource"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.ReferenceSource"/> to instantiate</returns>
+        public static CDP4Common.DTO.ReferenceSource FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var referenceSource = new CDP4Common.DTO.ReferenceSource(iid, revisionNumber);
-
-            if (!jObject["alias"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                referenceSource.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the ReferenceSourceResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["author"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                referenceSource.Author = jObject["author"].ToObject<string>();
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the ReferenceSourceResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            var referenceSource = new CDP4Common.DTO.ReferenceSource(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                referenceSource.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    referenceSource.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                referenceSource.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale author property of the referenceSource {id} is null", referenceSource.Iid);
+                }
+                else
+                {
+                    referenceSource.Author = authorProperty.GetString();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty) && categoryProperty.ValueKind != JsonValueKind.Null)
             {
-                referenceSource.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    referenceSource.Category.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                referenceSource.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    referenceSource.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                referenceSource.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    referenceSource.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["isDeprecated"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                referenceSource.IsDeprecated = jObject["isDeprecated"].ToObject<bool>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    referenceSource.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["language"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                referenceSource.Language = jObject["language"].ToObject<string>();
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    referenceSource.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                referenceSource.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the referenceSource {id} is null", referenceSource.Iid);
+                }
+                else
+                {
+                    referenceSource.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("language"u8, out var languageProperty))
             {
-                referenceSource.Name = jObject["name"].ToObject<string>();
+                if(languageProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale language property of the referenceSource {id} is null", referenceSource.Iid);
+                }
+                else
+                {
+                    referenceSource.Language = languageProperty.GetString();
+                }
             }
 
-            if (!jObject["publicationYear"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                referenceSource.PublicationYear = jObject["publicationYear"].ToObject<int?>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the referenceSource {id} is null", referenceSource.Iid);
+                }
+                else
+                {
+                    referenceSource.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["publishedIn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                referenceSource.PublishedIn = jObject["publishedIn"].ToObject<Guid?>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the referenceSource {id} is null", referenceSource.Iid);
+                }
+                else
+                {
+                    referenceSource.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["publisher"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("publicationYear"u8, out var publicationYearProperty))
             {
-                referenceSource.Publisher = jObject["publisher"].ToObject<Guid?>();
+                if(publicationYearProperty.ValueKind == JsonValueKind.Null)
+                {
+                    referenceSource.PublicationYear = null;
+                }
+                else
+                {
+                    referenceSource.PublicationYear = publicationYearProperty.GetInt32();
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("publishedIn"u8, out var publishedInProperty))
             {
-                referenceSource.ShortName = jObject["shortName"].ToObject<string>();
+                if(publishedInProperty.ValueKind == JsonValueKind.Null)
+                {
+                    referenceSource.PublishedIn = null;
+                }
+                else
+                {
+                    referenceSource.PublishedIn = publishedInProperty.GetGuid();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("publisher"u8, out var publisherProperty))
             {
-                referenceSource.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(publisherProperty.ValueKind == JsonValueKind.Null)
+                {
+                    referenceSource.Publisher = null;
+                }
+                else
+                {
+                    referenceSource.Publisher = publisherProperty.GetGuid();
+                }
             }
 
-            if (!jObject["versionDate"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                referenceSource.VersionDate = jObject["versionDate"].ToObject<DateTime?>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the referenceSource {id} is null", referenceSource.Iid);
+                }
+                else
+                {
+                    referenceSource.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["versionIdentifier"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                referenceSource.VersionIdentifier = jObject["versionIdentifier"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the referenceSource {id} is null", referenceSource.Iid);
+                }
+                else
+                {
+                    referenceSource.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("versionDate"u8, out var versionDateProperty))
+            {
+                if(versionDateProperty.ValueKind == JsonValueKind.Null)
+                {
+                    referenceSource.VersionDate = null;
+                }
+                else
+                {
+                    referenceSource.VersionDate = versionDateProperty.GetDateTime();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("versionIdentifier"u8, out var versionIdentifierProperty))
+            {
+                if(versionIdentifierProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale versionIdentifier property of the referenceSource {id} is null", referenceSource.Iid);
+                }
+                else
+                {
+                    referenceSource.VersionIdentifier = versionIdentifierProperty.GetString();
+                }
             }
 
             return referenceSource;

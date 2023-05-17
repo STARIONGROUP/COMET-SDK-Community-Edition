@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ActualFiniteStateResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,61 +27,97 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="ActualFiniteStateResolver"/> is to deserialize a JSON object to a <see cref="ActualFiniteState"/>
+    /// The purpose of the <see cref="ActualFiniteStateResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.ActualFiniteState"/>
     /// </summary>
     public static class ActualFiniteStateResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="ActualFiniteState"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="ActualFiniteState"/> to instantiate</returns>
-        public static CDP4Common.DTO.ActualFiniteState FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.ActualFiniteState"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.ActualFiniteState"/> to instantiate</returns>
+        public static CDP4Common.DTO.ActualFiniteState FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var actualFiniteState = new CDP4Common.DTO.ActualFiniteState(iid, revisionNumber);
-
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                actualFiniteState.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the ActualFiniteStateResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                actualFiniteState.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the ActualFiniteStateResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["kind"].IsNullOrEmpty())
+            var actualFiniteState = new CDP4Common.DTO.ActualFiniteState(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                actualFiniteState.Kind = jObject["kind"].ToObject<ActualFiniteStateKind>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    actualFiniteState.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                actualFiniteState.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    actualFiniteState.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["possibleState"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("kind"u8, out var kindProperty))
             {
-                actualFiniteState.PossibleState.AddRange(jObject["possibleState"].ToObject<IEnumerable<Guid>>());
+                if(kindProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale kind property of the actualFiniteState {id} is null", actualFiniteState.Iid);
+                }
+                else
+                {
+                    actualFiniteState.Kind = ActualFiniteStateKindDeserializer.Deserialize(kindProperty);
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                actualFiniteState.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the actualFiniteState {id} is null", actualFiniteState.Iid);
+                }
+                else
+                {
+                    actualFiniteState.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("possibleState"u8, out var possibleStateProperty) && possibleStateProperty.ValueKind != JsonValueKind.Null)
+            {
+                foreach(var element in possibleStateProperty.EnumerateArray())
+                {
+                    actualFiniteState.PossibleState.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the actualFiniteState {id} is null", actualFiniteState.Iid);
+                }
+                else
+                {
+                    actualFiniteState.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return actualFiniteState;

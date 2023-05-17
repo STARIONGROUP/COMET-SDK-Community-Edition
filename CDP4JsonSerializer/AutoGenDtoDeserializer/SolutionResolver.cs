@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SolutionResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,76 +27,137 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="SolutionResolver"/> is to deserialize a JSON object to a <see cref="Solution"/>
+    /// The purpose of the <see cref="SolutionResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.Solution"/>
     /// </summary>
     public static class SolutionResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="Solution"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="Solution"/> to instantiate</returns>
-        public static CDP4Common.DTO.Solution FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.Solution"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.Solution"/> to instantiate</returns>
+        public static CDP4Common.DTO.Solution FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var solution = new CDP4Common.DTO.Solution(iid, revisionNumber);
-
-            if (!jObject["author"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                solution.Author = jObject["author"].ToObject<Guid>();
+                throw new DeSerializationException("the mandatory iid property is not available, the SolutionResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["content"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                solution.Content = jObject["content"].ToObject<string>();
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the SolutionResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            var solution = new CDP4Common.DTO.Solution(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                solution.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale author property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                solution.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.Content = contentProperty.GetString();
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                solution.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["languageCode"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                solution.LanguageCode = jObject["languageCode"].ToObject<string>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    solution.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                solution.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    solution.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                solution.Owner = jObject["owner"].ToObject<Guid>();
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                solution.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
+            {
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.Owner = ownerProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the solution {id} is null", solution.Iid);
+                }
+                else
+                {
+                    solution.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return solution;

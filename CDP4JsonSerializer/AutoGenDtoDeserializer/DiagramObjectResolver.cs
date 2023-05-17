@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DiagramObjectResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,91 +27,161 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="DiagramObjectResolver"/> is to deserialize a JSON object to a <see cref="DiagramObject"/>
+    /// The purpose of the <see cref="DiagramObjectResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.DiagramObject"/>
     /// </summary>
     public static class DiagramObjectResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="DiagramObject"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="DiagramObject"/> to instantiate</returns>
-        public static CDP4Common.DTO.DiagramObject FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.DiagramObject"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.DiagramObject"/> to instantiate</returns>
+        public static CDP4Common.DTO.DiagramObject FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var diagramObject = new CDP4Common.DTO.DiagramObject(iid, revisionNumber);
-
-            if (!jObject["bounds"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                diagramObject.Bounds.AddRange(jObject["bounds"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the DiagramObjectResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["depictedThing"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                diagramObject.DepictedThing = jObject["depictedThing"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the DiagramObjectResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["diagramElement"].IsNullOrEmpty())
+            var diagramObject = new CDP4Common.DTO.DiagramObject(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("bounds"u8, out var boundsProperty) && boundsProperty.ValueKind != JsonValueKind.Null)
             {
-                diagramObject.DiagramElement.AddRange(jObject["diagramElement"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in boundsProperty.EnumerateArray())
+                {
+                    diagramObject.Bounds.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["documentation"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("depictedThing"u8, out var depictedThingProperty))
             {
-                diagramObject.Documentation = jObject["documentation"].ToObject<string>();
+                if(depictedThingProperty.ValueKind == JsonValueKind.Null)
+                {
+                    diagramObject.DepictedThing = null;
+                }
+                else
+                {
+                    diagramObject.DepictedThing = depictedThingProperty.GetGuid();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("diagramElement"u8, out var diagramElementProperty) && diagramElementProperty.ValueKind != JsonValueKind.Null)
             {
-                diagramObject.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in diagramElementProperty.EnumerateArray())
+                {
+                    diagramObject.DiagramElement.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
             {
-                diagramObject.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                if(documentationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale documentation property of the diagramObject {id} is null", diagramObject.Iid);
+                }
+                else
+                {
+                    diagramObject.Documentation = documentationProperty.GetString();
+                }
             }
 
-            if (!jObject["localStyle"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                diagramObject.LocalStyle.AddRange(jObject["localStyle"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    diagramObject.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                diagramObject.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    diagramObject.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("localStyle"u8, out var localStyleProperty) && localStyleProperty.ValueKind != JsonValueKind.Null)
             {
-                diagramObject.Name = jObject["name"].ToObject<string>();
+                foreach(var element in localStyleProperty.EnumerateArray())
+                {
+                    diagramObject.LocalStyle.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["resolution"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                diagramObject.Resolution = jObject["resolution"].ToObject<float>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the diagramObject {id} is null", diagramObject.Iid);
+                }
+                else
+                {
+                    diagramObject.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["sharedStyle"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                diagramObject.SharedStyle = jObject["sharedStyle"].ToObject<Guid?>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the diagramObject {id} is null", diagramObject.Iid);
+                }
+                else
+                {
+                    diagramObject.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("resolution"u8, out var resolutionProperty))
             {
-                diagramObject.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(resolutionProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale resolution property of the diagramObject {id} is null", diagramObject.Iid);
+                }
+                else
+                {
+                    diagramObject.Resolution = resolutionProperty.GetSingle();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("sharedStyle"u8, out var sharedStyleProperty))
+            {
+                if(sharedStyleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    diagramObject.SharedStyle = null;
+                }
+                else
+                {
+                    diagramObject.SharedStyle = sharedStyleProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the diagramObject {id} is null", diagramObject.Iid);
+                }
+                else
+                {
+                    diagramObject.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return diagramObject;

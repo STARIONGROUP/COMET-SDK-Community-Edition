@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EngineeringModelSetupResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,126 +27,225 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="EngineeringModelSetupResolver"/> is to deserialize a JSON object to a <see cref="EngineeringModelSetup"/>
+    /// The purpose of the <see cref="EngineeringModelSetupResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.EngineeringModelSetup"/>
     /// </summary>
     public static class EngineeringModelSetupResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="EngineeringModelSetup"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="EngineeringModelSetup"/> to instantiate</returns>
-        public static CDP4Common.DTO.EngineeringModelSetup FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.EngineeringModelSetup"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.EngineeringModelSetup"/> to instantiate</returns>
+        public static CDP4Common.DTO.EngineeringModelSetup FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var engineeringModelSetup = new CDP4Common.DTO.EngineeringModelSetup(iid, revisionNumber);
-
-            if (!jObject["activeDomain"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                engineeringModelSetup.ActiveDomain.AddRange(jObject["activeDomain"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the EngineeringModelSetupResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["alias"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                engineeringModelSetup.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the EngineeringModelSetupResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["defaultOrganizationalParticipant"].IsNullOrEmpty())
+            var engineeringModelSetup = new CDP4Common.DTO.EngineeringModelSetup(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("activeDomain"u8, out var activeDomainProperty) && activeDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelSetup.DefaultOrganizationalParticipant = jObject["defaultOrganizationalParticipant"].ToObject<Guid?>();
+                foreach(var element in activeDomainProperty.EnumerateArray())
+                {
+                    engineeringModelSetup.ActiveDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelSetup.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    engineeringModelSetup.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["engineeringModelIid"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("defaultOrganizationalParticipant"u8, out var defaultOrganizationalParticipantProperty))
             {
-                engineeringModelSetup.EngineeringModelIid = jObject["engineeringModelIid"].ToObject<Guid>();
+                if(defaultOrganizationalParticipantProperty.ValueKind == JsonValueKind.Null)
+                {
+                    engineeringModelSetup.DefaultOrganizationalParticipant = null;
+                }
+                else
+                {
+                    engineeringModelSetup.DefaultOrganizationalParticipant = defaultOrganizationalParticipantProperty.GetGuid();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelSetup.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    engineeringModelSetup.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("engineeringModelIid"u8, out var engineeringModelIidProperty))
             {
-                engineeringModelSetup.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                if(engineeringModelIidProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale engineeringModelIid property of the engineeringModelSetup {id} is null", engineeringModelSetup.Iid);
+                }
+                else
+                {
+                    engineeringModelSetup.EngineeringModelIid = engineeringModelIidProperty.GetGuid();
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelSetup.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    engineeringModelSetup.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["iterationSetup"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelSetup.IterationSetup.AddRange(jObject["iterationSetup"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    engineeringModelSetup.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["kind"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelSetup.Kind = jObject["kind"].ToObject<EngineeringModelKind>();
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    engineeringModelSetup.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("iterationSetup"u8, out var iterationSetupProperty) && iterationSetupProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelSetup.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in iterationSetupProperty.EnumerateArray())
+                {
+                    engineeringModelSetup.IterationSetup.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("kind"u8, out var kindProperty))
             {
-                engineeringModelSetup.Name = jObject["name"].ToObject<string>();
+                if(kindProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale kind property of the engineeringModelSetup {id} is null", engineeringModelSetup.Iid);
+                }
+                else
+                {
+                    engineeringModelSetup.Kind = EngineeringModelKindDeserializer.Deserialize(kindProperty);
+                }
             }
 
-            if (!jObject["organizationalParticipant"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                engineeringModelSetup.OrganizationalParticipant.AddRange(jObject["organizationalParticipant"].ToObject<IEnumerable<Guid>>());
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the engineeringModelSetup {id} is null", engineeringModelSetup.Iid);
+                }
+                else
+                {
+                    engineeringModelSetup.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["participant"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                engineeringModelSetup.Participant.AddRange(jObject["participant"].ToObject<IEnumerable<Guid>>());
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the engineeringModelSetup {id} is null", engineeringModelSetup.Iid);
+                }
+                else
+                {
+                    engineeringModelSetup.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["requiredRdl"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("organizationalParticipant"u8, out var organizationalParticipantProperty) && organizationalParticipantProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelSetup.RequiredRdl.AddRange(jObject["requiredRdl"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in organizationalParticipantProperty.EnumerateArray())
+                {
+                    engineeringModelSetup.OrganizationalParticipant.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("participant"u8, out var participantProperty) && participantProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelSetup.ShortName = jObject["shortName"].ToObject<string>();
+                foreach(var element in participantProperty.EnumerateArray())
+                {
+                    engineeringModelSetup.Participant.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["sourceEngineeringModelSetupIid"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("requiredRdl"u8, out var requiredRdlProperty) && requiredRdlProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelSetup.SourceEngineeringModelSetupIid = jObject["sourceEngineeringModelSetupIid"].ToObject<Guid?>();
+                foreach(var element in requiredRdlProperty.EnumerateArray())
+                {
+                    engineeringModelSetup.RequiredRdl.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["studyPhase"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                engineeringModelSetup.StudyPhase = jObject["studyPhase"].ToObject<StudyPhaseKind>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the engineeringModelSetup {id} is null", engineeringModelSetup.Iid);
+                }
+                else
+                {
+                    engineeringModelSetup.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("sourceEngineeringModelSetupIid"u8, out var sourceEngineeringModelSetupIidProperty))
             {
-                engineeringModelSetup.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(sourceEngineeringModelSetupIidProperty.ValueKind == JsonValueKind.Null)
+                {
+                    engineeringModelSetup.SourceEngineeringModelSetupIid = null;
+                }
+                else
+                {
+                    engineeringModelSetup.SourceEngineeringModelSetupIid = sourceEngineeringModelSetupIidProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("studyPhase"u8, out var studyPhaseProperty))
+            {
+                if(studyPhaseProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale studyPhase property of the engineeringModelSetup {id} is null", engineeringModelSetup.Iid);
+                }
+                else
+                {
+                    engineeringModelSetup.StudyPhase = StudyPhaseKindDeserializer.Deserialize(studyPhaseProperty);
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the engineeringModelSetup {id} is null", engineeringModelSetup.Iid);
+                }
+                else
+                {
+                    engineeringModelSetup.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return engineeringModelSetup;

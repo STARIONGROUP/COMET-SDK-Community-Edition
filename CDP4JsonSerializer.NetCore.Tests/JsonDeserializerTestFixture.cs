@@ -44,7 +44,7 @@ namespace CDP4JsonSerializer.Tests
     using PossibleFiniteStateList = CDP4Common.DTO.PossibleFiniteStateList;
 
     /// <summary>
-    /// Suite of tests for the <see cref="JsonDeserializer"/> class
+    /// Suite of tests for the <see cref="Cdp4JsonSerializer"/> class
     /// </summary>
     [TestFixture]
     public class JsonDeserializerTestFixture

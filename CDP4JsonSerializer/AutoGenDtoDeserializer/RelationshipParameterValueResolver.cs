@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RelationshipParameterValueResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,66 +27,105 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="RelationshipParameterValueResolver"/> is to deserialize a JSON object to a <see cref="RelationshipParameterValue"/>
+    /// The purpose of the <see cref="RelationshipParameterValueResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.RelationshipParameterValue"/>
     /// </summary>
     public static class RelationshipParameterValueResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="RelationshipParameterValue"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="RelationshipParameterValue"/> to instantiate</returns>
-        public static CDP4Common.DTO.RelationshipParameterValue FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.RelationshipParameterValue"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.RelationshipParameterValue"/> to instantiate</returns>
+        public static CDP4Common.DTO.RelationshipParameterValue FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var relationshipParameterValue = new CDP4Common.DTO.RelationshipParameterValue(iid, revisionNumber);
-
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                relationshipParameterValue.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the RelationshipParameterValueResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                relationshipParameterValue.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the RelationshipParameterValueResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            var relationshipParameterValue = new CDP4Common.DTO.RelationshipParameterValue(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                relationshipParameterValue.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    relationshipParameterValue.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["parameterType"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                relationshipParameterValue.ParameterType = jObject["parameterType"].ToObject<Guid>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    relationshipParameterValue.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["scale"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                relationshipParameterValue.Scale = jObject["scale"].ToObject<Guid?>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the relationshipParameterValue {id} is null", relationshipParameterValue.Iid);
+                }
+                else
+                {
+                    relationshipParameterValue.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("parameterType"u8, out var parameterTypeProperty))
             {
-                relationshipParameterValue.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(parameterTypeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale parameterType property of the relationshipParameterValue {id} is null", relationshipParameterValue.Iid);
+                }
+                else
+                {
+                    relationshipParameterValue.ParameterType = parameterTypeProperty.GetGuid();
+                }
             }
 
-            if (!jObject["value"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("scale"u8, out var scaleProperty))
             {
-                relationshipParameterValue.Value = SerializerHelper.ToValueArray<string>(jObject["value"].ToString());
+                if(scaleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    relationshipParameterValue.Scale = null;
+                }
+                else
+                {
+                    relationshipParameterValue.Scale = scaleProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the relationshipParameterValue {id} is null", relationshipParameterValue.Iid);
+                }
+                else
+                {
+                    relationshipParameterValue.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
+            if (jsonElement.TryGetProperty("value"u8, out var valueProperty))
+            {
+                relationshipParameterValue.Value = SerializerHelper.ToValueArray<string>(valueProperty.GetString());
             }
 
             return relationshipParameterValue;

@@ -2,7 +2,7 @@
 // <copyright file="IThingSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Jaime Bernar
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -24,28 +24,26 @@
 
 namespace CDP4JsonSerializer
 {
+    using CDP4Common.DTO;
     using System;
     using System.Collections.Generic;
-
-    using CDP4Common.DTO;
-
-    using Newtonsoft.Json.Linq;
+    using System.Text.Json.Nodes;
 
     /// <summary>
-    /// Definition of the <see cref="IThingSerializer"/> used to serialize instances of <see cref="Thing"/> to a <see cref="JObject"/>
+    /// Definition of the <see cref="IThingSerializer"/> used to serialize instances of <see cref="Thing"/> to a <see cref="JsonObject"/>
     /// </summary>
     public interface IThingSerializer
     {
         /// <summary>
         /// Gets the map containing the serialization method for each property
         /// </summary>
-        IReadOnlyDictionary<string, Func<object, JToken>> PropertySerializerMap { get; }
+        IReadOnlyDictionary<string, Func<object, JsonValue>> PropertySerializerMap { get; }
 
         /// <summary>
         /// Serialize the <see cref="Thing"/>
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        JObject Serialize(Thing thing);
+        /// <returns>The <see cref="JsonObject"/></returns>
+        JsonObject Serialize(Thing thing);
     }
 }

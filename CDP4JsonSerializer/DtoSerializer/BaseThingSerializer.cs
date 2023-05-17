@@ -25,6 +25,7 @@
 namespace CDP4JsonSerializer
 {
     using System;
+    
     using CDP4Common.Comparers;
     using CDP4Common.Types;
 

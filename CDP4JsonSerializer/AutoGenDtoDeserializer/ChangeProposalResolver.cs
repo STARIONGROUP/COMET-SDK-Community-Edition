@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ChangeProposalResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,131 +27,249 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="ChangeProposalResolver"/> is to deserialize a JSON object to a <see cref="ChangeProposal"/>
+    /// The purpose of the <see cref="ChangeProposalResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.ChangeProposal"/>
     /// </summary>
     public static class ChangeProposalResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="ChangeProposal"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="ChangeProposal"/> to instantiate</returns>
-        public static CDP4Common.DTO.ChangeProposal FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.ChangeProposal"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.ChangeProposal"/> to instantiate</returns>
+        public static CDP4Common.DTO.ChangeProposal FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var changeProposal = new CDP4Common.DTO.ChangeProposal(iid, revisionNumber);
-
-            if (!jObject["approvedBy"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                changeProposal.ApprovedBy.AddRange(jObject["approvedBy"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the ChangeProposalResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["author"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                changeProposal.Author = jObject["author"].ToObject<Guid>();
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the ChangeProposalResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            var changeProposal = new CDP4Common.DTO.ChangeProposal(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("approvedBy"u8, out var approvedByProperty) && approvedByProperty.ValueKind != JsonValueKind.Null)
             {
-                changeProposal.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in approvedByProperty.EnumerateArray())
+                {
+                    changeProposal.ApprovedBy.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["changeRequest"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                changeProposal.ChangeRequest = jObject["changeRequest"].ToObject<Guid>();
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale author property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (!jObject["classification"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty) && categoryProperty.ValueKind != JsonValueKind.Null)
             {
-                changeProposal.Classification = jObject["classification"].ToObject<AnnotationClassificationKind>();
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    changeProposal.Category.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["content"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("changeRequest"u8, out var changeRequestProperty))
             {
-                changeProposal.Content = jObject["content"].ToObject<string>();
+                if(changeRequestProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale changeRequest property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.ChangeRequest = changeRequestProperty.GetGuid();
+                }
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("classification"u8, out var classificationProperty))
             {
-                changeProposal.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                if(classificationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale classification property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.Classification = AnnotationClassificationKindDeserializer.Deserialize(classificationProperty);
+                }
             }
 
-            if (!jObject["discussion"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                changeProposal.Discussion.AddRange(jObject["discussion"].ToObject<IEnumerable<Guid>>());
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.Content = contentProperty.GetString();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                changeProposal.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("discussion"u8, out var discussionProperty) && discussionProperty.ValueKind != JsonValueKind.Null)
             {
-                changeProposal.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in discussionProperty.EnumerateArray())
+                {
+                    changeProposal.Discussion.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["languageCode"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                changeProposal.LanguageCode = jObject["languageCode"].ToObject<string>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    changeProposal.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                changeProposal.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    changeProposal.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                changeProposal.Owner = jObject["owner"].ToObject<Guid>();
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (!jObject["primaryAnnotatedThing"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                changeProposal.PrimaryAnnotatedThing = jObject["primaryAnnotatedThing"].ToObject<Guid?>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["relatedThing"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                changeProposal.RelatedThing.AddRange(jObject["relatedThing"].ToObject<IEnumerable<Guid>>());
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("primaryAnnotatedThing"u8, out var primaryAnnotatedThingProperty))
             {
-                changeProposal.ShortName = jObject["shortName"].ToObject<string>();
+                if(primaryAnnotatedThingProperty.ValueKind == JsonValueKind.Null)
+                {
+                    changeProposal.PrimaryAnnotatedThing = null;
+                }
+                else
+                {
+                    changeProposal.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.GetGuid();
+                }
             }
 
-            if (!jObject["sourceAnnotation"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("relatedThing"u8, out var relatedThingProperty) && relatedThingProperty.ValueKind != JsonValueKind.Null)
             {
-                changeProposal.SourceAnnotation.AddRange(jObject["sourceAnnotation"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in relatedThingProperty.EnumerateArray())
+                {
+                    changeProposal.RelatedThing.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["status"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                changeProposal.Status = jObject["status"].ToObject<AnnotationStatusKind>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("sourceAnnotation"u8, out var sourceAnnotationProperty) && sourceAnnotationProperty.ValueKind != JsonValueKind.Null)
             {
-                changeProposal.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                foreach(var element in sourceAnnotationProperty.EnumerateArray())
+                {
+                    changeProposal.SourceAnnotation.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["title"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("status"u8, out var statusProperty))
             {
-                changeProposal.Title = jObject["title"].ToObject<string>();
+                if(statusProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale status property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.Status = AnnotationStatusKindDeserializer.Deserialize(statusProperty);
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("title"u8, out var titleProperty))
+            {
+                if(titleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale title property of the changeProposal {id} is null", changeProposal.Iid);
+                }
+                else
+                {
+                    changeProposal.Title = titleProperty.GetString();
+                }
             }
 
             return changeProposal;

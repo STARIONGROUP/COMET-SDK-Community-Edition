@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IndependentParameterTypeAssignmentResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,61 +27,101 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="IndependentParameterTypeAssignmentResolver"/> is to deserialize a JSON object to a <see cref="IndependentParameterTypeAssignment"/>
+    /// The purpose of the <see cref="IndependentParameterTypeAssignmentResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.IndependentParameterTypeAssignment"/>
     /// </summary>
     public static class IndependentParameterTypeAssignmentResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="IndependentParameterTypeAssignment"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="IndependentParameterTypeAssignment"/> to instantiate</returns>
-        public static CDP4Common.DTO.IndependentParameterTypeAssignment FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.IndependentParameterTypeAssignment"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.IndependentParameterTypeAssignment"/> to instantiate</returns>
+        public static CDP4Common.DTO.IndependentParameterTypeAssignment FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var independentParameterTypeAssignment = new CDP4Common.DTO.IndependentParameterTypeAssignment(iid, revisionNumber);
-
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                independentParameterTypeAssignment.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the IndependentParameterTypeAssignmentResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                independentParameterTypeAssignment.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the IndependentParameterTypeAssignmentResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["measurementScale"].IsNullOrEmpty())
+            var independentParameterTypeAssignment = new CDP4Common.DTO.IndependentParameterTypeAssignment(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                independentParameterTypeAssignment.MeasurementScale = jObject["measurementScale"].ToObject<Guid?>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    independentParameterTypeAssignment.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                independentParameterTypeAssignment.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    independentParameterTypeAssignment.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["parameterType"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("measurementScale"u8, out var measurementScaleProperty))
             {
-                independentParameterTypeAssignment.ParameterType = jObject["parameterType"].ToObject<Guid>();
+                if(measurementScaleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    independentParameterTypeAssignment.MeasurementScale = null;
+                }
+                else
+                {
+                    independentParameterTypeAssignment.MeasurementScale = measurementScaleProperty.GetGuid();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                independentParameterTypeAssignment.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the independentParameterTypeAssignment {id} is null", independentParameterTypeAssignment.Iid);
+                }
+                else
+                {
+                    independentParameterTypeAssignment.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("parameterType"u8, out var parameterTypeProperty))
+            {
+                if(parameterTypeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale parameterType property of the independentParameterTypeAssignment {id} is null", independentParameterTypeAssignment.Iid);
+                }
+                else
+                {
+                    independentParameterTypeAssignment.ParameterType = parameterTypeProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the independentParameterTypeAssignment {id} is null", independentParameterTypeAssignment.Iid);
+                }
+                else
+                {
+                    independentParameterTypeAssignment.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return independentParameterTypeAssignment;

@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UserPreferenceResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,61 +27,101 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="UserPreferenceResolver"/> is to deserialize a JSON object to a <see cref="UserPreference"/>
+    /// The purpose of the <see cref="UserPreferenceResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.UserPreference"/>
     /// </summary>
     public static class UserPreferenceResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="UserPreference"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="UserPreference"/> to instantiate</returns>
-        public static CDP4Common.DTO.UserPreference FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.UserPreference"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.UserPreference"/> to instantiate</returns>
+        public static CDP4Common.DTO.UserPreference FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var userPreference = new CDP4Common.DTO.UserPreference(iid, revisionNumber);
-
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                userPreference.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the UserPreferenceResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                userPreference.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the UserPreferenceResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            var userPreference = new CDP4Common.DTO.UserPreference(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                userPreference.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    userPreference.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                userPreference.ShortName = jObject["shortName"].ToObject<string>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    userPreference.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                userPreference.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the userPreference {id} is null", userPreference.Iid);
+                }
+                else
+                {
+                    userPreference.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["value"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                userPreference.Value = jObject["value"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the userPreference {id} is null", userPreference.Iid);
+                }
+                else
+                {
+                    userPreference.ShortName = shortNameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the userPreference {id} is null", userPreference.Iid);
+                }
+                else
+                {
+                    userPreference.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("value"u8, out var valueProperty))
+            {
+                if(valueProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale value property of the userPreference {id} is null", userPreference.Iid);
+                }
+                else
+                {
+                    userPreference.Value = valueProperty.GetString();
+                }
             }
 
             return userPreference;

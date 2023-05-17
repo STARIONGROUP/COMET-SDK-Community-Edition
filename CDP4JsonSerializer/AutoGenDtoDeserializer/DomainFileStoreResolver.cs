@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DomainFileStoreResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,81 +27,141 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="DomainFileStoreResolver"/> is to deserialize a JSON object to a <see cref="DomainFileStore"/>
+    /// The purpose of the <see cref="DomainFileStoreResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.DomainFileStore"/>
     /// </summary>
     public static class DomainFileStoreResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="DomainFileStore"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="DomainFileStore"/> to instantiate</returns>
-        public static CDP4Common.DTO.DomainFileStore FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.DomainFileStore"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.DomainFileStore"/> to instantiate</returns>
+        public static CDP4Common.DTO.DomainFileStore FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var domainFileStore = new CDP4Common.DTO.DomainFileStore(iid, revisionNumber);
-
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                domainFileStore.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                throw new DeSerializationException("the mandatory iid property is not available, the DomainFileStoreResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                domainFileStore.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the DomainFileStoreResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            var domainFileStore = new CDP4Common.DTO.DomainFileStore(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                domainFileStore.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the domainFileStore {id} is null", domainFileStore.Iid);
+                }
+                else
+                {
+                    domainFileStore.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["file"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                domainFileStore.File.AddRange(jObject["file"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    domainFileStore.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["folder"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                domainFileStore.Folder.AddRange(jObject["folder"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    domainFileStore.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["isHidden"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("file"u8, out var fileProperty) && fileProperty.ValueKind != JsonValueKind.Null)
             {
-                domainFileStore.IsHidden = jObject["isHidden"].ToObject<bool>();
+                foreach(var element in fileProperty.EnumerateArray())
+                {
+                    domainFileStore.File.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("folder"u8, out var folderProperty) && folderProperty.ValueKind != JsonValueKind.Null)
             {
-                domainFileStore.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in folderProperty.EnumerateArray())
+                {
+                    domainFileStore.Folder.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isHidden"u8, out var isHiddenProperty))
             {
-                domainFileStore.Name = jObject["name"].ToObject<string>();
+                if(isHiddenProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isHidden property of the domainFileStore {id} is null", domainFileStore.Iid);
+                }
+                else
+                {
+                    domainFileStore.IsHidden = isHiddenProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                domainFileStore.Owner = jObject["owner"].ToObject<Guid>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the domainFileStore {id} is null", domainFileStore.Iid);
+                }
+                else
+                {
+                    domainFileStore.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                domainFileStore.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the domainFileStore {id} is null", domainFileStore.Iid);
+                }
+                else
+                {
+                    domainFileStore.Name = nameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
+            {
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the domainFileStore {id} is null", domainFileStore.Iid);
+                }
+                else
+                {
+                    domainFileStore.Owner = ownerProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the domainFileStore {id} is null", domainFileStore.Iid);
+                }
+                else
+                {
+                    domainFileStore.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return domainFileStore;

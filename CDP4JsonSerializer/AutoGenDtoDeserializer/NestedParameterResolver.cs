@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedParameterResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,81 +27,149 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="NestedParameterResolver"/> is to deserialize a JSON object to a <see cref="NestedParameter"/>
+    /// The purpose of the <see cref="NestedParameterResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.NestedParameter"/>
     /// </summary>
     public static class NestedParameterResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="NestedParameter"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="NestedParameter"/> to instantiate</returns>
-        public static CDP4Common.DTO.NestedParameter FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.NestedParameter"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.NestedParameter"/> to instantiate</returns>
+        public static CDP4Common.DTO.NestedParameter FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var nestedParameter = new CDP4Common.DTO.NestedParameter(iid, revisionNumber);
-
-            if (!jObject["actualState"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                nestedParameter.ActualState = jObject["actualState"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the NestedParameterResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["actualValue"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                nestedParameter.ActualValue = jObject["actualValue"].ToObject<string>();
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the NestedParameterResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["associatedParameter"].IsNullOrEmpty())
+            var nestedParameter = new CDP4Common.DTO.NestedParameter(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("actualState"u8, out var actualStateProperty))
             {
-                nestedParameter.AssociatedParameter = jObject["associatedParameter"].ToObject<Guid>();
+                if(actualStateProperty.ValueKind == JsonValueKind.Null)
+                {
+                    nestedParameter.ActualState = null;
+                }
+                else
+                {
+                    nestedParameter.ActualState = actualStateProperty.GetGuid();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("actualValue"u8, out var actualValueProperty))
             {
-                nestedParameter.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                if(actualValueProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale actualValue property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.ActualValue = actualValueProperty.GetString();
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("associatedParameter"u8, out var associatedParameterProperty))
             {
-                nestedParameter.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                if(associatedParameterProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale associatedParameter property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.AssociatedParameter = associatedParameterProperty.GetGuid();
+                }
             }
 
-            if (!jObject["formula"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                nestedParameter.Formula = jObject["formula"].ToObject<string>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    nestedParameter.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["isVolatile"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                nestedParameter.IsVolatile = jObject["isVolatile"].ToObject<bool>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    nestedParameter.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("formula"u8, out var formulaProperty))
             {
-                nestedParameter.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(formulaProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale formula property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.Formula = formulaProperty.GetString();
+                }
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isVolatile"u8, out var isVolatileProperty))
             {
-                nestedParameter.Owner = jObject["owner"].ToObject<Guid>();
+                if(isVolatileProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isVolatile property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.IsVolatile = isVolatileProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                nestedParameter.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
+            {
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.Owner = ownerProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the nestedParameter {id} is null", nestedParameter.Iid);
+                }
+                else
+                {
+                    nestedParameter.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return nestedParameter;

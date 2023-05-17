@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BinaryRelationshipRuleResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,106 +27,197 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="BinaryRelationshipRuleResolver"/> is to deserialize a JSON object to a <see cref="BinaryRelationshipRule"/>
+    /// The purpose of the <see cref="BinaryRelationshipRuleResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.BinaryRelationshipRule"/>
     /// </summary>
     public static class BinaryRelationshipRuleResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="BinaryRelationshipRule"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="BinaryRelationshipRule"/> to instantiate</returns>
-        public static CDP4Common.DTO.BinaryRelationshipRule FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.BinaryRelationshipRule"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.BinaryRelationshipRule"/> to instantiate</returns>
+        public static CDP4Common.DTO.BinaryRelationshipRule FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var binaryRelationshipRule = new CDP4Common.DTO.BinaryRelationshipRule(iid, revisionNumber);
-
-            if (!jObject["alias"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                binaryRelationshipRule.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the BinaryRelationshipRuleResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                binaryRelationshipRule.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the BinaryRelationshipRuleResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            var binaryRelationshipRule = new CDP4Common.DTO.BinaryRelationshipRule(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                binaryRelationshipRule.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    binaryRelationshipRule.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                binaryRelationshipRule.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    binaryRelationshipRule.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["forwardRelationshipName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                binaryRelationshipRule.ForwardRelationshipName = jObject["forwardRelationshipName"].ToObject<string>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    binaryRelationshipRule.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                binaryRelationshipRule.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    binaryRelationshipRule.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["inverseRelationshipName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("forwardRelationshipName"u8, out var forwardRelationshipNameProperty))
             {
-                binaryRelationshipRule.InverseRelationshipName = jObject["inverseRelationshipName"].ToObject<string>();
+                if(forwardRelationshipNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale forwardRelationshipName property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                }
+                else
+                {
+                    binaryRelationshipRule.ForwardRelationshipName = forwardRelationshipNameProperty.GetString();
+                }
             }
 
-            if (!jObject["isDeprecated"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                binaryRelationshipRule.IsDeprecated = jObject["isDeprecated"].ToObject<bool>();
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    binaryRelationshipRule.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("inverseRelationshipName"u8, out var inverseRelationshipNameProperty))
             {
-                binaryRelationshipRule.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(inverseRelationshipNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale inverseRelationshipName property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                }
+                else
+                {
+                    binaryRelationshipRule.InverseRelationshipName = inverseRelationshipNameProperty.GetString();
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                binaryRelationshipRule.Name = jObject["name"].ToObject<string>();
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                }
+                else
+                {
+                    binaryRelationshipRule.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["relationshipCategory"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                binaryRelationshipRule.RelationshipCategory = jObject["relationshipCategory"].ToObject<Guid>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                }
+                else
+                {
+                    binaryRelationshipRule.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                binaryRelationshipRule.ShortName = jObject["shortName"].ToObject<string>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                }
+                else
+                {
+                    binaryRelationshipRule.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["sourceCategory"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("relationshipCategory"u8, out var relationshipCategoryProperty))
             {
-                binaryRelationshipRule.SourceCategory = jObject["sourceCategory"].ToObject<Guid>();
+                if(relationshipCategoryProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale relationshipCategory property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                }
+                else
+                {
+                    binaryRelationshipRule.RelationshipCategory = relationshipCategoryProperty.GetGuid();
+                }
             }
 
-            if (!jObject["targetCategory"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                binaryRelationshipRule.TargetCategory = jObject["targetCategory"].ToObject<Guid>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                }
+                else
+                {
+                    binaryRelationshipRule.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("sourceCategory"u8, out var sourceCategoryProperty))
             {
-                binaryRelationshipRule.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(sourceCategoryProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale sourceCategory property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                }
+                else
+                {
+                    binaryRelationshipRule.SourceCategory = sourceCategoryProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("targetCategory"u8, out var targetCategoryProperty))
+            {
+                if(targetCategoryProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale targetCategory property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                }
+                else
+                {
+                    binaryRelationshipRule.TargetCategory = targetCategoryProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                }
+                else
+                {
+                    binaryRelationshipRule.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return binaryRelationshipRule;

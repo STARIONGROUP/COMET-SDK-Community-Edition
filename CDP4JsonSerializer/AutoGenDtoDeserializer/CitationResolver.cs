@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CitationResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,76 +27,137 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="CitationResolver"/> is to deserialize a JSON object to a <see cref="Citation"/>
+    /// The purpose of the <see cref="CitationResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.Citation"/>
     /// </summary>
     public static class CitationResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="Citation"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="Citation"/> to instantiate</returns>
-        public static CDP4Common.DTO.Citation FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.Citation"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.Citation"/> to instantiate</returns>
+        public static CDP4Common.DTO.Citation FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var citation = new CDP4Common.DTO.Citation(iid, revisionNumber);
-
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                citation.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the CitationResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                citation.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the CitationResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["isAdaptation"].IsNullOrEmpty())
+            var citation = new CDP4Common.DTO.Citation(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                citation.IsAdaptation = jObject["isAdaptation"].ToObject<bool>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    citation.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["location"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                citation.Location = jObject["location"].ToObject<string>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    citation.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isAdaptation"u8, out var isAdaptationProperty))
             {
-                citation.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(isAdaptationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isAdaptation property of the citation {id} is null", citation.Iid);
+                }
+                else
+                {
+                    citation.IsAdaptation = isAdaptationProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["remark"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("location"u8, out var locationProperty))
             {
-                citation.Remark = jObject["remark"].ToObject<string>();
+                if(locationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale location property of the citation {id} is null", citation.Iid);
+                }
+                else
+                {
+                    citation.Location = locationProperty.GetString();
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                citation.ShortName = jObject["shortName"].ToObject<string>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the citation {id} is null", citation.Iid);
+                }
+                else
+                {
+                    citation.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["source"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("remark"u8, out var remarkProperty))
             {
-                citation.Source = jObject["source"].ToObject<Guid>();
+                if(remarkProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale remark property of the citation {id} is null", citation.Iid);
+                }
+                else
+                {
+                    citation.Remark = remarkProperty.GetString();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                citation.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the citation {id} is null", citation.Iid);
+                }
+                else
+                {
+                    citation.ShortName = shortNameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
+            {
+                if(sourceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale source property of the citation {id} is null", citation.Iid);
+                }
+                else
+                {
+                    citation.Source = sourceProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the citation {id} is null", citation.Iid);
+                }
+                else
+                {
+                    citation.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return citation;

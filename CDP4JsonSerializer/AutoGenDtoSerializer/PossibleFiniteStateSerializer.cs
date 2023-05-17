@@ -1,18 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file "PossibleFiniteStateSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -32,12 +32,11 @@ namespace CDP4JsonSerializer
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json.Nodes;
 
     using CDP4Common.DTO;
     using CDP4Common.Types;
-
-    using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="PossibleFiniteStateSerializer"/> class is to provide a <see cref="PossibleFiniteState"/> specific serializer
     /// </summary>
@@ -46,67 +45,129 @@ namespace CDP4JsonSerializer
         /// <summary>
         /// The map containing the serialization methods
         /// </summary>
-        private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
+        private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            { "alias", alias => new JArray(alias) },
-            { "classKind", classKind => new JValue(classKind.ToString()) },
-            { "definition", definition => new JArray(definition) },
-            { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
-            { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
-            { "hyperLink", hyperLink => new JArray(hyperLink) },
-            { "iid", iid => new JValue(iid) },
-            { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            { "name", name => new JValue(name) },
-            { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
-            { "shortName", shortName => new JValue(shortName) },
-            { "thingPreference", thingPreference => new JValue(thingPreference) },
+            
+            
+            
+            
+            { "alias", alias => JsonValue.Create(alias) },
+            
+            
+            
+            
+            
+            { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
+            
+            
+            
+            
+            
+            { "definition", definition => JsonValue.Create(definition) },
+            
+            
+            
+            
+            
+            { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
+            
+            
+            
+            
+            
+            { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
+            
+            
+            
+            
+            
+            { "hyperLink", hyperLink => JsonValue.Create(hyperLink) },
+            
+            
+            
+            
+            
+            { "iid", iid => JsonValue.Create(iid) },
+            
+            
+            
+            
+            
+            { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            
+            
+            
+            
+            
+            { "name", name => JsonValue.Create(name) },
+            
+            
+             
+             
+            
+            
+            
+            { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
+            
+            
+            
+            
+            
+            { "shortName", shortName => JsonValue.Create(shortName) },
+            
+            
+            
+            
+            
+            { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
+            
+            
         };
 
         /// <summary>
         /// Serialize the <see cref="PossibleFiniteState"/>
         /// </summary>
         /// <param name="possibleFiniteState">The <see cref="PossibleFiniteState"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        private JObject Serialize(PossibleFiniteState possibleFiniteState)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        private JsonObject Serialize(PossibleFiniteState possibleFiniteState)
         {
-            var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](possibleFiniteState.Alias.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), possibleFiniteState.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](possibleFiniteState.Definition.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](possibleFiniteState.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](possibleFiniteState.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](possibleFiniteState.HyperLink.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("iid", this.PropertySerializerMap["iid"](possibleFiniteState.Iid));
-            jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](possibleFiniteState.ModifiedOn));
-            jsonObject.Add("name", this.PropertySerializerMap["name"](possibleFiniteState.Name));
-            jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](possibleFiniteState.RevisionNumber));
-            jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](possibleFiniteState.ShortName));
-            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](possibleFiniteState.ThingPreference));
+            var jsonObject = new JsonObject
+            {
+                {"alias", this.PropertySerializerMap["alias"](possibleFiniteState.Alias.OrderBy(x => x, this.guidComparer))},
+                {"classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), possibleFiniteState.ClassKind))},
+                {"definition", this.PropertySerializerMap["definition"](possibleFiniteState.Definition.OrderBy(x => x, this.guidComparer))},
+                {"excludedDomain", this.PropertySerializerMap["excludedDomain"](possibleFiniteState.ExcludedDomain.OrderBy(x => x, this.guidComparer))},
+                {"excludedPerson", this.PropertySerializerMap["excludedPerson"](possibleFiniteState.ExcludedPerson.OrderBy(x => x, this.guidComparer))},
+                {"hyperLink", this.PropertySerializerMap["hyperLink"](possibleFiniteState.HyperLink.OrderBy(x => x, this.guidComparer))},
+                {"iid", this.PropertySerializerMap["iid"](possibleFiniteState.Iid)},
+                {"modifiedOn", this.PropertySerializerMap["modifiedOn"](possibleFiniteState.ModifiedOn)},
+                {"name", this.PropertySerializerMap["name"](possibleFiniteState.Name)},
+                {"revisionNumber", this.PropertySerializerMap["revisionNumber"](possibleFiniteState.RevisionNumber)},
+                {"shortName", this.PropertySerializerMap["shortName"](possibleFiniteState.ShortName)},
+                {"thingPreference", this.PropertySerializerMap["thingPreference"](possibleFiniteState.ThingPreference)},
+            };
+
             return jsonObject;
         }
 
         /// <summary>
         /// Gets the map containing the serialization method for each property of the <see cref="PossibleFiniteState"/> class.
         /// </summary>
-        public IReadOnlyDictionary<string, Func<object, JToken>> PropertySerializerMap 
-        {
-            get { return this.propertySerializerMap; }
-        }
+        public IReadOnlyDictionary<string, Func<object, JsonValue>> PropertySerializerMap => this.propertySerializerMap;
 
         /// <summary>
         /// Serialize the <see cref="Thing"/> to JObject
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public JObject Serialize(Thing thing)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        public JsonObject Serialize(Thing thing)
         {
             if (thing == null)
             {
                 throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
-            var possibleFiniteState = thing as PossibleFiniteState;
-            if (possibleFiniteState == null)
+            if (thing is not PossibleFiniteState possibleFiniteState)
             {
                 throw new InvalidOperationException("The thing is not a PossibleFiniteState.");
             }

@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BoundsResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,76 +27,137 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="BoundsResolver"/> is to deserialize a JSON object to a <see cref="Bounds"/>
+    /// The purpose of the <see cref="BoundsResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.Bounds"/>
     /// </summary>
     public static class BoundsResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="Bounds"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="Bounds"/> to instantiate</returns>
-        public static CDP4Common.DTO.Bounds FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.Bounds"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.Bounds"/> to instantiate</returns>
+        public static CDP4Common.DTO.Bounds FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var bounds = new CDP4Common.DTO.Bounds(iid, revisionNumber);
-
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                bounds.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the BoundsResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                bounds.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the BoundsResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["height"].IsNullOrEmpty())
+            var bounds = new CDP4Common.DTO.Bounds(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                bounds.Height = jObject["height"].ToObject<float>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    bounds.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                bounds.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    bounds.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("height"u8, out var heightProperty))
             {
-                bounds.Name = jObject["name"].ToObject<string>();
+                if(heightProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale height property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.Height = heightProperty.GetSingle();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                bounds.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["width"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                bounds.Width = jObject["width"].ToObject<float>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["x"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                bounds.X = jObject["x"].ToObject<float>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (!jObject["y"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("width"u8, out var widthProperty))
             {
-                bounds.Y = jObject["y"].ToObject<float>();
+                if(widthProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale width property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.Width = widthProperty.GetSingle();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("x"u8, out var xProperty))
+            {
+                if(xProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale x property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.X = xProperty.GetSingle();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("y"u8, out var yProperty))
+            {
+                if(yProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale y property of the bounds {id} is null", bounds.Iid);
+                }
+                else
+                {
+                    bounds.Y = yProperty.GetSingle();
+                }
             }
 
             return bounds;

@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FolderResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,76 +27,137 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="FolderResolver"/> is to deserialize a JSON object to a <see cref="Folder"/>
+    /// The purpose of the <see cref="FolderResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.Folder"/>
     /// </summary>
     public static class FolderResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="Folder"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="Folder"/> to instantiate</returns>
-        public static CDP4Common.DTO.Folder FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.Folder"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.Folder"/> to instantiate</returns>
+        public static CDP4Common.DTO.Folder FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var folder = new CDP4Common.DTO.Folder(iid, revisionNumber);
-
-            if (!jObject["containingFolder"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                folder.ContainingFolder = jObject["containingFolder"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the FolderResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                folder.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the FolderResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["creator"].IsNullOrEmpty())
+            var folder = new CDP4Common.DTO.Folder(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("containingFolder"u8, out var containingFolderProperty))
             {
-                folder.Creator = jObject["creator"].ToObject<Guid>();
+                if(containingFolderProperty.ValueKind == JsonValueKind.Null)
+                {
+                    folder.ContainingFolder = null;
+                }
+                else
+                {
+                    folder.ContainingFolder = containingFolderProperty.GetGuid();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                folder.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the folder {id} is null", folder.Iid);
+                }
+                else
+                {
+                    folder.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("creator"u8, out var creatorProperty))
             {
-                folder.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                if(creatorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale creator property of the folder {id} is null", folder.Iid);
+                }
+                else
+                {
+                    folder.Creator = creatorProperty.GetGuid();
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                folder.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    folder.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                folder.Name = jObject["name"].ToObject<string>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    folder.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                folder.Owner = jObject["owner"].ToObject<Guid>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the folder {id} is null", folder.Iid);
+                }
+                else
+                {
+                    folder.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                folder.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the folder {id} is null", folder.Iid);
+                }
+                else
+                {
+                    folder.Name = nameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
+            {
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the folder {id} is null", folder.Iid);
+                }
+                else
+                {
+                    folder.Owner = ownerProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the folder {id} is null", folder.Iid);
+                }
+                else
+                {
+                    folder.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return folder;

@@ -1,18 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file "RelationshipParameterValueSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -32,12 +32,11 @@ namespace CDP4JsonSerializer
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json.Nodes;
 
     using CDP4Common.DTO;
     using CDP4Common.Types;
-
-    using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="RelationshipParameterValueSerializer"/> class is to provide a <see cref="RelationshipParameterValue"/> specific serializer
     /// </summary>
@@ -46,63 +45,113 @@ namespace CDP4JsonSerializer
         /// <summary>
         /// The map containing the serialization methods
         /// </summary>
-        private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
+        private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            { "classKind", classKind => new JValue(classKind.ToString()) },
-            { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
-            { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
-            { "iid", iid => new JValue(iid) },
-            { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            { "parameterType", parameterType => new JValue(parameterType) },
-            { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
-            { "scale", scale => new JValue(scale) },
-            { "thingPreference", thingPreference => new JValue(thingPreference) },
-            { "value", value => new JValue(((ValueArray<string>)value).ToJsonString()) },
+            
+            
+            
+            
+            { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
+            
+            
+            
+            
+            
+            { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
+            
+            
+            
+            
+            
+            { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
+            
+            
+            
+            
+            
+            { "iid", iid => JsonValue.Create(iid) },
+            
+            
+            
+            
+            
+            { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            
+            
+            
+            
+            
+            { "parameterType", parameterType => JsonValue.Create(parameterType) },
+            
+            
+            
+            
+            
+            { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
+            
+            
+            
+            
+            
+            { "scale", scale => JsonValue.Create(scale) },
+            
+            
+            
+            
+            
+            { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
+            
+            
+            
+            
+            
+            { "value", value => JsonValue.Create(((ValueArray<string>)value).ToJsonString()) },
+            
+            
         };
 
         /// <summary>
         /// Serialize the <see cref="RelationshipParameterValue"/>
         /// </summary>
         /// <param name="relationshipParameterValue">The <see cref="RelationshipParameterValue"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        private JObject Serialize(RelationshipParameterValue relationshipParameterValue)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        private JsonObject Serialize(RelationshipParameterValue relationshipParameterValue)
         {
-            var jsonObject = new JObject();
-            jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), relationshipParameterValue.ClassKind)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](relationshipParameterValue.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](relationshipParameterValue.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("iid", this.PropertySerializerMap["iid"](relationshipParameterValue.Iid));
-            jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](relationshipParameterValue.ModifiedOn));
-            jsonObject.Add("parameterType", this.PropertySerializerMap["parameterType"](relationshipParameterValue.ParameterType));
-            jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](relationshipParameterValue.RevisionNumber));
-            jsonObject.Add("scale", this.PropertySerializerMap["scale"](relationshipParameterValue.Scale));
-            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](relationshipParameterValue.ThingPreference));
-            jsonObject.Add("value", this.PropertySerializerMap["value"](relationshipParameterValue.Value));
+            var jsonObject = new JsonObject
+            {
+                {"classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), relationshipParameterValue.ClassKind))},
+                {"excludedDomain", this.PropertySerializerMap["excludedDomain"](relationshipParameterValue.ExcludedDomain.OrderBy(x => x, this.guidComparer))},
+                {"excludedPerson", this.PropertySerializerMap["excludedPerson"](relationshipParameterValue.ExcludedPerson.OrderBy(x => x, this.guidComparer))},
+                {"iid", this.PropertySerializerMap["iid"](relationshipParameterValue.Iid)},
+                {"modifiedOn", this.PropertySerializerMap["modifiedOn"](relationshipParameterValue.ModifiedOn)},
+                {"parameterType", this.PropertySerializerMap["parameterType"](relationshipParameterValue.ParameterType)},
+                {"revisionNumber", this.PropertySerializerMap["revisionNumber"](relationshipParameterValue.RevisionNumber)},
+                {"scale", this.PropertySerializerMap["scale"](relationshipParameterValue.Scale)},
+                {"thingPreference", this.PropertySerializerMap["thingPreference"](relationshipParameterValue.ThingPreference)},
+                {"value", this.PropertySerializerMap["value"](relationshipParameterValue.Value)},
+            };
+
             return jsonObject;
         }
 
         /// <summary>
         /// Gets the map containing the serialization method for each property of the <see cref="RelationshipParameterValue"/> class.
         /// </summary>
-        public IReadOnlyDictionary<string, Func<object, JToken>> PropertySerializerMap 
-        {
-            get { return this.propertySerializerMap; }
-        }
+        public IReadOnlyDictionary<string, Func<object, JsonValue>> PropertySerializerMap => this.propertySerializerMap;
 
         /// <summary>
         /// Serialize the <see cref="Thing"/> to JObject
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public JObject Serialize(Thing thing)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        public JsonObject Serialize(Thing thing)
         {
             if (thing == null)
             {
                 throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
-            var relationshipParameterValue = thing as RelationshipParameterValue;
-            if (relationshipParameterValue == null)
+            if (thing is not RelationshipParameterValue relationshipParameterValue)
             {
                 throw new InvalidOperationException("The thing is not a RelationshipParameterValue.");
             }

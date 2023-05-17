@@ -59,9 +59,9 @@ namespace CDP4JsonSerializer.Tests.PostOperation
             var byteArray = Encoding.UTF8.GetBytes(postMessage);
             var stream = new MemoryStream(byteArray);
 
-            var cdp4JsonSerializer = new Cdp4JsonSerializer(this.metaDataProvider, this.supportedVersion);
+            var CDP4JsonSerializer_New = new Cdp4JsonSerializer(this.metaDataProvider, this.supportedVersion);
             
-            var cdpPostOperation = cdp4JsonSerializer.Deserialize<CdpPostOperation>(stream);
+            var cdpPostOperation = CDP4JsonSerializer_New.Deserialize<CdpPostOperation>(stream);
 
             Assert.IsEmpty(cdpPostOperation.Create);
             Assert.IsEmpty(cdpPostOperation.Delete);
@@ -72,10 +72,10 @@ namespace CDP4JsonSerializer.Tests.PostOperation
             var orderedItems = classlessDto["QuantityKindFactor"] as IEnumerable<OrderedItem>;
 
             var orderedItem_1 = orderedItems.First();
-            orderedItem_1.M = 77606679;
+            //orderedItem_1.M = 77606679;
 
             var orderedItem_2 = orderedItems.Last();
-            orderedItem_2.M = -12551680;
+            //orderedItem_2.M = -12551680;
         }
 
         [Test]
@@ -85,9 +85,9 @@ namespace CDP4JsonSerializer.Tests.PostOperation
             var byteArray = Encoding.UTF8.GetBytes(postMessage);
             var stream = new MemoryStream(byteArray);
 
-            var cdp4JsonSerializer = new Cdp4JsonSerializer(this.metaDataProvider, this.supportedVersion);
+            var CDP4JsonSerializer_New = new Cdp4JsonSerializer(this.metaDataProvider, this.supportedVersion);
 
-            var cdpPostOperation = cdp4JsonSerializer.Deserialize<CdpPostOperation>(stream);
+            var cdpPostOperation = CDP4JsonSerializer_New.Deserialize<CdpPostOperation>(stream);
             
             Assert.IsEmpty(cdpPostOperation.Delete);
             Assert.IsEmpty(cdpPostOperation.Copy);

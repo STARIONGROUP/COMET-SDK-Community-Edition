@@ -1,18 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file "SiteDirectoryDataDiscussionItemSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -32,12 +32,11 @@ namespace CDP4JsonSerializer
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json.Nodes;
 
     using CDP4Common.DTO;
     using CDP4Common.Types;
-
-    using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="SiteDirectoryDataDiscussionItemSerializer"/> class is to provide a <see cref="SiteDirectoryDataDiscussionItem"/> specific serializer
     /// </summary>
@@ -46,67 +45,127 @@ namespace CDP4JsonSerializer
         /// <summary>
         /// The map containing the serialization methods
         /// </summary>
-        private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
+        private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            { "author", author => new JValue(author) },
-            { "classKind", classKind => new JValue(classKind.ToString()) },
-            { "content", content => new JValue(content) },
-            { "createdOn", createdOn => new JValue(((DateTime)createdOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
-            { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
-            { "iid", iid => new JValue(iid) },
-            { "languageCode", languageCode => new JValue(languageCode) },
-            { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            { "replyTo", replyTo => new JValue(replyTo) },
-            { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
-            { "thingPreference", thingPreference => new JValue(thingPreference) },
+            
+            
+            
+            
+            { "author", author => JsonValue.Create(author) },
+            
+            
+            
+            
+            
+            { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
+            
+            
+            
+            
+            
+            { "content", content => JsonValue.Create(content) },
+            
+            
+            
+            
+            
+            { "createdOn", createdOn => JsonValue.Create(((DateTime)createdOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            
+            
+            
+            
+            
+            { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
+            
+            
+            
+            
+            
+            { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
+            
+            
+            
+            
+            
+            { "iid", iid => JsonValue.Create(iid) },
+            
+            
+            
+            
+            
+            { "languageCode", languageCode => JsonValue.Create(languageCode) },
+            
+            
+            
+            
+            
+            { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            
+            
+            
+            
+            
+            { "replyTo", replyTo => JsonValue.Create(replyTo) },
+            
+            
+            
+            
+            
+            { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
+            
+            
+            
+            
+            
+            { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
+            
+            
         };
 
         /// <summary>
         /// Serialize the <see cref="SiteDirectoryDataDiscussionItem"/>
         /// </summary>
         /// <param name="siteDirectoryDataDiscussionItem">The <see cref="SiteDirectoryDataDiscussionItem"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        private JObject Serialize(SiteDirectoryDataDiscussionItem siteDirectoryDataDiscussionItem)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        private JsonObject Serialize(SiteDirectoryDataDiscussionItem siteDirectoryDataDiscussionItem)
         {
-            var jsonObject = new JObject();
-            jsonObject.Add("author", this.PropertySerializerMap["author"](siteDirectoryDataDiscussionItem.Author));
-            jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), siteDirectoryDataDiscussionItem.ClassKind)));
-            jsonObject.Add("content", this.PropertySerializerMap["content"](siteDirectoryDataDiscussionItem.Content));
-            jsonObject.Add("createdOn", this.PropertySerializerMap["createdOn"](siteDirectoryDataDiscussionItem.CreatedOn));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](siteDirectoryDataDiscussionItem.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](siteDirectoryDataDiscussionItem.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("iid", this.PropertySerializerMap["iid"](siteDirectoryDataDiscussionItem.Iid));
-            jsonObject.Add("languageCode", this.PropertySerializerMap["languageCode"](siteDirectoryDataDiscussionItem.LanguageCode));
-            jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](siteDirectoryDataDiscussionItem.ModifiedOn));
-            jsonObject.Add("replyTo", this.PropertySerializerMap["replyTo"](siteDirectoryDataDiscussionItem.ReplyTo));
-            jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](siteDirectoryDataDiscussionItem.RevisionNumber));
-            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](siteDirectoryDataDiscussionItem.ThingPreference));
+            var jsonObject = new JsonObject
+            {
+                {"author", this.PropertySerializerMap["author"](siteDirectoryDataDiscussionItem.Author)},
+                {"classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), siteDirectoryDataDiscussionItem.ClassKind))},
+                {"content", this.PropertySerializerMap["content"](siteDirectoryDataDiscussionItem.Content)},
+                {"createdOn", this.PropertySerializerMap["createdOn"](siteDirectoryDataDiscussionItem.CreatedOn)},
+                {"excludedDomain", this.PropertySerializerMap["excludedDomain"](siteDirectoryDataDiscussionItem.ExcludedDomain.OrderBy(x => x, this.guidComparer))},
+                {"excludedPerson", this.PropertySerializerMap["excludedPerson"](siteDirectoryDataDiscussionItem.ExcludedPerson.OrderBy(x => x, this.guidComparer))},
+                {"iid", this.PropertySerializerMap["iid"](siteDirectoryDataDiscussionItem.Iid)},
+                {"languageCode", this.PropertySerializerMap["languageCode"](siteDirectoryDataDiscussionItem.LanguageCode)},
+                {"modifiedOn", this.PropertySerializerMap["modifiedOn"](siteDirectoryDataDiscussionItem.ModifiedOn)},
+                {"replyTo", this.PropertySerializerMap["replyTo"](siteDirectoryDataDiscussionItem.ReplyTo)},
+                {"revisionNumber", this.PropertySerializerMap["revisionNumber"](siteDirectoryDataDiscussionItem.RevisionNumber)},
+                {"thingPreference", this.PropertySerializerMap["thingPreference"](siteDirectoryDataDiscussionItem.ThingPreference)},
+            };
+
             return jsonObject;
         }
 
         /// <summary>
         /// Gets the map containing the serialization method for each property of the <see cref="SiteDirectoryDataDiscussionItem"/> class.
         /// </summary>
-        public IReadOnlyDictionary<string, Func<object, JToken>> PropertySerializerMap 
-        {
-            get { return this.propertySerializerMap; }
-        }
+        public IReadOnlyDictionary<string, Func<object, JsonValue>> PropertySerializerMap => this.propertySerializerMap;
 
         /// <summary>
         /// Serialize the <see cref="Thing"/> to JObject
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public JObject Serialize(Thing thing)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        public JsonObject Serialize(Thing thing)
         {
             if (thing == null)
             {
                 throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
-            var siteDirectoryDataDiscussionItem = thing as SiteDirectoryDataDiscussionItem;
-            if (siteDirectoryDataDiscussionItem == null)
+            if (thing is not SiteDirectoryDataDiscussionItem siteDirectoryDataDiscussionItem)
             {
                 throw new InvalidOperationException("The thing is not a SiteDirectoryDataDiscussionItem.");
             }

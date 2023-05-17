@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteDirectoryResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,136 +27,237 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="SiteDirectoryResolver"/> is to deserialize a JSON object to a <see cref="SiteDirectory"/>
+    /// The purpose of the <see cref="SiteDirectoryResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.SiteDirectory"/>
     /// </summary>
     public static class SiteDirectoryResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="SiteDirectory"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="SiteDirectory"/> to instantiate</returns>
-        public static CDP4Common.DTO.SiteDirectory FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.SiteDirectory"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.SiteDirectory"/> to instantiate</returns>
+        public static CDP4Common.DTO.SiteDirectory FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var siteDirectory = new CDP4Common.DTO.SiteDirectory(iid, revisionNumber);
-
-            if (!jObject["annotation"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                siteDirectory.Annotation.AddRange(jObject["annotation"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the SiteDirectoryResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                siteDirectory.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the SiteDirectoryResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["defaultParticipantRole"].IsNullOrEmpty())
+            var siteDirectory = new CDP4Common.DTO.SiteDirectory(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("annotation"u8, out var annotationProperty) && annotationProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.DefaultParticipantRole = jObject["defaultParticipantRole"].ToObject<Guid?>();
+                foreach(var element in annotationProperty.EnumerateArray())
+                {
+                    siteDirectory.Annotation.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["defaultPersonRole"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                siteDirectory.DefaultPersonRole = jObject["defaultPersonRole"].ToObject<Guid?>();
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the siteDirectory {id} is null", siteDirectory.Iid);
+                }
+                else
+                {
+                    siteDirectory.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["domain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("defaultParticipantRole"u8, out var defaultParticipantRoleProperty))
             {
-                siteDirectory.Domain.AddRange(jObject["domain"].ToObject<IEnumerable<Guid>>());
+                if(defaultParticipantRoleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    siteDirectory.DefaultParticipantRole = null;
+                }
+                else
+                {
+                    siteDirectory.DefaultParticipantRole = defaultParticipantRoleProperty.GetGuid();
+                }
             }
 
-            if (!jObject["domainGroup"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("defaultPersonRole"u8, out var defaultPersonRoleProperty))
             {
-                siteDirectory.DomainGroup.AddRange(jObject["domainGroup"].ToObject<IEnumerable<Guid>>());
+                if(defaultPersonRoleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    siteDirectory.DefaultPersonRole = null;
+                }
+                else
+                {
+                    siteDirectory.DefaultPersonRole = defaultPersonRoleProperty.GetGuid();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("domain"u8, out var domainProperty) && domainProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in domainProperty.EnumerateArray())
+                {
+                    siteDirectory.Domain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("domainGroup"u8, out var domainGroupProperty) && domainGroupProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in domainGroupProperty.EnumerateArray())
+                {
+                    siteDirectory.DomainGroup.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["lastModifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.LastModifiedOn = jObject["lastModifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    siteDirectory.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["logEntry"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.LogEntry.AddRange(jObject["logEntry"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    siteDirectory.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["model"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("lastModifiedOn"u8, out var lastModifiedOnProperty))
             {
-                siteDirectory.Model.AddRange(jObject["model"].ToObject<IEnumerable<Guid>>());
+                if(lastModifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale lastModifiedOn property of the siteDirectory {id} is null", siteDirectory.Iid);
+                }
+                else
+                {
+                    siteDirectory.LastModifiedOn = lastModifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("logEntry"u8, out var logEntryProperty) && logEntryProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in logEntryProperty.EnumerateArray())
+                {
+                    siteDirectory.LogEntry.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("model"u8, out var modelProperty) && modelProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.Name = jObject["name"].ToObject<string>();
+                foreach(var element in modelProperty.EnumerateArray())
+                {
+                    siteDirectory.Model.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["naturalLanguage"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                siteDirectory.NaturalLanguage.AddRange(jObject["naturalLanguage"].ToObject<IEnumerable<Guid>>());
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the siteDirectory {id} is null", siteDirectory.Iid);
+                }
+                else
+                {
+                    siteDirectory.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["organization"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                siteDirectory.Organization.AddRange(jObject["organization"].ToObject<IEnumerable<Guid>>());
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the siteDirectory {id} is null", siteDirectory.Iid);
+                }
+                else
+                {
+                    siteDirectory.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["participantRole"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("naturalLanguage"u8, out var naturalLanguageProperty) && naturalLanguageProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.ParticipantRole.AddRange(jObject["participantRole"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in naturalLanguageProperty.EnumerateArray())
+                {
+                    siteDirectory.NaturalLanguage.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["person"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("organization"u8, out var organizationProperty) && organizationProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.Person.AddRange(jObject["person"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in organizationProperty.EnumerateArray())
+                {
+                    siteDirectory.Organization.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["personRole"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("participantRole"u8, out var participantRoleProperty) && participantRoleProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.PersonRole.AddRange(jObject["personRole"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in participantRoleProperty.EnumerateArray())
+                {
+                    siteDirectory.ParticipantRole.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("person"u8, out var personProperty) && personProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.ShortName = jObject["shortName"].ToObject<string>();
+                foreach(var element in personProperty.EnumerateArray())
+                {
+                    siteDirectory.Person.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["siteReferenceDataLibrary"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("personRole"u8, out var personRoleProperty) && personRoleProperty.ValueKind != JsonValueKind.Null)
             {
-                siteDirectory.SiteReferenceDataLibrary.AddRange(jObject["siteReferenceDataLibrary"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in personRoleProperty.EnumerateArray())
+                {
+                    siteDirectory.PersonRole.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                siteDirectory.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the siteDirectory {id} is null", siteDirectory.Iid);
+                }
+                else
+                {
+                    siteDirectory.ShortName = shortNameProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("siteReferenceDataLibrary"u8, out var siteReferenceDataLibraryProperty) && siteReferenceDataLibraryProperty.ValueKind != JsonValueKind.Null)
+            {
+                foreach(var element in siteReferenceDataLibraryProperty.EnumerateArray())
+                {
+                    siteDirectory.SiteReferenceDataLibrary.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the siteDirectory {id} is null", siteDirectory.Iid);
+                }
+                else
+                {
+                    siteDirectory.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return siteDirectory;

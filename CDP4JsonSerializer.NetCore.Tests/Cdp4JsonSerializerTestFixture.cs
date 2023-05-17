@@ -1,6 +1,6 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Cdp4JsonSerializerTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="CDP4JsonSerializer_NewTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
@@ -30,6 +30,7 @@ namespace CDP4JsonSerializer.Tests
     using System.IO;
     using CDP4Common.CommonData;
     using CDP4Common.MetaInfo;
+
     using CDP4JsonSerializer.Tests.Helper;
     using NUnit.Framework;
 
@@ -37,7 +38,7 @@ namespace CDP4JsonSerializer.Tests
     /// Suite of tests for the <see cref="Cdp4JsonSerializer"/> class
     /// </summary>
     [TestFixture]
-    public class Cdp4JsonSerializerTestFixture
+    public class CDP4JsonSerializer_NewTestFixture
     {
         [Test]
         public void Verify_serializestream_throws_exception_when_metadata_and_version_not_set()
@@ -46,11 +47,11 @@ namespace CDP4JsonSerializer.Tests
 
             using (var stream = new MemoryStream())
             {
-                var cdp4JsonSerializer = new Cdp4JsonSerializer();
+                var jsonSerializer = new Cdp4JsonSerializer();
 
-                Assert.Throws<InvalidOperationException>(() => cdp4JsonSerializer.SerializeToStream(definition, stream));
+                Assert.Throws<InvalidOperationException>(() => jsonSerializer.SerializeToStream(definition, stream));
 
-                Assert.Throws<InvalidOperationException>(() => cdp4JsonSerializer.SerializeToStream(definition, stream, false));
+                Assert.Throws<InvalidOperationException>(() => jsonSerializer.SerializeToStream(definition, stream, false));
             }
         }
 
@@ -59,10 +60,10 @@ namespace CDP4JsonSerializer.Tests
         {
             var metadataprovider = new MetaDataProvider();
 
-            var cdp4JsonSerializer = new Cdp4JsonSerializer();
-            cdp4JsonSerializer.Initialize(metadataprovider, new Version(1,0,0));
+            var jsonSerializer = new Cdp4JsonSerializer();
+            jsonSerializer.Initialize(metadataprovider, new Version(1,0,0));
             
-            Assert.Throws<ArgumentNullException>(() => cdp4JsonSerializer.SerializeToStream(null, null));
+            Assert.Throws<ArgumentNullException>(() => jsonSerializer.SerializeToStream(null, null));
         }
 
         [Test]
@@ -70,14 +71,14 @@ namespace CDP4JsonSerializer.Tests
         {
             var metadataprovider = new MetaDataProvider();
 
-            var cdp4JsonSerializer = new Cdp4JsonSerializer();
-            cdp4JsonSerializer.Initialize(metadataprovider, new Version(1, 0, 0));
+            var jsonSerializer = new Cdp4JsonSerializer();
+            jsonSerializer.Initialize(metadataprovider, new Version(1, 0, 0));
 
             Definition definition = null;
-            Assert.Throws<ArgumentNullException>(() => cdp4JsonSerializer.SerializeToStream(definition, null, false));
+            Assert.Throws<ArgumentNullException>(() => jsonSerializer.SerializeToStream(definition, null, false));
 
             definition = new Definition();
-            Assert.Throws<ArgumentNullException>(() => cdp4JsonSerializer.SerializeToStream(definition, null, false));
+            Assert.Throws<ArgumentNullException>(() => jsonSerializer.SerializeToStream(definition, null, false));
         }
 
         [Test]
@@ -85,19 +86,19 @@ namespace CDP4JsonSerializer.Tests
         {
             var definition = new Definition();
             
-            var cdp4JsonSerializer = new Cdp4JsonSerializer();
+            var jsonSerializer = new Cdp4JsonSerializer();
 
-            Assert.Throws<InvalidOperationException>(() => cdp4JsonSerializer.SerializeToString(definition, false));
+            Assert.Throws<InvalidOperationException>(() => jsonSerializer.SerializeToString(definition, false));
         }
 
         [Test]
         public void Verify_that_deserialize_throws_exception()
         {
             var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/SiteDirectory.json"));
-            var cdp4JsonSerializer = new Cdp4JsonSerializer();
+            var jsonSerializer = new Cdp4JsonSerializer();
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
-                Assert.Throws<InvalidOperationException>(() => cdp4JsonSerializer.Deserialize(stream));
+                Assert.Throws<InvalidOperationException>(() => jsonSerializer.Deserialize(stream));
             }
         }
     }

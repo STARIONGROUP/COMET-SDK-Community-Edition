@@ -1,18 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file "CitationSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -32,12 +32,11 @@ namespace CDP4JsonSerializer
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json.Nodes;
 
     using CDP4Common.DTO;
     using CDP4Common.Types;
-
-    using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="CitationSerializer"/> class is to provide a <see cref="Citation"/> specific serializer
     /// </summary>
@@ -46,67 +45,127 @@ namespace CDP4JsonSerializer
         /// <summary>
         /// The map containing the serialization methods
         /// </summary>
-        private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
+        private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            { "classKind", classKind => new JValue(classKind.ToString()) },
-            { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
-            { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
-            { "iid", iid => new JValue(iid) },
-            { "isAdaptation", isAdaptation => new JValue(isAdaptation) },
-            { "location", location => new JValue(location) },
-            { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            { "remark", remark => new JValue(remark) },
-            { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
-            { "shortName", shortName => new JValue(shortName) },
-            { "source", source => new JValue(source) },
-            { "thingPreference", thingPreference => new JValue(thingPreference) },
+            
+            
+            
+            
+            { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
+            
+            
+            
+            
+            
+            { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
+            
+            
+            
+            
+            
+            { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
+            
+            
+            
+            
+            
+            { "iid", iid => JsonValue.Create(iid) },
+            
+            
+            
+            
+            
+            { "isAdaptation", isAdaptation => JsonValue.Create(isAdaptation) },
+            
+            
+            
+            
+            
+            { "location", location => JsonValue.Create(location) },
+            
+            
+            
+            
+            
+            { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            
+            
+            
+            
+            
+            { "remark", remark => JsonValue.Create(remark) },
+            
+            
+            
+            
+            
+            { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
+            
+            
+            
+            
+            
+            { "shortName", shortName => JsonValue.Create(shortName) },
+            
+            
+            
+            
+            
+            { "source", source => JsonValue.Create(source) },
+            
+            
+            
+            
+            
+            { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
+            
+            
         };
 
         /// <summary>
         /// Serialize the <see cref="Citation"/>
         /// </summary>
         /// <param name="citation">The <see cref="Citation"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        private JObject Serialize(Citation citation)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        private JsonObject Serialize(Citation citation)
         {
-            var jsonObject = new JObject();
-            jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), citation.ClassKind)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](citation.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](citation.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("iid", this.PropertySerializerMap["iid"](citation.Iid));
-            jsonObject.Add("isAdaptation", this.PropertySerializerMap["isAdaptation"](citation.IsAdaptation));
-            jsonObject.Add("location", this.PropertySerializerMap["location"](citation.Location));
-            jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](citation.ModifiedOn));
-            jsonObject.Add("remark", this.PropertySerializerMap["remark"](citation.Remark));
-            jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](citation.RevisionNumber));
-            jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](citation.ShortName));
-            jsonObject.Add("source", this.PropertySerializerMap["source"](citation.Source));
-            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](citation.ThingPreference));
+            var jsonObject = new JsonObject
+            {
+                {"classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), citation.ClassKind))},
+                {"excludedDomain", this.PropertySerializerMap["excludedDomain"](citation.ExcludedDomain.OrderBy(x => x, this.guidComparer))},
+                {"excludedPerson", this.PropertySerializerMap["excludedPerson"](citation.ExcludedPerson.OrderBy(x => x, this.guidComparer))},
+                {"iid", this.PropertySerializerMap["iid"](citation.Iid)},
+                {"isAdaptation", this.PropertySerializerMap["isAdaptation"](citation.IsAdaptation)},
+                {"location", this.PropertySerializerMap["location"](citation.Location)},
+                {"modifiedOn", this.PropertySerializerMap["modifiedOn"](citation.ModifiedOn)},
+                {"remark", this.PropertySerializerMap["remark"](citation.Remark)},
+                {"revisionNumber", this.PropertySerializerMap["revisionNumber"](citation.RevisionNumber)},
+                {"shortName", this.PropertySerializerMap["shortName"](citation.ShortName)},
+                {"source", this.PropertySerializerMap["source"](citation.Source)},
+                {"thingPreference", this.PropertySerializerMap["thingPreference"](citation.ThingPreference)},
+            };
+
             return jsonObject;
         }
 
         /// <summary>
         /// Gets the map containing the serialization method for each property of the <see cref="Citation"/> class.
         /// </summary>
-        public IReadOnlyDictionary<string, Func<object, JToken>> PropertySerializerMap 
-        {
-            get { return this.propertySerializerMap; }
-        }
+        public IReadOnlyDictionary<string, Func<object, JsonValue>> PropertySerializerMap => this.propertySerializerMap;
 
         /// <summary>
         /// Serialize the <see cref="Thing"/> to JObject
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public JObject Serialize(Thing thing)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        public JsonObject Serialize(Thing thing)
         {
             if (thing == null)
             {
                 throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
-            var citation = thing as Citation;
-            if (citation == null)
+            if (thing is not Citation citation)
             {
                 throw new InvalidOperationException("The thing is not a Citation.");
             }

@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StakeHolderValueMapResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,106 +27,173 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="StakeHolderValueMapResolver"/> is to deserialize a JSON object to a <see cref="StakeHolderValueMap"/>
+    /// The purpose of the <see cref="StakeHolderValueMapResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.StakeHolderValueMap"/>
     /// </summary>
     public static class StakeHolderValueMapResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="StakeHolderValueMap"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="StakeHolderValueMap"/> to instantiate</returns>
-        public static CDP4Common.DTO.StakeHolderValueMap FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.StakeHolderValueMap"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.StakeHolderValueMap"/> to instantiate</returns>
+        public static CDP4Common.DTO.StakeHolderValueMap FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var stakeHolderValueMap = new CDP4Common.DTO.StakeHolderValueMap(iid, revisionNumber);
-
-            if (!jObject["alias"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                stakeHolderValueMap.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the StakeHolderValueMapResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                stakeHolderValueMap.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the StakeHolderValueMapResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            var stakeHolderValueMap = new CDP4Common.DTO.StakeHolderValueMap(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                stakeHolderValueMap.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty) && categoryProperty.ValueKind != JsonValueKind.Null)
             {
-                stakeHolderValueMap.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.Category.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                stakeHolderValueMap.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["goal"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                stakeHolderValueMap.Goal.AddRange(jObject["goal"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                stakeHolderValueMap.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("goal"u8, out var goalProperty) && goalProperty.ValueKind != JsonValueKind.Null)
             {
-                stakeHolderValueMap.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in goalProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.Goal.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                stakeHolderValueMap.Name = jObject["name"].ToObject<string>();
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["requirement"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                stakeHolderValueMap.Requirement.AddRange(jObject["requirement"].ToObject<IEnumerable<Guid>>());
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the stakeHolderValueMap {id} is null", stakeHolderValueMap.Iid);
+                }
+                else
+                {
+                    stakeHolderValueMap.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["settings"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                stakeHolderValueMap.Settings.AddRange(jObject["settings"].ToObject<IEnumerable<Guid>>());
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the stakeHolderValueMap {id} is null", stakeHolderValueMap.Iid);
+                }
+                else
+                {
+                    stakeHolderValueMap.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("requirement"u8, out var requirementProperty) && requirementProperty.ValueKind != JsonValueKind.Null)
             {
-                stakeHolderValueMap.ShortName = jObject["shortName"].ToObject<string>();
+                foreach(var element in requirementProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.Requirement.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["stakeholderValue"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("settings"u8, out var settingsProperty) && settingsProperty.ValueKind != JsonValueKind.Null)
             {
-                stakeHolderValueMap.StakeholderValue.AddRange(jObject["stakeholderValue"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in settingsProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.Settings.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                stakeHolderValueMap.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the stakeHolderValueMap {id} is null", stakeHolderValueMap.Iid);
+                }
+                else
+                {
+                    stakeHolderValueMap.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["valueGroup"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("stakeholderValue"u8, out var stakeholderValueProperty) && stakeholderValueProperty.ValueKind != JsonValueKind.Null)
             {
-                stakeHolderValueMap.ValueGroup.AddRange(jObject["valueGroup"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in stakeholderValueProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.StakeholderValue.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the stakeHolderValueMap {id} is null", stakeHolderValueMap.Iid);
+                }
+                else
+                {
+                    stakeHolderValueMap.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("valueGroup"u8, out var valueGroupProperty) && valueGroupProperty.ValueKind != JsonValueKind.Null)
+            {
+                foreach(var element in valueGroupProperty.EnumerateArray())
+                {
+                    stakeHolderValueMap.ValueGroup.Add(element.GetGuid());
+                }
             }
 
             return stakeHolderValueMap;

@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EngineeringModelDataNoteResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,86 +27,153 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="EngineeringModelDataNoteResolver"/> is to deserialize a JSON object to a <see cref="EngineeringModelDataNote"/>
+    /// The purpose of the <see cref="EngineeringModelDataNoteResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.EngineeringModelDataNote"/>
     /// </summary>
     public static class EngineeringModelDataNoteResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="EngineeringModelDataNote"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="EngineeringModelDataNote"/> to instantiate</returns>
-        public static CDP4Common.DTO.EngineeringModelDataNote FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.EngineeringModelDataNote"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.EngineeringModelDataNote"/> to instantiate</returns>
+        public static CDP4Common.DTO.EngineeringModelDataNote FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var engineeringModelDataNote = new CDP4Common.DTO.EngineeringModelDataNote(iid, revisionNumber);
-
-            if (!jObject["author"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                engineeringModelDataNote.Author = jObject["author"].ToObject<Guid>();
+                throw new DeSerializationException("the mandatory iid property is not available, the EngineeringModelDataNoteResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["content"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                engineeringModelDataNote.Content = jObject["content"].ToObject<string>();
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the EngineeringModelDataNoteResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            var engineeringModelDataNote = new CDP4Common.DTO.EngineeringModelDataNote(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                engineeringModelDataNote.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale author property of the engineeringModelDataNote {id} is null", engineeringModelDataNote.Iid);
+                }
+                else
+                {
+                    engineeringModelDataNote.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (!jObject["discussion"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                engineeringModelDataNote.Discussion.AddRange(jObject["discussion"].ToObject<IEnumerable<Guid>>());
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the engineeringModelDataNote {id} is null", engineeringModelDataNote.Iid);
+                }
+                else
+                {
+                    engineeringModelDataNote.Content = contentProperty.GetString();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                engineeringModelDataNote.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the engineeringModelDataNote {id} is null", engineeringModelDataNote.Iid);
+                }
+                else
+                {
+                    engineeringModelDataNote.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("discussion"u8, out var discussionProperty) && discussionProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelDataNote.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in discussionProperty.EnumerateArray())
+                {
+                    engineeringModelDataNote.Discussion.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["languageCode"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelDataNote.LanguageCode = jObject["languageCode"].ToObject<string>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    engineeringModelDataNote.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModelDataNote.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    engineeringModelDataNote.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["primaryAnnotatedThing"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                engineeringModelDataNote.PrimaryAnnotatedThing = jObject["primaryAnnotatedThing"].ToObject<Guid?>();
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the engineeringModelDataNote {id} is null", engineeringModelDataNote.Iid);
+                }
+                else
+                {
+                    engineeringModelDataNote.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (!jObject["relatedThing"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                engineeringModelDataNote.RelatedThing.AddRange(jObject["relatedThing"].ToObject<IEnumerable<Guid>>());
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the engineeringModelDataNote {id} is null", engineeringModelDataNote.Iid);
+                }
+                else
+                {
+                    engineeringModelDataNote.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("primaryAnnotatedThing"u8, out var primaryAnnotatedThingProperty))
             {
-                engineeringModelDataNote.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(primaryAnnotatedThingProperty.ValueKind == JsonValueKind.Null)
+                {
+                    engineeringModelDataNote.PrimaryAnnotatedThing = null;
+                }
+                else
+                {
+                    engineeringModelDataNote.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.GetGuid();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("relatedThing"u8, out var relatedThingProperty) && relatedThingProperty.ValueKind != JsonValueKind.Null)
+            {
+                foreach(var element in relatedThingProperty.EnumerateArray())
+                {
+                    engineeringModelDataNote.RelatedThing.Add(element.GetGuid());
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the engineeringModelDataNote {id} is null", engineeringModelDataNote.Iid);
+                }
+                else
+                {
+                    engineeringModelDataNote.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return engineeringModelDataNote;

@@ -7,17 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Common", "CDP4Common\CD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Common.Tests", "CDP4Common.Tests\CDP4Common.Tests.csproj", "{850A39B6-BCB6-46D9-B7D7-8CED79302E19}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer", "CDP4JsonSerializer\CDP4JsonSerializer.csproj", "{A8F3B7A2-DC51-40D7-B886-51174DDDF668}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer.Tests", "CDP4JsonSerializer.Tests\CDP4JsonSerializer.Tests.csproj", "{CCED2E8F-5072-45B0-B4A4-1200C348E903}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Dal", "CDP4Dal\CDP4Dal.csproj", "{6410A3C1-F166-4B40-91E6-49CC312B968A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Dal.Tests", "CDP4Dal.Tests\CDP4Dal.Tests.csproj", "{D7EF94D5-1E5A-4D22-8D23-D6737C71CBE1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Common.NetCore.Tests", "CDP4Common.NetCore.Tests\CDP4Common.NetCore.Tests.csproj", "{39F6D678-F3EF-458A-9C6B-680F272314D3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer.NetCore.Tests", "CDP4JsonSerializer.NetCore.Tests\CDP4JsonSerializer.NetCore.Tests.csproj", "{8C50DC9F-10D4-4BC1-9A49-4FC03AC78767}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonFileDal", "CDP4JsonFileDal\CDP4JsonFileDal.csproj", "{3CE04A57-83EE-4E31-8AC7-D99628C848E6}"
 EndProject
@@ -59,11 +53,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Reporting", "CDP4Report
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Reporting.Tests", "CDP4Reporting.Tests\CDP4Reporting.Tests.csproj", "{0320A3B7-087A-4AD6-93F7-90F563132399}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer_SystemTextJson", "CDP4JsonSerializer_New\CDP4JsonSerializer_SystemTextJson.csproj", "{8A0202C4-5C6B-45F3-823B-15B7A55A8222}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer", "CDP4JsonSerializer\CDP4JsonSerializer.csproj", "{A9813D6A-20D3-4846-B612-7FBBB7A2637A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer_SystemTextJson.NetCore.Tests", "CDP4JsonSerializer_New.NetCore.Tests\CDP4JsonSerializer_SystemTextJson.NetCore.Tests.csproj", "{1CE434DE-ACD3-4883-A6D6-19E4308997DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer.NetCore.Tests", "CDP4JsonSerializer.NetCore.Tests\CDP4JsonSerializer.NetCore.Tests.csproj", "{11B1E85A-D939-40E9-AD21-F99647C7F2DB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer_SystemTextJson.Tests", "CDP4JsonSerializer_New.Tests\CDP4JsonSerializer_SystemTextJson.Tests.csproj", "{AFC43F0B-CE28-4467-A98C-7D44B0E0F209}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4JsonSerializer.Tests", "CDP4JsonSerializer.Tests\CDP4JsonSerializer.Tests.csproj", "{859E6448-F655-4B02-876B-8047E6114538}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,14 +73,6 @@ Global
 		{850A39B6-BCB6-46D9-B7D7-8CED79302E19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{850A39B6-BCB6-46D9-B7D7-8CED79302E19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{850A39B6-BCB6-46D9-B7D7-8CED79302E19}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A8F3B7A2-DC51-40D7-B886-51174DDDF668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8F3B7A2-DC51-40D7-B886-51174DDDF668}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A8F3B7A2-DC51-40D7-B886-51174DDDF668}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A8F3B7A2-DC51-40D7-B886-51174DDDF668}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CCED2E8F-5072-45B0-B4A4-1200C348E903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCED2E8F-5072-45B0-B4A4-1200C348E903}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CCED2E8F-5072-45B0-B4A4-1200C348E903}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CCED2E8F-5072-45B0-B4A4-1200C348E903}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6410A3C1-F166-4B40-91E6-49CC312B968A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6410A3C1-F166-4B40-91E6-49CC312B968A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6410A3C1-F166-4B40-91E6-49CC312B968A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -99,10 +85,6 @@ Global
 		{39F6D678-F3EF-458A-9C6B-680F272314D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39F6D678-F3EF-458A-9C6B-680F272314D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39F6D678-F3EF-458A-9C6B-680F272314D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C50DC9F-10D4-4BC1-9A49-4FC03AC78767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C50DC9F-10D4-4BC1-9A49-4FC03AC78767}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C50DC9F-10D4-4BC1-9A49-4FC03AC78767}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C50DC9F-10D4-4BC1-9A49-4FC03AC78767}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3CE04A57-83EE-4E31-8AC7-D99628C848E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3CE04A57-83EE-4E31-8AC7-D99628C848E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CE04A57-83EE-4E31-8AC7-D99628C848E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -167,18 +149,18 @@ Global
 		{0320A3B7-087A-4AD6-93F7-90F563132399}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0320A3B7-087A-4AD6-93F7-90F563132399}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0320A3B7-087A-4AD6-93F7-90F563132399}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A0202C4-5C6B-45F3-823B-15B7A55A8222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A0202C4-5C6B-45F3-823B-15B7A55A8222}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A0202C4-5C6B-45F3-823B-15B7A55A8222}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A0202C4-5C6B-45F3-823B-15B7A55A8222}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CE434DE-ACD3-4883-A6D6-19E4308997DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CE434DE-ACD3-4883-A6D6-19E4308997DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CE434DE-ACD3-4883-A6D6-19E4308997DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CE434DE-ACD3-4883-A6D6-19E4308997DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFC43F0B-CE28-4467-A98C-7D44B0E0F209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFC43F0B-CE28-4467-A98C-7D44B0E0F209}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFC43F0B-CE28-4467-A98C-7D44B0E0F209}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFC43F0B-CE28-4467-A98C-7D44B0E0F209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9813D6A-20D3-4846-B612-7FBBB7A2637A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9813D6A-20D3-4846-B612-7FBBB7A2637A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9813D6A-20D3-4846-B612-7FBBB7A2637A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9813D6A-20D3-4846-B612-7FBBB7A2637A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11B1E85A-D939-40E9-AD21-F99647C7F2DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11B1E85A-D939-40E9-AD21-F99647C7F2DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11B1E85A-D939-40E9-AD21-F99647C7F2DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11B1E85A-D939-40E9-AD21-F99647C7F2DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{859E6448-F655-4B02-876B-8047E6114538}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{859E6448-F655-4B02-876B-8047E6114538}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{859E6448-F655-4B02-876B-8047E6114538}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{859E6448-F655-4B02-876B-8047E6114538}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

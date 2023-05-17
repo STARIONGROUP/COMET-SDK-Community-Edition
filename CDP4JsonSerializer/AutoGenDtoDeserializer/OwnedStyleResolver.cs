@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OwnedStyleResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,121 +27,241 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="OwnedStyleResolver"/> is to deserialize a JSON object to a <see cref="OwnedStyle"/>
+    /// The purpose of the <see cref="OwnedStyleResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.OwnedStyle"/>
     /// </summary>
     public static class OwnedStyleResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="OwnedStyle"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="OwnedStyle"/> to instantiate</returns>
-        public static CDP4Common.DTO.OwnedStyle FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.OwnedStyle"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.OwnedStyle"/> to instantiate</returns>
+        public static CDP4Common.DTO.OwnedStyle FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var ownedStyle = new CDP4Common.DTO.OwnedStyle(iid, revisionNumber);
-
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                ownedStyle.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the OwnedStyleResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                ownedStyle.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the OwnedStyleResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["fillColor"].IsNullOrEmpty())
+            var ownedStyle = new CDP4Common.DTO.OwnedStyle(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                ownedStyle.FillColor = jObject["fillColor"].ToObject<Guid?>();
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    ownedStyle.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["fillOpacity"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                ownedStyle.FillOpacity = jObject["fillOpacity"].ToObject<float?>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    ownedStyle.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["fontBold"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("fillColor"u8, out var fillColorProperty))
             {
-                ownedStyle.FontBold = jObject["fontBold"].ToObject<bool?>();
+                if(fillColorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FillColor = null;
+                }
+                else
+                {
+                    ownedStyle.FillColor = fillColorProperty.GetGuid();
+                }
             }
 
-            if (!jObject["fontColor"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("fillOpacity"u8, out var fillOpacityProperty))
             {
-                ownedStyle.FontColor = jObject["fontColor"].ToObject<Guid?>();
+                if(fillOpacityProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FillOpacity = null;
+                }
+                else
+                {
+                    ownedStyle.FillOpacity = fillOpacityProperty.GetSingle();
+                }
             }
 
-            if (!jObject["fontItalic"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("fontBold"u8, out var fontBoldProperty))
             {
-                ownedStyle.FontItalic = jObject["fontItalic"].ToObject<bool?>();
+                if(fontBoldProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontBold = null;
+                }
+                else
+                {
+                    ownedStyle.FontBold = fontBoldProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["fontName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("fontColor"u8, out var fontColorProperty))
             {
-                ownedStyle.FontName = jObject["fontName"].ToObject<string>();
+                if(fontColorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontColor = null;
+                }
+                else
+                {
+                    ownedStyle.FontColor = fontColorProperty.GetGuid();
+                }
             }
 
-            if (!jObject["fontSize"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("fontItalic"u8, out var fontItalicProperty))
             {
-                ownedStyle.FontSize = jObject["fontSize"].ToObject<float?>();
+                if(fontItalicProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontItalic = null;
+                }
+                else
+                {
+                    ownedStyle.FontItalic = fontItalicProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["fontStrokeThrough"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("fontName"u8, out var fontNameProperty))
             {
-                ownedStyle.FontStrokeThrough = jObject["fontStrokeThrough"].ToObject<bool?>();
+                if(fontNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale fontName property of the ownedStyle {id} is null", ownedStyle.Iid);
+                }
+                else
+                {
+                    ownedStyle.FontName = fontNameProperty.GetString();
+                }
             }
 
-            if (!jObject["fontUnderline"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("fontSize"u8, out var fontSizeProperty))
             {
-                ownedStyle.FontUnderline = jObject["fontUnderline"].ToObject<bool?>();
+                if(fontSizeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontSize = null;
+                }
+                else
+                {
+                    ownedStyle.FontSize = fontSizeProperty.GetSingle();
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("fontStrokeThrough"u8, out var fontStrokeThroughProperty))
             {
-                ownedStyle.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(fontStrokeThroughProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontStrokeThrough = null;
+                }
+                else
+                {
+                    ownedStyle.FontStrokeThrough = fontStrokeThroughProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("fontUnderline"u8, out var fontUnderlineProperty))
             {
-                ownedStyle.Name = jObject["name"].ToObject<string>();
+                if(fontUnderlineProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.FontUnderline = null;
+                }
+                else
+                {
+                    ownedStyle.FontUnderline = fontUnderlineProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["strokeColor"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                ownedStyle.StrokeColor = jObject["strokeColor"].ToObject<Guid?>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the ownedStyle {id} is null", ownedStyle.Iid);
+                }
+                else
+                {
+                    ownedStyle.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["strokeOpacity"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                ownedStyle.StrokeOpacity = jObject["strokeOpacity"].ToObject<float?>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the ownedStyle {id} is null", ownedStyle.Iid);
+                }
+                else
+                {
+                    ownedStyle.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["strokeWidth"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("strokeColor"u8, out var strokeColorProperty))
             {
-                ownedStyle.StrokeWidth = jObject["strokeWidth"].ToObject<float?>();
+                if(strokeColorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.StrokeColor = null;
+                }
+                else
+                {
+                    ownedStyle.StrokeColor = strokeColorProperty.GetGuid();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("strokeOpacity"u8, out var strokeOpacityProperty))
             {
-                ownedStyle.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(strokeOpacityProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.StrokeOpacity = null;
+                }
+                else
+                {
+                    ownedStyle.StrokeOpacity = strokeOpacityProperty.GetSingle();
+                }
             }
 
-            if (!jObject["usedColor"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("strokeWidth"u8, out var strokeWidthProperty))
             {
-                ownedStyle.UsedColor.AddRange(jObject["usedColor"].ToObject<IEnumerable<Guid>>());
+                if(strokeWidthProperty.ValueKind == JsonValueKind.Null)
+                {
+                    ownedStyle.StrokeWidth = null;
+                }
+                else
+                {
+                    ownedStyle.StrokeWidth = strokeWidthProperty.GetSingle();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the ownedStyle {id} is null", ownedStyle.Iid);
+                }
+                else
+                {
+                    ownedStyle.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("usedColor"u8, out var usedColorProperty) && usedColorProperty.ValueKind != JsonValueKind.Null)
+            {
+                foreach(var element in usedColorProperty.EnumerateArray())
+                {
+                    ownedStyle.UsedColor.Add(element.GetGuid());
+                }
             }
 
             return ownedStyle;

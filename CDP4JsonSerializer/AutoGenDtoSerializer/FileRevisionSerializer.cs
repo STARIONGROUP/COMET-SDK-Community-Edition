@@ -1,18 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file "FileRevisionSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -32,12 +32,11 @@ namespace CDP4JsonSerializer
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json.Nodes;
 
     using CDP4Common.DTO;
     using CDP4Common.Types;
-
-    using Newtonsoft.Json.Linq;
-
+    
     /// <summary>
     /// The purpose of the <see cref="FileRevisionSerializer"/> class is to provide a <see cref="FileRevision"/> specific serializer
     /// </summary>
@@ -46,69 +45,135 @@ namespace CDP4JsonSerializer
         /// <summary>
         /// The map containing the serialization methods
         /// </summary>
-        private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
+        private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            { "classKind", classKind => new JValue(classKind.ToString()) },
-            { "containingFolder", containingFolder => new JValue(containingFolder) },
-            { "contentHash", contentHash => new JValue(contentHash) },
-            { "createdOn", createdOn => new JValue(((DateTime)createdOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            { "creator", creator => new JValue(creator) },
-            { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
-            { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
-            { "fileType", fileType => new JArray(((IEnumerable)fileType).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            { "iid", iid => new JValue(iid) },
-            { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            { "name", name => new JValue(name) },
-            { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
-            { "thingPreference", thingPreference => new JValue(thingPreference) },
+            
+            
+            
+            
+            { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
+            
+            
+            
+            
+            
+            { "containingFolder", containingFolder => JsonValue.Create(containingFolder) },
+            
+            
+            
+            
+            
+            { "contentHash", contentHash => JsonValue.Create(contentHash) },
+            
+            
+            
+            
+            
+            { "createdOn", createdOn => JsonValue.Create(((DateTime)createdOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            
+            
+            
+            
+            
+            { "creator", creator => JsonValue.Create(creator) },
+            
+            
+            
+            
+            
+            { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
+            
+            
+            
+            
+            
+            { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
+            
+            
+            
+            
+            
+            { "fileType", fileType => JsonValue.Create(((IEnumerable)fileType).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
+            
+            
+            
+            
+            
+            { "iid", iid => JsonValue.Create(iid) },
+            
+            
+            
+            
+            
+            { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
+            
+            
+            
+            
+            
+            { "name", name => JsonValue.Create(name) },
+            
+            
+             
+            
+            
+            
+            { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
+            
+            
+            
+            
+            
+            { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
+            
+            
         };
 
         /// <summary>
         /// Serialize the <see cref="FileRevision"/>
         /// </summary>
         /// <param name="fileRevision">The <see cref="FileRevision"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        private JObject Serialize(FileRevision fileRevision)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        private JsonObject Serialize(FileRevision fileRevision)
         {
-            var jsonObject = new JObject();
-            jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), fileRevision.ClassKind)));
-            jsonObject.Add("containingFolder", this.PropertySerializerMap["containingFolder"](fileRevision.ContainingFolder));
-            jsonObject.Add("contentHash", this.PropertySerializerMap["contentHash"](fileRevision.ContentHash));
-            jsonObject.Add("createdOn", this.PropertySerializerMap["createdOn"](fileRevision.CreatedOn));
-            jsonObject.Add("creator", this.PropertySerializerMap["creator"](fileRevision.Creator));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](fileRevision.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](fileRevision.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("fileType", this.PropertySerializerMap["fileType"](fileRevision.FileType.OrderBy(x => x, this.orderedItemComparer)));
-            jsonObject.Add("iid", this.PropertySerializerMap["iid"](fileRevision.Iid));
-            jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](fileRevision.ModifiedOn));
-            jsonObject.Add("name", this.PropertySerializerMap["name"](fileRevision.Name));
-            jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](fileRevision.RevisionNumber));
-            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](fileRevision.ThingPreference));
+            var jsonObject = new JsonObject
+            {
+                {"classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), fileRevision.ClassKind))},
+                {"containingFolder", this.PropertySerializerMap["containingFolder"](fileRevision.ContainingFolder)},
+                {"contentHash", this.PropertySerializerMap["contentHash"](fileRevision.ContentHash)},
+                {"createdOn", this.PropertySerializerMap["createdOn"](fileRevision.CreatedOn)},
+                {"creator", this.PropertySerializerMap["creator"](fileRevision.Creator)},
+                {"excludedDomain", this.PropertySerializerMap["excludedDomain"](fileRevision.ExcludedDomain.OrderBy(x => x, this.guidComparer))},
+                {"excludedPerson", this.PropertySerializerMap["excludedPerson"](fileRevision.ExcludedPerson.OrderBy(x => x, this.guidComparer))},
+                {"fileType", this.PropertySerializerMap["fileType"](fileRevision.FileType.OrderBy(x => x, this.orderedItemComparer))},
+                {"iid", this.PropertySerializerMap["iid"](fileRevision.Iid)},
+                {"modifiedOn", this.PropertySerializerMap["modifiedOn"](fileRevision.ModifiedOn)},
+                {"name", this.PropertySerializerMap["name"](fileRevision.Name)},
+                {"revisionNumber", this.PropertySerializerMap["revisionNumber"](fileRevision.RevisionNumber)},
+                {"thingPreference", this.PropertySerializerMap["thingPreference"](fileRevision.ThingPreference)},
+            };
+
             return jsonObject;
         }
 
         /// <summary>
         /// Gets the map containing the serialization method for each property of the <see cref="FileRevision"/> class.
         /// </summary>
-        public IReadOnlyDictionary<string, Func<object, JToken>> PropertySerializerMap 
-        {
-            get { return this.propertySerializerMap; }
-        }
+        public IReadOnlyDictionary<string, Func<object, JsonValue>> PropertySerializerMap => this.propertySerializerMap;
 
         /// <summary>
         /// Serialize the <see cref="Thing"/> to JObject
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public JObject Serialize(Thing thing)
+        /// <returns>The <see cref="JsonObject"/></returns>
+        public JsonObject Serialize(Thing thing)
         {
             if (thing == null)
             {
                 throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
             }
 
-            var fileRevision = thing as FileRevision;
-            if (fileRevision == null)
+            if (thing is not FileRevision fileRevision)
             {
                 throw new InvalidOperationException("The thing is not a FileRevision.");
             }

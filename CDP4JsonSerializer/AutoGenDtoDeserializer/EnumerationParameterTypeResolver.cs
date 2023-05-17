@@ -1,18 +1,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EnumerationParameterTypeResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//    This file is part of CDP4-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -28,101 +27,174 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="EnumerationParameterTypeResolver"/> is to deserialize a JSON object to a <see cref="EnumerationParameterType"/>
+    /// The purpose of the <see cref="EnumerationParameterTypeResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.EnumerationParameterType"/>
     /// </summary>
     public static class EnumerationParameterTypeResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="EnumerationParameterType"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="EnumerationParameterType"/> to instantiate</returns>
-        public static CDP4Common.DTO.EnumerationParameterType FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.EnumerationParameterType"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.EnumerationParameterType"/> to instantiate</returns>
+        public static CDP4Common.DTO.EnumerationParameterType FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var enumerationParameterType = new CDP4Common.DTO.EnumerationParameterType(iid, revisionNumber);
-
-            if (!jObject["alias"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                enumerationParameterType.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                throw new DeSerializationException("the mandatory iid property is not available, the EnumerationParameterTypeResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["allowMultiSelect"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
             {
-                enumerationParameterType.AllowMultiSelect = jObject["allowMultiSelect"].ToObject<bool>();
+                throw new DeSerializationException("the mandatory revisionNumber property is not available, the EnumerationParameterTypeResolver cannot be used to deserialize this JsonElement");
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            var enumerationParameterType = new CDP4Common.DTO.EnumerationParameterType(iid.GetGuid(), revisionNumber.GetInt32());
+
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                enumerationParameterType.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    enumerationParameterType.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("allowMultiSelect"u8, out var allowMultiSelectProperty))
             {
-                enumerationParameterType.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                if(allowMultiSelectProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale allowMultiSelect property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.AllowMultiSelect = allowMultiSelectProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty) && categoryProperty.ValueKind != JsonValueKind.Null)
             {
-                enumerationParameterType.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    enumerationParameterType.Category.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                enumerationParameterType.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    enumerationParameterType.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                enumerationParameterType.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    enumerationParameterType.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["isDeprecated"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                enumerationParameterType.IsDeprecated = jObject["isDeprecated"].ToObject<bool>();
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    enumerationParameterType.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                enumerationParameterType.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    enumerationParameterType.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                enumerationParameterType.Name = jObject["name"].ToObject<string>();
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                enumerationParameterType.ShortName = jObject["shortName"].ToObject<string>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["symbol"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                enumerationParameterType.Symbol = jObject["symbol"].ToObject<string>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                enumerationParameterType.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["valueDefinition"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("symbol"u8, out var symbolProperty))
             {
-                enumerationParameterType.ValueDefinition.AddRange(jObject["valueDefinition"].ToOrderedItemCollection());
+                if(symbolProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale symbol property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.Symbol = symbolProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
+            {
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the enumerationParameterType {id} is null", enumerationParameterType.Iid);
+                }
+                else
+                {
+                    enumerationParameterType.ThingPreference = thingPreferenceProperty.GetString();
+                }
+            }
+
+            if (jsonElement.TryGetProperty("valueDefinition"u8, out var valueDefinitionProperty))
+            {
+                enumerationParameterType.ValueDefinition.AddRange(valueDefinitionProperty.ToOrderedItemCollection());
             }
 
             return enumerationParameterType;

@@ -51,15 +51,15 @@ namespace CDP4JsonSerializer.Tests.Helper
             propertyInfo.SetValue(orderedItem, value);
 
             var jObject = orderedItem.ToJsonObject();
-            Assert.AreEqual(3, jObject.Properties().Count());
+            Assert.AreEqual(3, jObject.AsEnumerable().Count());
 
-            var k = jObject.Property("k");
+            jObject.TryGetPropertyValue("k", out var k);
             Assert.IsNotNull(k);            
 
-            var v = jObject.Property("v");
+            jObject.TryGetPropertyValue("v", out var v);
             Assert.IsNotNull(v);
 
-            var m = jObject.Property("m");
+            jObject.TryGetPropertyValue("m", out var m);
             Assert.IsNotNull(m);
         }
 

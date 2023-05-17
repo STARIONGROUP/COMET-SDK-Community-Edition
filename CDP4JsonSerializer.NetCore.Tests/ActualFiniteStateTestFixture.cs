@@ -35,7 +35,7 @@ namespace CDP4JsonSerializer.Tests
     using ActualFiniteState = CDP4Common.DTO.ActualFiniteState;
 
     /// <summary>
-    /// Suite of tests for the <see cref="CDP4JsonSerializer.ActualFiniteState"/>
+    /// Suite of tests for the <see cref="Cdp4JsonSerializer.ActualFiniteState"/>
     /// </summary>
     [TestFixture]
     public  class ActualFiniteStateTestFixture

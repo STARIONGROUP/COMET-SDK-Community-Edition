@@ -27,6 +27,8 @@ namespace CDP4WspDal.Tests
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Text.Json.Serialization;
+
     using CDP4Common;
     using CDP4Common.Dto;
     using CDP4Common.DTO;
@@ -34,7 +36,6 @@ namespace CDP4WspDal.Tests
     using CDP4JsonSerializer;
     using CDP4Dal.Operations;
     using CDP4WspDal.Tests.Helper;
-    using Newtonsoft.Json;
     using NUnit.Framework;
     using CDP4Common.Types;
     using File = System.IO.File;
@@ -138,25 +139,25 @@ namespace CDP4WspDal.Tests
             /// <summary>
             /// Gets or sets the collection of DTOs to delete.
             /// </summary>
-            [JsonProperty("_delete")]
+            [JsonPropertyName("_delete")]
             public override List<ClasslessDTO> Delete { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to create.
             /// </summary>
-            [JsonProperty("_create")]
+            [JsonPropertyName("_create")]
             public override List<CDP4Common.DTO.Thing> Create { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to update.
             /// </summary>
-            [JsonProperty("_update")]
+            [JsonPropertyName("_update")]
             public override List<ClasslessDTO> Update { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to update.
             /// </summary>
-            [JsonProperty("_copy")]
+            [JsonPropertyName("_copy")]
             public override List<CopyInfo> Copy { get; set; }
         }
     }

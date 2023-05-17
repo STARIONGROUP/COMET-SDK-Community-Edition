@@ -30,6 +30,8 @@ namespace CDP4WspDal
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json.Serialization;
+
     using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.Dto;
@@ -37,7 +39,6 @@ namespace CDP4WspDal
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Dal.Operations;
-    using Newtonsoft.Json;
     using DomainOfExpertise = CDP4Common.DTO.DomainOfExpertise;
     using Thing = CDP4Common.DTO.Thing;
 
@@ -63,19 +64,19 @@ namespace CDP4WspDal
         /// <summary>
         /// Gets or sets the collection of DTOs to delete.
         /// </summary>
-        [JsonProperty("_delete")]
+        [JsonPropertyName("_delete")]
         public override List<ClasslessDTO> Delete { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of DTOs to create.
         /// </summary>
-        [JsonProperty("_create")]
+        [JsonPropertyName("_create")]
         public override List<Thing> Create { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of DTOs to update.
         /// </summary>
-        [JsonProperty("_update")]
+        [JsonPropertyName("_update")]
         public override List<ClasslessDTO> Update { get; set; }
 
         /// <summary>

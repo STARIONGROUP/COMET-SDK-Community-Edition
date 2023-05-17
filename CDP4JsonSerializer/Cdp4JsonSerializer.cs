@@ -2,7 +2,7 @@
 // <copyright file="Cdp4JsonSerializer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2021 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Jaime Bernar
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -28,13 +28,11 @@ namespace CDP4JsonSerializer
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Text.Json;
 
     using CDP4Common.MetaInfo;
-
-    using CDP4JsonSerializer.JsonConverter;
-
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
+    
+    using JsonConverter;
     
     using NLog;
     
@@ -82,6 +80,11 @@ namespace CDP4JsonSerializer
         public IMetaDataProvider MetaInfoProvider { get; private set; }
 
         /// <summary>
+        /// Gets or sets the options for the serializer
+        /// </summary>
+        public JsonSerializerOptions JsonSerializerOptions { get; private set; }
+
+        /// <summary>
         /// Initialize this instance with the required <see cref="IMetaDataProvider"/> and supported <see cref="Version"/>
         /// </summary>
         /// <param name="metaInfoProvider">The <see cref="IMetaDataProvider"/></param>
@@ -90,6 +93,10 @@ namespace CDP4JsonSerializer
         {
             this.MetaInfoProvider = metaInfoProvider;
             this.RequestDataModelVersion = supportedVersion;
+
+            this.JsonSerializerOptions = SerializerOptions.Copy();
+            this.JsonSerializerOptions.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
+            this.JsonSerializerOptions.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
         }
 
         /// <summary>
@@ -114,15 +121,9 @@ namespace CDP4JsonSerializer
             }
 
             var sw = Stopwatch.StartNew();
-            
-            var serializer = this.CreateJsonSerializer();
-
-            Logger.Trace("initializing JsonTextWriter");
-            var jsonWriter = new JsonTextWriter(new StreamWriter(outputStream));
-
-            Logger.Trace("Serialize to JsonTextWriter");
-            serializer.Serialize(jsonWriter, collectionSource);
-            jsonWriter.Flush();
+                        
+            Logger.Trace("initializing Serialization");
+            JsonSerializer.Serialize(outputStream, collectionSource, this.JsonSerializerOptions);
 
             sw.Stop();
             Logger.Debug("SerializeToStream finished in {0} [ms]", sw.ElapsedMilliseconds);
@@ -246,43 +247,12 @@ namespace CDP4JsonSerializer
             {
                 throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
             }
-
-            var serializer = this.CreateJsonSerializer();
-            
-            T data;
-            using (var streamReader = new StreamReader(contentStream))
-            using (var jsonTextReader = new JsonTextReader(streamReader))
-            {
-                var sw = new Stopwatch();
-                sw.Start();
-                data = serializer.Deserialize<T>(jsonTextReader);
-                Logger.Trace("Deserialize from stream in {0} [ms]", sw.ElapsedMilliseconds);
-            }
-
+                       
+            var sw = new Stopwatch();
+            sw.Start();           
+            var data = JsonSerializer.Deserialize<T>(contentStream, this.JsonSerializerOptions);
+            Logger.Trace("Deserialize from stream in {0} [ms]", sw.ElapsedMilliseconds);
             return data;
-        }
-
-        /// <summary>
-        /// Create a <see cref="JsonSerializer"/>
-        /// </summary>
-        /// <returns>
-        /// an instance of <see cref="JsonSerializer"/>
-        /// </returns>
-        private JsonSerializer CreateJsonSerializer()
-        {
-            Logger.Trace("initializing JsonSerializer");
-            var serializer = new JsonSerializer
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            
-            Logger.Trace("register converters");
-            serializer.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
-            serializer.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
-            serializer.Converters.Add(new ClassKindConverter());
-
-            return serializer;
         }
     }
 }

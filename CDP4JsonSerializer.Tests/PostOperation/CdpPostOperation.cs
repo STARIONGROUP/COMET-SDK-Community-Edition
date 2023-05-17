@@ -7,25 +7,25 @@
 namespace CDP4JsonSerializer.Tests.Cdp4PostOperation
 {
     using System.Collections.Generic;
+    using System.Text.Json.Serialization;
     using CDP4Common;
     using CDP4Common.DTO;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// A CdpPostOperation class used for testing purposes
     /// </summary>
     public class CdpPostOperation
     {
-        [JsonProperty("_delete")]
+        [JsonPropertyName("_delete")]
         public List<ClasslessDTO> Delete { get; set; }
 
-        [JsonProperty("_create")]
+        [JsonPropertyName("_create")]
         public List<Thing> Create { get; set; }
 
-        [JsonProperty("_update")]
+        [JsonPropertyName("_update")]
         public List<ClasslessDTO> Update { get; set; }
 
-        [JsonProperty("_copy")]
+        [JsonPropertyName("_copy")]
         public List<ClasslessDTO> Copy { get; set; }
     }
 }
