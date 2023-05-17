@@ -47,115 +47,24 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "alias", alias => JsonValue.Create(alias) },
-            
-            
-            
-            
-            
             { "category", category => JsonValue.Create(category) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "definition", definition => JsonValue.Create(definition) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "goal", goal => JsonValue.Create(goal) },
-            
-            
-            
-            
-            
             { "hyperLink", hyperLink => JsonValue.Create(hyperLink) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "name", name => JsonValue.Create(name) },
-            
-            
-            
-            
-            
             { "requirement", requirement => JsonValue.Create(requirement) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "settings", settings => JsonValue.Create(settings) },
-            
-            
-            
-            
-            
             { "shortName", shortName => JsonValue.Create(shortName) },
-            
-            
-            
-            
-            
             { "stakeholderValue", stakeholderValue => JsonValue.Create(stakeholderValue) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "valueGroup", valueGroup => JsonValue.Create(valueGroup) },
-            
-            
         };
 
         /// <summary>

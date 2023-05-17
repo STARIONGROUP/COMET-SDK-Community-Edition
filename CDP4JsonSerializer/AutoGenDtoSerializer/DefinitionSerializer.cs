@@ -47,79 +47,18 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "citation", citation => JsonValue.Create(citation) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "content", content => JsonValue.Create(content) },
-            
-            
-            
-            
-            
             { "example", example => JsonValue.Create(((IEnumerable)example).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "languageCode", languageCode => JsonValue.Create(languageCode) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "note", note => JsonValue.Create(((IEnumerable)note).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
         };
 
         /// <summary>

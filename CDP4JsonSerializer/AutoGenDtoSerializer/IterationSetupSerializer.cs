@@ -47,91 +47,20 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "createdOn", createdOn => JsonValue.Create(((DateTime)createdOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "description", description => JsonValue.Create(description) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "frozenOn", frozenOn => JsonValue.Create(frozenOn != null ? ((DateTime)frozenOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ") : null) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "isDeleted", isDeleted => JsonValue.Create(isDeleted) },
-            
-            
-            
-            
-            
             { "iterationIid", iterationIid => JsonValue.Create(iterationIid) },
-            
-            
-            
-            
-            
             { "iterationNumber", iterationNumber => JsonValue.Create(iterationNumber) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "sourceIterationSetup", sourceIterationSetup => JsonValue.Create(sourceIterationSetup) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
         };
 
         /// <summary>

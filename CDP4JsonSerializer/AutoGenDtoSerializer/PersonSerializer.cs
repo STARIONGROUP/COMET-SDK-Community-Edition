@@ -47,142 +47,30 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "defaultDomain", defaultDomain => JsonValue.Create(defaultDomain) },
-            
-            
-            
-            
-            
             { "defaultEmailAddress", defaultEmailAddress => JsonValue.Create(defaultEmailAddress) },
-            
-            
-            
-            
-            
             { "defaultTelephoneNumber", defaultTelephoneNumber => JsonValue.Create(defaultTelephoneNumber) },
-            
-            
-            
-            
-            
             { "emailAddress", emailAddress => JsonValue.Create(emailAddress) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "givenName", givenName => JsonValue.Create(givenName) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "isActive", isActive => JsonValue.Create(isActive) },
-            
-            
-            
-            
-            
             { "isDeprecated", isDeprecated => JsonValue.Create(isDeprecated) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-             
-             
-            
-            
-            
+  
             { "organization", organization => JsonValue.Create(organization) },
-            
-            
-            
-            
-            
             { "organizationalUnit", organizationalUnit => JsonValue.Create(organizationalUnit) },
-            
-            
-            
-            
-            
             { "password", password => JsonValue.Create(password) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "role", role => JsonValue.Create(role) },
-            
-            
-             
-            
-            
-            
+ 
             { "shortName", shortName => JsonValue.Create(shortName) },
-            
-            
-            
-            
-            
             { "surname", surname => JsonValue.Create(surname) },
-            
-            
-            
-            
-            
             { "telephoneNumber", telephoneNumber => JsonValue.Create(telephoneNumber) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "userPreference", userPreference => JsonValue.Create(userPreference) },
-            
-            
         };
 
         /// <summary>

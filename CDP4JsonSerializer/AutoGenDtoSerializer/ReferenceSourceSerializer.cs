@@ -47,133 +47,27 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "alias", alias => JsonValue.Create(alias) },
-            
-            
-            
-            
-            
             { "author", author => JsonValue.Create(author) },
-            
-            
-            
-            
-            
             { "category", category => JsonValue.Create(category) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "definition", definition => JsonValue.Create(definition) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "hyperLink", hyperLink => JsonValue.Create(hyperLink) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "isDeprecated", isDeprecated => JsonValue.Create(isDeprecated) },
-            
-            
-            
-            
-            
             { "language", language => JsonValue.Create(language) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "name", name => JsonValue.Create(name) },
-            
-            
-            
-            
-            
             { "publicationYear", publicationYear => JsonValue.Create(publicationYear) },
-            
-            
-            
-            
-            
             { "publishedIn", publishedIn => JsonValue.Create(publishedIn) },
-            
-            
-            
-            
-            
             { "publisher", publisher => JsonValue.Create(publisher) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "shortName", shortName => JsonValue.Create(shortName) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "versionDate", versionDate => JsonValue.Create(versionDate != null ? ((DateTime)versionDate).ToString("yyyy-MM-ddTHH:mm:ss.fffZ") : null) },
-            
-            
-            
-            
-            
             { "versionIdentifier", versionIdentifier => JsonValue.Create(versionIdentifier) },
-            
-            
         };
 
         /// <summary>

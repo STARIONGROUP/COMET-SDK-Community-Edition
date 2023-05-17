@@ -47,97 +47,21 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "bounds", bounds => JsonValue.Create(bounds) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "depictedThing", depictedThing => JsonValue.Create(depictedThing) },
-            
-            
-            
-            
-            
             { "diagramElement", diagramElement => JsonValue.Create(diagramElement) },
-            
-            
-            
-            
-            
             { "documentation", documentation => JsonValue.Create(documentation) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "localStyle", localStyle => JsonValue.Create(localStyle) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "name", name => JsonValue.Create(name) },
-            
-            
-            
-            
-            
             { "resolution", resolution => JsonValue.Create(resolution) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "sharedStyle", sharedStyle => JsonValue.Create(sharedStyle) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
         };
 
         /// <summary>

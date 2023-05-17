@@ -47,79 +47,20 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "elementUsage", elementUsage => JsonValue.Create(((IEnumerable)elementUsage).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "isVolatile", isVolatile => JsonValue.Create(isVolatile) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-             
-             
-            
-            
-            
+  
             { "nestedParameter", nestedParameter => JsonValue.Create(nestedParameter) },
-            
-            
-             
-             
-            
-            
-            
+  
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "rootElement", rootElement => JsonValue.Create(rootElement) },
-            
-            
-             
-             
-            
-            
-            
+  
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
         };
 
         /// <summary>

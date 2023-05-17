@@ -47,115 +47,24 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "allowDifferentOwnerOfOverride", allowDifferentOwnerOfOverride => JsonValue.Create(allowDifferentOwnerOfOverride) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "expectsOverride", expectsOverride => JsonValue.Create(expectsOverride) },
-            
-            
-            
-            
-            
             { "group", group => JsonValue.Create(group) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "isOptionDependent", isOptionDependent => JsonValue.Create(isOptionDependent) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "owner", owner => JsonValue.Create(owner) },
-            
-            
-            
-            
-            
             { "parameterSubscription", parameterSubscription => JsonValue.Create(parameterSubscription) },
-            
-            
-            
-            
-            
             { "parameterType", parameterType => JsonValue.Create(parameterType) },
-            
-            
-            
-            
-            
             { "requestedBy", requestedBy => JsonValue.Create(requestedBy) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "scale", scale => JsonValue.Create(scale) },
-            
-            
-            
-            
-            
             { "stateDependence", stateDependence => JsonValue.Create(stateDependence) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "valueSet", valueSet => JsonValue.Create(valueSet) },
-            
-            
         };
 
         /// <summary>

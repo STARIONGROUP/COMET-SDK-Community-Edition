@@ -47,115 +47,24 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "alias", alias => JsonValue.Create(alias) },
-            
-            
-            
-            
-            
             { "category", category => JsonValue.Create(category) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "definition", definition => JsonValue.Create(definition) },
-            
-            
-            
-            
-            
             { "elementDefinition", elementDefinition => JsonValue.Create(elementDefinition) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "excludeOption", excludeOption => JsonValue.Create(excludeOption) },
-            
-            
-            
-            
-            
             { "hyperLink", hyperLink => JsonValue.Create(hyperLink) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "interfaceEnd", interfaceEnd => JsonValue.Create(interfaceEnd.ToString()) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "name", name => JsonValue.Create(name) },
-            
-            
-            
-            
-            
             { "owner", owner => JsonValue.Create(owner) },
-            
-            
-            
-            
-            
             { "parameterOverride", parameterOverride => JsonValue.Create(parameterOverride) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "shortName", shortName => JsonValue.Create(shortName) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
         };
 
         /// <summary>

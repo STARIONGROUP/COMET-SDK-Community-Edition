@@ -47,151 +47,30 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "alias", alias => JsonValue.Create(alias) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "definition", definition => JsonValue.Create(definition) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "hyperLink", hyperLink => JsonValue.Create(hyperLink) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "isDeprecated", isDeprecated => JsonValue.Create(isDeprecated) },
-            
-            
-            
-            
-            
             { "isMaximumInclusive", isMaximumInclusive => JsonValue.Create(isMaximumInclusive) },
-            
-            
-            
-            
-            
             { "isMinimumInclusive", isMinimumInclusive => JsonValue.Create(isMinimumInclusive) },
-            
-            
-            
-            
-            
             { "mappingToReferenceScale", mappingToReferenceScale => JsonValue.Create(mappingToReferenceScale) },
-            
-            
-            
-            
-            
             { "maximumPermissibleValue", maximumPermissibleValue => JsonValue.Create(maximumPermissibleValue) },
-            
-            
-            
-            
-            
             { "minimumPermissibleValue", minimumPermissibleValue => JsonValue.Create(minimumPermissibleValue) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "modulus", modulus => JsonValue.Create(modulus) },
-            
-            
-            
-            
-            
             { "name", name => JsonValue.Create(name) },
-            
-            
-            
-            
-            
             { "negativeValueConnotation", negativeValueConnotation => JsonValue.Create(negativeValueConnotation) },
-            
-            
-            
-            
-            
             { "numberSet", numberSet => JsonValue.Create(numberSet.ToString()) },
-            
-            
-            
-            
-            
             { "positiveValueConnotation", positiveValueConnotation => JsonValue.Create(positiveValueConnotation) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "shortName", shortName => JsonValue.Create(shortName) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "unit", unit => JsonValue.Create(unit) },
-            
-            
-            
-            
-            
             { "valueDefinition", valueDefinition => JsonValue.Create(valueDefinition) },
-            
-            
         };
 
         /// <summary>

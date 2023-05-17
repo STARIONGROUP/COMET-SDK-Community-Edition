@@ -47,145 +47,29 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "approvedBy", approvedBy => JsonValue.Create(approvedBy) },
-            
-            
-            
-            
-            
             { "author", author => JsonValue.Create(author) },
-            
-            
-            
-            
-            
             { "category", category => JsonValue.Create(category) },
-            
-            
-            
-            
-            
             { "changeProposal", changeProposal => JsonValue.Create(changeProposal) },
-            
-            
-            
-            
-            
             { "classification", classification => JsonValue.Create(classification.ToString()) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "content", content => JsonValue.Create(content) },
-            
-            
-            
-            
-            
             { "createdOn", createdOn => JsonValue.Create(((DateTime)createdOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "discussion", discussion => JsonValue.Create(discussion) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "languageCode", languageCode => JsonValue.Create(languageCode) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "owner", owner => JsonValue.Create(owner) },
-            
-            
-            
-            
-            
             { "primaryAnnotatedThing", primaryAnnotatedThing => JsonValue.Create(primaryAnnotatedThing) },
-            
-            
-            
-            
-            
             { "relatedThing", relatedThing => JsonValue.Create(relatedThing) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "shortName", shortName => JsonValue.Create(shortName) },
-            
-            
-            
-            
-            
             { "sourceAnnotation", sourceAnnotation => JsonValue.Create(sourceAnnotation) },
-            
-            
-            
-            
-            
             { "status", status => JsonValue.Create(status.ToString()) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "title", title => JsonValue.Create(title) },
-            
-            
         };
 
         /// <summary>

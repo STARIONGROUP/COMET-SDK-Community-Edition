@@ -47,97 +47,21 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "book", book => JsonValue.Create(((IEnumerable)book).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "commonFileStore", commonFileStore => JsonValue.Create(commonFileStore) },
-            
-            
-            
-            
-            
             { "engineeringModelSetup", engineeringModelSetup => JsonValue.Create(engineeringModelSetup) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "genericNote", genericNote => JsonValue.Create(genericNote) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "iteration", iteration => JsonValue.Create(iteration) },
-            
-            
-            
-            
-            
             { "lastModifiedOn", lastModifiedOn => JsonValue.Create(((DateTime)lastModifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "logEntry", logEntry => JsonValue.Create(logEntry) },
-            
-            
-            
-            
-            
             { "modellingAnnotation", modellingAnnotation => JsonValue.Create(modellingAnnotation) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
         };
 
         /// <summary>

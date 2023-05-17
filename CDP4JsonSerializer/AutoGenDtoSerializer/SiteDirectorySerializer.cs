@@ -47,151 +47,30 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "annotation", annotation => JsonValue.Create(annotation) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "createdOn", createdOn => JsonValue.Create(((DateTime)createdOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "defaultParticipantRole", defaultParticipantRole => JsonValue.Create(defaultParticipantRole) },
-            
-            
-            
-            
-            
             { "defaultPersonRole", defaultPersonRole => JsonValue.Create(defaultPersonRole) },
-            
-            
-            
-            
-            
             { "domain", domain => JsonValue.Create(domain) },
-            
-            
-            
-            
-            
             { "domainGroup", domainGroup => JsonValue.Create(domainGroup) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "lastModifiedOn", lastModifiedOn => JsonValue.Create(((DateTime)lastModifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "logEntry", logEntry => JsonValue.Create(logEntry) },
-            
-            
-            
-            
-            
             { "model", model => JsonValue.Create(model) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "name", name => JsonValue.Create(name) },
-            
-            
-            
-            
-            
             { "naturalLanguage", naturalLanguage => JsonValue.Create(naturalLanguage) },
-            
-            
-            
-            
-            
             { "organization", organization => JsonValue.Create(organization) },
-            
-            
-            
-            
-            
             { "participantRole", participantRole => JsonValue.Create(participantRole) },
-            
-            
-            
-            
-            
             { "person", person => JsonValue.Create(person) },
-            
-            
-            
-            
-            
             { "personRole", personRole => JsonValue.Create(personRole) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "shortName", shortName => JsonValue.Create(shortName) },
-            
-            
-            
-            
-            
             { "siteReferenceDataLibrary", siteReferenceDataLibrary => JsonValue.Create(siteReferenceDataLibrary) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
         };
 
         /// <summary>

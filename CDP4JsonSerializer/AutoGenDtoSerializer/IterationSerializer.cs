@@ -47,175 +47,34 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "actualFiniteStateList", actualFiniteStateList => JsonValue.Create(actualFiniteStateList) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "defaultOption", defaultOption => JsonValue.Create(defaultOption) },
-            
-            
-            
-            
-            
             { "diagramCanvas", diagramCanvas => JsonValue.Create(diagramCanvas) },
-            
-            
-            
-            
-            
             { "domainFileStore", domainFileStore => JsonValue.Create(domainFileStore) },
-            
-            
-            
-            
-            
             { "element", element => JsonValue.Create(element) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "externalIdentifierMap", externalIdentifierMap => JsonValue.Create(externalIdentifierMap) },
-            
-            
-            
-            
-            
             { "goal", goal => JsonValue.Create(goal) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "iterationSetup", iterationSetup => JsonValue.Create(iterationSetup) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "option", option => JsonValue.Create(((IEnumerable)option).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            
-            
-            
-            
-            
             { "possibleFiniteStateList", possibleFiniteStateList => JsonValue.Create(possibleFiniteStateList) },
-            
-            
-            
-            
-            
             { "publication", publication => JsonValue.Create(publication) },
-            
-            
-            
-            
-            
             { "relationship", relationship => JsonValue.Create(relationship) },
-            
-            
-            
-            
-            
             { "requirementsSpecification", requirementsSpecification => JsonValue.Create(requirementsSpecification) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "ruleVerificationList", ruleVerificationList => JsonValue.Create(ruleVerificationList) },
-            
-            
-            
-            
-            
             { "sharedDiagramStyle", sharedDiagramStyle => JsonValue.Create(sharedDiagramStyle) },
-            
-            
-            
-            
-            
             { "sourceIterationIid", sourceIterationIid => JsonValue.Create(sourceIterationIid) },
-            
-            
-            
-            
-            
             { "stakeholder", stakeholder => JsonValue.Create(stakeholder) },
-            
-            
-            
-            
-            
             { "stakeholderValue", stakeholderValue => JsonValue.Create(stakeholderValue) },
-            
-            
-            
-            
-            
             { "stakeholderValueMap", stakeholderValueMap => JsonValue.Create(stakeholderValueMap) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "topElement", topElement => JsonValue.Create(topElement) },
-            
-            
-            
-            
-            
             { "valueGroup", valueGroup => JsonValue.Create(valueGroup) },
-            
-            
         };
 
         /// <summary>

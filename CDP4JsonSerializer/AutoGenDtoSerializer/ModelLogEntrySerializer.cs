@@ -47,103 +47,22 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "affectedDomainIid", affectedDomainIid => JsonValue.Create(affectedDomainIid) },
-            
-            
-            
-            
-            
             { "affectedItemIid", affectedItemIid => JsonValue.Create(affectedItemIid) },
-            
-            
-            
-            
-            
             { "author", author => JsonValue.Create(author) },
-            
-            
-            
-            
-            
             { "category", category => JsonValue.Create(category) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "content", content => JsonValue.Create(content) },
-            
-            
-            
-            
-            
             { "createdOn", createdOn => JsonValue.Create(((DateTime)createdOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "languageCode", languageCode => JsonValue.Create(languageCode) },
-            
-            
-            
-            
-            
             { "level", level => JsonValue.Create(level.ToString()) },
-            
-            
-            
-            
-            
             { "logEntryChangelogItem", logEntryChangelogItem => JsonValue.Create(logEntryChangelogItem) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
         };
 
         /// <summary>

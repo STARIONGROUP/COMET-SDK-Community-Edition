@@ -47,175 +47,34 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "alias", alias => JsonValue.Create(alias) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "definition", definition => JsonValue.Create(definition) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "exponent", exponent => JsonValue.Create(exponent) },
-            
-            
-            
-            
-            
             { "factor", factor => JsonValue.Create(factor) },
-            
-            
-            
-            
-            
             { "hyperLink", hyperLink => JsonValue.Create(hyperLink) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "isDeprecated", isDeprecated => JsonValue.Create(isDeprecated) },
-            
-            
-            
-            
-            
             { "isMaximumInclusive", isMaximumInclusive => JsonValue.Create(isMaximumInclusive) },
-            
-            
-            
-            
-            
             { "isMinimumInclusive", isMinimumInclusive => JsonValue.Create(isMinimumInclusive) },
-            
-            
-            
-            
-            
             { "logarithmBase", logarithmBase => JsonValue.Create(logarithmBase.ToString()) },
-            
-            
-            
-            
-            
             { "mappingToReferenceScale", mappingToReferenceScale => JsonValue.Create(mappingToReferenceScale) },
-            
-            
-            
-            
-            
             { "maximumPermissibleValue", maximumPermissibleValue => JsonValue.Create(maximumPermissibleValue) },
-            
-            
-            
-            
-            
             { "minimumPermissibleValue", minimumPermissibleValue => JsonValue.Create(minimumPermissibleValue) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "name", name => JsonValue.Create(name) },
-            
-            
-            
-            
-            
             { "negativeValueConnotation", negativeValueConnotation => JsonValue.Create(negativeValueConnotation) },
-            
-            
-            
-            
-            
             { "numberSet", numberSet => JsonValue.Create(numberSet.ToString()) },
-            
-            
-            
-            
-            
             { "positiveValueConnotation", positiveValueConnotation => JsonValue.Create(positiveValueConnotation) },
-            
-            
-            
-            
-            
             { "referenceQuantityKind", referenceQuantityKind => JsonValue.Create(referenceQuantityKind) },
-            
-            
-            
-            
-            
             { "referenceQuantityValue", referenceQuantityValue => JsonValue.Create(referenceQuantityValue) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "shortName", shortName => JsonValue.Create(shortName) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "unit", unit => JsonValue.Create(unit) },
-            
-            
-            
-            
-            
             { "valueDefinition", valueDefinition => JsonValue.Create(valueDefinition) },
-            
-            
         };
 
         /// <summary>

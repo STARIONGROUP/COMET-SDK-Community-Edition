@@ -47,133 +47,27 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "fillColor", fillColor => JsonValue.Create(fillColor) },
-            
-            
-            
-            
-            
             { "fillOpacity", fillOpacity => JsonValue.Create(fillOpacity) },
-            
-            
-            
-            
-            
             { "fontBold", fontBold => JsonValue.Create(fontBold) },
-            
-            
-            
-            
-            
             { "fontColor", fontColor => JsonValue.Create(fontColor) },
-            
-            
-            
-            
-            
             { "fontItalic", fontItalic => JsonValue.Create(fontItalic) },
-            
-            
-            
-            
-            
             { "fontName", fontName => JsonValue.Create(fontName) },
-            
-            
-            
-            
-            
             { "fontSize", fontSize => JsonValue.Create(fontSize) },
-            
-            
-            
-            
-            
             { "fontStrokeThrough", fontStrokeThrough => JsonValue.Create(fontStrokeThrough) },
-            
-            
-            
-            
-            
             { "fontUnderline", fontUnderline => JsonValue.Create(fontUnderline) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "name", name => JsonValue.Create(name) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "strokeColor", strokeColor => JsonValue.Create(strokeColor) },
-            
-            
-            
-            
-            
             { "strokeOpacity", strokeOpacity => JsonValue.Create(strokeOpacity) },
-            
-            
-            
-            
-            
             { "strokeWidth", strokeWidth => JsonValue.Create(strokeWidth) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "usedColor", usedColor => JsonValue.Create(usedColor) },
-            
-            
         };
 
         /// <summary>

@@ -47,100 +47,23 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "actualOption", actualOption => JsonValue.Create(actualOption) },
-            
-            
-            
-            
-            
             { "actualState", actualState => JsonValue.Create(actualState) },
-            
-            
-             
-            
-            
-            
+ 
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "computed", computed => JsonValue.Create(((ValueArray<string>)computed).ToJsonString()) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "formula", formula => JsonValue.Create(((ValueArray<string>)formula).ToJsonString()) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "manual", manual => JsonValue.Create(((ValueArray<string>)manual).ToJsonString()) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-             
-             
-            
-            
-            
+  
             { "published", published => JsonValue.Create(((ValueArray<string>)published).ToJsonString()) },
-            
-            
-            
-            
-            
             { "reference", reference => JsonValue.Create(((ValueArray<string>)reference).ToJsonString()) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "valueSwitch", valueSwitch => JsonValue.Create(valueSwitch.ToString()) },
-            
-            
         };
 
         /// <summary>

@@ -47,163 +47,32 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "alias", alias => JsonValue.Create(alias) },
-            
-            
-            
-            
-            
             { "baseQuantityKind", baseQuantityKind => JsonValue.Create(((IEnumerable)baseQuantityKind).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            
-            
-            
-            
-            
             { "baseUnit", baseUnit => JsonValue.Create(baseUnit) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "constant", constant => JsonValue.Create(constant) },
-            
-            
-            
-            
-            
             { "definedCategory", definedCategory => JsonValue.Create(definedCategory) },
-            
-            
-            
-            
-            
             { "definition", definition => JsonValue.Create(definition) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "fileType", fileType => JsonValue.Create(fileType) },
-            
-            
-            
-            
-            
             { "glossary", glossary => JsonValue.Create(glossary) },
-            
-            
-            
-            
-            
             { "hyperLink", hyperLink => JsonValue.Create(hyperLink) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "isDeprecated", isDeprecated => JsonValue.Create(isDeprecated) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "name", name => JsonValue.Create(name) },
-            
-            
-            
-            
-            
             { "parameterType", parameterType => JsonValue.Create(parameterType) },
-            
-            
-            
-            
-            
             { "referenceSource", referenceSource => JsonValue.Create(referenceSource) },
-            
-            
-            
-            
-            
             { "requiredRdl", requiredRdl => JsonValue.Create(requiredRdl) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "rule", rule => JsonValue.Create(rule) },
-            
-            
-            
-            
-            
             { "scale", scale => JsonValue.Create(scale) },
-            
-            
-            
-            
-            
             { "shortName", shortName => JsonValue.Create(shortName) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
-            
-            
-            
             { "unit", unit => JsonValue.Create(unit) },
-            
-            
-            
-            
-            
             { "unitPrefix", unitPrefix => JsonValue.Create(unitPrefix) },
-            
-            
         };
 
         /// <summary>

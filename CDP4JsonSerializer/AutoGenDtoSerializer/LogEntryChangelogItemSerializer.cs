@@ -47,73 +47,17 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JsonValue>> propertySerializerMap = new()
         {
-            
-            
-            
-            
             { "affectedItemIid", affectedItemIid => JsonValue.Create(affectedItemIid) },
-            
-            
-            
-            
-            
             { "affectedReferenceIid", affectedReferenceIid => JsonValue.Create(affectedReferenceIid) },
-            
-            
-            
-            
-            
             { "changeDescription", changeDescription => JsonValue.Create(changeDescription) },
-            
-            
-            
-            
-            
             { "changelogKind", changelogKind => JsonValue.Create(changelogKind.ToString()) },
-            
-            
-            
-            
-            
             { "classKind", classKind => JsonValue.Create(classKind.ToString()) },
-            
-            
-            
-            
-            
             { "excludedDomain", excludedDomain => JsonValue.Create(excludedDomain) },
-            
-            
-            
-            
-            
             { "excludedPerson", excludedPerson => JsonValue.Create(excludedPerson) },
-            
-            
-            
-            
-            
             { "iid", iid => JsonValue.Create(iid) },
-            
-            
-            
-            
-            
             { "modifiedOn", modifiedOn => JsonValue.Create(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            
-            
-            
-            
-            
             { "revisionNumber", revisionNumber => JsonValue.Create(revisionNumber) },
-            
-            
-            
-            
-            
             { "thingPreference", thingPreference => JsonValue.Create(thingPreference) },
-            
-            
         };
 
         /// <summary>
