@@ -1,8 +1,8 @@
 <img src="https://github.com/RHEAGROUP/COMET-SDK-Community-Edition/raw/master/Comet_Logo.jpg" width="350">
 
-> COMET is the new name for what was previously called the CDP4. We are transitioning the applications and software libraries. The code and documentation will still refer to CDP4 in a number of places while we are updating.
+> CDP4-COMET is the new name for what was previously called the CDP4. We are transitioning the applications and software libraries. The code and documentation will still refer to CDP4 in a number of places while we are updating.
 
-The COMET Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the COMET to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/RHEAGROUP/COMET-WebServices-Community-Edition) and the [Desktop Application](https://github.com/RHEAGROUP/COMET-IME-Community-Edition). The following libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
+The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the CDP4-COMET to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/RHEAGROUP/COMET-WebServices-Community-Edition) and the [Desktop Application](https://github.com/RHEAGROUP/COMET-IME-Community-Edition). The following libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
 
   - CDP4Common
   - CDP4Rules
@@ -52,13 +52,13 @@ Development | ![Build Status](https://github.com/RHEAGROUP/COMET-SDK-Community-E
 
 ## CDP4Common
 
-The CDP4Common library is a C# implementation of the COMET UML master model. The COMET UML master model is based on the ECSS-E-TM-10-25A Annex A UML master model and extends it with COMET concepts to improve the use of ECSS-E-TM-10-25A Annex A for Concurrent Design of complex systems. The library contains both POCO and DTO implementations of the classes defined in the COMET UML master model. The POCO classes are used when a full object graph is required. The DTO's are used when a full object graph is not required, references to other class are represented by unique identifiers in the form of a GUID.
+The CDP4Common library is a C# implementation of the CDP4-COMET UML master model. The CDP4-COMET UML master model is based on the ECSS-E-TM-10-25A Annex A UML master model and extends it with CDP4-COMET concepts to improve the use of ECSS-E-TM-10-25A Annex A for Concurrent Design of complex systems. The library contains both POCO and DTO implementations of the classes defined in the CDP4-COMET UML master model. The POCO classes are used when a full object graph is required. The DTO's are used when a full object graph is not required, references to other class are represented by unique identifiers in the form of a GUID.
 
 The CDP4Common library also includes a set of so-called MetaInfo classes. These classes are used to provide information about the classes in the UML master model such as the properties, relationships to other classes etc. These classes provide similar functionality as the C# reflection system, but with higher performance.
 
 ## CDP4Rules
 
-The CDP4Rules library provides a mechanism for checking COMET instances versus defined **rules**. This rule checking mechanism is introduced to verify the correctness of POCO's that cannot be verified based on the COMET Master (UML) model (such as multiplicity, type information, etc.). Each rule has a code, description and default severity.
+The CDP4Rules library provides a mechanism for checking CDP4-COMET instances versus defined **rules**. This rule checking mechanism is introduced to verify the correctness of POCO's that cannot be verified based on the CDP4-COMET Master (UML) model (such as multiplicity, type information, etc.). Each rule has a code, description and default severity.
 
 ## CDP4RequirementsVerification
 
@@ -78,7 +78,7 @@ The CDP4JsonFileDal library is a C# library that provides an implementation of E
 
 ## CDP4ServicesDal
 
-The CDP4ServicesDal library is a C# library that provides an implementation of ECSS-E-TM-10-25A Annex C.2, the JSON REST API, which includes concepts that are specific to the COMET. These COMET specific items are pure extensions of ECSS-E-TM-10-25A. The CDP4ServicesDal library can only be used to communicate with a COMET Services instance, dedicated HTTP headers are used to verify that the REST API is indeed a COMET Services instance.
+The CDP4ServicesDal library is a C# library that provides an implementation of ECSS-E-TM-10-25A Annex C.2, the JSON REST API, which includes concepts that are specific to CDP4-COMET. These CDP4-COMET specific items are pure extensions of ECSS-E-TM-10-25A. The CDP4ServicesDal library can only be used to communicate with a CDP4-COMET Services instance, dedicated HTTP headers are used to verify that the REST API is indeed a COMET Services instance.
 
 ## CDP4WspDal
 
