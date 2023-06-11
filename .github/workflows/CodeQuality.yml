@@ -36,7 +36,7 @@ jobs:
         run: dotnet build CDP4-SDK.sln --no-restore /p:ContinuousIntegrationBuild=true
 
       - name: Run Tests and Compute Coverage
-        run: dotnet test CDP4-SDK.sln --no-restore --no-build --verbosity normal --filter="(TestCategory!~WebServicesDependent) & (TestCategory!~AppVeyorExclusion)" /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
+        run: dotnet test CDP4-SDK.sln --no-restore --no-build --verbosity normal --filter="(TestCategory!~WebServicesDependent) & (TestCategory!~CICDExclusion)" /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
 
       - name: Sonarqube end
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

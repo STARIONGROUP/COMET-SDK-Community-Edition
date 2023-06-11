@@ -168,7 +168,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         }
 
         [Test]
-        [Category("AppVeyorExclusion")]
+        [Category("CICDExclusion")]
         public async Task VerifyThatOpenCreatesAConnection()
         {
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
@@ -200,7 +200,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         }
 
         [Test]
-        [Category("AppVeyorExclusion")]
+        [Category("CICDExclusion")]
         public async Task VerifyThatReadReturnsCorrectDTO()
         {
             var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();

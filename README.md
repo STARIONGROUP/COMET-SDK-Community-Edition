@@ -6,7 +6,9 @@ The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with
 
   - CDP4Common
   - CDP4Rules
+  - CDP4RequirementsVerification
   - CDP4JsonSerializer
+  - CDP4Reporting
   - CDP4Dal
   - CDP4JsonFileDal
   - CDP4ServicesDal
@@ -22,6 +24,7 @@ CDP4Common | [![NuGet Badge](https://buildstats.info/nuget/CDP4Common-CE)](https
 CDP4Rules | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4Rules-CE)
 CDP4RequirementsVerification | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4RequirementsVerification-CE)
 CDP4JsonSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonSerializer-CE)](https://buildstats.info/nuget/CDP4JsonSerializer-CE)
+CDP4Reporting | [![NuGet Badge](https://buildstats.info/nuget/CDP4Reporting-CE)](https://buildstats.info/nuget/CDP4Reporting-CE)
 CDP4Dal | [![NuGet Badge](https://buildstats.info/nuget/CDP4Dal-CE)](https://buildstats.info/nuget/CDP4Dal-CE)
 CDP4JsonFileDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonFileDal-CE)](https://buildstats.info/nuget/CDP4JsonFileDal-CE)
 CDP4ServicesDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4ServicesDal-CE)](https://buildstats.info/nuget/CDP4ServicesDal-CE)

@@ -597,7 +597,7 @@ namespace CDP4ServicesDal.Tests
 
         [Test]
         [Category("WebServicesDependent")]
-        [Category("AppVeyorExclusion")]
+        [Category("CICDExclusion")]
         public async Task Verify_that_open_with_proxy_returns_expected_result()
         {
             var proxySettings = new ProxySettings(new Uri("http://tinyproxy:8888"));

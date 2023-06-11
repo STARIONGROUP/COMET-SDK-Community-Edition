@@ -562,7 +562,7 @@ namespace CDP4ServicesDal.Tests
 
         [Test]
         [Category("WebServicesDependent")]
-        [Category("AppVeyorExclusion")]
+        [Category("CICDExclusion")]
         public async Task Verify_that_opens_and_close_removes_items_from_cache()
         {
             this.dal = new CdpServicesDal { Session = this.session };
@@ -598,7 +598,7 @@ namespace CDP4ServicesDal.Tests
 
         [Test]
         [Category("WebServicesDependent")]
-        [Category("AppVeyorExclusion")]
+        [Category("CICDExclusion")]
         public async Task Verify_that_open_with_proxy_returns_expected_result()
         {
             var proxySettings = new ProxySettings(new Uri("http://tinyproxy:8888"));

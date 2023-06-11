@@ -162,7 +162,7 @@ namespace CDP4Common.Tests.Validation
         }
 
         [Test]
-        [Category("AppVeyorExclusion")]
+        [Category("CICDExclusion")]
         public void VerifyThatDateParameterTypeValidatesValue_with_Z()
         {
             ValidationResult result = ValueValidator.Validate(this.dateParameterType, "1976-08-20Z");
