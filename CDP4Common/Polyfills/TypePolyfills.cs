@@ -223,6 +223,9 @@ namespace CDP4Common.Polyfills
         /// <summary>
         /// Searches for the public field with the specified name.
         /// </summary>
+        /// <param name="type">
+        /// the subject <see cref="Type"/>
+        /// </param>
         /// <param name="name">
         /// The string containing the name of the data field to get.
         /// </param>
@@ -375,6 +378,9 @@ namespace CDP4Common.Polyfills
         /// <param name="type">
         /// The current <see cref="Type"/>
         /// </param>
+        /// <param name="c">
+        /// The specified <see cref="Type"/> 
+        /// </param>
         /// <returns>
         /// true if any of the following conditions is true: c and the current instance represent
         /// the same type. c is derived either directly or indirectly from the current instance.
@@ -427,6 +433,9 @@ namespace CDP4Common.Polyfills
         /// <summary>
         /// Searches for the public field with the specified name.
         /// </summary>
+        /// <param name="type">
+        /// the subject <see cref="Type"/>
+        /// </param>
         /// <param name="name">
         /// The string containing the name of the data field to get.
         /// </param>

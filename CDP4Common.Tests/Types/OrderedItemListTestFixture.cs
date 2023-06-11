@@ -208,7 +208,7 @@ namespace CDP4Common.Tests.Types
             this.testList.Add(tel);
 
             var dtoOrderedList = this.testList.ToDtoOrderedItemList().ToList();
-            Assert.AreEqual(this.testList.Count, dtoOrderedList.Count());
+            Assert.AreEqual(this.testList.Count, dtoOrderedList.Count);
             Assert.AreEqual(this.testList.SortedItems.Keys[0], dtoOrderedList[0].K);
             Assert.AreEqual(this.testList.SortedItems.Keys[1], dtoOrderedList[1].K);
 

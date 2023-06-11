@@ -51,7 +51,7 @@ namespace CDP4Dal
             }
 
             var secureString = new SecureString();
-            foreach (var c in unsecurestring.ToCharArray())
+            foreach (var c in unsecurestring)
             {
                 secureString.AppendChar(c);
             }

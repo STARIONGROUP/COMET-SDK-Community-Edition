@@ -774,7 +774,7 @@ namespace CDP4Dal.Tests
         /// <summary>
         /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s asynchronously.
         /// </summary>
-        /// <param name="operationContainer">
+        /// <param name="operationContainers">
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
         /// <param name="files">
@@ -793,6 +793,9 @@ namespace CDP4Dal.Tests
         /// </summary>
         /// <param name="operationContainer">
         /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="files">
+        /// the files that are to be written
         /// </param>
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.

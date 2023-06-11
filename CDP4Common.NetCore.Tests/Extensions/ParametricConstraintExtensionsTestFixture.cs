@@ -75,11 +75,11 @@ namespace CDP4Common.NetCore.Tests.Extensions
             this.relationalExpression5 = new RelationalExpression();
             this.parametricConstraint = new ParametricConstraint();
 
-            this.SetClassKind(this.andExpression, ClassKind.AndExpression);
-            this.SetClassKind(this.orExpression, ClassKind.OrExpression);
-            this.SetClassKind(this.exclusiveOrExpression, ClassKind.ExclusiveOrExpression);
-            this.SetClassKind(this.notExpression, ClassKind.NotExpression);
-            this.SetClassKind(this.parametricConstraint, ClassKind.ParametricConstraint);
+            SetClassKind(this.andExpression, ClassKind.AndExpression);
+            SetClassKind(this.orExpression, ClassKind.OrExpression);
+            SetClassKind(this.exclusiveOrExpression, ClassKind.ExclusiveOrExpression);
+            SetClassKind(this.notExpression, ClassKind.NotExpression);
+            SetClassKind(this.parametricConstraint, ClassKind.ParametricConstraint);
         }
 
         [Test]
@@ -118,7 +118,7 @@ namespace CDP4Common.NetCore.Tests.Extensions
         {
             relationalExpression.ParameterType = new SimpleQuantityKind { ShortName = parameterShortName };
 
-            this.SetClassKind(relationalExpression, ClassKind.RelationalExpression);
+            SetClassKind(relationalExpression, ClassKind.RelationalExpression);
 
             relationalExpression.RelationalOperator = RelationalOperatorKind.EQ;
             relationalExpression.Value = new ValueArray<string>(new[] { value.ToString() });
@@ -130,7 +130,7 @@ namespace CDP4Common.NetCore.Tests.Extensions
         /// <typeparam name="T">The <see cref="Type"/> of the object</typeparam>
         /// <param name="obj">The object</param>
         /// <param name="classKind">The <see cref="ClassKind"/></param>
-        private void SetClassKind<T>(T obj, ClassKind classKind)
+        private static void SetClassKind<T>(T obj, ClassKind classKind)
         {
             var field = typeof(RelationalExpression).GetField("<ClassKind>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic);
             field?.SetValue(obj, classKind);

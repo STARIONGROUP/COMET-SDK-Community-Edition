@@ -425,7 +425,7 @@ namespace CDP4JsonSerializer.Tests
                 var valueArray = (ValueArray<string>)subscriptionValueSetClasslessDto["Manual"];
                 Assert.IsTrue(subscriptionValueSetClasslessDto["Iid"] is Guid);
                 Assert.IsTrue(subscriptionValueSetClasslessDto["ClassKind"] is ClassKind);
-                Assert.AreEqual(3, valueArray.Count());
+                Assert.AreEqual(3, valueArray.Count);
                 Assert.AreEqual("123", valueArray[0]);
                 Assert.AreEqual("456", valueArray[1]);
                 Assert.AreEqual("789.0", valueArray[2]);

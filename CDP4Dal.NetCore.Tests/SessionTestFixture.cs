@@ -280,25 +280,25 @@ namespace CDP4Dal.NetCore.Tests
             session.GetType().GetProperty("ActivePerson").SetValue(session, JohnDoe, null);
             await session.Assembler.Synchronize(thingsToAdd);
             await session.Read(rdlPoco);
-            Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count);
 
             Lazy<CDP4Common.CommonData.Thing> rdlPocoToClose;
             session.Assembler.Cache.TryGetValue(new CacheKey(rdlPoco.Iid, null), out rdlPocoToClose);
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)rdlPocoToClose.Value);
-            Assert.AreEqual(1, session.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(1, session.OpenReferenceDataLibraries.ToList().Count);
 
             await session.Read(rdlPoco);
-            Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count);
 
             session.Assembler.Cache.TryGetValue(new CacheKey(rdlPoco.Iid, null), out rdlPocoToClose);
             Lazy<CDP4Common.CommonData.Thing> requiredRdlToClose;
             session.Assembler.Cache.TryGetValue(new CacheKey(requiredSiteReferenceDataLibraryPoco.Iid, null), out requiredRdlToClose);
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)requiredRdlToClose.Value);
             
-            Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count);
 
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)rdlPocoToClose.Value);
-            Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count());
+            Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count);
         }
 
         [Test]
@@ -655,7 +655,7 @@ namespace CDP4Dal.NetCore.Tests
         /// <summary>
         /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s asynchronously.
         /// </summary>
-        /// <param name="operationContainer">
+        /// <param name="operationContainers">
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
         /// <param name="files">
@@ -674,6 +674,9 @@ namespace CDP4Dal.NetCore.Tests
         /// </summary>
         /// <param name="operationContainer">
         /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="files">
+        /// the files that are to be written
         /// </param>
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.

@@ -230,7 +230,7 @@ namespace CDP4JsonFileDal.Tests
 
             // General assertions for any kind of Thing we read
             Assert.That(readResult, Is.Not.Null);
-            Assert.That(readResult.Count(), Is.Not.EqualTo(1));
+            Assert.That(readResult.Count, Is.Not.EqualTo(1));
             
             var iter1 = readResult.Single(d => d.ClassKind == ClassKind.Iteration);
             Assert.That(iter1.ClassKind, Is.EqualTo(iterObject.ClassKind));

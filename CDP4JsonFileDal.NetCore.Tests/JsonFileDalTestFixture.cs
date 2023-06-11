@@ -229,7 +229,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
 
             // General assertions for any kind of Thing we read
             Assert.NotNull(readResult);
-            Assert.IsTrue(readResult.Count() != 1);
+            Assert.IsTrue(readResult.Count != 1);
             var iter1 = readResult.Single(d => d.ClassKind == ClassKind.Iteration);
             Assert.IsTrue(iterObject.ClassKind == iter1.ClassKind);
             Assert.IsTrue(iterObject.Iid == iter1.Iid);
