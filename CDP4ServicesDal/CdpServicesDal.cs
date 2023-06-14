@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDal.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
@@ -41,6 +41,7 @@ namespace CDP4ServicesDal
     using System.Threading;
     using System.Threading.Tasks;
 
+    using CDP4Common.CommonData;
     using CDP4Common.DTO;
 
     using CDP4Dal;
@@ -51,6 +52,7 @@ namespace CDP4ServicesDal
     using CDP4Dal.Operations;
     
     using CDP4JsonSerializer;
+
 
     using CDP4MessagePackSerializer;
 
@@ -616,6 +618,66 @@ namespace CDP4ServicesDal
                     return returned;
                 }
             }
+        }
+
+        /// <summary>
+        /// Opens a connection to a data source <see cref="Uri"/> specified by the provided <see cref="Credentials"/>
+        /// </summary>
+        /// <param name="credentials">
+        /// The <see cref="Dal.Credentials"/> that are used to connect to the data source such as username, password and <see cref="Uri"/>
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The cancellation Token.
+        /// </param>
+        /// <param name="httpClient">
+        /// The injected <see cref="HttpClient"/> that will be used to set the cached <see cref="HttpClient"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{T}"/> that the services return when connecting to the <see cref="CDP4Common.SiteDirectoryData.SiteDirectory"/>.
+        /// </returns>
+        public async Task<IEnumerable<Thing>> Open(Credentials credentials, CancellationToken cancellationToken, HttpClient httpClient)
+        {
+            if (httpClient == null)
+            {
+                throw new ArgumentNullException(nameof(httpClient), $"The {nameof(httpClient)} may not be null");
+            }
+
+            this.httpClient = httpClient;
+
+            return await this.Open(credentials, cancellationToken);
+        }
+
+        /// <summary>
+        /// Cherry pick <see cref="Thing"/>s contained into an <see cref="Iteration"/> that match provided <se
+        /// </summary>
+        /// <param name="engineeringModelId"></param>
+        /// <param name="iterationId"></param>
+        /// <param name="classKinds"></param>
+        /// <param name="categoriesShocategoriesIdrtName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, 
+            IEnumerable<Guid> categoriesId, CancellationToken cancellationToken)
+        {
+            var uri = $"cherrypick/engineeringmodel/{engineeringModelId}/iteration/{iterationId}";
+
+            var attributes = new QueryAttributes()
+            {
+                CategoriesData = categoriesId,
+                ClassKinds = classKinds
+            };
+
+            uri = $"{uri}{attributes}";
+            var httpResponseMessage = await this.httpClient.GetAsync(uri, cancellationToken);
+
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                Logger.Error(msg);
+                throw new DalReadException(msg);
+            }
+
+            return Enumerable.Empty<Thing>(); 
         }
 
         /// <summary>
