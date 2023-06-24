@@ -56,7 +56,8 @@ namespace CDP4Common.Tests.Helpers
         private Option option_B;
         private Parameter parameter;
         private ParameterOverride parameterOverride;
-        private Parameter parameter2;
+        private Parameter parameter2; 
+        private Parameter parameter3;
         private ActualFiniteState actualState_3;
         private ActualFiniteState actualState_4;
 
@@ -142,6 +143,12 @@ namespace CDP4Common.Tests.Helpers
                 ParameterType = simpleQuantityKind2
             };
 
+            this.parameter3 = new Parameter(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Owner = this.domainOfExpertise,
+                ParameterType = simpleQuantityKind2
+            };
+
             this.parameterOverride = new ParameterOverride(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
@@ -193,6 +200,12 @@ namespace CDP4Common.Tests.Helpers
                 Iid = Guid.NewGuid()
             };
 
+            var parameterValueset_5 = new ParameterValueSet()
+            {
+                ActualOption = this.option_A,
+                Iid = Guid.NewGuid()
+            };
+
             var values_1 = new List<string> { "2" };
             var values_2 = new List<string> { "3" };
             var values_3 = new List<string> { "220" };
@@ -232,6 +245,11 @@ namespace CDP4Common.Tests.Helpers
             parameterValueset_4.Formula = new CDP4Common.Types.ValueArray<string>(values_4);
             parameterValueset_4.ValueSwitch = ParameterSwitchKind.MANUAL;
 
+            parameterValueset_5.Manual = null;
+            parameterValueset_5.Reference = null;
+            parameterValueset_5.Computed = null;
+            parameterValueset_5.Formula = null;
+
             overrideValueset.Manual = new CDP4Common.Types.ValueArray<string>(values_1);
             overrideValueset.Reference = new CDP4Common.Types.ValueArray<string>(values_1);
             overrideValueset.Computed = new CDP4Common.Types.ValueArray<string>(values_1);
@@ -253,6 +271,7 @@ namespace CDP4Common.Tests.Helpers
             this.elementDefinition_1.ContainedElement.Add(this.elementUsage_2);
             this.elementDefinition_2.Parameter.Add(this.parameter);
             this.elementDefinition_2.Parameter.Add(this.parameter2);
+            this.elementDefinition_2.Parameter.Add(this.parameter3);
 
             this.iteration.Element.Add(this.elementDefinition_1);
             this.iteration.Element.Add(this.elementDefinition_2);

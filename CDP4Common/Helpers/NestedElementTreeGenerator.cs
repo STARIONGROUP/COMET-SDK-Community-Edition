@@ -683,9 +683,9 @@ namespace CDP4Common.Helpers
         /// </returns>
         private NestedParameter CreatedNestedParameter(ParameterOrOverrideBase parameter, ParameterTypeComponent component, ParameterValueSetBase valueSet, Option option)
         {
-            var componentIndex = component == null ? 0 : component.Index;
-            var actualValue = valueSet.ActualValue[componentIndex];
-            var formula = valueSet.Formula[componentIndex];
+            var componentIndex = component?.Index ?? 0;
+            var actualValue = valueSet.ActualValue == null ? "-" :  valueSet.ActualValue[componentIndex];
+            var formula = valueSet.Formula == null ? "-" : valueSet.Formula[componentIndex];
 
             var nestedParameter = new NestedParameter(Guid.NewGuid(), parameter.Cache, parameter.IDalUri)
             {
@@ -726,9 +726,9 @@ namespace CDP4Common.Helpers
         /// </returns>
         private NestedParameter CreateNestedParameter(ParameterSubscription subscription, ParameterTypeComponent component, ParameterSubscriptionValueSet valueSet, Option option)
         {
-            var componentIndex = component == null ? 0 : component.Index;
-            var actualValue = valueSet.ActualValue[componentIndex];
-
+            var componentIndex = component?.Index ?? 0;
+            var actualValue = valueSet.ActualValue == null ? "-" : valueSet.ActualValue[componentIndex];
+            
             var nestedParameter = new NestedParameter(Guid.NewGuid(), subscription.Cache, subscription.IDalUri)
             {
                 IsVolatile = true,
