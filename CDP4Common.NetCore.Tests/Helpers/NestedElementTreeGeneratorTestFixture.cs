@@ -131,6 +131,11 @@ namespace CDP4Common.Tests.Helpers
                 ShortName = "v"
             };
 
+            var simpleQuantityKind3 = new SimpleQuantityKind(Guid.NewGuid(), null, null)
+            {
+                ShortName = "q"
+            };
+
             this.parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
@@ -146,7 +151,7 @@ namespace CDP4Common.Tests.Helpers
             this.parameter3 = new Parameter(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
-                ParameterType = simpleQuantityKind2
+                ParameterType = simpleQuantityKind3
             };
 
             this.parameterOverride = new ParameterOverride(Guid.NewGuid(), this.cache, this.uri)
@@ -509,6 +514,150 @@ namespace CDP4Common.Tests.Helpers
             Assert.AreEqual(@"Sat.bat_a\v\1\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B, this.actualState_3));
             Assert.AreEqual(@"Sat.bat_a\v\2\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B, this.actualState_4));
             Assert.AreEqual(@"Sat\m\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_B));
+        }
+
+        [Test]
+        public void Verify_that_a_nested_parameter_for_an_override_references_the_override_and_not_the_a_parameter()
+        {
+            var testiteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
+            
+            var option = new Option(Guid.NewGuid(), this.cache, this.uri)
+            {
+                ShortName = "option_1",
+                Name = "option 1"
+            };
+
+            testiteration.Option.Add(option);
+
+            var system_engineering = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.uri)
+            {
+                ShortName = "SYS",
+                Name = "System"
+            };
+
+            var mass = new SimpleQuantityKind(Guid.NewGuid(), this.cache, this.uri)
+            {
+                ShortName = "m"
+            };
+            
+            var power = new SimpleQuantityKind(Guid.NewGuid(), this.cache, this.uri)
+            {
+                ShortName = "p"
+            };
+
+            var values_1 = new List<string> { "1" };
+            var values_2 = new List<string> { "2" };
+
+            var satellite_definition = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
+            {
+                ShortName = "SAT",
+                Name = "Satellite",
+                Owner = system_engineering
+            };
+
+            testiteration.Element.Add(satellite_definition);
+            testiteration.TopElement = satellite_definition;
+
+            var battery_definition = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
+            {
+                ShortName = "BAT",
+                Name = "Battery",
+                Owner = system_engineering
+            };
+
+            var mass_parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Owner = system_engineering,
+                ParameterType = mass
+            };
+
+            var mass_parameterValueset = new ParameterValueSet(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Iid = Guid.NewGuid(),
+                Manual = new CDP4Common.Types.ValueArray<string>(values_1),
+                Reference = new CDP4Common.Types.ValueArray<string>(values_1),
+                Computed = new CDP4Common.Types.ValueArray<string>(values_1),
+                Formula = new CDP4Common.Types.ValueArray<string>(values_1),
+                ValueSwitch = ParameterSwitchKind.MANUAL
+            };
+            
+            mass_parameter.ValueSet.Add(mass_parameterValueset);
+            
+            var power_parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Owner = system_engineering,
+                ParameterType = power
+            };
+
+            var power_parameterValueset = new ParameterValueSet(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Iid = Guid.NewGuid(),
+                Manual = new CDP4Common.Types.ValueArray<string>(values_1),
+                Reference = new CDP4Common.Types.ValueArray<string>(values_1),
+                Computed = new CDP4Common.Types.ValueArray<string>(values_1),
+                Formula = new CDP4Common.Types.ValueArray<string>(values_1),
+                ValueSwitch = ParameterSwitchKind.MANUAL
+            };
+
+            power_parameter.ValueSet.Add(power_parameterValueset);
+
+            battery_definition.Parameter.Add(mass_parameter);
+            battery_definition.Parameter.Add(power_parameter);
+
+            testiteration.Element.Add(battery_definition);
+
+            var battery_usage = new ElementUsage(Guid.NewGuid(), this.cache, this.uri)
+            {
+                ShortName = "BAT_a",
+                Name = "Battery A",
+                ElementDefinition = battery_definition,
+                Owner = system_engineering
+            };
+
+            var mass_parameteroverride = new ParameterOverride(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Owner = system_engineering,
+                Parameter = mass_parameter,
+            };
+
+            var mass_parameterOverrideValueset = new ParameterOverrideValueSet(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Iid = Guid.NewGuid(),
+                Manual = new CDP4Common.Types.ValueArray<string>(values_2),
+                Reference = new CDP4Common.Types.ValueArray<string>(values_2),
+                Computed = new CDP4Common.Types.ValueArray<string>(values_2),
+                Formula = new CDP4Common.Types.ValueArray<string>(values_2),
+                ValueSwitch = ParameterSwitchKind.MANUAL,
+                ParameterValueSet = mass_parameterValueset
+            };
+
+            mass_parameteroverride.ValueSet.Add(mass_parameterOverrideValueset);
+
+            battery_usage.ParameterOverride.Add(mass_parameteroverride);
+
+            satellite_definition.ContainedElement.Add(battery_usage);
+            
+            var nestedElements =this.nestedElementTreeGenerator.Generate(option, system_engineering, false).ToList();
+            
+            foreach (var nestedElement in nestedElements)
+            {
+                Console.WriteLine($"NE: - {nestedElement.ShortName}:{nestedElement.Name}");
+
+                foreach (var nestedParameter in nestedElement.NestedParameter)
+                {
+                    Console.WriteLine($"NP: - {nestedParameter.Path}:{nestedParameter.UserFriendlyShortName}:{nestedParameter.ActualValue}");
+                }
+            }
+
+            var nested_battery_a = nestedElements.Single(x => x.ShortName == "SAT.BAT_a");
+
+            var nested_mass_parameter = nested_battery_a.NestedParameter.Single(x => x.Path == @"SAT.BAT_a\m\\option_1");
+
+            Assert.That(nested_mass_parameter.AssociatedParameter, Is.EqualTo(mass_parameteroverride));
+
+            var nested_power_parameter = nested_battery_a.NestedParameter.Single(x => x.Path == @"SAT.BAT_a\p\\option_1");
+
+            Assert.That(nested_power_parameter.AssociatedParameter, Is.EqualTo(power_parameter));
         }
     }
 }

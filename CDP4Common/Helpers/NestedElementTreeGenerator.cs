@@ -588,7 +588,7 @@ namespace CDP4Common.Helpers
                         {
                             if (compoundParameterType == null)
                             {
-                                var nestedParameter = this.CreatedNestedParameter(parameter, null, parameterOverrideValueSet, option);
+                                var nestedParameter = this.CreatedNestedParameter(parameterOveride, null, parameterOverrideValueSet, option);
                                 yield return nestedParameter;
                             }
                             else
@@ -596,7 +596,7 @@ namespace CDP4Common.Helpers
                                 foreach (var component in compoundParameterType.Component)
                                 {
                                     var comp = (ParameterTypeComponent) component;
-                                    var nestedParameter = this.CreatedNestedParameter(parameter, comp, parameterOverrideValueSet, option);
+                                    var nestedParameter = this.CreatedNestedParameter(parameterOveride, comp, parameterOverrideValueSet, option);
                                     yield return nestedParameter;
                                 }
                             }
