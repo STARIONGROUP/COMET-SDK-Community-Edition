@@ -153,8 +153,8 @@ namespace CDP4ServicesDal.Tests
             await httpClient.PostAsync(uriBuilder.Uri, null);
 
             httpClient = new HttpClient();
-            var dal = new CdpServicesDal();
-            var result = await dal.Open(this.credentials, new CancellationToken(), httpClient);
+            var dal = new CdpServicesDal(httpClient);
+            var result = await dal.Open(this.credentials, new CancellationToken());
 
             var amountOfDtos = result.ToList().Count;
 
@@ -162,27 +162,12 @@ namespace CDP4ServicesDal.Tests
         }
 
         [Test]
-        public void Verify_That_When_Open_with_null_httpclient_throws_exception()
+        public void Verify_That_When_constructed_with_null_httpclient_throws_exception()
         {
             HttpClient httpClient = null;
-            var dal = new CdpServicesDal();
-
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await dal.Open(this.credentials, new CancellationToken(), httpClient));            
+            Assert.Throws<ArgumentNullException>(() => new CdpServicesDal(httpClient));
         }
-
-        [Test]
-        public void Verify_That_When_Open_with_httpclient_and_proxysettings_throws_exception()
-        {
-            var httpClient = new HttpClient(); ;
-            var dal = new CdpServicesDal();
-
-            var proxySettings = new ProxySettings(new Uri("http://proxy.com"), "username", "password");
-
-            this.credentials = new Credentials("admin", "pass", this.uri, proxySettings);
-
-            Assert.ThrowsAsync<ArgumentException>(async () => await dal.Open(this.credentials, new CancellationToken(), httpClient));
-        }
-
+        
         [Test]
         [Category("WebServicesDependent")]
         public async Task VerifThatAClosedDalCannotBeClosedAgain()

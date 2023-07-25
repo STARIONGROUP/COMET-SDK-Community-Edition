@@ -8,6 +8,7 @@ The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with
   - CDP4Rules
   - CDP4RequirementsVerification
   - CDP4JsonSerializer
+  - CDP4MessagePackSerializer
   - CDP4Reporting
   - CDP4Dal
   - CDP4JsonFileDal
@@ -70,6 +71,10 @@ The CDP4RequirementsVerification library is used to perform requirements verific
 ## CDP4JsonSerializer
 
 The CDP4JsonSerializer library is an optimized CDP4Common specific JSON (de)serialization library that is used to serialize and deserialize the classes implemented in the CDP4Common class library. The (de)serialization makes use of the popular Json.NET framework to serialize and deserialize the CDP4Common DTO classes.
+
+## CDP4MessagePackSerializer
+
+The CDP4MessagePackSerializer library is an optimized CDP4Common specific MessagePack (de)serialization library that is used to serialize and deserialize the classes implemented in the CDP4Common class library.
 
 ## CDP4Dal
 
