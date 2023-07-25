@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
@@ -51,7 +51,9 @@ namespace CDP4ServicesDal
     using CDP4Dal.Operations;
     
     using CDP4JsonSerializer;
-    
+
+    using CDP4MessagePackSerializer;
+
     using NLog;
 
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
@@ -83,13 +85,35 @@ namespace CDP4ServicesDal
         /// </summary>
         public CdpServicesDal()
         {
-            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Cdp4JsonSerializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.MessagePackSerializer = new MessagePackSerializer();
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Cdp4JsonSerializer"/>
+        /// Initializes a new instance of the <see cref="CdpServicesDal"/> class.
         /// </summary>
-        public Cdp4JsonSerializer Serializer { get; private set; }
+        /// <param name="httpClient">
+        /// The (injected) <see cref="HttpClient"/>
+        /// </param>
+        public CdpServicesDal(HttpClient httpClient) : this()
+        {
+            if (httpClient == null)
+            {
+                throw new ArgumentNullException(nameof(httpClient));
+            }
+
+            this.httpClient = httpClient;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Cdp4JsonSerializer"/>
+        /// </summary>
+        public Cdp4JsonSerializer Cdp4JsonSerializer { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="MessagePackSerializer"/>
+        /// </summary>
+        public MessagePackSerializer MessagePackSerializer { get; private set; }
 
         /// <summary>
         /// Gets the value indicating whether this <see cref="IDal"/> is read only.
@@ -172,8 +196,18 @@ namespace CDP4ServicesDal
 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
-                    result.AddRange(this.Serializer.Deserialize(resultStream));
-
+                    switch (this.QueryConentTypeKind(httpResponseMessage))
+                    {
+                        case ContentTypeKind.JSON:
+                            result.AddRange(this.Cdp4JsonSerializer.Deserialize(resultStream));
+                            break;
+                        case ContentTypeKind.MESSAGEPACK:
+                            var cts = new CancellationTokenSource();
+                            var things = await this.MessagePackSerializer.DeserializeAsync(resultStream, cts.Token);
+                            result.AddRange(things);
+                            break;
+                    }
+                    
                     Guid iterationId;
                     if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
                     {
@@ -395,8 +429,18 @@ namespace CDP4ServicesDal
 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
-                    var returned = this.Serializer.Deserialize(resultStream);
+                    IEnumerable<Thing> returned = new List<Thing>();
 
+                    switch (this.QueryConentTypeKind(httpResponseMessage))
+                    {
+                        case ContentTypeKind.JSON:
+                            returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
+                            break;
+                        case ContentTypeKind.MESSAGEPACK:
+                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
+                            break;
+                    }
+                    
                     if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(returned, iterationId);
@@ -532,7 +576,17 @@ namespace CDP4ServicesDal
 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
-                    var returned = this.Serializer.Deserialize(resultStream);
+                    IEnumerable<Thing> returned = new List<Thing>();
+
+                    switch (this.QueryConentTypeKind(httpResponseMessage))
+                    {
+                        case ContentTypeKind.JSON:
+                            returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
+                            break;
+                        case ContentTypeKind.MESSAGEPACK:
+                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
+                            break;
+                    }
 
                     watch.Stop();
                     Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
@@ -549,34 +603,6 @@ namespace CDP4ServicesDal
                 }
             }
         }
-
-        /// <summary>
-        /// Opens a connection to a data source <see cref="Uri"/> specified by the provided <see cref="Credentials"/>
-        /// </summary>
-        /// <param name="credentials">
-        /// The <see cref="Dal.Credentials"/> that are used to connect to the data source such as username, password and <see cref="Uri"/>
-        /// </param>
-        /// <param name="cancellationToken">
-        /// The cancellation Token.
-        /// </param>
-        /// <param name="httpClient">
-        /// The injected <see cref="HttpClient"/> that will be used to set the cached <see cref="HttpClient"/>
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{T}"/> that the services return when connecting to the <see cref="CDP4Common.SiteDirectoryData.SiteDirectory"/>.
-        /// </returns>
-        public async Task<IEnumerable<Thing>> Open(Credentials credentials, CancellationToken cancellationToken, HttpClient httpClient)
-        {
-            if (httpClient == null)
-            {
-                throw new ArgumentNullException(nameof(httpClient), $"The {nameof(httpClient)} may not be null");
-            }
-
-            this.httpClient = httpClient;
-
-            return await this.Open(credentials, cancellationToken);
-        }
-
 
         /// <summary>
         /// Create a new <see cref="HttpClient"/>
@@ -636,6 +662,7 @@ namespace CDP4ServicesDal
             result.BaseAddress = credentials.Uri;
             result.DefaultRequestHeaders.Accept.Clear();
             result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/msgpack"));
             result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
             result.DefaultRequestHeaders.Add(Headers.AcceptCdpVersion, Headers.AcceptCdpVersionValue);
             result.DefaultRequestHeaders.Add("User-Agent", "CDP4 (ECSS-E-TM-10-25 Annex C.2) CDPServicesDal");
@@ -719,7 +746,7 @@ namespace CDP4ServicesDal
                 postOperation.ConstructFromOperation(operation);
             }
 
-            this.Serializer.SerializeToStream(postOperation, outputStream);
+            this.Cdp4JsonSerializer.SerializeToStream(postOperation, outputStream);
             outputStream.Position = 0;
 
             if (Logger.IsTraceEnabled)
@@ -798,15 +825,64 @@ namespace CDP4ServicesDal
                 return false;
             }
 
-            if (!headerArray.Contains("application/json"))
+            if (headerArray.Contains("application/json"))
             {
-                if (!allowMultiPart || !headerArray.Contains("multipart/mixed"))
-                {
-                    return false;
-                }
+                return true;
+            }
+
+            if (headerArray.Contains("application/msgpack"))
+            {
+                return true;
+            }
+
+            if (!allowMultiPart || !headerArray.Contains("multipart/mixed"))
+            {
+                return false;
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Queries the Content-Type from the <see cref="HttpResponseMessage"/>
+        /// </summary>
+        /// <param name="httpResponseMessage">
+        /// The subject <see cref="HttpResponseMessage"/>
+        /// </param>
+        /// <returns>
+        /// returns a <see cref="ContentTypeKind"/> 
+        /// </returns>
+        /// <exception cref="HeaderException">
+        /// thrown when the Content-Type is not supported
+        /// </exception>
+        private ContentTypeKind QueryConentTypeKind(HttpResponseMessage httpResponseMessage)
+        {
+            var contentHeaders = httpResponseMessage.Content.Headers;
+            
+            var mediaTypeHeader = contentHeaders.SingleOrDefault(h => h.Key.ToLower(CultureInfo.InvariantCulture) == Headers.ContentType.ToLower(CultureInfo.InvariantCulture));
+
+            if (mediaTypeHeader.Value == null)
+            {
+                throw new HeaderException($"Header {Headers.ContentType} not found");
+            }
+
+            var headerString = Convert.ToString(mediaTypeHeader.Value.FirstOrDefault()).ToLower(CultureInfo.InvariantCulture);
+
+            var headerArray = headerString
+                .Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim()).ToArray();
+
+            if (headerArray.Contains("application/json"))
+            {
+                return ContentTypeKind.JSON;
+            }
+
+            if (headerArray.Contains("application/msgpack"))
+            {
+                return ContentTypeKind.MESSAGEPACK;
+            }
+
+            throw new HeaderException($"Header Media-Type has incompatible value: {mediaTypeHeader.Value} ");
         }
 
         /// <summary>

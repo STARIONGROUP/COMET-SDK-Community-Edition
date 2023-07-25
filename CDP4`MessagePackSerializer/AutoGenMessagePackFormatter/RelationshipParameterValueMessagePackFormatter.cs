@@ -1,0 +1,214 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RelationshipParameterValueMessagePackFormatter.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2023 RHEA System S.A.
+//
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//
+//    This file is part of CDP4-COMET SDK Community Edition
+//    This is an auto-generated class. Any manual changes to this file will be overwritten!
+//
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 3 of the License, or (at your option) any later version.
+//
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public License
+//    along with this program; if not, write to the Free Software Foundation,
+//    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+// --------------------------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+/* -------------------------------------------- | ---------------------------- | ----------- | ------- *
+ | index | name                                 | Type                         | Cardinality | version |
+ | -------------------------------------------- | ---------------------------- | ----------- | ------- |
+ | 0     | iid                                  | Guid                         |  1..1       |  1.0.0  |
+ | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
+ | -------------------------------------------- | ---------------------------- | ----------- | ------- |
+ | 2     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 3     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 4     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 5     | parameterType                        | Guid                         | 1..1        |  1.1.0  |
+ | 6     | scale                                | Guid                         | 0..1        |  1.1.0  |
+ | 7     | value                                | ValueArray<string>           | 1..*        |  1.1.0  |
+ | 8     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ * -------------------------------------------- | ---------------------------- | ----------- | ------- */
+
+namespace CDP4MessagePackSerializer
+{
+    using System;
+    using System.Collections.Generic;
+
+    using CDP4Common;
+    using CDP4Common.DTO;
+    using CDP4Common.Types;
+
+    using global::MessagePack;
+    using global::MessagePack.Formatters;
+
+    /// <summary>
+    /// The purpose of the <see cref="RelationshipParameterValueMessagePackFormatter"/> is to provide
+    /// the contract for MessagePack (de)serialization of the <see cref="RelationshipParameterValue"/> type
+    /// </summary>
+    [CDPVersion("1.1.0")]
+    public class RelationshipParameterValueMessagePackFormatter : IMessagePackFormatter<RelationshipParameterValue>
+    {
+        /// <summary>
+        /// Serializes an <see cref="RelationshipParameterValue"/> DTO.
+        /// </summary>
+        /// <param name="writer">
+        /// The <see cref="MessagePackWriter"/> to use when serializing the value.
+        /// </param>
+        /// <param name="relationshipParameterValue">
+        /// The <see cref="RelationshipParameterValue"/> that is to be serialized.
+        /// </param>
+        /// <param name="options">
+        /// The serialization settings to use.
+        /// </param>
+        public void Serialize(ref MessagePackWriter writer, RelationshipParameterValue relationshipParameterValue, MessagePackSerializerOptions options)
+        {
+            if (relationshipParameterValue == null)
+            {
+                throw new ArgumentNullException(nameof(relationshipParameterValue), "The RelationshipParameterValue may not be null");
+            }
+
+            writer.WriteArrayHeader(9);
+
+            writer.Write(relationshipParameterValue.Iid.ToByteArray());
+            writer.Write(relationshipParameterValue.RevisionNumber);
+
+            writer.WriteArrayHeader(relationshipParameterValue.ExcludedDomain.Count);
+            foreach (var identifier in relationshipParameterValue.ExcludedDomain)
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(relationshipParameterValue.ExcludedPerson.Count);
+            foreach (var identifier in relationshipParameterValue.ExcludedPerson)
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.Write(relationshipParameterValue.ModifiedOn);
+            writer.Write(relationshipParameterValue.ParameterType.ToByteArray());
+            if (relationshipParameterValue.Scale.HasValue)
+            {
+                writer.Write(relationshipParameterValue.Scale.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
+            writer.WriteArrayHeader(relationshipParameterValue.Value.Count);
+            foreach (var valueArrayItem in relationshipParameterValue.Value)
+            {
+                writer.Write(valueArrayItem);
+            }
+            writer.Write(relationshipParameterValue.ThingPreference);
+
+            writer.Flush();
+        }
+
+        /// <summary>
+        /// Deserializes an <see cref="RelationshipParameterValue"/>.
+        /// </summary>
+        /// <param name="reader">
+        /// The <see cref="MessagePackWriter"/> to deserialize the <see cref="RelationshipParameterValue"/> from.
+        /// </param>
+        /// <param name="options">
+        /// The serialization settings to use.
+        /// </param>
+        /// <returns>
+        /// The deserialized <see cref="RelationshipParameterValue"/>.
+        /// </returns>
+        public RelationshipParameterValue Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+
+            var relationshipParameterValue = new RelationshipParameterValue();
+
+            var propertyCounter = reader.ReadArrayHeader();
+
+            for (var i = 0; i < propertyCounter; i++)
+            {
+                int valueLength;
+                int valueCounter;
+                OrderedItem orderedItem = null;
+
+                switch (i)
+                {
+                    case 0:
+                        relationshipParameterValue.Iid = reader.ReadBytes().ToGuid();
+                        break;
+                    case 1:
+                        relationshipParameterValue.RevisionNumber = reader.ReadInt32();
+                        break;
+                    case 2:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            relationshipParameterValue.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
+                        }
+                        break;
+                    case 3:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            relationshipParameterValue.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
+                        }
+                        break;
+                    case 4:
+                        relationshipParameterValue.ModifiedOn = reader.ReadDateTime();
+                        break;
+                    case 5:
+                        relationshipParameterValue.ParameterType = reader.ReadBytes().ToGuid();
+                        break;
+                    case 6:
+                        if (reader.TryReadNil())
+                        {
+                            relationshipParameterValue.Scale = null;
+                        }
+                        else
+                        {
+                            relationshipParameterValue.Scale = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 7:
+                        valueLength = reader.ReadArrayHeader();
+                        var relationshipParameterValueValue = new List<string>();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            relationshipParameterValueValue.Add(reader.ReadString());
+                        }
+                        relationshipParameterValue.Value = new ValueArray<string>(relationshipParameterValueValue);
+                        break;
+                    case 8:
+                        relationshipParameterValue.ThingPreference = reader.ReadString();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            reader.Depth--;
+
+            return relationshipParameterValue;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
