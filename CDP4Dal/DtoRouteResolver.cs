@@ -76,7 +76,7 @@ namespace CDP4Dal
                 var res = session.Assembler.Cache.TryGetValue(new CacheKey(thing.Iid, thing.IterationContainerId), out lazyThing);
                 if (!res)
                 {
-                    throw new InstanceNotFoundException(string.Format("The {0} with id {1} could not be found", thing.ClassKind, thing.Iid));
+                    throw new InstanceNotFoundException($"The {thing.ClassKind} with id {thing.Iid} could not be found");
                 }
 
                 // Build the complete containement tree
@@ -101,7 +101,7 @@ namespace CDP4Dal
                 var res = session.Assembler.Cache.TryGetValue(new CacheKey(previousContainer.Iid, previousContainer.IterationContainerId), out lazyThing);
                 if (!res)
                 {
-                    throw new InstanceNotFoundException(string.Format("The {0} with id {1} could not be found", previousContainer.ClassKind, previousContainer.Iid));
+                    throw new InstanceNotFoundException($"The {previousContainer.ClassKind} with id {previousContainer.Iid} could not be found");
                 }
 
                 thing.AddContainerPartialTree(lazyThing.Value);
@@ -119,7 +119,7 @@ namespace CDP4Dal
             var container = cachedThing.Container;
             if (container == null)
             {
-                throw new NullReferenceException(string.Format("The container of the {0} with id {1} is null.", thing.ClassKind, thing.Iid));
+                throw new NullReferenceException($"The container of the {thing.ClassKind} with id {thing.Iid} is null.");
             }
 
             thing.AddContainer(container.ClassKind, container.Iid);
@@ -128,7 +128,7 @@ namespace CDP4Dal
                 container = container.Container;
                 if (container == null)
                 {
-                    throw new NullReferenceException(string.Format("The containment tree is broken for the {0} with id {1}.", thing.ClassKind, thing.Iid));
+                    throw new NullReferenceException($"The containment tree is broken for the {thing.ClassKind} with id {thing.Iid}.");
                 }
 
                 thing.AddContainer(container.ClassKind, container.Iid);
@@ -148,7 +148,7 @@ namespace CDP4Dal
                 tmpContainer = tmpContainer.Container;
                 if (tmpContainer == null)
                 {
-                    throw new NullReferenceException(string.Format("The containment tree is broken for the {0} with id {1}.", thing.ClassKind, thing.Iid));
+                    throw new NullReferenceException($"The containment tree is broken for the {thing.ClassKind} with id {thing.Iid}.");
                 }
 
                 thing.AddContainer(tmpContainer.ClassKind, tmpContainer.Iid);

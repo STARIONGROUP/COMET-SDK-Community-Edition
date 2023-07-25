@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelReferenceDataLibraryMetaInfo.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
@@ -183,7 +183,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.containmentPropertyValueMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'ModelReferenceDataLibrary'", propertyName));
+                throw new ArgumentException($"'{propertyName}' is not a valid containment property of 'ModelReferenceDataLibrary'");
             }
 
             return this.containmentPropertyValueMap[propertyName]((CDP4Common.DTO.ModelReferenceDataLibrary)modelReferenceDataLibrary);
@@ -208,7 +208,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.orderedContainmentPropertyValueMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'ModelReferenceDataLibrary'", propertyName));
+                throw new ArgumentException($"'{propertyName}' is not a valid containment property of 'ModelReferenceDataLibrary'");
             }
 
             return this.orderedContainmentPropertyValueMap[propertyName]((CDP4Common.DTO.ModelReferenceDataLibrary)modelReferenceDataLibrary);
@@ -431,7 +431,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.containmentTypeMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'ModelReferenceDataLibrary'", propertyName));
+                throw new ArgumentException($"'{propertyName}' is not a valid containment property of 'ModelReferenceDataLibrary'");
             }
 
             return this.containmentTypeMap[propertyName];
@@ -547,7 +547,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.collectionPropertyValueDeserializationMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid collection property of 'ModelReferenceDataLibrary'", propertyName));
+                throw new ArgumentException($"'{propertyName}' is not a valid collection property of 'ModelReferenceDataLibrary'");
             }
 
             return this.collectionPropertyValueDeserializationMap[propertyName](value);
@@ -572,7 +572,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.propertyValueMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid collection property of 'ModelReferenceDataLibrary'", propertyName));
+                throw new ArgumentException($"'{propertyName}' is not a valid collection property of 'ModelReferenceDataLibrary'");
             }
 
             return this.propertyValueMap[propertyName]((CDP4Common.DTO.ModelReferenceDataLibrary)thing);

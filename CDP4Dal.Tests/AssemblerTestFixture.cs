@@ -100,7 +100,6 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        //[ExpectedException(typeof(NullReferenceException))]
         public void VerifyThatAssemblerThrowsNullReferenceExceptionWhenUriIsNull()
         {
             Assert.Throws<NullReferenceException>(() =>

@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterSubscriptionMetaInfo.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
@@ -155,7 +155,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.containmentPropertyValueMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'ParameterSubscription'", propertyName));
+                throw new ArgumentException($"'{propertyName}' is not a valid containment property of 'ParameterSubscription'");
             }
 
             return this.containmentPropertyValueMap[propertyName]((CDP4Common.DTO.ParameterSubscription)parameterSubscription);
@@ -180,7 +180,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.orderedContainmentPropertyValueMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'ParameterSubscription'", propertyName));
+                throw new ArgumentException($"'{propertyName}' is not a valid containment property of 'ParameterSubscription'");
             }
 
             return this.orderedContainmentPropertyValueMap[propertyName]((CDP4Common.DTO.ParameterSubscription)parameterSubscription);
@@ -361,7 +361,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.containmentTypeMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid containment property of 'ParameterSubscription'", propertyName));
+                throw new ArgumentException($"'{propertyName}' is not a valid containment property of 'ParameterSubscription'");
             }
 
             return this.containmentTypeMap[propertyName];
@@ -477,7 +477,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.collectionPropertyValueDeserializationMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid collection property of 'ParameterSubscription'", propertyName));
+                throw new ArgumentException($"'{propertyName}' is not a valid collection property of 'ParameterSubscription'");
             }
 
             return this.collectionPropertyValueDeserializationMap[propertyName](value);
@@ -502,7 +502,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.propertyValueMap.ContainsKey(propertyName))
             {
-                throw new ArgumentException(string.Format("'{0}' is not a valid collection property of 'ParameterSubscription'", propertyName));
+                throw new ArgumentException($"'{propertyName}' is not a valid collection property of 'ParameterSubscription'");
             }
 
             return this.propertyValueMap[propertyName]((CDP4Common.DTO.ParameterSubscription)thing);

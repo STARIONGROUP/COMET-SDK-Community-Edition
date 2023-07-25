@@ -251,7 +251,7 @@ namespace CDP4Common.MetaInfo
         {
             if (!this.metaDataMap.ContainsKey(typeName))
             {
-                throw new TypeLoadException(string.Format("Type not supported {0}", typeName));
+                throw new TypeLoadException($"Type not supported {typeName}");
             }
 
             return this.metaDataMap[typeName];

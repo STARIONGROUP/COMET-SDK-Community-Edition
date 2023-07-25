@@ -157,7 +157,7 @@ namespace CDP4Common.Tests.DTO
             elementDefinition.AddContainer(ClassKind.Iteration, iterationId);
             elementDefinition.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
 
-            Assert.AreEqual(string.Format("/EngineeringModel/{0}/iteration/{1}", engineeringModelId, iterationId), elementDefinition.GetTopContainerRoute());
+            Assert.AreEqual($"/EngineeringModel/{engineeringModelId}/iteration/{iterationId}", elementDefinition.GetTopContainerRoute());
 
             // engineering model thing
             Book book;

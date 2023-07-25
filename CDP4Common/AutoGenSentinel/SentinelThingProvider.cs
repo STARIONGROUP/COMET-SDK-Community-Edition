@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SentinelThingProvider.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
@@ -94,7 +94,7 @@ namespace CDP4Common
             Thing sentinel = null;
             if (!sentinelProvider.TryGetValue(typeof(T).Name, out sentinel))
             {
-                throw new InvalidOperationException(string.Format("The sentinel instance of {0} was not found", typeof(T).Name));
+                throw new InvalidOperationException($"The sentinel instance of {typeof(T).Name} was not found");
             }
 
             return (T)sentinel;

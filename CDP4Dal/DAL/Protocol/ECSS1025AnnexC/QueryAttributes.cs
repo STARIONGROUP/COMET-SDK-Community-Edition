@@ -60,7 +60,7 @@ namespace CDP4Dal.DAL.ECSS1025AnnexC
         public override string ToString()
         {
             var attributeString = this.JoinAttributes();
-            return string.IsNullOrEmpty(attributeString) ? string.Empty : string.Format("?{0}", attributeString);
+            return string.IsNullOrEmpty(attributeString) ? string.Empty : $"?{attributeString}";
         }
 
         /// <summary>
@@ -75,22 +75,22 @@ namespace CDP4Dal.DAL.ECSS1025AnnexC
 
             if (this.Extent != null)
             {
-                attributeList.Add(string.Format("extent={0}", this.Extent));
+                attributeList.Add($"extent={this.Extent}");
             }
 
             if (this.IncludeReferenceData != null)
             {
-                attributeList.Add(string.Format("includeReferenceData={0}", this.IncludeReferenceData.ToString().ToLower()));
+                attributeList.Add($"includeReferenceData={this.IncludeReferenceData.ToString().ToLower()}");
             }
 
             if (this.IncludeAllContainers != null)
             {
-                attributeList.Add(string.Format("includeAllContainers={0}", this.IncludeAllContainers.ToString().ToLower()));
+                attributeList.Add($"includeAllContainers={this.IncludeAllContainers.ToString().ToLower()}");
             }
 
             if (this.IncludeFileData != null)
             {
-                attributeList.Add(string.Format("includeFileData={0}", this.IncludeFileData.ToString().ToLower()));
+                attributeList.Add($"includeFileData={this.IncludeFileData.ToString().ToLower()}");
             }
 
             // include the base attributelist

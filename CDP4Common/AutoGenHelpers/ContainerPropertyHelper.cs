@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ContainerPropertyHelper.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
@@ -225,7 +225,7 @@ namespace CDP4Common.Helpers
             {
                 return result.Value;
             }
-            throw new ArgumentException(string.Format("The ClassKind {0} does not exist in the CDP4Common library", classKind));
+            throw new ArgumentException($"The ClassKind {classKind} does not exist in the CDP4Common library");
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace CDP4Common.Helpers
             {
                 return result.Key;
             }
-            throw new ArgumentException(string.Format("The ClassKind {0} does not exist in the CDP4Common library", classKind));
+            throw new ArgumentException($"The ClassKind {classKind} does not exist in the CDP4Common library");
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace CDP4Common.Helpers
                 var pair = (pairs.Count() == 1) ? pairs.Single() : pairs.SingleOrDefault(p => Type.GetType("CDP4Common.DTO." + p.Key).QueryIsAbstract());
                 return (ClassKind)Enum.Parse(typeof(ClassKind), pair.Key, true);
             }
-            throw new ArgumentException(string.Format("the container property {0} does not exist", containerProperty));
+            throw new ArgumentException($"the container property {containerProperty} does not exist");
         }
     }
 }

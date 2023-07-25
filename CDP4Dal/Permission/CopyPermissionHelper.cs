@@ -201,7 +201,7 @@ namespace CDP4Dal.Permission
 
             if (!this.permissionService.CanWrite(thingToCopy.ClassKind, targetContainer))
             {
-                permissionResult.errorList.Add(thingToCopy, string.Format("You do not have permission to copy the {0} with id {1}.", thingToCopy.ClassKind, thingToCopy.Iid));
+                permissionResult.errorList.Add(thingToCopy, $"You do not have permission to copy the {thingToCopy.ClassKind} with id {thingToCopy.Iid}.");
                 return;
             }
 
@@ -209,28 +209,28 @@ namespace CDP4Dal.Permission
             var requiredRdls = thingToCopy.RequiredRdls.ToList();
             if (this.availableRdls.Intersect(requiredRdls).Count() != requiredRdls.Count)
             {
-                permissionResult.errorList.Add(thingToCopy, string.Format("The copy operation cannot be performed for the {0} with id {1} as some required reference data libraries are missing in the target model.", thingToCopy.ClassKind, thingToCopy.Iid));
+                permissionResult.errorList.Add(thingToCopy, $"The copy operation cannot be performed for the {thingToCopy.ClassKind} with id {thingToCopy.Iid} as some required reference data libraries are missing in the target model.");
                 return;
             }
 
             var ownedThing = thingToCopy as IOwnedThing;
             if (ownedThing != null && !this.ownerIsChanged && !this.activeDomains.Contains(ownedThing.Owner))
             {
-                permissionResult.errorList.Add(thingToCopy, string.Format("The copy operation cannot be performed for the {0} with id {1}. The owner is not active in the target model", thingToCopy.ClassKind, thingToCopy.Iid));
+                permissionResult.errorList.Add(thingToCopy, $"The copy operation cannot be performed for the {thingToCopy.ClassKind} with id {thingToCopy.Iid}. The owner is not active in the target model");
                 return;
             }
 
             // compute copy dependencies, if fail, dont copy
             if (!this.ComputeDependenciesCopyPermission(thingToCopy, targetContainer, permissionResult))
             {
-                permissionResult.errorList.Add(thingToCopy, string.Format("The copy operation cannot be performed for the {0} with id {1}. Some of its dependencies cannot be copied.", thingToCopy.ClassKind, thingToCopy.Iid));
+                permissionResult.errorList.Add(thingToCopy, $"The copy operation cannot be performed for the {thingToCopy.ClassKind} with id {thingToCopy.Iid}. Some of its dependencies cannot be copied.");
                 return;
             }
 
             var subscription = thingToCopy as ParameterSubscription;
             if (subscription != null && this.ownerIsChanged && (subscription.Owner == this.changedOwner || !this.activeDomains.Contains(ownedThing.Owner)))
             {
-                permissionResult.errorList.Add(thingToCopy, string.Format("The parameter subscription {0} will not be copied. The owner of the subscribed parameter or override in the target destination is the same of the subscription or is not active in the target model.", thingToCopy.Iid));
+                permissionResult.errorList.Add(thingToCopy, $"The parameter subscription {thingToCopy.Iid} will not be copied. The owner of the subscribed parameter or override in the target destination is the same of the subscription or is not active in the target model.");
                 return;
             }
 

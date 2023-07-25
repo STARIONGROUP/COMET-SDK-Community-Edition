@@ -281,13 +281,13 @@ namespace CDP4Common.DTO
                         if (this.IsAuthorizedRoute(lastRouteClassKind, classKind))
                         {
                             var containerPropertyName = ContainerPropertyHelper.ContainerPropertyName(classKind);
-                            var partialRoute = string.Format("{0}/{1}", containerPropertyName, iid);
+                            var partialRoute = $"{containerPropertyName}/{iid}";
                             this.PartialRoutes.Add(partialRoute);
                             this.partialClassKindRoute.Add(classKind);
                             break;
                         }
 
-                        throw new InvalidOperationException(string.Format("the added container of classKind: {0} is not consistent with the existing route", classKind));
+                        throw new InvalidOperationException($"the added container of classKind: {classKind} is not consistent with the existing route");
                     }
             }
         }
@@ -305,14 +305,14 @@ namespace CDP4Common.DTO
             var containerRoute = string.Join("/", temporaryList);
 
             var containerPropertyName = ContainerPropertyHelper.ContainerPropertyName(this.ClassKind);
-            var partialRoute = string.Format("{0}/{1}", containerPropertyName, this.Iid);
+            var partialRoute = $"{containerPropertyName}/{this.Iid}";
 
             if (string.IsNullOrEmpty(containerRoute))
             {
                 return "/" + partialRoute;
             }
 
-            return string.Format("/{0}/{1}", containerRoute, partialRoute);
+            return $"/{containerRoute}/{partialRoute}";
         }
 
         /// <summary>
@@ -330,7 +330,7 @@ namespace CDP4Common.DTO
                 return classKind;
             }
 
-            throw new InvalidOperationException(string.Format("The current Thing {0} does not have a corresponding ClassKind", type));
+            throw new InvalidOperationException($"The current Thing {type} does not have a corresponding ClassKind");
         }
 
         /// <summary>
@@ -389,12 +389,12 @@ namespace CDP4Common.DTO
 
             if (!this.PartialRoutes.Any())
             {
-                throw new InvalidOperationException(string.Format("No valid top container found for DTO: {0}.", this.Iid));
+                throw new InvalidOperationException($"No valid top container found for DTO: {this.Iid}.");
             }
 
             if (temporaryList[0].Contains("SiteDirectory"))
             {
-                return string.Format("/{0}", temporaryList[0]);
+                return $"/{temporaryList[0]}";
             }
 
             if (temporaryList[0].Contains("EngineeringModel"))
@@ -403,13 +403,13 @@ namespace CDP4Common.DTO
                 if (temporaryList.Count == 1 || !temporaryList[1].Contains("iteration"))
                 {
                     // a thing that is directly under an EngineeringModel
-                    return string.Format("/{0}", temporaryList[0]);
+                    return $"/{temporaryList[0]}";
                 }
 
-                return string.Format("/{0}", string.Join("/", temporaryList.GetRange(0, 2)));
+                return $"/{string.Join("/", temporaryList.GetRange(0, 2))}";
             }
 
-            throw new InvalidOperationException(string.Format("No valid top container found for DTO: {0}.", this.Iid));
+            throw new InvalidOperationException($"No valid top container found for DTO: {this.Iid}.");
         }
 
         /// <summary>

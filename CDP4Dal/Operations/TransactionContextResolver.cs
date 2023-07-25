@@ -105,7 +105,7 @@ namespace CDP4Dal.Operations
                 }
             }
             
-            throw new IncompleteModelException(string.Format("The context of the {0}:{1} could not be determined.", thing.GetType().Name, thing.Iid));
+            throw new IncompleteModelException($"The context of the {thing.GetType().Name}:{thing.Iid} could not be determined.");
         }
 
         /// <summary>

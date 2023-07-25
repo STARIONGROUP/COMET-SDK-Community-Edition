@@ -318,7 +318,6 @@ namespace CDP4Dal.Tests.Permission
         }
 
         [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
         public void VerifyException5()
         {
             this.session.Setup(x => x.OpenIterations)

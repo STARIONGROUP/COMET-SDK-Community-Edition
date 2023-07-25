@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DtoFactory.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
@@ -204,7 +204,7 @@ namespace CDP4JsonSerializer
             Func<JObject, Thing> constructor;
             if (!DtoConstructorMap.TryGetValue(classKind, out constructor))
             {
-                throw new InvalidOperationException(string.Format("The dto resolver was not found for {0}", classKind));
+                throw new InvalidOperationException($"The dto resolver was not found for {classKind}");
             }
 
             return constructor(dataObject);

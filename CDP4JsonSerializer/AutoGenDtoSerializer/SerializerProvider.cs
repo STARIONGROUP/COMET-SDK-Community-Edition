@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file "SerializerProvider.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
 //
@@ -206,7 +206,7 @@ namespace CDP4JsonSerializer
             IThingSerializer serializer;
             if(!SerializerMap.TryGetValue(thing.ClassKind.ToString(), out serializer))
             {
-                throw new NotSupportedException(string.Format("The {0} class is not registered", thing.ClassKind));
+                throw new NotSupportedException($"The {thing.ClassKind} class is not registered");
             }
 
             return serializer.Serialize(thing);
@@ -222,7 +222,7 @@ namespace CDP4JsonSerializer
             IThingSerializer serializer;
             if(!SerializerMap.TryGetValue(classlessDto["ClassKind"].ToString(), out serializer))
             {
-                throw new NotSupportedException(string.Format("The {0} class is not registered", classlessDto["ClassKind"]));
+                throw new NotSupportedException($"The {classlessDto["ClassKind"]} class is not registered");
             }
 
             var jsonObject = new JObject();
