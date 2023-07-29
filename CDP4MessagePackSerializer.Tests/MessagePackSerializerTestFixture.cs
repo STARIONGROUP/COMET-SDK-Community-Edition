@@ -731,7 +731,7 @@ namespace CDP4MessagePackSerializer.Tests
         }
 
         [Test]
-        public async Task Verify_that_things_can_be_serialized_and_deserialized_using_stream()
+        public async Task Verify_that_things_can_be_serialized_and_deserialized_async_using_stream()
         {
             var cts = new CancellationTokenSource();
 
@@ -742,6 +742,22 @@ namespace CDP4MessagePackSerializer.Tests
             stream.Position = 0;
 
             var deserializedThings = await this.messagePackSerializer.DeserializeAsync(stream, cts.Token);
+
+            Assert.That(deserializedThings.Count(), Is.EqualTo(this.things.Count));
+
+            this.ThingAssertions(deserializedThings);
+        }
+
+        [Test]
+        public void Verify_that_things_can_be_serialized_and_deserialized_using_stream()
+        {
+            var stream = new MemoryStream();
+
+            this.messagePackSerializer.SerializeToStream(this.things, stream);
+
+            stream.Position = 0;
+
+            var deserializedThings = this.messagePackSerializer.Deserialize(stream);
 
             Assert.That(deserializedThings.Count(), Is.EqualTo(this.things.Count));
 

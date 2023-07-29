@@ -55,6 +55,20 @@ namespace CDP4MessagePackSerializer
         Task SerializeToStreamAsync(IEnumerable<Thing> things, Stream outputStream, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Serializes the <see cref="Thing"/>s to a <see cref="Stream"/>
+        /// </summary>
+        /// <param name="things">
+        /// The <see cref="Thing"/>s that are to be serialized.
+        /// </param>
+        /// <param name="outputStream">
+        /// The target output <see cref="Stream"/>.
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task"/>
+        /// </returns>
+        void SerializeToStream(IEnumerable<Thing> things, Stream outputStream);
+
+        /// <summary>
         /// Serializes the <see cref="Thing"/>s to a <see cref="IBufferWriter{Byte}"/>
         /// </summary>
         /// <param name="things">
@@ -69,7 +83,7 @@ namespace CDP4MessagePackSerializer
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        void SerializeToBufferWriter(IEnumerable<Thing> things, IBufferWriter<byte> writer, CancellationToken cancellationToken);
+        void SerializeToBufferWriter(IEnumerable<Thing> things, IBufferWriter<byte> writer, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously deserializes <see cref="IEnumerable{Thing}"/> from the <paramref name="contentStream"/>
@@ -84,5 +98,16 @@ namespace CDP4MessagePackSerializer
         /// The the deserialized collection of <see cref="Thing"/>.
         /// </returns>
         Task<IEnumerable<Thing>> DeserializeAsync(Stream contentStream, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Asynchronously deserializes <see cref="IEnumerable{Thing}"/> from the <paramref name="contentStream"/>
+        /// </summary>
+        /// <param name="contentStream">
+        /// A stream containing <see cref="Thing"/>s
+        /// </param>
+        /// <returns>
+        /// The the deserialized collection of <see cref="Thing"/>.
+        /// </returns>
+        IEnumerable<Thing> Deserialize(Stream contentStream);
     }
 }

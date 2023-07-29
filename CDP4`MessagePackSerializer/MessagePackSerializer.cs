@@ -83,14 +83,8 @@ namespace CDP4MessagePackSerializer
             {
                 throw new ArgumentNullException(nameof(outputStream), "outputstream may not be null");
             }
-            
-            var formatterResolver = CompositeResolver.Create(
-                ThingFormatterResolver.Instance,
-                StandardResolver.Instance);
 
-            var options = MessagePackSerializerOptions.Standard
-                .WithResolver(formatterResolver)
-                .WithOldSpec(false);
+            var options = this.CreateSerializerOptions();
 
             var payload = things.ToPayload();
 
@@ -101,6 +95,43 @@ namespace CDP4MessagePackSerializer
             sw.Stop();
 
             Logger.Debug("SerializeToStreamAsync finished in {0} [ms]", sw.ElapsedMilliseconds);
+        }
+
+        /// <summary>
+        /// Serializes the <see cref="Thing"/>s to a <see cref="Stream"/>
+        /// </summary>
+        /// <param name="things">
+        /// The <see cref="Thing"/>s that are to be serialized.
+        /// </param>
+        /// <param name="outputStream">
+        /// The target output <see cref="Stream"/>.
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task"/>
+        /// </returns>
+        public void SerializeToStream(IEnumerable<Thing> things, Stream outputStream)
+        {
+            if (things == null)
+            {
+                throw new ArgumentNullException(nameof(things), "things may not be null");
+            }
+
+            if (outputStream == null)
+            {
+                throw new ArgumentNullException(nameof(outputStream), "outputstream may not be null");
+            }
+
+            var options = this.CreateSerializerOptions();
+
+            var payload = things.ToPayload();
+
+            var sw = Stopwatch.StartNew();
+
+            global::MessagePack.MessagePackSerializer.Serialize(outputStream, payload, options);
+
+            sw.Stop();
+
+            Logger.Debug("SerializeToStream finished in {0} [ms]", sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -118,7 +149,7 @@ namespace CDP4MessagePackSerializer
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        public void SerializeToBufferWriter(IEnumerable<Thing> things, IBufferWriter<byte> writer, CancellationToken cancellationToken)
+        public void SerializeToBufferWriter(IEnumerable<Thing> things, IBufferWriter<byte> writer, CancellationToken cancellationToken = default)
         {
             if (things == null)
             {
@@ -129,21 +160,15 @@ namespace CDP4MessagePackSerializer
             {
                 throw new ArgumentNullException(nameof(writer), "IBufferWriter may not be null");
             }
-            
-            var formatterResolver = CompositeResolver.Create(
-                ThingFormatterResolver.Instance,
-                StandardResolver.Instance);
 
-            var options = MessagePackSerializerOptions.Standard
-                .WithResolver(formatterResolver)
-                .WithOldSpec(false);
+            var options = this.CreateSerializerOptions();
 
             var payload = things.ToPayload();
 
             var sw = Stopwatch.StartNew();
 
             global::MessagePack.MessagePackSerializer.Serialize(writer, payload, options, cancellationToken);
-
+            
             sw.Stop();
 
             Logger.Debug("SerializeToStreamAsync finished in {0} [ms]", sw.ElapsedMilliseconds);
@@ -163,13 +188,7 @@ namespace CDP4MessagePackSerializer
         /// </returns>
         public async Task<IEnumerable<Thing>> DeserializeAsync(Stream contentStream, CancellationToken cancellationToken)
         {
-            var formatterResolver = CompositeResolver.Create(
-                ThingFormatterResolver.Instance,
-                StandardResolver.Instance);
-
-            var options = MessagePackSerializerOptions.Standard
-                .WithResolver(formatterResolver)
-                .WithOldSpec(false);
+            var options = this.CreateSerializerOptions();
 
             var sw = Stopwatch.StartNew();
 
@@ -182,6 +201,51 @@ namespace CDP4MessagePackSerializer
             var result = payload.ToThings();
 
             return result;
+        }
+
+        /// <summary>
+        /// Asynchronously deserializes <see cref="IEnumerable{Thing}"/> from the <paramref name="contentStream"/>
+        /// </summary>
+        /// <param name="contentStream">
+        /// A stream containing <see cref="Thing"/>s
+        /// </param>
+        /// <returns>
+        /// The the deserialized collection of <see cref="Thing"/>.
+        /// </returns>
+        public IEnumerable<Thing> Deserialize(Stream contentStream)
+        {
+            var options = this.CreateSerializerOptions();
+
+            var sw = Stopwatch.StartNew();
+
+            var payload =  global::MessagePack.MessagePackSerializer.Deserialize<Payload>(contentStream, options);
+
+            sw.Stop();
+
+            Logger.Debug("DeserializeAsync finished in {0} [ms]", sw.ElapsedMilliseconds);
+
+            var result = payload.ToThings();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Creates an instance of the <see cref="MessagePackSerializerOptions"/> 
+        /// </summary>
+        /// <returns>
+        /// An instance of <see cref="MessagePackSerializerOptions"/>
+        /// </returns>
+        private MessagePackSerializerOptions CreateSerializerOptions()
+        {
+            var formatterResolver = CompositeResolver.Create(
+                ThingFormatterResolver.Instance,
+                StandardResolver.Instance);
+
+            var options = MessagePackSerializerOptions.Standard
+                .WithResolver(formatterResolver)
+                .WithOldSpec(false);
+
+            return options;
         }
     }
 }
