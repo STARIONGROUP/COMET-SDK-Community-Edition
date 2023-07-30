@@ -731,6 +731,54 @@ namespace CDP4MessagePackSerializer.Tests
         }
 
         [Test]
+        public void Verify_that_SerializeToStream_throws_argumentexceptions()
+        {
+            Assert.That(() => this.messagePackSerializer.SerializeToStream(null, null),
+                Throws.Exception.TypeOf<ArgumentNullException>());
+
+            Assert.That(() => this.messagePackSerializer.SerializeToStream(new List<Thing>(), null),
+                Throws.Exception.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
+        public void Verify_that_SerializeToStreamAsync_throws_argumentexceptions()
+        {
+            var cts = new CancellationTokenSource();
+
+            Assert.That(async () => await this.messagePackSerializer.SerializeToStreamAsync(null, null, cts.Token),
+                Throws.Exception.TypeOf<ArgumentNullException>());
+
+            Assert.That(async () => await this.messagePackSerializer.SerializeToStreamAsync(new List<Thing>(), null, cts.Token),
+                Throws.Exception.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
+        public void Verify_that_SerializeToBufferWriter_throws_argumentexceptions()
+        {
+            var cts = new CancellationTokenSource();
+
+            Assert.That(() =>  this.messagePackSerializer.SerializeToBufferWriter(null, null, cts.Token),
+                Throws.Exception.TypeOf<ArgumentNullException>());
+
+            Assert.That( () => this.messagePackSerializer.SerializeToBufferWriter(new List<Thing>(), null, cts.Token),
+                Throws.Exception.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
+        public void Verify_that_Deserialize_throws_argumentexceptions()
+        {
+            Assert.That(() => this.messagePackSerializer.Deserialize(null), Throws.Exception.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
+        public void Verify_that_DeserializeAsync_throws_argumentexceptions()
+        {
+            var cts = new CancellationTokenSource();
+
+            Assert.That(async () => await this.messagePackSerializer.DeserializeAsync(null, cts.Token), Throws.Exception.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
         public async Task Verify_that_things_can_be_serialized_and_deserialized_async_using_stream()
         {
             var cts = new CancellationTokenSource();

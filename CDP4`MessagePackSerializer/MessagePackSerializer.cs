@@ -188,6 +188,11 @@ namespace CDP4MessagePackSerializer
         /// </returns>
         public async Task<IEnumerable<Thing>> DeserializeAsync(Stream contentStream, CancellationToken cancellationToken)
         {
+            if (contentStream == null)
+            {
+                throw new ArgumentNullException(nameof(contentStream), "Stream may not be null");
+            }
+
             var options = this.CreateSerializerOptions();
 
             var sw = Stopwatch.StartNew();
@@ -214,6 +219,11 @@ namespace CDP4MessagePackSerializer
         /// </returns>
         public IEnumerable<Thing> Deserialize(Stream contentStream)
         {
+            if (contentStream == null)
+            {
+                throw new ArgumentNullException(nameof(contentStream), "Stream may not be null");
+            }
+
             var options = this.CreateSerializerOptions();
 
             var sw = Stopwatch.StartNew();
