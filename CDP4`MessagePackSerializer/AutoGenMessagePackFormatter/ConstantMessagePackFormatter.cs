@@ -53,8 +53,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -68,6 +70,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ConstantMessagePackFormatter : IMessagePackFormatter<Constant>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="Constant"/> DTO.
         /// </summary>
@@ -93,22 +105,22 @@ namespace CDP4MessagePackSerializer
             writer.Write(constant.RevisionNumber);
 
             writer.WriteArrayHeader(constant.Alias.Count);
-            foreach (var identifier in constant.Alias)
+            foreach (var identifier in constant.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(constant.Category.Count);
-            foreach (var identifier in constant.Category)
+            foreach (var identifier in constant.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(constant.Definition.Count);
-            foreach (var identifier in constant.Definition)
+            foreach (var identifier in constant.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(constant.HyperLink.Count);
-            foreach (var identifier in constant.HyperLink)
+            foreach (var identifier in constant.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -130,12 +142,12 @@ namespace CDP4MessagePackSerializer
                 writer.Write(valueArrayItem);
             }
             writer.WriteArrayHeader(constant.ExcludedDomain.Count);
-            foreach (var identifier in constant.ExcludedDomain)
+            foreach (var identifier in constant.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(constant.ExcludedPerson.Count);
-            foreach (var identifier in constant.ExcludedPerson)
+            foreach (var identifier in constant.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

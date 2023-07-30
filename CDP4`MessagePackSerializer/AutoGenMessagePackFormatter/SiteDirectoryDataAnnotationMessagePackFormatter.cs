@@ -50,8 +50,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -65,6 +67,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class SiteDirectoryDataAnnotationMessagePackFormatter : IMessagePackFormatter<SiteDirectoryDataAnnotation>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="SiteDirectoryDataAnnotation"/> DTO.
         /// </summary>
@@ -93,17 +105,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(siteDirectoryDataAnnotation.Content);
             writer.Write(siteDirectoryDataAnnotation.CreatedOn);
             writer.WriteArrayHeader(siteDirectoryDataAnnotation.Discussion.Count);
-            foreach (var identifier in siteDirectoryDataAnnotation.Discussion)
+            foreach (var identifier in siteDirectoryDataAnnotation.Discussion.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectoryDataAnnotation.ExcludedDomain.Count);
-            foreach (var identifier in siteDirectoryDataAnnotation.ExcludedDomain)
+            foreach (var identifier in siteDirectoryDataAnnotation.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectoryDataAnnotation.ExcludedPerson.Count);
-            foreach (var identifier in siteDirectoryDataAnnotation.ExcludedPerson)
+            foreach (var identifier in siteDirectoryDataAnnotation.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -111,7 +123,7 @@ namespace CDP4MessagePackSerializer
             writer.Write(siteDirectoryDataAnnotation.ModifiedOn);
             writer.Write(siteDirectoryDataAnnotation.PrimaryAnnotatedThing.ToByteArray());
             writer.WriteArrayHeader(siteDirectoryDataAnnotation.RelatedThing.Count);
-            foreach (var identifier in siteDirectoryDataAnnotation.RelatedThing)
+            foreach (var identifier in siteDirectoryDataAnnotation.RelatedThing.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

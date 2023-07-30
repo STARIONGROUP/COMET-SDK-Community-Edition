@@ -59,8 +59,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -74,6 +76,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class RatioScaleMessagePackFormatter : IMessagePackFormatter<RatioScale>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="RatioScale"/> DTO.
         /// </summary>
@@ -99,17 +111,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(ratioScale.RevisionNumber);
 
             writer.WriteArrayHeader(ratioScale.Alias.Count);
-            foreach (var identifier in ratioScale.Alias)
+            foreach (var identifier in ratioScale.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ratioScale.Definition.Count);
-            foreach (var identifier in ratioScale.Definition)
+            foreach (var identifier in ratioScale.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ratioScale.HyperLink.Count);
-            foreach (var identifier in ratioScale.HyperLink)
+            foreach (var identifier in ratioScale.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -117,7 +129,7 @@ namespace CDP4MessagePackSerializer
             writer.Write(ratioScale.IsMaximumInclusive);
             writer.Write(ratioScale.IsMinimumInclusive);
             writer.WriteArrayHeader(ratioScale.MappingToReferenceScale.Count);
-            foreach (var identifier in ratioScale.MappingToReferenceScale)
+            foreach (var identifier in ratioScale.MappingToReferenceScale.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -130,17 +142,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(ratioScale.ShortName);
             writer.Write(ratioScale.Unit.ToByteArray());
             writer.WriteArrayHeader(ratioScale.ValueDefinition.Count);
-            foreach (var identifier in ratioScale.ValueDefinition)
+            foreach (var identifier in ratioScale.ValueDefinition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ratioScale.ExcludedDomain.Count);
-            foreach (var identifier in ratioScale.ExcludedDomain)
+            foreach (var identifier in ratioScale.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ratioScale.ExcludedPerson.Count);
-            foreach (var identifier in ratioScale.ExcludedPerson)
+            foreach (var identifier in ratioScale.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

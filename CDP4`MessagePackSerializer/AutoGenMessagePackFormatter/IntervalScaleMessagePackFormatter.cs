@@ -59,8 +59,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -74,6 +76,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class IntervalScaleMessagePackFormatter : IMessagePackFormatter<IntervalScale>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="IntervalScale"/> DTO.
         /// </summary>
@@ -99,17 +111,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(intervalScale.RevisionNumber);
 
             writer.WriteArrayHeader(intervalScale.Alias.Count);
-            foreach (var identifier in intervalScale.Alias)
+            foreach (var identifier in intervalScale.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(intervalScale.Definition.Count);
-            foreach (var identifier in intervalScale.Definition)
+            foreach (var identifier in intervalScale.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(intervalScale.HyperLink.Count);
-            foreach (var identifier in intervalScale.HyperLink)
+            foreach (var identifier in intervalScale.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -117,7 +129,7 @@ namespace CDP4MessagePackSerializer
             writer.Write(intervalScale.IsMaximumInclusive);
             writer.Write(intervalScale.IsMinimumInclusive);
             writer.WriteArrayHeader(intervalScale.MappingToReferenceScale.Count);
-            foreach (var identifier in intervalScale.MappingToReferenceScale)
+            foreach (var identifier in intervalScale.MappingToReferenceScale.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -130,17 +142,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(intervalScale.ShortName);
             writer.Write(intervalScale.Unit.ToByteArray());
             writer.WriteArrayHeader(intervalScale.ValueDefinition.Count);
-            foreach (var identifier in intervalScale.ValueDefinition)
+            foreach (var identifier in intervalScale.ValueDefinition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(intervalScale.ExcludedDomain.Count);
-            foreach (var identifier in intervalScale.ExcludedDomain)
+            foreach (var identifier in intervalScale.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(intervalScale.ExcludedPerson.Count);
-            foreach (var identifier in intervalScale.ExcludedPerson)
+            foreach (var identifier in intervalScale.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

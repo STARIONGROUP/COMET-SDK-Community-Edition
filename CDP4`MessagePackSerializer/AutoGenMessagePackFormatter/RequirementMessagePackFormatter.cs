@@ -54,8 +54,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -69,6 +71,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class RequirementMessagePackFormatter : IMessagePackFormatter<Requirement>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="Requirement"/> DTO.
         /// </summary>
@@ -94,17 +106,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(requirement.RevisionNumber);
 
             writer.WriteArrayHeader(requirement.Alias.Count);
-            foreach (var identifier in requirement.Alias)
+            foreach (var identifier in requirement.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requirement.Category.Count);
-            foreach (var identifier in requirement.Category)
+            foreach (var identifier in requirement.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requirement.Definition.Count);
-            foreach (var identifier in requirement.Definition)
+            foreach (var identifier in requirement.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -117,7 +129,7 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(requirement.HyperLink.Count);
-            foreach (var identifier in requirement.HyperLink)
+            foreach (var identifier in requirement.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -125,25 +137,25 @@ namespace CDP4MessagePackSerializer
             writer.Write(requirement.Name);
             writer.Write(requirement.Owner.ToByteArray());
             writer.WriteArrayHeader(requirement.ParameterValue.Count);
-            foreach (var identifier in requirement.ParameterValue)
+            foreach (var identifier in requirement.ParameterValue.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requirement.ParametricConstraint.Count);
-            foreach (var orderedItem in requirement.ParametricConstraint)
+            foreach (var orderedItem in requirement.ParametricConstraint.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.Write(requirement.ShortName);
             writer.WriteArrayHeader(requirement.ExcludedDomain.Count);
-            foreach (var identifier in requirement.ExcludedDomain)
+            foreach (var identifier in requirement.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requirement.ExcludedPerson.Count);
-            foreach (var identifier in requirement.ExcludedPerson)
+            foreach (var identifier in requirement.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -253,7 +265,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             requirement.ParametricConstraint.Add(orderedItem);
                         }
                         break;

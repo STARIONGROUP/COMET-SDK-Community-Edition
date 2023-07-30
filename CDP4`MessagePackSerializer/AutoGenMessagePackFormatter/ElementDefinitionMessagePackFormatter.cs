@@ -55,8 +55,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -70,6 +72,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ElementDefinitionMessagePackFormatter : IMessagePackFormatter<ElementDefinition>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ElementDefinition"/> DTO.
         /// </summary>
@@ -95,61 +107,61 @@ namespace CDP4MessagePackSerializer
             writer.Write(elementDefinition.RevisionNumber);
 
             writer.WriteArrayHeader(elementDefinition.Alias.Count);
-            foreach (var identifier in elementDefinition.Alias)
+            foreach (var identifier in elementDefinition.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementDefinition.Category.Count);
-            foreach (var identifier in elementDefinition.Category)
+            foreach (var identifier in elementDefinition.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementDefinition.ContainedElement.Count);
-            foreach (var identifier in elementDefinition.ContainedElement)
+            foreach (var identifier in elementDefinition.ContainedElement.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementDefinition.Definition.Count);
-            foreach (var identifier in elementDefinition.Definition)
+            foreach (var identifier in elementDefinition.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementDefinition.HyperLink.Count);
-            foreach (var identifier in elementDefinition.HyperLink)
+            foreach (var identifier in elementDefinition.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(elementDefinition.Name);
             writer.Write(elementDefinition.Owner.ToByteArray());
             writer.WriteArrayHeader(elementDefinition.Parameter.Count);
-            foreach (var identifier in elementDefinition.Parameter)
+            foreach (var identifier in elementDefinition.Parameter.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementDefinition.ParameterGroup.Count);
-            foreach (var identifier in elementDefinition.ParameterGroup)
+            foreach (var identifier in elementDefinition.ParameterGroup.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementDefinition.ReferencedElement.Count);
-            foreach (var identifier in elementDefinition.ReferencedElement)
+            foreach (var identifier in elementDefinition.ReferencedElement.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(elementDefinition.ShortName);
             writer.WriteArrayHeader(elementDefinition.ExcludedDomain.Count);
-            foreach (var identifier in elementDefinition.ExcludedDomain)
+            foreach (var identifier in elementDefinition.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementDefinition.ExcludedPerson.Count);
-            foreach (var identifier in elementDefinition.ExcludedPerson)
+            foreach (var identifier in elementDefinition.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(elementDefinition.ModifiedOn);
             writer.WriteArrayHeader(elementDefinition.OrganizationalParticipant.Count);
-            foreach (var identifier in elementDefinition.OrganizationalParticipant)
+            foreach (var identifier in elementDefinition.OrganizationalParticipant.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

@@ -62,8 +62,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -77,6 +79,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class ActionItemMessagePackFormatter : IMessagePackFormatter<ActionItem>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ActionItem"/> DTO.
         /// </summary>
@@ -103,13 +115,13 @@ namespace CDP4MessagePackSerializer
 
             writer.Write(actionItem.Actionee.ToByteArray());
             writer.WriteArrayHeader(actionItem.ApprovedBy.Count);
-            foreach (var identifier in actionItem.ApprovedBy)
+            foreach (var identifier in actionItem.ApprovedBy.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(actionItem.Author.ToByteArray());
             writer.WriteArrayHeader(actionItem.Category.Count);
-            foreach (var identifier in actionItem.Category)
+            foreach (var identifier in actionItem.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -126,18 +138,18 @@ namespace CDP4MessagePackSerializer
             writer.Write(actionItem.Content);
             writer.Write(actionItem.CreatedOn);
             writer.WriteArrayHeader(actionItem.Discussion.Count);
-            foreach (var identifier in actionItem.Discussion)
+            foreach (var identifier in actionItem.Discussion.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(actionItem.DueDate);
             writer.WriteArrayHeader(actionItem.ExcludedDomain.Count);
-            foreach (var identifier in actionItem.ExcludedDomain)
+            foreach (var identifier in actionItem.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(actionItem.ExcludedPerson.Count);
-            foreach (var identifier in actionItem.ExcludedPerson)
+            foreach (var identifier in actionItem.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -153,13 +165,13 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(actionItem.RelatedThing.Count);
-            foreach (var identifier in actionItem.RelatedThing)
+            foreach (var identifier in actionItem.RelatedThing.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(actionItem.ShortName);
             writer.WriteArrayHeader(actionItem.SourceAnnotation.Count);
-            foreach (var identifier in actionItem.SourceAnnotation)
+            foreach (var identifier in actionItem.SourceAnnotation.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

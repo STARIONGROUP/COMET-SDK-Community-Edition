@@ -25,7 +25,6 @@
 namespace CDP4MessagePackSerializer.Tests
 {
     using System;
-    using System.Buffers;
     using System.Collections.Generic;
     using System.IO;
     using System.IO.Pipelines;
@@ -35,10 +34,13 @@ namespace CDP4MessagePackSerializer.Tests
 
     using Castle.Components.DictionaryAdapter;
 
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
+    using CDP4Common.MetaInfo;
     using CDP4Common.Types;
 
     using CDP4MessagePackSerializer;
+    using CDP4JsonSerializer;
 
     using NUnit.Framework;
 
@@ -52,6 +54,8 @@ namespace CDP4MessagePackSerializer.Tests
     using ElementDefinition = CDP4Common.DTO.ElementDefinition;
     using Parameter = CDP4Common.DTO.Parameter;
     using Thing = CDP4Common.DTO.Thing;
+    using System.Diagnostics;
+    using static System.Net.Mime.MediaTypeNames;
 
     /// <summary>
     /// Suite of tests for the <see cref="MessagePackSerializer"/> class
@@ -121,7 +125,7 @@ namespace CDP4MessagePackSerializer.Tests
                     new OrderedItem()
                     {
                         K = 1,
-                        V = Guid.Parse("62290849-4f48-4679-abfc-2f7b4d80f4f0")
+                        V = "62290849-4f48-4679-abfc-2f7b4d80f4f0"
                     }
                 },
                 ExcludedDomain = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
@@ -148,12 +152,12 @@ namespace CDP4MessagePackSerializer.Tests
                     new OrderedItem()
                     {
                         K = 1,
-                        V = Guid.Parse("73c2851f-b00d-4f2f-937b-313102dcd867")
+                        V = "73c2851f-b00d-4f2f-937b-313102dcd867"
                     },
                     new OrderedItem()
                     {
                         K = 2,
-                        V = Guid.Parse("3e088bac-6ccb-43a8-9efb-af657db7895e")
+                        V = "3e088bac-6ccb-43a8-9efb-af657db7895e"
                     }
                 },
                 Definition = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
@@ -162,7 +166,7 @@ namespace CDP4MessagePackSerializer.Tests
                     new OrderedItem()
                     {
                         K = 1,
-                        V = 99
+                        V = "99"
                     }
                 },
                 HyperLink = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
@@ -230,12 +234,12 @@ namespace CDP4MessagePackSerializer.Tests
                     new OrderedItem()
                     {
                         K = 1,
-                        V = Guid.Parse("6e346cc9-f296-4403-afe9-1b10367a2656")
+                        V = "6e346cc9-f296-4403-afe9-1b10367a2656"
                     },
                     new OrderedItem()
                     {
                         K = 2,
-                        V = Guid.Parse("d2ec9df3-cdc3-4ee6-a13d-928ffcd0dc66")
+                        V = "d2ec9df3-cdc3-4ee6-a13d-928ffcd0dc66"
                     }
                 },
                 Definition = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
@@ -326,12 +330,12 @@ namespace CDP4MessagePackSerializer.Tests
                     new OrderedItem()
                     {
                         K = 2,
-                        V = Guid.Parse("cc64732f-383c-4d2b-aca9-ab5d8dd8ad67")
+                        V = "cc64732f-383c-4d2b-aca9-ab5d8dd8ad67"
                     },
                     new OrderedItem()
                     {
                         K = 5,
-                        V = Guid.Parse("b510eb1a-33a3-4779-8e85-60e08c7e4d40")
+                        V = "b510eb1a-33a3-4779-8e85-60e08c7e4d40"
                     }
                 },
                 ExcludedDomain = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
@@ -381,7 +385,7 @@ namespace CDP4MessagePackSerializer.Tests
                     new OrderedItem()
                     {
                         K = 1,
-                        V = Guid.Parse("efcbfa3c-4f91-4abc-bbf4-5b83cb6b15b7")
+                        V = "efcbfa3c-4f91-4abc-bbf4-5b83cb6b15b7"
                     }
                 },
                 ExcludedDomain = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
@@ -412,7 +416,7 @@ namespace CDP4MessagePackSerializer.Tests
                     new OrderedItem()
                     {
                         K = 1,
-                        V = Guid.Parse("2b4fa102-2d4a-4ce5-92b4-3996177129b7")
+                        V = "2b4fa102-2d4a-4ce5-92b4-3996177129b7"
                     }
                 },
                 PossibleFiniteStateList = new List<Guid>() { Guid.NewGuid() },
@@ -589,7 +593,7 @@ namespace CDP4MessagePackSerializer.Tests
                     new OrderedItem()
                     {
                         K = 1,
-                        V = Guid.Parse("59134117-3b79-494e-94b1-11ed9249f22f")
+                        V = "59134117-3b79-494e-94b1-11ed9249f22f"
                     }
                 },
                 HyperLink = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
@@ -598,7 +602,7 @@ namespace CDP4MessagePackSerializer.Tests
                     new OrderedItem()
                     {
                         K = 1,
-                        V = Guid.Parse("a0a64d3b-937b-492d-9df1-0644ef3ebf3a")
+                        V = "a0a64d3b-937b-492d-9df1-0644ef3ebf3a"
                     }
                 },
                 InterpolationPeriod = new ValueArray<string>(new List<string> { "value1", "value2" }),
@@ -642,7 +646,7 @@ namespace CDP4MessagePackSerializer.Tests
                     new OrderedItem()
                     {
                         K = 1,
-                        V = Guid.Parse("1a6b5440-0a92-4daf-9765-5c38ff1ee9ac")
+                        V = "1a6b5440-0a92-4daf-9765-5c38ff1ee9ac"
                     }
                 },
                 BaseUnit = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
@@ -843,7 +847,7 @@ namespace CDP4MessagePackSerializer.Tests
 
             var actualFiniteStateList = deserializedThings.OfType<ActualFiniteStateList>().Single(x => x.Iid == Guid.Parse("80492750-b1e0-4db0-a80e-ef00cd148074"));
             var possibleFiniteState = actualFiniteStateList.PossibleFiniteStateList.Single(x => x.K == 1);
-            Assert.That(possibleFiniteState.V, Is.EqualTo(Guid.Parse("62290849-4f48-4679-abfc-2f7b4d80f4f0")));
+            Assert.That(possibleFiniteState.V, Is.EqualTo("62290849-4f48-4679-abfc-2f7b4d80f4f0"));
             
             var andExpression = deserializedThings.OfType<AndExpression>().Single(x => x.Iid == Guid.Parse("e9f82620-279c-4b10-9607-91bd8b78127c"));
             Assert.That(andExpression.ModifiedOn, Is.EqualTo(new DateTime(1976, 8, 20)));
@@ -851,10 +855,10 @@ namespace CDP4MessagePackSerializer.Tests
             var arrayParameterType = deserializedThings.OfType<ArrayParameterType>().Single(x => x.Iid == Guid.Parse("f7c2fa1e-39b4-4917-ba8f-235add46f41a"));
             Assert.That(arrayParameterType.Component.Count, Is.EqualTo(2));
             var component = arrayParameterType.Component.Single(x => x.K == 2);
-            Assert.That(component.V, Is.EqualTo(Guid.Parse("3e088bac-6ccb-43a8-9efb-af657db7895e")));
+            Assert.That(component.V, Is.EqualTo("3e088bac-6ccb-43a8-9efb-af657db7895e"));
             var dimension = arrayParameterType.Dimension.First();
             Assert.That(dimension.K, Is.EqualTo(1));
-            Assert.That(dimension.V, Is.EqualTo(99));
+            Assert.That(dimension.V, Is.EqualTo("99"));
 
             var category = deserializedThings.OfType<Category>().Single(x => x.Iid == Guid.Parse("233555ad-6700-4a7b-b9c8-9ffc50df7bfc"));
             Assert.That(category.IsAbstract, Is.True);
@@ -925,6 +929,73 @@ namespace CDP4MessagePackSerializer.Tests
                 }));
 
             var textualNote = deserializedThings.OfType<TextualNote>().Single(x => x.Iid == Guid.Parse("aa5988ad-6f34-477a-8afe-aae27b17624f"));
+        }
+
+        [TestCase("bigmodel")]
+        [TestCase("SiteDirectoryData")]
+        public void Verify_that_from_JSON_can_be_serialized_and_deserialized(string jsonFileName)
+        {
+            var metaDataProvider = new MetaDataProvider();
+            var jsonSerializer = new Cdp4JsonSerializer(metaDataProvider, new Version(1, 1, 0));
+
+            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Data/{jsonFileName}.json"));
+
+            List<Thing> jsonThings;
+
+            var sw = Stopwatch.StartNew();
+            using (var stream = GenerateStreamFromString(response))
+            {
+                jsonThings = new List<Thing>(jsonSerializer.Deserialize(stream));
+                Console.WriteLine($"JSON READ {jsonFileName}:{jsonThings.Count} in {sw.ElapsedMilliseconds} [ms]");
+                sw.Stop();
+            }
+
+            var memoryStream = new MemoryStream();
+
+            sw = Stopwatch.StartNew();
+            this.messagePackSerializer.SerializeToStream(jsonThings, memoryStream);
+            Console.WriteLine($"MESSAGEPACK WRITE {jsonFileName}:{jsonThings.Count} in {sw.ElapsedMilliseconds} [ms]");
+            
+            memoryStream.Position = 0;
+
+            sw = Stopwatch.StartNew();
+            var messagePackedThings = this.messagePackSerializer.Deserialize(memoryStream).ToList();
+            Console.WriteLine($"MESSAGEPACK READ {jsonFileName}:{messagePackedThings.Count()} in {sw.ElapsedMilliseconds} [ms]");
+            
+            memoryStream = new MemoryStream();
+            sw = Stopwatch.StartNew();
+            jsonSerializer.SerializeToStream(messagePackedThings,memoryStream);
+            Console.WriteLine($"JSON WRITE {jsonFileName}:{messagePackedThings.Count()} in {sw.ElapsedMilliseconds} [ms]");
+            
+            memoryStream.Position = 0;
+
+            using (var reader = new StreamReader(memoryStream))
+            {
+                var serializedJson = reader.ReadToEnd();
+
+                var path = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory,
+                    $"compare-{jsonFileName}.json");
+                System.IO.File.WriteAllText(path, serializedJson);
+            }
+        }
+
+        /// <summary>
+        /// Generates a <see cref="Stream"/> from a string
+        /// </summary>
+        /// <param name="s">
+        /// The string that is to be converted into a stram
+        /// </param>
+        /// <returns>
+        /// a <see cref="Stream"/> that contains the string
+        /// </returns>
+        private static Stream GenerateStreamFromString(string s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
     }
 }

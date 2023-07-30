@@ -60,8 +60,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -75,6 +77,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class SiteDirectoryMessagePackFormatter : IMessagePackFormatter<SiteDirectory>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="SiteDirectory"/> DTO.
         /// </summary>
@@ -117,70 +129,70 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(siteDirectory.Domain.Count);
-            foreach (var identifier in siteDirectory.Domain)
+            foreach (var identifier in siteDirectory.Domain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectory.DomainGroup.Count);
-            foreach (var identifier in siteDirectory.DomainGroup)
+            foreach (var identifier in siteDirectory.DomainGroup.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(siteDirectory.LastModifiedOn);
             writer.WriteArrayHeader(siteDirectory.LogEntry.Count);
-            foreach (var identifier in siteDirectory.LogEntry)
+            foreach (var identifier in siteDirectory.LogEntry.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectory.Model.Count);
-            foreach (var identifier in siteDirectory.Model)
+            foreach (var identifier in siteDirectory.Model.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(siteDirectory.Name);
             writer.WriteArrayHeader(siteDirectory.NaturalLanguage.Count);
-            foreach (var identifier in siteDirectory.NaturalLanguage)
+            foreach (var identifier in siteDirectory.NaturalLanguage.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectory.Organization.Count);
-            foreach (var identifier in siteDirectory.Organization)
+            foreach (var identifier in siteDirectory.Organization.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectory.ParticipantRole.Count);
-            foreach (var identifier in siteDirectory.ParticipantRole)
+            foreach (var identifier in siteDirectory.ParticipantRole.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectory.Person.Count);
-            foreach (var identifier in siteDirectory.Person)
+            foreach (var identifier in siteDirectory.Person.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectory.PersonRole.Count);
-            foreach (var identifier in siteDirectory.PersonRole)
+            foreach (var identifier in siteDirectory.PersonRole.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(siteDirectory.ShortName);
             writer.WriteArrayHeader(siteDirectory.SiteReferenceDataLibrary.Count);
-            foreach (var identifier in siteDirectory.SiteReferenceDataLibrary)
+            foreach (var identifier in siteDirectory.SiteReferenceDataLibrary.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectory.Annotation.Count);
-            foreach (var identifier in siteDirectory.Annotation)
+            foreach (var identifier in siteDirectory.Annotation.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectory.ExcludedDomain.Count);
-            foreach (var identifier in siteDirectory.ExcludedDomain)
+            foreach (var identifier in siteDirectory.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteDirectory.ExcludedPerson.Count);
-            foreach (var identifier in siteDirectory.ExcludedPerson)
+            foreach (var identifier in siteDirectory.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

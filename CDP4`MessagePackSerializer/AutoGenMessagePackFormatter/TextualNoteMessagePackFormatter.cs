@@ -50,8 +50,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -65,6 +67,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class TextualNoteMessagePackFormatter : IMessagePackFormatter<TextualNote>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="TextualNote"/> DTO.
         /// </summary>
@@ -90,19 +102,19 @@ namespace CDP4MessagePackSerializer
             writer.Write(textualNote.RevisionNumber);
 
             writer.WriteArrayHeader(textualNote.Category.Count);
-            foreach (var identifier in textualNote.Category)
+            foreach (var identifier in textualNote.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(textualNote.Content);
             writer.Write(textualNote.CreatedOn);
             writer.WriteArrayHeader(textualNote.ExcludedDomain.Count);
-            foreach (var identifier in textualNote.ExcludedDomain)
+            foreach (var identifier in textualNote.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(textualNote.ExcludedPerson.Count);
-            foreach (var identifier in textualNote.ExcludedPerson)
+            foreach (var identifier in textualNote.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

@@ -50,8 +50,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -65,6 +67,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class DomainOfExpertiseMessagePackFormatter : IMessagePackFormatter<DomainOfExpertise>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="DomainOfExpertise"/> DTO.
         /// </summary>
@@ -90,22 +102,22 @@ namespace CDP4MessagePackSerializer
             writer.Write(domainOfExpertise.RevisionNumber);
 
             writer.WriteArrayHeader(domainOfExpertise.Alias.Count);
-            foreach (var identifier in domainOfExpertise.Alias)
+            foreach (var identifier in domainOfExpertise.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(domainOfExpertise.Category.Count);
-            foreach (var identifier in domainOfExpertise.Category)
+            foreach (var identifier in domainOfExpertise.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(domainOfExpertise.Definition.Count);
-            foreach (var identifier in domainOfExpertise.Definition)
+            foreach (var identifier in domainOfExpertise.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(domainOfExpertise.HyperLink.Count);
-            foreach (var identifier in domainOfExpertise.HyperLink)
+            foreach (var identifier in domainOfExpertise.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -113,12 +125,12 @@ namespace CDP4MessagePackSerializer
             writer.Write(domainOfExpertise.Name);
             writer.Write(domainOfExpertise.ShortName);
             writer.WriteArrayHeader(domainOfExpertise.ExcludedDomain.Count);
-            foreach (var identifier in domainOfExpertise.ExcludedDomain)
+            foreach (var identifier in domainOfExpertise.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(domainOfExpertise.ExcludedPerson.Count);
-            foreach (var identifier in domainOfExpertise.ExcludedPerson)
+            foreach (var identifier in domainOfExpertise.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

@@ -60,8 +60,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -75,6 +77,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class OrdinalScaleMessagePackFormatter : IMessagePackFormatter<OrdinalScale>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="OrdinalScale"/> DTO.
         /// </summary>
@@ -100,17 +112,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(ordinalScale.RevisionNumber);
 
             writer.WriteArrayHeader(ordinalScale.Alias.Count);
-            foreach (var identifier in ordinalScale.Alias)
+            foreach (var identifier in ordinalScale.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ordinalScale.Definition.Count);
-            foreach (var identifier in ordinalScale.Definition)
+            foreach (var identifier in ordinalScale.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ordinalScale.HyperLink.Count);
-            foreach (var identifier in ordinalScale.HyperLink)
+            foreach (var identifier in ordinalScale.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -118,7 +130,7 @@ namespace CDP4MessagePackSerializer
             writer.Write(ordinalScale.IsMaximumInclusive);
             writer.Write(ordinalScale.IsMinimumInclusive);
             writer.WriteArrayHeader(ordinalScale.MappingToReferenceScale.Count);
-            foreach (var identifier in ordinalScale.MappingToReferenceScale)
+            foreach (var identifier in ordinalScale.MappingToReferenceScale.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -132,17 +144,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(ordinalScale.Unit.ToByteArray());
             writer.Write(ordinalScale.UseShortNameValues);
             writer.WriteArrayHeader(ordinalScale.ValueDefinition.Count);
-            foreach (var identifier in ordinalScale.ValueDefinition)
+            foreach (var identifier in ordinalScale.ValueDefinition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ordinalScale.ExcludedDomain.Count);
-            foreach (var identifier in ordinalScale.ExcludedDomain)
+            foreach (var identifier in ordinalScale.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ordinalScale.ExcludedPerson.Count);
-            foreach (var identifier in ordinalScale.ExcludedPerson)
+            foreach (var identifier in ordinalScale.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

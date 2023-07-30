@@ -61,8 +61,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -76,6 +78,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ModelReferenceDataLibraryMessagePackFormatter : IMessagePackFormatter<ModelReferenceDataLibrary>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ModelReferenceDataLibrary"/> DTO.
         /// </summary>
@@ -101,60 +113,60 @@ namespace CDP4MessagePackSerializer
             writer.Write(modelReferenceDataLibrary.RevisionNumber);
 
             writer.WriteArrayHeader(modelReferenceDataLibrary.Alias.Count);
-            foreach (var identifier in modelReferenceDataLibrary.Alias)
+            foreach (var identifier in modelReferenceDataLibrary.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.BaseQuantityKind.Count);
-            foreach (var orderedItem in modelReferenceDataLibrary.BaseQuantityKind)
+            foreach (var orderedItem in modelReferenceDataLibrary.BaseQuantityKind.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.BaseUnit.Count);
-            foreach (var identifier in modelReferenceDataLibrary.BaseUnit)
+            foreach (var identifier in modelReferenceDataLibrary.BaseUnit.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.Constant.Count);
-            foreach (var identifier in modelReferenceDataLibrary.Constant)
+            foreach (var identifier in modelReferenceDataLibrary.Constant.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.DefinedCategory.Count);
-            foreach (var identifier in modelReferenceDataLibrary.DefinedCategory)
+            foreach (var identifier in modelReferenceDataLibrary.DefinedCategory.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.Definition.Count);
-            foreach (var identifier in modelReferenceDataLibrary.Definition)
+            foreach (var identifier in modelReferenceDataLibrary.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.FileType.Count);
-            foreach (var identifier in modelReferenceDataLibrary.FileType)
+            foreach (var identifier in modelReferenceDataLibrary.FileType.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.Glossary.Count);
-            foreach (var identifier in modelReferenceDataLibrary.Glossary)
+            foreach (var identifier in modelReferenceDataLibrary.Glossary.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.HyperLink.Count);
-            foreach (var identifier in modelReferenceDataLibrary.HyperLink)
+            foreach (var identifier in modelReferenceDataLibrary.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(modelReferenceDataLibrary.Name);
             writer.WriteArrayHeader(modelReferenceDataLibrary.ParameterType.Count);
-            foreach (var identifier in modelReferenceDataLibrary.ParameterType)
+            foreach (var identifier in modelReferenceDataLibrary.ParameterType.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.ReferenceSource.Count);
-            foreach (var identifier in modelReferenceDataLibrary.ReferenceSource)
+            foreach (var identifier in modelReferenceDataLibrary.ReferenceSource.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -167,33 +179,33 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.Rule.Count);
-            foreach (var identifier in modelReferenceDataLibrary.Rule)
+            foreach (var identifier in modelReferenceDataLibrary.Rule.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.Scale.Count);
-            foreach (var identifier in modelReferenceDataLibrary.Scale)
+            foreach (var identifier in modelReferenceDataLibrary.Scale.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(modelReferenceDataLibrary.ShortName);
             writer.WriteArrayHeader(modelReferenceDataLibrary.Unit.Count);
-            foreach (var identifier in modelReferenceDataLibrary.Unit)
+            foreach (var identifier in modelReferenceDataLibrary.Unit.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.UnitPrefix.Count);
-            foreach (var identifier in modelReferenceDataLibrary.UnitPrefix)
+            foreach (var identifier in modelReferenceDataLibrary.UnitPrefix.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.ExcludedDomain.Count);
-            foreach (var identifier in modelReferenceDataLibrary.ExcludedDomain)
+            foreach (var identifier in modelReferenceDataLibrary.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelReferenceDataLibrary.ExcludedPerson.Count);
-            foreach (var identifier in modelReferenceDataLibrary.ExcludedPerson)
+            foreach (var identifier in modelReferenceDataLibrary.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -256,7 +268,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             modelReferenceDataLibrary.BaseQuantityKind.Add(orderedItem);
                         }
                         break;

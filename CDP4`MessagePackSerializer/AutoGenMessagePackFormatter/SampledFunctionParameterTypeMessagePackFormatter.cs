@@ -55,8 +55,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -70,6 +72,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.2.0")]
     public class SampledFunctionParameterTypeMessagePackFormatter : IMessagePackFormatter<SampledFunctionParameterType>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="SampledFunctionParameterType"/> DTO.
         /// </summary>
@@ -95,28 +107,28 @@ namespace CDP4MessagePackSerializer
             writer.Write(sampledFunctionParameterType.RevisionNumber);
 
             writer.WriteArrayHeader(sampledFunctionParameterType.ExcludedDomain.Count);
-            foreach (var identifier in sampledFunctionParameterType.ExcludedDomain)
+            foreach (var identifier in sampledFunctionParameterType.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(sampledFunctionParameterType.ExcludedPerson.Count);
-            foreach (var identifier in sampledFunctionParameterType.ExcludedPerson)
+            foreach (var identifier in sampledFunctionParameterType.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(sampledFunctionParameterType.ModifiedOn);
             writer.WriteArrayHeader(sampledFunctionParameterType.Alias.Count);
-            foreach (var identifier in sampledFunctionParameterType.Alias)
+            foreach (var identifier in sampledFunctionParameterType.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(sampledFunctionParameterType.Category.Count);
-            foreach (var identifier in sampledFunctionParameterType.Category)
+            foreach (var identifier in sampledFunctionParameterType.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(sampledFunctionParameterType.Definition.Count);
-            foreach (var identifier in sampledFunctionParameterType.Definition)
+            foreach (var identifier in sampledFunctionParameterType.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -129,23 +141,23 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(sampledFunctionParameterType.DependentParameterType.Count);
-            foreach (var orderedItem in sampledFunctionParameterType.DependentParameterType)
+            foreach (var orderedItem in sampledFunctionParameterType.DependentParameterType.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.WriteArrayHeader(sampledFunctionParameterType.HyperLink.Count);
-            foreach (var identifier in sampledFunctionParameterType.HyperLink)
+            foreach (var identifier in sampledFunctionParameterType.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(sampledFunctionParameterType.IndependentParameterType.Count);
-            foreach (var orderedItem in sampledFunctionParameterType.IndependentParameterType)
+            foreach (var orderedItem in sampledFunctionParameterType.IndependentParameterType.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.WriteArrayHeader(sampledFunctionParameterType.InterpolationPeriod.Count);
             foreach (var valueArrayItem in sampledFunctionParameterType.InterpolationPeriod)
@@ -255,7 +267,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             sampledFunctionParameterType.DependentParameterType.Add(orderedItem);
                         }
                         break;
@@ -273,7 +285,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             sampledFunctionParameterType.IndependentParameterType.Add(orderedItem);
                         }
                         break;

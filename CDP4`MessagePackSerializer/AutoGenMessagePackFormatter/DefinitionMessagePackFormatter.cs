@@ -48,8 +48,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -63,6 +65,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class DefinitionMessagePackFormatter : IMessagePackFormatter<Definition>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="Definition"/> DTO.
         /// </summary>
@@ -88,33 +100,33 @@ namespace CDP4MessagePackSerializer
             writer.Write(definition.RevisionNumber);
 
             writer.WriteArrayHeader(definition.Citation.Count);
-            foreach (var identifier in definition.Citation)
+            foreach (var identifier in definition.Citation.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(definition.Content);
             writer.WriteArrayHeader(definition.Example.Count);
-            foreach (var orderedItem in definition.Example)
+            foreach (var orderedItem in definition.Example.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write((int)orderedItem.V);
+                writer.Write(orderedItem.V.ToString());
             }
             writer.Write(definition.LanguageCode);
             writer.WriteArrayHeader(definition.Note.Count);
-            foreach (var orderedItem in definition.Note)
+            foreach (var orderedItem in definition.Note.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write((int)orderedItem.V);
+                writer.Write(orderedItem.V.ToString());
             }
             writer.WriteArrayHeader(definition.ExcludedDomain.Count);
-            foreach (var identifier in definition.ExcludedDomain)
+            foreach (var identifier in definition.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(definition.ExcludedPerson.Count);
-            foreach (var identifier in definition.ExcludedPerson)
+            foreach (var identifier in definition.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

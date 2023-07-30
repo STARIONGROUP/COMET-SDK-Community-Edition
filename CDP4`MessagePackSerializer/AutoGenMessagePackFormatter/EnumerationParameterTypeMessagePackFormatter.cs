@@ -53,8 +53,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -68,6 +70,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class EnumerationParameterTypeMessagePackFormatter : IMessagePackFormatter<EnumerationParameterType>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="EnumerationParameterType"/> DTO.
         /// </summary>
@@ -93,23 +105,23 @@ namespace CDP4MessagePackSerializer
             writer.Write(enumerationParameterType.RevisionNumber);
 
             writer.WriteArrayHeader(enumerationParameterType.Alias.Count);
-            foreach (var identifier in enumerationParameterType.Alias)
+            foreach (var identifier in enumerationParameterType.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(enumerationParameterType.AllowMultiSelect);
             writer.WriteArrayHeader(enumerationParameterType.Category.Count);
-            foreach (var identifier in enumerationParameterType.Category)
+            foreach (var identifier in enumerationParameterType.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(enumerationParameterType.Definition.Count);
-            foreach (var identifier in enumerationParameterType.Definition)
+            foreach (var identifier in enumerationParameterType.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(enumerationParameterType.HyperLink.Count);
-            foreach (var identifier in enumerationParameterType.HyperLink)
+            foreach (var identifier in enumerationParameterType.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -118,19 +130,19 @@ namespace CDP4MessagePackSerializer
             writer.Write(enumerationParameterType.ShortName);
             writer.Write(enumerationParameterType.Symbol);
             writer.WriteArrayHeader(enumerationParameterType.ValueDefinition.Count);
-            foreach (var orderedItem in enumerationParameterType.ValueDefinition)
+            foreach (var orderedItem in enumerationParameterType.ValueDefinition.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.WriteArrayHeader(enumerationParameterType.ExcludedDomain.Count);
-            foreach (var identifier in enumerationParameterType.ExcludedDomain)
+            foreach (var identifier in enumerationParameterType.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(enumerationParameterType.ExcludedPerson.Count);
-            foreach (var identifier in enumerationParameterType.ExcludedPerson)
+            foreach (var identifier in enumerationParameterType.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -229,7 +241,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             enumerationParameterType.ValueDefinition.Add(orderedItem);
                         }
                         break;

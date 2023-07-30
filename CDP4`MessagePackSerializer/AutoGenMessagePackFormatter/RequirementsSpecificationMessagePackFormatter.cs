@@ -54,8 +54,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -69,6 +71,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class RequirementsSpecificationMessagePackFormatter : IMessagePackFormatter<RequirementsSpecification>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="RequirementsSpecification"/> DTO.
         /// </summary>
@@ -94,22 +106,22 @@ namespace CDP4MessagePackSerializer
             writer.Write(requirementsSpecification.RevisionNumber);
 
             writer.WriteArrayHeader(requirementsSpecification.Alias.Count);
-            foreach (var identifier in requirementsSpecification.Alias)
+            foreach (var identifier in requirementsSpecification.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requirementsSpecification.Definition.Count);
-            foreach (var identifier in requirementsSpecification.Definition)
+            foreach (var identifier in requirementsSpecification.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requirementsSpecification.Group.Count);
-            foreach (var identifier in requirementsSpecification.Group)
+            foreach (var identifier in requirementsSpecification.Group.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requirementsSpecification.HyperLink.Count);
-            foreach (var identifier in requirementsSpecification.HyperLink)
+            foreach (var identifier in requirementsSpecification.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -117,29 +129,29 @@ namespace CDP4MessagePackSerializer
             writer.Write(requirementsSpecification.Name);
             writer.Write(requirementsSpecification.Owner.ToByteArray());
             writer.WriteArrayHeader(requirementsSpecification.Requirement.Count);
-            foreach (var identifier in requirementsSpecification.Requirement)
+            foreach (var identifier in requirementsSpecification.Requirement.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(requirementsSpecification.ShortName);
             writer.WriteArrayHeader(requirementsSpecification.Category.Count);
-            foreach (var identifier in requirementsSpecification.Category)
+            foreach (var identifier in requirementsSpecification.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requirementsSpecification.ExcludedDomain.Count);
-            foreach (var identifier in requirementsSpecification.ExcludedDomain)
+            foreach (var identifier in requirementsSpecification.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requirementsSpecification.ExcludedPerson.Count);
-            foreach (var identifier in requirementsSpecification.ExcludedPerson)
+            foreach (var identifier in requirementsSpecification.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(requirementsSpecification.ModifiedOn);
             writer.WriteArrayHeader(requirementsSpecification.ParameterValue.Count);
-            foreach (var identifier in requirementsSpecification.ParameterValue)
+            foreach (var identifier in requirementsSpecification.ParameterValue.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

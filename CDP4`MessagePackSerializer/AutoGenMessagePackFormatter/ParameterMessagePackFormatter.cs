@@ -54,8 +54,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -69,6 +71,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ParameterMessagePackFormatter : IMessagePackFormatter<Parameter>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="Parameter"/> DTO.
         /// </summary>
@@ -106,7 +118,7 @@ namespace CDP4MessagePackSerializer
             writer.Write(parameter.IsOptionDependent);
             writer.Write(parameter.Owner.ToByteArray());
             writer.WriteArrayHeader(parameter.ParameterSubscription.Count);
-            foreach (var identifier in parameter.ParameterSubscription)
+            foreach (var identifier in parameter.ParameterSubscription.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -136,17 +148,17 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(parameter.ValueSet.Count);
-            foreach (var identifier in parameter.ValueSet)
+            foreach (var identifier in parameter.ValueSet.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(parameter.ExcludedDomain.Count);
-            foreach (var identifier in parameter.ExcludedDomain)
+            foreach (var identifier in parameter.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(parameter.ExcludedPerson.Count);
-            foreach (var identifier in parameter.ExcludedPerson)
+            foreach (var identifier in parameter.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

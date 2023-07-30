@@ -46,8 +46,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -61,6 +63,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ParameterSubscriptionValueSetMessagePackFormatter : IMessagePackFormatter<ParameterSubscriptionValueSet>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ParameterSubscriptionValueSet"/> DTO.
         /// </summary>
@@ -93,12 +105,12 @@ namespace CDP4MessagePackSerializer
             writer.Write(parameterSubscriptionValueSet.SubscribedValueSet.ToByteArray());
             writer.Write(parameterSubscriptionValueSet.ValueSwitch.ToString());
             writer.WriteArrayHeader(parameterSubscriptionValueSet.ExcludedDomain.Count);
-            foreach (var identifier in parameterSubscriptionValueSet.ExcludedDomain)
+            foreach (var identifier in parameterSubscriptionValueSet.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(parameterSubscriptionValueSet.ExcludedPerson.Count);
-            foreach (var identifier in parameterSubscriptionValueSet.ExcludedPerson)
+            foreach (var identifier in parameterSubscriptionValueSet.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

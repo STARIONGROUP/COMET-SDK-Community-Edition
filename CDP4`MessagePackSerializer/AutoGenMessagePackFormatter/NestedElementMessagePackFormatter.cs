@@ -47,8 +47,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -62,6 +64,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class NestedElementMessagePackFormatter : IMessagePackFormatter<NestedElement>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="NestedElement"/> DTO.
         /// </summary>
@@ -87,26 +99,26 @@ namespace CDP4MessagePackSerializer
             writer.Write(nestedElement.RevisionNumber);
 
             writer.WriteArrayHeader(nestedElement.ElementUsage.Count);
-            foreach (var orderedItem in nestedElement.ElementUsage)
+            foreach (var orderedItem in nestedElement.ElementUsage.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.Write(nestedElement.IsVolatile);
             writer.WriteArrayHeader(nestedElement.NestedParameter.Count);
-            foreach (var identifier in nestedElement.NestedParameter)
+            foreach (var identifier in nestedElement.NestedParameter.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(nestedElement.RootElement.ToByteArray());
             writer.WriteArrayHeader(nestedElement.ExcludedDomain.Count);
-            foreach (var identifier in nestedElement.ExcludedDomain)
+            foreach (var identifier in nestedElement.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(nestedElement.ExcludedPerson.Count);
-            foreach (var identifier in nestedElement.ExcludedPerson)
+            foreach (var identifier in nestedElement.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -162,7 +174,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             nestedElement.ElementUsage.Add(orderedItem);
                         }
                         break;

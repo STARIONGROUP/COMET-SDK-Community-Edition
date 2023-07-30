@@ -58,8 +58,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -73,6 +75,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class RequestForDeviationMessagePackFormatter : IMessagePackFormatter<RequestForDeviation>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="RequestForDeviation"/> DTO.
         /// </summary>
@@ -98,13 +110,13 @@ namespace CDP4MessagePackSerializer
             writer.Write(requestForDeviation.RevisionNumber);
 
             writer.WriteArrayHeader(requestForDeviation.ApprovedBy.Count);
-            foreach (var identifier in requestForDeviation.ApprovedBy)
+            foreach (var identifier in requestForDeviation.ApprovedBy.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(requestForDeviation.Author.ToByteArray());
             writer.WriteArrayHeader(requestForDeviation.Category.Count);
-            foreach (var identifier in requestForDeviation.Category)
+            foreach (var identifier in requestForDeviation.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -112,17 +124,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(requestForDeviation.Content);
             writer.Write(requestForDeviation.CreatedOn);
             writer.WriteArrayHeader(requestForDeviation.Discussion.Count);
-            foreach (var identifier in requestForDeviation.Discussion)
+            foreach (var identifier in requestForDeviation.Discussion.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requestForDeviation.ExcludedDomain.Count);
-            foreach (var identifier in requestForDeviation.ExcludedDomain)
+            foreach (var identifier in requestForDeviation.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requestForDeviation.ExcludedPerson.Count);
-            foreach (var identifier in requestForDeviation.ExcludedPerson)
+            foreach (var identifier in requestForDeviation.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -138,13 +150,13 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(requestForDeviation.RelatedThing.Count);
-            foreach (var identifier in requestForDeviation.RelatedThing)
+            foreach (var identifier in requestForDeviation.RelatedThing.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(requestForDeviation.ShortName);
             writer.WriteArrayHeader(requestForDeviation.SourceAnnotation.Count);
-            foreach (var identifier in requestForDeviation.SourceAnnotation)
+            foreach (var identifier in requestForDeviation.SourceAnnotation.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

@@ -48,8 +48,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -63,6 +65,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class EnumerationValueDefinitionMessagePackFormatter : IMessagePackFormatter<EnumerationValueDefinition>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="EnumerationValueDefinition"/> DTO.
         /// </summary>
@@ -88,29 +100,29 @@ namespace CDP4MessagePackSerializer
             writer.Write(enumerationValueDefinition.RevisionNumber);
 
             writer.WriteArrayHeader(enumerationValueDefinition.Alias.Count);
-            foreach (var identifier in enumerationValueDefinition.Alias)
+            foreach (var identifier in enumerationValueDefinition.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(enumerationValueDefinition.Definition.Count);
-            foreach (var identifier in enumerationValueDefinition.Definition)
+            foreach (var identifier in enumerationValueDefinition.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(enumerationValueDefinition.HyperLink.Count);
-            foreach (var identifier in enumerationValueDefinition.HyperLink)
+            foreach (var identifier in enumerationValueDefinition.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(enumerationValueDefinition.Name);
             writer.Write(enumerationValueDefinition.ShortName);
             writer.WriteArrayHeader(enumerationValueDefinition.ExcludedDomain.Count);
-            foreach (var identifier in enumerationValueDefinition.ExcludedDomain)
+            foreach (var identifier in enumerationValueDefinition.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(enumerationValueDefinition.ExcludedPerson.Count);
-            foreach (var identifier in enumerationValueDefinition.ExcludedPerson)
+            foreach (var identifier in enumerationValueDefinition.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

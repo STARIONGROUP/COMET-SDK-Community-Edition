@@ -55,8 +55,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -70,6 +72,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class DerivedQuantityKindMessagePackFormatter : IMessagePackFormatter<DerivedQuantityKind>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="DerivedQuantityKind"/> DTO.
         /// </summary>
@@ -95,50 +107,50 @@ namespace CDP4MessagePackSerializer
             writer.Write(derivedQuantityKind.RevisionNumber);
 
             writer.WriteArrayHeader(derivedQuantityKind.Alias.Count);
-            foreach (var identifier in derivedQuantityKind.Alias)
+            foreach (var identifier in derivedQuantityKind.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(derivedQuantityKind.Category.Count);
-            foreach (var identifier in derivedQuantityKind.Category)
+            foreach (var identifier in derivedQuantityKind.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(derivedQuantityKind.DefaultScale.ToByteArray());
             writer.WriteArrayHeader(derivedQuantityKind.Definition.Count);
-            foreach (var identifier in derivedQuantityKind.Definition)
+            foreach (var identifier in derivedQuantityKind.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(derivedQuantityKind.HyperLink.Count);
-            foreach (var identifier in derivedQuantityKind.HyperLink)
+            foreach (var identifier in derivedQuantityKind.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(derivedQuantityKind.IsDeprecated);
             writer.Write(derivedQuantityKind.Name);
             writer.WriteArrayHeader(derivedQuantityKind.PossibleScale.Count);
-            foreach (var identifier in derivedQuantityKind.PossibleScale)
+            foreach (var identifier in derivedQuantityKind.PossibleScale.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(derivedQuantityKind.QuantityDimensionSymbol);
             writer.WriteArrayHeader(derivedQuantityKind.QuantityKindFactor.Count);
-            foreach (var orderedItem in derivedQuantityKind.QuantityKindFactor)
+            foreach (var orderedItem in derivedQuantityKind.QuantityKindFactor.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.Write(derivedQuantityKind.ShortName);
             writer.Write(derivedQuantityKind.Symbol);
             writer.WriteArrayHeader(derivedQuantityKind.ExcludedDomain.Count);
-            foreach (var identifier in derivedQuantityKind.ExcludedDomain)
+            foreach (var identifier in derivedQuantityKind.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(derivedQuantityKind.ExcludedPerson.Count);
-            foreach (var identifier in derivedQuantityKind.ExcludedPerson)
+            foreach (var identifier in derivedQuantityKind.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -241,7 +253,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             derivedQuantityKind.QuantityKindFactor.Add(orderedItem);
                         }
                         break;

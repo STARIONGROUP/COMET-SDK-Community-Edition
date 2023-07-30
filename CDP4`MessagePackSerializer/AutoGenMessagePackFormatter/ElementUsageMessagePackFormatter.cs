@@ -54,8 +54,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -69,6 +71,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ElementUsageMessagePackFormatter : IMessagePackFormatter<ElementUsage>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ElementUsage"/> DTO.
         /// </summary>
@@ -94,28 +106,28 @@ namespace CDP4MessagePackSerializer
             writer.Write(elementUsage.RevisionNumber);
 
             writer.WriteArrayHeader(elementUsage.Alias.Count);
-            foreach (var identifier in elementUsage.Alias)
+            foreach (var identifier in elementUsage.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementUsage.Category.Count);
-            foreach (var identifier in elementUsage.Category)
+            foreach (var identifier in elementUsage.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementUsage.Definition.Count);
-            foreach (var identifier in elementUsage.Definition)
+            foreach (var identifier in elementUsage.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(elementUsage.ElementDefinition.ToByteArray());
             writer.WriteArrayHeader(elementUsage.ExcludeOption.Count);
-            foreach (var identifier in elementUsage.ExcludeOption)
+            foreach (var identifier in elementUsage.ExcludeOption.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementUsage.HyperLink.Count);
-            foreach (var identifier in elementUsage.HyperLink)
+            foreach (var identifier in elementUsage.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -123,18 +135,18 @@ namespace CDP4MessagePackSerializer
             writer.Write(elementUsage.Name);
             writer.Write(elementUsage.Owner.ToByteArray());
             writer.WriteArrayHeader(elementUsage.ParameterOverride.Count);
-            foreach (var identifier in elementUsage.ParameterOverride)
+            foreach (var identifier in elementUsage.ParameterOverride.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(elementUsage.ShortName);
             writer.WriteArrayHeader(elementUsage.ExcludedDomain.Count);
-            foreach (var identifier in elementUsage.ExcludedDomain)
+            foreach (var identifier in elementUsage.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(elementUsage.ExcludedPerson.Count);
-            foreach (var identifier in elementUsage.ExcludedPerson)
+            foreach (var identifier in elementUsage.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

@@ -58,8 +58,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -73,6 +75,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class RequestForWaiverMessagePackFormatter : IMessagePackFormatter<RequestForWaiver>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="RequestForWaiver"/> DTO.
         /// </summary>
@@ -98,13 +110,13 @@ namespace CDP4MessagePackSerializer
             writer.Write(requestForWaiver.RevisionNumber);
 
             writer.WriteArrayHeader(requestForWaiver.ApprovedBy.Count);
-            foreach (var identifier in requestForWaiver.ApprovedBy)
+            foreach (var identifier in requestForWaiver.ApprovedBy.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(requestForWaiver.Author.ToByteArray());
             writer.WriteArrayHeader(requestForWaiver.Category.Count);
-            foreach (var identifier in requestForWaiver.Category)
+            foreach (var identifier in requestForWaiver.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -112,17 +124,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(requestForWaiver.Content);
             writer.Write(requestForWaiver.CreatedOn);
             writer.WriteArrayHeader(requestForWaiver.Discussion.Count);
-            foreach (var identifier in requestForWaiver.Discussion)
+            foreach (var identifier in requestForWaiver.Discussion.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requestForWaiver.ExcludedDomain.Count);
-            foreach (var identifier in requestForWaiver.ExcludedDomain)
+            foreach (var identifier in requestForWaiver.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(requestForWaiver.ExcludedPerson.Count);
-            foreach (var identifier in requestForWaiver.ExcludedPerson)
+            foreach (var identifier in requestForWaiver.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -138,13 +150,13 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(requestForWaiver.RelatedThing.Count);
-            foreach (var identifier in requestForWaiver.RelatedThing)
+            foreach (var identifier in requestForWaiver.RelatedThing.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(requestForWaiver.ShortName);
             writer.WriteArrayHeader(requestForWaiver.SourceAnnotation.Count);
-            foreach (var identifier in requestForWaiver.SourceAnnotation)
+            foreach (var identifier in requestForWaiver.SourceAnnotation.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

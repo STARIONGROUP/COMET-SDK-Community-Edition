@@ -54,8 +54,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -69,6 +71,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class StakeHolderValueMapMessagePackFormatter : IMessagePackFormatter<StakeHolderValueMap>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="StakeHolderValueMap"/> DTO.
         /// </summary>
@@ -94,60 +106,60 @@ namespace CDP4MessagePackSerializer
             writer.Write(stakeHolderValueMap.RevisionNumber);
 
             writer.WriteArrayHeader(stakeHolderValueMap.Alias.Count);
-            foreach (var identifier in stakeHolderValueMap.Alias)
+            foreach (var identifier in stakeHolderValueMap.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(stakeHolderValueMap.Category.Count);
-            foreach (var identifier in stakeHolderValueMap.Category)
+            foreach (var identifier in stakeHolderValueMap.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(stakeHolderValueMap.Definition.Count);
-            foreach (var identifier in stakeHolderValueMap.Definition)
+            foreach (var identifier in stakeHolderValueMap.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(stakeHolderValueMap.ExcludedDomain.Count);
-            foreach (var identifier in stakeHolderValueMap.ExcludedDomain)
+            foreach (var identifier in stakeHolderValueMap.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(stakeHolderValueMap.ExcludedPerson.Count);
-            foreach (var identifier in stakeHolderValueMap.ExcludedPerson)
+            foreach (var identifier in stakeHolderValueMap.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(stakeHolderValueMap.Goal.Count);
-            foreach (var identifier in stakeHolderValueMap.Goal)
+            foreach (var identifier in stakeHolderValueMap.Goal.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(stakeHolderValueMap.HyperLink.Count);
-            foreach (var identifier in stakeHolderValueMap.HyperLink)
+            foreach (var identifier in stakeHolderValueMap.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(stakeHolderValueMap.ModifiedOn);
             writer.Write(stakeHolderValueMap.Name);
             writer.WriteArrayHeader(stakeHolderValueMap.Requirement.Count);
-            foreach (var identifier in stakeHolderValueMap.Requirement)
+            foreach (var identifier in stakeHolderValueMap.Requirement.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(stakeHolderValueMap.Settings.Count);
-            foreach (var identifier in stakeHolderValueMap.Settings)
+            foreach (var identifier in stakeHolderValueMap.Settings.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(stakeHolderValueMap.ShortName);
             writer.WriteArrayHeader(stakeHolderValueMap.StakeholderValue.Count);
-            foreach (var identifier in stakeHolderValueMap.StakeholderValue)
+            foreach (var identifier in stakeHolderValueMap.StakeholderValue.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(stakeHolderValueMap.ValueGroup.Count);
-            foreach (var identifier in stakeHolderValueMap.ValueGroup)
+            foreach (var identifier in stakeHolderValueMap.ValueGroup.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

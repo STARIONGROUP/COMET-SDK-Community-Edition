@@ -49,8 +49,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -64,6 +66,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class PageMessagePackFormatter : IMessagePackFormatter<Page>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="Page"/> DTO.
         /// </summary>
@@ -89,29 +101,29 @@ namespace CDP4MessagePackSerializer
             writer.Write(page.RevisionNumber);
 
             writer.WriteArrayHeader(page.Category.Count);
-            foreach (var identifier in page.Category)
+            foreach (var identifier in page.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(page.CreatedOn);
             writer.WriteArrayHeader(page.ExcludedDomain.Count);
-            foreach (var identifier in page.ExcludedDomain)
+            foreach (var identifier in page.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(page.ExcludedPerson.Count);
-            foreach (var identifier in page.ExcludedPerson)
+            foreach (var identifier in page.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(page.ModifiedOn);
             writer.Write(page.Name);
             writer.WriteArrayHeader(page.Note.Count);
-            foreach (var orderedItem in page.Note)
+            foreach (var orderedItem in page.Note.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.Write(page.Owner.ToByteArray());
             writer.Write(page.ShortName);
@@ -196,7 +208,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             page.Note.Add(orderedItem);
                         }
                         break;

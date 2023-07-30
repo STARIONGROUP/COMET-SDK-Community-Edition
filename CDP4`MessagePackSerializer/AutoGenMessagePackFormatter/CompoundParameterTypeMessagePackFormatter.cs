@@ -53,8 +53,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -68,6 +70,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class CompoundParameterTypeMessagePackFormatter : IMessagePackFormatter<CompoundParameterType>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="CompoundParameterType"/> DTO.
         /// </summary>
@@ -93,29 +105,29 @@ namespace CDP4MessagePackSerializer
             writer.Write(compoundParameterType.RevisionNumber);
 
             writer.WriteArrayHeader(compoundParameterType.Alias.Count);
-            foreach (var identifier in compoundParameterType.Alias)
+            foreach (var identifier in compoundParameterType.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(compoundParameterType.Category.Count);
-            foreach (var identifier in compoundParameterType.Category)
+            foreach (var identifier in compoundParameterType.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(compoundParameterType.Component.Count);
-            foreach (var orderedItem in compoundParameterType.Component)
+            foreach (var orderedItem in compoundParameterType.Component.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.WriteArrayHeader(compoundParameterType.Definition.Count);
-            foreach (var identifier in compoundParameterType.Definition)
+            foreach (var identifier in compoundParameterType.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(compoundParameterType.HyperLink.Count);
-            foreach (var identifier in compoundParameterType.HyperLink)
+            foreach (var identifier in compoundParameterType.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -125,12 +137,12 @@ namespace CDP4MessagePackSerializer
             writer.Write(compoundParameterType.ShortName);
             writer.Write(compoundParameterType.Symbol);
             writer.WriteArrayHeader(compoundParameterType.ExcludedDomain.Count);
-            foreach (var identifier in compoundParameterType.ExcludedDomain)
+            foreach (var identifier in compoundParameterType.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(compoundParameterType.ExcludedPerson.Count);
-            foreach (var identifier in compoundParameterType.ExcludedPerson)
+            foreach (var identifier in compoundParameterType.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -200,7 +212,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             compoundParameterType.Component.Add(orderedItem);
                         }
                         break;

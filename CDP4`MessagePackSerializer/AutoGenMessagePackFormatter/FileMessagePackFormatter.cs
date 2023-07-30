@@ -47,8 +47,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -62,6 +64,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class FileMessagePackFormatter : IMessagePackFormatter<File>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="File"/> DTO.
         /// </summary>
@@ -87,12 +99,12 @@ namespace CDP4MessagePackSerializer
             writer.Write(file.RevisionNumber);
 
             writer.WriteArrayHeader(file.Category.Count);
-            foreach (var identifier in file.Category)
+            foreach (var identifier in file.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(file.FileRevision.Count);
-            foreach (var identifier in file.FileRevision)
+            foreach (var identifier in file.FileRevision.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -106,12 +118,12 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(file.Owner.ToByteArray());
             writer.WriteArrayHeader(file.ExcludedDomain.Count);
-            foreach (var identifier in file.ExcludedDomain)
+            foreach (var identifier in file.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(file.ExcludedPerson.Count);
-            foreach (var identifier in file.ExcludedPerson)
+            foreach (var identifier in file.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

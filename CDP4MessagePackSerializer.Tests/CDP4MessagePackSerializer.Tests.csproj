@@ -29,7 +29,17 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
       <ProjectReference Include="..\CDP4`MessagePackSerializer\CDP4MessagePackSerializer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Data\bigmodel.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Data\SiteDirectoryData.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

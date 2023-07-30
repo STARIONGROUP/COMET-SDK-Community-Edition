@@ -51,8 +51,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -66,6 +68,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class EngineeringModelMessagePackFormatter : IMessagePackFormatter<EngineeringModel>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="EngineeringModel"/> DTO.
         /// </summary>
@@ -91,46 +103,46 @@ namespace CDP4MessagePackSerializer
             writer.Write(engineeringModel.RevisionNumber);
 
             writer.WriteArrayHeader(engineeringModel.CommonFileStore.Count);
-            foreach (var identifier in engineeringModel.CommonFileStore)
+            foreach (var identifier in engineeringModel.CommonFileStore.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(engineeringModel.EngineeringModelSetup.ToByteArray());
             writer.WriteArrayHeader(engineeringModel.Iteration.Count);
-            foreach (var identifier in engineeringModel.Iteration)
+            foreach (var identifier in engineeringModel.Iteration.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(engineeringModel.LastModifiedOn);
             writer.WriteArrayHeader(engineeringModel.LogEntry.Count);
-            foreach (var identifier in engineeringModel.LogEntry)
+            foreach (var identifier in engineeringModel.LogEntry.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModel.Book.Count);
-            foreach (var orderedItem in engineeringModel.Book)
+            foreach (var orderedItem in engineeringModel.Book.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.WriteArrayHeader(engineeringModel.ExcludedDomain.Count);
-            foreach (var identifier in engineeringModel.ExcludedDomain)
+            foreach (var identifier in engineeringModel.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModel.ExcludedPerson.Count);
-            foreach (var identifier in engineeringModel.ExcludedPerson)
+            foreach (var identifier in engineeringModel.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModel.GenericNote.Count);
-            foreach (var identifier in engineeringModel.GenericNote)
+            foreach (var identifier in engineeringModel.GenericNote.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModel.ModellingAnnotation.Count);
-            foreach (var identifier in engineeringModel.ModellingAnnotation)
+            foreach (var identifier in engineeringModel.ModellingAnnotation.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -213,7 +225,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             engineeringModel.Book.Add(orderedItem);
                         }
                         break;

@@ -52,8 +52,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -67,6 +69,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ModelLogEntryMessagePackFormatter : IMessagePackFormatter<ModelLogEntry>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ModelLogEntry"/> DTO.
         /// </summary>
@@ -110,7 +122,7 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(modelLogEntry.Category.Count);
-            foreach (var identifier in modelLogEntry.Category)
+            foreach (var identifier in modelLogEntry.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -119,18 +131,18 @@ namespace CDP4MessagePackSerializer
             writer.Write(modelLogEntry.LanguageCode);
             writer.Write(modelLogEntry.Level.ToString());
             writer.WriteArrayHeader(modelLogEntry.ExcludedDomain.Count);
-            foreach (var identifier in modelLogEntry.ExcludedDomain)
+            foreach (var identifier in modelLogEntry.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modelLogEntry.ExcludedPerson.Count);
-            foreach (var identifier in modelLogEntry.ExcludedPerson)
+            foreach (var identifier in modelLogEntry.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(modelLogEntry.ModifiedOn);
             writer.WriteArrayHeader(modelLogEntry.LogEntryChangelogItem.Count);
-            foreach (var identifier in modelLogEntry.LogEntryChangelogItem)
+            foreach (var identifier in modelLogEntry.LogEntryChangelogItem.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

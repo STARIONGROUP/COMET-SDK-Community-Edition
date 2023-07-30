@@ -60,8 +60,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -75,6 +77,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class CyclicRatioScaleMessagePackFormatter : IMessagePackFormatter<CyclicRatioScale>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="CyclicRatioScale"/> DTO.
         /// </summary>
@@ -100,17 +112,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(cyclicRatioScale.RevisionNumber);
 
             writer.WriteArrayHeader(cyclicRatioScale.Alias.Count);
-            foreach (var identifier in cyclicRatioScale.Alias)
+            foreach (var identifier in cyclicRatioScale.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(cyclicRatioScale.Definition.Count);
-            foreach (var identifier in cyclicRatioScale.Definition)
+            foreach (var identifier in cyclicRatioScale.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(cyclicRatioScale.HyperLink.Count);
-            foreach (var identifier in cyclicRatioScale.HyperLink)
+            foreach (var identifier in cyclicRatioScale.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -118,7 +130,7 @@ namespace CDP4MessagePackSerializer
             writer.Write(cyclicRatioScale.IsMaximumInclusive);
             writer.Write(cyclicRatioScale.IsMinimumInclusive);
             writer.WriteArrayHeader(cyclicRatioScale.MappingToReferenceScale.Count);
-            foreach (var identifier in cyclicRatioScale.MappingToReferenceScale)
+            foreach (var identifier in cyclicRatioScale.MappingToReferenceScale.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -132,17 +144,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(cyclicRatioScale.ShortName);
             writer.Write(cyclicRatioScale.Unit.ToByteArray());
             writer.WriteArrayHeader(cyclicRatioScale.ValueDefinition.Count);
-            foreach (var identifier in cyclicRatioScale.ValueDefinition)
+            foreach (var identifier in cyclicRatioScale.ValueDefinition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(cyclicRatioScale.ExcludedDomain.Count);
-            foreach (var identifier in cyclicRatioScale.ExcludedDomain)
+            foreach (var identifier in cyclicRatioScale.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(cyclicRatioScale.ExcludedPerson.Count);
-            foreach (var identifier in cyclicRatioScale.ExcludedPerson)
+            foreach (var identifier in cyclicRatioScale.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

@@ -64,8 +64,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -79,6 +81,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class LogarithmicScaleMessagePackFormatter : IMessagePackFormatter<LogarithmicScale>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="LogarithmicScale"/> DTO.
         /// </summary>
@@ -104,19 +116,19 @@ namespace CDP4MessagePackSerializer
             writer.Write(logarithmicScale.RevisionNumber);
 
             writer.WriteArrayHeader(logarithmicScale.Alias.Count);
-            foreach (var identifier in logarithmicScale.Alias)
+            foreach (var identifier in logarithmicScale.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(logarithmicScale.Definition.Count);
-            foreach (var identifier in logarithmicScale.Definition)
+            foreach (var identifier in logarithmicScale.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(logarithmicScale.Exponent);
             writer.Write(logarithmicScale.Factor);
             writer.WriteArrayHeader(logarithmicScale.HyperLink.Count);
-            foreach (var identifier in logarithmicScale.HyperLink)
+            foreach (var identifier in logarithmicScale.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -125,7 +137,7 @@ namespace CDP4MessagePackSerializer
             writer.Write(logarithmicScale.IsMinimumInclusive);
             writer.Write(logarithmicScale.LogarithmBase.ToString());
             writer.WriteArrayHeader(logarithmicScale.MappingToReferenceScale.Count);
-            foreach (var identifier in logarithmicScale.MappingToReferenceScale)
+            foreach (var identifier in logarithmicScale.MappingToReferenceScale.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -137,24 +149,24 @@ namespace CDP4MessagePackSerializer
             writer.Write(logarithmicScale.PositiveValueConnotation);
             writer.Write(logarithmicScale.ReferenceQuantityKind.ToByteArray());
             writer.WriteArrayHeader(logarithmicScale.ReferenceQuantityValue.Count);
-            foreach (var identifier in logarithmicScale.ReferenceQuantityValue)
+            foreach (var identifier in logarithmicScale.ReferenceQuantityValue.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(logarithmicScale.ShortName);
             writer.Write(logarithmicScale.Unit.ToByteArray());
             writer.WriteArrayHeader(logarithmicScale.ValueDefinition.Count);
-            foreach (var identifier in logarithmicScale.ValueDefinition)
+            foreach (var identifier in logarithmicScale.ValueDefinition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(logarithmicScale.ExcludedDomain.Count);
-            foreach (var identifier in logarithmicScale.ExcludedDomain)
+            foreach (var identifier in logarithmicScale.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(logarithmicScale.ExcludedPerson.Count);
-            foreach (var identifier in logarithmicScale.ExcludedPerson)
+            foreach (var identifier in logarithmicScale.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

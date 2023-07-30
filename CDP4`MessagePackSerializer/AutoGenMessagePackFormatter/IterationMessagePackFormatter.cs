@@ -64,8 +64,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -79,6 +81,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class IterationMessagePackFormatter : IMessagePackFormatter<Iteration>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="Iteration"/> DTO.
         /// </summary>
@@ -104,7 +116,7 @@ namespace CDP4MessagePackSerializer
             writer.Write(iteration.RevisionNumber);
 
             writer.WriteArrayHeader(iteration.ActualFiniteStateList.Count);
-            foreach (var identifier in iteration.ActualFiniteStateList)
+            foreach (var identifier in iteration.ActualFiniteStateList.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -117,50 +129,50 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(iteration.DomainFileStore.Count);
-            foreach (var identifier in iteration.DomainFileStore)
+            foreach (var identifier in iteration.DomainFileStore.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.Element.Count);
-            foreach (var identifier in iteration.Element)
+            foreach (var identifier in iteration.Element.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.ExternalIdentifierMap.Count);
-            foreach (var identifier in iteration.ExternalIdentifierMap)
+            foreach (var identifier in iteration.ExternalIdentifierMap.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(iteration.IterationSetup.ToByteArray());
             writer.WriteArrayHeader(iteration.Option.Count);
-            foreach (var orderedItem in iteration.Option)
+            foreach (var orderedItem in iteration.Option.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.WriteArrayHeader(iteration.PossibleFiniteStateList.Count);
-            foreach (var identifier in iteration.PossibleFiniteStateList)
+            foreach (var identifier in iteration.PossibleFiniteStateList.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.Publication.Count);
-            foreach (var identifier in iteration.Publication)
+            foreach (var identifier in iteration.Publication.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.Relationship.Count);
-            foreach (var identifier in iteration.Relationship)
+            foreach (var identifier in iteration.Relationship.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.RequirementsSpecification.Count);
-            foreach (var identifier in iteration.RequirementsSpecification)
+            foreach (var identifier in iteration.RequirementsSpecification.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.RuleVerificationList.Count);
-            foreach (var identifier in iteration.RuleVerificationList)
+            foreach (var identifier in iteration.RuleVerificationList.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -181,48 +193,48 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(iteration.DiagramCanvas.Count);
-            foreach (var identifier in iteration.DiagramCanvas)
+            foreach (var identifier in iteration.DiagramCanvas.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.ExcludedDomain.Count);
-            foreach (var identifier in iteration.ExcludedDomain)
+            foreach (var identifier in iteration.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.ExcludedPerson.Count);
-            foreach (var identifier in iteration.ExcludedPerson)
+            foreach (var identifier in iteration.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.Goal.Count);
-            foreach (var identifier in iteration.Goal)
+            foreach (var identifier in iteration.Goal.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(iteration.ModifiedOn);
             writer.WriteArrayHeader(iteration.SharedDiagramStyle.Count);
-            foreach (var identifier in iteration.SharedDiagramStyle)
+            foreach (var identifier in iteration.SharedDiagramStyle.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.Stakeholder.Count);
-            foreach (var identifier in iteration.Stakeholder)
+            foreach (var identifier in iteration.Stakeholder.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.StakeholderValue.Count);
-            foreach (var identifier in iteration.StakeholderValue)
+            foreach (var identifier in iteration.StakeholderValue.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.StakeholderValueMap.Count);
-            foreach (var identifier in iteration.StakeholderValueMap)
+            foreach (var identifier in iteration.StakeholderValueMap.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(iteration.ValueGroup.Count);
-            foreach (var identifier in iteration.ValueGroup)
+            foreach (var identifier in iteration.ValueGroup.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -318,7 +330,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             iteration.Option.Add(orderedItem);
                         }
                         break;

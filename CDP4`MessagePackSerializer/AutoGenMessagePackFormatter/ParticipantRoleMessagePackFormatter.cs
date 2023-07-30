@@ -50,8 +50,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -65,6 +67,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ParticipantRoleMessagePackFormatter : IMessagePackFormatter<ParticipantRole>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ParticipantRole"/> DTO.
         /// </summary>
@@ -90,35 +102,35 @@ namespace CDP4MessagePackSerializer
             writer.Write(participantRole.RevisionNumber);
 
             writer.WriteArrayHeader(participantRole.Alias.Count);
-            foreach (var identifier in participantRole.Alias)
+            foreach (var identifier in participantRole.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(participantRole.Definition.Count);
-            foreach (var identifier in participantRole.Definition)
+            foreach (var identifier in participantRole.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(participantRole.HyperLink.Count);
-            foreach (var identifier in participantRole.HyperLink)
+            foreach (var identifier in participantRole.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(participantRole.IsDeprecated);
             writer.Write(participantRole.Name);
             writer.WriteArrayHeader(participantRole.ParticipantPermission.Count);
-            foreach (var identifier in participantRole.ParticipantPermission)
+            foreach (var identifier in participantRole.ParticipantPermission.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(participantRole.ShortName);
             writer.WriteArrayHeader(participantRole.ExcludedDomain.Count);
-            foreach (var identifier in participantRole.ExcludedDomain)
+            foreach (var identifier in participantRole.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(participantRole.ExcludedPerson.Count);
-            foreach (var identifier in participantRole.ExcludedPerson)
+            foreach (var identifier in participantRole.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

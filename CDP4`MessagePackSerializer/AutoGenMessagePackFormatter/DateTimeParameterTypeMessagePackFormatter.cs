@@ -51,8 +51,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -66,6 +68,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class DateTimeParameterTypeMessagePackFormatter : IMessagePackFormatter<DateTimeParameterType>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="DateTimeParameterType"/> DTO.
         /// </summary>
@@ -91,22 +103,22 @@ namespace CDP4MessagePackSerializer
             writer.Write(dateTimeParameterType.RevisionNumber);
 
             writer.WriteArrayHeader(dateTimeParameterType.Alias.Count);
-            foreach (var identifier in dateTimeParameterType.Alias)
+            foreach (var identifier in dateTimeParameterType.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(dateTimeParameterType.Category.Count);
-            foreach (var identifier in dateTimeParameterType.Category)
+            foreach (var identifier in dateTimeParameterType.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(dateTimeParameterType.Definition.Count);
-            foreach (var identifier in dateTimeParameterType.Definition)
+            foreach (var identifier in dateTimeParameterType.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(dateTimeParameterType.HyperLink.Count);
-            foreach (var identifier in dateTimeParameterType.HyperLink)
+            foreach (var identifier in dateTimeParameterType.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -115,12 +127,12 @@ namespace CDP4MessagePackSerializer
             writer.Write(dateTimeParameterType.ShortName);
             writer.Write(dateTimeParameterType.Symbol);
             writer.WriteArrayHeader(dateTimeParameterType.ExcludedDomain.Count);
-            foreach (var identifier in dateTimeParameterType.ExcludedDomain)
+            foreach (var identifier in dateTimeParameterType.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(dateTimeParameterType.ExcludedPerson.Count);
-            foreach (var identifier in dateTimeParameterType.ExcludedPerson)
+            foreach (var identifier in dateTimeParameterType.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

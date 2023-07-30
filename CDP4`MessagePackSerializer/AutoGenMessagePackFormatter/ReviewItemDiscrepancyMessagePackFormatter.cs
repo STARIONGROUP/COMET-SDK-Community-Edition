@@ -59,8 +59,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -74,6 +76,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class ReviewItemDiscrepancyMessagePackFormatter : IMessagePackFormatter<ReviewItemDiscrepancy>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ReviewItemDiscrepancy"/> DTO.
         /// </summary>
@@ -99,13 +111,13 @@ namespace CDP4MessagePackSerializer
             writer.Write(reviewItemDiscrepancy.RevisionNumber);
 
             writer.WriteArrayHeader(reviewItemDiscrepancy.ApprovedBy.Count);
-            foreach (var identifier in reviewItemDiscrepancy.ApprovedBy)
+            foreach (var identifier in reviewItemDiscrepancy.ApprovedBy.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(reviewItemDiscrepancy.Author.ToByteArray());
             writer.WriteArrayHeader(reviewItemDiscrepancy.Category.Count);
-            foreach (var identifier in reviewItemDiscrepancy.Category)
+            foreach (var identifier in reviewItemDiscrepancy.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -113,17 +125,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(reviewItemDiscrepancy.Content);
             writer.Write(reviewItemDiscrepancy.CreatedOn);
             writer.WriteArrayHeader(reviewItemDiscrepancy.Discussion.Count);
-            foreach (var identifier in reviewItemDiscrepancy.Discussion)
+            foreach (var identifier in reviewItemDiscrepancy.Discussion.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(reviewItemDiscrepancy.ExcludedDomain.Count);
-            foreach (var identifier in reviewItemDiscrepancy.ExcludedDomain)
+            foreach (var identifier in reviewItemDiscrepancy.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(reviewItemDiscrepancy.ExcludedPerson.Count);
-            foreach (var identifier in reviewItemDiscrepancy.ExcludedPerson)
+            foreach (var identifier in reviewItemDiscrepancy.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -139,18 +151,18 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(reviewItemDiscrepancy.RelatedThing.Count);
-            foreach (var identifier in reviewItemDiscrepancy.RelatedThing)
+            foreach (var identifier in reviewItemDiscrepancy.RelatedThing.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(reviewItemDiscrepancy.ShortName);
             writer.WriteArrayHeader(reviewItemDiscrepancy.Solution.Count);
-            foreach (var identifier in reviewItemDiscrepancy.Solution)
+            foreach (var identifier in reviewItemDiscrepancy.Solution.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(reviewItemDiscrepancy.SourceAnnotation.Count);
-            foreach (var identifier in reviewItemDiscrepancy.SourceAnnotation)
+            foreach (var identifier in reviewItemDiscrepancy.SourceAnnotation.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

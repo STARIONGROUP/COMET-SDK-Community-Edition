@@ -48,8 +48,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -63,6 +65,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class MultiRelationshipMessagePackFormatter : IMessagePackFormatter<MultiRelationship>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="MultiRelationship"/> DTO.
         /// </summary>
@@ -88,29 +100,29 @@ namespace CDP4MessagePackSerializer
             writer.Write(multiRelationship.RevisionNumber);
 
             writer.WriteArrayHeader(multiRelationship.Category.Count);
-            foreach (var identifier in multiRelationship.Category)
+            foreach (var identifier in multiRelationship.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(multiRelationship.Owner.ToByteArray());
             writer.WriteArrayHeader(multiRelationship.RelatedThing.Count);
-            foreach (var identifier in multiRelationship.RelatedThing)
+            foreach (var identifier in multiRelationship.RelatedThing.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(multiRelationship.ExcludedDomain.Count);
-            foreach (var identifier in multiRelationship.ExcludedDomain)
+            foreach (var identifier in multiRelationship.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(multiRelationship.ExcludedPerson.Count);
-            foreach (var identifier in multiRelationship.ExcludedPerson)
+            foreach (var identifier in multiRelationship.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(multiRelationship.ModifiedOn);
             writer.WriteArrayHeader(multiRelationship.ParameterValue.Count);
-            foreach (var identifier in multiRelationship.ParameterValue)
+            foreach (var identifier in multiRelationship.ParameterValue.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

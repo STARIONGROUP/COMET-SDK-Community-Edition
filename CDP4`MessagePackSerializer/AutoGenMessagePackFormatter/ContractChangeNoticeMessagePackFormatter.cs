@@ -59,8 +59,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -74,6 +76,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class ContractChangeNoticeMessagePackFormatter : IMessagePackFormatter<ContractChangeNotice>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ContractChangeNotice"/> DTO.
         /// </summary>
@@ -99,13 +111,13 @@ namespace CDP4MessagePackSerializer
             writer.Write(contractChangeNotice.RevisionNumber);
 
             writer.WriteArrayHeader(contractChangeNotice.ApprovedBy.Count);
-            foreach (var identifier in contractChangeNotice.ApprovedBy)
+            foreach (var identifier in contractChangeNotice.ApprovedBy.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(contractChangeNotice.Author.ToByteArray());
             writer.WriteArrayHeader(contractChangeNotice.Category.Count);
-            foreach (var identifier in contractChangeNotice.Category)
+            foreach (var identifier in contractChangeNotice.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -114,17 +126,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(contractChangeNotice.Content);
             writer.Write(contractChangeNotice.CreatedOn);
             writer.WriteArrayHeader(contractChangeNotice.Discussion.Count);
-            foreach (var identifier in contractChangeNotice.Discussion)
+            foreach (var identifier in contractChangeNotice.Discussion.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(contractChangeNotice.ExcludedDomain.Count);
-            foreach (var identifier in contractChangeNotice.ExcludedDomain)
+            foreach (var identifier in contractChangeNotice.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(contractChangeNotice.ExcludedPerson.Count);
-            foreach (var identifier in contractChangeNotice.ExcludedPerson)
+            foreach (var identifier in contractChangeNotice.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -140,13 +152,13 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(contractChangeNotice.RelatedThing.Count);
-            foreach (var identifier in contractChangeNotice.RelatedThing)
+            foreach (var identifier in contractChangeNotice.RelatedThing.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(contractChangeNotice.ShortName);
             writer.WriteArrayHeader(contractChangeNotice.SourceAnnotation.Count);
-            foreach (var identifier in contractChangeNotice.SourceAnnotation)
+            foreach (var identifier in contractChangeNotice.SourceAnnotation.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

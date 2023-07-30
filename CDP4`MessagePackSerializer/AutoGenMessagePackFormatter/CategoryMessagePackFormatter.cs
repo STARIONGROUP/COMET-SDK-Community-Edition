@@ -52,8 +52,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -67,6 +69,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class CategoryMessagePackFormatter : IMessagePackFormatter<Category>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="Category"/> DTO.
         /// </summary>
@@ -92,17 +104,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(category.RevisionNumber);
 
             writer.WriteArrayHeader(category.Alias.Count);
-            foreach (var identifier in category.Alias)
+            foreach (var identifier in category.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(category.Definition.Count);
-            foreach (var identifier in category.Definition)
+            foreach (var identifier in category.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(category.HyperLink.Count);
-            foreach (var identifier in category.HyperLink)
+            foreach (var identifier in category.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -116,17 +128,17 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(category.ShortName);
             writer.WriteArrayHeader(category.SuperCategory.Count);
-            foreach (var identifier in category.SuperCategory)
+            foreach (var identifier in category.SuperCategory.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(category.ExcludedDomain.Count);
-            foreach (var identifier in category.ExcludedDomain)
+            foreach (var identifier in category.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(category.ExcludedPerson.Count);
-            foreach (var identifier in category.ExcludedPerson)
+            foreach (var identifier in category.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

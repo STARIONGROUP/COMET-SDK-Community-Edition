@@ -50,8 +50,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -65,6 +67,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class EngineeringModelDataNoteMessagePackFormatter : IMessagePackFormatter<EngineeringModelDataNote>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="EngineeringModelDataNote"/> DTO.
         /// </summary>
@@ -93,17 +105,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(engineeringModelDataNote.Content);
             writer.Write(engineeringModelDataNote.CreatedOn);
             writer.WriteArrayHeader(engineeringModelDataNote.Discussion.Count);
-            foreach (var identifier in engineeringModelDataNote.Discussion)
+            foreach (var identifier in engineeringModelDataNote.Discussion.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModelDataNote.ExcludedDomain.Count);
-            foreach (var identifier in engineeringModelDataNote.ExcludedDomain)
+            foreach (var identifier in engineeringModelDataNote.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModelDataNote.ExcludedPerson.Count);
-            foreach (var identifier in engineeringModelDataNote.ExcludedPerson)
+            foreach (var identifier in engineeringModelDataNote.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -118,7 +130,7 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(engineeringModelDataNote.RelatedThing.Count);
-            foreach (var identifier in engineeringModelDataNote.RelatedThing)
+            foreach (var identifier in engineeringModelDataNote.RelatedThing.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

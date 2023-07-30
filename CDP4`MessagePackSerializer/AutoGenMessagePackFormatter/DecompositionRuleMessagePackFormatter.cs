@@ -53,8 +53,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -68,6 +70,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class DecompositionRuleMessagePackFormatter : IMessagePackFormatter<DecompositionRule>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="DecompositionRule"/> DTO.
         /// </summary>
@@ -93,23 +105,23 @@ namespace CDP4MessagePackSerializer
             writer.Write(decompositionRule.RevisionNumber);
 
             writer.WriteArrayHeader(decompositionRule.Alias.Count);
-            foreach (var identifier in decompositionRule.Alias)
+            foreach (var identifier in decompositionRule.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(decompositionRule.ContainedCategory.Count);
-            foreach (var identifier in decompositionRule.ContainedCategory)
+            foreach (var identifier in decompositionRule.ContainedCategory.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(decompositionRule.ContainingCategory.ToByteArray());
             writer.WriteArrayHeader(decompositionRule.Definition.Count);
-            foreach (var identifier in decompositionRule.Definition)
+            foreach (var identifier in decompositionRule.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(decompositionRule.HyperLink.Count);
-            foreach (var identifier in decompositionRule.HyperLink)
+            foreach (var identifier in decompositionRule.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -126,12 +138,12 @@ namespace CDP4MessagePackSerializer
             writer.Write(decompositionRule.Name);
             writer.Write(decompositionRule.ShortName);
             writer.WriteArrayHeader(decompositionRule.ExcludedDomain.Count);
-            foreach (var identifier in decompositionRule.ExcludedDomain)
+            foreach (var identifier in decompositionRule.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(decompositionRule.ExcludedPerson.Count);
-            foreach (var identifier in decompositionRule.ExcludedPerson)
+            foreach (var identifier in decompositionRule.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

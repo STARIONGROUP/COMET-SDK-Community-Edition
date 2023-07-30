@@ -52,8 +52,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -67,6 +69,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class DiagramEdgeMessagePackFormatter : IMessagePackFormatter<DiagramEdge>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="DiagramEdge"/> DTO.
         /// </summary>
@@ -92,7 +104,7 @@ namespace CDP4MessagePackSerializer
             writer.Write(diagramEdge.RevisionNumber);
 
             writer.WriteArrayHeader(diagramEdge.Bounds.Count);
-            foreach (var identifier in diagramEdge.Bounds)
+            foreach (var identifier in diagramEdge.Bounds.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -105,33 +117,33 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(diagramEdge.DiagramElement.Count);
-            foreach (var identifier in diagramEdge.DiagramElement)
+            foreach (var identifier in diagramEdge.DiagramElement.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(diagramEdge.ExcludedDomain.Count);
-            foreach (var identifier in diagramEdge.ExcludedDomain)
+            foreach (var identifier in diagramEdge.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(diagramEdge.ExcludedPerson.Count);
-            foreach (var identifier in diagramEdge.ExcludedPerson)
+            foreach (var identifier in diagramEdge.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(diagramEdge.LocalStyle.Count);
-            foreach (var identifier in diagramEdge.LocalStyle)
+            foreach (var identifier in diagramEdge.LocalStyle.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(diagramEdge.ModifiedOn);
             writer.Write(diagramEdge.Name);
             writer.WriteArrayHeader(diagramEdge.Point.Count);
-            foreach (var orderedItem in diagramEdge.Point)
+            foreach (var orderedItem in diagramEdge.Point.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             if (diagramEdge.SharedStyle.HasValue)
             {
@@ -245,7 +257,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             diagramEdge.Point.Add(orderedItem);
                         }
                         break;

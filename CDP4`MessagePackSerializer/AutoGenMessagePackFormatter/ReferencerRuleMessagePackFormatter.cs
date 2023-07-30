@@ -53,8 +53,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -68,6 +70,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ReferencerRuleMessagePackFormatter : IMessagePackFormatter<ReferencerRule>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ReferencerRule"/> DTO.
         /// </summary>
@@ -93,17 +105,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(referencerRule.RevisionNumber);
 
             writer.WriteArrayHeader(referencerRule.Alias.Count);
-            foreach (var identifier in referencerRule.Alias)
+            foreach (var identifier in referencerRule.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(referencerRule.Definition.Count);
-            foreach (var identifier in referencerRule.Definition)
+            foreach (var identifier in referencerRule.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(referencerRule.HyperLink.Count);
-            foreach (var identifier in referencerRule.HyperLink)
+            foreach (var identifier in referencerRule.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -112,19 +124,19 @@ namespace CDP4MessagePackSerializer
             writer.Write(referencerRule.MinReferenced);
             writer.Write(referencerRule.Name);
             writer.WriteArrayHeader(referencerRule.ReferencedCategory.Count);
-            foreach (var identifier in referencerRule.ReferencedCategory)
+            foreach (var identifier in referencerRule.ReferencedCategory.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(referencerRule.ReferencingCategory.ToByteArray());
             writer.Write(referencerRule.ShortName);
             writer.WriteArrayHeader(referencerRule.ExcludedDomain.Count);
-            foreach (var identifier in referencerRule.ExcludedDomain)
+            foreach (var identifier in referencerRule.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(referencerRule.ExcludedPerson.Count);
-            foreach (var identifier in referencerRule.ExcludedPerson)
+            foreach (var identifier in referencerRule.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

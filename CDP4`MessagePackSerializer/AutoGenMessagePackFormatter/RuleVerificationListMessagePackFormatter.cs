@@ -50,8 +50,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -65,6 +67,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class RuleVerificationListMessagePackFormatter : IMessagePackFormatter<RuleVerificationList>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="RuleVerificationList"/> DTO.
         /// </summary>
@@ -90,37 +102,37 @@ namespace CDP4MessagePackSerializer
             writer.Write(ruleVerificationList.RevisionNumber);
 
             writer.WriteArrayHeader(ruleVerificationList.Alias.Count);
-            foreach (var identifier in ruleVerificationList.Alias)
+            foreach (var identifier in ruleVerificationList.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ruleVerificationList.Definition.Count);
-            foreach (var identifier in ruleVerificationList.Definition)
+            foreach (var identifier in ruleVerificationList.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ruleVerificationList.HyperLink.Count);
-            foreach (var identifier in ruleVerificationList.HyperLink)
+            foreach (var identifier in ruleVerificationList.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(ruleVerificationList.Name);
             writer.Write(ruleVerificationList.Owner.ToByteArray());
             writer.WriteArrayHeader(ruleVerificationList.RuleVerification.Count);
-            foreach (var orderedItem in ruleVerificationList.RuleVerification)
+            foreach (var orderedItem in ruleVerificationList.RuleVerification.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.Write(ruleVerificationList.ShortName);
             writer.WriteArrayHeader(ruleVerificationList.ExcludedDomain.Count);
-            foreach (var identifier in ruleVerificationList.ExcludedDomain)
+            foreach (var identifier in ruleVerificationList.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(ruleVerificationList.ExcludedPerson.Count);
-            foreach (var identifier in ruleVerificationList.ExcludedPerson)
+            foreach (var identifier in ruleVerificationList.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -203,7 +215,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             ruleVerificationList.RuleVerification.Add(orderedItem);
                         }
                         break;

@@ -62,8 +62,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -77,6 +79,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class SiteReferenceDataLibraryMessagePackFormatter : IMessagePackFormatter<SiteReferenceDataLibrary>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="SiteReferenceDataLibrary"/> DTO.
         /// </summary>
@@ -102,61 +114,61 @@ namespace CDP4MessagePackSerializer
             writer.Write(siteReferenceDataLibrary.RevisionNumber);
 
             writer.WriteArrayHeader(siteReferenceDataLibrary.Alias.Count);
-            foreach (var identifier in siteReferenceDataLibrary.Alias)
+            foreach (var identifier in siteReferenceDataLibrary.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.BaseQuantityKind.Count);
-            foreach (var orderedItem in siteReferenceDataLibrary.BaseQuantityKind)
+            foreach (var orderedItem in siteReferenceDataLibrary.BaseQuantityKind.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.BaseUnit.Count);
-            foreach (var identifier in siteReferenceDataLibrary.BaseUnit)
+            foreach (var identifier in siteReferenceDataLibrary.BaseUnit.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.Constant.Count);
-            foreach (var identifier in siteReferenceDataLibrary.Constant)
+            foreach (var identifier in siteReferenceDataLibrary.Constant.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.DefinedCategory.Count);
-            foreach (var identifier in siteReferenceDataLibrary.DefinedCategory)
+            foreach (var identifier in siteReferenceDataLibrary.DefinedCategory.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.Definition.Count);
-            foreach (var identifier in siteReferenceDataLibrary.Definition)
+            foreach (var identifier in siteReferenceDataLibrary.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.FileType.Count);
-            foreach (var identifier in siteReferenceDataLibrary.FileType)
+            foreach (var identifier in siteReferenceDataLibrary.FileType.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.Glossary.Count);
-            foreach (var identifier in siteReferenceDataLibrary.Glossary)
+            foreach (var identifier in siteReferenceDataLibrary.Glossary.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.HyperLink.Count);
-            foreach (var identifier in siteReferenceDataLibrary.HyperLink)
+            foreach (var identifier in siteReferenceDataLibrary.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(siteReferenceDataLibrary.IsDeprecated);
             writer.Write(siteReferenceDataLibrary.Name);
             writer.WriteArrayHeader(siteReferenceDataLibrary.ParameterType.Count);
-            foreach (var identifier in siteReferenceDataLibrary.ParameterType)
+            foreach (var identifier in siteReferenceDataLibrary.ParameterType.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.ReferenceSource.Count);
-            foreach (var identifier in siteReferenceDataLibrary.ReferenceSource)
+            foreach (var identifier in siteReferenceDataLibrary.ReferenceSource.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -169,33 +181,33 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.Rule.Count);
-            foreach (var identifier in siteReferenceDataLibrary.Rule)
+            foreach (var identifier in siteReferenceDataLibrary.Rule.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.Scale.Count);
-            foreach (var identifier in siteReferenceDataLibrary.Scale)
+            foreach (var identifier in siteReferenceDataLibrary.Scale.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(siteReferenceDataLibrary.ShortName);
             writer.WriteArrayHeader(siteReferenceDataLibrary.Unit.Count);
-            foreach (var identifier in siteReferenceDataLibrary.Unit)
+            foreach (var identifier in siteReferenceDataLibrary.Unit.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.UnitPrefix.Count);
-            foreach (var identifier in siteReferenceDataLibrary.UnitPrefix)
+            foreach (var identifier in siteReferenceDataLibrary.UnitPrefix.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.ExcludedDomain.Count);
-            foreach (var identifier in siteReferenceDataLibrary.ExcludedDomain)
+            foreach (var identifier in siteReferenceDataLibrary.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(siteReferenceDataLibrary.ExcludedPerson.Count);
-            foreach (var identifier in siteReferenceDataLibrary.ExcludedPerson)
+            foreach (var identifier in siteReferenceDataLibrary.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -258,7 +270,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             siteReferenceDataLibrary.BaseQuantityKind.Add(orderedItem);
                         }
                         break;

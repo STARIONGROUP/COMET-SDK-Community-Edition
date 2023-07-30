@@ -51,8 +51,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -66,6 +68,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class GlossaryMessagePackFormatter : IMessagePackFormatter<Glossary>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="Glossary"/> DTO.
         /// </summary>
@@ -91,22 +103,22 @@ namespace CDP4MessagePackSerializer
             writer.Write(glossary.RevisionNumber);
 
             writer.WriteArrayHeader(glossary.Alias.Count);
-            foreach (var identifier in glossary.Alias)
+            foreach (var identifier in glossary.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(glossary.Category.Count);
-            foreach (var identifier in glossary.Category)
+            foreach (var identifier in glossary.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(glossary.Definition.Count);
-            foreach (var identifier in glossary.Definition)
+            foreach (var identifier in glossary.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(glossary.HyperLink.Count);
-            foreach (var identifier in glossary.HyperLink)
+            foreach (var identifier in glossary.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -114,17 +126,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(glossary.Name);
             writer.Write(glossary.ShortName);
             writer.WriteArrayHeader(glossary.Term.Count);
-            foreach (var identifier in glossary.Term)
+            foreach (var identifier in glossary.Term.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(glossary.ExcludedDomain.Count);
-            foreach (var identifier in glossary.ExcludedDomain)
+            foreach (var identifier in glossary.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(glossary.ExcludedPerson.Count);
-            foreach (var identifier in glossary.ExcludedPerson)
+            foreach (var identifier in glossary.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

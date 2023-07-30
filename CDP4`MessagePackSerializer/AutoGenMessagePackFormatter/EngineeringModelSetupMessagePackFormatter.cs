@@ -58,8 +58,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -73,6 +75,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class EngineeringModelSetupMessagePackFormatter : IMessagePackFormatter<EngineeringModelSetup>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="EngineeringModelSetup"/> DTO.
         /// </summary>
@@ -98,40 +110,40 @@ namespace CDP4MessagePackSerializer
             writer.Write(engineeringModelSetup.RevisionNumber);
 
             writer.WriteArrayHeader(engineeringModelSetup.ActiveDomain.Count);
-            foreach (var identifier in engineeringModelSetup.ActiveDomain)
+            foreach (var identifier in engineeringModelSetup.ActiveDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModelSetup.Alias.Count);
-            foreach (var identifier in engineeringModelSetup.Alias)
+            foreach (var identifier in engineeringModelSetup.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModelSetup.Definition.Count);
-            foreach (var identifier in engineeringModelSetup.Definition)
+            foreach (var identifier in engineeringModelSetup.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(engineeringModelSetup.EngineeringModelIid.ToByteArray());
             writer.WriteArrayHeader(engineeringModelSetup.HyperLink.Count);
-            foreach (var identifier in engineeringModelSetup.HyperLink)
+            foreach (var identifier in engineeringModelSetup.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModelSetup.IterationSetup.Count);
-            foreach (var identifier in engineeringModelSetup.IterationSetup)
+            foreach (var identifier in engineeringModelSetup.IterationSetup.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(engineeringModelSetup.Kind.ToString());
             writer.Write(engineeringModelSetup.Name);
             writer.WriteArrayHeader(engineeringModelSetup.Participant.Count);
-            foreach (var identifier in engineeringModelSetup.Participant)
+            foreach (var identifier in engineeringModelSetup.Participant.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModelSetup.RequiredRdl.Count);
-            foreach (var identifier in engineeringModelSetup.RequiredRdl)
+            foreach (var identifier in engineeringModelSetup.RequiredRdl.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -146,12 +158,12 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(engineeringModelSetup.StudyPhase.ToString());
             writer.WriteArrayHeader(engineeringModelSetup.ExcludedDomain.Count);
-            foreach (var identifier in engineeringModelSetup.ExcludedDomain)
+            foreach (var identifier in engineeringModelSetup.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(engineeringModelSetup.ExcludedPerson.Count);
-            foreach (var identifier in engineeringModelSetup.ExcludedPerson)
+            foreach (var identifier in engineeringModelSetup.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -165,7 +177,7 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.WriteArrayHeader(engineeringModelSetup.OrganizationalParticipant.Count);
-            foreach (var identifier in engineeringModelSetup.OrganizationalParticipant)
+            foreach (var identifier in engineeringModelSetup.OrganizationalParticipant.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

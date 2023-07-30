@@ -48,8 +48,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -63,6 +65,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ParticipantMessagePackFormatter : IMessagePackFormatter<Participant>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="Participant"/> DTO.
         /// </summary>
@@ -88,7 +100,7 @@ namespace CDP4MessagePackSerializer
             writer.Write(participant.RevisionNumber);
 
             writer.WriteArrayHeader(participant.Domain.Count);
-            foreach (var identifier in participant.Domain)
+            foreach (var identifier in participant.Domain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -97,12 +109,12 @@ namespace CDP4MessagePackSerializer
             writer.Write(participant.Role.ToByteArray());
             writer.Write(participant.SelectedDomain.ToByteArray());
             writer.WriteArrayHeader(participant.ExcludedDomain.Count);
-            foreach (var identifier in participant.ExcludedDomain)
+            foreach (var identifier in participant.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(participant.ExcludedPerson.Count);
-            foreach (var identifier in participant.ExcludedPerson)
+            foreach (var identifier in participant.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

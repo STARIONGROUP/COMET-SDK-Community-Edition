@@ -49,8 +49,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -64,6 +66,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class ValueGroupMessagePackFormatter : IMessagePackFormatter<ValueGroup>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ValueGroup"/> DTO.
         /// </summary>
@@ -89,32 +101,32 @@ namespace CDP4MessagePackSerializer
             writer.Write(valueGroup.RevisionNumber);
 
             writer.WriteArrayHeader(valueGroup.Alias.Count);
-            foreach (var identifier in valueGroup.Alias)
+            foreach (var identifier in valueGroup.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(valueGroup.Category.Count);
-            foreach (var identifier in valueGroup.Category)
+            foreach (var identifier in valueGroup.Category.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(valueGroup.Definition.Count);
-            foreach (var identifier in valueGroup.Definition)
+            foreach (var identifier in valueGroup.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(valueGroup.ExcludedDomain.Count);
-            foreach (var identifier in valueGroup.ExcludedDomain)
+            foreach (var identifier in valueGroup.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(valueGroup.ExcludedPerson.Count);
-            foreach (var identifier in valueGroup.ExcludedPerson)
+            foreach (var identifier in valueGroup.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(valueGroup.HyperLink.Count);
-            foreach (var identifier in valueGroup.HyperLink)
+            foreach (var identifier in valueGroup.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

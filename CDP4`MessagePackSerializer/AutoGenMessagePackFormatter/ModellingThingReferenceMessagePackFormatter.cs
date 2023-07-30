@@ -45,8 +45,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -60,6 +62,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class ModellingThingReferenceMessagePackFormatter : IMessagePackFormatter<ModellingThingReference>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ModellingThingReference"/> DTO.
         /// </summary>
@@ -85,12 +97,12 @@ namespace CDP4MessagePackSerializer
             writer.Write(modellingThingReference.RevisionNumber);
 
             writer.WriteArrayHeader(modellingThingReference.ExcludedDomain.Count);
-            foreach (var identifier in modellingThingReference.ExcludedDomain)
+            foreach (var identifier in modellingThingReference.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(modellingThingReference.ExcludedPerson.Count);
-            foreach (var identifier in modellingThingReference.ExcludedPerson)
+            foreach (var identifier in modellingThingReference.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

@@ -49,8 +49,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -64,6 +66,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class FileRevisionMessagePackFormatter : IMessagePackFormatter<FileRevision>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="FileRevision"/> DTO.
         /// </summary>
@@ -100,20 +112,20 @@ namespace CDP4MessagePackSerializer
             writer.Write(fileRevision.CreatedOn);
             writer.Write(fileRevision.Creator.ToByteArray());
             writer.WriteArrayHeader(fileRevision.FileType.Count);
-            foreach (var orderedItem in fileRevision.FileType)
+            foreach (var orderedItem in fileRevision.FileType.OrderBy(x => x, orderedItemComparer))
             {
                 writer.WriteArrayHeader(2);
                 writer.Write(orderedItem.K);
-                writer.Write(((Guid)orderedItem.V).ToByteArray());
+                writer.Write(orderedItem.V.ToString());
             }
             writer.Write(fileRevision.Name);
             writer.WriteArrayHeader(fileRevision.ExcludedDomain.Count);
-            foreach (var identifier in fileRevision.ExcludedDomain)
+            foreach (var identifier in fileRevision.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(fileRevision.ExcludedPerson.Count);
-            foreach (var identifier in fileRevision.ExcludedPerson)
+            foreach (var identifier in fileRevision.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -188,7 +200,7 @@ namespace CDP4MessagePackSerializer
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
-                            orderedItem.V = reader.ReadBytes().ToGuid();
+                            orderedItem.V = reader.ReadString();
                             fileRevision.FileType.Add(orderedItem);
                         }
                         break;

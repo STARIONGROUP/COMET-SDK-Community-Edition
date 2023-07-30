@@ -47,8 +47,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -62,6 +64,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.1.0")]
     public class DiagramCanvasMessagePackFormatter : IMessagePackFormatter<DiagramCanvas>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="DiagramCanvas"/> DTO.
         /// </summary>
@@ -87,23 +99,23 @@ namespace CDP4MessagePackSerializer
             writer.Write(diagramCanvas.RevisionNumber);
 
             writer.WriteArrayHeader(diagramCanvas.Bounds.Count);
-            foreach (var identifier in diagramCanvas.Bounds)
+            foreach (var identifier in diagramCanvas.Bounds.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(diagramCanvas.CreatedOn);
             writer.WriteArrayHeader(diagramCanvas.DiagramElement.Count);
-            foreach (var identifier in diagramCanvas.DiagramElement)
+            foreach (var identifier in diagramCanvas.DiagramElement.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(diagramCanvas.ExcludedDomain.Count);
-            foreach (var identifier in diagramCanvas.ExcludedDomain)
+            foreach (var identifier in diagramCanvas.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(diagramCanvas.ExcludedPerson.Count);
-            foreach (var identifier in diagramCanvas.ExcludedPerson)
+            foreach (var identifier in diagramCanvas.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }

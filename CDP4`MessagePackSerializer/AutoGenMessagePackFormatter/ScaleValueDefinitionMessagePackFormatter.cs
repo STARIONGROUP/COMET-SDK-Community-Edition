@@ -49,8 +49,10 @@ namespace CDP4MessagePackSerializer
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDP4Common;
+    using CDP4Common.Comparers;
     using CDP4Common.DTO;
     using CDP4Common.Types;
 
@@ -64,6 +66,16 @@ namespace CDP4MessagePackSerializer
     [CDPVersion("1.0.0")]
     public class ScaleValueDefinitionMessagePackFormatter : IMessagePackFormatter<ScaleValueDefinition>
     {
+        /// <summary>
+        /// The <see cref="GuidComparer"/> used to compare 2 <see cref="Guid"/>s
+        /// </summary>
+        private static readonly GuidComparer guidComparer = new GuidComparer();
+
+        /// <summary>
+        /// The <see cref="OrderedItemComparer"/> used to compare 2 <see cref="OrderedItem"/>s
+        /// </summary>
+        private static readonly OrderedItemComparer orderedItemComparer = new OrderedItemComparer();
+
         /// <summary>
         /// Serializes an <see cref="ScaleValueDefinition"/> DTO.
         /// </summary>
@@ -89,17 +101,17 @@ namespace CDP4MessagePackSerializer
             writer.Write(scaleValueDefinition.RevisionNumber);
 
             writer.WriteArrayHeader(scaleValueDefinition.Alias.Count);
-            foreach (var identifier in scaleValueDefinition.Alias)
+            foreach (var identifier in scaleValueDefinition.Alias.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(scaleValueDefinition.Definition.Count);
-            foreach (var identifier in scaleValueDefinition.Definition)
+            foreach (var identifier in scaleValueDefinition.Definition.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(scaleValueDefinition.HyperLink.Count);
-            foreach (var identifier in scaleValueDefinition.HyperLink)
+            foreach (var identifier in scaleValueDefinition.HyperLink.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -107,12 +119,12 @@ namespace CDP4MessagePackSerializer
             writer.Write(scaleValueDefinition.ShortName);
             writer.Write(scaleValueDefinition.Value);
             writer.WriteArrayHeader(scaleValueDefinition.ExcludedDomain.Count);
-            foreach (var identifier in scaleValueDefinition.ExcludedDomain)
+            foreach (var identifier in scaleValueDefinition.ExcludedDomain.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
             writer.WriteArrayHeader(scaleValueDefinition.ExcludedPerson.Count);
-            foreach (var identifier in scaleValueDefinition.ExcludedPerson)
+            foreach (var identifier in scaleValueDefinition.ExcludedPerson.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
