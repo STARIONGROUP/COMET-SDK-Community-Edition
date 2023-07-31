@@ -196,7 +196,7 @@ namespace CDP4ServicesDal
 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
-                    switch (this.QueryConentTypeKind(httpResponseMessage))
+                    switch (this.QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
                             result.AddRange(this.Cdp4JsonSerializer.Deserialize(resultStream));
@@ -431,7 +431,7 @@ namespace CDP4ServicesDal
                 {
                     IEnumerable<Thing> returned = new List<Thing>();
 
-                    switch (this.QueryConentTypeKind(httpResponseMessage))
+                    switch (this.QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
                             returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
@@ -578,7 +578,7 @@ namespace CDP4ServicesDal
                 {
                     IEnumerable<Thing> returned = new List<Thing>();
 
-                    switch (this.QueryConentTypeKind(httpResponseMessage))
+                    switch (this.QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
                             returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
@@ -855,7 +855,7 @@ namespace CDP4ServicesDal
         /// <exception cref="HeaderException">
         /// thrown when the Content-Type is not supported
         /// </exception>
-        private ContentTypeKind QueryConentTypeKind(HttpResponseMessage httpResponseMessage)
+        private ContentTypeKind QueryContentTypeKind(HttpResponseMessage httpResponseMessage)
         {
             var contentHeaders = httpResponseMessage.Content.Headers;
             
