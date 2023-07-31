@@ -196,19 +196,27 @@ namespace CDP4ServicesDal
 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
+	                var deserializationWatch = Stopwatch.StartNew();
+
                     switch (this.QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
-                            result.AddRange(this.Cdp4JsonSerializer.Deserialize(resultStream));
-                            break;
+	                        Logger.Info("Deserializing JSON response");
+	                        result.AddRange(this.Cdp4JsonSerializer.Deserialize(resultStream));
+	                        Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+							break;
                         case ContentTypeKind.MESSAGEPACK:
-                            var cts = new CancellationTokenSource();
+	                        Logger.Info("Deserializing MESSAGEPACK response");
+							var cts = new CancellationTokenSource();
                             var things = await this.MessagePackSerializer.DeserializeAsync(resultStream, cts.Token);
                             result.AddRange(things);
-                            break;
+	                        Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+							break;
                     }
-                    
-                    Guid iterationId;
+
+					deserializationWatch.Stop();
+
+					Guid iterationId;
                     if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
                     {
                         this.SetIterationContainer(result, iterationId);
@@ -388,9 +396,7 @@ namespace CDP4ServicesDal
             {
                 throw new ArgumentNullException(nameof(thing), $"The {nameof(thing)} may not be null");
             }
-
-            var watch = Stopwatch.StartNew();
-
+            
             if (attributes == null)
             {
                 var includeReferenData = thing is ReferenceDataLibrary;
@@ -429,26 +435,31 @@ namespace CDP4ServicesDal
 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
-                    IEnumerable<Thing> returned = new List<Thing>();
+	                var deserializationWatch = Stopwatch.StartNew();
+
+					IEnumerable<Thing> returned = new List<Thing>();
 
                     switch (this.QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
-                            returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
-                            break;
+	                        Logger.Info("Deserializing JSON response");
+							returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
+	                        Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+							break;
                         case ContentTypeKind.MESSAGEPACK:
-                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
-                            break;
+	                        Logger.Info("Deserializing MESSAGEPACK response");
+							returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
+	                        Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+							break;
                     }
+
+                    deserializationWatch.Stop();
                     
-                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
+					if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(returned, iterationId);
                     }
-
-                    watch.Stop();
-                    Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
-
+                    
                     return returned;
                 }
             }
@@ -571,27 +582,30 @@ namespace CDP4ServicesDal
                 Logger.Info("CDP4Services Open {0}: {1} completed in {2} [ms]", openToken, uriBuilder, watch.ElapsedMilliseconds);
 
                 this.ProcessHeaders(httpResponseMessage);
-                    
-                watch = Stopwatch.StartNew();
-
+                
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
-                    IEnumerable<Thing> returned = new List<Thing>();
+	                var deserializationWatch = Stopwatch.StartNew();
+
+					IEnumerable<Thing> returned = new List<Thing>();
 
                     switch (this.QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
+                            Logger.Info("Deserializing JSON response");
                             returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
-                            break;
+                            Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+							break;
                         case ContentTypeKind.MESSAGEPACK:
-                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
-                            break;
+	                        Logger.Info("Deserializing MESSAGEPACK response");
+							returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
+	                        Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+							break;
                     }
 
-                    watch.Stop();
-                    Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
+					deserializationWatch.Stop();
 
-                    var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
+					var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
                     if (returnedPerson == null)
                     {
                         throw new InvalidOperationException("User not found.");
