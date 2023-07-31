@@ -55,7 +55,13 @@ namespace CDP4MessagePackSerializer.Tests
     using Parameter = CDP4Common.DTO.Parameter;
     using Thing = CDP4Common.DTO.Thing;
     using System.Diagnostics;
+
+    using CDP4Common.CommonData;
+    using CDP4Common.DTO.Equatable;
+
     using static System.Net.Mime.MediaTypeNames;
+
+    using Citation = CDP4Common.DTO.Citation;
 
     /// <summary>
     /// Suite of tests for the <see cref="MessagePackSerializer"/> class
@@ -64,7 +70,9 @@ namespace CDP4MessagePackSerializer.Tests
     {
         private MessagePackSerializer messagePackSerializer;
 
-        private List<Thing> things;
+        private readonly GuidComparer guidComparer = new GuidComparer();
+
+		private List<Thing> things;
 
         [SetUp]
         public void Setup()
@@ -936,7 +944,7 @@ namespace CDP4MessagePackSerializer.Tests
         public void Verify_that_from_JSON_can_be_serialized_and_deserialized(string jsonFileName)
         {
             var metaDataProvider = new MetaDataProvider();
-            var jsonSerializer = new Cdp4JsonSerializer(metaDataProvider, new Version(1, 1, 0));
+            var jsonSerializer = new Cdp4JsonSerializer(metaDataProvider, new Version(1, 2, 0));
 
             var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Data/{jsonFileName}.json"));
 
@@ -966,16 +974,21 @@ namespace CDP4MessagePackSerializer.Tests
             sw = Stopwatch.StartNew();
             jsonSerializer.SerializeToStream(messagePackedThings,memoryStream);
             Console.WriteLine($"JSON WRITE {jsonFileName}:{messagePackedThings.Count()} in {sw.ElapsedMilliseconds} [ms]");
-            
-            memoryStream.Position = 0;
 
-            using (var reader = new StreamReader(memoryStream))
+            Assert.That(jsonThings.Count, Is.EqualTo(messagePackedThings.Count));
+
+            foreach (var jsonThing in jsonThings)
             {
-                var serializedJson = reader.ReadToEnd();
+	            var messagePackThing = messagePackedThings.Single(x => x.Iid == jsonThing.Iid);
+                
+                var areThingsEqual = ThingEquatable.ArePropertiesEqual(jsonThing, messagePackThing);
 
-                var path = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory,
-                    $"compare-{jsonFileName}.json");
-                System.IO.File.WriteAllText(path, serializedJson);
+                if (!areThingsEqual)
+                {
+	                Console.WriteLine($"{jsonThing.ClassKind}:{jsonThing.Iid}");
+                }
+
+				Assert.That(areThingsEqual, Is.True);
             }
         }
 
