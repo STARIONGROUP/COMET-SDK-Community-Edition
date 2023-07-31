@@ -30,7 +30,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
-      <ProjectReference Include="..\CDP4`MessagePackSerializer\CDP4MessagePackSerializer.csproj" />
+      <ProjectReference Include="..\CDP4MessagePackSerializer\CDP4MessagePackSerializer.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -59,7 +59,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Reporting", "CDP4Report
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Reporting.Tests", "CDP4Reporting.Tests\CDP4Reporting.Tests.csproj", "{0320A3B7-087A-4AD6-93F7-90F563132399}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4MessagePackSerializer", "CDP4`MessagePackSerializer\CDP4MessagePackSerializer.csproj", "{231DC960-B227-46CA-B345-E9C4B7CFBC01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4MessagePackSerializer", "CDP4MessagePackSerializer\CDP4MessagePackSerializer.csproj", "{231DC960-B227-46CA-B345-E9C4B7CFBC01}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4MessagePackSerializer.Tests", "CDP4MessagePackSerializer.Tests\CDP4MessagePackSerializer.Tests.csproj", "{CBECE184-A79F-4D71-82F6-3DA29FF9E048}"
 EndProject
