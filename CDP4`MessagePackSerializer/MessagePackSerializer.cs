@@ -72,7 +72,7 @@ namespace CDP4MessagePackSerializer
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        public async Task SerializeToStreamAsync(IEnumerable<Thing> things, Stream outputStream, CancellationToken cancellationToken)
+        public Task SerializeToStreamAsync(IEnumerable<Thing> things, Stream outputStream, CancellationToken cancellationToken)
         {
             if (things == null)
             {
@@ -84,6 +84,30 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(outputStream), "outputstream may not be null");
             }
 
+            return this.SerializeToStreamInternalAsync(things, outputStream, cancellationToken);
+        }
+
+        /// <summary>
+        /// Asynchronously serializes the <see cref="Thing"/>s to a <see cref="Stream"/>
+        /// </summary>
+        /// <param name="things">
+        /// The <see cref="Thing"/>s that are to be serialized.
+        /// </param>
+        /// <param name="outputStream">
+        /// The target output <see cref="Stream"/>.
+        /// </param>
+        /// <param name="cancellationToken">
+        /// A <see cref="CancellationToken"/>
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task"/>
+        /// </returns>
+        /// <remarks>
+        /// This method is used to split asynchronous code from parameter checking.
+        /// The <see cref="SerializeToStreamAsync"/> method is exposed and shall be used.
+        /// </remarks>
+        private async Task SerializeToStreamInternalAsync(IEnumerable<Thing> things, Stream outputStream, CancellationToken cancellationToken)
+        {
             var options = this.CreateSerializerOptions();
 
             var payload = things.ToPayload();
@@ -133,7 +157,7 @@ namespace CDP4MessagePackSerializer
 
             Logger.Debug("SerializeToStream finished in {0} [ms]", sw.ElapsedMilliseconds);
         }
-
+        
         /// <summary>
         /// Asynchronously serializes the <see cref="Thing"/>s to a <see cref="IBufferWriter{Byte}"/>
         /// </summary>
@@ -186,13 +210,34 @@ namespace CDP4MessagePackSerializer
         /// <returns>
         /// The the deserialized collection of <see cref="Thing"/>.
         /// </returns>
-        public async Task<IEnumerable<Thing>> DeserializeAsync(Stream contentStream, CancellationToken cancellationToken)
+        public Task<IEnumerable<Thing>> DeserializeAsync(Stream contentStream, CancellationToken cancellationToken)
         {
             if (contentStream == null)
             {
                 throw new ArgumentNullException(nameof(contentStream), "Stream may not be null");
             }
 
+            return this.DeserializeInternalAsync(contentStream, cancellationToken);
+        }
+
+        /// <summary>
+        /// Asynchronously deserializes <see cref="IEnumerable{Thing}"/> from the <paramref name="contentStream"/>
+        /// </summary>
+        /// <param name="contentStream">
+        /// A stream containing <see cref="Thing"/>s
+        /// </param>
+        /// <param name="cancellationToken">
+        /// A <see cref="CancellationToken"/>
+        /// </param>
+        /// <returns>
+        /// The the deserialized collection of <see cref="Thing"/>.
+        /// </returns>
+        /// <remarks>
+        /// This method is used to split asynchronous code from parameter checking.
+        /// The <see cref="DeserializeAsync"/> method is exposed and shall be used.
+        /// </remarks>
+        private async Task<IEnumerable<Thing>> DeserializeInternalAsync(Stream contentStream, CancellationToken cancellationToken)
+        {
             var options = this.CreateSerializerOptions();
 
             var sw = Stopwatch.StartNew();
