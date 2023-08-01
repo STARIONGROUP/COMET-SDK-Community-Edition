@@ -115,7 +115,7 @@ namespace CDP4Common.DTO.Equatable
             if (me.ShortName == null && other.ShortName != null) return false;
             if (me.ShortName != null && !me.ShortName.Equals(other.ShortName)) return false;
 
-            if (!me.SourceEngineeringModelSetupIid.HasValue && other.SourceEngineeringModelSetupIid.HasValue) return false;
+            if (me.SourceEngineeringModelSetupIid.HasValue != other.SourceEngineeringModelSetupIid.HasValue) return false;
             if (!me.SourceEngineeringModelSetupIid.Equals(other.SourceEngineeringModelSetupIid)) return false;
 
             if (!me.StudyPhase.Equals(other.StudyPhase)) return false;
@@ -126,7 +126,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.ModifiedOn.Equals(other.ModifiedOn)) return false;
 
-            if (!me.DefaultOrganizationalParticipant.HasValue && other.DefaultOrganizationalParticipant.HasValue) return false;
+            if (me.DefaultOrganizationalParticipant.HasValue != other.DefaultOrganizationalParticipant.HasValue) return false;
             if (!me.DefaultOrganizationalParticipant.Equals(other.DefaultOrganizationalParticipant)) return false;
 
             if (!me.OrganizationalParticipant.OrderBy(x => x).SequenceEqual(other.OrganizationalParticipant.OrderBy(x => x))) return false;

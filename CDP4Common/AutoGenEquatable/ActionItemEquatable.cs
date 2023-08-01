@@ -105,7 +105,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Classification.Equals(other.Classification)) return false;
 
-            if (!me.CloseOutDate.HasValue && other.CloseOutDate.HasValue) return false;
+            if (me.CloseOutDate.HasValue != other.CloseOutDate.HasValue) return false;
             if (!me.CloseOutDate.Equals(other.CloseOutDate)) return false;
 
             if (me.CloseOutStatement == null && other.CloseOutStatement != null) return false;
@@ -131,7 +131,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Owner.Equals(other.Owner)) return false;
 
-            if (!me.PrimaryAnnotatedThing.HasValue && other.PrimaryAnnotatedThing.HasValue) return false;
+            if (me.PrimaryAnnotatedThing.HasValue != other.PrimaryAnnotatedThing.HasValue) return false;
             if (!me.PrimaryAnnotatedThing.Equals(other.PrimaryAnnotatedThing)) return false;
 
             if (!me.RelatedThing.OrderBy(x => x).SequenceEqual(other.RelatedThing.OrderBy(x => x))) return false;

@@ -93,7 +93,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Definition.OrderBy(x => x).SequenceEqual(other.Definition.OrderBy(x => x))) return false;
 
-            if (!me.Group.HasValue && other.Group.HasValue) return false;
+            if (me.Group.HasValue != other.Group.HasValue) return false;
             if (!me.Group.Equals(other.Group)) return false;
 
             if (!me.HyperLink.OrderBy(x => x).SequenceEqual(other.HyperLink.OrderBy(x => x))) return false;

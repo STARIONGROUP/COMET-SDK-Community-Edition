@@ -82,7 +82,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.RevisionNumber.Equals(other.RevisionNumber)) return false;
 
-            if (!me.ContainingFolder.HasValue && other.ContainingFolder.HasValue) return false;
+            if (me.ContainingFolder.HasValue != other.ContainingFolder.HasValue) return false;
             if (!me.ContainingFolder.Equals(other.ContainingFolder)) return false;
 
             if (me.ContentHash == null && other.ContentHash != null) return false;

@@ -78,7 +78,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.RevisionNumber.Equals(other.RevisionNumber)) return false;
 
-            if (!me.ContainingGroup.HasValue && other.ContainingGroup.HasValue) return false;
+            if (me.ContainingGroup.HasValue != other.ContainingGroup.HasValue) return false;
             if (!me.ContainingGroup.Equals(other.ContainingGroup)) return false;
 
             if (me.Name == null && other.Name != null) return false;

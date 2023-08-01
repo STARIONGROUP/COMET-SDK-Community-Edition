@@ -84,7 +84,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.FileRevision.OrderBy(x => x).SequenceEqual(other.FileRevision.OrderBy(x => x))) return false;
 
-            if (!me.LockedBy.HasValue && other.LockedBy.HasValue) return false;
+            if (me.LockedBy.HasValue != other.LockedBy.HasValue) return false;
             if (!me.LockedBy.Equals(other.LockedBy)) return false;
 
             if (!me.Owner.Equals(other.Owner)) return false;

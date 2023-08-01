@@ -89,7 +89,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.AffectedItemIid.Equals(other.AffectedItemIid)) return false;
 
-            if (!me.Author.HasValue && other.Author.HasValue) return false;
+            if (me.Author.HasValue != other.Author.HasValue) return false;
             if (!me.Author.Equals(other.Author)) return false;
 
             if (!me.Category.OrderBy(x => x).SequenceEqual(other.Category.OrderBy(x => x))) return false;

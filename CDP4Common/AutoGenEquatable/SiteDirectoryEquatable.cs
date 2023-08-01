@@ -95,10 +95,10 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.CreatedOn.Equals(other.CreatedOn)) return false;
 
-            if (!me.DefaultParticipantRole.HasValue && other.DefaultParticipantRole.HasValue) return false;
+            if (me.DefaultParticipantRole.HasValue != other.DefaultParticipantRole.HasValue) return false;
             if (!me.DefaultParticipantRole.Equals(other.DefaultParticipantRole)) return false;
 
-            if (!me.DefaultPersonRole.HasValue && other.DefaultPersonRole.HasValue) return false;
+            if (me.DefaultPersonRole.HasValue != other.DefaultPersonRole.HasValue) return false;
             if (!me.DefaultPersonRole.Equals(other.DefaultPersonRole)) return false;
 
             if (!me.Domain.OrderBy(x => x).SequenceEqual(other.Domain.OrderBy(x => x))) return false;

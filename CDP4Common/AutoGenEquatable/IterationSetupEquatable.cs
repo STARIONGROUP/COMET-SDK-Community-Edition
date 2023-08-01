@@ -88,7 +88,7 @@ namespace CDP4Common.DTO.Equatable
             if (me.Description == null && other.Description != null) return false;
             if (me.Description != null && !me.Description.Equals(other.Description)) return false;
 
-            if (!me.FrozenOn.HasValue && other.FrozenOn.HasValue) return false;
+            if (me.FrozenOn.HasValue != other.FrozenOn.HasValue) return false;
             if (!me.FrozenOn.Equals(other.FrozenOn)) return false;
 
             if (!me.IsDeleted.Equals(other.IsDeleted)) return false;
@@ -97,7 +97,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.IterationNumber.Equals(other.IterationNumber)) return false;
 
-            if (!me.SourceIterationSetup.HasValue && other.SourceIterationSetup.HasValue) return false;
+            if (me.SourceIterationSetup.HasValue != other.SourceIterationSetup.HasValue) return false;
             if (!me.SourceIterationSetup.Equals(other.SourceIterationSetup)) return false;
 
             if (!me.ExcludedDomain.OrderBy(x => x).SequenceEqual(other.ExcludedDomain.OrderBy(x => x))) return false;

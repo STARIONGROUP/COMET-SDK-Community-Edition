@@ -81,7 +81,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.RevisionNumber.Equals(other.RevisionNumber)) return false;
 
-            if (!me.ExecutedOn.HasValue && other.ExecutedOn.HasValue) return false;
+            if (me.ExecutedOn.HasValue != other.ExecutedOn.HasValue) return false;
             if (!me.ExecutedOn.Equals(other.ExecutedOn)) return false;
 
             if (!me.IsActive.Equals(other.IsActive)) return false;

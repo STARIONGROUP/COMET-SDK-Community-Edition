@@ -97,7 +97,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.ModifiedOn.Equals(other.ModifiedOn)) return false;
 
-            if (!me.ReplyTo.HasValue && other.ReplyTo.HasValue) return false;
+            if (me.ReplyTo.HasValue != other.ReplyTo.HasValue) return false;
             if (!me.ReplyTo.Equals(other.ReplyTo)) return false;
 
             if (me.ThingPreference == null && other.ThingPreference != null) return false;

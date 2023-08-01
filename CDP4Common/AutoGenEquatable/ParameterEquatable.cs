@@ -91,7 +91,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.ExpectsOverride.Equals(other.ExpectsOverride)) return false;
 
-            if (!me.Group.HasValue && other.Group.HasValue) return false;
+            if (me.Group.HasValue != other.Group.HasValue) return false;
             if (!me.Group.Equals(other.Group)) return false;
 
             if (!me.IsOptionDependent.Equals(other.IsOptionDependent)) return false;
@@ -102,13 +102,13 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.ParameterType.Equals(other.ParameterType)) return false;
 
-            if (!me.RequestedBy.HasValue && other.RequestedBy.HasValue) return false;
+            if (me.RequestedBy.HasValue != other.RequestedBy.HasValue) return false;
             if (!me.RequestedBy.Equals(other.RequestedBy)) return false;
 
-            if (!me.Scale.HasValue && other.Scale.HasValue) return false;
+            if (me.Scale.HasValue != other.Scale.HasValue) return false;
             if (!me.Scale.Equals(other.Scale)) return false;
 
-            if (!me.StateDependence.HasValue && other.StateDependence.HasValue) return false;
+            if (me.StateDependence.HasValue != other.StateDependence.HasValue) return false;
             if (!me.StateDependence.Equals(other.StateDependence)) return false;
 
             if (!me.ValueSet.OrderBy(x => x).SequenceEqual(other.ValueSet.OrderBy(x => x))) return false;

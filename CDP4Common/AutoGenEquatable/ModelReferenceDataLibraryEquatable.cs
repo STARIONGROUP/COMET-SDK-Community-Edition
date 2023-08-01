@@ -120,7 +120,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.ReferenceSource.OrderBy(x => x).SequenceEqual(other.ReferenceSource.OrderBy(x => x))) return false;
 
-            if (!me.RequiredRdl.HasValue && other.RequiredRdl.HasValue) return false;
+            if (me.RequiredRdl.HasValue != other.RequiredRdl.HasValue) return false;
             if (!me.RequiredRdl.Equals(other.RequiredRdl)) return false;
 
             if (!me.Rule.OrderBy(x => x).SequenceEqual(other.Rule.OrderBy(x => x))) return false;

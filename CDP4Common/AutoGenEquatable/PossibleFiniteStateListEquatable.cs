@@ -89,7 +89,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Category.OrderBy(x => x).SequenceEqual(other.Category.OrderBy(x => x))) return false;
 
-            if (!me.DefaultState.HasValue && other.DefaultState.HasValue) return false;
+            if (me.DefaultState.HasValue != other.DefaultState.HasValue) return false;
             if (!me.DefaultState.Equals(other.DefaultState)) return false;
 
             if (!me.Definition.OrderBy(x => x).SequenceEqual(other.Definition.OrderBy(x => x))) return false;

@@ -86,7 +86,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Bounds.OrderBy(x => x).SequenceEqual(other.Bounds.OrderBy(x => x))) return false;
 
-            if (!me.DepictedThing.HasValue && other.DepictedThing.HasValue) return false;
+            if (me.DepictedThing.HasValue != other.DepictedThing.HasValue) return false;
             if (!me.DepictedThing.Equals(other.DepictedThing)) return false;
 
             if (!me.DiagramElement.OrderBy(x => x).SequenceEqual(other.DiagramElement.OrderBy(x => x))) return false;
@@ -107,7 +107,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Resolution.Equals(other.Resolution)) return false;
 
-            if (!me.SharedStyle.HasValue && other.SharedStyle.HasValue) return false;
+            if (me.SharedStyle.HasValue != other.SharedStyle.HasValue) return false;
             if (!me.SharedStyle.Equals(other.SharedStyle)) return false;
 
             if (me.ThingPreference == null && other.ThingPreference != null) return false;

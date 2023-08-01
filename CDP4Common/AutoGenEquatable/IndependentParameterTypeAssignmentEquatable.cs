@@ -84,7 +84,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.ModifiedOn.Equals(other.ModifiedOn)) return false;
 
-            if (!me.MeasurementScale.HasValue && other.MeasurementScale.HasValue) return false;
+            if (me.MeasurementScale.HasValue != other.MeasurementScale.HasValue) return false;
             if (!me.MeasurementScale.Equals(other.MeasurementScale)) return false;
 
             if (!me.ParameterType.Equals(other.ParameterType)) return false;

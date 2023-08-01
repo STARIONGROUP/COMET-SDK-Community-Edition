@@ -94,31 +94,31 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.ExcludedPerson.OrderBy(x => x).SequenceEqual(other.ExcludedPerson.OrderBy(x => x))) return false;
 
-            if (!me.FillColor.HasValue && other.FillColor.HasValue) return false;
+            if (me.FillColor.HasValue != other.FillColor.HasValue) return false;
             if (!me.FillColor.Equals(other.FillColor)) return false;
 
-            if (!me.FillOpacity.HasValue && other.FillOpacity.HasValue) return false;
+            if (me.FillOpacity.HasValue != other.FillOpacity.HasValue) return false;
             if (!me.FillOpacity.Equals(other.FillOpacity)) return false;
 
-            if (!me.FontBold.HasValue && other.FontBold.HasValue) return false;
+            if (me.FontBold.HasValue != other.FontBold.HasValue) return false;
             if (!me.FontBold.Equals(other.FontBold)) return false;
 
-            if (!me.FontColor.HasValue && other.FontColor.HasValue) return false;
+            if (me.FontColor.HasValue != other.FontColor.HasValue) return false;
             if (!me.FontColor.Equals(other.FontColor)) return false;
 
-            if (!me.FontItalic.HasValue && other.FontItalic.HasValue) return false;
+            if (me.FontItalic.HasValue != other.FontItalic.HasValue) return false;
             if (!me.FontItalic.Equals(other.FontItalic)) return false;
 
             if (me.FontName == null && other.FontName != null) return false;
             if (me.FontName != null && !me.FontName.Equals(other.FontName)) return false;
 
-            if (!me.FontSize.HasValue && other.FontSize.HasValue) return false;
+            if (me.FontSize.HasValue != other.FontSize.HasValue) return false;
             if (!me.FontSize.Equals(other.FontSize)) return false;
 
-            if (!me.FontStrokeThrough.HasValue && other.FontStrokeThrough.HasValue) return false;
+            if (me.FontStrokeThrough.HasValue != other.FontStrokeThrough.HasValue) return false;
             if (!me.FontStrokeThrough.Equals(other.FontStrokeThrough)) return false;
 
-            if (!me.FontUnderline.HasValue && other.FontUnderline.HasValue) return false;
+            if (me.FontUnderline.HasValue != other.FontUnderline.HasValue) return false;
             if (!me.FontUnderline.Equals(other.FontUnderline)) return false;
 
             if (!me.ModifiedOn.Equals(other.ModifiedOn)) return false;
@@ -126,13 +126,13 @@ namespace CDP4Common.DTO.Equatable
             if (me.Name == null && other.Name != null) return false;
             if (me.Name != null && !me.Name.Equals(other.Name)) return false;
 
-            if (!me.StrokeColor.HasValue && other.StrokeColor.HasValue) return false;
+            if (me.StrokeColor.HasValue != other.StrokeColor.HasValue) return false;
             if (!me.StrokeColor.Equals(other.StrokeColor)) return false;
 
-            if (!me.StrokeOpacity.HasValue && other.StrokeOpacity.HasValue) return false;
+            if (me.StrokeOpacity.HasValue != other.StrokeOpacity.HasValue) return false;
             if (!me.StrokeOpacity.Equals(other.StrokeOpacity)) return false;
 
-            if (!me.StrokeWidth.HasValue && other.StrokeWidth.HasValue) return false;
+            if (me.StrokeWidth.HasValue != other.StrokeWidth.HasValue) return false;
             if (!me.StrokeWidth.Equals(other.StrokeWidth)) return false;
 
             if (!me.UsedColor.OrderBy(x => x).SequenceEqual(other.UsedColor.OrderBy(x => x))) return false;

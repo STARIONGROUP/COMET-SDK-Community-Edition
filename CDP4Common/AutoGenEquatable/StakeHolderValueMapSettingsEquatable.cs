@@ -83,15 +83,15 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.ExcludedPerson.OrderBy(x => x).SequenceEqual(other.ExcludedPerson.OrderBy(x => x))) return false;
 
-            if (!me.GoalToValueGroupRelationship.HasValue && other.GoalToValueGroupRelationship.HasValue) return false;
+            if (me.GoalToValueGroupRelationship.HasValue != other.GoalToValueGroupRelationship.HasValue) return false;
             if (!me.GoalToValueGroupRelationship.Equals(other.GoalToValueGroupRelationship)) return false;
 
             if (!me.ModifiedOn.Equals(other.ModifiedOn)) return false;
 
-            if (!me.StakeholderValueToRequirementRelationship.HasValue && other.StakeholderValueToRequirementRelationship.HasValue) return false;
+            if (me.StakeholderValueToRequirementRelationship.HasValue != other.StakeholderValueToRequirementRelationship.HasValue) return false;
             if (!me.StakeholderValueToRequirementRelationship.Equals(other.StakeholderValueToRequirementRelationship)) return false;
 
-            if (!me.ValueGroupToStakeholderValueRelationship.HasValue && other.ValueGroupToStakeholderValueRelationship.HasValue) return false;
+            if (me.ValueGroupToStakeholderValueRelationship.HasValue != other.ValueGroupToStakeholderValueRelationship.HasValue) return false;
             if (!me.ValueGroupToStakeholderValueRelationship.Equals(other.ValueGroupToStakeholderValueRelationship)) return false;
 
             if (me.ThingPreference == null && other.ThingPreference != null) return false;

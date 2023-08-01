@@ -80,7 +80,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Expression.OrderBy(x => x).SequenceEqual(other.Expression.OrderBy(x => x))) return false;
 
-            if (!me.TopExpression.HasValue && other.TopExpression.HasValue) return false;
+            if (me.TopExpression.HasValue != other.TopExpression.HasValue) return false;
             if (!me.TopExpression.Equals(other.TopExpression)) return false;
 
             if (!me.ExcludedDomain.OrderBy(x => x).SequenceEqual(other.ExcludedDomain.OrderBy(x => x))) return false;

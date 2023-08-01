@@ -101,7 +101,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.ParameterType.Equals(other.ParameterType)) return false;
 
-            if (!me.Scale.HasValue && other.Scale.HasValue) return false;
+            if (me.Scale.HasValue != other.Scale.HasValue) return false;
             if (!me.Scale.Equals(other.Scale)) return false;
 
             if (me.ShortName == null && other.ShortName != null) return false;

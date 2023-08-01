@@ -85,7 +85,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Correspondence.OrderBy(x => x).SequenceEqual(other.Correspondence.OrderBy(x => x))) return false;
 
-            if (!me.ExternalFormat.HasValue && other.ExternalFormat.HasValue) return false;
+            if (me.ExternalFormat.HasValue != other.ExternalFormat.HasValue) return false;
             if (!me.ExternalFormat.Equals(other.ExternalFormat)) return false;
 
             if (me.ExternalModelName == null && other.ExternalModelName != null) return false;

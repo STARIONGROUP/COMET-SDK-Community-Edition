@@ -84,7 +84,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.RelationalOperator.Equals(other.RelationalOperator)) return false;
 
-            if (!me.Scale.HasValue && other.Scale.HasValue) return false;
+            if (me.Scale.HasValue != other.Scale.HasValue) return false;
             if (!me.Scale.Equals(other.Scale)) return false;
 
             if (!me.Value.SequenceEqual(other.Value)) return false;

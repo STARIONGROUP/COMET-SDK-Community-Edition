@@ -84,10 +84,10 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.RevisionNumber.Equals(other.RevisionNumber)) return false;
 
-            if (!me.ActualOption.HasValue && other.ActualOption.HasValue) return false;
+            if (me.ActualOption.HasValue != other.ActualOption.HasValue) return false;
             if (!me.ActualOption.Equals(other.ActualOption)) return false;
 
-            if (!me.ActualState.HasValue && other.ActualState.HasValue) return false;
+            if (me.ActualState.HasValue != other.ActualState.HasValue) return false;
             if (!me.ActualState.Equals(other.ActualState)) return false;
 
             if (!me.Computed.SequenceEqual(other.Computed)) return false;

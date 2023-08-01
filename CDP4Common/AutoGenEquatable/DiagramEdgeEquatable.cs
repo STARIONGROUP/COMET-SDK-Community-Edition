@@ -87,7 +87,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Bounds.OrderBy(x => x).SequenceEqual(other.Bounds.OrderBy(x => x))) return false;
 
-            if (!me.DepictedThing.HasValue && other.DepictedThing.HasValue) return false;
+            if (me.DepictedThing.HasValue != other.DepictedThing.HasValue) return false;
             if (!me.DepictedThing.Equals(other.DepictedThing)) return false;
 
             if (!me.DiagramElement.OrderBy(x => x).SequenceEqual(other.DiagramElement.OrderBy(x => x))) return false;
@@ -106,7 +106,7 @@ namespace CDP4Common.DTO.Equatable
             if (!me.Point.OrderBy(x => x.K).Select(x => x.K).SequenceEqual(other.Point.OrderBy(x => x.K).Select(x => x.K))) return false;
             if (!me.Point.OrderBy(x => x.K).Select(x => x.V).SequenceEqual(other.Point.OrderBy(x => x.K).Select(x => x.V))) return false;
 
-            if (!me.SharedStyle.HasValue && other.SharedStyle.HasValue) return false;
+            if (me.SharedStyle.HasValue != other.SharedStyle.HasValue) return false;
             if (!me.SharedStyle.Equals(other.SharedStyle)) return false;
 
             if (!me.Source.Equals(other.Source)) return false;

@@ -100,7 +100,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Definition.OrderBy(x => x).SequenceEqual(other.Definition.OrderBy(x => x))) return false;
 
-            if (!me.DegreeOfInterpolation.HasValue && other.DegreeOfInterpolation.HasValue) return false;
+            if (me.DegreeOfInterpolation.HasValue != other.DegreeOfInterpolation.HasValue) return false;
             if (!me.DegreeOfInterpolation.Equals(other.DegreeOfInterpolation)) return false;
 
             if (!me.DependentParameterType.OrderBy(x => x.K).Select(x => x.K).SequenceEqual(other.DependentParameterType.OrderBy(x => x.K).Select(x => x.K))) return false;

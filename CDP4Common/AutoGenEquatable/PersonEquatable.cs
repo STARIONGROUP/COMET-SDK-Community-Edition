@@ -91,13 +91,13 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.RevisionNumber.Equals(other.RevisionNumber)) return false;
 
-            if (!me.DefaultDomain.HasValue && other.DefaultDomain.HasValue) return false;
+            if (me.DefaultDomain.HasValue != other.DefaultDomain.HasValue) return false;
             if (!me.DefaultDomain.Equals(other.DefaultDomain)) return false;
 
-            if (!me.DefaultEmailAddress.HasValue && other.DefaultEmailAddress.HasValue) return false;
+            if (me.DefaultEmailAddress.HasValue != other.DefaultEmailAddress.HasValue) return false;
             if (!me.DefaultEmailAddress.Equals(other.DefaultEmailAddress)) return false;
 
-            if (!me.DefaultTelephoneNumber.HasValue && other.DefaultTelephoneNumber.HasValue) return false;
+            if (me.DefaultTelephoneNumber.HasValue != other.DefaultTelephoneNumber.HasValue) return false;
             if (!me.DefaultTelephoneNumber.Equals(other.DefaultTelephoneNumber)) return false;
 
             if (!me.EmailAddress.OrderBy(x => x).SequenceEqual(other.EmailAddress.OrderBy(x => x))) return false;
@@ -109,7 +109,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.IsDeprecated.Equals(other.IsDeprecated)) return false;
 
-            if (!me.Organization.HasValue && other.Organization.HasValue) return false;
+            if (me.Organization.HasValue != other.Organization.HasValue) return false;
             if (!me.Organization.Equals(other.Organization)) return false;
 
             if (me.OrganizationalUnit == null && other.OrganizationalUnit != null) return false;
@@ -118,7 +118,7 @@ namespace CDP4Common.DTO.Equatable
             if (me.Password == null && other.Password != null) return false;
             if (me.Password != null && !me.Password.Equals(other.Password)) return false;
 
-            if (!me.Role.HasValue && other.Role.HasValue) return false;
+            if (me.Role.HasValue != other.Role.HasValue) return false;
             if (!me.Role.Equals(other.Role)) return false;
 
             if (me.ShortName == null && other.ShortName != null) return false;

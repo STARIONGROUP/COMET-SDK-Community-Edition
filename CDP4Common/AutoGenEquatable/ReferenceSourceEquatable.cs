@@ -109,19 +109,19 @@ namespace CDP4Common.DTO.Equatable
             if (me.Name == null && other.Name != null) return false;
             if (me.Name != null && !me.Name.Equals(other.Name)) return false;
 
-            if (!me.PublicationYear.HasValue && other.PublicationYear.HasValue) return false;
+            if (me.PublicationYear.HasValue != other.PublicationYear.HasValue) return false;
             if (!me.PublicationYear.Equals(other.PublicationYear)) return false;
 
-            if (!me.PublishedIn.HasValue && other.PublishedIn.HasValue) return false;
+            if (me.PublishedIn.HasValue != other.PublishedIn.HasValue) return false;
             if (!me.PublishedIn.Equals(other.PublishedIn)) return false;
 
-            if (!me.Publisher.HasValue && other.Publisher.HasValue) return false;
+            if (me.Publisher.HasValue != other.Publisher.HasValue) return false;
             if (!me.Publisher.Equals(other.Publisher)) return false;
 
             if (me.ShortName == null && other.ShortName != null) return false;
             if (me.ShortName != null && !me.ShortName.Equals(other.ShortName)) return false;
 
-            if (!me.VersionDate.HasValue && other.VersionDate.HasValue) return false;
+            if (me.VersionDate.HasValue != other.VersionDate.HasValue) return false;
             if (!me.VersionDate.Equals(other.VersionDate)) return false;
 
             if (me.VersionIdentifier == null && other.VersionIdentifier != null) return false;

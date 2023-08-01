@@ -99,7 +99,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.ActualFiniteStateList.OrderBy(x => x).SequenceEqual(other.ActualFiniteStateList.OrderBy(x => x))) return false;
 
-            if (!me.DefaultOption.HasValue && other.DefaultOption.HasValue) return false;
+            if (me.DefaultOption.HasValue != other.DefaultOption.HasValue) return false;
             if (!me.DefaultOption.Equals(other.DefaultOption)) return false;
 
             if (!me.DomainFileStore.OrderBy(x => x).SequenceEqual(other.DomainFileStore.OrderBy(x => x))) return false;
@@ -123,10 +123,10 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.RuleVerificationList.OrderBy(x => x).SequenceEqual(other.RuleVerificationList.OrderBy(x => x))) return false;
 
-            if (!me.SourceIterationIid.HasValue && other.SourceIterationIid.HasValue) return false;
+            if (me.SourceIterationIid.HasValue != other.SourceIterationIid.HasValue) return false;
             if (!me.SourceIterationIid.Equals(other.SourceIterationIid)) return false;
 
-            if (!me.TopElement.HasValue && other.TopElement.HasValue) return false;
+            if (me.TopElement.HasValue != other.TopElement.HasValue) return false;
             if (!me.TopElement.Equals(other.TopElement)) return false;
 
             if (!me.DiagramCanvas.OrderBy(x => x).SequenceEqual(other.DiagramCanvas.OrderBy(x => x))) return false;

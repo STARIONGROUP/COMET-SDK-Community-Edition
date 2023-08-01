@@ -98,7 +98,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.IsDeprecated.Equals(other.IsDeprecated)) return false;
 
-            if (!me.MaxContained.HasValue && other.MaxContained.HasValue) return false;
+            if (me.MaxContained.HasValue != other.MaxContained.HasValue) return false;
             if (!me.MaxContained.Equals(other.MaxContained)) return false;
 
             if (!me.MinContained.Equals(other.MinContained)) return false;
