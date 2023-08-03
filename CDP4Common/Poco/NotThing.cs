@@ -25,6 +25,7 @@
 namespace CDP4Common
 {
     using System;
+
     using CDP4Common.CommonData;
 
     /// <summary>
@@ -76,5 +77,23 @@ namespace CDP4Common
         {
             throw new NotSupportedException();
         }
+
+		/// <summary>
+		/// Queries the value(s) of the specified property
+		/// </summary>
+		/// <param name="path">
+		/// The path of the property for which the value is to be queried
+		/// </param>
+		/// <returns>
+		/// an object that represents the value.
+		/// </returns>
+		/// <remarks>
+		/// The result may be any 
+		/// </remarks>
+		/// <exception cref="NotSupportedException">The methos is not supported by this class</exception>
+		public override object QueryValue(string path)
+        {
+			throw new NotSupportedException();
+		}
     }
 }

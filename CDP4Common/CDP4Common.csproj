@@ -49,6 +49,7 @@
     <Folder Include="AutoGenMetaInfo\" />
     <Folder Include="AutoGenPoco\" />
     <Folder Include="AutoGenSentinel\" />
+    <Folder Include="AutoGenThingPropertyAccessor\" />
     <Folder Include="ClasslessDto\" />
     <Folder Include="Poco\" />
     <Folder Include="RuleVerification\" />
