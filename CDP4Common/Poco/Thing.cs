@@ -771,5 +771,217 @@ namespace CDP4Common.CommonData
                 dto.PartialRoutes.Add(partialRoute);
             }
         }
+
+        /// <summary>
+        /// Queries the value(s) of the specified property
+        /// </summary>
+        /// <param name="path">
+        /// The path of the property for which the value is to be queried
+        /// </param>
+        /// <returns>
+        /// an object that represents the value.
+        /// </returns>
+        /// <remarks>
+        /// The result may be any 
+        /// </remarks>
+        public abstract object QueryValue(string path);
+
+        /// <summary>
+        /// Queries the value(s) of the specified property for the <see cref="Thing"/> class.
+        /// </summary>
+        /// <param name="path">
+        /// The path of the property for which the value is to be queried
+        /// </param>
+        /// <returns>
+        /// an object that represents the value.
+        /// </returns>
+        /// <remarks>
+        /// The result may be any 
+        /// </remarks>
+        protected internal object QueryThingValues(string path)
+        {
+            var pd = PropertyAccesor.PropertyDescriptor.QueryPropertyDescriptor(path);
+
+            switch (pd.Name.ToLower())
+            {
+                case "iid":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return this.Iid;
+                case "revisionnumber":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return this.RevisionNumber;
+                case "classkind":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return this.ClassKind;
+                case "excludeddomain":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    var excludedDomainUpperBound = pd.Upper.Value;
+
+                    if (pd.Lower.Value == 0 && excludedDomainUpperBound == int.MaxValue && !this.ExcludedDomain.Any())
+                    {
+                        if (pd.Next == null)
+                        {
+                            return new List<DomainOfExpertise>();
+                        }
+
+                        var sentinelDomainOfExpertise = new DomainOfExpertise(Guid.Empty, null, null);
+
+                        return sentinelDomainOfExpertise.QuerySentinelValue(pd.NextPath, true);
+                    }
+
+                    if (pd.Upper.Value == int.MaxValue)
+                    {
+                        excludedDomainUpperBound = this.ExcludedDomain.Count - 1;
+                    }
+
+                    if (this.ExcludedDomain.Count - 1 < pd.Lower.Value)
+                    {
+                        throw new IndexOutOfRangeException($"Invalid Multiplicity for ExcludedDomain property, the lower bound {pd.Lower.Value} is higher than the max index of this list.");
+                    }
+
+                    if (this.ExcludedDomain.Count - 1 < excludedDomainUpperBound)
+                    {
+                        throw new IndexOutOfRangeException($"Invalid Multiplicity for ExcludedDomain property, the upper bound {excludedDomainUpperBound} is higher than the max index of this list.");
+                    }
+
+                    if (pd.Lower.Value == pd.Upper.Value)
+                    {
+                        if (pd.Next == null)
+                        {
+                            return this.ExcludedDomain[pd.Lower.Value];
+                        }
+
+                        return this.ExcludedDomain[pd.Lower.Value].QueryValue(pd.NextPath);
+                    }
+
+                    if (pd.Next == null)
+                    {
+                        var domainOfExpertiseObjects = new List<DomainOfExpertise>();
+
+                        for (var i = pd.Lower.Value; i < excludedDomainUpperBound + 1; i++)
+                        {
+                            domainOfExpertiseObjects.Add(this.ExcludedDomain[i]);
+                        }
+
+                        return domainOfExpertiseObjects;
+                    }
+
+                    var excludeddomainNextObjects = new List<object>();
+
+                    for (var i = pd.Lower.Value; i < excludedDomainUpperBound + 1; i++)
+                    {
+                        var queryResult = this.ExcludedDomain[i].QueryValue(pd.Next.Input);
+
+                        if (queryResult is IEnumerable<object> queriedValues)
+                        {
+                            foreach (var queriedValue in queriedValues)
+                            {
+                                if (queriedValue != null)
+                                {
+                                    excludeddomainNextObjects.Add(queriedValue);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (queryResult != null)
+                            {
+                                excludeddomainNextObjects.Add(queryResult);
+                            }
+                        }
+                    }
+
+                    return excludeddomainNextObjects;
+                case "excludedperson":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    var excludedPersonUpperBound = pd.Upper.Value;
+
+                    if (pd.Lower.Value == 0 && excludedPersonUpperBound == int.MaxValue && !this.ExcludedPerson.Any())
+                    {
+                        if (pd.Next == null)
+                        {
+                            return new List<Person>();
+                        }
+
+                        var sentinelPerson = new Person(Guid.Empty, null, null);
+
+                        return sentinelPerson.QuerySentinelValue(pd.NextPath, true);
+                    }
+
+                    if (pd.Upper.Value == int.MaxValue)
+                    {
+                        excludedPersonUpperBound = this.ExcludedPerson.Count - 1;
+                    }
+
+                    if (this.ExcludedPerson.Count - 1 < pd.Lower.Value)
+                    {
+                        throw new IndexOutOfRangeException($"Invalid Multiplicity for ExcludedPerson property, the lower bound {pd.Lower.Value} is higher than the max index of this list.");
+                    }
+
+                    if (this.ExcludedPerson.Count - 1 < excludedPersonUpperBound)
+                    {
+                        throw new IndexOutOfRangeException($"Invalid Multiplicity for ExcludedPerson property, the upper bound {excludedPersonUpperBound} is higher than the max index of this list.");
+                    }
+
+                    if (pd.Lower.Value == pd.Upper.Value)
+                    {
+                        if (pd.Next == null)
+                        {
+                            return this.ExcludedPerson[pd.Lower.Value];
+                        }
+
+                        return this.ExcludedPerson[pd.Lower.Value].QueryValue(pd.NextPath);
+                    }
+
+                    if (pd.Next == null)
+                    {
+                        var personObjects = new List<Person>();
+
+                        for (var i = pd.Lower.Value; i < excludedPersonUpperBound + 1; i++)
+                        {
+                            personObjects.Add(this.ExcludedPerson[i]);
+                        }
+
+                        return personObjects;
+                    }
+
+                    var excludedpersonNextObjects = new List<object>();
+
+                    for (var i = pd.Lower.Value; i < excludedPersonUpperBound + 1; i++)
+                    {
+	                    var queryResult = this.ExcludedPerson[i].QueryValue(pd.Next.Input);
+
+	                    if (queryResult is IEnumerable<object> queriedValues)
+	                    {
+		                    foreach (var queriedValue in queriedValues)
+		                    {
+			                    if (queriedValue != null)
+			                    {
+				                    excludedpersonNextObjects.Add(queriedValue);
+			                    }
+		                    }
+	                    }
+	                    else
+	                    {
+		                    if (queryResult != null)
+		                    {
+			                    excludedpersonNextObjects.Add(queryResult);
+		                    }
+	                    }
+                    }
+
+                    return excludedpersonNextObjects;
+                case "modifiedOn":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return this.ModifiedOn;
+                case "thingpreference":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return this.ThingPreference;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on Thing");
+            }
+        }
     }
 }
