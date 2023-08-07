@@ -29,8 +29,17 @@ namespace CDP4Common.PropertyAccesor
     using System.Text.RegularExpressions;
 
     /// <summary>
-    /// The <see cref="PropertyDescriptor"/> is used ...
+    /// The <see cref="PropertyDescriptor"/> is used to convert and capture the 
+    /// (nested) property path of a Thing into the name of the parameter, the lower and
+    /// upper bound as well as the next part of the path.
     /// </summary>
+    /// <example>
+    /// definition[0..*].content
+    ///    name: definitopn
+    ///    lower: 0
+    ///    upper: 1
+    ///    next: content
+    /// </example>
     public class PropertyDescriptor
     {
         /// <summary>
