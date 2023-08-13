@@ -1,4 +1,4 @@
-<img src="https://github.com/RHEAGROUP/COMET-SDK-Community-Edition/raw/master/Comet_Logo.jpg" width="350">
+![CDP4-COMET](https://github.com/RHEAGROUP/COMET-SDK-Community-Edition/raw/master/Comet_Logo.jpg)
 
 > CDP4-COMET is the new name for what was previously called the CDP4. We are transitioning the applications and software libraries. The code and documentation will still refer to CDP4 in a number of places while we are updating.
 
@@ -25,6 +25,7 @@ CDP4Common | [![NuGet Badge](https://buildstats.info/nuget/CDP4Common-CE)](https
 CDP4Rules | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4Rules-CE)
 CDP4RequirementsVerification | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4RequirementsVerification-CE)
 CDP4JsonSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonSerializer-CE)](https://buildstats.info/nuget/CDP4JsonSerializer-CE)
+CDP4MessagePackSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4MessagePackSerializer-CE)](https://buildstats.info/nuget/CDP4MessagePackSerializer-CE)
 CDP4Reporting | [![NuGet Badge](https://buildstats.info/nuget/CDP4Reporting-CE)](https://buildstats.info/nuget/CDP4Reporting-CE)
 CDP4Dal | [![NuGet Badge](https://buildstats.info/nuget/CDP4Dal-CE)](https://buildstats.info/nuget/CDP4Dal-CE)
 CDP4JsonFileDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonFileDal-CE)](https://buildstats.info/nuget/CDP4JsonFileDal-CE)
