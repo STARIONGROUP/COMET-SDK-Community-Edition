@@ -733,6 +733,21 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
+        /// Cherry pick <see cref="Thing"/>s contained into an <see cref="CDP4Common.DTO.Iteration"/> that match provided <see cref="CDP4Common.DTO.Category"/> and <see cref="ClassKind"/>
+        /// filter
+        /// </summary>
+        /// <param name="engineeringModelId">The <see cref="Guid"/> of the <see cref="CDP4Common.DTO.EngineeringModel"/></param>
+        /// <param name="iterationId">The <see cref="Guid"/> of the <see cref="CDP4Common.DTO.Iteration"/></param>
+        /// <param name="classKinds">A collection of <see cref="ClassKind"/></param>
+        /// <param name="categoriesId">A collection of <see cref="CDP4Common.DTO.Category"/> <see cref="Guid"/>s</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
+        public override Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("CherryPick is not supported");
+        }
+
+        /// <summary>
         /// Validates that the correctness of the <paramref name="operationContainers"/>
         /// </summary>
         /// <param name="operationContainers">

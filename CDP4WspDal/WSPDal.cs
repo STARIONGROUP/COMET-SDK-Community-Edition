@@ -40,6 +40,7 @@ namespace CDP4WspDal
     using System.Threading;
     using System.Threading.Tasks;
 
+    using CDP4Common.CommonData;
     using CDP4Common.DTO;
 
     using CDP4Dal;
@@ -711,7 +712,22 @@ namespace CDP4WspDal
                 return false;
             }
         }
-        
+
+        /// <summary>
+        /// Cherry pick <see cref="Thing"/>s contained into an <see cref="Iteration"/> that match provided <see cref="Category"/> and <see cref="ClassKind"/>
+        /// filter
+        /// </summary>
+        /// <param name="engineeringModelId">The <see cref="Guid"/> of the <see cref="EngineeringModel"/></param>
+        /// <param name="iterationId">The <see cref="Guid"/> of the <see cref="Iteration"/></param>
+        /// <param name="classKinds">A collection of <see cref="ClassKind"/></param>
+        /// <param name="categoriesId">A collection of <see cref="Category"/> <see cref="Guid"/>s</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
+        public override Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("CherryPick is not supported");
+        }
+
         /// <summary>
         /// gets the <see cref="QueryAttributes"/> associated to the <see cref="WspDal"/>
         /// </summary>

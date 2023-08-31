@@ -468,6 +468,13 @@ namespace CDP4JsonFileDal.Tests
             Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers, new string[] { this.migrationFile })));
         }
 
+        [Test]
+        public void VerifyCherryPick()
+        {
+            Assert.That(async () => await this.dal.CherryPick(Guid.NewGuid(), Guid.NewGuid(), new List<ClassKind>(),
+                new List<Guid>(), CancellationToken.None), Throws.Exception.TypeOf<NotImplementedException>());
+        }
+
         /// <summary>
         /// Build operation containes structure that will be serialized
         /// </summary>

@@ -970,6 +970,39 @@ namespace CDP4Dal
         }
 
         /// <summary>
+        /// Cherry Pick a subset of an <see cref="Iteration" /> based on <see cref="ClassKind"/> and <see cref="Category"/> filters
+        /// </summary>
+        /// <param name="engineeringModelId">The <see cref="Guid"/> of the <see cref="EngineeringModel"/> that contains the <see cref="Iteration"/></param>
+        /// <param name="iterationId">The <see cref="Guid"/> of the <see cref="Iteration"/></param>
+        /// <param name="classKinds">A collection of <see cref="ClassKind"/> that <see cref="Thing"/> to retrieve should belongs to</param>
+        /// <param name="categoriesId">A collection of <see cref="Guid"/> of <see cref="Category"/> that <see cref="Thing"/> to retrieve should be categorized by</param>
+        /// <returns>A <see cref="Task{T}"/> with retrieved <see cref="CDP4Common.DTO.Thing"/>s</returns>
+        public async Task<IEnumerable<CDP4Common.DTO.Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId)
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+
+            IEnumerable<CDP4Common.DTO.Thing> cherryPickedThings;
+
+            try
+            {
+                cherryPickedThings = await this.Dal.CherryPick(engineeringModelId, iterationId, classKinds, categoriesId, cancellationTokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                logger.Info("CherryPick {0} cancelled", iterationId);
+                return Enumerable.Empty<CDP4Common.DTO.Thing>();
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
+            }
+
+            return cherryPickedThings;
+        }
+
+        /// <summary>
         /// Gets the <see cref="SiteDirectory"/> and all active <see cref="Iteration"/>s from the Assembler's cache for this <see cref="Session"/>
         /// </summary>
         /// <returns>the <see cref="List{T}"/> of the collected <see cref="SiteDirectory"/> and all <see cref="Iteration"/>s from the Assembler's cache for this <see cref="Session"/></returns>

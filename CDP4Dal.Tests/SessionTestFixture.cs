@@ -755,6 +755,37 @@ namespace CDP4Dal.Tests
 
             this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(0));
         }
+
+        [Test]
+        public async Task VerifyCanCherryPick()
+        {
+            var engineeringModelId = Guid.NewGuid();
+            var iterationId = Guid.NewGuid();
+            var classKinds = new List<ClassKind>();
+            var categoriesId = new List<Guid>();
+            var cherryPickedThings = new List<Thing>();
+
+            this.mockedDal.Setup(x => x.CherryPick(engineeringModelId, iterationId, classKinds, categoriesId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(cherryPickedThings);
+
+            var readThings = (await this.session.CherryPick(engineeringModelId, iterationId, classKinds, categoriesId)).ToList();
+            Assert.That(readThings, Is.Empty);
+
+            classKinds.Add(ClassKind.ElementDefinition);
+            categoriesId.Add(Guid.NewGuid());
+
+            var elementDefinitionId = Guid.NewGuid();
+            cherryPickedThings.Add(new Iteration(){Iid = engineeringModelId, Element = new List<Guid>{elementDefinitionId}});
+            cherryPickedThings.Add(new ElementDefinition(){Iid = elementDefinitionId, Category = new List<Guid> { categoriesId[0] }});
+
+            readThings = (await this.session.CherryPick(engineeringModelId, iterationId, classKinds, categoriesId)).ToList();
+           
+            Assert.Multiple(() =>
+            {
+                Assert.That(readThings, Is.Not.Empty);
+                Assert.That(readThings, Has.Count.EqualTo(2));
+            });
+        }
     }
 
     [DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
@@ -946,6 +977,21 @@ namespace CDP4Dal.Tests
         /// true when valid, false when invalid
         /// </returns>
         public bool IsValidUri(string uri)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Cherry pick <see cref="Thing"/>s contained into an <see cref="Iteration"/> that match provided <see cref="CDP4Common.DTO.Category"/> and <see cref="ClassKind"/>
+        /// filter
+        /// </summary>
+        /// <param name="engineeringModelId">The <see cref="Guid"/> of the <see cref="EngineeringModel"/></param>
+        /// <param name="iterationId">The <see cref="Guid"/> of the <see cref="Iteration"/></param>
+        /// <param name="classKinds">A collection of <see cref="ClassKind"/></param>
+        /// <param name="categoriesId">A collection of <see cref="CDP4Common.DTO.Category"/> <see cref="Guid"/>s</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
+        public Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
