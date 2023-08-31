@@ -34,6 +34,7 @@ namespace CDP4Dal.DAL
     using System.Threading.Tasks;
 
     using CDP4Common.CommonData;
+    using CDP4Common.DTO;
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
     
@@ -247,6 +248,19 @@ namespace CDP4Dal.DAL
         /// true when valid, false when invalid
         /// </returns>
         public abstract bool IsValidUri(string uri);
+
+        /// <summary>
+        /// Cherry pick <see cref="Thing"/>s contained into an <see cref="Iteration"/> that match provided <see cref="Category"/> and <see cref="ClassKind"/>
+        /// filter
+        /// </summary>
+        /// <param name="engineeringModelId">The <see cref="Guid"/> of the <see cref="EngineeringModel"/></param>
+        /// <param name="iterationId">The <see cref="Guid"/> of the <see cref="Iteration"/></param>
+        /// <param name="classKinds">A collection of <see cref="ClassKind"/></param>
+        /// <param name="categoriesId">A collection of <see cref="Category"/> <see cref="Guid"/>s</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
+        public abstract Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds,
+            IEnumerable<Guid> categoriesId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Closes the active session

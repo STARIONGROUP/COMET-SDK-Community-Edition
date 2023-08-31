@@ -53,7 +53,6 @@ namespace CDP4ServicesDal
     
     using CDP4JsonSerializer;
 
-
     using CDP4MessagePackSerializer;
 
     using NLog;
@@ -198,27 +197,27 @@ namespace CDP4ServicesDal
 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
-	                var deserializationWatch = Stopwatch.StartNew();
+                    var deserializationWatch = Stopwatch.StartNew();
 
                     switch (this.QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
-	                        Logger.Info("Deserializing JSON response");
-	                        result.AddRange(this.Cdp4JsonSerializer.Deserialize(resultStream));
-	                        Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
-							break;
+                            Logger.Info("Deserializing JSON response");
+                            result.AddRange(this.Cdp4JsonSerializer.Deserialize(resultStream));
+                            Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
                         case ContentTypeKind.MESSAGEPACK:
-	                        Logger.Info("Deserializing MESSAGEPACK response");
-							var cts = new CancellationTokenSource();
+                            Logger.Info("Deserializing MESSAGEPACK response");
+                            var cts = new CancellationTokenSource();
                             var things = await this.MessagePackSerializer.DeserializeAsync(resultStream, cts.Token);
                             result.AddRange(things);
-	                        Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
-							break;
+                            Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
                     }
 
-					deserializationWatch.Stop();
+                    deserializationWatch.Stop();
 
-					Guid iterationId;
+                    Guid iterationId;
                     if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
                     {
                         this.SetIterationContainer(result, iterationId);
@@ -416,10 +415,10 @@ namespace CDP4ServicesDal
             Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
             Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
 
-            var requestsw = Stopwatch.StartNew();
-
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
             requestMessage.Headers.Add(Headers.CDPToken, readToken);
+
+            var requestsw = Stopwatch.StartNew();
 
             using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
@@ -437,31 +436,31 @@ namespace CDP4ServicesDal
 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
-	                var deserializationWatch = Stopwatch.StartNew();
+                    var deserializationWatch = Stopwatch.StartNew();
 
-					IEnumerable<Thing> returned = new List<Thing>();
+                    IEnumerable<Thing> returned = new List<Thing>();
 
                     switch (this.QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
-	                        Logger.Info("Deserializing JSON response");
-							returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
-	                        Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
-							break;
+                            Logger.Info("Deserializing JSON response");
+                            returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
+                            Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
                         case ContentTypeKind.MESSAGEPACK:
-	                        Logger.Info("Deserializing MESSAGEPACK response");
-							returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
-	                        Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
-							break;
+                            Logger.Info("Deserializing MESSAGEPACK response");
+                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
+                            Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
                     }
 
                     deserializationWatch.Stop();
-                    
-					if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
+
+                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(returned, iterationId);
                     }
-                    
+
                     return returned;
                 }
             }
@@ -587,9 +586,9 @@ namespace CDP4ServicesDal
                 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
-	                var deserializationWatch = Stopwatch.StartNew();
+                    var deserializationWatch = Stopwatch.StartNew();
 
-					IEnumerable<Thing> returned = new List<Thing>();
+                    IEnumerable<Thing> returned = new List<Thing>();
 
                     switch (this.QueryContentTypeKind(httpResponseMessage))
                     {
@@ -597,17 +596,17 @@ namespace CDP4ServicesDal
                             Logger.Info("Deserializing JSON response");
                             returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
                             Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
-							break;
+                            break;
                         case ContentTypeKind.MESSAGEPACK:
-	                        Logger.Info("Deserializing MESSAGEPACK response");
-							returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
-	                        Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
-							break;
+                            Logger.Info("Deserializing MESSAGEPACK response");
+                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
+                            Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
                     }
 
-					deserializationWatch.Stop();
+                    deserializationWatch.Stop();
 
-					var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
+                    var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
                     if (returnedPerson == null)
                     {
                         throw new InvalidOperationException("User not found.");
@@ -648,36 +647,28 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
-        /// Cherry pick <see cref="Thing"/>s contained into an <see cref="Iteration"/> that match provided <se
+        /// Cherry pick <see cref="Thing"/>s contained into an <see cref="Iteration"/> that match provided <see cref="Category"/> and <see cref="ClassKind"/>
+        /// filter
         /// </summary>
-        /// <param name="engineeringModelId"></param>
-        /// <param name="iterationId"></param>
-        /// <param name="classKinds"></param>
-        /// <param name="categoriesShocategoriesIdrtName"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, 
+        /// <param name="engineeringModelId">The <see cref="Guid"/> of the <see cref="EngineeringModel"/></param>
+        /// <param name="iterationId">The <see cref="Guid"/> of the <see cref="Iteration"/></param>
+        /// <param name="classKinds">A collection of <see cref="ClassKind"/></param>
+        /// <param name="categoriesId">A collection of <see cref="Category"/> <see cref="Guid"/>s</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
+        public override async Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, 
             IEnumerable<Guid> categoriesId, CancellationToken cancellationToken)
         {
-            var uri = $"cherrypick/engineeringmodel/{engineeringModelId}/iteration/{iterationId}";
-
             var attributes = new QueryAttributes()
             {
                 CategoriesData = categoriesId,
-                ClassKinds = classKinds
+                ClassKinds = classKinds,
+                CherryPick = true
             };
 
-            uri = $"{uri}{attributes}";
-            var httpResponseMessage = await this.httpClient.GetAsync(uri, cancellationToken);
-
-            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
-            {
-                var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
-                Logger.Error(msg);
-                throw new DalReadException(msg);
-            }
-
-            return Enumerable.Empty<Thing>(); 
+            Thing iteration = new Iteration() { Iid = iterationId };
+            iteration.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
+            return await this.Read(iteration, cancellationToken, attributes);
         }
 
         /// <summary>

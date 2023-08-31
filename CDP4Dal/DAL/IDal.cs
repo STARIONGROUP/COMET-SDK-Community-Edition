@@ -29,10 +29,13 @@ namespace CDP4Dal.DAL
     using System.Threading;
     using System.Threading.Tasks;
 
+    using CDP4Common.CommonData;
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
 
     using CDP4Dal.Operations;
+
+    using Thing = CDP4Common.DTO.Thing;
 
     /// <summary>
     /// The Data Access Layer interface.
@@ -69,7 +72,7 @@ namespace CDP4Dal.DAL
         /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
         /// </param>
         /// <returns>
-        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// A list of <see cref="CDP4Common.DTO.Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
         Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> files = null);
 
@@ -211,5 +214,18 @@ namespace CDP4Dal.DAL
         /// true when valid, false when invalid
         /// </returns>
         bool IsValidUri(string uri);
+
+        /// <summary>
+        /// Cherry pick <see cref="Thing"/>s contained into an <see cref="Iteration"/> that match provided <see cref="Category"/> and <see cref="ClassKind"/>
+        /// filter
+        /// </summary>
+        /// <param name="engineeringModelId">The <see cref="Guid"/> of the <see cref="EngineeringModel"/></param>
+        /// <param name="iterationId">The <see cref="Guid"/> of the <see cref="Iteration"/></param>
+        /// <param name="classKinds">A collection of <see cref="ClassKind"/></param>
+        /// <param name="categoriesId">A collection of <see cref="Category"/> <see cref="Guid"/>s</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
+        Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, 
+            IEnumerable<Guid> categoriesId, CancellationToken cancellationToken);
     }
 }

@@ -68,6 +68,11 @@ namespace CDP4Dal.DAL.ECSS1025AnnexC
         public IEnumerable<ClassKind> ClassKinds { get; set; } = Enumerable.Empty<ClassKind>();
 
         /// <summary>
+        /// Gets or sets whether to enable cherrypick feature
+        /// </summary>
+        public bool? CherryPick { get; set; }
+
+        /// <summary>
         /// Converts all values of this <see cref="QueryAttributes"/> class to a uri attributes string
         /// </summary>
         /// <returns>
@@ -117,6 +122,11 @@ namespace CDP4Dal.DAL.ECSS1025AnnexC
             if (this.ClassKinds.Any())
             {
                 attributeList.Add($"classkind=[{string.Join(";", this.ClassKinds.Select(x => x.ToString().ToUpper()))}]");
+            }
+
+            if (this.CherryPick != null)
+            {
+                attributeList.Add($"cherryPick={this.CherryPick.ToString().ToLower()}");
             }
 
             // include the base attributelist

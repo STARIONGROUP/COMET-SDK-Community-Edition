@@ -563,6 +563,13 @@ namespace CDP4WspDal.Tests
             Assert.NotNull(resultPerson);
         }
 
+        [Test]
+        public void VerifyCherryPick()
+        {
+            Assert.That(async () => await this.dal.CherryPick(Guid.NewGuid(), Guid.NewGuid(), new List<ClassKind>(),
+                new List<Guid>(), CancellationToken.None),Throws.Exception.TypeOf<NotImplementedException>());
+        }
+
         /// <summary>
         /// Set the credentials property so DAL appears to be open
         /// </summary>

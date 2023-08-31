@@ -330,5 +330,15 @@ namespace CDP4Dal
         /// The <see cref="Task"/>.
         /// </returns>
         Task CloseModelRdl(ModelReferenceDataLibrary modelRdl);
+
+        /// <summary>
+        /// Cherry Pick a subset of an <see cref="Iteration" /> based on <see cref="ClassKind"/> and <see cref="Category"/> filters
+        /// </summary>
+        /// <param name="engineeringModelId">The <see cref="Guid"/> of the <see cref="EngineeringModel"/> that contains the <see cref="Iteration"/></param>
+        /// <param name="iterationId">The <see cref="Guid"/> of the <see cref="Iteration"/></param>
+        /// <param name="classKinds">A collection of <see cref="ClassKind"/> that <see cref="Thing"/> to retrieve should belongs to</param>
+        /// <param name="categoriesId">A collection of <see cref="Guid"/> of <see cref="Category"/> that <see cref="Thing"/> to retrieve should be categorized by</param>
+        /// <returns>A <see cref="Task{T}"/> with retrieved <see cref="CDP4Common.DTO.Thing"/>s</returns>
+        Task<IEnumerable<CDP4Common.DTO.Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId);
     }
 }
