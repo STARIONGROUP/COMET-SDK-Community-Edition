@@ -744,7 +744,7 @@ namespace CDP4JsonFileDal
         /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
         public override Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException("CherryPick is not supported");
         }
 
         /// <summary>

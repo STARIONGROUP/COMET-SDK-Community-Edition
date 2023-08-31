@@ -471,7 +471,7 @@ namespace CDP4Dal.Tests.DAL
         /// <returns>A <see cref="System.Threading.Tasks.Task{TResult}" /> of type <see cref="System.Collections.Generic.IEnumerable{T}"/> of read <see cref="Thing" /></returns>
         public override Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }
