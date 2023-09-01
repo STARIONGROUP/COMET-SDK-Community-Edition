@@ -138,7 +138,7 @@ namespace CDP4Common.PropertyAccesor
                     throw new ArgumentException("when the upper bound is speficifed, so should the lower bound");
                 }
 
-                if (lower.HasValue & upper.HasValue)
+                if (lower.HasValue && upper.HasValue)
                 {
                     if (lower.Value < 0)
                     {

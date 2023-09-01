@@ -25,115 +25,113 @@
 
 namespace CDP4Common.NetCore.Tests.Helpers
 {
-	using System;
+    using System;
 
-	using CDP4Common.PropertyAccesor;
+    using CDP4Common.PropertyAccesor;
 
-	using NUnit.Framework;
-	
-	/// <summary>
-	/// Suite of tests for the <see cref="PropertyDescriptor"/> class.
-	/// </summary>
-	[TestFixture]
-	public class PropertyDescriptorTestFixture
-	{
-		[Test]
-		public void Verify_that_QueryPropertyDescriptor_returns_expected_results()
-		{
-			PropertyDescriptor descriptor = null;
+    using NUnit.Framework;
+    
+    /// <summary>
+    /// Suite of tests for the <see cref="PropertyDescriptor"/> class.
+    /// </summary>
+    [TestFixture]
+    public class PropertyDescriptorTestFixture
+    {
+        [Test]
+        public void Verify_that_QueryPropertyDescriptor_returns_expected_results()
+        {
+            PropertyDescriptor descriptor = null;
 
-			descriptor = PropertyDescriptor.QueryPropertyDescriptor("Name");
-			Assert.That(descriptor.Name, Is.EqualTo("Name"));
-			Assert.That(descriptor.Lower, Is.Null);
-			Assert.That(descriptor.Upper, Is.Null);
-			Assert.That(descriptor.PathLiteral, Is.EqualTo("Name"));
-			Assert.That(descriptor.NextPath, Is.Empty);
-			
-			descriptor = PropertyDescriptor.QueryPropertyDescriptor("Name.Me");
-			Assert.That(descriptor.Name, Is.EqualTo("Name"));
-			Assert.That(descriptor.Lower, Is.Null);
-			Assert.That(descriptor.Upper, Is.Null);
-			Assert.That(descriptor.PathLiteral, Is.EqualTo("Name"));
-			Assert.That(descriptor.NextPath, Is.EqualTo("Me"));
-			Assert.That(descriptor.Next.Name, Is.EqualTo("Me"));
+            descriptor = PropertyDescriptor.QueryPropertyDescriptor("Name");
+            Assert.That(descriptor.Name, Is.EqualTo("Name"));
+            Assert.That(descriptor.Lower, Is.Null);
+            Assert.That(descriptor.Upper, Is.Null);
+            Assert.That(descriptor.PathLiteral, Is.EqualTo("Name"));
+            Assert.That(descriptor.NextPath, Is.Empty);
+            
+            descriptor = PropertyDescriptor.QueryPropertyDescriptor("Name.Me");
+            Assert.That(descriptor.Name, Is.EqualTo("Name"));
+            Assert.That(descriptor.Lower, Is.Null);
+            Assert.That(descriptor.Upper, Is.Null);
+            Assert.That(descriptor.PathLiteral, Is.EqualTo("Name"));
+            Assert.That(descriptor.NextPath, Is.EqualTo("Me"));
+            Assert.That(descriptor.Next.Name, Is.EqualTo("Me"));
 
-			descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter[1..1]");
-			Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
-			Assert.That(descriptor.Lower, Is.EqualTo(1));
-			Assert.That(descriptor.Upper, Is.EqualTo(1));
-			Assert.That(descriptor.PathLiteral, Is.EqualTo("Parameter[1..1]"));
-			Assert.That(descriptor.NextPath, Is.Empty);
-			Assert.That(descriptor.Next, Is.Null);
+            descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter[1..1]");
+            Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
+            Assert.That(descriptor.Lower, Is.EqualTo(1));
+            Assert.That(descriptor.Upper, Is.EqualTo(1));
+            Assert.That(descriptor.PathLiteral, Is.EqualTo("Parameter[1..1]"));
+            Assert.That(descriptor.NextPath, Is.Empty);
+            Assert.That(descriptor.Next, Is.Null);
 
-			descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter[0..*]");
-			Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
-			Assert.That(descriptor.Lower, Is.EqualTo(0));
-			Assert.That(descriptor.Upper, Is.EqualTo(int.MaxValue));
-			Assert.That(descriptor.PathLiteral, Is.EqualTo("Parameter[0..*]"));
-			Assert.That(descriptor.NextPath, Is.Empty);
-			Assert.That(descriptor.Next, Is.Null);
+            descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter[0..*]");
+            Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
+            Assert.That(descriptor.Lower, Is.EqualTo(0));
+            Assert.That(descriptor.Upper, Is.EqualTo(int.MaxValue));
+            Assert.That(descriptor.PathLiteral, Is.EqualTo("Parameter[0..*]"));
+            Assert.That(descriptor.NextPath, Is.Empty);
+            Assert.That(descriptor.Next, Is.Null);
 
-			descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter[1..1].Name");
-			Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
-			Assert.That(descriptor.Lower, Is.EqualTo(1));
-			Assert.That(descriptor.Upper, Is.EqualTo(1));
-			Assert.That(descriptor.PathLiteral, Is.EqualTo("Parameter[1..1]"));
-			Assert.That(descriptor.NextPath, Is.EqualTo("Name"));
-			Assert.That(descriptor.Next.Name, Is.EqualTo("Name"));
-			Assert.That(descriptor.Next.PathLiteral, Is.EqualTo("Name"));
+            descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter[1..1].Name");
+            Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
+            Assert.That(descriptor.Lower, Is.EqualTo(1));
+            Assert.That(descriptor.Upper, Is.EqualTo(1));
+            Assert.That(descriptor.PathLiteral, Is.EqualTo("Parameter[1..1]"));
+            Assert.That(descriptor.NextPath, Is.EqualTo("Name"));
+            Assert.That(descriptor.Next.Name, Is.EqualTo("Name"));
+            Assert.That(descriptor.Next.PathLiteral, Is.EqualTo("Name"));
 
-			descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter[1..*].Name");
-			Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
-			Assert.That(descriptor.Lower, Is.EqualTo(1));
-			Assert.That(descriptor.Upper, Is.EqualTo(int.MaxValue));
-			Assert.That(descriptor.NextPath, Is.EqualTo("Name"));
+            descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter[1..*].Name");
+            Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
+            Assert.That(descriptor.Lower, Is.EqualTo(1));
+            Assert.That(descriptor.Upper, Is.EqualTo(int.MaxValue));
+            Assert.That(descriptor.NextPath, Is.EqualTo("Name"));
 
-			descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter.Name[1..*]");
-			Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
-			Assert.That(descriptor.Lower, Is.Null);
-			Assert.That(descriptor.Upper, Is.Null);
-			Assert.That(descriptor.PathLiteral, Is.EqualTo("Parameter"));
-			Assert.That(descriptor.NextPath, Is.EqualTo("Name[1..*]"));
-			Assert.That(descriptor.Next.Name, Is.EqualTo("Name"));
-			Assert.That(descriptor.Next.Lower, Is.EqualTo(1));
-			Assert.That(descriptor.Next.Upper, Is.EqualTo(int.MaxValue));
-			Assert.That(descriptor.Next.PathLiteral, Is.EqualTo("Name[1..*]"));
+            descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter.Name[1..*]");
+            Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
+            Assert.That(descriptor.Lower, Is.Null);
+            Assert.That(descriptor.Upper, Is.Null);
+            Assert.That(descriptor.PathLiteral, Is.EqualTo("Parameter"));
+            Assert.That(descriptor.NextPath, Is.EqualTo("Name[1..*]"));
+            Assert.That(descriptor.Next.Name, Is.EqualTo("Name"));
+            Assert.That(descriptor.Next.Lower, Is.EqualTo(1));
+            Assert.That(descriptor.Next.Upper, Is.EqualTo(int.MaxValue));
+            Assert.That(descriptor.Next.PathLiteral, Is.EqualTo("Name[1..*]"));
 
-			descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter.Name[1..*].Me");
-			Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
-			Assert.That(descriptor.Lower, Is.Null);
-			Assert.That(descriptor.Upper, Is.Null);
-			Assert.That(descriptor.NextPath, Is.EqualTo("Name[1..*].Me"));
-			Assert.That(descriptor.Next.Name, Is.EqualTo("Name"));
-			Assert.That(descriptor.Next.Next.Name, Is.EqualTo("Me"));
+            descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter.Name[1..*].Me");
+            Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
+            Assert.That(descriptor.Lower, Is.Null);
+            Assert.That(descriptor.Upper, Is.Null);
+            Assert.That(descriptor.NextPath, Is.EqualTo("Name[1..*].Me"));
+            Assert.That(descriptor.Next.Name, Is.EqualTo("Name"));
+            Assert.That(descriptor.Next.Next.Name, Is.EqualTo("Me"));
 
-			descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter[10..11]");
-			Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
-			Assert.That(descriptor.Lower, Is.EqualTo(10));
-			Assert.That(descriptor.Upper, Is.EqualTo(11));
-			Assert.That(descriptor.NextPath, Is.EqualTo(""));
-			Assert.That(descriptor.Next, Is.Null);
+            descriptor = PropertyDescriptor.QueryPropertyDescriptor("Parameter[10..11]");
+            Assert.That(descriptor.Name, Is.EqualTo("Parameter"));
+            Assert.That(descriptor.Lower, Is.EqualTo(10));
+            Assert.That(descriptor.Upper, Is.EqualTo(11));
+            Assert.That(descriptor.NextPath, Is.EqualTo(""));
+            Assert.That(descriptor.Next, Is.Null);
 
-			descriptor = PropertyDescriptor.QueryPropertyDescriptor("actionee.selectedDomain.alias[1..1]");
-			Assert.That(descriptor.Name, Is.EqualTo("actionee"));
-			Assert.That(descriptor.Lower, Is.Null);
-			Assert.That(descriptor.Upper, Is.Null);
-			Assert.That(descriptor.NextPath, Is.EqualTo("selectedDomain.alias[1..1]"));
-			Assert.That(descriptor.Next.Next.Name, Is.EqualTo("alias"));
-			Assert.That(descriptor.Next.Next.Lower, Is.EqualTo(1));
-			Assert.That(descriptor.Next.Next.Upper, Is.EqualTo(1));
-			Assert.That(descriptor.Next.Next.Next, Is.Null);
-		}
+            descriptor = PropertyDescriptor.QueryPropertyDescriptor("actionee.selectedDomain.alias[1..1]");
+            Assert.That(descriptor.Name, Is.EqualTo("actionee"));
+            Assert.That(descriptor.Lower, Is.Null);
+            Assert.That(descriptor.Upper, Is.Null);
+            Assert.That(descriptor.NextPath, Is.EqualTo("selectedDomain.alias[1..1]"));
+            Assert.That(descriptor.Next.Next.Name, Is.EqualTo("alias"));
+            Assert.That(descriptor.Next.Next.Lower, Is.EqualTo(1));
+            Assert.That(descriptor.Next.Next.Upper, Is.EqualTo(1));
+            Assert.That(descriptor.Next.Next.Next, Is.Null);
+        }
 
-		[Test]
-		public void Verify_that_QueryPropertyDescriptor_throws_exception_on_incorrect_multiplicity()
-		{
-			PropertyDescriptor descriptor = null;
-
-			Assert.That(() =>
-				PropertyDescriptor.QueryPropertyDescriptor("Parameter[-1..1]"), 
-				Throws.Exception.TypeOf<ArgumentException>()
-					.With.Message.EqualTo("The input may not contain a hyphen or minus sign"));
-		}
-	}
+        [Test]
+        public void Verify_that_QueryPropertyDescriptor_throws_exception_on_incorrect_multiplicity()
+        {
+            Assert.That(() =>
+                PropertyDescriptor.QueryPropertyDescriptor("Parameter[-1..1]"), 
+                Throws.Exception.TypeOf<ArgumentException>()
+                    .With.Message.EqualTo("The input may not contain a hyphen or minus sign"));
+        }
+    }
 }
