@@ -4,7 +4,7 @@
     <TargetFrameworks>net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>24.0.0</VersionPrefix>
+    <VersionPrefix>24.1.0</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
@@ -20,10 +20,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-        [Refactor] string.Format to $"" string interpolation code; fixes #226
-        [Add] ThingEquatable and concrete DTO Equatable extension methods; fixes #269
-        [Add] Generate PropertyAccessor files; fixes #271
-        [UPGRADE] to NLOG 5.2.3
+        [Add] Guid Extensions
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
