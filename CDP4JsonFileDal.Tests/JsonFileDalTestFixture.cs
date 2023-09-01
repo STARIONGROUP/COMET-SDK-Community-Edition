@@ -472,7 +472,7 @@ namespace CDP4JsonFileDal.Tests
         public void VerifyCherryPick()
         {
             Assert.That(async () => await this.dal.CherryPick(Guid.NewGuid(), Guid.NewGuid(), new List<ClassKind>(),
-                new List<Guid>(), CancellationToken.None), Throws.Exception.TypeOf<NotImplementedException>());
+                new List<Guid>(), CancellationToken.None), Throws.Exception.TypeOf<NotSupportedException>());
         }
 
         /// <summary>
