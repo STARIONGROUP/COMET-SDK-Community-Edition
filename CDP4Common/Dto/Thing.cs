@@ -153,6 +153,7 @@ namespace CDP4Common.DTO
         /// <summary>
         /// Gets or sets the <see cref="Guid"/> of the latest <see cref="Person"/> that authored this <see cref="Thing"/>
         /// </summary>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: true, isPersistent: false)]
         [CDPVersion("1.3.0")]
         [DataMember]
         public Guid? Actor { get; set; }

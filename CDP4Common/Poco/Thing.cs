@@ -136,7 +136,7 @@ namespace CDP4Common.CommonData
         /// Note: Typically this is used internally by the implementing software to improve classification of instances and optimise performance when moving data between different programming environments. In an object-oriented software engineering environment that supports reflection such information would be redundant.
         /// </summary>
         [Browsable(true)]
-        [UmlInformation(AggregationKind.None, false, false, false, true)]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public ClassKind ClassKind { get; internal set; }
 
@@ -147,7 +147,7 @@ namespace CDP4Common.CommonData
         /// Excluded <see cref="DomainOfExpertise"/> do not have access to the instance
         /// </remarks>
         [CDPVersion("1.1.0")]
-        [UmlInformation(AggregationKind.None, false, false, false, true)]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual List<DomainOfExpertise> ExcludedDomain { get; set; }
 
@@ -158,7 +158,7 @@ namespace CDP4Common.CommonData
         /// Excluded <see cref="Person"/> do not have access to the instance
         /// </remarks>
         [CDPVersion("1.1.0")]
-        [UmlInformation(AggregationKind.None, false, false, false, true)]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual List<Person> ExcludedPerson { get; set; }
 
@@ -166,7 +166,7 @@ namespace CDP4Common.CommonData
         /// Gets or sets the Universally Unique Identifier (UUID) that uniquely identifies an instance of <see cref="Thing"/>
         /// </summary>
         [Browsable(true)]
-        [UmlInformation(AggregationKind.None, false, false, false, true)]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public Guid Iid { get; set; }
 
@@ -174,7 +174,7 @@ namespace CDP4Common.CommonData
         /// Gets or sets the <see cref="DateTime"/> the <see cref="Thing"/> was last modified on.
         /// </summary>
         [CDPVersion("1.1.0")]
-        [UmlInformation(AggregationKind.None, false, false, false, true)]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual DateTime ModifiedOn { get; set; }
 
@@ -182,7 +182,7 @@ namespace CDP4Common.CommonData
         /// Gets or sets a string that holds data about preferences of a <see cref="Thing"/>
         /// </summary>
         [CDPVersion("1.2.0")]
-        [UmlInformation(AggregationKind.None, false, false, false, true)]
+        [UmlInformation(aggregation:AggregationKind.None,isDerived: false, isOrdered:false, isNullable:false, isPersistent:true)]
         [DataMember]
         public virtual string ThingPreference { get; set; }
 
@@ -190,7 +190,7 @@ namespace CDP4Common.CommonData
         /// revision number of this <see cref="Thing"/>
         /// Note: In this data model a revision numbering approach similar to Subversion is used, see <a href="http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.basic">http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.basic</a>. Therefore the revision number is actually a change set number. At any time that an update to a Thing is made and committed to a persistent data store, the <i>revisionNumber</i> of its TopContainer is incremented by one, and then the <i>revisionNumber</i> of the updated Thing is set to the new TopContainer's <i>revisionNumber</i>. See also TopContainer. When a Thing is first created (in a client application) its <i>revisionNumber</i> is set to zero, implying it has not yet been persisted.
         /// </summary>
-        [UmlInformation(AggregationKind.None, false, false, false, true)]
+        [UmlInformation(aggregation: AggregationKind.None,isDerived: false,isOrdered:false, isNullable: false,isPersistent: true)]
         [DataMember]
         public int RevisionNumber { get; internal set; }
 
@@ -221,6 +221,7 @@ namespace CDP4Common.CommonData
         /// <summary>
         /// Gets or sets the latest <see cref="Person"/> that authored this <see cref="Thing"/>
         /// </summary>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false,isOrdered: false, isNullable: true, isPersistent: false)]
         [CDPVersion("1.3.0")]
         [DataMember]
         public Person Actor { get; set; }
