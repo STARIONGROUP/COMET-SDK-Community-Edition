@@ -52,6 +52,7 @@
  | 18    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 19    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 20    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 21    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -104,7 +105,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(person), "The Person may not be null");
             }
 
-            writer.WriteArrayHeader(21);
+            writer.WriteArrayHeader(22);
 
             writer.Write(person.Iid.ToByteArray());
             writer.Write(person.RevisionNumber);
@@ -183,6 +184,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(person.ModifiedOn);
             writer.Write(person.ThingPreference);
+            if (person.Actor.HasValue)
+            {
+                writer.Write(person.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -337,6 +346,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 20:
                         person.ThingPreference = reader.ReadString();
+                        break;
+                    case 21:
+                        if (reader.TryReadNil())
+                        {
+                            person.Actor = null;
+                        }
+                        else
+                        {
+                            person.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

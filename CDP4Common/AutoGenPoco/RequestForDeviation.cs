@@ -158,6 +158,7 @@ namespace CDP4Common.ReportingData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current RequestForDeviation POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.ApprovedBy.ResolveList(dto.ApprovedBy, dto.IterationContainerId, this.Cache);
             this.Author = this.Cache.Get<Participant>(dto.Author, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Participant>();
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);
@@ -189,6 +190,7 @@ namespace CDP4Common.ReportingData
         {
             var dto = new DTO.RequestForDeviation(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.ApprovedBy.AddRange(this.ApprovedBy.Select(x => x.Iid));
             dto.Author = this.Author != null ? this.Author.Iid : Guid.Empty;
             dto.Category.AddRange(this.Category.Select(x => x.Iid));

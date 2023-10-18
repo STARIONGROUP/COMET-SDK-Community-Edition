@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var notExpression = new CDP4Common.DTO.NotExpression(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                notExpression.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["excludedDomain"].IsNullOrEmpty())
             {
                 notExpression.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());

@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var hyperLink = new CDP4Common.DTO.HyperLink(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                hyperLink.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["content"].IsNullOrEmpty())
             {
                 hyperLink.Content = jObject["content"].ToObject<string>();

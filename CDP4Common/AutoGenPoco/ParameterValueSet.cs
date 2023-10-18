@@ -153,6 +153,7 @@ namespace CDP4Common.EngineeringModelData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParameterValueSet POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.ActualOption = (dto.ActualOption.HasValue) ? this.Cache.Get<Option>(dto.ActualOption.Value, dto.IterationContainerId) : null;
             this.ActualState = (dto.ActualState.HasValue) ? this.Cache.Get<ActualFiniteState>(dto.ActualState.Value, dto.IterationContainerId) : null;
             this.Computed = new ValueArray<string>(dto.Computed, this);
@@ -177,6 +178,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var dto = new DTO.ParameterValueSet(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.ActualOption = this.ActualOption != null ? (Guid?)this.ActualOption.Iid : null;
             dto.ActualState = this.ActualState != null ? (Guid?)this.ActualState.Iid : null;
             dto.Computed = new ValueArray<string>(this.Computed, this);

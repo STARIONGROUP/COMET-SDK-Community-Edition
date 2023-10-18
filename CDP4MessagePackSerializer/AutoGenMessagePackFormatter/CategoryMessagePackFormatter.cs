@@ -46,6 +46,7 @@
  | 12    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 13    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 14    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 15    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -98,7 +99,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(category), "The Category may not be null");
             }
 
-            writer.WriteArrayHeader(15);
+            writer.WriteArrayHeader(16);
 
             writer.Write(category.Iid.ToByteArray());
             writer.Write(category.RevisionNumber);
@@ -144,6 +145,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(category.ModifiedOn);
             writer.Write(category.ThingPreference);
+            if (category.Actor.HasValue)
+            {
+                writer.Write(category.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -254,6 +263,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 14:
                         category.ThingPreference = reader.ReadString();
+                        break;
+                    case 15:
+                        if (reader.TryReadNil())
+                        {
+                            category.Actor = null;
+                        }
+                        else
+                        {
+                            category.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

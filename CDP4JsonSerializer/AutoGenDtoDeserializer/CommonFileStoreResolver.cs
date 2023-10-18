@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var commonFileStore = new CDP4Common.DTO.CommonFileStore(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                commonFileStore.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["createdOn"].IsNullOrEmpty())
             {
                 commonFileStore.CreatedOn = jObject["createdOn"].ToObject<DateTime>();

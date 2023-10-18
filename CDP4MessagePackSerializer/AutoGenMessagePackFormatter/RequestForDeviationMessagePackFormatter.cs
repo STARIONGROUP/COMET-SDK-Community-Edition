@@ -52,6 +52,7 @@
  | 18    | status                               | AnnotationStatusKind         | 1..1        |  1.1.0  |
  | 19    | title                                | string                       | 1..1        |  1.1.0  |
  | 20    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 21    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -104,7 +105,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(requestForDeviation), "The RequestForDeviation may not be null");
             }
 
-            writer.WriteArrayHeader(21);
+            writer.WriteArrayHeader(22);
 
             writer.Write(requestForDeviation.Iid.ToByteArray());
             writer.Write(requestForDeviation.RevisionNumber);
@@ -163,6 +164,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(requestForDeviation.Status.ToString());
             writer.Write(requestForDeviation.Title);
             writer.Write(requestForDeviation.ThingPreference);
+            if (requestForDeviation.Actor.HasValue)
+            {
+                writer.Write(requestForDeviation.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -297,6 +306,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 20:
                         requestForDeviation.ThingPreference = reader.ReadString();
+                        break;
+                    case 21:
+                        if (reader.TryReadNil())
+                        {
+                            requestForDeviation.Actor = null;
+                        }
+                        else
+                        {
+                            requestForDeviation.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

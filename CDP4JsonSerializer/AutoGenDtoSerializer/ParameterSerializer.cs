@@ -48,6 +48,7 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
         {
+            { "actor", actor => new JValue(actor) },
             { "allowDifferentOwnerOfOverride", allowDifferentOwnerOfOverride => new JValue(allowDifferentOwnerOfOverride) },
             { "classKind", classKind => new JValue(classKind.ToString()) },
             { "excludedDomain", excludedDomain => new JArray(excludedDomain) },

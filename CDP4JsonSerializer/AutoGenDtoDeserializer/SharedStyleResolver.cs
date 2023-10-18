@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var sharedStyle = new CDP4Common.DTO.SharedStyle(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                sharedStyle.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["excludedDomain"].IsNullOrEmpty())
             {
                 sharedStyle.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());

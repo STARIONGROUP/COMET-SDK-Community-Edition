@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var requestForWaiver = new CDP4Common.DTO.RequestForWaiver(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                requestForWaiver.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["approvedBy"].IsNullOrEmpty())
             {
                 requestForWaiver.ApprovedBy.AddRange(jObject["approvedBy"].ToObject<IEnumerable<Guid>>());

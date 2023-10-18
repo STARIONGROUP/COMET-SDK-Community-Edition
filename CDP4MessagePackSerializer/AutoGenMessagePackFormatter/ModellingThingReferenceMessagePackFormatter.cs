@@ -39,6 +39,7 @@
  | 5     | referencedRevisionNumber             | int                          | 1..1        |  1.1.0  |
  | 6     | referencedThing                      | Guid                         | 1..1        |  1.1.0  |
  | 7     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 8     | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -91,7 +92,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(modellingThingReference), "The ModellingThingReference may not be null");
             }
 
-            writer.WriteArrayHeader(8);
+            writer.WriteArrayHeader(9);
 
             writer.Write(modellingThingReference.Iid.ToByteArray());
             writer.Write(modellingThingReference.RevisionNumber);
@@ -110,6 +111,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(modellingThingReference.ReferencedRevisionNumber);
             writer.Write(modellingThingReference.ReferencedThing.ToByteArray());
             writer.Write(modellingThingReference.ThingPreference);
+            if (modellingThingReference.Actor.HasValue)
+            {
+                writer.Write(modellingThingReference.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -178,6 +187,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 7:
                         modellingThingReference.ThingPreference = reader.ReadString();
+                        break;
+                    case 8:
+                        if (reader.TryReadNil())
+                        {
+                            modellingThingReference.Actor = null;
+                        }
+                        else
+                        {
+                            modellingThingReference.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

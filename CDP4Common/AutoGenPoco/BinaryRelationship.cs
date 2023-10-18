@@ -212,6 +212,7 @@ namespace CDP4Common.EngineeringModelData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current BinaryRelationship POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
@@ -234,6 +235,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var dto = new DTO.BinaryRelationship(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Category.AddRange(this.Category.Select(x => x.Iid));
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));

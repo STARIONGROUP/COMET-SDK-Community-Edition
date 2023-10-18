@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var simpleUnit = new CDP4Common.DTO.SimpleUnit(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                simpleUnit.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["alias"].IsNullOrEmpty())
             {
                 simpleUnit.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());

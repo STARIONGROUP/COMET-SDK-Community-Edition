@@ -246,6 +246,7 @@ namespace CDP4Common.SiteDirectoryData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current IterationSetup POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.CreatedOn = dto.CreatedOn;
             this.Description = dto.Description;
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
@@ -269,6 +270,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             var dto = new DTO.IterationSetup(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.CreatedOn = this.CreatedOn;
             dto.Description = this.Description;
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));

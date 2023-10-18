@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var unitFactor = new CDP4Common.DTO.UnitFactor(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                unitFactor.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["excludedDomain"].IsNullOrEmpty())
             {
                 unitFactor.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());

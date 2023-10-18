@@ -42,6 +42,7 @@
  | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 9     | replyTo                              | Guid                         | 0..1        |  1.1.0  |
  | 10    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 11    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -94,7 +95,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(engineeringModelDataDiscussionItem), "The EngineeringModelDataDiscussionItem may not be null");
             }
 
-            writer.WriteArrayHeader(11);
+            writer.WriteArrayHeader(12);
 
             writer.Write(engineeringModelDataDiscussionItem.Iid.ToByteArray());
             writer.Write(engineeringModelDataDiscussionItem.RevisionNumber);
@@ -123,6 +124,14 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.Write(engineeringModelDataDiscussionItem.ThingPreference);
+            if (engineeringModelDataDiscussionItem.Actor.HasValue)
+            {
+                writer.Write(engineeringModelDataDiscussionItem.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -207,6 +216,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 10:
                         engineeringModelDataDiscussionItem.ThingPreference = reader.ReadString();
+                        break;
+                    case 11:
+                        if (reader.TryReadNil())
+                        {
+                            engineeringModelDataDiscussionItem.Actor = null;
+                        }
+                        else
+                        {
+                            engineeringModelDataDiscussionItem.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

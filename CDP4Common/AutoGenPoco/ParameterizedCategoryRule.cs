@@ -216,6 +216,7 @@ namespace CDP4Common.SiteDirectoryData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ParameterizedCategoryRule POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
             this.Category = this.Cache.Get<Category>(dto.Category, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Category>();
             this.Definition.ResolveList(dto.Definition, dto.IterationContainerId, this.Cache);
@@ -240,6 +241,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             var dto = new DTO.ParameterizedCategoryRule(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
             dto.Category = this.Category != null ? this.Category.Iid : Guid.Empty;
             dto.Definition.AddRange(this.Definition.Select(x => x.Iid));

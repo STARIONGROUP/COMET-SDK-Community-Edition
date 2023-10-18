@@ -45,6 +45,7 @@
  | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -97,7 +98,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(textParameterType), "The TextParameterType may not be null");
             }
 
-            writer.WriteArrayHeader(14);
+            writer.WriteArrayHeader(15);
 
             writer.Write(textParameterType.Iid.ToByteArray());
             writer.Write(textParameterType.RevisionNumber);
@@ -138,6 +139,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(textParameterType.ModifiedOn);
             writer.Write(textParameterType.ThingPreference);
+            if (textParameterType.Actor.HasValue)
+            {
+                writer.Write(textParameterType.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -240,6 +249,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 13:
                         textParameterType.ThingPreference = reader.ReadString();
+                        break;
+                    case 14:
+                        if (reader.TryReadNil())
+                        {
+                            textParameterType.Actor = null;
+                        }
+                        else
+                        {
+                            textParameterType.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

@@ -80,6 +80,8 @@ namespace CDP4Common.ReportingData
                     return base.QueryThingValues(pd.Input);
                 case "thingpreference":
                     return base.QueryThingValues(pd.Input);
+                case "actor":
+                    return base.QueryThingValues(pd.Input);
                 case "content":
                     return base.QueryValue(pd.Input);
                 case "createdon":

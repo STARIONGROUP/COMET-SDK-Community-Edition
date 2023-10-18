@@ -48,6 +48,7 @@
  | 14    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 15    | parameterValue                       | Guid                         | 0..*        |  1.1.0  |
  | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -100,7 +101,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(requirementsSpecification), "The RequirementsSpecification may not be null");
             }
 
-            writer.WriteArrayHeader(17);
+            writer.WriteArrayHeader(18);
 
             writer.Write(requirementsSpecification.Iid.ToByteArray());
             writer.Write(requirementsSpecification.RevisionNumber);
@@ -156,6 +157,14 @@ namespace CDP4MessagePackSerializer
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(requirementsSpecification.ThingPreference);
+            if (requirementsSpecification.Actor.HasValue)
+            {
+                writer.Write(requirementsSpecification.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -279,6 +288,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 16:
                         requirementsSpecification.ThingPreference = reader.ReadString();
+                        break;
+                    case 17:
+                        if (reader.TryReadNil())
+                        {
+                            requirementsSpecification.Actor = null;
+                        }
+                        else
+                        {
+                            requirementsSpecification.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

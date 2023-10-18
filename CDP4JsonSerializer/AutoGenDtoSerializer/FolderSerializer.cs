@@ -48,6 +48,7 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
         {
+            { "actor", actor => new JValue(actor) },
             { "classKind", classKind => new JValue(classKind.ToString()) },
             { "containingFolder", containingFolder => new JValue(containingFolder) },
             { "createdOn", createdOn => new JValue(((DateTime)createdOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },

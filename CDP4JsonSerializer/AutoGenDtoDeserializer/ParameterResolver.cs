@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var parameter = new CDP4Common.DTO.Parameter(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                parameter.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["allowDifferentOwnerOfOverride"].IsNullOrEmpty())
             {
                 parameter.AllowDifferentOwnerOfOverride = jObject["allowDifferentOwnerOfOverride"].ToObject<bool>();

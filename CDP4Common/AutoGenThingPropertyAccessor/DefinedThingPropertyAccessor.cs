@@ -80,6 +80,8 @@ namespace CDP4Common.CommonData
                     return base.QueryThingValues(pd.Input);
                 case "thingpreference":
                     return base.QueryThingValues(pd.Input);
+                case "actor":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 

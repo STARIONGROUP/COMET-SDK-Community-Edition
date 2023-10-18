@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var parametricConstraint = new CDP4Common.DTO.ParametricConstraint(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                parametricConstraint.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["excludedDomain"].IsNullOrEmpty())
             {
                 parametricConstraint.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());

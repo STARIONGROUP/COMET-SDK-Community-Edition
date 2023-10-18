@@ -43,6 +43,7 @@
  | 9     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 10    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -95,7 +96,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(scaleValueDefinition), "The ScaleValueDefinition may not be null");
             }
 
-            writer.WriteArrayHeader(12);
+            writer.WriteArrayHeader(13);
 
             writer.Write(scaleValueDefinition.Iid.ToByteArray());
             writer.Write(scaleValueDefinition.RevisionNumber);
@@ -130,6 +131,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(scaleValueDefinition.ModifiedOn);
             writer.Write(scaleValueDefinition.ThingPreference);
+            if (scaleValueDefinition.Actor.HasValue)
+            {
+                writer.Write(scaleValueDefinition.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -222,6 +231,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 11:
                         scaleValueDefinition.ThingPreference = reader.ReadString();
+                        break;
+                    case 12:
+                        if (reader.TryReadNil())
+                        {
+                            scaleValueDefinition.Actor = null;
+                        }
+                        else
+                        {
+                            scaleValueDefinition.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

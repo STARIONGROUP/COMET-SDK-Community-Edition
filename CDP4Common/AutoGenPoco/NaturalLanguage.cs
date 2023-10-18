@@ -193,6 +193,7 @@ namespace CDP4Common.SiteDirectoryData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current NaturalLanguage POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
             this.LanguageCode = dto.LanguageCode;
@@ -212,6 +213,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             var dto = new DTO.NaturalLanguage(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
             dto.LanguageCode = this.LanguageCode;

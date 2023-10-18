@@ -45,6 +45,7 @@
  | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -97,7 +98,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(parameterizedCategoryRule), "The ParameterizedCategoryRule may not be null");
             }
 
-            writer.WriteArrayHeader(14);
+            writer.WriteArrayHeader(15);
 
             writer.Write(parameterizedCategoryRule.Iid.ToByteArray());
             writer.Write(parameterizedCategoryRule.RevisionNumber);
@@ -138,6 +139,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(parameterizedCategoryRule.ModifiedOn);
             writer.Write(parameterizedCategoryRule.ThingPreference);
+            if (parameterizedCategoryRule.Actor.HasValue)
+            {
+                writer.Write(parameterizedCategoryRule.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -240,6 +249,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 13:
                         parameterizedCategoryRule.ThingPreference = reader.ReadString();
+                        break;
+                    case 14:
+                        if (reader.TryReadNil())
+                        {
+                            parameterizedCategoryRule.Actor = null;
+                        }
+                        else
+                        {
+                            parameterizedCategoryRule.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var stakeHolderValueMap = new CDP4Common.DTO.StakeHolderValueMap(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                stakeHolderValueMap.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["alias"].IsNullOrEmpty())
             {
                 stakeHolderValueMap.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());

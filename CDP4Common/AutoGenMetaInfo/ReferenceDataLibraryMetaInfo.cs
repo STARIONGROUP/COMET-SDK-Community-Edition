@@ -219,6 +219,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -269,6 +270,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.ReferenceDataLibrary, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.ReferenceDataLibrary, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "Alias", thing => thing.Alias },
             { "BaseQuantityKind", thing => thing.BaseQuantityKind },
             { "BaseUnit", thing => thing.BaseUnit },
@@ -304,6 +306,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "BaseQuantityKind", new PropertyMetaInfo("BaseQuantityKind", "QuantityKind", PropertyKind.OrderedList, AggregationKind.None, false, true, true, 0, "*", true) },
             { "BaseUnit", new PropertyMetaInfo("BaseUnit", "MeasurementUnit", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
@@ -347,6 +350,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.ReferenceDataLibrary, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.ReferenceDataLibrary, object>>
         {
+            { "Actor", (referenceDataLibrary, value) => referenceDataLibrary.Actor = value == null ? (Guid?)null : (Guid)value },
             { "Iid", (referenceDataLibrary, value) => referenceDataLibrary.Iid = (Guid)value },
             { "ModifiedOn", (referenceDataLibrary, value) => referenceDataLibrary.ModifiedOn = (DateTime)value },
             { "Name", (referenceDataLibrary, value) => referenceDataLibrary.Name = value.ToString() },

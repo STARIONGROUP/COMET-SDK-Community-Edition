@@ -60,6 +60,11 @@ namespace CDP4JsonSerializer
                 personPermission.AccessRight = jObject["accessRight"].ToObject<PersonAccessRightKind>();
             }
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                personPermission.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["excludedDomain"].IsNullOrEmpty())
             {
                 personPermission.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());

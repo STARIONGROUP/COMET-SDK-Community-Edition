@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var alias = new CDP4Common.DTO.Alias(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                alias.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["content"].IsNullOrEmpty())
             {
                 alias.Content = jObject["content"].ToObject<string>();

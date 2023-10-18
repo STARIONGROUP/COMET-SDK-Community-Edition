@@ -488,6 +488,7 @@ namespace CDP4Common.EngineeringModelData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Iteration POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.Iid) : null;
             this.ActualFiniteStateList.ResolveList(dto.ActualFiniteStateList, dto.Iid, this.Cache);
             this.DefaultOption = (dto.DefaultOption.HasValue) ? this.Cache.Get<Option>(dto.DefaultOption.Value, dto.Iid) : null;
             this.DiagramCanvas.ResolveList(dto.DiagramCanvas, dto.Iid, this.Cache);
@@ -525,6 +526,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var dto = new DTO.Iteration(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.ActualFiniteStateList.AddRange(this.ActualFiniteStateList.Select(x => x.Iid));
             dto.DefaultOption = this.DefaultOption != null ? (Guid?)this.DefaultOption.Iid : null;
             dto.DiagramCanvas.AddRange(this.DiagramCanvas.Select(x => x.Iid));

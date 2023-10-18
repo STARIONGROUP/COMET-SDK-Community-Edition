@@ -43,6 +43,7 @@
  | 9     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 10    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -95,7 +96,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(term), "The Term may not be null");
             }
 
-            writer.WriteArrayHeader(12);
+            writer.WriteArrayHeader(13);
 
             writer.Write(term.Iid.ToByteArray());
             writer.Write(term.RevisionNumber);
@@ -130,6 +131,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(term.ModifiedOn);
             writer.Write(term.ThingPreference);
+            if (term.Actor.HasValue)
+            {
+                writer.Write(term.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -222,6 +231,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 11:
                         term.ThingPreference = reader.ReadString();
+                        break;
+                    case 12:
+                        if (reader.TryReadNil())
+                        {
+                            term.Actor = null;
+                        }
+                        else
+                        {
+                            term.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

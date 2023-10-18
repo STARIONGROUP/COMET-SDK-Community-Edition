@@ -41,6 +41,7 @@
  | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 9     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -93,7 +94,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(color), "The Color may not be null");
             }
 
-            writer.WriteArrayHeader(10);
+            writer.WriteArrayHeader(11);
 
             writer.Write(color.Iid.ToByteArray());
             writer.Write(color.RevisionNumber);
@@ -114,6 +115,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(color.ModifiedOn);
             writer.Write(color.ThingPreference);
+            if (color.Actor.HasValue)
+            {
+                writer.Write(color.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -188,6 +197,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 9:
                         color.ThingPreference = reader.ReadString();
+                        break;
+                    case 10:
+                        if (reader.TryReadNil())
+                        {
+                            color.Actor = null;
+                        }
+                        else
+                        {
+                            color.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

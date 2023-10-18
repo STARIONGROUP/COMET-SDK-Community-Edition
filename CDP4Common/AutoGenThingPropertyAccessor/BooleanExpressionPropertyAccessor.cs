@@ -80,6 +80,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "thingpreference":
                     return base.QueryThingValues(pd.Input);
+                case "actor":
+                    return base.QueryThingValues(pd.Input);
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

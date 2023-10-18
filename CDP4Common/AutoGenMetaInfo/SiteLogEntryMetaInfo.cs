@@ -196,6 +196,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "LogEntryChangelogItem", "1.2.0" },
@@ -235,6 +236,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.SiteLogEntry, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.SiteLogEntry, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "AffectedDomainIid", thing => thing.AffectedDomainIid },
             { "AffectedItemIid", thing => thing.AffectedItemIid },
             { "Author", thing => thing.Author },
@@ -261,6 +263,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "AffectedDomainIid", new PropertyMetaInfo("AffectedDomainIid", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "AffectedItemIid", new PropertyMetaInfo("AffectedItemIid", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Author", new PropertyMetaInfo("Author", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
@@ -296,6 +299,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.SiteLogEntry, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.SiteLogEntry, object>>
         {
+            { "Actor", (siteLogEntry, value) => siteLogEntry.Actor = value == null ? (Guid?)null : (Guid)value },
             { "Author", (siteLogEntry, value) => siteLogEntry.Author = value == null ? (Guid?)null : (Guid)value },
             { "Content", (siteLogEntry, value) => siteLogEntry.Content = value.ToString() },
             { "CreatedOn", (siteLogEntry, value) => siteLogEntry.CreatedOn = (DateTime)value },

@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var ordinalScale = new CDP4Common.DTO.OrdinalScale(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                ordinalScale.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["alias"].IsNullOrEmpty())
             {
                 ordinalScale.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());

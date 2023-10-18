@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var possibleFiniteState = new CDP4Common.DTO.PossibleFiniteState(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                possibleFiniteState.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["alias"].IsNullOrEmpty())
             {
                 possibleFiniteState.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());

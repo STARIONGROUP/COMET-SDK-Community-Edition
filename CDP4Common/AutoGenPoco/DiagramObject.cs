@@ -179,6 +179,7 @@ namespace CDP4Common.DiagramData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current DiagramObject POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Bounds.ResolveList(dto.Bounds, dto.IterationContainerId, this.Cache);
             this.DepictedThing = (dto.DepictedThing.HasValue) ? this.Cache.Get<Thing>(dto.DepictedThing.Value, dto.IterationContainerId) : null;
             this.DiagramElement.ResolveList(dto.DiagramElement, dto.IterationContainerId, this.Cache);
@@ -203,6 +204,7 @@ namespace CDP4Common.DiagramData
         {
             var dto = new DTO.DiagramObject(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Bounds.AddRange(this.Bounds.Select(x => x.Iid));
             dto.DepictedThing = this.DepictedThing != null ? (Guid?)this.DepictedThing.Iid : null;
             dto.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Iid));

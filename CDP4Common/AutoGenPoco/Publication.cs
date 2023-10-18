@@ -216,6 +216,7 @@ namespace CDP4Common.EngineeringModelData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Publication POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.CreatedOn = dto.CreatedOn;
             this.Domain.ResolveList(dto.Domain, dto.IterationContainerId, this.Cache);
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
@@ -235,6 +236,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var dto = new DTO.Publication(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.CreatedOn = this.CreatedOn;
             dto.Domain.AddRange(this.Domain.Select(x => x.Iid));
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));

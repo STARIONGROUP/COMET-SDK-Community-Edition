@@ -42,6 +42,7 @@
  | 8     | x                                    | float                        | 1..1        |  1.1.0  |
  | 9     | y                                    | float                        | 1..1        |  1.1.0  |
  | 10    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 11    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -94,7 +95,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(bounds), "The Bounds may not be null");
             }
 
-            writer.WriteArrayHeader(11);
+            writer.WriteArrayHeader(12);
 
             writer.Write(bounds.Iid.ToByteArray());
             writer.Write(bounds.RevisionNumber);
@@ -116,6 +117,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(bounds.X);
             writer.Write(bounds.Y);
             writer.Write(bounds.ThingPreference);
+            if (bounds.Actor.HasValue)
+            {
+                writer.Write(bounds.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -193,6 +202,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 10:
                         bounds.ThingPreference = reader.ReadString();
+                        break;
+                    case 11:
+                        if (reader.TryReadNil())
+                        {
+                            bounds.Actor = null;
+                        }
+                        else
+                        {
+                            bounds.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

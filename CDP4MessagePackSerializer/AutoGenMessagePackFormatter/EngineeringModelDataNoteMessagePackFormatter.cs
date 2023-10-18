@@ -44,6 +44,7 @@
  | 10    | primaryAnnotatedThing                | Guid                         | 0..1        |  1.1.0  |
  | 11    | relatedThing                         | Guid                         | 0..*        |  1.1.0  |
  | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -96,7 +97,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(engineeringModelDataNote), "The EngineeringModelDataNote may not be null");
             }
 
-            writer.WriteArrayHeader(13);
+            writer.WriteArrayHeader(14);
 
             writer.Write(engineeringModelDataNote.Iid.ToByteArray());
             writer.Write(engineeringModelDataNote.RevisionNumber);
@@ -135,6 +136,14 @@ namespace CDP4MessagePackSerializer
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(engineeringModelDataNote.ThingPreference);
+            if (engineeringModelDataNote.Actor.HasValue)
+            {
+                writer.Write(engineeringModelDataNote.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -233,6 +242,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 12:
                         engineeringModelDataNote.ThingPreference = reader.ReadString();
+                        break;
+                    case 13:
+                        if (reader.TryReadNil())
+                        {
+                            engineeringModelDataNote.Actor = null;
+                        }
+                        else
+                        {
+                            engineeringModelDataNote.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

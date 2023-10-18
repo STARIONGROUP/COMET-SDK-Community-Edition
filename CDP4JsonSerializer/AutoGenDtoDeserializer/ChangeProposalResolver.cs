@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var changeProposal = new CDP4Common.DTO.ChangeProposal(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                changeProposal.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["approvedBy"].IsNullOrEmpty())
             {
                 changeProposal.ApprovedBy.AddRange(jObject["approvedBy"].ToObject<IEnumerable<Guid>>());

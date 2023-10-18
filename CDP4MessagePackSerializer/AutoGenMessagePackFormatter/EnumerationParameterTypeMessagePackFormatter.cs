@@ -47,6 +47,7 @@
  | 13    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 14    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -99,7 +100,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(enumerationParameterType), "The EnumerationParameterType may not be null");
             }
 
-            writer.WriteArrayHeader(16);
+            writer.WriteArrayHeader(17);
 
             writer.Write(enumerationParameterType.Iid.ToByteArray());
             writer.Write(enumerationParameterType.RevisionNumber);
@@ -148,6 +149,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(enumerationParameterType.ModifiedOn);
             writer.Write(enumerationParameterType.ThingPreference);
+            if (enumerationParameterType.Actor.HasValue)
+            {
+                writer.Write(enumerationParameterType.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -264,6 +273,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 15:
                         enumerationParameterType.ThingPreference = reader.ReadString();
+                        break;
+                    case 16:
+                        if (reader.TryReadNil())
+                        {
+                            enumerationParameterType.Actor = null;
+                        }
+                        else
+                        {
+                            enumerationParameterType.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

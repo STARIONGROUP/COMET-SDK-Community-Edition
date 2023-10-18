@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var parameterGroup = new CDP4Common.DTO.ParameterGroup(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                parameterGroup.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["containingGroup"].IsNullOrEmpty())
             {
                 parameterGroup.ContainingGroup = jObject["containingGroup"].ToObject<Guid?>();

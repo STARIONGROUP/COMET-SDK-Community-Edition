@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var engineeringModelDataNote = new CDP4Common.DTO.EngineeringModelDataNote(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                engineeringModelDataNote.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["author"].IsNullOrEmpty())
             {
                 engineeringModelDataNote.Author = jObject["author"].ToObject<Guid>();

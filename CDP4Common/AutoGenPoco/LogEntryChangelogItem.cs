@@ -188,6 +188,7 @@ namespace CDP4Common.CommonData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current LogEntryChangelogItem POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.AffectedItemIid = dto.AffectedItemIid;
             this.AffectedReferenceIid.ClearAndAddRange(dto.AffectedReferenceIid);
             this.ChangeDescription = dto.ChangeDescription;
@@ -208,6 +209,7 @@ namespace CDP4Common.CommonData
         {
             var dto = new DTO.LogEntryChangelogItem(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.AffectedItemIid = this.AffectedItemIid;
             dto.AffectedReferenceIid.AddRange(this.AffectedReferenceIid);
             dto.ChangeDescription = this.ChangeDescription;

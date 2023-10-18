@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var binaryNote = new CDP4Common.DTO.BinaryNote(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                binaryNote.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["caption"].IsNullOrEmpty())
             {
                 binaryNote.Caption = jObject["caption"].ToObject<string>();

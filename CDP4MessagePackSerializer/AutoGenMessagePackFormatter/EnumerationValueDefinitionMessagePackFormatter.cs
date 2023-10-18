@@ -42,6 +42,7 @@
  | 8     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 9     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 10    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 11    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -94,7 +95,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(enumerationValueDefinition), "The EnumerationValueDefinition may not be null");
             }
 
-            writer.WriteArrayHeader(11);
+            writer.WriteArrayHeader(12);
 
             writer.Write(enumerationValueDefinition.Iid.ToByteArray());
             writer.Write(enumerationValueDefinition.RevisionNumber);
@@ -128,6 +129,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(enumerationValueDefinition.ModifiedOn);
             writer.Write(enumerationValueDefinition.ThingPreference);
+            if (enumerationValueDefinition.Actor.HasValue)
+            {
+                writer.Write(enumerationValueDefinition.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -217,6 +226,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 10:
                         enumerationValueDefinition.ThingPreference = reader.ReadString();
+                        break;
+                    case 11:
+                        if (reader.TryReadNil())
+                        {
+                            enumerationValueDefinition.Actor = null;
+                        }
+                        else
+                        {
+                            enumerationValueDefinition.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

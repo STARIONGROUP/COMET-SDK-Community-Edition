@@ -52,6 +52,7 @@
  | 18    | defaultOrganizationalParticipant     | Guid                         | 0..1        |  1.2.0  |
  | 19    | organizationalParticipant            | Guid                         | 0..*        |  1.2.0  |
  | 20    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 21    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -104,7 +105,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(engineeringModelSetup), "The EngineeringModelSetup may not be null");
             }
 
-            writer.WriteArrayHeader(21);
+            writer.WriteArrayHeader(22);
 
             writer.Write(engineeringModelSetup.Iid.ToByteArray());
             writer.Write(engineeringModelSetup.RevisionNumber);
@@ -182,6 +183,14 @@ namespace CDP4MessagePackSerializer
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(engineeringModelSetup.ThingPreference);
+            if (engineeringModelSetup.Actor.HasValue)
+            {
+                writer.Write(engineeringModelSetup.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -335,6 +344,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 20:
                         engineeringModelSetup.ThingPreference = reader.ReadString();
+                        break;
+                    case 21:
+                        if (reader.TryReadNil())
+                        {
+                            engineeringModelSetup.Actor = null;
+                        }
+                        else
+                        {
+                            engineeringModelSetup.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

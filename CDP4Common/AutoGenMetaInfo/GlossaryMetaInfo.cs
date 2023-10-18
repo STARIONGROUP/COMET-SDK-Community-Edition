@@ -200,6 +200,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -241,6 +242,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.Glossary, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.Glossary, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "Alias", thing => thing.Alias },
             { "Category", thing => thing.Category },
             { "ClassKind", thing => thing.ClassKind },
@@ -266,6 +268,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "Category", new PropertyMetaInfo("Category", "Category", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
@@ -298,6 +301,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.Glossary, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.Glossary, object>>
         {
+            { "Actor", (glossary, value) => glossary.Actor = value == null ? (Guid?)null : (Guid)value },
             { "Iid", (glossary, value) => glossary.Iid = (Guid)value },
             { "IsDeprecated", (glossary, value) => glossary.IsDeprecated = (bool)value },
             { "ModifiedOn", (glossary, value) => glossary.ModifiedOn = (DateTime)value },

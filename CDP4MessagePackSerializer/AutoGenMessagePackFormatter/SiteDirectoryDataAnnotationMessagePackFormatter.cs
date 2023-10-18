@@ -44,6 +44,7 @@
  | 10    | primaryAnnotatedThing                | Guid                         | 1..1        |  1.1.0  |
  | 11    | relatedThing                         | Guid                         | 1..*        |  1.1.0  |
  | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -96,7 +97,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(siteDirectoryDataAnnotation), "The SiteDirectoryDataAnnotation may not be null");
             }
 
-            writer.WriteArrayHeader(13);
+            writer.WriteArrayHeader(14);
 
             writer.Write(siteDirectoryDataAnnotation.Iid.ToByteArray());
             writer.Write(siteDirectoryDataAnnotation.RevisionNumber);
@@ -128,6 +129,14 @@ namespace CDP4MessagePackSerializer
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(siteDirectoryDataAnnotation.ThingPreference);
+            if (siteDirectoryDataAnnotation.Actor.HasValue)
+            {
+                writer.Write(siteDirectoryDataAnnotation.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -219,6 +228,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 12:
                         siteDirectoryDataAnnotation.ThingPreference = reader.ReadString();
+                        break;
+                    case 13:
+                        if (reader.TryReadNil())
+                        {
+                            siteDirectoryDataAnnotation.Actor = null;
+                        }
+                        else
+                        {
+                            siteDirectoryDataAnnotation.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

@@ -48,6 +48,7 @@ namespace CDP4JsonSerializer
         /// </summary>
         private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
         {
+            { "actor", actor => new JValue(actor) },
             { "alias", alias => new JArray(alias) },
             { "allowMultiSelect", allowMultiSelect => new JValue(allowMultiSelect) },
             { "category", category => new JArray(category) },

@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var userRuleVerification = new CDP4Common.DTO.UserRuleVerification(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                userRuleVerification.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["excludedDomain"].IsNullOrEmpty())
             {
                 userRuleVerification.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
@@ -93,6 +98,11 @@ namespace CDP4JsonSerializer
             if (!jObject["thingPreference"].IsNullOrEmpty())
             {
                 userRuleVerification.ThingPreference = jObject["thingPreference"].ToObject<string>();
+            }
+
+            if (!jObject["violation"].IsNullOrEmpty())
+            {
+                userRuleVerification.Violation.AddRange(jObject["violation"].ToObject<IEnumerable<Guid>>());
             }
 
             return userRuleVerification;

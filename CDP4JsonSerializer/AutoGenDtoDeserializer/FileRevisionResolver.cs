@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var fileRevision = new CDP4Common.DTO.FileRevision(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                fileRevision.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["containingFolder"].IsNullOrEmpty())
             {
                 fileRevision.ContainingFolder = jObject["containingFolder"].ToObject<Guid?>();

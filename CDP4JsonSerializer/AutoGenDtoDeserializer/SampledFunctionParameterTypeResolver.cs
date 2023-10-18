@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var sampledFunctionParameterType = new CDP4Common.DTO.SampledFunctionParameterType(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                sampledFunctionParameterType.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["alias"].IsNullOrEmpty())
             {
                 sampledFunctionParameterType.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());

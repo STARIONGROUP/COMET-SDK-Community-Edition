@@ -53,6 +53,7 @@
  | 19    | status                               | AnnotationStatusKind         | 1..1        |  1.1.0  |
  | 20    | title                                | string                       | 1..1        |  1.1.0  |
  | 21    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 22    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -105,7 +106,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(contractChangeNotice), "The ContractChangeNotice may not be null");
             }
 
-            writer.WriteArrayHeader(22);
+            writer.WriteArrayHeader(23);
 
             writer.Write(contractChangeNotice.Iid.ToByteArray());
             writer.Write(contractChangeNotice.RevisionNumber);
@@ -165,6 +166,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(contractChangeNotice.Status.ToString());
             writer.Write(contractChangeNotice.Title);
             writer.Write(contractChangeNotice.ThingPreference);
+            if (contractChangeNotice.Actor.HasValue)
+            {
+                writer.Write(contractChangeNotice.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -302,6 +311,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 21:
                         contractChangeNotice.ThingPreference = reader.ReadString();
+                        break;
+                    case 22:
+                        if (reader.TryReadNil())
+                        {
+                            contractChangeNotice.Actor = null;
+                        }
+                        else
+                        {
+                            contractChangeNotice.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

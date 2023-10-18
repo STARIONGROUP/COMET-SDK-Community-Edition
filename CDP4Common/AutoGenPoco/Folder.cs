@@ -267,6 +267,7 @@ namespace CDP4Common.EngineeringModelData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Folder POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.ContainingFolder = (dto.ContainingFolder.HasValue) ? this.Cache.Get<Folder>(dto.ContainingFolder.Value, dto.IterationContainerId) : null;
             this.CreatedOn = dto.CreatedOn;
             this.Creator = this.Cache.Get<Participant>(dto.Creator, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Participant>();
@@ -288,6 +289,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var dto = new DTO.Folder(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.ContainingFolder = this.ContainingFolder != null ? (Guid?)this.ContainingFolder.Iid : null;
             dto.CreatedOn = this.CreatedOn;
             dto.Creator = this.Creator != null ? this.Creator.Iid : Guid.Empty;

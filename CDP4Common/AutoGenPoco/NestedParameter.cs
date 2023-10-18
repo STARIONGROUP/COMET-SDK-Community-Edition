@@ -279,6 +279,7 @@ namespace CDP4Common.EngineeringModelData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current NestedParameter POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.ActualState = (dto.ActualState.HasValue) ? this.Cache.Get<ActualFiniteState>(dto.ActualState.Value, dto.IterationContainerId) : null;
             this.ActualValue = dto.ActualValue;
             this.AssociatedParameter = this.Cache.Get<ParameterBase>(dto.AssociatedParameter, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<ParameterBase>();
@@ -301,6 +302,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var dto = new DTO.NestedParameter(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.ActualState = this.ActualState != null ? (Guid?)this.ActualState.Iid : null;
             dto.ActualValue = this.ActualValue;
             dto.AssociatedParameter = this.AssociatedParameter != null ? this.AssociatedParameter.Iid : Guid.Empty;

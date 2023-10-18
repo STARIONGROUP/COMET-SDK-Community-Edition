@@ -40,6 +40,7 @@
  | 6     | stakeholderValueToRequirementRelationship | Guid                         | 0..1        |  1.1.0  |
  | 7     | valueGroupToStakeholderValueRelationship | Guid                         | 0..1        |  1.1.0  |
  | 8     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 9     | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -92,7 +93,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(stakeHolderValueMapSettings), "The StakeHolderValueMapSettings may not be null");
             }
 
-            writer.WriteArrayHeader(9);
+            writer.WriteArrayHeader(10);
 
             writer.Write(stakeHolderValueMapSettings.Iid.ToByteArray());
             writer.Write(stakeHolderValueMapSettings.RevisionNumber);
@@ -133,6 +134,14 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.Write(stakeHolderValueMapSettings.ThingPreference);
+            if (stakeHolderValueMapSettings.Actor.HasValue)
+            {
+                writer.Write(stakeHolderValueMapSettings.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -225,6 +234,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 8:
                         stakeHolderValueMapSettings.ThingPreference = reader.ReadString();
+                        break;
+                    case 9:
+                        if (reader.TryReadNil())
+                        {
+                            stakeHolderValueMapSettings.Actor = null;
+                        }
+                        else
+                        {
+                            stakeHolderValueMapSettings.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

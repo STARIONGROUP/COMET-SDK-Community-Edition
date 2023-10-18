@@ -266,6 +266,7 @@ namespace CDP4Common.EngineeringModelData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current PossibleFiniteStateList POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);
             this.DefaultState = (dto.DefaultState.HasValue) ? this.Cache.Get<PossibleFiniteState>(dto.DefaultState.Value, dto.IterationContainerId) : null;
@@ -291,6 +292,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var dto = new DTO.PossibleFiniteStateList(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
             dto.Category.AddRange(this.Category.Select(x => x.Iid));
             dto.DefaultState = this.DefaultState != null ? (Guid?)this.DefaultState.Iid : null;

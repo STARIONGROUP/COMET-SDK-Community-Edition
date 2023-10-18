@@ -41,6 +41,7 @@
  | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 9     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -93,7 +94,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(relationalExpression), "The RelationalExpression may not be null");
             }
 
-            writer.WriteArrayHeader(10);
+            writer.WriteArrayHeader(11);
 
             writer.Write(relationalExpression.Iid.ToByteArray());
             writer.Write(relationalExpression.RevisionNumber);
@@ -125,6 +126,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(relationalExpression.ModifiedOn);
             writer.Write(relationalExpression.ThingPreference);
+            if (relationalExpression.Actor.HasValue)
+            {
+                writer.Write(relationalExpression.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -212,6 +221,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 9:
                         relationalExpression.ThingPreference = reader.ReadString();
+                        break;
+                    case 10:
+                        if (reader.TryReadNil())
+                        {
+                            relationalExpression.Actor = null;
+                        }
+                        else
+                        {
+                            relationalExpression.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

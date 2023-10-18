@@ -296,6 +296,7 @@ namespace CDP4Common.SiteDirectoryData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current SiteLogEntry POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.AffectedDomainIid.ClearAndAddRange(dto.AffectedDomainIid);
             this.AffectedItemIid.ClearAndAddRange(dto.AffectedItemIid);
             this.Author = (dto.Author.HasValue) ? this.Cache.Get<Person>(dto.Author.Value, dto.IterationContainerId) : null;
@@ -321,6 +322,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             var dto = new DTO.SiteLogEntry(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.AffectedDomainIid.AddRange(this.AffectedDomainIid);
             dto.AffectedItemIid.AddRange(this.AffectedItemIid);
             dto.Author = this.Author != null ? (Guid?)this.Author.Iid : null;

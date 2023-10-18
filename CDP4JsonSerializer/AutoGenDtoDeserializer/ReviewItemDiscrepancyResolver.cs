@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var reviewItemDiscrepancy = new CDP4Common.DTO.ReviewItemDiscrepancy(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                reviewItemDiscrepancy.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["approvedBy"].IsNullOrEmpty())
             {
                 reviewItemDiscrepancy.ApprovedBy.AddRange(jObject["approvedBy"].ToObject<IEnumerable<Guid>>());

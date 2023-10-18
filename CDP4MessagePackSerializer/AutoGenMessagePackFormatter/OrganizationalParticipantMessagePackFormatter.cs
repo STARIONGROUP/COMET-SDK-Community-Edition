@@ -38,6 +38,7 @@
  | 4     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 5     | organization                         | Guid                         | 1..1        |  1.2.0  |
  | 6     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 7     | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -90,7 +91,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(organizationalParticipant), "The OrganizationalParticipant may not be null");
             }
 
-            writer.WriteArrayHeader(7);
+            writer.WriteArrayHeader(8);
 
             writer.Write(organizationalParticipant.Iid.ToByteArray());
             writer.Write(organizationalParticipant.RevisionNumber);
@@ -108,6 +109,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(organizationalParticipant.ModifiedOn);
             writer.Write(organizationalParticipant.Organization.ToByteArray());
             writer.Write(organizationalParticipant.ThingPreference);
+            if (organizationalParticipant.Actor.HasValue)
+            {
+                writer.Write(organizationalParticipant.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -173,6 +182,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 6:
                         organizationalParticipant.ThingPreference = reader.ReadString();
+                        break;
+                    case 7:
+                        if (reader.TryReadNil())
+                        {
+                            organizationalParticipant.Actor = null;
+                        }
+                        else
+                        {
+                            organizationalParticipant.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

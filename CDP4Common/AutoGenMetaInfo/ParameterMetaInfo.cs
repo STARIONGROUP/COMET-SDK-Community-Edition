@@ -193,6 +193,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -232,6 +233,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.Parameter, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.Parameter, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "AllowDifferentOwnerOfOverride", thing => thing.AllowDifferentOwnerOfOverride },
             { "ClassKind", thing => thing.ClassKind },
             { "ExcludedDomain", thing => thing.ExcludedDomain },
@@ -260,6 +262,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "AllowDifferentOwnerOfOverride", new PropertyMetaInfo("AllowDifferentOwnerOfOverride", "bool", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
@@ -294,6 +297,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.Parameter, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.Parameter, object>>
         {
+            { "Actor", (parameter, value) => parameter.Actor = value == null ? (Guid?)null : (Guid)value },
             { "AllowDifferentOwnerOfOverride", (parameter, value) => parameter.AllowDifferentOwnerOfOverride = (bool)value },
             { "ExpectsOverride", (parameter, value) => parameter.ExpectsOverride = (bool)value },
             { "Group", (parameter, value) => parameter.Group = value == null ? (Guid?)null : (Guid)value },

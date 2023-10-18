@@ -49,6 +49,7 @@
  | 15    | shortName                            | string                       | 1..1        |  1.2.0  |
  | 16    | symbol                               | string                       | 1..1        |  1.2.0  |
  | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -101,7 +102,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(sampledFunctionParameterType), "The SampledFunctionParameterType may not be null");
             }
 
-            writer.WriteArrayHeader(18);
+            writer.WriteArrayHeader(19);
 
             writer.Write(sampledFunctionParameterType.Iid.ToByteArray());
             writer.Write(sampledFunctionParameterType.RevisionNumber);
@@ -169,6 +170,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(sampledFunctionParameterType.ShortName);
             writer.Write(sampledFunctionParameterType.Symbol);
             writer.Write(sampledFunctionParameterType.ThingPreference);
+            if (sampledFunctionParameterType.Actor.HasValue)
+            {
+                writer.Write(sampledFunctionParameterType.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -312,6 +321,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 17:
                         sampledFunctionParameterType.ThingPreference = reader.ReadString();
+                        break;
+                    case 18:
+                        if (reader.TryReadNil())
+                        {
+                            sampledFunctionParameterType.Actor = null;
+                        }
+                        else
+                        {
+                            sampledFunctionParameterType.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

@@ -188,6 +188,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -223,6 +224,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.LogEntryChangelogItem, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.LogEntryChangelogItem, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "AffectedItemIid", thing => thing.AffectedItemIid },
             { "AffectedReferenceIid", thing => thing.AffectedReferenceIid },
             { "ChangeDescription", thing => thing.ChangeDescription },
@@ -244,6 +246,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "AffectedItemIid", new PropertyMetaInfo("AffectedItemIid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "AffectedReferenceIid", new PropertyMetaInfo("AffectedReferenceIid", "Guid", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ChangeDescription", new PropertyMetaInfo("ChangeDescription", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
@@ -272,6 +275,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.LogEntryChangelogItem, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.LogEntryChangelogItem, object>>
         {
+            { "Actor", (logEntryChangelogItem, value) => logEntryChangelogItem.Actor = value == null ? (Guid?)null : (Guid)value },
             { "AffectedItemIid", (logEntryChangelogItem, value) => logEntryChangelogItem.AffectedItemIid = (Guid)value },
             { "ChangeDescription", (logEntryChangelogItem, value) => logEntryChangelogItem.ChangeDescription = value == null ? (string)null : value.ToString() },
             { "ChangelogKind", (logEntryChangelogItem, value) => logEntryChangelogItem.ChangelogKind = (LogEntryChangelogItemKind)value },

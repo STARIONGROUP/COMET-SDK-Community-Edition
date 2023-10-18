@@ -204,6 +204,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "Book", "1.1.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
@@ -250,6 +251,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.EngineeringModel, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.EngineeringModel, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "Book", thing => thing.Book },
             { "ClassKind", thing => thing.ClassKind },
             { "CommonFileStore", thing => thing.CommonFileStore },
@@ -275,6 +277,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "EngineeringModelSetup", new PropertyMetaInfo("EngineeringModelSetup", "EngineeringModelSetup", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
@@ -306,6 +309,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.EngineeringModel, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.EngineeringModel, object>>
         {
+            { "Actor", (engineeringModel, value) => engineeringModel.Actor = value == null ? (Guid?)null : (Guid)value },
             { "EngineeringModelSetup", (engineeringModel, value) => engineeringModel.EngineeringModelSetup = (Guid)value },
             { "Iid", (engineeringModel, value) => engineeringModel.Iid = (Guid)value },
             { "LastModifiedOn", (engineeringModel, value) => engineeringModel.LastModifiedOn = (DateTime)value },

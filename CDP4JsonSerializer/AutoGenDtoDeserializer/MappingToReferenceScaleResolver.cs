@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var mappingToReferenceScale = new CDP4Common.DTO.MappingToReferenceScale(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                mappingToReferenceScale.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["dependentScaleValue"].IsNullOrEmpty())
             {
                 mappingToReferenceScale.DependentScaleValue = jObject["dependentScaleValue"].ToObject<Guid>();

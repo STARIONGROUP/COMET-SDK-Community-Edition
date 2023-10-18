@@ -40,6 +40,7 @@
  | 6     | scale                                | Guid                         | 0..1        |  1.1.0  |
  | 7     | value                                | ValueArray<string>           | 1..*        |  1.1.0  |
  | 8     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 9     | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -92,7 +93,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(requirementsContainerParameterValue), "The RequirementsContainerParameterValue may not be null");
             }
 
-            writer.WriteArrayHeader(9);
+            writer.WriteArrayHeader(10);
 
             writer.Write(requirementsContainerParameterValue.Iid.ToByteArray());
             writer.Write(requirementsContainerParameterValue.RevisionNumber);
@@ -123,6 +124,14 @@ namespace CDP4MessagePackSerializer
                 writer.Write(valueArrayItem);
             }
             writer.Write(requirementsContainerParameterValue.ThingPreference);
+            if (requirementsContainerParameterValue.Actor.HasValue)
+            {
+                writer.Write(requirementsContainerParameterValue.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -207,6 +216,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 8:
                         requirementsContainerParameterValue.ThingPreference = reader.ReadString();
+                        break;
+                    case 9:
+                        if (reader.TryReadNil())
+                        {
+                            requirementsContainerParameterValue.Actor = null;
+                        }
+                        else
+                        {
+                            requirementsContainerParameterValue.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

@@ -285,6 +285,7 @@ namespace CDP4Common.EngineeringModelData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current FileRevision POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.ContainingFolder = (dto.ContainingFolder.HasValue) ? this.Cache.Get<Folder>(dto.ContainingFolder.Value, dto.IterationContainerId) : null;
             this.ContentHash = dto.ContentHash;
             this.CreatedOn = dto.CreatedOn;
@@ -307,6 +308,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var dto = new DTO.FileRevision(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.ContainingFolder = this.ContainingFolder != null ? (Guid?)this.ContainingFolder.Iid : null;
             dto.ContentHash = this.ContentHash;
             dto.CreatedOn = this.CreatedOn;

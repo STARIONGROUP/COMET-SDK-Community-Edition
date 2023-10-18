@@ -53,6 +53,7 @@
  | 19    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 20    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 21    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 22    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -105,7 +106,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(ratioScale), "The RatioScale may not be null");
             }
 
-            writer.WriteArrayHeader(22);
+            writer.WriteArrayHeader(23);
 
             writer.Write(ratioScale.Iid.ToByteArray());
             writer.Write(ratioScale.RevisionNumber);
@@ -158,6 +159,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(ratioScale.ModifiedOn);
             writer.Write(ratioScale.ThingPreference);
+            if (ratioScale.Actor.HasValue)
+            {
+                writer.Write(ratioScale.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -288,6 +297,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 21:
                         ratioScale.ThingPreference = reader.ReadString();
+                        break;
+                    case 22:
+                        if (reader.TryReadNil())
+                        {
+                            ratioScale.Actor = null;
+                        }
+                        else
+                        {
+                            ratioScale.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

@@ -43,6 +43,7 @@
  | 9     | name                                 | string                       | 1..1        |  1.1.0  |
  | 10    | shortName                            | string                       | 1..1        |  1.1.0  |
  | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -95,7 +96,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(goal), "The Goal may not be null");
             }
 
-            writer.WriteArrayHeader(12);
+            writer.WriteArrayHeader(13);
 
             writer.Write(goal.Iid.ToByteArray());
             writer.Write(goal.RevisionNumber);
@@ -134,6 +135,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(goal.Name);
             writer.Write(goal.ShortName);
             writer.Write(goal.ThingPreference);
+            if (goal.Actor.HasValue)
+            {
+                writer.Write(goal.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -230,6 +239,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 11:
                         goal.ThingPreference = reader.ReadString();
+                        break;
+                    case 12:
+                        if (reader.TryReadNil())
+                        {
+                            goal.Actor = null;
+                        }
+                        else
+                        {
+                            goal.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();
