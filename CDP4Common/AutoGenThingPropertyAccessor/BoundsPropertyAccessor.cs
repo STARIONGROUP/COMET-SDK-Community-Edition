@@ -80,6 +80,8 @@ namespace CDP4Common.DiagramData
                     return base.QueryThingValues(pd.Input);
                 case "thingpreference":
                     return base.QueryThingValues(pd.Input);
+                case "actor":
+                    return base.QueryThingValues(pd.Input);
                 case "height":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.Height;
@@ -141,6 +143,15 @@ namespace CDP4Common.DiagramData
                 case "thingpreference":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return isCallerEmunerable ? (object) new List<string>() : null;
+                case "actor":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if (pd.Next != null)
+                    {
+                        return new Person(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                    }
+
+                    return isCallerEmunerable ? (object) new List<Person>() : default(Person);
                 case "height":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return isCallerEmunerable ? (object) new List<float>() : null;

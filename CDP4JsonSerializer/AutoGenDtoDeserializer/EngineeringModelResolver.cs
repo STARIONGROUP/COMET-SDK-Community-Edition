@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var engineeringModel = new CDP4Common.DTO.EngineeringModel(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                engineeringModel.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["book"].IsNullOrEmpty())
             {
                 engineeringModel.Book.AddRange(jObject["book"].ToOrderedItemCollection());

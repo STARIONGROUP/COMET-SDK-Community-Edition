@@ -43,6 +43,7 @@
  | 9     | section                              | Guid                         | 0..*        |  1.1.0  |
  | 10    | shortName                            | string                       | 1..1        |  1.1.0  |
  | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -95,7 +96,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(book), "The Book may not be null");
             }
 
-            writer.WriteArrayHeader(12);
+            writer.WriteArrayHeader(13);
 
             writer.Write(book.Iid.ToByteArray());
             writer.Write(book.RevisionNumber);
@@ -128,6 +129,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(book.ShortName);
             writer.Write(book.ThingPreference);
+            if (book.Actor.HasValue)
+            {
+                writer.Write(book.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -220,6 +229,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 11:
                         book.ThingPreference = reader.ReadString();
+                        break;
+                    case 12:
+                        if (reader.TryReadNil())
+                        {
+                            book.Actor = null;
+                        }
+                        else
+                        {
+                            book.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

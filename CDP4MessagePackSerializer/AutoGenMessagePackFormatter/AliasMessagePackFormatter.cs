@@ -40,6 +40,7 @@
  | 6     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 7     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 8     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 9     | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -92,7 +93,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(alias), "The Alias may not be null");
             }
 
-            writer.WriteArrayHeader(9);
+            writer.WriteArrayHeader(10);
 
             writer.Write(alias.Iid.ToByteArray());
             writer.Write(alias.RevisionNumber);
@@ -112,6 +113,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(alias.ModifiedOn);
             writer.Write(alias.ThingPreference);
+            if (alias.Actor.HasValue)
+            {
+                writer.Write(alias.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -183,6 +192,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 8:
                         alias.ThingPreference = reader.ReadString();
+                        break;
+                    case 9:
+                        if (reader.TryReadNil())
+                        {
+                            alias.Actor = null;
+                        }
+                        else
+                        {
+                            alias.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

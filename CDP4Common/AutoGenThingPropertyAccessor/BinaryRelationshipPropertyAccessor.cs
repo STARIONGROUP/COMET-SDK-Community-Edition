@@ -80,6 +80,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "thingpreference":
                     return base.QueryThingValues(pd.Input);
+                case "actor":
+                    return base.QueryThingValues(pd.Input);
                 case "category":
                     return base.QueryValue(pd.Input);
                 case "name":
@@ -165,6 +167,15 @@ namespace CDP4Common.EngineeringModelData
                 case "thingpreference":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return isCallerEmunerable ? (object) new List<string>() : null;
+                case "actor":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if (pd.Next != null)
+                    {
+                        return new Person(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                    }
+
+                    return isCallerEmunerable ? (object) new List<Person>() : default(Person);
                 case "category":
                     return pd.Next == null ? (object) new List<Category>() : new Category(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
                 case "name":

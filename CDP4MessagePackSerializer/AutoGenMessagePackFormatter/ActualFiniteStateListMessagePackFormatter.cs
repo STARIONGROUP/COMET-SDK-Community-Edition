@@ -41,6 +41,7 @@
  | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 9     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -93,7 +94,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(actualFiniteStateList), "The ActualFiniteStateList may not be null");
             }
 
-            writer.WriteArrayHeader(10);
+            writer.WriteArrayHeader(11);
 
             writer.Write(actualFiniteStateList.Iid.ToByteArray());
             writer.Write(actualFiniteStateList.RevisionNumber);
@@ -128,6 +129,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(actualFiniteStateList.ModifiedOn);
             writer.Write(actualFiniteStateList.ThingPreference);
+            if (actualFiniteStateList.Actor.HasValue)
+            {
+                writer.Write(actualFiniteStateList.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -218,6 +227,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 9:
                         actualFiniteStateList.ThingPreference = reader.ReadString();
+                        break;
+                    case 10:
+                        if (reader.TryReadNil())
+                        {
+                            actualFiniteStateList.Actor = null;
+                        }
+                        else
+                        {
+                            actualFiniteStateList.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

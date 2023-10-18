@@ -196,6 +196,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -236,6 +237,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.DiagramElementThing, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.DiagramElementThing, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "Bounds", thing => thing.Bounds },
             { "ClassKind", thing => thing.ClassKind },
             { "DepictedThing", thing => thing.DepictedThing },
@@ -259,6 +261,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "DepictedThing", new PropertyMetaInfo("DepictedThing", "Thing", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
@@ -288,6 +291,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.DiagramElementThing, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.DiagramElementThing, object>>
         {
+            { "Actor", (diagramElementThing, value) => diagramElementThing.Actor = value == null ? (Guid?)null : (Guid)value },
             { "DepictedThing", (diagramElementThing, value) => diagramElementThing.DepictedThing = value == null ? (Guid?)null : (Guid)value },
             { "Iid", (diagramElementThing, value) => diagramElementThing.Iid = (Guid)value },
             { "ModifiedOn", (diagramElementThing, value) => diagramElementThing.ModifiedOn = (DateTime)value },

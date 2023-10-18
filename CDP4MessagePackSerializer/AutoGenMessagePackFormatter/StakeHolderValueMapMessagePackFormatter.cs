@@ -48,6 +48,7 @@
  | 14    | stakeholderValue                     | Guid                         | 0..*        |  1.1.0  |
  | 15    | valueGroup                           | Guid                         | 0..*        |  1.1.0  |
  | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -100,7 +101,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(stakeHolderValueMap), "The StakeHolderValueMap may not be null");
             }
 
-            writer.WriteArrayHeader(17);
+            writer.WriteArrayHeader(18);
 
             writer.Write(stakeHolderValueMap.Iid.ToByteArray());
             writer.Write(stakeHolderValueMap.RevisionNumber);
@@ -164,6 +165,14 @@ namespace CDP4MessagePackSerializer
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(stakeHolderValueMap.ThingPreference);
+            if (stakeHolderValueMap.Actor.HasValue)
+            {
+                writer.Write(stakeHolderValueMap.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -295,6 +304,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 16:
                         stakeHolderValueMap.ThingPreference = reader.ReadString();
+                        break;
+                    case 17:
+                        if (reader.TryReadNil())
+                        {
+                            stakeHolderValueMap.Actor = null;
+                        }
+                        else
+                        {
+                            stakeHolderValueMap.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

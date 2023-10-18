@@ -60,6 +60,11 @@ namespace CDP4JsonSerializer
                 actionItem.Actionee = jObject["actionee"].ToObject<Guid>();
             }
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                actionItem.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["approvedBy"].IsNullOrEmpty())
             {
                 actionItem.ApprovedBy.AddRange(jObject["approvedBy"].ToObject<IEnumerable<Guid>>());

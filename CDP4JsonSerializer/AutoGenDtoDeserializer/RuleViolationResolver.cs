@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var ruleViolation = new CDP4Common.DTO.RuleViolation(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                ruleViolation.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["description"].IsNullOrEmpty())
             {
                 ruleViolation.Description = jObject["description"].ToObject<string>();

@@ -195,6 +195,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -233,6 +234,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.Definition, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.Definition, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "Citation", thing => thing.Citation },
             { "ClassKind", thing => thing.ClassKind },
             { "Content", thing => thing.Content },
@@ -255,6 +257,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Content", new PropertyMetaInfo("Content", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Example", new PropertyMetaInfo("Example", "string", PropertyKind.OrderedList, AggregationKind.None, false, true, true, 0, "*", true) },
@@ -285,6 +288,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.Definition, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.Definition, object>>
         {
+            { "Actor", (definition, value) => definition.Actor = value == null ? (Guid?)null : (Guid)value },
             { "Content", (definition, value) => definition.Content = value.ToString() },
             { "Iid", (definition, value) => definition.Iid = (Guid)value },
             { "LanguageCode", (definition, value) => definition.LanguageCode = value.ToString() },

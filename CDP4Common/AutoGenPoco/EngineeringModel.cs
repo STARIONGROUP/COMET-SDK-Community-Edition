@@ -297,6 +297,7 @@ namespace CDP4Common.EngineeringModelData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current EngineeringModel POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Book.ResolveList(dto.Book, dto.IterationContainerId, this.Cache);
             this.CommonFileStore.ResolveList(dto.CommonFileStore, dto.IterationContainerId, this.Cache);
             this.EngineeringModelSetup = this.Cache.Get<EngineeringModelSetup>(dto.EngineeringModelSetup, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<EngineeringModelSetup>();
@@ -321,6 +322,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var dto = new DTO.EngineeringModel(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Book.AddRange(this.Book.ToDtoOrderedItemList());
             dto.CommonFileStore.AddRange(this.CommonFileStore.Select(x => x.Iid));
             dto.EngineeringModelSetup = this.EngineeringModelSetup != null ? this.EngineeringModelSetup.Iid : Guid.Empty;

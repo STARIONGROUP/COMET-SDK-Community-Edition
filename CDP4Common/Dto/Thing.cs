@@ -151,6 +151,14 @@ namespace CDP4Common.DTO
         public Guid? IterationContainerId { get; set; }
 
         /// <summary>
+        /// Gets or sets the <see cref="Guid"/> of the latest <see cref="Person"/> that authored this <see cref="Thing"/>
+        /// </summary>
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: true, isPersistent: false)]
+        [CDPVersion("1.3.0")]
+        [DataMember]
+        public Guid? Actor { get; set; }
+
+        /// <summary>
         /// Gets or sets the <see cref="ContainerLevelKind"/> that determines where in the containment tree
         /// the DTO is situated.
         /// </summary>

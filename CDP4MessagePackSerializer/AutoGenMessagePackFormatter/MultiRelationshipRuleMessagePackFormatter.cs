@@ -47,6 +47,7 @@
  | 13    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 14    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -99,7 +100,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(multiRelationshipRule), "The MultiRelationshipRule may not be null");
             }
 
-            writer.WriteArrayHeader(16);
+            writer.WriteArrayHeader(17);
 
             writer.Write(multiRelationshipRule.Iid.ToByteArray());
             writer.Write(multiRelationshipRule.RevisionNumber);
@@ -142,6 +143,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(multiRelationshipRule.ModifiedOn);
             writer.Write(multiRelationshipRule.ThingPreference);
+            if (multiRelationshipRule.Actor.HasValue)
+            {
+                writer.Write(multiRelationshipRule.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -250,6 +259,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 15:
                         multiRelationshipRule.ThingPreference = reader.ReadString();
+                        break;
+                    case 16:
+                        if (reader.TryReadNil())
+                        {
+                            multiRelationshipRule.Actor = null;
+                        }
+                        else
+                        {
+                            multiRelationshipRule.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

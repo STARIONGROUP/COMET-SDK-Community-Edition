@@ -43,6 +43,7 @@
  | 9     | page                                 | Guid                         | 0..*        |  1.1.0  |
  | 10    | shortName                            | string                       | 1..1        |  1.1.0  |
  | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -95,7 +96,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(section), "The Section may not be null");
             }
 
-            writer.WriteArrayHeader(12);
+            writer.WriteArrayHeader(13);
 
             writer.Write(section.Iid.ToByteArray());
             writer.Write(section.RevisionNumber);
@@ -128,6 +129,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(section.ShortName);
             writer.Write(section.ThingPreference);
+            if (section.Actor.HasValue)
+            {
+                writer.Write(section.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -220,6 +229,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 11:
                         section.ThingPreference = reader.ReadString();
+                        break;
+                    case 12:
+                        if (reader.TryReadNil())
+                        {
+                            section.Actor = null;
+                        }
+                        else
+                        {
+                            section.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

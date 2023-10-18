@@ -45,6 +45,7 @@
  | 11    | resolution                           | float                        | 1..1        |  1.1.0  |
  | 12    | sharedStyle                          | Guid                         | 0..1        |  1.1.0  |
  | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -97,7 +98,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(diagramObject), "The DiagramObject may not be null");
             }
 
-            writer.WriteArrayHeader(14);
+            writer.WriteArrayHeader(15);
 
             writer.Write(diagramObject.Iid.ToByteArray());
             writer.Write(diagramObject.RevisionNumber);
@@ -148,6 +149,14 @@ namespace CDP4MessagePackSerializer
                 writer.WriteNil();
             }
             writer.Write(diagramObject.ThingPreference);
+            if (diagramObject.Actor.HasValue)
+            {
+                writer.Write(diagramObject.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -260,6 +269,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 13:
                         diagramObject.ThingPreference = reader.ReadString();
+                        break;
+                    case 14:
+                        if (reader.TryReadNil())
+                        {
+                            diagramObject.Actor = null;
+                        }
+                        else
+                        {
+                            diagramObject.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

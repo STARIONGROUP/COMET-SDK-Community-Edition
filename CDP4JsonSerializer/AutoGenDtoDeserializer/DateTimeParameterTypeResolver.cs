@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var dateTimeParameterType = new CDP4Common.DTO.DateTimeParameterType(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                dateTimeParameterType.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["alias"].IsNullOrEmpty())
             {
                 dateTimeParameterType.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());

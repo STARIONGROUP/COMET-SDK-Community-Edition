@@ -60,6 +60,11 @@ namespace CDP4JsonSerializer
                 engineeringModelSetup.ActiveDomain.AddRange(jObject["activeDomain"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                engineeringModelSetup.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["alias"].IsNullOrEmpty())
             {
                 engineeringModelSetup.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());

@@ -219,6 +219,7 @@ namespace CDP4Common.ReportingData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Approval POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Author = this.Cache.Get<Participant>(dto.Author, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Participant>();
             this.Classification = dto.Classification;
             this.Content = dto.Content;
@@ -241,6 +242,7 @@ namespace CDP4Common.ReportingData
         {
             var dto = new DTO.Approval(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Author = this.Author != null ? this.Author.Iid : Guid.Empty;
             dto.Classification = this.Classification;
             dto.Content = this.Content;

@@ -42,6 +42,7 @@
  | 8     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 9     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 10    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 11    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -94,7 +95,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(builtInRuleVerification), "The BuiltInRuleVerification may not be null");
             }
 
-            writer.WriteArrayHeader(11);
+            writer.WriteArrayHeader(12);
 
             writer.Write(builtInRuleVerification.Iid.ToByteArray());
             writer.Write(builtInRuleVerification.RevisionNumber);
@@ -127,6 +128,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(builtInRuleVerification.ModifiedOn);
             writer.Write(builtInRuleVerification.ThingPreference);
+            if (builtInRuleVerification.Actor.HasValue)
+            {
+                writer.Write(builtInRuleVerification.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -215,6 +224,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 10:
                         builtInRuleVerification.ThingPreference = reader.ReadString();
+                        break;
+                    case 11:
+                        if (reader.TryReadNil())
+                        {
+                            builtInRuleVerification.Actor = null;
+                        }
+                        else
+                        {
+                            builtInRuleVerification.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

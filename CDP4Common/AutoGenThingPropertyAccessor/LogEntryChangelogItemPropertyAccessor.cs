@@ -80,6 +80,8 @@ namespace CDP4Common.CommonData
                     return base.QueryThingValues(pd.Input);
                 case "thingpreference":
                     return base.QueryThingValues(pd.Input);
+                case "actor":
+                    return base.QueryThingValues(pd.Input);
                 case "affecteditemiid":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.AffectedItemIid;
@@ -175,6 +177,15 @@ namespace CDP4Common.CommonData
                 case "thingpreference":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return isCallerEmunerable ? (object) new List<string>() : null;
+                case "actor":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if (pd.Next != null)
+                    {
+                        return new Person(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                    }
+
+                    return isCallerEmunerable ? (object) new List<Person>() : default(Person);
                 case "affecteditemiid":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return isCallerEmunerable ? (object) new List<Guid>() : null;

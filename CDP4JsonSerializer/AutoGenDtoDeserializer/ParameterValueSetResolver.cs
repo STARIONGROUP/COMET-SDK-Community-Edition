@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var parameterValueSet = new CDP4Common.DTO.ParameterValueSet(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                parameterValueSet.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["actualOption"].IsNullOrEmpty())
             {
                 parameterValueSet.ActualOption = jObject["actualOption"].ToObject<Guid?>();

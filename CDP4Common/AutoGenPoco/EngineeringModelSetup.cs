@@ -352,6 +352,7 @@ namespace CDP4Common.SiteDirectoryData
             }
 
             this.ActiveDomain.ResolveList(dto.ActiveDomain, dto.IterationContainerId, this.Cache);
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
             this.DefaultOrganizationalParticipant = (dto.DefaultOrganizationalParticipant.HasValue) ? this.Cache.Get<OrganizationalParticipant>(dto.DefaultOrganizationalParticipant.Value, dto.IterationContainerId) : null;
             this.Definition.ResolveList(dto.Definition, dto.IterationContainerId, this.Cache);
@@ -383,6 +384,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = new DTO.EngineeringModelSetup(this.Iid, this.RevisionNumber);
 
             dto.ActiveDomain.AddRange(this.ActiveDomain.Select(x => x.Iid));
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
             dto.DefaultOrganizationalParticipant = this.DefaultOrganizationalParticipant != null ? (Guid?)this.DefaultOrganizationalParticipant.Iid : null;
             dto.Definition.AddRange(this.Definition.Select(x => x.Iid));

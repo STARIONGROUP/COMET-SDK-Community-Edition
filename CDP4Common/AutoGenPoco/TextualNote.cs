@@ -176,6 +176,7 @@ namespace CDP4Common.ReportingData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current TextualNote POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);
             this.Content = dto.Content;
             this.CreatedOn = dto.CreatedOn;
@@ -199,6 +200,7 @@ namespace CDP4Common.ReportingData
         {
             var dto = new DTO.TextualNote(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Category.AddRange(this.Category.Select(x => x.Iid));
             dto.Content = this.Content;
             dto.CreatedOn = this.CreatedOn;

@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var nestedParameter = new CDP4Common.DTO.NestedParameter(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                nestedParameter.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["actualState"].IsNullOrEmpty())
             {
                 nestedParameter.ActualState = jObject["actualState"].ToObject<Guid?>();

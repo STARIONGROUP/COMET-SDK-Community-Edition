@@ -199,6 +199,7 @@ namespace CDP4Common.SiteDirectoryData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current SpecializedQuantityKind POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);
             this.DefaultScale = this.Cache.Get<MeasurementScale>(dto.DefaultScale, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<MeasurementScale>();
@@ -227,6 +228,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             var dto = new DTO.SpecializedQuantityKind(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
             dto.Category.AddRange(this.Category.Select(x => x.Iid));
             dto.DefaultScale = this.DefaultScale != null ? this.DefaultScale.Iid : Guid.Empty;

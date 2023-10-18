@@ -42,6 +42,7 @@
  | 8     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 9     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 10    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 11    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -94,7 +95,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(userRuleVerification), "The UserRuleVerification may not be null");
             }
 
-            writer.WriteArrayHeader(11);
+            writer.WriteArrayHeader(12);
 
             writer.Write(userRuleVerification.Iid.ToByteArray());
             writer.Write(userRuleVerification.RevisionNumber);
@@ -127,6 +128,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(userRuleVerification.ModifiedOn);
             writer.Write(userRuleVerification.ThingPreference);
+            if (userRuleVerification.Actor.HasValue)
+            {
+                writer.Write(userRuleVerification.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -215,6 +224,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 10:
                         userRuleVerification.ThingPreference = reader.ReadString();
+                        break;
+                    case 11:
+                        if (reader.TryReadNil())
+                        {
+                            userRuleVerification.Actor = null;
+                        }
+                        else
+                        {
+                            userRuleVerification.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

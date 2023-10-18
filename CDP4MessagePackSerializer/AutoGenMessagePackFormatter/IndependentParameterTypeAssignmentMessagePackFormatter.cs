@@ -39,6 +39,7 @@
  | 5     | measurementScale                     | Guid                         | 0..1        |  1.2.0  |
  | 6     | parameterType                        | Guid                         | 1..1        |  1.2.0  |
  | 7     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 8     | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -91,7 +92,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(independentParameterTypeAssignment), "The IndependentParameterTypeAssignment may not be null");
             }
 
-            writer.WriteArrayHeader(8);
+            writer.WriteArrayHeader(9);
 
             writer.Write(independentParameterTypeAssignment.Iid.ToByteArray());
             writer.Write(independentParameterTypeAssignment.RevisionNumber);
@@ -117,6 +118,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(independentParameterTypeAssignment.ParameterType.ToByteArray());
             writer.Write(independentParameterTypeAssignment.ThingPreference);
+            if (independentParameterTypeAssignment.Actor.HasValue)
+            {
+                writer.Write(independentParameterTypeAssignment.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -192,6 +201,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 7:
                         independentParameterTypeAssignment.ThingPreference = reader.ReadString();
+                        break;
+                    case 8:
+                        if (reader.TryReadNil())
+                        {
+                            independentParameterTypeAssignment.Actor = null;
+                        }
+                        else
+                        {
+                            independentParameterTypeAssignment.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

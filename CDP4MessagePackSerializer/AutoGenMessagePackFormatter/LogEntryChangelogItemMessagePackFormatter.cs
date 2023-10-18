@@ -41,6 +41,7 @@
  | 7     | changeDescription                    | string                       | 0..1        |  1.2.0  |
  | 8     | changelogKind                        | LogEntryChangelogItemKind    | 1..1        |  1.2.0  |
  | 9     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -93,7 +94,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(logEntryChangelogItem), "The LogEntryChangelogItem may not be null");
             }
 
-            writer.WriteArrayHeader(10);
+            writer.WriteArrayHeader(11);
 
             writer.Write(logEntryChangelogItem.Iid.ToByteArray());
             writer.Write(logEntryChangelogItem.RevisionNumber);
@@ -118,6 +119,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(logEntryChangelogItem.ChangeDescription);
             writer.Write(logEntryChangelogItem.ChangelogKind.ToString());
             writer.Write(logEntryChangelogItem.ThingPreference);
+            if (logEntryChangelogItem.Actor.HasValue)
+            {
+                writer.Write(logEntryChangelogItem.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -196,6 +205,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 9:
                         logEntryChangelogItem.ThingPreference = reader.ReadString();
+                        break;
+                    case 10:
+                        if (reader.TryReadNil())
+                        {
+                            logEntryChangelogItem.Actor = null;
+                        }
+                        else
+                        {
+                            logEntryChangelogItem.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

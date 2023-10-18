@@ -198,6 +198,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -238,6 +239,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.Person, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.Person, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "ClassKind", thing => thing.ClassKind },
             { "DefaultDomain", thing => thing.DefaultDomain },
             { "DefaultEmailAddress", thing => thing.DefaultEmailAddress },
@@ -270,6 +272,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "DefaultDomain", new PropertyMetaInfo("DefaultDomain", "DomainOfExpertise", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "DefaultEmailAddress", new PropertyMetaInfo("DefaultEmailAddress", "EmailAddress", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
@@ -309,6 +312,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.Person, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.Person, object>>
         {
+            { "Actor", (person, value) => person.Actor = value == null ? (Guid?)null : (Guid)value },
             { "DefaultDomain", (person, value) => person.DefaultDomain = value == null ? (Guid?)null : (Guid)value },
             { "DefaultEmailAddress", (person, value) => person.DefaultEmailAddress = value == null ? (Guid?)null : (Guid)value },
             { "DefaultTelephoneNumber", (person, value) => person.DefaultTelephoneNumber = value == null ? (Guid?)null : (Guid)value },

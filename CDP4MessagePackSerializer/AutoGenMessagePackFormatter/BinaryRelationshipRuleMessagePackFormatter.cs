@@ -48,6 +48,7 @@
  | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -100,7 +101,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(binaryRelationshipRule), "The BinaryRelationshipRule may not be null");
             }
 
-            writer.WriteArrayHeader(17);
+            writer.WriteArrayHeader(18);
 
             writer.Write(binaryRelationshipRule.Iid.ToByteArray());
             writer.Write(binaryRelationshipRule.RevisionNumber);
@@ -140,6 +141,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(binaryRelationshipRule.ModifiedOn);
             writer.Write(binaryRelationshipRule.ThingPreference);
+            if (binaryRelationshipRule.Actor.HasValue)
+            {
+                writer.Write(binaryRelationshipRule.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -247,6 +256,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 16:
                         binaryRelationshipRule.ThingPreference = reader.ReadString();
+                        break;
+                    case 17:
+                        if (reader.TryReadNil())
+                        {
+                            binaryRelationshipRule.Actor = null;
+                        }
+                        else
+                        {
+                            binaryRelationshipRule.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

@@ -51,6 +51,7 @@
  | 17    | strokeWidth                          | float                        | 0..1        |  1.1.0  |
  | 18    | usedColor                            | Guid                         | 0..*        |  1.1.0  |
  | 19    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 20    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -103,7 +104,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(ownedStyle), "The OwnedStyle may not be null");
             }
 
-            writer.WriteArrayHeader(20);
+            writer.WriteArrayHeader(21);
 
             writer.Write(ownedStyle.Iid.ToByteArray());
             writer.Write(ownedStyle.RevisionNumber);
@@ -215,6 +216,14 @@ namespace CDP4MessagePackSerializer
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(ownedStyle.ThingPreference);
+            if (ownedStyle.Actor.HasValue)
+            {
+                writer.Write(ownedStyle.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -372,6 +381,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 19:
                         ownedStyle.ThingPreference = reader.ReadString();
+                        break;
+                    case 20:
+                        if (reader.TryReadNil())
+                        {
+                            ownedStyle.Actor = null;
+                        }
+                        else
+                        {
+                            ownedStyle.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

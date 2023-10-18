@@ -55,6 +55,7 @@
  | 21    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 22    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 23    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 24    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -107,7 +108,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(modelReferenceDataLibrary), "The ModelReferenceDataLibrary may not be null");
             }
 
-            writer.WriteArrayHeader(24);
+            writer.WriteArrayHeader(25);
 
             writer.Write(modelReferenceDataLibrary.Iid.ToByteArray());
             writer.Write(modelReferenceDataLibrary.RevisionNumber);
@@ -211,6 +212,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(modelReferenceDataLibrary.ModifiedOn);
             writer.Write(modelReferenceDataLibrary.ThingPreference);
+            if (modelReferenceDataLibrary.Actor.HasValue)
+            {
+                writer.Write(modelReferenceDataLibrary.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -398,6 +407,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 23:
                         modelReferenceDataLibrary.ThingPreference = reader.ReadString();
+                        break;
+                    case 24:
+                        if (reader.TryReadNil())
+                        {
+                            modelReferenceDataLibrary.Actor = null;
+                        }
+                        else
+                        {
+                            modelReferenceDataLibrary.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

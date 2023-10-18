@@ -40,6 +40,7 @@
  | 6     | x                                    | float                        | 1..1        |  1.1.0  |
  | 7     | y                                    | float                        | 1..1        |  1.1.0  |
  | 8     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 9     | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -92,7 +93,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(point), "The Point may not be null");
             }
 
-            writer.WriteArrayHeader(9);
+            writer.WriteArrayHeader(10);
 
             writer.Write(point.Iid.ToByteArray());
             writer.Write(point.RevisionNumber);
@@ -112,6 +113,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(point.X);
             writer.Write(point.Y);
             writer.Write(point.ThingPreference);
+            if (point.Actor.HasValue)
+            {
+                writer.Write(point.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -183,6 +192,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 8:
                         point.ThingPreference = reader.ReadString();
+                        break;
+                    case 9:
+                        if (reader.TryReadNil())
+                        {
+                            point.Actor = null;
+                        }
+                        else
+                        {
+                            point.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

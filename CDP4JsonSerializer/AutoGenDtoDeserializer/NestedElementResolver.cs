@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var nestedElement = new CDP4Common.DTO.NestedElement(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                nestedElement.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["elementUsage"].IsNullOrEmpty())
             {
                 nestedElement.ElementUsage.AddRange(jObject["elementUsage"].ToOrderedItemCollection());

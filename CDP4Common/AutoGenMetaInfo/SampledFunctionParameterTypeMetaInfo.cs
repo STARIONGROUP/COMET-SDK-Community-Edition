@@ -208,6 +208,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -250,6 +251,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.SampledFunctionParameterType, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.SampledFunctionParameterType, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "Alias", thing => thing.Alias },
             { "Category", thing => thing.Category },
             { "ClassKind", thing => thing.ClassKind },
@@ -279,6 +281,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "Category", new PropertyMetaInfo("Category", "Category", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "DegreeOfInterpolation", new PropertyMetaInfo("DegreeOfInterpolation", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
@@ -316,6 +319,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.SampledFunctionParameterType, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.SampledFunctionParameterType, object>>
         {
+            { "Actor", (sampledFunctionParameterType, value) => sampledFunctionParameterType.Actor = value == null ? (Guid?)null : (Guid)value },
             { "DegreeOfInterpolation", (sampledFunctionParameterType, value) => sampledFunctionParameterType.DegreeOfInterpolation = value == null ? (int?)null : (int)value },
             { "Iid", (sampledFunctionParameterType, value) => sampledFunctionParameterType.Iid = (Guid)value },
             { "InterpolationPeriod", (sampledFunctionParameterType, value) => sampledFunctionParameterType.InterpolationPeriod = (ValueArray<string>)value },

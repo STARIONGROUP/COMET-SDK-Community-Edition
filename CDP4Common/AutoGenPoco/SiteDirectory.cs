@@ -408,6 +408,7 @@ namespace CDP4Common.SiteDirectoryData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current SiteDirectory POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Annotation.ResolveList(dto.Annotation, dto.IterationContainerId, this.Cache);
             this.CreatedOn = dto.CreatedOn;
             this.DefaultParticipantRole = (dto.DefaultParticipantRole.HasValue) ? this.Cache.Get<ParticipantRole>(dto.DefaultParticipantRole.Value, dto.IterationContainerId) : null;
@@ -441,6 +442,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             var dto = new DTO.SiteDirectory(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Annotation.AddRange(this.Annotation.Select(x => x.Iid));
             dto.CreatedOn = this.CreatedOn;
             dto.DefaultParticipantRole = this.DefaultParticipantRole != null ? (Guid?)this.DefaultParticipantRole.Iid : null;

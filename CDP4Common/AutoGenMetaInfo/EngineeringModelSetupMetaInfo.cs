@@ -206,6 +206,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "DefaultOrganizationalParticipant", "1.2.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
@@ -253,6 +254,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.EngineeringModelSetup, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.EngineeringModelSetup, object>>
         {
             { "ActiveDomain", thing => thing.ActiveDomain },
+            { "Actor", thing => thing.Actor },
             { "Alias", thing => thing.Alias },
             { "ClassKind", thing => thing.ClassKind },
             { "DefaultOrganizationalParticipant", thing => thing.DefaultOrganizationalParticipant },
@@ -285,6 +287,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "ActiveDomain", new PropertyMetaInfo("ActiveDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 1, "*", true) },
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "DefaultOrganizationalParticipant", new PropertyMetaInfo("DefaultOrganizationalParticipant", "OrganizationalParticipant", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
             { "EngineeringModelIid", new PropertyMetaInfo("EngineeringModelIid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
@@ -323,6 +326,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.EngineeringModelSetup, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.EngineeringModelSetup, object>>
         {
+            { "Actor", (engineeringModelSetup, value) => engineeringModelSetup.Actor = value == null ? (Guid?)null : (Guid)value },
             { "DefaultOrganizationalParticipant", (engineeringModelSetup, value) => engineeringModelSetup.DefaultOrganizationalParticipant = value == null ? (Guid?)null : (Guid)value },
             { "EngineeringModelIid", (engineeringModelSetup, value) => engineeringModelSetup.EngineeringModelIid = (Guid)value },
             { "Iid", (engineeringModelSetup, value) => engineeringModelSetup.Iid = (Guid)value },

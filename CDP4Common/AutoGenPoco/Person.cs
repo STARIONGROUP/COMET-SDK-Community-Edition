@@ -400,6 +400,7 @@ namespace CDP4Common.SiteDirectoryData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current Person POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.DefaultDomain = (dto.DefaultDomain.HasValue) ? this.Cache.Get<DomainOfExpertise>(dto.DefaultDomain.Value, dto.IterationContainerId) : null;
             this.DefaultEmailAddress = (dto.DefaultEmailAddress.HasValue) ? this.Cache.Get<EmailAddress>(dto.DefaultEmailAddress.Value, dto.IterationContainerId) : null;
             this.DefaultTelephoneNumber = (dto.DefaultTelephoneNumber.HasValue) ? this.Cache.Get<TelephoneNumber>(dto.DefaultTelephoneNumber.Value, dto.IterationContainerId) : null;
@@ -431,6 +432,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             var dto = new DTO.Person(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.DefaultDomain = this.DefaultDomain != null ? (Guid?)this.DefaultDomain.Iid : null;
             dto.DefaultEmailAddress = this.DefaultEmailAddress != null ? (Guid?)this.DefaultEmailAddress.Iid : null;
             dto.DefaultTelephoneNumber = this.DefaultTelephoneNumber != null ? (Guid?)this.DefaultTelephoneNumber.Iid : null;

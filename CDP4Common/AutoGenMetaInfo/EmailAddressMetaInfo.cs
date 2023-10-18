@@ -188,6 +188,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -223,6 +224,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.EmailAddress, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.EmailAddress, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "ClassKind", thing => thing.ClassKind },
             { "ExcludedDomain", thing => thing.ExcludedDomain },
             { "ExcludedPerson", thing => thing.ExcludedPerson },
@@ -242,6 +244,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
@@ -267,6 +270,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.EmailAddress, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.EmailAddress, object>>
         {
+            { "Actor", (emailAddress, value) => emailAddress.Actor = value == null ? (Guid?)null : (Guid)value },
             { "Iid", (emailAddress, value) => emailAddress.Iid = (Guid)value },
             { "ModifiedOn", (emailAddress, value) => emailAddress.ModifiedOn = (DateTime)value },
             { "ThingPreference", (emailAddress, value) => emailAddress.ThingPreference = value == null ? (string)null : value.ToString() },

@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var binaryRelationshipRule = new CDP4Common.DTO.BinaryRelationshipRule(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                binaryRelationshipRule.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["alias"].IsNullOrEmpty())
             {
                 binaryRelationshipRule.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());

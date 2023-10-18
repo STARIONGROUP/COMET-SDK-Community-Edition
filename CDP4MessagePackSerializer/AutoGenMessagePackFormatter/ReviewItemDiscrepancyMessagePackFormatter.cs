@@ -53,6 +53,7 @@
  | 19    | status                               | AnnotationStatusKind         | 1..1        |  1.1.0  |
  | 20    | title                                | string                       | 1..1        |  1.1.0  |
  | 21    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 22    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -105,7 +106,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(reviewItemDiscrepancy), "The ReviewItemDiscrepancy may not be null");
             }
 
-            writer.WriteArrayHeader(22);
+            writer.WriteArrayHeader(23);
 
             writer.Write(reviewItemDiscrepancy.Iid.ToByteArray());
             writer.Write(reviewItemDiscrepancy.RevisionNumber);
@@ -169,6 +170,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(reviewItemDiscrepancy.Status.ToString());
             writer.Write(reviewItemDiscrepancy.Title);
             writer.Write(reviewItemDiscrepancy.ThingPreference);
+            if (reviewItemDiscrepancy.Actor.HasValue)
+            {
+                writer.Write(reviewItemDiscrepancy.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -310,6 +319,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 21:
                         reviewItemDiscrepancy.ThingPreference = reader.ReadString();
+                        break;
+                    case 22:
+                        if (reader.TryReadNil())
+                        {
+                            reviewItemDiscrepancy.Actor = null;
+                        }
+                        else
+                        {
+                            reviewItemDiscrepancy.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var color = new CDP4Common.DTO.Color(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                color.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["blue"].IsNullOrEmpty())
             {
                 color.Blue = jObject["blue"].ToObject<int>();

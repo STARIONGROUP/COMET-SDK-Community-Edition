@@ -43,6 +43,7 @@
  | 9     | owner                                | Guid                         | 1..1        |  1.1.0  |
  | 10    | shortName                            | string                       | 1..1        |  1.1.0  |
  | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -95,7 +96,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(page), "The Page may not be null");
             }
 
-            writer.WriteArrayHeader(12);
+            writer.WriteArrayHeader(13);
 
             writer.Write(page.Iid.ToByteArray());
             writer.Write(page.RevisionNumber);
@@ -128,6 +129,14 @@ namespace CDP4MessagePackSerializer
             writer.Write(page.Owner.ToByteArray());
             writer.Write(page.ShortName);
             writer.Write(page.ThingPreference);
+            if (page.Actor.HasValue)
+            {
+                writer.Write(page.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -220,6 +229,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 11:
                         page.ThingPreference = reader.ReadString();
+                        break;
+                    case 12:
+                        if (reader.TryReadNil())
+                        {
+                            page.Actor = null;
+                        }
+                        else
+                        {
+                            page.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

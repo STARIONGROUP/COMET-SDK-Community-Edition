@@ -192,6 +192,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -227,6 +228,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.ParameterOverrideValueSet, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.ParameterOverrideValueSet, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "ClassKind", thing => thing.ClassKind },
             { "Computed", thing => thing.Computed },
             { "ExcludedDomain", thing => thing.ExcludedDomain },
@@ -251,6 +253,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "ActualOption", new PropertyMetaInfo("ActualOption", "Option", PropertyKind.Scalar, AggregationKind.None, true, false, true, 0, "1", false) },
             { "ActualState", new PropertyMetaInfo("ActualState", "ActualFiniteState", PropertyKind.Scalar, AggregationKind.None, true, false, true, 0, "1", false) },
             { "ActualValue", new PropertyMetaInfo("ActualValue", "string", PropertyKind.ValueArray, AggregationKind.None, true, true, true, 1, "*", false) },
@@ -285,6 +288,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.ParameterOverrideValueSet, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.ParameterOverrideValueSet, object>>
         {
+            { "Actor", (parameterOverrideValueSet, value) => parameterOverrideValueSet.Actor = value == null ? (Guid?)null : (Guid)value },
             { "Computed", (parameterOverrideValueSet, value) => parameterOverrideValueSet.Computed = (ValueArray<string>)value },
             { "Formula", (parameterOverrideValueSet, value) => parameterOverrideValueSet.Formula = (ValueArray<string>)value },
             { "Iid", (parameterOverrideValueSet, value) => parameterOverrideValueSet.Iid = (Guid)value },

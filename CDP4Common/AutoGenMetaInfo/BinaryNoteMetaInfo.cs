@@ -191,6 +191,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
+            { "Actor", "1.3.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
             { "ModifiedOn", "1.1.0" },
@@ -226,6 +227,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Func<CDP4Common.DTO.BinaryNote, object>> propertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.BinaryNote, object>>
         {
+            { "Actor", thing => thing.Actor },
             { "Caption", thing => thing.Caption },
             { "Category", thing => thing.Category },
             { "ClassKind", thing => thing.ClassKind },
@@ -250,6 +252,7 @@ namespace CDP4Common.MetaInfo
         /// </remarks>
         private readonly Dictionary<string, PropertyMetaInfo> propertyTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
+            { "Actor", new PropertyMetaInfo("Actor", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, false, 0, "1", false) },
             { "Caption", new PropertyMetaInfo("Caption", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Category", new PropertyMetaInfo("Category", "Category", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ClassKind", new PropertyMetaInfo("ClassKind", "CDP4Common.CommonData.ClassKind", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
@@ -281,6 +284,7 @@ namespace CDP4Common.MetaInfo
         /// </summary>
         private readonly Dictionary<string, Action<CDP4Common.DTO.BinaryNote, object>> propertyValueAssignmentMap = new Dictionary<string, Action<CDP4Common.DTO.BinaryNote, object>>
         {
+            { "Actor", (binaryNote, value) => binaryNote.Actor = value == null ? (Guid?)null : (Guid)value },
             { "Caption", (binaryNote, value) => binaryNote.Caption = value.ToString() },
             { "CreatedOn", (binaryNote, value) => binaryNote.CreatedOn = (DateTime)value },
             { "FileType", (binaryNote, value) => binaryNote.FileType = (Guid)value },

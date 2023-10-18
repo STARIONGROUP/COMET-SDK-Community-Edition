@@ -49,6 +49,7 @@
  | 15    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 16    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -101,7 +102,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(specializedQuantityKind), "The SpecializedQuantityKind may not be null");
             }
 
-            writer.WriteArrayHeader(18);
+            writer.WriteArrayHeader(19);
 
             writer.Write(specializedQuantityKind.Iid.ToByteArray());
             writer.Write(specializedQuantityKind.RevisionNumber);
@@ -150,6 +151,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(specializedQuantityKind.ModifiedOn);
             writer.Write(specializedQuantityKind.ThingPreference);
+            if (specializedQuantityKind.Actor.HasValue)
+            {
+                writer.Write(specializedQuantityKind.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -268,6 +277,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 17:
                         specializedQuantityKind.ThingPreference = reader.ReadString();
+                        break;
+                    case 18:
+                        if (reader.TryReadNil())
+                        {
+                            specializedQuantityKind.Actor = null;
+                        }
+                        else
+                        {
+                            specializedQuantityKind.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

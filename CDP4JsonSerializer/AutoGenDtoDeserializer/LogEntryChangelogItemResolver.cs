@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var logEntryChangelogItem = new CDP4Common.DTO.LogEntryChangelogItem(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                logEntryChangelogItem.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["affectedItemIid"].IsNullOrEmpty())
             {
                 logEntryChangelogItem.AffectedItemIid = jObject["affectedItemIid"].ToObject<Guid>();

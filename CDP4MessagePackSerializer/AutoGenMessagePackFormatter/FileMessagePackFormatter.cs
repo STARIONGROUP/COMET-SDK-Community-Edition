@@ -41,6 +41,7 @@
  | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 9     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -93,7 +94,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(file), "The File may not be null");
             }
 
-            writer.WriteArrayHeader(10);
+            writer.WriteArrayHeader(11);
 
             writer.Write(file.Iid.ToByteArray());
             writer.Write(file.RevisionNumber);
@@ -129,6 +130,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(file.ModifiedOn);
             writer.Write(file.ThingPreference);
+            if (file.Actor.HasValue)
+            {
+                writer.Write(file.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -218,6 +227,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 9:
                         file.ThingPreference = reader.ReadString();
+                        break;
+                    case 10:
+                        if (reader.TryReadNil())
+                        {
+                            file.Actor = null;
+                        }
+                        else
+                        {
+                            file.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

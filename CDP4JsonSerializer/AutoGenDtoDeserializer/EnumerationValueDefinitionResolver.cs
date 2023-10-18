@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var enumerationValueDefinition = new CDP4Common.DTO.EnumerationValueDefinition(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                enumerationValueDefinition.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["alias"].IsNullOrEmpty())
             {
                 enumerationValueDefinition.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());

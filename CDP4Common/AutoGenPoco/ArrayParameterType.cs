@@ -222,6 +222,7 @@ namespace CDP4Common.SiteDirectoryData
                 throw new InvalidOperationException($"The DTO type {dtoThing.GetType()} does not match the type of the current ArrayParameterType POCO.");
             }
 
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);
             this.Component.ResolveList(dto.Component, dto.IterationContainerId, this.Cache);
@@ -250,6 +251,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             var dto = new DTO.ArrayParameterType(this.Iid, this.RevisionNumber);
 
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
             dto.Category.AddRange(this.Category.Select(x => x.Iid));
             dto.Component.AddRange(this.Component.ToDtoOrderedItemList());

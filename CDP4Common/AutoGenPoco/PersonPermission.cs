@@ -177,6 +177,7 @@ namespace CDP4Common.SiteDirectoryData
             }
 
             this.AccessRight = dto.AccessRight;
+            this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
             this.IsDeprecated = dto.IsDeprecated;
@@ -196,6 +197,7 @@ namespace CDP4Common.SiteDirectoryData
             var dto = new DTO.PersonPermission(this.Iid, this.RevisionNumber);
 
             dto.AccessRight = this.AccessRight;
+            dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
             dto.IsDeprecated = this.IsDeprecated;

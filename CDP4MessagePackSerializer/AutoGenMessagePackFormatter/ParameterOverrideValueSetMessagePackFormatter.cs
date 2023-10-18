@@ -44,6 +44,7 @@
  | 10    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 11    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -96,7 +97,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(parameterOverrideValueSet), "The ParameterOverrideValueSet may not be null");
             }
 
-            writer.WriteArrayHeader(13);
+            writer.WriteArrayHeader(14);
 
             writer.Write(parameterOverrideValueSet.Iid.ToByteArray());
             writer.Write(parameterOverrideValueSet.RevisionNumber);
@@ -140,6 +141,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(parameterOverrideValueSet.ModifiedOn);
             writer.Write(parameterOverrideValueSet.ThingPreference);
+            if (parameterOverrideValueSet.Actor.HasValue)
+            {
+                writer.Write(parameterOverrideValueSet.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -253,6 +262,16 @@ namespace CDP4MessagePackSerializer
                         break;
                     case 12:
                         parameterOverrideValueSet.ThingPreference = reader.ReadString();
+                        break;
+                    case 13:
+                        if (reader.TryReadNil())
+                        {
+                            parameterOverrideValueSet.Actor = null;
+                        }
+                        else
+                        {
+                            parameterOverrideValueSet.Actor = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();

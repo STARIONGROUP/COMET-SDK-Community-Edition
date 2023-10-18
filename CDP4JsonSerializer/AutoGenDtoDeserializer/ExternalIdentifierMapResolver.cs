@@ -55,6 +55,11 @@ namespace CDP4JsonSerializer
             var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
             var externalIdentifierMap = new CDP4Common.DTO.ExternalIdentifierMap(iid, revisionNumber);
 
+            if (!jObject["actor"].IsNullOrEmpty())
+            {
+                externalIdentifierMap.Actor = jObject["actor"].ToObject<Guid?>();
+            }
+
             if (!jObject["correspondence"].IsNullOrEmpty())
             {
                 externalIdentifierMap.Correspondence.AddRange(jObject["correspondence"].ToObject<IEnumerable<Guid>>());
