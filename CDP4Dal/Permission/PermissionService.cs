@@ -34,7 +34,7 @@ namespace CDP4Dal.Permission
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
-    
+
     using NLog;
 
     /// <summary>
@@ -123,6 +123,7 @@ namespace CDP4Dal.Permission
         private bool CanReadEngineeringModelContainedThing(Thing thing, Type thingType)
         {
             var engineeringModel = thing.TopContainer;
+
             var participant =
                 this.Session.ActivePersonParticipants.FirstOrDefault(
                     p => ((EngineeringModelSetup)p.Container).EngineeringModelIid == engineeringModel.Iid);
@@ -173,12 +174,14 @@ namespace CDP4Dal.Permission
         private bool CanReadSiteDirectoryContainedThing(Thing thing, Type thingType)
         {
             var person = this.Session.ActivePerson;
+
             if (person == null)
             {
                 return false;
             }
 
             var personRole = this.Session.ActivePerson.Role;
+
             if (personRole == null)
             {
                 return false;
@@ -219,6 +222,7 @@ namespace CDP4Dal.Permission
                         var rdl =
                             this.Session.RetrieveSiteDirectory()
                                 .Model.SelectMany(ems => this.Session.GetEngineeringModelSetupRdlChain(ems));
+
                         return rdl.Contains(thing);
                     }
 
@@ -256,6 +260,7 @@ namespace CDP4Dal.Permission
             this.CheckOwnedThing(thing);
 
             var topContainerClassKind = thing.TopContainer.ClassKind;
+
             switch (topContainerClassKind)
             {
                 case ClassKind.SiteDirectory:
@@ -288,6 +293,7 @@ namespace CDP4Dal.Permission
             this.CheckOwnedThing(containerThing);
 
             var topContainerClassKind = containerThing.TopContainer.ClassKind;
+
             switch (topContainerClassKind)
             {
                 case ClassKind.SiteDirectory:
@@ -339,6 +345,7 @@ namespace CDP4Dal.Permission
             var engineeringModel = thing.TopContainer;
 
             var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
+
             if (iteration?.IterationSetup.FrozenOn != null)
             {
                 return false;
@@ -445,12 +452,14 @@ namespace CDP4Dal.Permission
         private bool CanWriteSiteDirectoryContainedThing(Thing thing, Type thingType)
         {
             var person = this.Session.ActivePerson;
+
             if (person == null)
             {
                 return false;
             }
 
             var personRole = this.Session.ActivePerson.Role;
+
             if (personRole == null)
             {
                 return false;
@@ -489,6 +498,7 @@ namespace CDP4Dal.Permission
                         var rdl =
                             this.Session.RetrieveSiteDirectory()
                                 .Model.SelectMany(ems => this.Session.GetEngineeringModelSetupRdlChain(ems));
+
                         return rdl.Contains(thing);
                     }
 
@@ -512,12 +522,14 @@ namespace CDP4Dal.Permission
         private bool CanWriteSiteDirectoryContainedThing(ClassKind classKind, Thing containerThing, ClassKind thingType)
         {
             var person = this.Session.ActivePerson;
+
             if (person == null)
             {
                 return false;
             }
 
             var personRole = this.Session.ActivePerson.Role;
+
             if (personRole == null)
             {
                 return false;
@@ -537,11 +549,6 @@ namespace CDP4Dal.Permission
                 case PersonAccessRightKind.MODIFY:
                     return true;
                 case PersonAccessRightKind.MODIFY_IF_PARTICIPANT:
-                    if (classKind == ClassKind.EngineeringModelSetup && containerThing is SiteDirectory)
-                    {
-                        //If a participant has MODIFY_IF_PARTICIPANT access right on EngineeringModelSetup and SiteDirectory is sent as the Container, he/she is allowed to create a new EngineeringModelSetup.
-                        return true;
-                    }
 
                     if (containerThing is EngineeringModelSetup setup)
                     {
@@ -551,8 +558,9 @@ namespace CDP4Dal.Permission
                     if (containerThing is SiteReferenceDataLibrary)
                     {
                         var rdl =
-                                            this.Session.RetrieveSiteDirectory()
-                                                .Model.SelectMany(ems => this.Session.GetEngineeringModelSetupRdlChain(ems));
+                            this.Session.RetrieveSiteDirectory()
+                                .Model.SelectMany(ems => this.Session.GetEngineeringModelSetupRdlChain(ems));
+
                         return rdl.Contains(containerThing);
                     }
 
@@ -578,14 +586,14 @@ namespace CDP4Dal.Permission
         private bool CanCreateOverrideSiteDirectoryContainedThing(ClassKind classKind, ClassKind containerClassKind)
         {
             var person = this.Session.ActivePerson;
-            
+
             if (person == null)
             {
                 return false;
             }
 
             var personRole = this.Session.ActivePerson.Role;
-            
+
             if (personRole == null)
             {
                 return false;
@@ -662,9 +670,9 @@ namespace CDP4Dal.Permission
             participant = null;
 
             if (iteration != null
-                   && this.Session.OpenIterations.TryGetValue(iteration, out var participation)
-                   && participation.Item1 != null
-                   && participation.Item2 != null)
+                && this.Session.OpenIterations.TryGetValue(iteration, out var participation)
+                && participation.Item1 != null
+                && participation.Item2 != null)
             {
                 participant = participation.Item2;
                 return true;
