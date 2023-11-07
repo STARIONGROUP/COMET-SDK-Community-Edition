@@ -453,7 +453,7 @@ namespace CDP4Dal.Tests.Permission
         }
 
         [Test]
-        public void VarifyCanCreateOverrideReturnsExpectedResult()
+        public void VerifyCanCreateOverrideReturnsExpectedResult()
         {
             this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
 
