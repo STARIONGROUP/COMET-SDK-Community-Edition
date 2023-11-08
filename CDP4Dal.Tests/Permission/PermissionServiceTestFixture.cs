@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PermissionServiceTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -27,13 +27,17 @@ namespace CDP4Dal.Tests.Permission
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
-    using CDP4Dal.Permission;
+
     using CDP4Dal.DAL;
+    using CDP4Dal.Permission;
+
     using Moq;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -133,9 +137,10 @@ namespace CDP4Dal.Tests.Permission
 
             this.session.Setup(x => x.ActivePerson).Returns(this.person);
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
+
             this.session.Setup(x => x.OpenIterations).Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>
             {
-                {this.iteration, new Tuple<DomainOfExpertise,Participant>(this.domain1,this.participant)}
+                { this.iteration, new Tuple<DomainOfExpertise, Participant>(this.domain1, this.participant) }
             });
 
             this.permissionService = new PermissionService(this.session.Object);
@@ -146,7 +151,6 @@ namespace CDP4Dal.Tests.Permission
         {
         }
 
-        #region Person Permission
         [Test]
         public void TestCanWriteFalseWithDefaultPermission()
         {
@@ -280,9 +284,6 @@ namespace CDP4Dal.Tests.Permission
             Assert.IsTrue(this.permissionService.CanRead(this.modelsetup));
             Assert.IsTrue(this.permissionService.CanWrite(this.modelsetup));
         }
-        #endregion
-
-        #region PArticipant Permission
 
         [Test]
         public void VerifyReadWriteParticipantPermission()
@@ -307,6 +308,7 @@ namespace CDP4Dal.Tests.Permission
 
             var permission =
                 this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.EngineeringModel);
+
             var defpermission =
                 this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.ElementDefinition);
 
@@ -321,7 +323,7 @@ namespace CDP4Dal.Tests.Permission
 
             this.session.Setup(x => x.OpenIterations).Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>
             {
-                {this.iteration, new Tuple<DomainOfExpertise, Participant>(null,null)}
+                { this.iteration, new Tuple<DomainOfExpertise, Participant>(null, null) }
             });
 
             Assert.IsFalse(this.permissionService.CanWrite(this.elementDef));
@@ -337,6 +339,7 @@ namespace CDP4Dal.Tests.Permission
 
             var permission =
                 this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.Requirement);
+
             var specPermission =
                 this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.RequirementsSpecification);
 
@@ -371,7 +374,6 @@ namespace CDP4Dal.Tests.Permission
             this.requirementsSpecification.Owner = this.domain2;
             Assert.IsFalse(this.permissionService.CanWrite(this.requirementsSpecification));
             Assert.IsTrue(this.permissionService.CanRead(this.requirementsSpecification));
-
         }
 
         [Test]
@@ -401,7 +403,6 @@ namespace CDP4Dal.Tests.Permission
             Assert.IsTrue(this.permissionService.CanRead(this.commonFileStore));
         }
 
-
         [Test]
         public void VerifySameAsSuperclassParticipantPermission()
         {
@@ -429,7 +430,6 @@ namespace CDP4Dal.Tests.Permission
             Assert.IsTrue(this.permissionService.CanWrite(this.valueset));
             Assert.IsTrue(this.permissionService.CanRead(this.valueset));
         }
-        #endregion
 
         [Test]
         public void VerifyCanWriteReturnsFalseWithFrozenIterationSetup()
@@ -450,6 +450,20 @@ namespace CDP4Dal.Tests.Permission
             Assert.IsFalse(this.permissionService.CanWrite(this.elementDef));
             Assert.IsFalse(this.permissionService.CanWrite(this.iteration));
             Assert.IsFalse(this.permissionService.CanWrite(ClassKind.ElementDefinition, this.iteration));
+        }
+
+        [Test]
+        public void VerifyCanCreateOverrideReturnsExpectedResult()
+        {
+            this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
+
+            var permission = this.personRole.PersonPermission.Single(x => x.ObjectClass == ClassKind.EngineeringModelSetup);
+            permission.AccessRight = PersonAccessRightKind.MODIFY;
+            Assert.That(this.permissionService.CanCreateOverride(ClassKind.EngineeringModelSetup, ClassKind.SiteDirectory), Is.False);
+
+            permission.AccessRight = PersonAccessRightKind.MODIFY_IF_PARTICIPANT;
+            Assert.That(this.permissionService.CanCreateOverride(ClassKind.EngineeringModelSetup, ClassKind.SiteDirectory), Is.True);
+            Assert.That(this.permissionService.CanCreateOverride(ClassKind.EngineeringModelSetup, ClassKind.EngineeringModelSetup), Is.False);
         }
     }
 }

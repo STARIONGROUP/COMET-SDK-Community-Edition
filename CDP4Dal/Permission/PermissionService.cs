@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PermissionService.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -34,7 +34,7 @@ namespace CDP4Dal.Permission
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
-    
+
     using NLog;
 
     /// <summary>
@@ -123,6 +123,7 @@ namespace CDP4Dal.Permission
         private bool CanReadEngineeringModelContainedThing(Thing thing, Type thingType)
         {
             var engineeringModel = thing.TopContainer;
+
             var participant =
                 this.Session.ActivePersonParticipants.FirstOrDefault(
                     p => ((EngineeringModelSetup)p.Container).EngineeringModelIid == engineeringModel.Iid);
@@ -173,12 +174,14 @@ namespace CDP4Dal.Permission
         private bool CanReadSiteDirectoryContainedThing(Thing thing, Type thingType)
         {
             var person = this.Session.ActivePerson;
+
             if (person == null)
             {
                 return false;
             }
 
             var personRole = this.Session.ActivePerson.Role;
+
             if (personRole == null)
             {
                 return false;
@@ -219,6 +222,7 @@ namespace CDP4Dal.Permission
                         var rdl =
                             this.Session.RetrieveSiteDirectory()
                                 .Model.SelectMany(ems => this.Session.GetEngineeringModelSetupRdlChain(ems));
+
                         return rdl.Contains(thing);
                     }
 
@@ -256,6 +260,7 @@ namespace CDP4Dal.Permission
             this.CheckOwnedThing(thing);
 
             var topContainerClassKind = thing.TopContainer.ClassKind;
+
             switch (topContainerClassKind)
             {
                 case ClassKind.SiteDirectory:
@@ -288,12 +293,39 @@ namespace CDP4Dal.Permission
             this.CheckOwnedThing(containerThing);
 
             var topContainerClassKind = containerThing.TopContainer.ClassKind;
+
             switch (topContainerClassKind)
             {
                 case ClassKind.SiteDirectory:
                     return this.CanWriteSiteDirectoryContainedThing(classKind, containerThing, classKind);
                 case ClassKind.EngineeringModel:
                     return this.CanWriteEngineeringModelContainedThing(classKind, containerThing, classKind);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Normally permission to Create, Update or Delete is handled by the CanWrite methods.
+        /// In some cases Create is allowed to be performed based on <see cref="PersonAccessRightKind"/>, but Update and Delete are not.
+        /// This method is an extra method that can be performed to check if Create is allowed, based on the TopContainer <see cref="ClassKind"/>
+        /// and the <see cref="ClassKind"/> of the <see cref="Thing"/> to create.
+        /// </summary>
+        /// <param name="classKind">The <see cref="ClassKind"/> that ultimately determines the permissions.</param>
+        /// <param name="containerClassKind">The <see cref="ClassKind"/> of the top container class where to create the classKind</param>
+        /// <returns>True if Create operation can be performed.</returns>
+        public bool CanCreateOverride(ClassKind classKind, ClassKind containerClassKind)
+        {
+            logger.Trace("CanCreate invoked on ClassKind {0} and Container ClassKind {1}", classKind, containerClassKind);
+
+            if (this.Session.Dal.IsReadOnly)
+            {
+                return false;
+            }
+
+            if (containerClassKind == ClassKind.SiteDirectory && classKind == ClassKind.EngineeringModelSetup)
+            {
+                return this.CanCreateOverrideSiteDirectoryContainedThing(classKind, containerClassKind);
             }
 
             return false;
@@ -313,6 +345,7 @@ namespace CDP4Dal.Permission
             var engineeringModel = thing.TopContainer;
 
             var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
+
             if (iteration?.IterationSetup.FrozenOn != null)
             {
                 return false;
@@ -419,12 +452,14 @@ namespace CDP4Dal.Permission
         private bool CanWriteSiteDirectoryContainedThing(Thing thing, Type thingType)
         {
             var person = this.Session.ActivePerson;
+
             if (person == null)
             {
                 return false;
             }
 
             var personRole = this.Session.ActivePerson.Role;
+
             if (personRole == null)
             {
                 return false;
@@ -463,6 +498,7 @@ namespace CDP4Dal.Permission
                         var rdl =
                             this.Session.RetrieveSiteDirectory()
                                 .Model.SelectMany(ems => this.Session.GetEngineeringModelSetupRdlChain(ems));
+
                         return rdl.Contains(thing);
                     }
 
@@ -486,12 +522,14 @@ namespace CDP4Dal.Permission
         private bool CanWriteSiteDirectoryContainedThing(ClassKind classKind, Thing containerThing, ClassKind thingType)
         {
             var person = this.Session.ActivePerson;
+
             if (person == null)
             {
                 return false;
             }
 
             var personRole = this.Session.ActivePerson.Role;
+
             if (personRole == null)
             {
                 return false;
@@ -511,6 +549,7 @@ namespace CDP4Dal.Permission
                 case PersonAccessRightKind.MODIFY:
                     return true;
                 case PersonAccessRightKind.MODIFY_IF_PARTICIPANT:
+
                     if (containerThing is EngineeringModelSetup setup)
                     {
                         return setup.Participant.Any(x => x.Person == this.Session.ActivePerson);
@@ -519,9 +558,59 @@ namespace CDP4Dal.Permission
                     if (containerThing is SiteReferenceDataLibrary)
                     {
                         var rdl =
-                                            this.Session.RetrieveSiteDirectory()
-                                                .Model.SelectMany(ems => this.Session.GetEngineeringModelSetupRdlChain(ems));
+                            this.Session.RetrieveSiteDirectory()
+                                .Model.SelectMany(ems => this.Session.GetEngineeringModelSetupRdlChain(ems));
+
                         return rdl.Contains(containerThing);
+                    }
+
+                    return false;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Normally permission to Create, Update or Delete is handled by the CanWrite methods.
+        /// In some cases Create is allowed to be performed based on <see cref="PersonAccessRightKind"/>, but Update and Delete are not.
+        /// This method is an extra method that can be performed to check if Create is allowed, based on the TopContainer <see cref="ClassKind"/>
+        /// and the <see cref="ClassKind"/> of the <see cref="Thing"/> to create.
+        /// </summary>
+        /// <param name="classKind">The <see cref="ClassKind"/> that ultimately determines the permissions.</param>
+        /// <param name="containerClassKind">The <see cref="ClassKind"/> that determine the permission</param>
+        /// <returns>True if Write operation can be performed.</returns>
+        /// <remarks>
+        /// This method should only be called to check for a specific (override) situation.
+        /// It does not cover all the Create scenario's, only the custom/overridden scenario's
+        /// </remarks>
+        private bool CanCreateOverrideSiteDirectoryContainedThing(ClassKind classKind, ClassKind containerClassKind)
+        {
+            var person = this.Session.ActivePerson;
+
+            if (person == null)
+            {
+                return false;
+            }
+
+            var personRole = this.Session.ActivePerson.Role;
+
+            if (personRole == null)
+            {
+                return false;
+            }
+
+            var permission = personRole.PersonPermission.SingleOrDefault(p => p.ObjectClass == classKind);
+
+            // if the permission is not found or superclass derivation is used then get the default one.
+            var accessRightKind = permission?.AccessRight ?? StaticDefaultPermissionProvider.GetDefaultPersonPermission(containerClassKind.ToString());
+
+            switch (accessRightKind)
+            {
+                case PersonAccessRightKind.MODIFY_IF_PARTICIPANT:
+                    if (classKind == ClassKind.EngineeringModelSetup && containerClassKind == ClassKind.SiteDirectory)
+                    {
+                        //If a participant has MODIFY_IF_PARTICIPANT access right on EngineeringModelSetup and SiteDirectory is sent as the Container, he/she is allowed to create a new EngineeringModelSetup.
+                        return true;
                     }
 
                     return false;
@@ -581,9 +670,9 @@ namespace CDP4Dal.Permission
             participant = null;
 
             if (iteration != null
-                   && this.Session.OpenIterations.TryGetValue(iteration, out var participation)
-                   && participation.Item1 != null
-                   && participation.Item2 != null)
+                && this.Session.OpenIterations.TryGetValue(iteration, out var participation)
+                && participation.Item1 != null
+                && participation.Item2 != null)
             {
                 participant = participation.Item2;
                 return true;
