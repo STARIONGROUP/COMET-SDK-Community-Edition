@@ -65,7 +65,7 @@ namespace CDP4ServicesDal
     /// The purpose of the <see cref="CdpServicesDal"/> is to provide the Data Access Layer for CDP4 ECSS-E-TM-10-25
     /// Annex C, REST API
     /// </summary>
-    [DalExport("COMET/CDP4 Services", "A COMET, or CDP4 Services Data Access Layer", "1.2.0", DalType.Web)]
+    [DalExport("COMET/CDP4 Services", "A COMET, or CDP4 Services Data Access Layer", "1.3.0", DalType.Web)]
 #if NETFRAMEWORK
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif
