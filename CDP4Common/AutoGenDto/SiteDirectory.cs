@@ -1,18 +1,19 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteDirectory.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -233,6 +234,143 @@ namespace CDP4Common.DTO
                 containers.Add(this.SiteReferenceDataLibrary);
                 return containers;
             }
+        }
+
+        /// <summary>
+        /// Get all Reference Properties by their Name and id's of instance values
+        /// </summary>
+        /// <returns>A dictionary of string (Name) and a collections of Guid's (id's of instance values)</returns>
+        public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
+        {
+            var dictionary = new Dictionary<string, IEnumerable<Guid>>();
+
+            dictionary.Add("Annotation", this.Annotation);
+
+            if (this.DefaultParticipantRole != default)
+            {
+                dictionary.Add("DefaultParticipantRole", new [] { this.DefaultParticipantRole.Value });
+            }
+
+            if (this.DefaultPersonRole != default)
+            {
+                dictionary.Add("DefaultPersonRole", new [] { this.DefaultPersonRole.Value });
+            }
+
+            dictionary.Add("Domain", this.Domain);
+
+            dictionary.Add("DomainGroup", this.DomainGroup);
+
+            dictionary.Add("ExcludedDomain", this.ExcludedDomain);
+
+            dictionary.Add("ExcludedPerson", this.ExcludedPerson);
+
+            dictionary.Add("LogEntry", this.LogEntry);
+
+            dictionary.Add("Model", this.Model);
+
+            dictionary.Add("NaturalLanguage", this.NaturalLanguage);
+
+            dictionary.Add("Organization", this.Organization);
+
+            dictionary.Add("ParticipantRole", this.ParticipantRole);
+
+            dictionary.Add("Person", this.Person);
+
+            dictionary.Add("PersonRole", this.PersonRole);
+
+            dictionary.Add("SiteReferenceDataLibrary", this.SiteReferenceDataLibrary);
+
+            return dictionary;
+        }
+
+        /// <summary>
+        /// Tries to remove references to id's if they exist in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to remove references for.</param>
+        /// <param name="errors">The errors collected while trying to remove references</param>
+        /// <returns>True if no errors were found while trying to remove references</returns>
+        public override bool TryRemoveReferences(IEnumerable<Guid> ids, out List<string> errors)
+        {
+            errors = new List<string>();
+            var referencedProperties = this.GetReferenceProperties();
+            var addModelErrors = !ids.Contains(this.Iid);
+            var result = true;
+
+            foreach (var id in ids)
+            {
+                var foundProperty = referencedProperties.Where(x => x.Value.Contains(id)).ToList();
+
+                if (foundProperty.Any())
+                {
+                    foreach (var kvp in foundProperty)
+                    {
+                        switch (kvp.Key)
+                        {
+                            case "Annotation":
+                                this.Annotation.Remove(id);
+                                break;
+
+                            case "DefaultParticipantRole":
+                                this.DefaultParticipantRole = null;
+                                break;
+
+                            case "DefaultPersonRole":
+                                this.DefaultPersonRole = null;
+                                break;
+
+                            case "Domain":
+                                this.Domain.Remove(id);
+                                break;
+
+                            case "DomainGroup":
+                                this.DomainGroup.Remove(id);
+                                break;
+
+                            case "ExcludedDomain":
+                                this.ExcludedDomain.Remove(id);
+                                break;
+
+                            case "ExcludedPerson":
+                                this.ExcludedPerson.Remove(id);
+                                break;
+
+                            case "LogEntry":
+                                this.LogEntry.Remove(id);
+                                break;
+
+                            case "Model":
+                                this.Model.Remove(id);
+                                break;
+
+                            case "NaturalLanguage":
+                                this.NaturalLanguage.Remove(id);
+                                break;
+
+                            case "Organization":
+                                this.Organization.Remove(id);
+                                break;
+
+                            case "ParticipantRole":
+                                this.ParticipantRole.Remove(id);
+                                break;
+
+                            case "Person":
+                                this.Person.Remove(id);
+                                break;
+
+                            case "PersonRole":
+                                this.PersonRole.Remove(id);
+                                break;
+
+                            case "SiteReferenceDataLibrary":
+                                this.SiteReferenceDataLibrary.Remove(id);
+                                break;
+                        }
+                    }
+                }
+            }
+            
+            return result;
         }
 
         /// <summary>

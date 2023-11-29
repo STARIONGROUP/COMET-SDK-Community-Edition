@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -66,6 +66,9 @@ namespace CDP4JsonFileDal.Tests
     using SiteDirectory = CDP4Common.SiteDirectoryData.SiteDirectory;
     using SiteReferenceDataLibrary = CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary;
     using Thing = CDP4Common.CommonData.Thing;
+    using SampledFunctionParameterType = CDP4Common.SiteDirectoryData.SampledFunctionParameterType;
+    using ElementDefinition = CDP4Common.EngineeringModelData.ElementDefinition;
+    using Parameter = CDP4Common.EngineeringModelData.Parameter;
 
     [TestFixture]
     public class JsonFileDalTestFixture
@@ -105,6 +108,17 @@ namespace CDP4JsonFileDal.Tests
         /// </summary>
         private SiteDirectory siteDirectoryData;
 
+        /// <summary>
+        /// An instance of iteration data used to be returned from the mocked session.
+        /// </summary>
+        private Iteration iteration;
+
+        private EngineeringModel model;
+        private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache;
+        private CDP4Common.EngineeringModelData.Iteration iterationPoco;
+        private Guid iterationIid;
+        private Guid modelSetupId;
+
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -142,7 +156,7 @@ namespace CDP4JsonFileDal.Tests
                 Session = this.session.Object
             };
 
-            this.siteDirectoryData = new SiteDirectory();
+            this.siteDirectoryData = new SiteDirectory(Guid.NewGuid(), this.cache, this.credentials.Uri);
             this.session.Setup(x => x.RetrieveSiteDirectory()).Returns(this.siteDirectoryData);
             this.session.Setup(x => x.Credentials).Returns(this.credentials);
         }
@@ -262,7 +276,7 @@ namespace CDP4JsonFileDal.Tests
             Assert.Throws<ArgumentNullException>(() => this.dal.Write((IEnumerable<OperationContainer>)null, files));
             Assert.Throws<ArgumentException>(() => this.dal.Write(new List<OperationContainer>(), files));
 
-            var operationContainers = new[] { new OperationContainer("/SiteDirectory/00000000-0000-0000-0000-000000000000", 0) };
+            var operationContainers = new[] { new OperationContainer($"/SiteDirectory/{this.siteDirectoryData.Iid}", 0) };
             Assert.Throws<ArgumentException>(() => this.dal.Write(operationContainers, files));
 
             var domainSys = new DomainOfExpertise(Guid.NewGuid(), cache, this.credentials.Uri) { ShortName = "SYS" };
@@ -330,6 +344,8 @@ namespace CDP4JsonFileDal.Tests
                 Organization = organization,
                 DefaultDomain = domainAer
             };
+
+            this.siteDirectoryData.Person.Add(person);
 
             var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) { Person = person };
             participant.Person.Role = role;
@@ -452,6 +468,7 @@ namespace CDP4JsonFileDal.Tests
             var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
             var zipSession = new Session(this.dal, zipCredentials);
 
+            this.CreateBasicModel();
             var operationContainers = this.BuildOperationContainers();
 
             Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
@@ -463,6 +480,7 @@ namespace CDP4JsonFileDal.Tests
             var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
             var zipSession = new Session(this.dal, zipCredentials);
 
+            this.CreateBasicModel();
             var operationContainers = this.BuildOperationContainers();
 
             Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers, new string[] { this.migrationFile })));
@@ -475,6 +493,119 @@ namespace CDP4JsonFileDal.Tests
                 new List<Guid>(), CancellationToken.None), Throws.Exception.TypeOf<NotSupportedException>());
         }
 
+        [Test]
+        public async Task VerifyWriteOfIncompatibleVersionFile()
+        {
+            this.dal = new JsonFileDal(new Version("1.0.0"))
+            {
+                Session = this.session.Object
+            };
+
+            var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
+            var zipSession = new Session(this.dal, zipCredentials);
+
+            this.CreateBasicModel();
+            this.AddSampledFunctionParameterAndUsage();
+
+            var operationContainers = this.BuildOperationContainers();
+
+            Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
+
+            //Part 2 read newly created file
+            var newDal = new JsonFileDal(new Version("1.0.0"));
+            var newSession = new Session(newDal, zipCredentials);
+
+            await newSession.Open();
+
+            var siteDirectory = newSession.RetrieveSiteDirectory();
+
+            var modelSetup = siteDirectory.Model.First();
+            var domain = siteDirectory.Domain.First();
+
+            var model = new CDP4Common.EngineeringModelData.EngineeringModel(modelSetup.EngineeringModelIid, newSession.Assembler.Cache, newDal.Credentials.Uri)
+                { EngineeringModelSetup = modelSetup };
+
+            var iteration = new CDP4Common.EngineeringModelData.Iteration(this.iterationIid, newSession.Assembler.Cache, newDal.Credentials.Uri);
+
+            model.Iteration.Add(iteration);
+
+            await newSession.Read(iteration, domain);
+
+            var readIteration = newSession.OpenIterations.First().Key;
+
+            Assert.That(readIteration.Element.Count, Is.EqualTo(2));
+
+            var mainElement = readIteration.Element.FirstOrDefault(x => x.ContainedElement.Any());
+            Assert.That(mainElement, Is.Not.Null);
+
+            Assert.That(mainElement.Parameter.Any(), Is.False);
+
+            var elementUsage = mainElement.ContainedElement.FirstOrDefault();
+            Assert.That(elementUsage, Is.Not.Null);
+            Assert.That(elementUsage.ParameterOverride.Any(), Is.False);
+        }
+
+        [Test]
+        public async Task VerifyWriteOfCompatibleVersionFile()
+        {
+            this.dal = new JsonFileDal(new Version("1.3.0"))
+            {
+                Session = this.session.Object
+            };
+
+            var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
+            var zipSession = new Session(this.dal, zipCredentials);
+
+            this.CreateBasicModel();
+            this.AddSampledFunctionParameterAndUsage();
+
+            var operationContainers = this.BuildOperationContainers();
+
+            Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
+
+            //Part 2 read newly created file
+            var newDal = new JsonFileDal(new Version("1.0.0"));
+            var newSession = new Session(newDal, zipCredentials);
+
+            await newSession.Open();
+
+            var siteDirectory = newSession.RetrieveSiteDirectory();
+
+            var modelSetup = siteDirectory.Model.First();
+            var domain = siteDirectory.Domain.First();
+
+            var model = new CDP4Common.EngineeringModelData.EngineeringModel(modelSetup.EngineeringModelIid, newSession.Assembler.Cache, newDal.Credentials.Uri)
+                { EngineeringModelSetup = modelSetup };
+
+            var iteration = new CDP4Common.EngineeringModelData.Iteration(this.iterationIid, newSession.Assembler.Cache, newDal.Credentials.Uri);
+
+            model.Iteration.Add(iteration);
+
+            await newSession.Read(iteration, domain);
+
+            var readIteration = newSession.OpenIterations.First().Key;
+
+            Assert.That(readIteration.Element.Count, Is.EqualTo(2));
+
+            var mainElement = readIteration.Element.FirstOrDefault(x => x.ContainedElement.Any());
+            Assert.That(mainElement, Is.Not.Null);
+
+            Assert.That(mainElement.Parameter.Count(), Is.EqualTo(1));
+
+            var parameter = mainElement.Parameter.FirstOrDefault();
+            Assert.That(parameter, Is.Not.Null);
+            Assert.That(parameter.ParameterType.GetType(), Is.EqualTo(typeof(SampledFunctionParameterType)));
+
+            var elementUsage = mainElement.ContainedElement.First();
+            Assert.That(elementUsage, Is.Not.Null);
+            Assert.That(elementUsage.ParameterOverride.Any(), Is.True);
+
+            var parameterOverride = elementUsage.ParameterOverride.FirstOrDefault();
+            Assert.That(parameterOverride, Is.Not.Null);
+
+            Assert.That(parameterOverride.Parameter.ParameterType.GetType(), Is.EqualTo(typeof(SampledFunctionParameterType)));
+        }
+
         /// <summary>
         /// Build operation containes structure that will be serialized
         /// </summary>
@@ -483,10 +614,21 @@ namespace CDP4JsonFileDal.Tests
         /// </returns>
         private IEnumerable<OperationContainer> BuildOperationContainers()
         {
-            var cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
+            var iterationClone = this.iteration.DeepClone<Iteration>();
+
+            var operation = new Operation(this.iteration, iterationClone, OperationKind.Update);
+            var operationContainers = new[] { new OperationContainer("/EngineeringModel/" + this.model.Iid + "/iteration/" + this.iteration.Iid, 0) };
+            operationContainers.Single().AddOperation(operation);
+
+            return operationContainers;
+        }
+
+        private void CreateBasicModel()
+        {
+            this.cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
 
             // DomainOfExpertise
-            var domain = new DomainOfExpertise(Guid.NewGuid(), cache, this.credentials.Uri) { ShortName = "SYS" };
+            var domain = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.credentials.Uri) { ShortName = "SYS" };
             this.siteDirectoryData.Domain.Add(domain);
 
             // PersonRole
@@ -495,7 +637,7 @@ namespace CDP4JsonFileDal.Tests
             this.siteDirectoryData.DefaultPersonRole = role;
 
             // ParticipantRole
-            var participantRole = new ParticipantRole(Guid.Empty, null, null);
+            var participantRole = new ParticipantRole(Guid.NewGuid(), null, null);
             this.siteDirectoryData.ParticipantRole.Add(participantRole);
             this.siteDirectoryData.DefaultParticipantRole = participantRole;
 
@@ -506,42 +648,69 @@ namespace CDP4JsonFileDal.Tests
             };
 
             // Iteration
-            var iterationIid = new Guid("b58ea73d-350d-4520-b9d9-a52c75ac2b5d");
+            this.iterationIid = new Guid("b58ea73d-350d-4520-b9d9-a52c75ac2b5d");
             var iterationSetup = new IterationSetup(Guid.NewGuid(), 0);
-            var iterationSetupPoco = new CDP4Common.SiteDirectoryData.IterationSetup(iterationSetup.Iid, cache, this.credentials.Uri);
+            var iterationSetupPoco = new CDP4Common.SiteDirectoryData.IterationSetup(iterationSetup.Iid, this.cache, this.credentials.Uri);
 
+            iterationSetup.IterationIid = this.iterationIid;
+            iterationSetupPoco.IterationIid = this.iterationIid;
             // EngineeringModel
-            var model = new EngineeringModel(Guid.NewGuid(), cache, this.credentials.Uri);
-            var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup();
+            this.model = new EngineeringModel(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            this.modelSetupId = Guid.NewGuid();
+            var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(this.modelSetupId, this.cache, this.credentials.Uri);
             modelSetup.ActiveDomain.Add(domain);
 
-            var requiredRdl = new ModelReferenceDataLibrary();
+            var requiredRdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.cache, this.credentials.Uri);
 
-            var person = new Person { ShortName = "admin", Organization = organization };
-            var participant = new Participant(Guid.NewGuid(), cache, this.credentials.Uri) { Person = person };
+            var person = new Person(Guid.NewGuid(), this.cache, this.credentials.Uri) { ShortName = "admin", Organization = organization };
+            this.siteDirectoryData.Person.Add(person);
+            var participant = new Participant(Guid.NewGuid(), this.cache, this.credentials.Uri) { Person = person };
             participant.Person.Role = role;
             participant.Role = participantRole;
             participant.Domain.Add(domain);
             modelSetup.Participant.Add(participant);
 
             var lazyPerson = new Lazy<Thing>(() => person);
-            var iterationPoco = new CDP4Common.EngineeringModelData.Iteration(iterationIid, cache, this.credentials.Uri) { IterationSetup = iterationSetupPoco };
-            model.Iteration.Add(iterationPoco);
-            var iteration = (Iteration)iterationPoco.ToDto();
-            model.EngineeringModelSetup = modelSetup;
+            this.iterationPoco = new CDP4Common.EngineeringModelData.Iteration(this.iterationIid, this.cache, this.credentials.Uri) { IterationSetup = iterationSetupPoco };
+            this.model.Iteration.Add(this.iterationPoco);
+            this.model.EngineeringModelSetup = modelSetup;
             this.siteDirectoryData.Model.Add(modelSetup);
             modelSetup.RequiredRdl.Add(requiredRdl);
             modelSetup.IterationSetup.Add(iterationSetupPoco);
-            cache.TryAdd(new CacheKey(person.Iid, this.siteDirectoryData.Iid), lazyPerson);
-            this.siteDirectoryData.Cache = cache;
-            iteration.IterationSetup = iterationSetup.Iid;
-            var iterationClone = iteration.DeepClone<Iteration>();
+            modelSetup.EngineeringModelIid = this.model.Iid;
+            this.cache.TryAdd(new CacheKey(person.Iid, this.siteDirectoryData.Iid), lazyPerson);
+            this.siteDirectoryData.Cache = this.cache;
 
-            var operation = new Operation(iteration, iterationClone, OperationKind.Update);
-            var operationContainers = new[] { new OperationContainer("/EngineeringModel/" + model.Iid + "/iteration/" + iteration.Iid, 0) };
-            operationContainers.Single().AddOperation(operation);
+            this.iteration = (Iteration)this.iterationPoco.ToDto();
+        }
 
-            return operationContainers;
+        private void AddSampledFunctionParameterAndUsage()
+        {
+            var sampledFunctionParameterType = new SampledFunctionParameterType(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            this.siteDirectoryData.Model.First().RequiredRdl.First().ParameterType.Add(sampledFunctionParameterType);
+
+            var elementDefinition1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            var elementDefinition2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            var sampledFunctionParameter1 = new Parameter(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            var sampledFunctionParameter2 = new Parameter(Guid.NewGuid(), this.cache, this.credentials.Uri);
+
+            sampledFunctionParameter1.ParameterType = sampledFunctionParameterType;
+            sampledFunctionParameter2.ParameterType = sampledFunctionParameterType;
+            elementDefinition1.Parameter.Add(sampledFunctionParameter1);
+            elementDefinition2.Parameter.Add(sampledFunctionParameter2);
+            this.iterationPoco.Element.Add(elementDefinition1);
+            this.iterationPoco.Element.Add(elementDefinition2);
+
+            var elementUsage = new CDP4Common.EngineeringModelData.ElementUsage(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementUsage.ElementDefinition = elementDefinition2;
+            var parameterOverride = new CDP4Common.EngineeringModelData.ParameterOverride(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            parameterOverride.Parameter = sampledFunctionParameter2;
+            elementUsage.ParameterOverride.Add(parameterOverride);
+
+            elementDefinition1.ContainedElement.Add(elementUsage);
+
+            //Create the DTO again as it might have been changed
+            this.iteration = (Iteration)this.iterationPoco.ToDto();
         }
     }
 }

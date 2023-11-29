@@ -1,17 +1,17 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
 //    This file is part of COMET-SDK Community Edition
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -24,10 +24,6 @@
 
 namespace CDP4JsonFileDal
 {
-#if NETFRAMEWORK
-    using System.ComponentModel.Composition;
-#endif
-
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -39,13 +35,14 @@ namespace CDP4JsonFileDal
     using CDP4Common.CommonData;
     using CDP4Common.Comparers;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
 
-    using CDP4Dal.Operations;
     using CDP4Dal;
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;
     using CDP4Dal.Exceptions;
+    using CDP4Dal.Operations;
 
     using CDP4JsonFileDal.Json;
 
@@ -55,7 +52,12 @@ namespace CDP4JsonFileDal
 
     using NLog;
 
+    using Person = CDP4Common.SiteDirectoryData.Person;
+    using SiteDirectory = CDP4Common.SiteDirectoryData.SiteDirectory;
     using Thing = CDP4Common.DTO.Thing;
+#if NETFRAMEWORK
+    using System.ComponentModel.Composition;
+#endif
 
     /// <summary>
     /// Provides the Data Access Layer for file based import/export
@@ -135,7 +137,7 @@ namespace CDP4JsonFileDal
         /// <param name="person">The <see cref="CDP4Common.SiteDirectoryData.Person"/> that is used to create the <see cref="ExchangeFileHeader"/></param>
         /// <param name="headerCopyright">Header copyright text</param>
         /// <param name="headerRemark">Header remark text</param>
-        public void UpdateExchangeFileHeader(CDP4Common.SiteDirectoryData.Person person, string headerCopyright = null, string headerRemark = null)
+        public void UpdateExchangeFileHeader(Person person, string headerCopyright = null, string headerRemark = null)
         {
             var exchangeFileHeader = JsonFileDalUtils.CreateExchangeFileHeader(person);
             exchangeFileHeader.Remark = headerRemark ?? exchangeFileHeader.Remark;
@@ -152,10 +154,7 @@ namespace CDP4JsonFileDal
         /// <summary>
         /// Gets the value indicating whether this <see cref="IDal"/> is read only
         /// </summary>
-        public override bool IsReadOnly
-        {
-            get { return true; }
-        }
+        public override bool IsReadOnly => true;
 
         /// <summary>
         /// Gets the <see cref="ExchangeFileHeader"/>
@@ -172,29 +171,31 @@ namespace CDP4JsonFileDal
         /// The path to the files that need to be uploaded. If <paramref name="extensionFiles"/> is null, then no files are to be uploaded
         /// </param>
         /// <returns>
-        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// A list of <see cref="CDP4Common.DTO.Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
         public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> extensionFiles = null)
         {
             this.ValidateOperationContainers(operationContainers);
 
-            CDP4Common.SiteDirectoryData.SiteDirectory siteDirectory = null;
-            var iterations = new HashSet<CDP4Common.EngineeringModelData.Iteration>();
-            var siteReferenceDataLibraries = new HashSet<CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary>();
-            var modelReferenceDataLibraries = new HashSet<CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary>();
-            var domainOfExpertises = new HashSet<CDP4Common.SiteDirectoryData.DomainOfExpertise>();
-            var persons = new HashSet<CDP4Common.SiteDirectoryData.Person>();
-            var personRoles = new HashSet<CDP4Common.SiteDirectoryData.PersonRole>();
-            var participantRoles = new HashSet<CDP4Common.SiteDirectoryData.ParticipantRole>();
-            var organizations = new HashSet<CDP4Common.SiteDirectoryData.Organization>();
-            var engineeringModelSetups = new HashSet<CDP4Common.SiteDirectoryData.EngineeringModelSetup>();
-            var iterationSetups = new HashSet<CDP4Common.SiteDirectoryData.IterationSetup>();
+            SiteDirectory siteDirectory = null;
+            var iterations = new HashSet<Iteration>();
+            var siteReferenceDataLibraries = new HashSet<SiteReferenceDataLibrary>();
+            var modelReferenceDataLibraries = new HashSet<ModelReferenceDataLibrary>();
+            var domainOfExpertises = new HashSet<DomainOfExpertise>();
+            var persons = new HashSet<Person>();
+            var personRoles = new HashSet<PersonRole>();
+            var participantRoles = new HashSet<ParticipantRole>();
+            var organizations = new HashSet<Organization>();
+            var engineeringModelSetups = new HashSet<EngineeringModelSetup>();
+            var iterationSetups = new HashSet<IterationSetup>();
+
+            var allExtraInstancesToRemove = new HashSet<Guid>();
 
             foreach (var operationContainer in operationContainers)
             {
                 var operation = operationContainer.Operations.First(x => x.ModifiedThing is CDP4Common.DTO.Iteration);
                 var iterationDto = (CDP4Common.DTO.Iteration)operation.ModifiedThing;
-                var iterationPoco = (CDP4Common.EngineeringModelData.Iteration)iterationDto.QuerySourceThing();
+                var iterationPoco = (Iteration)iterationDto.QuerySourceThing();
 
                 JsonFileDalUtils.AddIteration(iterationPoco, ref iterations);
 
@@ -204,12 +205,12 @@ namespace CDP4JsonFileDal
                 var iterationRequiredRls = iterationPoco.RequiredRdls;
                 JsonFileDalUtils.AddReferenceDataLibraries(iterationRequiredRls, ref siteReferenceDataLibraries, ref modelReferenceDataLibraries);
 
-                var engineeringModelSetup = (CDP4Common.SiteDirectoryData.EngineeringModelSetup)iterationSetup.Container;
+                var engineeringModelSetup = (EngineeringModelSetup)iterationSetup.Container;
                 JsonFileDalUtils.AddEngineeringModelSetup(engineeringModelSetup, ref engineeringModelSetups);
 
                 if (siteDirectory == null)
                 {
-                    siteDirectory = (CDP4Common.SiteDirectoryData.SiteDirectory)engineeringModelSetup.Container;
+                    siteDirectory = (SiteDirectory)engineeringModelSetup.Container;
                 }
 
                 // add the domains-of-expertise that are to be included in the File
@@ -220,20 +221,47 @@ namespace CDP4JsonFileDal
 
                 // add organizations that are referrenced by ReferencedSource
                 JsonFileDalUtils.AddOrganizations(iterationRequiredRls, ref organizations);
+
+                var allPocos = siteReferenceDataLibraries.ToList().Cast<CDP4Common.CommonData.Thing>()
+                    .Union(domainOfExpertises.ToList())
+                    .Union(persons.ToList())
+                    .Union(personRoles.ToList())
+                    .Union(participantRoles.ToList())
+                    .Union(organizations.ToList())
+                    .Union(engineeringModelSetups.ToList())
+                    .Union(iterationSetups.ToList())
+                    .Union(iterationPoco.QueryContainedThingsDeep())
+                    .Union(siteReferenceDataLibraries.SelectMany(x => x.QueryContainedThingsDeep())
+                        .Union(modelReferenceDataLibraries.SelectMany(x => x.QueryContainedThingsDeep())));
+
+                foreach (var extraInstanceToRemove in this.FindNonSupportedVersionThings(allPocos))
+                {
+                    allExtraInstancesToRemove.Add(extraInstanceToRemove);
+                }
             }
 
             var path = this.Session.Credentials.Uri.LocalPath;
 
             var prunedSiteDirectoryDtos = JsonFileDalUtils.CreateSiteDirectoryAndPrunedContainedThingDtos(
-                siteDirectory,
-                siteReferenceDataLibraries,
-                domainOfExpertises,
-                persons,
-                personRoles,
-                participantRoles,
-                organizations,
-                engineeringModelSetups,
-                iterationSetups);
+                    siteDirectory,
+                    siteReferenceDataLibraries,
+                    domainOfExpertises,
+                    persons,
+                    personRoles,
+                    participantRoles,
+                    organizations,
+                    engineeringModelSetups,
+                    iterationSetups)
+                .Where(x => !allExtraInstancesToRemove.Contains(x.Iid))
+                .ToList();
+
+            foreach (var dto in prunedSiteDirectoryDtos)
+            {
+                if (!dto.TryRemoveReferences(allExtraInstancesToRemove, out var errors))
+                {
+                    throw new ModelErrorException(string.Join("\n", errors));
+                }
+            }
 
             var activePerson = JsonFileDalUtils.QueryActivePerson(this.Session.Credentials.UserName, siteDirectory);
 
@@ -249,12 +277,13 @@ namespace CDP4JsonFileDal
 
                     this.WriteSiteDirectoryToZipFile(prunedSiteDirectoryDtos, zipFile, path);
 
-                    this.WriteSiteReferenceDataLibraryToZipFile(siteReferenceDataLibraries, zipFile, path);
+                    this.WriteSiteReferenceDataLibraryToZipFile(siteReferenceDataLibraries, allExtraInstancesToRemove, zipFile, path);
 
-                    this.WriteModelReferenceDataLibraryToZipFile(modelReferenceDataLibraries, zipFile, path);
+                    this.WriteModelReferenceDataLibraryToZipFile(modelReferenceDataLibraries, allExtraInstancesToRemove, zipFile, path);
 
-                    this.WriteIterationsToZipFile(iterations, zipFile, path);
+                    this.WriteIterationsToZipFile(iterations, allExtraInstancesToRemove, zipFile, path);
 
+                    //ToDo: Remove extensionsFiles that are referenced by removed instances
                     this.WriteExtensionFilesToZipFile(extensionFiles, zipFile, path);
                 }
 
@@ -266,6 +295,49 @@ namespace CDP4JsonFileDal
             }
 
             return Task.FromResult(Enumerable.Empty<Thing>());
+        }
+
+        /// <summary>
+        /// Find not supported things by model version
+        /// </summary>
+        /// <param name="allPocos">A list of <see cref="CDP4Common.CommonData.Thing"/>s where to find incompatible objects in</param>
+        /// <returns>A collection of not supported things based on their model version</returns>
+        private IEnumerable<Guid> FindNonSupportedVersionThings(IEnumerable<CDP4Common.CommonData.Thing> allPocos)
+        {
+            var filterOutObjects = new List<CDP4Common.CommonData.Thing>();
+            var pocosToCheck = allPocos.ToList();
+
+            foreach (var thing in pocosToCheck)
+            {
+                var typeName = thing.ClassKind.ToString();
+                var classVersion = new Version(this.MetaDataProvider.GetClassVersion(typeName));
+
+                if (classVersion > this.DalVersion)
+                {
+                    filterOutObjects.Add(thing);
+                }
+            }
+
+            var allThingsToRemove = new HashSet<Guid>(filterOutObjects.Select(x => x.Iid));
+            var extraThingsToRemove = new HashSet<Guid>(allThingsToRemove);
+
+            while (extraThingsToRemove.Any())
+            {
+                var newThingsToRemove = new HashSet<Guid>();
+
+                foreach (var thing in pocosToCheck.ToList())
+                {
+                    if (thing.HasMandatoryReferenceToAny(extraThingsToRemove))
+                    {
+                        allThingsToRemove.Add(thing.Iid);
+                        newThingsToRemove.Add(thing.Iid);
+                    }
+                }
+
+                extraThingsToRemove = newThingsToRemove;
+            }
+
+            return allThingsToRemove;
         }
 
         /// <summary>
@@ -314,7 +386,7 @@ namespace CDP4JsonFileDal
                 throw new NotSupportedException("The JSONFileDal only supports Read on Iteration, SiteReferenceDataLibrary and DomainOfExpertise instances.");
             }
 
-            if (this.Credentials.Uri  == null)
+            if (this.Credentials.Uri == null)
             {
                 throw new ArgumentNullException(nameof(this.Credentials.Uri), $"The Credentials URI may not be null");
             }
@@ -397,7 +469,7 @@ namespace CDP4JsonFileDal
         /// <summary>
         /// Retrieves all data necessary for the transfer of a DomainOfExpertise
         /// </summary>
-        /// <param name="domain">The <see cref="DomainOfExpertise"/></param>
+        /// <param name="domain">The <see cref="CDP4Common.SiteDirectoryData.DomainOfExpertise"/></param>
         /// <param name="siteDirectoryData">All SiteDirectory DTOs</param>
         /// <returns>List of things contained by the particular srdl</returns>
         private List<Thing> RetrieveDomainOfExpertiseThings(CDP4Common.DTO.DomainOfExpertise domain, List<Thing> siteDirectoryData)
@@ -413,7 +485,7 @@ namespace CDP4JsonFileDal
             {
                 var thingDto = siteDirectoryData.FirstOrDefault(s => s.Iid.Equals(refThing)) as CDP4Common.DTO.Alias;
 
-                if(thingDto != null)
+                if (thingDto != null)
                 {
                     thingDto.ExcludedPerson.Clear();
                     thingDto.ExcludedDomain.Clear();
@@ -470,12 +542,12 @@ namespace CDP4JsonFileDal
         /// <summary>
         /// Retrieves all data necessary for the transfer of a SRDL
         /// </summary>
-        /// <param name="siteRdl">The <see cref="SiteReferenceDataLibrary"/></param>
+        /// <param name="siteRdl">The <see cref="CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary"/></param>
         /// <param name="siteDirectoryData">All SiteDirectory DTOs</param>
         /// <param name="zip">The zip file</param>
         /// <param name="siteDir">The <see cref="SiteDirectory"/> object</param>
         /// <returns>List of things contained by the particular srdl</returns>
-        private List<Thing> RetrieveSRDLThings(CDP4Common.DTO.SiteReferenceDataLibrary siteRdl, List<Thing> siteDirectoryData, ZipFile zip, CDP4Common.SiteDirectoryData.SiteDirectory siteDir)
+        private List<Thing> RetrieveSRDLThings(CDP4Common.DTO.SiteReferenceDataLibrary siteRdl, List<Thing> siteDirectoryData, ZipFile zip, SiteDirectory siteDir)
         {
             var returned = new List<Thing>();
 
@@ -483,6 +555,7 @@ namespace CDP4JsonFileDal
 
             // load the reference data libraries as per the containment chain
             var requiredRdl = srdl;
+
             while (requiredRdl != null)
             {
                 // add the rdlDto to the returned collection to make sure it's content gets dereferenced
@@ -504,12 +577,12 @@ namespace CDP4JsonFileDal
         /// <summary>
         /// Retrieves all data necessary for the transfer of an iteration
         /// </summary>
-        /// <param name="iteration">The <see cref="Iteration"/></param>
+        /// <param name="iteration">The <see cref="CDP4Common.EngineeringModelData.Iteration"/></param>
         /// <param name="siteDirectoryData">All SiteDirectory DTOs</param>
         /// <param name="zip">The zip file</param>
         /// <param name="siteDir">The <see cref="SiteDirectory"/> object</param>
         /// <returns>List of things relevant for a particular iteration</returns>
-        private List<Thing> RetrieveIterationThings(CDP4Common.DTO.Iteration iteration, List<Thing> siteDirectoryData, ZipFile zip, CDP4Common.SiteDirectoryData.SiteDirectory siteDir)
+        private List<Thing> RetrieveIterationThings(CDP4Common.DTO.Iteration iteration, List<Thing> siteDirectoryData, ZipFile zip, SiteDirectory siteDir)
         {
             var engineeringModelSetup =
                 siteDir.Model.SingleOrDefault(x => x.IterationSetup.Any(y => y.IterationIid == iteration.Iid));
@@ -521,8 +594,10 @@ namespace CDP4JsonFileDal
 
             // read engineeringmodel
             var engineeringModelFilePath = $"{engineeringModelSetup.EngineeringModelIid}.json";
+
             var engineeringModelZipEntry =
                 zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(engineeringModelFilePath));
+
             var returned = this.ReadInfoFromArchiveEntry(engineeringModelZipEntry, this.Credentials.Password);
 
             var iterationFilePath = $"{iteration.Iid}.json";
@@ -547,6 +622,7 @@ namespace CDP4JsonFileDal
 
             // load the reference data libraries as per the containment chain
             var requiredRdl = modelRdl.RequiredRdl;
+
             while (requiredRdl != null)
             {
                 // add the rdlDto to the returned collection to make sure it's content gets dereferenced
@@ -818,7 +894,7 @@ namespace CDP4JsonFileDal
         /// <param name="filePath">
         /// The file Path.
         /// </param>
-        private void WriteSiteDirectoryToZipFile(IEnumerable<CDP4Common.DTO.Thing> prunedSiteDirectoryContents, ZipFile zipFile, string filePath)
+        private void WriteSiteDirectoryToZipFile(IEnumerable<Thing> prunedSiteDirectoryContents, ZipFile zipFile, string filePath)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -841,23 +917,39 @@ namespace CDP4JsonFileDal
         /// <param name="siteReferenceDataLibraries">
         /// The <see cref="CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary"/> that are to be written to the <see cref="ZipFile"/>
         /// </param>
+        /// <param name="allExtraInstancesToRemove">A collection of the id's (Guids) of all the thing instances to remove from reference properties before serialization
+        /// </param>
         /// <param name="zipFile">
         /// The target <see cref="ZipFile"/> that the <paramref name="siteReferenceDataLibraries"/> are written to.
         /// </param>
         /// <param name="filePath">
         /// The file of the target <see cref="ZipFile"/>
         /// </param>
-        private void WriteSiteReferenceDataLibraryToZipFile(IEnumerable<CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary> siteReferenceDataLibraries, ZipFile zipFile, string filePath)
+        private void WriteSiteReferenceDataLibraryToZipFile(IEnumerable<SiteReferenceDataLibrary> siteReferenceDataLibraries, HashSet<Guid> allExtraInstancesToRemove, ZipFile zipFile, string filePath)
         {
             foreach (var siteReferenceDataLibrary in siteReferenceDataLibraries)
             {
                 var containmentPocos = siteReferenceDataLibrary.QueryContainedThingsDeep().ToList();
+
                 if (containmentPocos.Contains(siteReferenceDataLibrary))
                 {
                     containmentPocos.Remove(siteReferenceDataLibrary);
                 }
 
-                var dtos = containmentPocos.Select(poco => poco.ToDto()).OrderBy(x => x.Iid, this.guidComparer);
+                var dtos =
+                    containmentPocos
+                        .Where(x => !allExtraInstancesToRemove.Contains(x.Iid))
+                        .Select(poco => poco.ToDto())
+                        .OrderBy(x => x.Iid, this.guidComparer)
+                        .ToList();
+
+                foreach (var dto in dtos)
+                {
+                    if (!dto.TryRemoveReferences(allExtraInstancesToRemove, out var errors))
+                    {
+                        throw new ModelErrorException(string.Join("\n", errors));
+                    }
+                }
 
                 using (var memoryStream = new MemoryStream())
                 {
@@ -880,27 +972,44 @@ namespace CDP4JsonFileDal
         /// <param name="modelReferenceDataLibraries">
         /// The <see cref="CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary"/> that are to be written to the <see cref="ZipFile"/>
         /// </param>
+        /// <param name="allExtraInstancesToRemove">A collection of the id's (Guids) of all the thing instances to remove from reference properties before serialization
+        /// </param>
         /// <param name="zipFile">
         /// The target <see cref="ZipFile"/> that the <paramref name="modelReferenceDataLibraries"/> are written to.
         /// </param>
         /// <param name="filePath">
         /// The file of the target <see cref="ZipFile"/>
         /// </param>
-        private void WriteModelReferenceDataLibraryToZipFile(IEnumerable<CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary> modelReferenceDataLibraries, ZipFile zipFile, string filePath)
+        private void WriteModelReferenceDataLibraryToZipFile(IEnumerable<ModelReferenceDataLibrary> modelReferenceDataLibraries, HashSet<Guid> allExtraInstancesToRemove, ZipFile zipFile, string filePath)
         {
             foreach (var modelReferenceDataLibrary in modelReferenceDataLibraries)
             {
                 var containmentPocos = modelReferenceDataLibrary.QueryContainedThingsDeep().ToList();
+
                 if (containmentPocos.Contains(modelReferenceDataLibrary))
                 {
                     containmentPocos.Remove(modelReferenceDataLibrary);
                 }
 
-                var dtos = containmentPocos.Select(poco => poco.ToDto()).OrderBy(x => x.Iid, this.guidComparer);
+                var dtos =
+                    containmentPocos
+                        .Where(x => !allExtraInstancesToRemove.Contains(x.Iid))
+                        .Select(poco => poco.ToDto())
+                        .OrderBy(x => x.Iid, this.guidComparer)
+                        .ToList();
+
+                foreach (var dto in dtos)
+                {
+                    if (!dto.TryRemoveReferences(allExtraInstancesToRemove, out var errors))
+                    {
+                        throw new ModelErrorException(string.Join("\n", errors));
+                    }
+                }
 
                 using (var memoryStream = new MemoryStream())
                 {
                     this.Serializer.SerializeToStream(dtos, memoryStream);
+
                     using (var outputStream = new MemoryStream(memoryStream.ToArray()))
                     {
                         var modelReferenceDataLibraryFilename = $"{ModelRdlZipLocation}\\{modelReferenceDataLibrary.Iid}.json";
@@ -918,19 +1027,21 @@ namespace CDP4JsonFileDal
         /// <param name="iterations">
         /// The <see cref="CDP4Common.EngineeringModelData.Iteration"/> that are to be written to the <see cref="ZipFile"/>
         /// </param>
+        /// <param name="allExtraInstancesToRemove">A collection of the id's (Guids) of all the thing instances to remove from reference properties before serialization
+        /// </param>
         /// <param name="zipFile">
         /// The target <see cref="ZipFile"/> that the <paramref name="iterations"/> are written to.
         /// </param>
         /// <param name="filePath">
         /// The file of the target <see cref="ZipFile"/>
         /// </param>
-        private void WriteIterationsToZipFile(IEnumerable<CDP4Common.EngineeringModelData.Iteration> iterations, ZipFile zipFile, string filePath)
+        private void WriteIterationsToZipFile(IEnumerable<Iteration> iterations, HashSet<Guid> allExtraInstancesToRemove, ZipFile zipFile, string filePath)
         {
-            var engineeringModels = new List<CDP4Common.EngineeringModelData.EngineeringModel>();
+            var engineeringModels = new List<EngineeringModel>();
 
             foreach (var iteration in iterations)
             {
-                var engineeringModel = (CDP4Common.EngineeringModelData.EngineeringModel)iteration.Container;
+                var engineeringModel = (EngineeringModel)iteration.Container;
                 var engineeringModelDto = engineeringModel.ToDto();
 
                 if (!engineeringModels.Contains(engineeringModel))
@@ -952,7 +1063,21 @@ namespace CDP4JsonFileDal
                 }
 
                 var containmentPocos = iteration.QueryContainedThingsDeep();
-                var dtos = containmentPocos.Select(poco => poco.ToDto()).OrderBy(x => x.Iid, this.guidComparer);
+
+                var dtos =
+                    containmentPocos
+                        .Where(x => !allExtraInstancesToRemove.Contains(x.Iid))
+                        .Select(poco => poco.ToDto())
+                        .OrderBy(x => x.Iid, this.guidComparer)
+                        .ToList();
+
+                foreach (var dto in dtos)
+                {
+                    if (!dto.TryRemoveReferences(allExtraInstancesToRemove, out var errors))
+                    {
+                        throw new ModelErrorException(string.Join("\n", errors));
+                    }
+                }
 
                 using (var iterationMemoryStream = new MemoryStream())
                 {
