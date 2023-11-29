@@ -283,7 +283,7 @@ namespace CDP4JsonFileDal
 
                     this.WriteIterationsToZipFile(iterations, allExtraInstancesToRemove, zipFile, path);
 
-                    //ToDo: Remove extensionsFiles that are referenced by removed instances
+                    //ToDo: GH283: Remove extensionsFiles that are referenced by removed instances
                     this.WriteExtensionFilesToZipFile(extensionFiles, zipFile, path);
                 }
 
