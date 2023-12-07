@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Company>RHEA System S.A.</Company>
         <Description>CDP4RequirementsVerification netcore unit tests</Description>
         <Copyright>Copyright © RHEA System S.A.</Copyright>

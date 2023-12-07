@@ -61,7 +61,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Reporting.Tests", "CDP4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4MessagePackSerializer", "CDP4MessagePackSerializer\CDP4MessagePackSerializer.csproj", "{231DC960-B227-46CA-B345-E9C4B7CFBC01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4MessagePackSerializer.Tests", "CDP4MessagePackSerializer.Tests\CDP4MessagePackSerializer.Tests.csproj", "{CBECE184-A79F-4D71-82F6-3DA29FF9E048}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4MessagePackSerializer.Tests", "CDP4MessagePackSerializer.Tests\CDP4MessagePackSerializer.Tests.csproj", "{CBECE184-A79F-4D71-82F6-3DA29FF9E048}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Github Actions", "Github Actions", "{A51D9FCE-BFF3-4428-B538-B6A45B3A5401}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\CodeQuality.yml = .github\workflows\CodeQuality.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
