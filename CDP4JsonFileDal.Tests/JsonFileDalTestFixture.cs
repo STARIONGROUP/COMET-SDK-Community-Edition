@@ -399,7 +399,7 @@ namespace CDP4JsonFileDal.Tests
             this.dal = new JsonFileDal(null);
 
             Assert.That(this.dal.DalVersion.Major, Is.EqualTo(1));
-            Assert.That(this.dal.DalVersion.Minor, Is.EqualTo(2));
+            Assert.That(this.dal.DalVersion.Minor, Is.EqualTo(3));
             Assert.That(this.dal.DalVersion.Build, Is.EqualTo(0));
         }
 
