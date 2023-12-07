@@ -395,7 +395,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             this.dal = new JsonFileDal(null);
 
             Assert.IsTrue(this.dal.DalVersion.Major == 1);
-            Assert.IsTrue(this.dal.DalVersion.Minor == 2);
+            Assert.IsTrue(this.dal.DalVersion.Minor == 3);
             Assert.IsTrue(this.dal.DalVersion.Build == 0);
         }
 
