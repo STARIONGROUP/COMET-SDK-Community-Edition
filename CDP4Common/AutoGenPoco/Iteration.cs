@@ -1,18 +1,19 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Iteration.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -341,6 +342,100 @@ namespace CDP4Common.EngineeringModelData
                 containers.Add(this.ValueGroup);
                 return containers;
             }
+        }
+
+        /// <summary>
+        /// Get all Reference Properties by their Name and id's of instance values
+        /// </summary>
+        /// <returns>A dictionary of string (Name) and a collections of Guid's (id's of instance values)</returns>
+        public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
+        {
+            var dictionary = new Dictionary<string, IEnumerable<Guid>>();
+
+            dictionary.Add("ActualFiniteStateList", this.ActualFiniteStateList.Select(x => x.Iid));
+
+            if (this.DefaultOption != null)
+            {
+                dictionary.Add("DefaultOption", new [] { this.DefaultOption.Iid });
+            }
+
+            dictionary.Add("DiagramCanvas", this.DiagramCanvas.Select(x => x.Iid));
+
+            dictionary.Add("DomainFileStore", this.DomainFileStore.Select(x => x.Iid));
+
+            dictionary.Add("Element", this.Element.Select(x => x.Iid));
+
+            dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
+            dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
+
+            dictionary.Add("ExternalIdentifierMap", this.ExternalIdentifierMap.Select(x => x.Iid));
+
+            dictionary.Add("Goal", this.Goal.Select(x => x.Iid));
+
+            if (this.IterationSetup != null)
+            {
+                dictionary.Add("IterationSetup", new [] { this.IterationSetup.Iid });
+            }
+
+            dictionary.Add("Option", this.Option.Select(x => x.Iid));
+
+            dictionary.Add("PossibleFiniteStateList", this.PossibleFiniteStateList.Select(x => x.Iid));
+
+            dictionary.Add("Publication", this.Publication.Select(x => x.Iid));
+
+            dictionary.Add("Relationship", this.Relationship.Select(x => x.Iid));
+
+            dictionary.Add("RequirementsSpecification", this.RequirementsSpecification.Select(x => x.Iid));
+
+            dictionary.Add("RuleVerificationList", this.RuleVerificationList.Select(x => x.Iid));
+
+            dictionary.Add("SharedDiagramStyle", this.SharedDiagramStyle.Select(x => x.Iid));
+
+            dictionary.Add("Stakeholder", this.Stakeholder.Select(x => x.Iid));
+
+            dictionary.Add("StakeholderValue", this.StakeholderValue.Select(x => x.Iid));
+
+            dictionary.Add("StakeholderValueMap", this.StakeholderValueMap.Select(x => x.Iid));
+
+            if (this.TopElement != null)
+            {
+                dictionary.Add("TopElement", new [] { this.TopElement.Iid });
+            }
+
+            dictionary.Add("ValueGroup", this.ValueGroup.Select(x => x.Iid));
+
+            return dictionary;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to any of the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to search for.</param>
+        /// <returns>True is any of the id's in <paramref name="ids"/> is found in this instance's reference properties.</returns>
+        public override bool HasMandatoryReferenceToAny(IEnumerable<Guid> ids)
+        {
+            var result = false;
+
+            if (!ids.Any())
+            {
+                return false;
+            }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "IterationSetup":
+                        if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

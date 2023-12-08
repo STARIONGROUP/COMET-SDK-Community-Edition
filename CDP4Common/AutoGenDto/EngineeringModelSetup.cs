@@ -1,18 +1,19 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EngineeringModelSetup.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -174,6 +175,132 @@ namespace CDP4Common.DTO
                 containers.Add(this.RequiredRdl);
                 return containers;
             }
+        }
+
+        /// <summary>
+        /// Get all Reference Properties by their Name and id's of instance values
+        /// </summary>
+        /// <returns>A dictionary of string (Name) and a collections of Guid's (id's of instance values)</returns>
+        public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
+        {
+            var dictionary = new Dictionary<string, IEnumerable<Guid>>();
+
+            dictionary.Add("ActiveDomain", this.ActiveDomain);
+
+            dictionary.Add("Alias", this.Alias);
+
+            if (this.DefaultOrganizationalParticipant != default)
+            {
+                dictionary.Add("DefaultOrganizationalParticipant", new [] { this.DefaultOrganizationalParticipant.Value });
+            }
+
+            dictionary.Add("Definition", this.Definition);
+
+            dictionary.Add("ExcludedDomain", this.ExcludedDomain);
+
+            dictionary.Add("ExcludedPerson", this.ExcludedPerson);
+
+            dictionary.Add("HyperLink", this.HyperLink);
+
+            dictionary.Add("IterationSetup", this.IterationSetup);
+
+            dictionary.Add("OrganizationalParticipant", this.OrganizationalParticipant);
+
+            dictionary.Add("Participant", this.Participant);
+
+            dictionary.Add("RequiredRdl", this.RequiredRdl);
+
+            return dictionary;
+        }
+
+        /// <summary>
+        /// Tries to remove references to id's if they exist in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to remove references for.</param>
+        /// <param name="errors">The errors collected while trying to remove references</param>
+        /// <returns>True if no errors were found while trying to remove references</returns>
+        public override bool TryRemoveReferences(IEnumerable<Guid> ids, out List<string> errors)
+        {
+            errors = new List<string>();
+            var referencedProperties = this.GetReferenceProperties();
+            var addModelErrors = !ids.Contains(this.Iid);
+            var result = true;
+
+            foreach (var id in ids)
+            {
+                var foundProperty = referencedProperties.Where(x => x.Value.Contains(id)).ToList();
+
+                if (foundProperty.Any())
+                {
+                    foreach (var kvp in foundProperty)
+                    {
+                        switch (kvp.Key)
+                        {
+                            case "ActiveDomain":
+                                if (addModelErrors && this.ActiveDomain.Count == 1)
+                                {
+                                    errors.Add($"Remove reference '{id}' from ActiveDomain property is not allowed.");
+                                }
+                                this.ActiveDomain.Remove(id);
+                                break;
+
+                            case "Alias":
+                                this.Alias.Remove(id);
+                                break;
+
+                            case "DefaultOrganizationalParticipant":
+                                this.DefaultOrganizationalParticipant = null;
+                                break;
+
+                            case "Definition":
+                                this.Definition.Remove(id);
+                                break;
+
+                            case "ExcludedDomain":
+                                this.ExcludedDomain.Remove(id);
+                                break;
+
+                            case "ExcludedPerson":
+                                this.ExcludedPerson.Remove(id);
+                                break;
+
+                            case "HyperLink":
+                                this.HyperLink.Remove(id);
+                                break;
+
+                            case "IterationSetup":
+                                if (addModelErrors && this.IterationSetup.Count == 1)
+                                {
+                                    errors.Add($"Remove reference '{id}' from IterationSetup property is not allowed.");
+                                }
+                                this.IterationSetup.Remove(id);
+                                break;
+
+                            case "OrganizationalParticipant":
+                                this.OrganizationalParticipant.Remove(id);
+                                break;
+
+                            case "Participant":
+                                if (addModelErrors && this.Participant.Count == 1)
+                                {
+                                    errors.Add($"Remove reference '{id}' from Participant property is not allowed.");
+                                }
+                                this.Participant.Remove(id);
+                                break;
+
+                            case "RequiredRdl":
+                                if (addModelErrors && this.RequiredRdl.Count == 1)
+                                {
+                                    errors.Add($"Remove reference '{id}' from RequiredRdl property is not allowed.");
+                                }
+                                this.RequiredRdl.Remove(id);
+                                break;
+                        }
+                    }
+                }
+            }
+            
+            return result;
         }
 
         /// <summary>

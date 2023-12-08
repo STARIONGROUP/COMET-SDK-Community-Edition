@@ -4,7 +4,7 @@
      <TargetFrameworks>netstandard2.0</TargetFrameworks>
      <Company>RHEA System S.A.</Company>
      <Title>CDP4Reporting Community Edition</Title>
-      <VersionPrefix>24.3.0</VersionPrefix>
+      <VersionPrefix>24.4.0</VersionPrefix>
      <Description>CDP4 Reporting</Description>
      <Copyright>Copyright © RHEA System S.A.</Copyright>
      <Authors>Sam, Alex, Alexander</Authors>
@@ -20,7 +20,7 @@
      <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
      <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
      <PackageReleaseNotes>
-         [UPGRADE] CDP4Common 24.3.0
+       [UPGRADE] CDP4Common 24.4.0
      </PackageReleaseNotes>
      <LangVersion>latest</LangVersion>
      <PackageReadmeFile>README.md</PackageReadmeFile>

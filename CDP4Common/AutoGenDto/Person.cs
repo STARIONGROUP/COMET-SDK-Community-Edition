@@ -1,18 +1,19 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Person.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -216,6 +217,122 @@ namespace CDP4Common.DTO
                 containers.Add(this.UserPreference);
                 return containers;
             }
+        }
+
+        /// <summary>
+        /// Get all Reference Properties by their Name and id's of instance values
+        /// </summary>
+        /// <returns>A dictionary of string (Name) and a collections of Guid's (id's of instance values)</returns>
+        public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
+        {
+            var dictionary = new Dictionary<string, IEnumerable<Guid>>();
+
+            if (this.DefaultDomain != default)
+            {
+                dictionary.Add("DefaultDomain", new [] { this.DefaultDomain.Value });
+            }
+
+            if (this.DefaultEmailAddress != default)
+            {
+                dictionary.Add("DefaultEmailAddress", new [] { this.DefaultEmailAddress.Value });
+            }
+
+            if (this.DefaultTelephoneNumber != default)
+            {
+                dictionary.Add("DefaultTelephoneNumber", new [] { this.DefaultTelephoneNumber.Value });
+            }
+
+            dictionary.Add("EmailAddress", this.EmailAddress);
+
+            dictionary.Add("ExcludedDomain", this.ExcludedDomain);
+
+            dictionary.Add("ExcludedPerson", this.ExcludedPerson);
+
+            if (this.Organization != default)
+            {
+                dictionary.Add("Organization", new [] { this.Organization.Value });
+            }
+
+            if (this.Role != default)
+            {
+                dictionary.Add("Role", new [] { this.Role.Value });
+            }
+
+            dictionary.Add("TelephoneNumber", this.TelephoneNumber);
+
+            dictionary.Add("UserPreference", this.UserPreference);
+
+            return dictionary;
+        }
+
+        /// <summary>
+        /// Tries to remove references to id's if they exist in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to remove references for.</param>
+        /// <param name="errors">The errors collected while trying to remove references</param>
+        /// <returns>True if no errors were found while trying to remove references</returns>
+        public override bool TryRemoveReferences(IEnumerable<Guid> ids, out List<string> errors)
+        {
+            errors = new List<string>();
+            var referencedProperties = this.GetReferenceProperties();
+            var addModelErrors = !ids.Contains(this.Iid);
+            var result = true;
+
+            foreach (var id in ids)
+            {
+                var foundProperty = referencedProperties.Where(x => x.Value.Contains(id)).ToList();
+
+                if (foundProperty.Any())
+                {
+                    foreach (var kvp in foundProperty)
+                    {
+                        switch (kvp.Key)
+                        {
+                            case "DefaultDomain":
+                                this.DefaultDomain = null;
+                                break;
+
+                            case "DefaultEmailAddress":
+                                this.DefaultEmailAddress = null;
+                                break;
+
+                            case "DefaultTelephoneNumber":
+                                this.DefaultTelephoneNumber = null;
+                                break;
+
+                            case "EmailAddress":
+                                this.EmailAddress.Remove(id);
+                                break;
+
+                            case "ExcludedDomain":
+                                this.ExcludedDomain.Remove(id);
+                                break;
+
+                            case "ExcludedPerson":
+                                this.ExcludedPerson.Remove(id);
+                                break;
+
+                            case "Organization":
+                                this.Organization = null;
+                                break;
+
+                            case "Role":
+                                this.Role = null;
+                                break;
+
+                            case "TelephoneNumber":
+                                this.TelephoneNumber.Remove(id);
+                                break;
+
+                            case "UserPreference":
+                                this.UserPreference.Remove(id);
+                                break;
+                        }
+                    }
+                }
+            }
+            
+            return result;
         }
 
         /// <summary>

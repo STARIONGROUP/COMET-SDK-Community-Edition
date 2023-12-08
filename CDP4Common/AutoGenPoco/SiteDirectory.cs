@@ -1,18 +1,19 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteDirectory.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -281,6 +282,77 @@ namespace CDP4Common.SiteDirectoryData
                 containers.Add(this.SiteReferenceDataLibrary);
                 return containers;
             }
+        }
+
+        /// <summary>
+        /// Get all Reference Properties by their Name and id's of instance values
+        /// </summary>
+        /// <returns>A dictionary of string (Name) and a collections of Guid's (id's of instance values)</returns>
+        public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
+        {
+            var dictionary = new Dictionary<string, IEnumerable<Guid>>();
+
+            dictionary.Add("Annotation", this.Annotation.Select(x => x.Iid));
+
+            if (this.DefaultParticipantRole != null)
+            {
+                dictionary.Add("DefaultParticipantRole", new [] { this.DefaultParticipantRole.Iid });
+            }
+
+            if (this.DefaultPersonRole != null)
+            {
+                dictionary.Add("DefaultPersonRole", new [] { this.DefaultPersonRole.Iid });
+            }
+
+            dictionary.Add("Domain", this.Domain.Select(x => x.Iid));
+
+            dictionary.Add("DomainGroup", this.DomainGroup.Select(x => x.Iid));
+
+            dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
+            dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
+
+            dictionary.Add("LogEntry", this.LogEntry.Select(x => x.Iid));
+
+            dictionary.Add("Model", this.Model.Select(x => x.Iid));
+
+            dictionary.Add("NaturalLanguage", this.NaturalLanguage.Select(x => x.Iid));
+
+            dictionary.Add("Organization", this.Organization.Select(x => x.Iid));
+
+            dictionary.Add("ParticipantRole", this.ParticipantRole.Select(x => x.Iid));
+
+            dictionary.Add("Person", this.Person.Select(x => x.Iid));
+
+            dictionary.Add("PersonRole", this.PersonRole.Select(x => x.Iid));
+
+            dictionary.Add("SiteReferenceDataLibrary", this.SiteReferenceDataLibrary.Select(x => x.Iid));
+
+            return dictionary;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to any of the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to search for.</param>
+        /// <returns>True is any of the id's in <paramref name="ids"/> is found in this instance's reference properties.</returns>
+        public override bool HasMandatoryReferenceToAny(IEnumerable<Guid> ids)
+        {
+            var result = false;
+
+            if (!ids.Any())
+            {
+                return false;
+            }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

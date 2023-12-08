@@ -349,6 +349,25 @@ namespace CDP4Common.CommonData
         }
 
         /// <summary>
+        /// Get all Reference Properties by their Name and id's of instance values
+        /// </summary>
+        /// <returns>A dictionary of string (Name) and a collections of Guid's (id's of instance values)</returns>
+        public virtual IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
+        {
+            return new Dictionary<string, IEnumerable<Guid>>();
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to any of the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to search for.</param>
+        /// <returns>True is any of the id's in <paramref name="ids"/> is found in this instance's reference properties.</returns>
+        public virtual bool HasMandatoryReferenceToAny(IEnumerable<Guid> ids)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// Queries the referenced <see cref="Thing"/>s of the current <see cref="Thing"/>
         /// </summary>
         /// <remarks>

@@ -186,15 +186,36 @@ namespace CDP4Common.DTO
         }
 
         /// <summary>
-        /// Queries the <see cref="CommonData.Thing"/> that was the source of the DTO
-        /// </summary>        
-        /// <returns>
-        /// The <see cref="Thing"/> that is the source from which the DTO may have been created.
-        /// </returns>
-        /// <remarks>
-        /// The return value may be null if the DTO was not created based on an existing POCO.
-        /// </remarks>
-        public CommonData.Thing QuerySourceThing()
+        /// Get all Reference Properties by their Name and id's of instance values
+        /// </summary>
+        /// <returns>A dictionary of string (Name) and a collections of Guid's (id's of instance values)</returns>
+        public virtual IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
+        {
+            return new Dictionary<string, IEnumerable<Guid>>();
+        }
+
+        /// <summary>
+        /// Tries to remove references to id's if they exist in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to remove references for.</param>
+        /// <param name="errors">The errors collected while trying to remove references</param>
+        /// <returns>True if no errors were found while trying to remove references</returns>
+        public virtual bool TryRemoveReferences(IEnumerable<Guid> ids, out List<string> errors)
+        {
+            errors = null;
+            return true;
+        }
+
+        /// <summary>
+            /// Queries the <see cref="CommonData.Thing"/> that was the source of the DTO
+            /// </summary>        
+            /// <returns>
+            /// The <see cref="Thing"/> that is the source from which the DTO may have been created.
+            /// </returns>
+            /// <remarks>
+            /// The return value may be null if the DTO was not created based on an existing POCO.
+            /// </remarks>
+            public CommonData.Thing QuerySourceThing()
         {
             return this.SourceThing;
         }
