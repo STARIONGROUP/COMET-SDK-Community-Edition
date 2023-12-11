@@ -150,6 +150,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Scale property results in inconsistent ScaleReferenceQuantityValue.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

@@ -236,10 +236,36 @@ namespace CDP4Common.DiagramData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-            dictionary.Add("FillColor", new [] { this.FillColor?.Iid ?? Guid.Empty });
-            dictionary.Add("FontColor", new [] { this.FontColor?.Iid ?? Guid.Empty });
-            dictionary.Add("StrokeColor", new [] { this.StrokeColor?.Iid ?? Guid.Empty });
+
+            if (this.FillColor == null)
+            {
+                dictionary.Add("FillColor", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("FillColor", new [] { this.FillColor.Iid });
+            }
+
+            if (this.FontColor == null)
+            {
+                dictionary.Add("FontColor", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("FontColor", new [] { this.FontColor.Iid });
+            }
+
+            if (this.StrokeColor == null)
+            {
+                dictionary.Add("StrokeColor", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("StrokeColor", new [] { this.StrokeColor.Iid });
+            }
+
             dictionary.Add("UsedColor", this.UsedColor.Select(x => x.Iid));
 
             return dictionary;

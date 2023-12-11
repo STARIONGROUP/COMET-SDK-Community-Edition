@@ -186,6 +186,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from RelatedCategory property results in inconsistent MultiRelationshipRule.");
                                     result = false;
                                 }
+                                result = false;
                                 this.RelatedCategory.Remove(id);
                                 break;
 
@@ -195,6 +196,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from RelationshipCategory property results in inconsistent MultiRelationshipRule.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

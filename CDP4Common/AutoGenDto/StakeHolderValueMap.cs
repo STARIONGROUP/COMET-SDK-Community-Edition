@@ -241,6 +241,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from Settings property results in inconsistent StakeHolderValueMap.");
                                     result = false;
                                 }
+                                result = false;
                                 this.Settings.Remove(id);
                                 break;
 

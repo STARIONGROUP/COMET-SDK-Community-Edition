@@ -104,22 +104,46 @@ namespace CDP4Common.SiteDirectoryData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Alias", this.Alias.Select(x => x.Iid));
+
             dictionary.Add("BaseQuantityKind", this.BaseQuantityKind.Select(x => x.Iid));
+
             dictionary.Add("BaseUnit", this.BaseUnit.Select(x => x.Iid));
+
             dictionary.Add("Constant", this.Constant.Select(x => x.Iid));
+
             dictionary.Add("DefinedCategory", this.DefinedCategory.Select(x => x.Iid));
+
             dictionary.Add("Definition", this.Definition.Select(x => x.Iid));
+
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
+
             dictionary.Add("FileType", this.FileType.Select(x => x.Iid));
+
             dictionary.Add("Glossary", this.Glossary.Select(x => x.Iid));
+
             dictionary.Add("HyperLink", this.HyperLink.Select(x => x.Iid));
+
             dictionary.Add("ParameterType", this.ParameterType.Select(x => x.Iid));
+
             dictionary.Add("ReferenceSource", this.ReferenceSource.Select(x => x.Iid));
-            dictionary.Add("RequiredRdl", new [] { this.RequiredRdl?.Iid ?? Guid.Empty });
+
+            if (this.RequiredRdl == null)
+            {
+                dictionary.Add("RequiredRdl", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("RequiredRdl", new [] { this.RequiredRdl.Iid });
+            }
+
             dictionary.Add("Rule", this.Rule.Select(x => x.Iid));
+
             dictionary.Add("Scale", this.Scale.Select(x => x.Iid));
+
             dictionary.Add("Unit", this.Unit.Select(x => x.Iid));
+
             dictionary.Add("UnitPrefix", this.UnitPrefix.Select(x => x.Iid));
 
             return dictionary;

@@ -158,6 +158,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from DefaultScale property results in inconsistent SpecializedQuantityKind.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "Definition":
@@ -178,6 +179,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from General property results in inconsistent SpecializedQuantityKind.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "HyperLink":

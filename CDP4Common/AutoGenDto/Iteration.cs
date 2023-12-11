@@ -423,6 +423,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from IterationSetup property results in inconsistent Iteration.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "PossibleFiniteStateList":

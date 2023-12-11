@@ -196,10 +196,22 @@ namespace CDP4Common.SiteDirectoryData
         public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
-            dictionary.Add("Author", new [] { this.Author?.Iid ?? Guid.Empty });
+
+            if (this.Author == null)
+            {
+                dictionary.Add("Author", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("Author", new [] { this.Author.Iid });
+            }
+
             dictionary.Add("Category", this.Category.Select(x => x.Iid));
+
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
+
             dictionary.Add("LogEntryChangelogItem", this.LogEntryChangelogItem.Select(x => x.Iid));
 
             return dictionary;

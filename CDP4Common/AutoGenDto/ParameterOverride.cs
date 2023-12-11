@@ -244,6 +244,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent ParameterOverride.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "Parameter":
@@ -252,6 +253,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Parameter property results in inconsistent ParameterOverride.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "ParameterSubscription":
@@ -264,6 +266,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from ValueSet property results in inconsistent ParameterOverride.");
                                     result = false;
                                 }
+                                result = false;
                                 this.ValueSet.Remove(id);
                                 break;
                         }

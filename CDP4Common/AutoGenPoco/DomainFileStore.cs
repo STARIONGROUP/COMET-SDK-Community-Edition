@@ -104,10 +104,21 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
+
             dictionary.Add("File", this.File.Select(x => x.Iid));
+
             dictionary.Add("Folder", this.Folder.Select(x => x.Iid));
-            dictionary.Add("Owner", new [] { this.Owner?.Iid ?? Guid.Empty });
+
+            if (this.Owner == null)
+            {
+                dictionary.Add("Owner", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("Owner", new [] { this.Owner.Iid });
+            }
 
             return dictionary;
         }

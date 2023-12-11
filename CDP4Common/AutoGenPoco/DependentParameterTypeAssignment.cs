@@ -112,9 +112,26 @@ namespace CDP4Common.SiteDirectoryData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-            dictionary.Add("MeasurementScale", new [] { this.MeasurementScale?.Iid ?? Guid.Empty });
-            dictionary.Add("ParameterType", new [] { this.ParameterType?.Iid ?? Guid.Empty });
+
+            if (this.MeasurementScale == null)
+            {
+                dictionary.Add("MeasurementScale", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("MeasurementScale", new [] { this.MeasurementScale.Iid });
+            }
+
+            if (this.ParameterType == null)
+            {
+                dictionary.Add("ParameterType", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("ParameterType", new [] { this.ParameterType.Iid });
+            }
 
             return dictionary;
         }

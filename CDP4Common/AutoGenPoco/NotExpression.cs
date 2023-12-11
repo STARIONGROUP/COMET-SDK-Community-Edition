@@ -103,8 +103,17 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-            dictionary.Add("Term", new [] { this.Term?.Iid ?? Guid.Empty });
+
+            if (this.Term == null)
+            {
+                dictionary.Add("Term", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("Term", new [] { this.Term.Iid });
+            }
 
             return dictionary;
         }

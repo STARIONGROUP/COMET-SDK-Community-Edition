@@ -176,6 +176,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent SimpleParameterizableThing.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "ParameterValue":

@@ -223,6 +223,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from EngineeringModelSetup property results in inconsistent EngineeringModel.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "ExcludedDomain":
@@ -243,6 +244,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from Iteration property results in inconsistent EngineeringModel.");
                                     result = false;
                                 }
+                                result = false;
                                 this.Iteration.Remove(id);
                                 break;
 

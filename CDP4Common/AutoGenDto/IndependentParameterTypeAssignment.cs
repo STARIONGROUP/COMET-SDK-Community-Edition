@@ -160,6 +160,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ParameterType property results in inconsistent IndependentParameterTypeAssignment.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

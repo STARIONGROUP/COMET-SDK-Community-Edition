@@ -177,6 +177,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from Domain property results in inconsistent Participant.");
                                     result = false;
                                 }
+                                result = false;
                                 this.Domain.Remove(id);
                                 break;
 
@@ -194,6 +195,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Person property results in inconsistent Participant.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "Role":
@@ -202,6 +204,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Role property results in inconsistent Participant.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "SelectedDomain":
@@ -210,6 +213,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from SelectedDomain property results in inconsistent Participant.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

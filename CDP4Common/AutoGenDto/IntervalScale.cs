@@ -162,6 +162,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Unit property results in inconsistent IntervalScale.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "ValueDefinition":

@@ -189,14 +189,44 @@ namespace CDP4Common.ReportingData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ApprovedBy", this.ApprovedBy.Select(x => x.Iid));
-            dictionary.Add("Author", new [] { this.Author?.Iid ?? Guid.Empty });
+
+            if (this.Author == null)
+            {
+                dictionary.Add("Author", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("Author", new [] { this.Author.Iid });
+            }
+
             dictionary.Add("Category", this.Category.Select(x => x.Iid));
+
             dictionary.Add("Discussion", this.Discussion.Select(x => x.Iid));
+
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-            dictionary.Add("Owner", new [] { this.Owner?.Iid ?? Guid.Empty });
-            dictionary.Add("PrimaryAnnotatedThing", new [] { this.PrimaryAnnotatedThing?.Iid ?? Guid.Empty });
+
+            if (this.Owner == null)
+            {
+                dictionary.Add("Owner", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("Owner", new [] { this.Owner.Iid });
+            }
+
+            if (this.PrimaryAnnotatedThing == null)
+            {
+                dictionary.Add("PrimaryAnnotatedThing", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("PrimaryAnnotatedThing", new [] { this.PrimaryAnnotatedThing.Iid });
+            }
+
             dictionary.Add("RelatedThing", this.RelatedThing.Select(x => x.Iid));
+
             dictionary.Add("SourceAnnotation", this.SourceAnnotation.Select(x => x.Iid));
 
             return dictionary;

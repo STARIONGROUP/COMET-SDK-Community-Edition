@@ -202,6 +202,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent Book.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

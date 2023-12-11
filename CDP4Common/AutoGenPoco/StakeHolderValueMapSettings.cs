@@ -118,10 +118,35 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-            dictionary.Add("GoalToValueGroupRelationship", new [] { this.GoalToValueGroupRelationship?.Iid ?? Guid.Empty });
-            dictionary.Add("StakeholderValueToRequirementRelationship", new [] { this.StakeholderValueToRequirementRelationship?.Iid ?? Guid.Empty });
-            dictionary.Add("ValueGroupToStakeholderValueRelationship", new [] { this.ValueGroupToStakeholderValueRelationship?.Iid ?? Guid.Empty });
+
+            if (this.GoalToValueGroupRelationship == null)
+            {
+                dictionary.Add("GoalToValueGroupRelationship", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("GoalToValueGroupRelationship", new [] { this.GoalToValueGroupRelationship.Iid });
+            }
+
+            if (this.StakeholderValueToRequirementRelationship == null)
+            {
+                dictionary.Add("StakeholderValueToRequirementRelationship", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("StakeholderValueToRequirementRelationship", new [] { this.StakeholderValueToRequirementRelationship.Iid });
+            }
+
+            if (this.ValueGroupToStakeholderValueRelationship == null)
+            {
+                dictionary.Add("ValueGroupToStakeholderValueRelationship", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("ValueGroupToStakeholderValueRelationship", new [] { this.ValueGroupToStakeholderValueRelationship.Iid });
+            }
 
             return dictionary;
         }

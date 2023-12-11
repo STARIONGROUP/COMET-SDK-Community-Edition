@@ -146,6 +146,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from DefaultScale property results in inconsistent SimpleQuantityKind.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "Definition":

@@ -113,8 +113,18 @@ namespace CDP4Common.EngineeringModelData
         public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
-            dictionary.Add("ContainingGroup", new [] { this.ContainingGroup?.Iid ?? Guid.Empty });
+
+            if (this.ContainingGroup == null)
+            {
+                dictionary.Add("ContainingGroup", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("ContainingGroup", new [] { this.ContainingGroup.Iid });
+            }
+
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
 
             return dictionary;

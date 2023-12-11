@@ -142,6 +142,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ReferencedThing property results in inconsistent ThingReference.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

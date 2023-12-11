@@ -142,13 +142,41 @@ namespace CDP4Common.SiteDirectoryData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Alias", this.Alias.Select(x => x.Iid));
+
             dictionary.Add("Definition", this.Definition.Select(x => x.Iid));
+
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
+
             dictionary.Add("HyperLink", this.HyperLink.Select(x => x.Iid));
-            dictionary.Add("RelationshipCategory", new [] { this.RelationshipCategory?.Iid ?? Guid.Empty });
-            dictionary.Add("SourceCategory", new [] { this.SourceCategory?.Iid ?? Guid.Empty });
-            dictionary.Add("TargetCategory", new [] { this.TargetCategory?.Iid ?? Guid.Empty });
+
+            if (this.RelationshipCategory == null)
+            {
+                dictionary.Add("RelationshipCategory", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("RelationshipCategory", new [] { this.RelationshipCategory.Iid });
+            }
+
+            if (this.SourceCategory == null)
+            {
+                dictionary.Add("SourceCategory", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("SourceCategory", new [] { this.SourceCategory.Iid });
+            }
+
+            if (this.TargetCategory == null)
+            {
+                dictionary.Add("TargetCategory", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("TargetCategory", new [] { this.TargetCategory.Iid });
+            }
 
             return dictionary;
         }

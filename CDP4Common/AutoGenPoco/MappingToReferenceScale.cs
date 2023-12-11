@@ -113,10 +113,28 @@ namespace CDP4Common.SiteDirectoryData
         public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
-            dictionary.Add("DependentScaleValue", new [] { this.DependentScaleValue?.Iid ?? Guid.Empty });
+
+            if (this.DependentScaleValue == null)
+            {
+                dictionary.Add("DependentScaleValue", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("DependentScaleValue", new [] { this.DependentScaleValue.Iid });
+            }
+
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-            dictionary.Add("ReferenceScaleValue", new [] { this.ReferenceScaleValue?.Iid ?? Guid.Empty });
+
+            if (this.ReferenceScaleValue == null)
+            {
+                dictionary.Add("ReferenceScaleValue", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("ReferenceScaleValue", new [] { this.ReferenceScaleValue.Iid });
+            }
 
             return dictionary;
         }

@@ -137,15 +137,52 @@ namespace CDP4Common.DiagramData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Bounds", this.Bounds.Select(x => x.Iid));
-            dictionary.Add("DepictedThing", new [] { this.DepictedThing?.Iid ?? Guid.Empty });
+
+            if (this.DepictedThing == null)
+            {
+                dictionary.Add("DepictedThing", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("DepictedThing", new [] { this.DepictedThing.Iid });
+            }
+
             dictionary.Add("DiagramElement", this.DiagramElement.Select(x => x.Iid));
+
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
+
             dictionary.Add("LocalStyle", this.LocalStyle.Select(x => x.Iid));
+
             dictionary.Add("Point", this.Point.Select(x => x.Iid));
-            dictionary.Add("SharedStyle", new [] { this.SharedStyle?.Iid ?? Guid.Empty });
-            dictionary.Add("Source", new [] { this.Source?.Iid ?? Guid.Empty });
-            dictionary.Add("Target", new [] { this.Target?.Iid ?? Guid.Empty });
+
+            if (this.SharedStyle == null)
+            {
+                dictionary.Add("SharedStyle", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("SharedStyle", new [] { this.SharedStyle.Iid });
+            }
+
+            if (this.Source == null)
+            {
+                dictionary.Add("Source", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("Source", new [] { this.Source.Iid });
+            }
+
+            if (this.Target == null)
+            {
+                dictionary.Add("Target", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("Target", new [] { this.Target.Iid });
+            }
 
             return dictionary;
         }

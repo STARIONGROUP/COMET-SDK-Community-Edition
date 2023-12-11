@@ -141,6 +141,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Author property results in inconsistent SiteDirectoryDataDiscussionItem.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "ExcludedDomain":

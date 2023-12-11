@@ -155,6 +155,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent MultiRelationship.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "ParameterValue":

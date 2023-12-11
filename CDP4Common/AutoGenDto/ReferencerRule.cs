@@ -186,6 +186,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from ReferencedCategory property results in inconsistent ReferencerRule.");
                                     result = false;
                                 }
+                                result = false;
                                 this.ReferencedCategory.Remove(id);
                                 break;
 
@@ -195,6 +196,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ReferencingCategory property results in inconsistent ReferencerRule.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

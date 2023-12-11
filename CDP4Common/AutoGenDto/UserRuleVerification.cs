@@ -157,6 +157,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Rule property results in inconsistent UserRuleVerification.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

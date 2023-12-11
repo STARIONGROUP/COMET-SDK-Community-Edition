@@ -181,6 +181,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from Expression property results in inconsistent ParametricConstraint.");
                                     result = false;
                                 }
+                                result = false;
                                 this.Expression.Remove(id);
                                 break;
 

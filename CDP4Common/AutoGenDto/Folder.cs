@@ -191,6 +191,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Creator property results in inconsistent Folder.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "ExcludedDomain":
@@ -207,6 +208,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent Folder.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

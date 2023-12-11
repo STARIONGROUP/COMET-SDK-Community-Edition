@@ -199,6 +199,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from RelationshipCategory property results in inconsistent BinaryRelationshipRule.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "SourceCategory":
@@ -207,6 +208,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from SourceCategory property results in inconsistent BinaryRelationshipRule.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "TargetCategory":
@@ -215,6 +217,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from TargetCategory property results in inconsistent BinaryRelationshipRule.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

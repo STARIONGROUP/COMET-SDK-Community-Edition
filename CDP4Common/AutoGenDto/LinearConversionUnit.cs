@@ -154,6 +154,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ReferenceUnit property results in inconsistent LinearConversionUnit.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

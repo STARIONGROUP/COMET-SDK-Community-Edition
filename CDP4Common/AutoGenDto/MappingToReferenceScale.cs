@@ -147,6 +147,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from DependentScaleValue property results in inconsistent MappingToReferenceScale.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "ExcludedDomain":
@@ -163,6 +164,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ReferenceScaleValue property results in inconsistent MappingToReferenceScale.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

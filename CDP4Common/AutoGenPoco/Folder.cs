@@ -158,11 +158,37 @@ namespace CDP4Common.EngineeringModelData
         public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
-            dictionary.Add("ContainingFolder", new [] { this.ContainingFolder?.Iid ?? Guid.Empty });
-            dictionary.Add("Creator", new [] { this.Creator?.Iid ?? Guid.Empty });
+
+            if (this.ContainingFolder == null)
+            {
+                dictionary.Add("ContainingFolder", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("ContainingFolder", new [] { this.ContainingFolder.Iid });
+            }
+
+            if (this.Creator == null)
+            {
+                dictionary.Add("Creator", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("Creator", new [] { this.Creator.Iid });
+            }
+
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-            dictionary.Add("Owner", new [] { this.Owner?.Iid ?? Guid.Empty });
+
+            if (this.Owner == null)
+            {
+                dictionary.Add("Owner", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("Owner", new [] { this.Owner.Iid });
+            }
 
             return dictionary;
         }

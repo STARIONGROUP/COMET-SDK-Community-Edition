@@ -229,6 +229,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from RootElement property results in inconsistent NestedElement.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

@@ -195,6 +195,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Creator property results in inconsistent FileRevision.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "ExcludedDomain":

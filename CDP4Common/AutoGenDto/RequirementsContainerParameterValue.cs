@@ -142,6 +142,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ParameterType property results in inconsistent RequirementsContainerParameterValue.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "Scale":

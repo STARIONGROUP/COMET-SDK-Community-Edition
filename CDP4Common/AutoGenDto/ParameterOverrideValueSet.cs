@@ -171,6 +171,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ParameterValueSet property results in inconsistent ParameterOverrideValueSet.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }

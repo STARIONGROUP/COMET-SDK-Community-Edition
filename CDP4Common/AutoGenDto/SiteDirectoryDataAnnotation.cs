@@ -184,6 +184,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Author property results in inconsistent SiteDirectoryDataAnnotation.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "Discussion":
@@ -204,6 +205,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from PrimaryAnnotatedThing property results in inconsistent SiteDirectoryDataAnnotation.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
 
                             case "RelatedThing":
@@ -212,6 +214,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from RelatedThing property results in inconsistent SiteDirectoryDataAnnotation.");
                                     result = false;
                                 }
+                                result = false;
                                 this.RelatedThing.Remove(id);
                                 break;
                         }

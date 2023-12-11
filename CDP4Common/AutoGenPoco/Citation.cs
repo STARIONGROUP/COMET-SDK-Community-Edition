@@ -144,8 +144,17 @@ namespace CDP4Common.CommonData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
+
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-            dictionary.Add("Source", new [] { this.Source?.Iid ?? Guid.Empty });
+
+            if (this.Source == null)
+            {
+                dictionary.Add("Source", new [] { Guid.Empty });
+            }
+            else
+            {
+                dictionary.Add("Source", new [] { this.Source.Iid });
+            }
 
             return dictionary;
         }

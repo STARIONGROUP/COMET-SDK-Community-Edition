@@ -194,6 +194,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from FileRevision property results in inconsistent File.");
                                     result = false;
                                 }
+                                result = false;
                                 this.FileRevision.Remove(id);
                                 break;
 
@@ -207,6 +208,7 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent File.");
                                     result = false;
                                 }
+                                result = false;
                                 break;
                         }
                     }
