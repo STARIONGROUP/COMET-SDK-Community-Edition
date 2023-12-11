@@ -354,7 +354,11 @@ namespace CDP4Common.EngineeringModelData
 
             dictionary.Add("ActualFiniteStateList", this.ActualFiniteStateList.Select(x => x.Iid));
 
-            if (this.DefaultOption != null)
+            if (this.DefaultOption == null)
+            {
+                dictionary.Add("DefaultOption", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("DefaultOption", new [] { this.DefaultOption.Iid });
             }
@@ -373,7 +377,11 @@ namespace CDP4Common.EngineeringModelData
 
             dictionary.Add("Goal", this.Goal.Select(x => x.Iid));
 
-            if (this.IterationSetup != null)
+            if (this.IterationSetup == null)
+            {
+                dictionary.Add("IterationSetup", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("IterationSetup", new [] { this.IterationSetup.Iid });
             }
@@ -398,7 +406,11 @@ namespace CDP4Common.EngineeringModelData
 
             dictionary.Add("StakeholderValueMap", this.StakeholderValueMap.Select(x => x.Iid));
 
-            if (this.TopElement != null)
+            if (this.TopElement == null)
+            {
+                dictionary.Add("TopElement", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("TopElement", new [] { this.TopElement.Iid });
             }
@@ -428,6 +440,31 @@ namespace CDP4Common.EngineeringModelData
                 {
                     case "IterationSetup":
                         if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "IterationSetup":
+                        if (kvp.Value.Except(ids).Any())
                         {
                             result = true;
                         }

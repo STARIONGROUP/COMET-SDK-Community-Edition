@@ -217,12 +217,20 @@ namespace CDP4Common.EngineeringModelData
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.ActualOption != null)
+            if (this.ActualOption == null)
+            {
+                dictionary.Add("ActualOption", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("ActualOption", new [] { this.ActualOption.Iid });
             }
 
-            if (this.ActualState != null)
+            if (this.ActualState == null)
+            {
+                dictionary.Add("ActualState", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("ActualState", new [] { this.ActualState.Iid });
             }
@@ -247,6 +255,25 @@ namespace CDP4Common.EngineeringModelData
             {
                 return false;
             }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
 
             foreach (var kvp in this.GetReferenceProperties())
             {

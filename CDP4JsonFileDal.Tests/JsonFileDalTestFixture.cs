@@ -69,6 +69,7 @@ namespace CDP4JsonFileDal.Tests
     using SampledFunctionParameterType = CDP4Common.SiteDirectoryData.SampledFunctionParameterType;
     using ElementDefinition = CDP4Common.EngineeringModelData.ElementDefinition;
     using Parameter = CDP4Common.EngineeringModelData.Parameter;
+    using System.Security.Cryptography;
 
     [TestFixture]
     public class JsonFileDalTestFixture
@@ -690,9 +691,17 @@ namespace CDP4JsonFileDal.Tests
             this.siteDirectoryData.Model.First().RequiredRdl.First().ParameterType.Add(sampledFunctionParameterType);
 
             var elementDefinition1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementDefinition1.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
             var elementDefinition2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementDefinition2.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
+            var elementDefinition3 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            var elementDefinition4 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementDefinition4.Owner = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.credentials.Uri); //Not in file
+
             var sampledFunctionParameter1 = new Parameter(Guid.NewGuid(), this.cache, this.credentials.Uri);
             var sampledFunctionParameter2 = new Parameter(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            sampledFunctionParameter1.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
+            sampledFunctionParameter2.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
 
             sampledFunctionParameter1.ParameterType = sampledFunctionParameterType;
             sampledFunctionParameter2.ParameterType = sampledFunctionParameterType;
@@ -700,11 +709,16 @@ namespace CDP4JsonFileDal.Tests
             elementDefinition2.Parameter.Add(sampledFunctionParameter2);
             this.iterationPoco.Element.Add(elementDefinition1);
             this.iterationPoco.Element.Add(elementDefinition2);
+            this.iterationPoco.Element.Add(elementDefinition3);
+            this.iterationPoco.Element.Add(elementDefinition4);
 
             var elementUsage = new CDP4Common.EngineeringModelData.ElementUsage(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementUsage.Owner = elementDefinition2.Owner;
             elementUsage.ElementDefinition = elementDefinition2;
+
             var parameterOverride = new CDP4Common.EngineeringModelData.ParameterOverride(Guid.NewGuid(), this.cache, this.credentials.Uri);
             parameterOverride.Parameter = sampledFunctionParameter2;
+            parameterOverride.Owner = sampledFunctionParameter2.Owner;
             elementUsage.ParameterOverride.Add(parameterOverride);
 
             elementDefinition1.ContainedElement.Add(elementUsage);

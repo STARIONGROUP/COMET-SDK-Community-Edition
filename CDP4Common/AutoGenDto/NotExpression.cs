@@ -142,6 +142,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Term property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }

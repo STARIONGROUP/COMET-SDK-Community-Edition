@@ -190,7 +190,11 @@ namespace CDP4Common.ReportingData
 
             dictionary.Add("ApprovedBy", this.ApprovedBy.Select(x => x.Iid));
 
-            if (this.Author != null)
+            if (this.Author == null)
+            {
+                dictionary.Add("Author", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("Author", new [] { this.Author.Iid });
             }
@@ -203,12 +207,20 @@ namespace CDP4Common.ReportingData
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
 
-            if (this.Owner != null)
+            if (this.Owner == null)
+            {
+                dictionary.Add("Owner", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("Owner", new [] { this.Owner.Iid });
             }
 
-            if (this.PrimaryAnnotatedThing != null)
+            if (this.PrimaryAnnotatedThing == null)
+            {
+                dictionary.Add("PrimaryAnnotatedThing", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("PrimaryAnnotatedThing", new [] { this.PrimaryAnnotatedThing.Iid });
             }
@@ -247,6 +259,38 @@ namespace CDP4Common.ReportingData
 
                     case "Owner":
                         if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "Author":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "Owner":
+                        if (kvp.Value.Except(ids).Any())
                         {
                             result = true;
                         }

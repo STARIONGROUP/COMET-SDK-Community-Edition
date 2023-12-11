@@ -146,6 +146,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from DependentScaleValue property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "ExcludedDomain":
@@ -161,6 +162,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from ReferenceScaleValue property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }

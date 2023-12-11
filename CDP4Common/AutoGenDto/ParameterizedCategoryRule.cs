@@ -155,6 +155,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Category property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "Definition":
@@ -178,6 +179,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from ParameterType property is not allowed.");
                                 }
+                                result = false;
                                 this.ParameterType.Remove(id);
                                 break;
                         }

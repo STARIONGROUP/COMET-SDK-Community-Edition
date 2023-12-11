@@ -180,6 +180,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Expression property is not allowed.");
                                 }
+                                result = false;
                                 this.Expression.Remove(id);
                                 break;
 

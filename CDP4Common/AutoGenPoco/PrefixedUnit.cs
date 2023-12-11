@@ -164,12 +164,20 @@ namespace CDP4Common.SiteDirectoryData
 
             dictionary.Add("HyperLink", this.HyperLink.Select(x => x.Iid));
 
-            if (this.Prefix != null)
+            if (this.Prefix == null)
+            {
+                dictionary.Add("Prefix", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("Prefix", new [] { this.Prefix.Iid });
             }
 
-            if (this.ReferenceUnit != null)
+            if (this.ReferenceUnit == null)
+            {
+                dictionary.Add("ReferenceUnit", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("ReferenceUnit", new [] { this.ReferenceUnit.Iid });
             }
@@ -204,6 +212,38 @@ namespace CDP4Common.SiteDirectoryData
 
                     case "ReferenceUnit":
                         if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "Prefix":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "ReferenceUnit":
+                        if (kvp.Value.Except(ids).Any())
                         {
                             result = true;
                         }

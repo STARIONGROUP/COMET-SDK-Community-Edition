@@ -280,17 +280,29 @@ namespace CDP4Common.SiteDirectoryData
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.DefaultDomain != null)
+            if (this.DefaultDomain == null)
+            {
+                dictionary.Add("DefaultDomain", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("DefaultDomain", new [] { this.DefaultDomain.Iid });
             }
 
-            if (this.DefaultEmailAddress != null)
+            if (this.DefaultEmailAddress == null)
+            {
+                dictionary.Add("DefaultEmailAddress", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("DefaultEmailAddress", new [] { this.DefaultEmailAddress.Iid });
             }
 
-            if (this.DefaultTelephoneNumber != null)
+            if (this.DefaultTelephoneNumber == null)
+            {
+                dictionary.Add("DefaultTelephoneNumber", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("DefaultTelephoneNumber", new [] { this.DefaultTelephoneNumber.Iid });
             }
@@ -301,12 +313,20 @@ namespace CDP4Common.SiteDirectoryData
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
 
-            if (this.Organization != null)
+            if (this.Organization == null)
+            {
+                dictionary.Add("Organization", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("Organization", new [] { this.Organization.Iid });
             }
 
-            if (this.Role != null)
+            if (this.Role == null)
+            {
+                dictionary.Add("Role", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("Role", new [] { this.Role.Iid });
             }
@@ -331,6 +351,25 @@ namespace CDP4Common.SiteDirectoryData
             {
                 return false;
             }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
 
             foreach (var kvp in this.GetReferenceProperties())
             {

@@ -229,6 +229,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "ValueSet":
@@ -236,6 +237,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from ValueSet property is not allowed.");
                                 }
+                                result = false;
                                 this.ValueSet.Remove(id);
                                 break;
                         }

@@ -213,6 +213,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Source property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "Target":
@@ -220,6 +221,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Target property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }

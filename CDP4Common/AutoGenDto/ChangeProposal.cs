@@ -164,6 +164,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Author property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "Category":
@@ -175,6 +176,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from ChangeRequest property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "Discussion":
@@ -194,6 +196,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "PrimaryAnnotatedThing":

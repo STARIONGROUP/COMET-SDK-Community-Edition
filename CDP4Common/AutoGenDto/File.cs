@@ -193,6 +193,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from FileRevision property is not allowed.");
                                 }
+                                result = false;
                                 this.FileRevision.Remove(id);
                                 break;
 
@@ -205,6 +206,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }

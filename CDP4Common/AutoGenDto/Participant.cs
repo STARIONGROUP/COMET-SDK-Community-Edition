@@ -176,6 +176,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Domain property is not allowed.");
                                 }
+                                result = false;
                                 this.Domain.Remove(id);
                                 break;
 
@@ -192,6 +193,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Person property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "Role":
@@ -199,6 +201,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Role property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "SelectedDomain":
@@ -206,6 +209,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from SelectedDomain property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }

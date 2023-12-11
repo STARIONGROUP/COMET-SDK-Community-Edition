@@ -222,6 +222,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from EngineeringModelSetup property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "ExcludedDomain":
@@ -241,6 +242,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Iteration property is not allowed.");
                                 }
+                                result = false;
                                 this.Iteration.Remove(id);
                                 break;
 

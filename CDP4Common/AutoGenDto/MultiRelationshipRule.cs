@@ -185,6 +185,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from RelatedCategory property is not allowed.");
                                 }
+                                result = false;
                                 this.RelatedCategory.Remove(id);
                                 break;
 
@@ -193,6 +194,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from RelationshipCategory property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }

@@ -97,17 +97,29 @@ namespace CDP4Common.DiagramData
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
 
-            if (this.FillColor != null)
+            if (this.FillColor == null)
+            {
+                dictionary.Add("FillColor", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("FillColor", new [] { this.FillColor.Iid });
             }
 
-            if (this.FontColor != null)
+            if (this.FontColor == null)
+            {
+                dictionary.Add("FontColor", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("FontColor", new [] { this.FontColor.Iid });
             }
 
-            if (this.StrokeColor != null)
+            if (this.StrokeColor == null)
+            {
+                dictionary.Add("StrokeColor", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("StrokeColor", new [] { this.StrokeColor.Iid });
             }
@@ -130,6 +142,25 @@ namespace CDP4Common.DiagramData
             {
                 return false;
             }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
 
             foreach (var kvp in this.GetReferenceProperties())
             {

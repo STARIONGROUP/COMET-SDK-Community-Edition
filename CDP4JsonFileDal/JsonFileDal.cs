@@ -232,9 +232,15 @@ namespace CDP4JsonFileDal
                     .Union(iterationSetups.ToList())
                     .Union(iterationPoco.QueryContainedThingsDeep())
                     .Union(siteReferenceDataLibraries.SelectMany(x => x.QueryContainedThingsDeep())
-                        .Union(modelReferenceDataLibraries.SelectMany(x => x.QueryContainedThingsDeep())));
+                    .Union(modelReferenceDataLibraries.SelectMany(x => x.QueryContainedThingsDeep())))
+                    .Where(x => x != null);
 
                 foreach (var extraInstanceToRemove in this.FindNonSupportedVersionThings(allPocos))
+                {
+                    allExtraInstancesToRemove.Add(extraInstanceToRemove);
+                }
+
+                foreach (var extraInstanceToRemove in this.FindUnlinkedReferences(allPocos))
                 {
                     allExtraInstancesToRemove.Add(extraInstanceToRemove);
                 }
@@ -335,6 +341,45 @@ namespace CDP4JsonFileDal
                 }
 
                 extraThingsToRemove = newThingsToRemove;
+            }
+
+            return allThingsToRemove;
+        }
+
+        /// <summary>
+        /// Find not supported things by model version
+        /// </summary>
+        /// <param name="allPocos">A list of <see cref="CDP4Common.CommonData.Thing"/>s where to find incompatible objects in</param>
+        /// <returns>A collection of not supported things based on their model version</returns>
+        private HashSet<Guid> FindUnlinkedReferences(IEnumerable<CDP4Common.CommonData.Thing> allPocos)
+        {
+            var pocosToCheck = allPocos.ToList();
+            var iidsToCheck = new HashSet<Guid>(allPocos.Select(x => x.Iid));
+
+            var allThingsToRemove = new HashSet<Guid>();
+
+            while (true)
+            {
+                var newThingsToRemove = new HashSet<Guid>();
+
+                foreach (var thing in pocosToCheck.ToList())
+                {
+                    if (thing.HasMandatoryReferenceNotIn(iidsToCheck))
+                    {
+                        allThingsToRemove.Add(thing.Iid);
+                        newThingsToRemove.Add(thing.Iid);
+                    }
+                }
+
+                if (newThingsToRemove.Any())
+                {
+                    pocosToCheck = pocosToCheck.Where(x => !newThingsToRemove.Contains(x.Iid)).ToList();
+                    iidsToCheck.RemoveWhere(x=> newThingsToRemove.Contains(x));
+                }
+                else
+                {
+                    break;
+                }
             }
 
             return allThingsToRemove;

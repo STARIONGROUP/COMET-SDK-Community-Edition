@@ -156,6 +156,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Rule property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }

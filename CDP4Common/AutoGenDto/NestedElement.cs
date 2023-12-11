@@ -228,6 +228,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from RootElement property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }

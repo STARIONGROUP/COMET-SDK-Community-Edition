@@ -152,17 +152,29 @@ namespace CDP4Common.SiteDirectoryData
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
 
-            if (this.Person != null)
+            if (this.Person == null)
+            {
+                dictionary.Add("Person", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("Person", new [] { this.Person.Iid });
             }
 
-            if (this.Role != null)
+            if (this.Role == null)
+            {
+                dictionary.Add("Role", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("Role", new [] { this.Role.Iid });
             }
 
-            if (this.SelectedDomain != null)
+            if (this.SelectedDomain == null)
+            {
+                dictionary.Add("SelectedDomain", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("SelectedDomain", new [] { this.SelectedDomain.Iid });
             }
@@ -204,6 +216,45 @@ namespace CDP4Common.SiteDirectoryData
 
                     case "SelectedDomain":
                         if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "Person":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "Role":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "SelectedDomain":
+                        if (kvp.Value.Except(ids).Any())
                         {
                             result = true;
                         }

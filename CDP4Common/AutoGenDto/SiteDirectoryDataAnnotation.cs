@@ -183,6 +183,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Author property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "Discussion":
@@ -202,6 +203,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from PrimaryAnnotatedThing property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "RelatedThing":
@@ -209,6 +211,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from RelatedThing property is not allowed.");
                                 }
+                                result = false;
                                 this.RelatedThing.Remove(id);
                                 break;
                         }

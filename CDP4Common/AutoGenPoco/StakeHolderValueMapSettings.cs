@@ -121,17 +121,29 @@ namespace CDP4Common.EngineeringModelData
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
 
-            if (this.GoalToValueGroupRelationship != null)
+            if (this.GoalToValueGroupRelationship == null)
+            {
+                dictionary.Add("GoalToValueGroupRelationship", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("GoalToValueGroupRelationship", new [] { this.GoalToValueGroupRelationship.Iid });
             }
 
-            if (this.StakeholderValueToRequirementRelationship != null)
+            if (this.StakeholderValueToRequirementRelationship == null)
+            {
+                dictionary.Add("StakeholderValueToRequirementRelationship", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("StakeholderValueToRequirementRelationship", new [] { this.StakeholderValueToRequirementRelationship.Iid });
             }
 
-            if (this.ValueGroupToStakeholderValueRelationship != null)
+            if (this.ValueGroupToStakeholderValueRelationship == null)
+            {
+                dictionary.Add("ValueGroupToStakeholderValueRelationship", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("ValueGroupToStakeholderValueRelationship", new [] { this.ValueGroupToStakeholderValueRelationship.Iid });
             }
@@ -152,6 +164,25 @@ namespace CDP4Common.EngineeringModelData
             {
                 return false;
             }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
 
             foreach (var kvp in this.GetReferenceProperties())
             {

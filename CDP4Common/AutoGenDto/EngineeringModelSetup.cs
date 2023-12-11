@@ -241,6 +241,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from ActiveDomain property is not allowed.");
                                 }
+                                result = false;
                                 this.ActiveDomain.Remove(id);
                                 break;
 
@@ -273,6 +274,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from IterationSetup property is not allowed.");
                                 }
+                                result = false;
                                 this.IterationSetup.Remove(id);
                                 break;
 
@@ -285,6 +287,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Participant property is not allowed.");
                                 }
+                                result = false;
                                 this.Participant.Remove(id);
                                 break;
 
@@ -293,6 +296,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from RequiredRdl property is not allowed.");
                                 }
+                                result = false;
                                 this.RequiredRdl.Remove(id);
                                 break;
                         }

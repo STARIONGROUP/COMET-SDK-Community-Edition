@@ -207,6 +207,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Prefix property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "ReferenceUnit":
@@ -214,6 +215,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from ReferenceUnit property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }

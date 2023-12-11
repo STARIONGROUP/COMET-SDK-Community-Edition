@@ -197,7 +197,11 @@ namespace CDP4Common.EngineeringModelData
 
             dictionary.Add("CommonFileStore", this.CommonFileStore.Select(x => x.Iid));
 
-            if (this.EngineeringModelSetup != null)
+            if (this.EngineeringModelSetup == null)
+            {
+                dictionary.Add("EngineeringModelSetup", new [] { Guid.Empty });
+            }
+            else
             {
                 dictionary.Add("EngineeringModelSetup", new [] { this.EngineeringModelSetup.Iid });
             }
@@ -237,6 +241,31 @@ namespace CDP4Common.EngineeringModelData
                 {
                     case "EngineeringModelSetup":
                         if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "EngineeringModelSetup":
+                        if (kvp.Value.Except(ids).Any())
                         {
                             result = true;
                         }

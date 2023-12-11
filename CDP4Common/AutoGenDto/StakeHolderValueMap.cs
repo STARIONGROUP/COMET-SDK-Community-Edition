@@ -240,6 +240,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Settings property is not allowed.");
                                 }
+                                result = false;
                                 this.Settings.Remove(id);
                                 break;
 

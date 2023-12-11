@@ -169,6 +169,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from ContainedCategory property is not allowed.");
                                 }
+                                result = false;
                                 this.ContainedCategory.Remove(id);
                                 break;
 
@@ -177,6 +178,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from ContainingCategory property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "Definition":

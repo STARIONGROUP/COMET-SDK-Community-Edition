@@ -136,6 +136,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from ReferencedThing property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }

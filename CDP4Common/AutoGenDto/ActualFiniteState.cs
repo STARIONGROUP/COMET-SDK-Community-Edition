@@ -190,6 +190,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from PossibleState property is not allowed.");
                                 }
+                                result = false;
                                 this.PossibleState.Remove(id);
                                 break;
                         }

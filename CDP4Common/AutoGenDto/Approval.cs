@@ -154,6 +154,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Author property is not allowed.");
                                 }
+                                result = false;
                                 break;
 
                             case "ExcludedDomain":
@@ -169,6 +170,7 @@ namespace CDP4Common.DTO
                                 {
                                     errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
                                 }
+                                result = false;
                                 break;
                         }
                     }
