@@ -101,7 +101,7 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.ContainingGroup != default)
+            if (this.ContainingGroup != null)
             {
                 dictionary.Add("ContainingGroup", new [] { this.ContainingGroup.Value });
             }

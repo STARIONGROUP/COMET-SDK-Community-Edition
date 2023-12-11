@@ -98,7 +98,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Term != default)
+            if (this.Term != null)
             {
                 dictionary.Add("Term", new [] { this.Term });
             }
@@ -140,9 +140,9 @@ namespace CDP4Common.DTO
                             case "Term":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Term property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Term property results in inconsistent NotExpression.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

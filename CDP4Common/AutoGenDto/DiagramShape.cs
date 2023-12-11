@@ -90,7 +90,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Bounds", this.Bounds);
 
-            if (this.DepictedThing != default)
+            if (this.DepictedThing != null)
             {
                 dictionary.Add("DepictedThing", new [] { this.DepictedThing.Value });
             }
@@ -103,7 +103,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("LocalStyle", this.LocalStyle);
 
-            if (this.SharedStyle != default)
+            if (this.SharedStyle != null)
             {
                 dictionary.Add("SharedStyle", new [] { this.SharedStyle.Value });
             }

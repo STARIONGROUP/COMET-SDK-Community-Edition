@@ -136,7 +136,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Expression", this.Expression);
 
-            if (this.TopExpression != default)
+            if (this.TopExpression != null)
             {
                 dictionary.Add("TopExpression", new [] { this.TopExpression.Value });
             }
@@ -178,9 +178,9 @@ namespace CDP4Common.DTO
                             case "Expression":
                                 if (addModelErrors && this.Expression.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Expression property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from Expression property results in inconsistent ParametricConstraint.");
+                                    result = false;
                                 }
-                                result = false;
                                 this.Expression.Remove(id);
                                 break;
 

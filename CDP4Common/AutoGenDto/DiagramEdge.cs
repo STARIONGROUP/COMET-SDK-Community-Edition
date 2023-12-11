@@ -126,7 +126,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Bounds", this.Bounds);
 
-            if (this.DepictedThing != default)
+            if (this.DepictedThing != null)
             {
                 dictionary.Add("DepictedThing", new [] { this.DepictedThing.Value });
             }
@@ -139,17 +139,17 @@ namespace CDP4Common.DTO
 
             dictionary.Add("LocalStyle", this.LocalStyle);
 
-            if (this.SharedStyle != default)
+            if (this.SharedStyle != null)
             {
                 dictionary.Add("SharedStyle", new [] { this.SharedStyle.Value });
             }
 
-            if (this.Source != default)
+            if (this.Source != null)
             {
                 dictionary.Add("Source", new [] { this.Source });
             }
 
-            if (this.Target != default)
+            if (this.Target != null)
             {
                 dictionary.Add("Target", new [] { this.Target });
             }
@@ -211,17 +211,17 @@ namespace CDP4Common.DTO
                             case "Source":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Source property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Source property results in inconsistent DiagramEdge.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Target":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Target property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Target property results in inconsistent DiagramEdge.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

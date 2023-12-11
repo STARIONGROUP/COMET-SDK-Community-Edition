@@ -159,7 +159,7 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.Author != default)
+            if (this.Author != null)
             {
                 dictionary.Add("Author", new [] { this.Author.Value });
             }

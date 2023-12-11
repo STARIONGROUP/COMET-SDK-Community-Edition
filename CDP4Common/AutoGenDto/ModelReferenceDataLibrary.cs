@@ -111,7 +111,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ReferenceSource", this.ReferenceSource);
 
-            if (this.RequiredRdl != default)
+            if (this.RequiredRdl != null)
             {
                 dictionary.Add("RequiredRdl", new [] { this.RequiredRdl.Value });
             }

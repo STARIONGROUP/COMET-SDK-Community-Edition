@@ -189,17 +189,17 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.FillColor != default)
+            if (this.FillColor != null)
             {
                 dictionary.Add("FillColor", new [] { this.FillColor.Value });
             }
 
-            if (this.FontColor != default)
+            if (this.FontColor != null)
             {
                 dictionary.Add("FontColor", new [] { this.FontColor.Value });
             }
 
-            if (this.StrokeColor != default)
+            if (this.StrokeColor != null)
             {
                 dictionary.Add("StrokeColor", new [] { this.StrokeColor.Value });
             }

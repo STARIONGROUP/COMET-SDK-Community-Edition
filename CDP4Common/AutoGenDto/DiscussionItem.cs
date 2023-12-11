@@ -90,7 +90,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.ReplyTo != default)
+            if (this.ReplyTo != null)
             {
                 dictionary.Add("ReplyTo", new [] { this.ReplyTo.Value });
             }

@@ -134,34 +134,34 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Group != default)
+            if (this.Group != null)
             {
                 dictionary.Add("Group", new [] { this.Group.Value });
             }
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
 
             dictionary.Add("ParameterSubscription", this.ParameterSubscription);
 
-            if (this.ParameterType != default)
+            if (this.ParameterType != null)
             {
                 dictionary.Add("ParameterType", new [] { this.ParameterType });
             }
 
-            if (this.RequestedBy != default)
+            if (this.RequestedBy != null)
             {
                 dictionary.Add("RequestedBy", new [] { this.RequestedBy.Value });
             }
 
-            if (this.Scale != default)
+            if (this.Scale != null)
             {
                 dictionary.Add("Scale", new [] { this.Scale.Value });
             }
 
-            if (this.StateDependence != default)
+            if (this.StateDependence != null)
             {
                 dictionary.Add("StateDependence", new [] { this.StateDependence.Value });
             }
@@ -209,9 +209,9 @@ namespace CDP4Common.DTO
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent Parameter.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ParameterSubscription":
@@ -221,9 +221,9 @@ namespace CDP4Common.DTO
                             case "ParameterType":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ParameterType property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ParameterType property results in inconsistent Parameter.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "RequestedBy":
@@ -241,9 +241,9 @@ namespace CDP4Common.DTO
                             case "ValueSet":
                                 if (addModelErrors && this.ValueSet.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ValueSet property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from ValueSet property results in inconsistent Parameter.");
+                                    result = false;
                                 }
-                                result = false;
                                 this.ValueSet.Remove(id);
                                 break;
                         }

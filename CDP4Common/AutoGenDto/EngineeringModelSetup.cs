@@ -189,7 +189,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Alias", this.Alias);
 
-            if (this.DefaultOrganizationalParticipant != default)
+            if (this.DefaultOrganizationalParticipant != null)
             {
                 dictionary.Add("DefaultOrganizationalParticipant", new [] { this.DefaultOrganizationalParticipant.Value });
             }
@@ -239,9 +239,9 @@ namespace CDP4Common.DTO
                             case "ActiveDomain":
                                 if (addModelErrors && this.ActiveDomain.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ActiveDomain property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from ActiveDomain property results in inconsistent EngineeringModelSetup.");
+                                    result = false;
                                 }
-                                result = false;
                                 this.ActiveDomain.Remove(id);
                                 break;
 
@@ -272,9 +272,9 @@ namespace CDP4Common.DTO
                             case "IterationSetup":
                                 if (addModelErrors && this.IterationSetup.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from IterationSetup property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from IterationSetup property results in inconsistent EngineeringModelSetup.");
+                                    result = false;
                                 }
-                                result = false;
                                 this.IterationSetup.Remove(id);
                                 break;
 
@@ -285,18 +285,18 @@ namespace CDP4Common.DTO
                             case "Participant":
                                 if (addModelErrors && this.Participant.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Participant property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from Participant property results in inconsistent EngineeringModelSetup.");
+                                    result = false;
                                 }
-                                result = false;
                                 this.Participant.Remove(id);
                                 break;
 
                             case "RequiredRdl":
                                 if (addModelErrors && this.RequiredRdl.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from RequiredRdl property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from RequiredRdl property results in inconsistent EngineeringModelSetup.");
+                                    result = false;
                                 }
-                                result = false;
                                 this.RequiredRdl.Remove(id);
                                 break;
                         }

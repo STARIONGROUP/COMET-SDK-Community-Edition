@@ -146,12 +146,12 @@ namespace CDP4Common.DTO
 
             dictionary.Add("HyperLink", this.HyperLink);
 
-            if (this.Prefix != default)
+            if (this.Prefix != null)
             {
                 dictionary.Add("Prefix", new [] { this.Prefix });
             }
 
-            if (this.ReferenceUnit != default)
+            if (this.ReferenceUnit != null)
             {
                 dictionary.Add("ReferenceUnit", new [] { this.ReferenceUnit });
             }
@@ -205,17 +205,17 @@ namespace CDP4Common.DTO
                             case "Prefix":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Prefix property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Prefix property results in inconsistent PrefixedUnit.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ReferenceUnit":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ReferenceUnit property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ReferenceUnit property results in inconsistent PrefixedUnit.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

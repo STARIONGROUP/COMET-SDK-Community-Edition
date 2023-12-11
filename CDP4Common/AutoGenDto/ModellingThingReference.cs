@@ -92,7 +92,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.ReferencedThing != default)
+            if (this.ReferencedThing != null)
             {
                 dictionary.Add("ReferencedThing", new [] { this.ReferencedThing });
             }
@@ -134,9 +134,9 @@ namespace CDP4Common.DTO
                             case "ReferencedThing":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ReferencedThing property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ReferencedThing property results in inconsistent ModellingThingReference.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

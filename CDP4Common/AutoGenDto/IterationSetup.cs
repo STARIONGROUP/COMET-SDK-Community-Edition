@@ -140,7 +140,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.SourceIterationSetup != default)
+            if (this.SourceIterationSetup != null)
             {
                 dictionary.Add("SourceIterationSetup", new [] { this.SourceIterationSetup.Value });
             }

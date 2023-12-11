@@ -129,7 +129,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ReferencedCategory", this.ReferencedCategory);
 
-            if (this.ReferencingCategory != default)
+            if (this.ReferencingCategory != null)
             {
                 dictionary.Add("ReferencingCategory", new [] { this.ReferencingCategory });
             }
@@ -183,18 +183,18 @@ namespace CDP4Common.DTO
                             case "ReferencedCategory":
                                 if (addModelErrors && this.ReferencedCategory.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ReferencedCategory property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from ReferencedCategory property results in inconsistent ReferencerRule.");
+                                    result = false;
                                 }
-                                result = false;
                                 this.ReferencedCategory.Remove(id);
                                 break;
 
                             case "ReferencingCategory":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ReferencingCategory property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ReferencingCategory property results in inconsistent ReferencerRule.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

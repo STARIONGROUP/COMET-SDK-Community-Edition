@@ -227,17 +227,17 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.DefaultDomain != default)
+            if (this.DefaultDomain != null)
             {
                 dictionary.Add("DefaultDomain", new [] { this.DefaultDomain.Value });
             }
 
-            if (this.DefaultEmailAddress != default)
+            if (this.DefaultEmailAddress != null)
             {
                 dictionary.Add("DefaultEmailAddress", new [] { this.DefaultEmailAddress.Value });
             }
 
-            if (this.DefaultTelephoneNumber != default)
+            if (this.DefaultTelephoneNumber != null)
             {
                 dictionary.Add("DefaultTelephoneNumber", new [] { this.DefaultTelephoneNumber.Value });
             }
@@ -248,12 +248,12 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Organization != default)
+            if (this.Organization != null)
             {
                 dictionary.Add("Organization", new [] { this.Organization.Value });
             }
 
-            if (this.Role != default)
+            if (this.Role != null)
             {
                 dictionary.Add("Role", new [] { this.Role.Value });
             }

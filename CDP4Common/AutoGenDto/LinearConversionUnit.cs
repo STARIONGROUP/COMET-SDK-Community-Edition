@@ -97,7 +97,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("HyperLink", this.HyperLink);
 
-            if (this.ReferenceUnit != default)
+            if (this.ReferenceUnit != null)
             {
                 dictionary.Add("ReferenceUnit", new [] { this.ReferenceUnit });
             }
@@ -151,9 +151,9 @@ namespace CDP4Common.DTO
                             case "ReferenceUnit":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ReferenceUnit property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ReferenceUnit property results in inconsistent LinearConversionUnit.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

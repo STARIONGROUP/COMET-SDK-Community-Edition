@@ -136,12 +136,12 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.ContainingFolder != default)
+            if (this.ContainingFolder != null)
             {
                 dictionary.Add("ContainingFolder", new [] { this.ContainingFolder.Value });
             }
 
-            if (this.Creator != default)
+            if (this.Creator != null)
             {
                 dictionary.Add("Creator", new [] { this.Creator });
             }
@@ -150,7 +150,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
@@ -188,9 +188,9 @@ namespace CDP4Common.DTO
                             case "Creator":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Creator property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Creator property results in inconsistent Folder.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ExcludedDomain":
@@ -204,9 +204,9 @@ namespace CDP4Common.DTO
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent Folder.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

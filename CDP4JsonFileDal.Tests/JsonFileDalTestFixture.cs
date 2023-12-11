@@ -71,6 +71,8 @@ namespace CDP4JsonFileDal.Tests
     using Parameter = CDP4Common.EngineeringModelData.Parameter;
     using System.Security.Cryptography;
 
+    using CDP4Common;
+
     [TestFixture]
     public class JsonFileDalTestFixture
     {
@@ -544,6 +546,9 @@ namespace CDP4JsonFileDal.Tests
             var elementUsage = mainElement.ContainedElement.FirstOrDefault();
             Assert.That(elementUsage, Is.Not.Null);
             Assert.That(elementUsage.ParameterOverride.Any(), Is.False);
+
+            Assert.That(mainElement.Definition.Any(), Is.True);
+            Assert.That(mainElement.Definition.First().Citation.Any(), Is.False);
         }
 
         [Test]
@@ -605,6 +610,9 @@ namespace CDP4JsonFileDal.Tests
             Assert.That(parameterOverride, Is.Not.Null);
 
             Assert.That(parameterOverride.Parameter.ParameterType.GetType(), Is.EqualTo(typeof(SampledFunctionParameterType)));
+
+            Assert.That(mainElement.Definition.Any(), Is.True);
+            Assert.That(mainElement.Definition.First().Citation.Any(), Is.False);
         }
 
         /// <summary>
@@ -669,6 +677,7 @@ namespace CDP4JsonFileDal.Tests
             participant.Person.Role = role;
             participant.Role = participantRole;
             participant.Domain.Add(domain);
+            participant.SelectedDomain = domain;
             modelSetup.Participant.Add(participant);
 
             var lazyPerson = new Lazy<Thing>(() => person);
@@ -725,6 +734,16 @@ namespace CDP4JsonFileDal.Tests
 
             //Create the DTO again as it might have been changed
             this.iteration = (Iteration)this.iterationPoco.ToDto();
+
+            var citation = new CDP4Common.CommonData.Citation(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            citation.ShortName = "a";
+            citation.Source = SentinelThingProvider.GetSentinel<ReferenceSource>();
+            var definition = new CDP4Common.CommonData.Definition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            definition.Citation.Add(citation);
+            definition.Content = "a";
+            definition.LanguageCode = "NL-nl";
+
+            elementDefinition1.Definition.Add(definition);
         }
     }
 }

@@ -106,7 +106,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("MappingToReferenceScale", this.MappingToReferenceScale);
 
-            if (this.Unit != default)
+            if (this.Unit != null)
             {
                 dictionary.Add("Unit", new [] { this.Unit });
             }
@@ -166,9 +166,9 @@ namespace CDP4Common.DTO
                             case "Unit":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Unit property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Unit property results in inconsistent CyclicRatioScale.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ValueDefinition":

@@ -143,12 +143,12 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.ActualState != default)
+            if (this.ActualState != null)
             {
                 dictionary.Add("ActualState", new [] { this.ActualState.Value });
             }
 
-            if (this.AssociatedParameter != default)
+            if (this.AssociatedParameter != null)
             {
                 dictionary.Add("AssociatedParameter", new [] { this.AssociatedParameter });
             }
@@ -157,7 +157,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
@@ -195,9 +195,9 @@ namespace CDP4Common.DTO
                             case "AssociatedParameter":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from AssociatedParameter property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from AssociatedParameter property results in inconsistent NestedParameter.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ExcludedDomain":
@@ -211,9 +211,9 @@ namespace CDP4Common.DTO
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent NestedParameter.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

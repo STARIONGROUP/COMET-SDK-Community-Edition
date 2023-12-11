@@ -98,7 +98,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Category", this.Category);
 
-            if (this.DefaultScale != default)
+            if (this.DefaultScale != null)
             {
                 dictionary.Add("DefaultScale", new [] { this.DefaultScale });
             }
@@ -109,7 +109,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.General != default)
+            if (this.General != null)
             {
                 dictionary.Add("General", new [] { this.General });
             }
@@ -155,9 +155,9 @@ namespace CDP4Common.DTO
                             case "DefaultScale":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from DefaultScale property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from DefaultScale property results in inconsistent SpecializedQuantityKind.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Definition":
@@ -175,9 +175,9 @@ namespace CDP4Common.DTO
                             case "General":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from General property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from General property results in inconsistent SpecializedQuantityKind.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "HyperLink":

@@ -188,9 +188,9 @@ namespace CDP4Common.DTO
                             case "PossibleState":
                                 if (addModelErrors && this.PossibleState.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from PossibleState property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from PossibleState property results in inconsistent ActualFiniteState.");
+                                    result = false;
                                 }
-                                result = false;
                                 this.PossibleState.Remove(id);
                                 break;
                         }

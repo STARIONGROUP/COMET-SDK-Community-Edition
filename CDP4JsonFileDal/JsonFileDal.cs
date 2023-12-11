@@ -26,6 +26,7 @@ namespace CDP4JsonFileDal
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -190,6 +191,9 @@ namespace CDP4JsonFileDal
             var iterationSetups = new HashSet<IterationSetup>();
 
             var allExtraInstancesToRemove = new HashSet<Guid>();
+            //Always remove empty GUID's as they might be Sentinal objects
+            allExtraInstancesToRemove.Add(Guid.Empty);
+
 
             foreach (var operationContainer in operationContainers)
             {
@@ -261,12 +265,28 @@ namespace CDP4JsonFileDal
                 .Where(x => !allExtraInstancesToRemove.Contains(x.Iid))
                 .ToList();
 
-            foreach (var dto in prunedSiteDirectoryDtos)
+            var currentInstancesToRemove = allExtraInstancesToRemove;
+            var allErrors = new List<string>();
+
+            while (currentInstancesToRemove.Any())
             {
-                if (!dto.TryRemoveReferences(allExtraInstancesToRemove, out var errors))
+                var newInstancesToRemove = new HashSet<Guid>();
+
+                foreach (var dto in prunedSiteDirectoryDtos)
                 {
-                    throw new ModelErrorException(string.Join("\n", errors));
+                    if (!dto.TryRemoveReferences(allExtraInstancesToRemove, out var errors))
+                    {
+                        allErrors.AddRange(errors);
+                        newInstancesToRemove.Add(dto.Iid);
+                    }
                 }
+
+                if (newInstancesToRemove.Any())
+                {
+                    prunedSiteDirectoryDtos = prunedSiteDirectoryDtos.Where(x => !newInstancesToRemove.Contains(x.Iid)).ToList();
+                }
+
+                currentInstancesToRemove = newInstancesToRemove;
             }
 
             var activePerson = JsonFileDalUtils.QueryActivePerson(this.Session.Credentials.UserName, siteDirectory);
@@ -294,10 +314,22 @@ namespace CDP4JsonFileDal
                 }
 
                 Logger.Info("Successfully exported the open session {1} to {0}.", path, this.Session.Credentials.Uri);
+
+                if (allErrors.Any())
+                {
+                    throw new ModelWarningException();
+                }
+            }
+            catch (ModelWarningException ex)
+            {
+                Logger.Warn("Not all things were exported to Annex.C3 file {0}.\n {1} Errors detected:\n {2}", path, allErrors.Count, $"{string.Join("\n", allErrors)}\n{ex.Message}");
+
+                throw new ModelWarningException($"Not all things were exported to Annex.C3 file {path}.\n {allErrors.Count} errors detected:\n {string.Join("\n", allErrors)}\n{ex.Message}");
             }
             catch (Exception ex)
             {
                 Logger.Error("Failed to export the open session to {0}. Error: {1}", path, ex.Message);
+                throw new ModelErrorException($"Failed to export the open session to {path}. Error: {ex.Message}");
             }
 
             return Task.FromResult(Enumerable.Empty<Thing>());
@@ -988,12 +1020,19 @@ namespace CDP4JsonFileDal
                         .OrderBy(x => x.Iid, this.guidComparer)
                         .ToList();
 
+                var allErrors = new List<string>();
+
                 foreach (var dto in dtos)
                 {
                     if (!dto.TryRemoveReferences(allExtraInstancesToRemove, out var errors))
                     {
-                        throw new ModelErrorException(string.Join("\n", errors));
+                        allErrors.AddRange(errors);
                     }
+                }
+
+                if (allErrors.Any())
+                {
+                    throw new ModelWarningException(string.Join("\n", allErrors));
                 }
 
                 using (var memoryStream = new MemoryStream())
@@ -1043,12 +1082,19 @@ namespace CDP4JsonFileDal
                         .OrderBy(x => x.Iid, this.guidComparer)
                         .ToList();
 
+                var allErrors = new List<string>();
+
                 foreach (var dto in dtos)
                 {
                     if (!dto.TryRemoveReferences(allExtraInstancesToRemove, out var errors))
                     {
-                        throw new ModelErrorException(string.Join("\n", errors));
+                        allErrors.AddRange(errors);
                     }
+                }
+
+                if (allErrors.Any())
+                {
+                    throw new ModelWarningException(string.Join("\n", allErrors));
                 }
 
                 using (var memoryStream = new MemoryStream())
@@ -1116,12 +1162,19 @@ namespace CDP4JsonFileDal
                         .OrderBy(x => x.Iid, this.guidComparer)
                         .ToList();
 
+                var allErrors = new List<string>();
+
                 foreach (var dto in dtos)
                 {
                     if (!dto.TryRemoveReferences(allExtraInstancesToRemove, out var errors))
                     {
-                        throw new ModelErrorException(string.Join("\n", errors));
+                        allErrors.AddRange(errors);
                     }
+                }
+
+                if (allErrors.Any())
+                {
+                    throw new ModelWarningException(string.Join("\n", allErrors));
                 }
 
                 using (var iterationMemoryStream = new MemoryStream())

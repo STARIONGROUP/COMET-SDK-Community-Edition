@@ -238,9 +238,9 @@ namespace CDP4Common.DTO
                             case "Settings":
                                 if (addModelErrors && this.Settings.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Settings property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from Settings property results in inconsistent StakeHolderValueMap.");
+                                    result = false;
                                 }
-                                result = false;
                                 this.Settings.Remove(id);
                                 break;
 

@@ -132,17 +132,17 @@ namespace CDP4Common.DTO
 
             dictionary.Add("HyperLink", this.HyperLink);
 
-            if (this.RelationshipCategory != default)
+            if (this.RelationshipCategory != null)
             {
                 dictionary.Add("RelationshipCategory", new [] { this.RelationshipCategory });
             }
 
-            if (this.SourceCategory != default)
+            if (this.SourceCategory != null)
             {
                 dictionary.Add("SourceCategory", new [] { this.SourceCategory });
             }
 
-            if (this.TargetCategory != default)
+            if (this.TargetCategory != null)
             {
                 dictionary.Add("TargetCategory", new [] { this.TargetCategory });
             }
@@ -196,25 +196,25 @@ namespace CDP4Common.DTO
                             case "RelationshipCategory":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from RelationshipCategory property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from RelationshipCategory property results in inconsistent BinaryRelationshipRule.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "SourceCategory":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from SourceCategory property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from SourceCategory property results in inconsistent BinaryRelationshipRule.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "TargetCategory":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from TargetCategory property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from TargetCategory property results in inconsistent BinaryRelationshipRule.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

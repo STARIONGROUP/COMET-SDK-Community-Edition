@@ -113,17 +113,17 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.GoalToValueGroupRelationship != default)
+            if (this.GoalToValueGroupRelationship != null)
             {
                 dictionary.Add("GoalToValueGroupRelationship", new [] { this.GoalToValueGroupRelationship.Value });
             }
 
-            if (this.StakeholderValueToRequirementRelationship != default)
+            if (this.StakeholderValueToRequirementRelationship != null)
             {
                 dictionary.Add("StakeholderValueToRequirementRelationship", new [] { this.StakeholderValueToRequirementRelationship.Value });
             }
 
-            if (this.ValueGroupToStakeholderValueRelationship != default)
+            if (this.ValueGroupToStakeholderValueRelationship != null)
             {
                 dictionary.Add("ValueGroupToStakeholderValueRelationship", new [] { this.ValueGroupToStakeholderValueRelationship.Value });
             }

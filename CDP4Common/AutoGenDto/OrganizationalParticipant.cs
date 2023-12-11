@@ -99,7 +99,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Organization != default)
+            if (this.Organization != null)
             {
                 dictionary.Add("Organization", new [] { this.Organization });
             }
@@ -141,9 +141,9 @@ namespace CDP4Common.DTO
                             case "Organization":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Organization property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Organization property results in inconsistent OrganizationalParticipant.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

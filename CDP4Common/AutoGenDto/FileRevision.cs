@@ -145,12 +145,12 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.ContainingFolder != default)
+            if (this.ContainingFolder != null)
             {
                 dictionary.Add("ContainingFolder", new [] { this.ContainingFolder.Value });
             }
 
-            if (this.Creator != default)
+            if (this.Creator != null)
             {
                 dictionary.Add("Creator", new [] { this.Creator });
             }
@@ -192,9 +192,9 @@ namespace CDP4Common.DTO
                             case "Creator":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Creator property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Creator property results in inconsistent FileRevision.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ExcludedDomain":

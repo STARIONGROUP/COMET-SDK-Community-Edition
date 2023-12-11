@@ -134,7 +134,7 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.Author != default)
+            if (this.Author != null)
             {
                 dictionary.Add("Author", new [] { this.Author });
             }
@@ -145,7 +145,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.PrimaryAnnotatedThing != default)
+            if (this.PrimaryAnnotatedThing != null)
             {
                 dictionary.Add("PrimaryAnnotatedThing", new [] { this.PrimaryAnnotatedThing });
             }
@@ -181,9 +181,9 @@ namespace CDP4Common.DTO
                             case "Author":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Author property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Author property results in inconsistent SiteDirectoryDataAnnotation.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Discussion":
@@ -201,17 +201,17 @@ namespace CDP4Common.DTO
                             case "PrimaryAnnotatedThing":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from PrimaryAnnotatedThing property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from PrimaryAnnotatedThing property results in inconsistent SiteDirectoryDataAnnotation.");
+                                    result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "RelatedThing":
                                 if (addModelErrors && this.RelatedThing.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from RelatedThing property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from RelatedThing property results in inconsistent SiteDirectoryDataAnnotation.");
+                                    result = false;
                                 }
-                                result = false;
                                 this.RelatedThing.Remove(id);
                                 break;
                         }
