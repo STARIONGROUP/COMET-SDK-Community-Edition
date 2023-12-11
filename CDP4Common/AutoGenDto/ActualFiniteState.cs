@@ -191,7 +191,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from PossibleState property results in inconsistent ActualFiniteState.");
                                     result = false;
                                 }
-                                result = false;
                                 this.PossibleState.Remove(id);
                                 break;
                         }

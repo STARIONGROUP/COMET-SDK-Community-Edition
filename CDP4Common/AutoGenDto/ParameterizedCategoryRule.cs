@@ -156,7 +156,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Category property results in inconsistent ParameterizedCategoryRule.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Definition":
@@ -181,7 +180,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from ParameterType property results in inconsistent ParameterizedCategoryRule.");
                                     result = false;
                                 }
-                                result = false;
                                 this.ParameterType.Remove(id);
                                 break;
                         }

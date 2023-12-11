@@ -168,7 +168,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent BinaryRelationship.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ParameterValue":
@@ -181,7 +180,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Source property results in inconsistent BinaryRelationship.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Target":
@@ -190,7 +188,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Target property results in inconsistent BinaryRelationship.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

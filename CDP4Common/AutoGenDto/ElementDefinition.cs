@@ -239,7 +239,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent ElementDefinition.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Parameter":

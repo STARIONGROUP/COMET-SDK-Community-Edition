@@ -175,7 +175,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent ParameterOrOverrideBase.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ParameterSubscription":
@@ -188,7 +187,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ParameterType property results in inconsistent ParameterOrOverrideBase.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Scale":

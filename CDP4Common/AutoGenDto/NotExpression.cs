@@ -143,7 +143,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Term property results in inconsistent NotExpression.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

@@ -162,7 +162,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from FileType property results in inconsistent BinaryNote.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Owner":
@@ -171,7 +170,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent BinaryNote.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

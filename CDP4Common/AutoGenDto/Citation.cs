@@ -171,7 +171,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Source property results in inconsistent Citation.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

@@ -142,7 +142,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from Term property results in inconsistent AndExpression.");
                                     result = false;
                                 }
-                                result = false;
                                 this.Term.Remove(id);
                                 break;
                         }

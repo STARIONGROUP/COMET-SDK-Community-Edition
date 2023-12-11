@@ -198,7 +198,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from AssociatedParameter property results in inconsistent NestedParameter.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ExcludedDomain":
@@ -215,7 +214,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent NestedParameter.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

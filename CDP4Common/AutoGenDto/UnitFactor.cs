@@ -150,7 +150,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Unit property results in inconsistent UnitFactor.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

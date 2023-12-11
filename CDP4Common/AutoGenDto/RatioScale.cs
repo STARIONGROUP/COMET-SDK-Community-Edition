@@ -162,7 +162,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Unit property results in inconsistent RatioScale.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ValueDefinition":

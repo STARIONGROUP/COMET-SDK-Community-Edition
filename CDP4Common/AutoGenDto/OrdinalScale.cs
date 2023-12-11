@@ -169,7 +169,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Unit property results in inconsistent OrdinalScale.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ValueDefinition":

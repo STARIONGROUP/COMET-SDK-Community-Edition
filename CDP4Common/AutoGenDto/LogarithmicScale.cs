@@ -219,7 +219,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ReferenceQuantityKind property results in inconsistent LogarithmicScale.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ReferenceQuantityValue":
@@ -232,7 +231,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Unit property results in inconsistent LogarithmicScale.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ValueDefinition":

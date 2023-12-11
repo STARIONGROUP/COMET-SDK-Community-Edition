@@ -230,7 +230,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent ParameterSubscription.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ValueSet":
@@ -239,7 +238,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from ValueSet property results in inconsistent ParameterSubscription.");
                                     result = false;
                                 }
-                                result = false;
                                 this.ValueSet.Remove(id);
                                 break;
                         }

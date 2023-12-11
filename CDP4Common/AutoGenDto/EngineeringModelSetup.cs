@@ -242,7 +242,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from ActiveDomain property results in inconsistent EngineeringModelSetup.");
                                     result = false;
                                 }
-                                result = false;
                                 this.ActiveDomain.Remove(id);
                                 break;
 
@@ -276,7 +275,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from IterationSetup property results in inconsistent EngineeringModelSetup.");
                                     result = false;
                                 }
-                                result = false;
                                 this.IterationSetup.Remove(id);
                                 break;
 
@@ -290,7 +288,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from Participant property results in inconsistent EngineeringModelSetup.");
                                     result = false;
                                 }
-                                result = false;
                                 this.Participant.Remove(id);
                                 break;
 
@@ -300,7 +297,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from RequiredRdl property results in inconsistent EngineeringModelSetup.");
                                     result = false;
                                 }
-                                result = false;
                                 this.RequiredRdl.Remove(id);
                                 break;
                         }

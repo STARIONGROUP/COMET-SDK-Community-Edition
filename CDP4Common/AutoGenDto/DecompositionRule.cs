@@ -170,7 +170,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removing reference '{id}' from ContainedCategory property results in inconsistent DecompositionRule.");
                                     result = false;
                                 }
-                                result = false;
                                 this.ContainedCategory.Remove(id);
                                 break;
 
@@ -180,7 +179,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ContainingCategory property results in inconsistent DecompositionRule.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Definition":

@@ -138,7 +138,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Author property results in inconsistent EngineeringModelDataNote.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Discussion":

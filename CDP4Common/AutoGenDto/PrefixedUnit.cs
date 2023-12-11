@@ -208,7 +208,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Prefix property results in inconsistent PrefixedUnit.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ReferenceUnit":
@@ -217,7 +216,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ReferenceUnit property results in inconsistent PrefixedUnit.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

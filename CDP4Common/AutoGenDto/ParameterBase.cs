@@ -193,7 +193,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent ParameterBase.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "ParameterType":
@@ -202,7 +201,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from ParameterType property results in inconsistent ParameterBase.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
 
                             case "Scale":

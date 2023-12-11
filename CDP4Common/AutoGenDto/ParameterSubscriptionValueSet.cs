@@ -243,7 +243,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from SubscribedValueSet property results in inconsistent ParameterSubscriptionValueSet.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

@@ -150,7 +150,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from QuantityKind property results in inconsistent QuantityKindFactor.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

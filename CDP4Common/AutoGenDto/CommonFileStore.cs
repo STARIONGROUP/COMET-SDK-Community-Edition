@@ -148,7 +148,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Owner property results in inconsistent CommonFileStore.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }

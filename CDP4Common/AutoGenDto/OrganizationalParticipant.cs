@@ -144,7 +144,6 @@ namespace CDP4Common.DTO
                                     errors.Add($"Removed reference '{id}' from Organization property results in inconsistent OrganizationalParticipant.");
                                     result = false;
                                 }
-                                result = false;
                                 break;
                         }
                     }
