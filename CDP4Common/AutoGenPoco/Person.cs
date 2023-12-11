@@ -279,60 +279,15 @@ namespace CDP4Common.SiteDirectoryData
         public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
-
-            if (this.DefaultDomain == null)
-            {
-                dictionary.Add("DefaultDomain", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("DefaultDomain", new [] { this.DefaultDomain.Iid });
-            }
-
-            if (this.DefaultEmailAddress == null)
-            {
-                dictionary.Add("DefaultEmailAddress", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("DefaultEmailAddress", new [] { this.DefaultEmailAddress.Iid });
-            }
-
-            if (this.DefaultTelephoneNumber == null)
-            {
-                dictionary.Add("DefaultTelephoneNumber", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("DefaultTelephoneNumber", new [] { this.DefaultTelephoneNumber.Iid });
-            }
-
+            dictionary.Add("DefaultDomain", new [] { this.DefaultDomain?.Iid ?? Guid.Empty });
+            dictionary.Add("DefaultEmailAddress", new [] { this.DefaultEmailAddress?.Iid ?? Guid.Empty });
+            dictionary.Add("DefaultTelephoneNumber", new [] { this.DefaultTelephoneNumber?.Iid ?? Guid.Empty });
             dictionary.Add("EmailAddress", this.EmailAddress.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
-            if (this.Organization == null)
-            {
-                dictionary.Add("Organization", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Organization", new [] { this.Organization.Iid });
-            }
-
-            if (this.Role == null)
-            {
-                dictionary.Add("Role", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Role", new [] { this.Role.Iid });
-            }
-
+            dictionary.Add("Organization", new [] { this.Organization?.Iid ?? Guid.Empty });
+            dictionary.Add("Role", new [] { this.Role?.Iid ?? Guid.Empty });
             dictionary.Add("TelephoneNumber", this.TelephoneNumber.Select(x => x.Iid));
-
             dictionary.Add("UserPreference", this.UserPreference.Select(x => x.Iid));
 
             return dictionary;

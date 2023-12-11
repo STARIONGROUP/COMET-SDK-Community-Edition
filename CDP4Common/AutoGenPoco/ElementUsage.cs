@@ -161,37 +161,14 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Alias", this.Alias.Select(x => x.Iid));
-
             dictionary.Add("Category", this.Category.Select(x => x.Iid));
-
             dictionary.Add("Definition", this.Definition.Select(x => x.Iid));
-
-            if (this.ElementDefinition == null)
-            {
-                dictionary.Add("ElementDefinition", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("ElementDefinition", new [] { this.ElementDefinition.Iid });
-            }
-
+            dictionary.Add("ElementDefinition", new [] { this.ElementDefinition?.Iid ?? Guid.Empty });
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("ExcludeOption", this.ExcludeOption.Select(x => x.Iid));
-
             dictionary.Add("HyperLink", this.HyperLink.Select(x => x.Iid));
-
-            if (this.Owner == null)
-            {
-                dictionary.Add("Owner", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Owner", new [] { this.Owner.Iid });
-            }
-
+            dictionary.Add("Owner", new [] { this.Owner?.Iid ?? Guid.Empty });
             dictionary.Add("ParameterOverride", this.ParameterOverride.Select(x => x.Iid));
 
             return dictionary;

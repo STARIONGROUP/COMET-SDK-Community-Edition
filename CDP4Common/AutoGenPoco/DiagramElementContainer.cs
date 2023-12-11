@@ -129,11 +129,8 @@ namespace CDP4Common.DiagramData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Bounds", this.Bounds.Select(x => x.Iid));
-
             dictionary.Add("DiagramElement", this.DiagramElement.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
 
             return dictionary;

@@ -168,25 +168,15 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Alias", this.Alias.Select(x => x.Iid));
-
             dictionary.Add("Category", this.Category.Select(x => x.Iid));
-
             dictionary.Add("Definition", this.Definition.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("Goal", this.Goal.Select(x => x.Iid));
-
             dictionary.Add("HyperLink", this.HyperLink.Select(x => x.Iid));
-
             dictionary.Add("Requirement", this.Requirement.Select(x => x.Iid));
-
             dictionary.Add("Settings", this.Settings.Select(x => x.Iid));
-
             dictionary.Add("StakeholderValue", this.StakeholderValue.Select(x => x.Iid));
-
             dictionary.Add("ValueGroup", this.ValueGroup.Select(x => x.Iid));
 
             return dictionary;
