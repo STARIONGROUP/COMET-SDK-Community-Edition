@@ -118,17 +118,8 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
-            if (this.Rule == null)
-            {
-                dictionary.Add("Rule", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Rule", new [] { this.Rule.Iid });
-            }
+            dictionary.Add("Rule", new [] { this.Rule?.Iid ?? Guid.Empty });
 
             return dictionary;
         }

@@ -136,24 +136,11 @@ namespace CDP4Common.SiteDirectoryData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Alias", this.Alias.Select(x => x.Iid));
-
             dictionary.Add("ContainedCategory", this.ContainedCategory.Select(x => x.Iid));
-
-            if (this.ContainingCategory == null)
-            {
-                dictionary.Add("ContainingCategory", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("ContainingCategory", new [] { this.ContainingCategory.Iid });
-            }
-
+            dictionary.Add("ContainingCategory", new [] { this.ContainingCategory?.Iid ?? Guid.Empty });
             dictionary.Add("Definition", this.Definition.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("HyperLink", this.HyperLink.Select(x => x.Iid));
 
             return dictionary;

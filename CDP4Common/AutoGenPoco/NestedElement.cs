@@ -202,21 +202,10 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ElementUsage", this.ElementUsage.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("NestedParameter", this.NestedParameter.Select(x => x.Iid));
-
-            if (this.RootElement == null)
-            {
-                dictionary.Add("RootElement", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("RootElement", new [] { this.RootElement.Iid });
-            }
+            dictionary.Add("RootElement", new [] { this.RootElement?.Iid ?? Guid.Empty });
 
             return dictionary;
         }

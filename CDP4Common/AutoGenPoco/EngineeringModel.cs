@@ -194,28 +194,13 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Book", this.Book.Select(x => x.Iid));
-
             dictionary.Add("CommonFileStore", this.CommonFileStore.Select(x => x.Iid));
-
-            if (this.EngineeringModelSetup == null)
-            {
-                dictionary.Add("EngineeringModelSetup", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("EngineeringModelSetup", new [] { this.EngineeringModelSetup.Iid });
-            }
-
+            dictionary.Add("EngineeringModelSetup", new [] { this.EngineeringModelSetup?.Iid ?? Guid.Empty });
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("GenericNote", this.GenericNote.Select(x => x.Iid));
-
             dictionary.Add("Iteration", this.Iteration.Select(x => x.Iid));
-
             dictionary.Add("LogEntry", this.LogEntry.Select(x => x.Iid));
-
             dictionary.Add("ModellingAnnotation", this.ModellingAnnotation.Select(x => x.Iid));
 
             return dictionary;

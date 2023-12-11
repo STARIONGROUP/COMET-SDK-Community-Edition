@@ -112,17 +112,8 @@ namespace CDP4Common.SiteDirectoryData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
-            if (this.Unit == null)
-            {
-                dictionary.Add("Unit", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Unit", new [] { this.Unit.Iid });
-            }
+            dictionary.Add("Unit", new [] { this.Unit?.Iid ?? Guid.Empty });
 
             return dictionary;
         }

@@ -158,37 +158,14 @@ namespace CDP4Common.SiteDirectoryData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Alias", this.Alias.Select(x => x.Iid));
-
             dictionary.Add("Definition", this.Definition.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("HyperLink", this.HyperLink.Select(x => x.Iid));
-
             dictionary.Add("MappingToReferenceScale", this.MappingToReferenceScale.Select(x => x.Iid));
-
-            if (this.ReferenceQuantityKind == null)
-            {
-                dictionary.Add("ReferenceQuantityKind", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("ReferenceQuantityKind", new [] { this.ReferenceQuantityKind.Iid });
-            }
-
+            dictionary.Add("ReferenceQuantityKind", new [] { this.ReferenceQuantityKind?.Iid ?? Guid.Empty });
             dictionary.Add("ReferenceQuantityValue", this.ReferenceQuantityValue.Select(x => x.Iid));
-
-            if (this.Unit == null)
-            {
-                dictionary.Add("Unit", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Unit", new [] { this.Unit.Iid });
-            }
-
+            dictionary.Add("Unit", new [] { this.Unit?.Iid ?? Guid.Empty });
             dictionary.Add("ValueDefinition", this.ValueDefinition.Select(x => x.Iid));
 
             return dictionary;

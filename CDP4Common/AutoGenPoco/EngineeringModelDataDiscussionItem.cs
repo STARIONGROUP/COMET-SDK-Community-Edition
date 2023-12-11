@@ -101,28 +101,10 @@ namespace CDP4Common.ReportingData
         public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
-
-            if (this.Author == null)
-            {
-                dictionary.Add("Author", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Author", new [] { this.Author.Iid });
-            }
-
+            dictionary.Add("Author", new [] { this.Author?.Iid ?? Guid.Empty });
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
-            if (this.ReplyTo == null)
-            {
-                dictionary.Add("ReplyTo", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("ReplyTo", new [] { this.ReplyTo.Iid });
-            }
+            dictionary.Add("ReplyTo", new [] { this.ReplyTo?.Iid ?? Guid.Empty });
 
             return dictionary;
         }

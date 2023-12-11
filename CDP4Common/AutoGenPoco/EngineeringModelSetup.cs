@@ -229,32 +229,15 @@ namespace CDP4Common.SiteDirectoryData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ActiveDomain", this.ActiveDomain.Select(x => x.Iid));
-
             dictionary.Add("Alias", this.Alias.Select(x => x.Iid));
-
-            if (this.DefaultOrganizationalParticipant == null)
-            {
-                dictionary.Add("DefaultOrganizationalParticipant", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("DefaultOrganizationalParticipant", new [] { this.DefaultOrganizationalParticipant.Iid });
-            }
-
+            dictionary.Add("DefaultOrganizationalParticipant", new [] { this.DefaultOrganizationalParticipant?.Iid ?? Guid.Empty });
             dictionary.Add("Definition", this.Definition.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("HyperLink", this.HyperLink.Select(x => x.Iid));
-
             dictionary.Add("IterationSetup", this.IterationSetup.Select(x => x.Iid));
-
             dictionary.Add("OrganizationalParticipant", this.OrganizationalParticipant.Select(x => x.Iid));
-
             dictionary.Add("Participant", this.Participant.Select(x => x.Iid));
-
             dictionary.Add("RequiredRdl", this.RequiredRdl.Select(x => x.Iid));
 
             return dictionary;

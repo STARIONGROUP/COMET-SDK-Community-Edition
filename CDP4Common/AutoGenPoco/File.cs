@@ -148,30 +148,11 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Category", this.Category.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("FileRevision", this.FileRevision.Select(x => x.Iid));
-
-            if (this.LockedBy == null)
-            {
-                dictionary.Add("LockedBy", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("LockedBy", new [] { this.LockedBy.Iid });
-            }
-
-            if (this.Owner == null)
-            {
-                dictionary.Add("Owner", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Owner", new [] { this.Owner.Iid });
-            }
+            dictionary.Add("LockedBy", new [] { this.LockedBy?.Iid ?? Guid.Empty });
+            dictionary.Add("Owner", new [] { this.Owner?.Iid ?? Guid.Empty });
 
             return dictionary;
         }

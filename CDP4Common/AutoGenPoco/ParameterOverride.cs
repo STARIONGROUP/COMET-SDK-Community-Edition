@@ -208,29 +208,10 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
-            if (this.Owner == null)
-            {
-                dictionary.Add("Owner", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Owner", new [] { this.Owner.Iid });
-            }
-
-            if (this.Parameter == null)
-            {
-                dictionary.Add("Parameter", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Parameter", new [] { this.Parameter.Iid });
-            }
-
+            dictionary.Add("Owner", new [] { this.Owner?.Iid ?? Guid.Empty });
+            dictionary.Add("Parameter", new [] { this.Parameter?.Iid ?? Guid.Empty });
             dictionary.Add("ParameterSubscription", this.ParameterSubscription.Select(x => x.Iid));
-
             dictionary.Add("ValueSet", this.ValueSet.Select(x => x.Iid));
 
             return dictionary;

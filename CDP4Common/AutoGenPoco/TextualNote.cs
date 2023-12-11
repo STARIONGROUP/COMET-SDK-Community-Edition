@@ -110,19 +110,9 @@ namespace CDP4Common.ReportingData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Category", this.Category.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
-            if (this.Owner == null)
-            {
-                dictionary.Add("Owner", new [] { Guid.Empty });
-            }
-            else
-            {
-                dictionary.Add("Owner", new [] { this.Owner.Iid });
-            }
+            dictionary.Add("Owner", new [] { this.Owner?.Iid ?? Guid.Empty });
 
             return dictionary;
         }
