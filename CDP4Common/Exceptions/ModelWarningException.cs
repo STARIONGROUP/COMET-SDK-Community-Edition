@@ -27,9 +27,15 @@ namespace CDP4Common.Exceptions
     using System;
     using System.Runtime.Serialization;
 
+    using CDP4Common.DTO;
+
     /// <summary>
-    /// The COMET model warning exception is an exception that indicates that a model migt contain and model data might be corrupted.
+    /// The COMET model warning exception is an exception that indicates that model data MIGHT be corrupted, but that is unsure.
     /// </summary>
+    /// <remarks>
+    /// This Exception is typically used during the creation of an Annex.C3 file, where <see cref="Thing"/>s could be removed from the exported file
+    /// due to incompatibility reasons (Model Version issues, source model that contains errors, etc...).
+    /// </remarks>
     [Serializable]
     public class ModelWarningException : ModelErrorException
     {
