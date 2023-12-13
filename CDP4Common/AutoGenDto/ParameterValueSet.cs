@@ -87,12 +87,12 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.ActualOption != default)
+            if (this.ActualOption != null)
             {
                 dictionary.Add("ActualOption", new [] { this.ActualOption.Value });
             }
 
-            if (this.ActualState != default)
+            if (this.ActualState != null)
             {
                 dictionary.Add("ActualState", new [] { this.ActualState.Value });
             }

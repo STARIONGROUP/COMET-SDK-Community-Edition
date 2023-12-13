@@ -149,14 +149,14 @@ namespace CDP4Common.DTO
 
             dictionary.Add("MappingToReferenceScale", this.MappingToReferenceScale);
 
-            if (this.ReferenceQuantityKind != default)
+            if (this.ReferenceQuantityKind != null)
             {
                 dictionary.Add("ReferenceQuantityKind", new [] { this.ReferenceQuantityKind });
             }
 
             dictionary.Add("ReferenceQuantityValue", this.ReferenceQuantityValue);
 
-            if (this.Unit != default)
+            if (this.Unit != null)
             {
                 dictionary.Add("Unit", new [] { this.Unit });
             }
@@ -216,7 +216,8 @@ namespace CDP4Common.DTO
                             case "ReferenceQuantityKind":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ReferenceQuantityKind property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ReferenceQuantityKind property results in inconsistent LogarithmicScale.");
+                                    result = false;
                                 }
                                 break;
 
@@ -227,7 +228,8 @@ namespace CDP4Common.DTO
                             case "Unit":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Unit property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Unit property results in inconsistent LogarithmicScale.");
+                                    result = false;
                                 }
                                 break;
 

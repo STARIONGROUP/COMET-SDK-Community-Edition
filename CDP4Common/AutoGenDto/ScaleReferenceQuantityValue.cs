@@ -105,7 +105,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Scale != default)
+            if (this.Scale != null)
             {
                 dictionary.Add("Scale", new [] { this.Scale });
             }
@@ -147,7 +147,8 @@ namespace CDP4Common.DTO
                             case "Scale":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Scale property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Scale property results in inconsistent ScaleReferenceQuantityValue.");
+                                    result = false;
                                 }
                                 break;
                         }

@@ -190,12 +190,12 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
 
-            if (this.Parameter != default)
+            if (this.Parameter != null)
             {
                 dictionary.Add("Parameter", new [] { this.Parameter });
             }
@@ -241,14 +241,16 @@ namespace CDP4Common.DTO
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent ParameterOverride.");
+                                    result = false;
                                 }
                                 break;
 
                             case "Parameter":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Parameter property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Parameter property results in inconsistent ParameterOverride.");
+                                    result = false;
                                 }
                                 break;
 
@@ -259,7 +261,8 @@ namespace CDP4Common.DTO
                             case "ValueSet":
                                 if (addModelErrors && this.ValueSet.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ValueSet property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from ValueSet property results in inconsistent ParameterOverride.");
+                                    result = false;
                                 }
                                 this.ValueSet.Remove(id);
                                 break;

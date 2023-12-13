@@ -139,7 +139,8 @@ namespace CDP4Common.DTO
                             case "Term":
                                 if (addModelErrors && this.Term.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Term property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from Term property results in inconsistent OrExpression.");
+                                    result = false;
                                 }
                                 this.Term.Remove(id);
                                 break;

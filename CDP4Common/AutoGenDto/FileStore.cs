@@ -139,7 +139,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Folder", this.Folder);
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
@@ -189,7 +189,8 @@ namespace CDP4Common.DTO
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent FileStore.");
+                                    result = false;
                                 }
                                 break;
                         }

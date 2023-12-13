@@ -138,7 +138,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Definition", this.Definition);
 
-            if (this.ElementDefinition != default)
+            if (this.ElementDefinition != null)
             {
                 dictionary.Add("ElementDefinition", new [] { this.ElementDefinition });
             }
@@ -151,7 +151,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("HyperLink", this.HyperLink);
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
@@ -199,7 +199,8 @@ namespace CDP4Common.DTO
                             case "ElementDefinition":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ElementDefinition property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ElementDefinition property results in inconsistent ElementUsage.");
+                                    result = false;
                                 }
                                 break;
 
@@ -222,7 +223,8 @@ namespace CDP4Common.DTO
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent ElementUsage.");
+                                    result = false;
                                 }
                                 break;
 

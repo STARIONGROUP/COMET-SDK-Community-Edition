@@ -4,7 +4,7 @@
      <TargetFrameworks>netstandard2.0</TargetFrameworks>
      <Company>RHEA System S.A.</Company>
      <Title>CDP4Reporting Community Edition</Title>
-      <VersionPrefix>24.4.0</VersionPrefix>
+      <VersionPrefix>24.5.0</VersionPrefix>
      <Description>CDP4 Reporting</Description>
      <Copyright>Copyright © RHEA System S.A.</Copyright>
      <Authors>Sam, Alex, Alexander</Authors>

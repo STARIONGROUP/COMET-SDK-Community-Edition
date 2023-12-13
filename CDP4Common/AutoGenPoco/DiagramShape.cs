@@ -100,24 +100,12 @@ namespace CDP4Common.DiagramData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Bounds", this.Bounds.Select(x => x.Iid));
-
-            if (this.DepictedThing != null)
-            {
-                dictionary.Add("DepictedThing", new [] { this.DepictedThing.Iid });
-            }
-
+            dictionary.Add("DepictedThing", new [] { this.DepictedThing?.Iid ?? Guid.Empty });
             dictionary.Add("DiagramElement", this.DiagramElement.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("LocalStyle", this.LocalStyle.Select(x => x.Iid));
-
-            if (this.SharedStyle != null)
-            {
-                dictionary.Add("SharedStyle", new [] { this.SharedStyle.Iid });
-            }
+            dictionary.Add("SharedStyle", new [] { this.SharedStyle?.Iid ?? Guid.Empty });
 
             return dictionary;
         }
@@ -135,6 +123,25 @@ namespace CDP4Common.DiagramData
             {
                 return false;
             }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
 
             foreach (var kvp in this.GetReferenceProperties())
             {

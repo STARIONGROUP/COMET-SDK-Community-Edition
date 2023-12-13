@@ -69,6 +69,9 @@ namespace CDP4JsonFileDal.Tests
     using SampledFunctionParameterType = CDP4Common.SiteDirectoryData.SampledFunctionParameterType;
     using ElementDefinition = CDP4Common.EngineeringModelData.ElementDefinition;
     using Parameter = CDP4Common.EngineeringModelData.Parameter;
+    using System.Security.Cryptography;
+
+    using CDP4Common;
 
     [TestFixture]
     public class JsonFileDalTestFixture
@@ -543,6 +546,9 @@ namespace CDP4JsonFileDal.Tests
             var elementUsage = mainElement.ContainedElement.FirstOrDefault();
             Assert.That(elementUsage, Is.Not.Null);
             Assert.That(elementUsage.ParameterOverride.Any(), Is.False);
+
+            Assert.That(mainElement.Definition.Any(), Is.True);
+            Assert.That(mainElement.Definition.First().Citation.Any(), Is.False);
         }
 
         [Test]
@@ -604,6 +610,9 @@ namespace CDP4JsonFileDal.Tests
             Assert.That(parameterOverride, Is.Not.Null);
 
             Assert.That(parameterOverride.Parameter.ParameterType.GetType(), Is.EqualTo(typeof(SampledFunctionParameterType)));
+
+            Assert.That(mainElement.Definition.Any(), Is.True);
+            Assert.That(mainElement.Definition.First().Citation.Any(), Is.False);
         }
 
         /// <summary>
@@ -668,6 +677,7 @@ namespace CDP4JsonFileDal.Tests
             participant.Person.Role = role;
             participant.Role = participantRole;
             participant.Domain.Add(domain);
+            participant.SelectedDomain = domain;
             modelSetup.Participant.Add(participant);
 
             var lazyPerson = new Lazy<Thing>(() => person);
@@ -690,9 +700,17 @@ namespace CDP4JsonFileDal.Tests
             this.siteDirectoryData.Model.First().RequiredRdl.First().ParameterType.Add(sampledFunctionParameterType);
 
             var elementDefinition1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementDefinition1.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
             var elementDefinition2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementDefinition2.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
+            var elementDefinition3 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            var elementDefinition4 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementDefinition4.Owner = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.credentials.Uri); //Not in file
+
             var sampledFunctionParameter1 = new Parameter(Guid.NewGuid(), this.cache, this.credentials.Uri);
             var sampledFunctionParameter2 = new Parameter(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            sampledFunctionParameter1.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
+            sampledFunctionParameter2.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
 
             sampledFunctionParameter1.ParameterType = sampledFunctionParameterType;
             sampledFunctionParameter2.ParameterType = sampledFunctionParameterType;
@@ -700,17 +718,32 @@ namespace CDP4JsonFileDal.Tests
             elementDefinition2.Parameter.Add(sampledFunctionParameter2);
             this.iterationPoco.Element.Add(elementDefinition1);
             this.iterationPoco.Element.Add(elementDefinition2);
+            this.iterationPoco.Element.Add(elementDefinition3);
+            this.iterationPoco.Element.Add(elementDefinition4);
 
             var elementUsage = new CDP4Common.EngineeringModelData.ElementUsage(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementUsage.Owner = elementDefinition2.Owner;
             elementUsage.ElementDefinition = elementDefinition2;
+
             var parameterOverride = new CDP4Common.EngineeringModelData.ParameterOverride(Guid.NewGuid(), this.cache, this.credentials.Uri);
             parameterOverride.Parameter = sampledFunctionParameter2;
+            parameterOverride.Owner = sampledFunctionParameter2.Owner;
             elementUsage.ParameterOverride.Add(parameterOverride);
 
             elementDefinition1.ContainedElement.Add(elementUsage);
 
             //Create the DTO again as it might have been changed
             this.iteration = (Iteration)this.iterationPoco.ToDto();
+
+            var citation = new CDP4Common.CommonData.Citation(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            citation.ShortName = "a";
+            citation.Source = SentinelThingProvider.GetSentinel<ReferenceSource>();
+            var definition = new CDP4Common.CommonData.Definition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            definition.Citation.Add(citation);
+            definition.Content = "a";
+            definition.LanguageCode = "NL-nl";
+
+            elementDefinition1.Definition.Add(definition);
         }
     }
 }

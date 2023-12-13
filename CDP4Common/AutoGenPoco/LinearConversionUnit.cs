@@ -96,19 +96,11 @@ namespace CDP4Common.SiteDirectoryData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Alias", this.Alias.Select(x => x.Iid));
-
             dictionary.Add("Definition", this.Definition.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("HyperLink", this.HyperLink.Select(x => x.Iid));
-
-            if (this.ReferenceUnit != null)
-            {
-                dictionary.Add("ReferenceUnit", new [] { this.ReferenceUnit.Iid });
-            }
+            dictionary.Add("ReferenceUnit", new [] { this.ReferenceUnit?.Iid ?? Guid.Empty });
 
             return dictionary;
         }
@@ -133,6 +125,31 @@ namespace CDP4Common.SiteDirectoryData
                 {
                     case "ReferenceUnit":
                         if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "ReferenceUnit":
+                        if (kvp.Value.Except(ids).Any())
                         {
                             result = true;
                         }

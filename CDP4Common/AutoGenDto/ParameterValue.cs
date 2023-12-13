@@ -106,12 +106,12 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.ParameterType != default)
+            if (this.ParameterType != null)
             {
                 dictionary.Add("ParameterType", new [] { this.ParameterType });
             }
 
-            if (this.Scale != default)
+            if (this.Scale != null)
             {
                 dictionary.Add("Scale", new [] { this.Scale.Value });
             }
@@ -153,7 +153,8 @@ namespace CDP4Common.DTO
                             case "ParameterType":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ParameterType property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ParameterType property results in inconsistent ParameterValue.");
+                                    result = false;
                                 }
                                 break;
 

@@ -180,7 +180,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("NestedParameter", this.NestedParameter);
 
-            if (this.RootElement != default)
+            if (this.RootElement != null)
             {
                 dictionary.Add("RootElement", new [] { this.RootElement });
             }
@@ -226,7 +226,8 @@ namespace CDP4Common.DTO
                             case "RootElement":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from RootElement property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from RootElement property results in inconsistent NestedElement.");
+                                    result = false;
                                 }
                                 break;
                         }

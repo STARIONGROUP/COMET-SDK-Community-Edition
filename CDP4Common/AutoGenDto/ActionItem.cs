@@ -116,14 +116,14 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.Actionee != default)
+            if (this.Actionee != null)
             {
                 dictionary.Add("Actionee", new [] { this.Actionee });
             }
 
             dictionary.Add("ApprovedBy", this.ApprovedBy);
 
-            if (this.Author != default)
+            if (this.Author != null)
             {
                 dictionary.Add("Author", new [] { this.Author });
             }
@@ -136,12 +136,12 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
 
-            if (this.PrimaryAnnotatedThing != default)
+            if (this.PrimaryAnnotatedThing != null)
             {
                 dictionary.Add("PrimaryAnnotatedThing", new [] { this.PrimaryAnnotatedThing.Value });
             }
@@ -179,7 +179,8 @@ namespace CDP4Common.DTO
                             case "Actionee":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Actionee property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Actionee property results in inconsistent ActionItem.");
+                                    result = false;
                                 }
                                 break;
 
@@ -190,7 +191,8 @@ namespace CDP4Common.DTO
                             case "Author":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Author property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Author property results in inconsistent ActionItem.");
+                                    result = false;
                                 }
                                 break;
 
@@ -213,7 +215,8 @@ namespace CDP4Common.DTO
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent ActionItem.");
+                                    result = false;
                                 }
                                 break;
 

@@ -105,7 +105,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Alias", this.Alias);
 
-            if (this.Category != default)
+            if (this.Category != null)
             {
                 dictionary.Add("Category", new [] { this.Category });
             }
@@ -153,7 +153,8 @@ namespace CDP4Common.DTO
                             case "Category":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Category property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Category property results in inconsistent ParameterizedCategoryRule.");
+                                    result = false;
                                 }
                                 break;
 
@@ -176,7 +177,8 @@ namespace CDP4Common.DTO
                             case "ParameterType":
                                 if (addModelErrors && this.ParameterType.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ParameterType property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from ParameterType property results in inconsistent ParameterizedCategoryRule.");
+                                    result = false;
                                 }
                                 this.ParameterType.Remove(id);
                                 break;

@@ -107,19 +107,19 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
 
             dictionary.Add("ParameterValue", this.ParameterValue);
 
-            if (this.Source != default)
+            if (this.Source != null)
             {
                 dictionary.Add("Source", new [] { this.Source });
             }
 
-            if (this.Target != default)
+            if (this.Target != null)
             {
                 dictionary.Add("Target", new [] { this.Target });
             }
@@ -165,7 +165,8 @@ namespace CDP4Common.DTO
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent BinaryRelationship.");
+                                    result = false;
                                 }
                                 break;
 
@@ -176,14 +177,16 @@ namespace CDP4Common.DTO
                             case "Source":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Source property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Source property results in inconsistent BinaryRelationship.");
+                                    result = false;
                                 }
                                 break;
 
                             case "Target":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Target property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Target property results in inconsistent BinaryRelationship.");
+                                    result = false;
                                 }
                                 break;
                         }

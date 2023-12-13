@@ -130,17 +130,17 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Person != default)
+            if (this.Person != null)
             {
                 dictionary.Add("Person", new [] { this.Person });
             }
 
-            if (this.Role != default)
+            if (this.Role != null)
             {
                 dictionary.Add("Role", new [] { this.Role });
             }
 
-            if (this.SelectedDomain != default)
+            if (this.SelectedDomain != null)
             {
                 dictionary.Add("SelectedDomain", new [] { this.SelectedDomain });
             }
@@ -174,7 +174,8 @@ namespace CDP4Common.DTO
                             case "Domain":
                                 if (addModelErrors && this.Domain.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Domain property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from Domain property results in inconsistent Participant.");
+                                    result = false;
                                 }
                                 this.Domain.Remove(id);
                                 break;
@@ -190,21 +191,24 @@ namespace CDP4Common.DTO
                             case "Person":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Person property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Person property results in inconsistent Participant.");
+                                    result = false;
                                 }
                                 break;
 
                             case "Role":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Role property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Role property results in inconsistent Participant.");
+                                    result = false;
                                 }
                                 break;
 
                             case "SelectedDomain":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from SelectedDomain property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from SelectedDomain property results in inconsistent Participant.");
+                                    result = false;
                                 }
                                 break;
                         }

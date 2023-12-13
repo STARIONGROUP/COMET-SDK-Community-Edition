@@ -88,7 +88,7 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.Author != default)
+            if (this.Author != null)
             {
                 dictionary.Add("Author", new [] { this.Author });
             }
@@ -99,7 +99,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.PrimaryAnnotatedThing != default)
+            if (this.PrimaryAnnotatedThing != null)
             {
                 dictionary.Add("PrimaryAnnotatedThing", new [] { this.PrimaryAnnotatedThing.Value });
             }
@@ -135,7 +135,8 @@ namespace CDP4Common.DTO
                             case "Author":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Author property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Author property results in inconsistent EngineeringModelDataNote.");
+                                    result = false;
                                 }
                                 break;
 

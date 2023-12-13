@@ -158,17 +158,10 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("File", this.File.Select(x => x.Iid));
-
             dictionary.Add("Folder", this.Folder.Select(x => x.Iid));
-
-            if (this.Owner != null)
-            {
-                dictionary.Add("Owner", new [] { this.Owner.Iid });
-            }
+            dictionary.Add("Owner", new [] { this.Owner?.Iid ?? Guid.Empty });
 
             return dictionary;
         }
@@ -193,6 +186,31 @@ namespace CDP4Common.EngineeringModelData
                 {
                     case "Owner":
                         if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "Owner":
+                        if (kvp.Value.Except(ids).Any())
                         {
                             result = true;
                         }

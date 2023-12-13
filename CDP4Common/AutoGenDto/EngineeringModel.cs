@@ -170,7 +170,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("CommonFileStore", this.CommonFileStore);
 
-            if (this.EngineeringModelSetup != default)
+            if (this.EngineeringModelSetup != null)
             {
                 dictionary.Add("EngineeringModelSetup", new [] { this.EngineeringModelSetup });
             }
@@ -220,7 +220,8 @@ namespace CDP4Common.DTO
                             case "EngineeringModelSetup":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from EngineeringModelSetup property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from EngineeringModelSetup property results in inconsistent EngineeringModel.");
+                                    result = false;
                                 }
                                 break;
 
@@ -239,7 +240,8 @@ namespace CDP4Common.DTO
                             case "Iteration":
                                 if (addModelErrors && this.Iteration.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Iteration property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from Iteration property results in inconsistent EngineeringModel.");
+                                    result = false;
                                 }
                                 this.Iteration.Remove(id);
                                 break;

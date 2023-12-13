@@ -129,7 +129,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("RelatedCategory", this.RelatedCategory);
 
-            if (this.RelationshipCategory != default)
+            if (this.RelationshipCategory != null)
             {
                 dictionary.Add("RelationshipCategory", new [] { this.RelationshipCategory });
             }
@@ -183,7 +183,8 @@ namespace CDP4Common.DTO
                             case "RelatedCategory":
                                 if (addModelErrors && this.RelatedCategory.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from RelatedCategory property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from RelatedCategory property results in inconsistent MultiRelationshipRule.");
+                                    result = false;
                                 }
                                 this.RelatedCategory.Remove(id);
                                 break;
@@ -191,7 +192,8 @@ namespace CDP4Common.DTO
                             case "RelationshipCategory":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from RelationshipCategory property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from RelationshipCategory property results in inconsistent MultiRelationshipRule.");
+                                    result = false;
                                 }
                                 break;
                         }

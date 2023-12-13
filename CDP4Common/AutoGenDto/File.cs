@@ -140,12 +140,12 @@ namespace CDP4Common.DTO
 
             dictionary.Add("FileRevision", this.FileRevision);
 
-            if (this.LockedBy != default)
+            if (this.LockedBy != null)
             {
                 dictionary.Add("LockedBy", new [] { this.LockedBy.Value });
             }
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
@@ -191,7 +191,8 @@ namespace CDP4Common.DTO
                             case "FileRevision":
                                 if (addModelErrors && this.FileRevision.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from FileRevision property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from FileRevision property results in inconsistent File.");
+                                    result = false;
                                 }
                                 this.FileRevision.Remove(id);
                                 break;
@@ -203,7 +204,8 @@ namespace CDP4Common.DTO
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent File.");
+                                    result = false;
                                 }
                                 break;
                         }

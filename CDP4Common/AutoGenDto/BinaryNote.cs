@@ -108,12 +108,12 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.FileType != default)
+            if (this.FileType != null)
             {
                 dictionary.Add("FileType", new [] { this.FileType });
             }
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
@@ -159,14 +159,16 @@ namespace CDP4Common.DTO
                             case "FileType":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from FileType property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from FileType property results in inconsistent BinaryNote.");
+                                    result = false;
                                 }
                                 break;
 
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent BinaryNote.");
+                                    result = false;
                                 }
                                 break;
                         }

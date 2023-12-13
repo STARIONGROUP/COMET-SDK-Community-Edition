@@ -194,24 +194,13 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Book", this.Book.Select(x => x.Iid));
-
             dictionary.Add("CommonFileStore", this.CommonFileStore.Select(x => x.Iid));
-
-            if (this.EngineeringModelSetup != null)
-            {
-                dictionary.Add("EngineeringModelSetup", new [] { this.EngineeringModelSetup.Iid });
-            }
-
+            dictionary.Add("EngineeringModelSetup", new [] { this.EngineeringModelSetup?.Iid ?? Guid.Empty });
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("GenericNote", this.GenericNote.Select(x => x.Iid));
-
             dictionary.Add("Iteration", this.Iteration.Select(x => x.Iid));
-
             dictionary.Add("LogEntry", this.LogEntry.Select(x => x.Iid));
-
             dictionary.Add("ModellingAnnotation", this.ModellingAnnotation.Select(x => x.Iid));
 
             return dictionary;
@@ -237,6 +226,31 @@ namespace CDP4Common.EngineeringModelData
                 {
                     case "EngineeringModelSetup":
                         if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "EngineeringModelSetup":
+                        if (kvp.Value.Except(ids).Any())
                         {
                             result = true;
                         }

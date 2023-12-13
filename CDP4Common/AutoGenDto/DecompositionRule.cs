@@ -121,7 +121,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ContainedCategory", this.ContainedCategory);
 
-            if (this.ContainingCategory != default)
+            if (this.ContainingCategory != null)
             {
                 dictionary.Add("ContainingCategory", new [] { this.ContainingCategory });
             }
@@ -167,7 +167,8 @@ namespace CDP4Common.DTO
                             case "ContainedCategory":
                                 if (addModelErrors && this.ContainedCategory.Count == 1)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ContainedCategory property is not allowed.");
+                                    errors.Add($"Removing reference '{id}' from ContainedCategory property results in inconsistent DecompositionRule.");
+                                    result = false;
                                 }
                                 this.ContainedCategory.Remove(id);
                                 break;
@@ -175,7 +176,8 @@ namespace CDP4Common.DTO
                             case "ContainingCategory":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ContainingCategory property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ContainingCategory property results in inconsistent DecompositionRule.");
+                                    result = false;
                                 }
                                 break;
 

@@ -306,7 +306,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ActualFiniteStateList", this.ActualFiniteStateList);
 
-            if (this.DefaultOption != default)
+            if (this.DefaultOption != null)
             {
                 dictionary.Add("DefaultOption", new [] { this.DefaultOption.Value });
             }
@@ -325,7 +325,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Goal", this.Goal);
 
-            if (this.IterationSetup != default)
+            if (this.IterationSetup != null)
             {
                 dictionary.Add("IterationSetup", new [] { this.IterationSetup });
             }
@@ -348,7 +348,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("StakeholderValueMap", this.StakeholderValueMap);
 
-            if (this.TopElement != default)
+            if (this.TopElement != null)
             {
                 dictionary.Add("TopElement", new [] { this.TopElement.Value });
             }
@@ -420,7 +420,8 @@ namespace CDP4Common.DTO
                             case "IterationSetup":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from IterationSetup property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from IterationSetup property results in inconsistent Iteration.");
+                                    result = false;
                                 }
                                 break;
 

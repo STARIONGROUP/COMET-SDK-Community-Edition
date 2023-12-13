@@ -164,12 +164,12 @@ namespace CDP4Common.DTO
 
             dictionary.Add("HyperLink", this.HyperLink);
 
-            if (this.PublishedIn != default)
+            if (this.PublishedIn != null)
             {
                 dictionary.Add("PublishedIn", new [] { this.PublishedIn.Value });
             }
 
-            if (this.Publisher != default)
+            if (this.Publisher != null)
             {
                 dictionary.Add("Publisher", new [] { this.Publisher.Value });
             }

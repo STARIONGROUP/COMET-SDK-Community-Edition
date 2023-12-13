@@ -105,7 +105,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.QuantityKind != default)
+            if (this.QuantityKind != null)
             {
                 dictionary.Add("QuantityKind", new [] { this.QuantityKind });
             }
@@ -147,7 +147,8 @@ namespace CDP4Common.DTO
                             case "QuantityKind":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from QuantityKind property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from QuantityKind property results in inconsistent QuantityKindFactor.");
+                                    result = false;
                                 }
                                 break;
                         }

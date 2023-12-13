@@ -341,7 +341,10 @@ namespace CDP4Common.CommonData
                 foreach (Thing thing in containerList)
                 {
                     var containedThings = thing.QueryContainedThingsDeep();
-                    temp.AddRange(containedThings);
+                    if (containedThings.Any())
+                    {
+                        temp.AddRange(containedThings);
+                    }
                 }
             }
 
@@ -363,6 +366,16 @@ namespace CDP4Common.CommonData
         /// <param name="ids">The collection of Guids to search for.</param>
         /// <returns>True is any of the id's in <paramref name="ids"/> is found in this instance's reference properties.</returns>
         public virtual bool HasMandatoryReferenceToAny(IEnumerable<Guid> ids)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public virtual bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
         {
             return false;
         }

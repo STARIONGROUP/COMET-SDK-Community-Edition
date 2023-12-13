@@ -112,7 +112,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Rule != default)
+            if (this.Rule != null)
             {
                 dictionary.Add("Rule", new [] { this.Rule });
             }
@@ -154,7 +154,8 @@ namespace CDP4Common.DTO
                             case "Rule":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Rule property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Rule property results in inconsistent UserRuleVerification.");
+                                    result = false;
                                 }
                                 break;
                         }

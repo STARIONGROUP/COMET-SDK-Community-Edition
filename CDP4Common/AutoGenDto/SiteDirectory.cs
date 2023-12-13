@@ -246,12 +246,12 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Annotation", this.Annotation);
 
-            if (this.DefaultParticipantRole != default)
+            if (this.DefaultParticipantRole != null)
             {
                 dictionary.Add("DefaultParticipantRole", new [] { this.DefaultParticipantRole.Value });
             }
 
-            if (this.DefaultPersonRole != default)
+            if (this.DefaultPersonRole != null)
             {
                 dictionary.Add("DefaultPersonRole", new [] { this.DefaultPersonRole.Value });
             }

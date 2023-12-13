@@ -156,7 +156,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Category", this.Category);
 
-            if (this.DefaultScale != default)
+            if (this.DefaultScale != null)
             {
                 dictionary.Add("DefaultScale", new [] { this.DefaultScale });
             }
@@ -208,7 +208,8 @@ namespace CDP4Common.DTO
                             case "DefaultScale":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from DefaultScale property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from DefaultScale property results in inconsistent QuantityKind.");
+                                    result = false;
                                 }
                                 break;
 

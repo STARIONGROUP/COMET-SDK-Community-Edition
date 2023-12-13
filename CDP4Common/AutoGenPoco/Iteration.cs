@@ -353,56 +353,26 @@ namespace CDP4Common.EngineeringModelData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ActualFiniteStateList", this.ActualFiniteStateList.Select(x => x.Iid));
-
-            if (this.DefaultOption != null)
-            {
-                dictionary.Add("DefaultOption", new [] { this.DefaultOption.Iid });
-            }
-
+            dictionary.Add("DefaultOption", new [] { this.DefaultOption?.Iid ?? Guid.Empty });
             dictionary.Add("DiagramCanvas", this.DiagramCanvas.Select(x => x.Iid));
-
             dictionary.Add("DomainFileStore", this.DomainFileStore.Select(x => x.Iid));
-
             dictionary.Add("Element", this.Element.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
             dictionary.Add("ExternalIdentifierMap", this.ExternalIdentifierMap.Select(x => x.Iid));
-
             dictionary.Add("Goal", this.Goal.Select(x => x.Iid));
-
-            if (this.IterationSetup != null)
-            {
-                dictionary.Add("IterationSetup", new [] { this.IterationSetup.Iid });
-            }
-
+            dictionary.Add("IterationSetup", new [] { this.IterationSetup?.Iid ?? Guid.Empty });
             dictionary.Add("Option", this.Option.Select(x => x.Iid));
-
             dictionary.Add("PossibleFiniteStateList", this.PossibleFiniteStateList.Select(x => x.Iid));
-
             dictionary.Add("Publication", this.Publication.Select(x => x.Iid));
-
             dictionary.Add("Relationship", this.Relationship.Select(x => x.Iid));
-
             dictionary.Add("RequirementsSpecification", this.RequirementsSpecification.Select(x => x.Iid));
-
             dictionary.Add("RuleVerificationList", this.RuleVerificationList.Select(x => x.Iid));
-
             dictionary.Add("SharedDiagramStyle", this.SharedDiagramStyle.Select(x => x.Iid));
-
             dictionary.Add("Stakeholder", this.Stakeholder.Select(x => x.Iid));
-
             dictionary.Add("StakeholderValue", this.StakeholderValue.Select(x => x.Iid));
-
             dictionary.Add("StakeholderValueMap", this.StakeholderValueMap.Select(x => x.Iid));
-
-            if (this.TopElement != null)
-            {
-                dictionary.Add("TopElement", new [] { this.TopElement.Iid });
-            }
-
+            dictionary.Add("TopElement", new [] { this.TopElement?.Iid ?? Guid.Empty });
             dictionary.Add("ValueGroup", this.ValueGroup.Select(x => x.Iid));
 
             return dictionary;
@@ -428,6 +398,31 @@ namespace CDP4Common.EngineeringModelData
                 {
                     case "IterationSetup":
                         if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "IterationSetup":
+                        if (kvp.Value.Except(ids).Any())
                         {
                             result = true;
                         }

@@ -104,29 +104,29 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Group != default)
+            if (this.Group != null)
             {
                 dictionary.Add("Group", new [] { this.Group.Value });
             }
 
-            if (this.Owner != default)
+            if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
             }
 
             dictionary.Add("ParameterSubscription", this.ParameterSubscription);
 
-            if (this.ParameterType != default)
+            if (this.ParameterType != null)
             {
                 dictionary.Add("ParameterType", new [] { this.ParameterType });
             }
 
-            if (this.Scale != default)
+            if (this.Scale != null)
             {
                 dictionary.Add("Scale", new [] { this.Scale.Value });
             }
 
-            if (this.StateDependence != default)
+            if (this.StateDependence != null)
             {
                 dictionary.Add("StateDependence", new [] { this.StateDependence.Value });
             }
@@ -172,7 +172,8 @@ namespace CDP4Common.DTO
                             case "Owner":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Owner property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Owner property results in inconsistent ParameterOrOverrideBase.");
+                                    result = false;
                                 }
                                 break;
 
@@ -183,7 +184,8 @@ namespace CDP4Common.DTO
                             case "ParameterType":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ParameterType property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ParameterType property results in inconsistent ParameterOrOverrideBase.");
+                                    result = false;
                                 }
                                 break;
 

@@ -101,7 +101,7 @@ namespace CDP4Common.DTO
         {
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
-            if (this.DependentScaleValue != default)
+            if (this.DependentScaleValue != null)
             {
                 dictionary.Add("DependentScaleValue", new [] { this.DependentScaleValue });
             }
@@ -110,7 +110,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.ReferenceScaleValue != default)
+            if (this.ReferenceScaleValue != null)
             {
                 dictionary.Add("ReferenceScaleValue", new [] { this.ReferenceScaleValue });
             }
@@ -144,7 +144,8 @@ namespace CDP4Common.DTO
                             case "DependentScaleValue":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from DependentScaleValue property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from DependentScaleValue property results in inconsistent MappingToReferenceScale.");
+                                    result = false;
                                 }
                                 break;
 
@@ -159,7 +160,8 @@ namespace CDP4Common.DTO
                             case "ReferenceScaleValue":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ReferenceScaleValue property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ReferenceScaleValue property results in inconsistent MappingToReferenceScale.");
+                                    result = false;
                                 }
                                 break;
                         }

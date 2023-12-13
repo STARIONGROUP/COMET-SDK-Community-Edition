@@ -198,7 +198,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.SubscribedValueSet != default)
+            if (this.SubscribedValueSet != null)
             {
                 dictionary.Add("SubscribedValueSet", new [] { this.SubscribedValueSet });
             }
@@ -240,7 +240,8 @@ namespace CDP4Common.DTO
                             case "SubscribedValueSet":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from SubscribedValueSet property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from SubscribedValueSet property results in inconsistent ParameterSubscriptionValueSet.");
+                                    result = false;
                                 }
                                 break;
                         }

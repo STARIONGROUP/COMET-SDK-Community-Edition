@@ -126,7 +126,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.Source != default)
+            if (this.Source != null)
             {
                 dictionary.Add("Source", new [] { this.Source });
             }
@@ -168,7 +168,8 @@ namespace CDP4Common.DTO
                             case "Source":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from Source property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from Source property results in inconsistent Citation.");
+                                    result = false;
                                 }
                                 break;
                         }

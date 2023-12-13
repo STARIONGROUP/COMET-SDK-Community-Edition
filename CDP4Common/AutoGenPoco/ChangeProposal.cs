@@ -103,37 +103,15 @@ namespace CDP4Common.ReportingData
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("ApprovedBy", this.ApprovedBy.Select(x => x.Iid));
-
-            if (this.Author != null)
-            {
-                dictionary.Add("Author", new [] { this.Author.Iid });
-            }
-
+            dictionary.Add("Author", new [] { this.Author?.Iid ?? Guid.Empty });
             dictionary.Add("Category", this.Category.Select(x => x.Iid));
-
-            if (this.ChangeRequest != null)
-            {
-                dictionary.Add("ChangeRequest", new [] { this.ChangeRequest.Iid });
-            }
-
+            dictionary.Add("ChangeRequest", new [] { this.ChangeRequest?.Iid ?? Guid.Empty });
             dictionary.Add("Discussion", this.Discussion.Select(x => x.Iid));
-
             dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-
             dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-
-            if (this.Owner != null)
-            {
-                dictionary.Add("Owner", new [] { this.Owner.Iid });
-            }
-
-            if (this.PrimaryAnnotatedThing != null)
-            {
-                dictionary.Add("PrimaryAnnotatedThing", new [] { this.PrimaryAnnotatedThing.Iid });
-            }
-
+            dictionary.Add("Owner", new [] { this.Owner?.Iid ?? Guid.Empty });
+            dictionary.Add("PrimaryAnnotatedThing", new [] { this.PrimaryAnnotatedThing?.Iid ?? Guid.Empty });
             dictionary.Add("RelatedThing", this.RelatedThing.Select(x => x.Iid));
-
             dictionary.Add("SourceAnnotation", this.SourceAnnotation.Select(x => x.Iid));
 
             return dictionary;
@@ -173,6 +151,45 @@ namespace CDP4Common.ReportingData
 
                     case "Owner":
                         if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "Author":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "ChangeRequest":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "Owner":
+                        if (kvp.Value.Except(ids).Any())
                         {
                             result = true;
                         }

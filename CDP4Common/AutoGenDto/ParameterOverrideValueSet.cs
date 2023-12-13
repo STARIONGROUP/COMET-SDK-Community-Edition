@@ -126,7 +126,7 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
-            if (this.ParameterValueSet != default)
+            if (this.ParameterValueSet != null)
             {
                 dictionary.Add("ParameterValueSet", new [] { this.ParameterValueSet });
             }
@@ -168,7 +168,8 @@ namespace CDP4Common.DTO
                             case "ParameterValueSet":
                                 if (addModelErrors)
                                 {
-                                    errors.Add($"Remove reference '{id}' from ParameterValueSet property is not allowed.");
+                                    errors.Add($"Removed reference '{id}' from ParameterValueSet property results in inconsistent ParameterOverrideValueSet.");
+                                    result = false;
                                 }
                                 break;
                         }
