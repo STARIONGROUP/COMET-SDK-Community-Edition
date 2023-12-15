@@ -155,64 +155,6 @@ namespace CDP4Common.SiteDirectoryData
         public IterationSetup SourceIterationSetup { get; set; }
 
         /// <summary>
-        /// Get all Reference Properties by their Name and id's of instance values
-        /// </summary>
-        /// <returns>A dictionary of string (Name) and a collections of Guid's (id's of instance values)</returns>
-        public override IDictionary<string, IEnumerable<Guid>> GetReferenceProperties()
-        {
-            var dictionary = new Dictionary<string, IEnumerable<Guid>>();
-
-            dictionary.Add("ExcludedDomain", this.ExcludedDomain.Select(x => x.Iid));
-            dictionary.Add("ExcludedPerson", this.ExcludedPerson.Select(x => x.Iid));
-            dictionary.Add("SourceIterationSetup", new [] { this.SourceIterationSetup?.Iid ?? Guid.Empty });
-
-            return dictionary;
-        }
-
-        /// <summary>
-        /// Checks if this instance has mandatory references to any of the id's in a collection of id's (Guid's)
-        /// </summary>
-        /// <param name="ids">The collection of Guids to search for.</param>
-        /// <returns>True is any of the id's in <paramref name="ids"/> is found in this instance's reference properties.</returns>
-        public override bool HasMandatoryReferenceToAny(IEnumerable<Guid> ids)
-        {
-            var result = false;
-
-            if (!ids.Any())
-            {
-                return false;
-            }
-
-            foreach (var kvp in this.GetReferenceProperties())
-            {
-                switch (kvp.Key)
-                {
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
-        /// </summary>
-        /// <param name="ids">The HashSet of Guids to search for.</param>
-        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
-        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
-        {
-            var result = false;
-
-            foreach (var kvp in this.GetReferenceProperties())
-            {
-                switch (kvp.Key)
-                {
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Queries the referenced <see cref="Thing"/>s of the current <see cref="IterationSetup"/>
         /// </summary>
         /// <remarks>

@@ -195,6 +195,26 @@ namespace CDP4Common.DTO
         }
 
         /// <summary>
+        /// Checks if this instance has mandatory references to any of the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to search for.</param>
+        /// <returns>True is any of the id's in <paramref name="ids"/> is found in this instance's reference properties.</returns>
+        public virtual bool HasMandatoryReferenceToAny(IEnumerable<Guid> ids)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public virtual bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// Tries to remove references to id's if they exist in a collection of id's (Guid's)
         /// </summary>
         /// <param name="ids">The collection of Guids to remove references for.</param>
@@ -202,20 +222,32 @@ namespace CDP4Common.DTO
         /// <returns>True if no errors were found while trying to remove references</returns>
         public virtual bool TryRemoveReferences(IEnumerable<Guid> ids, out List<string> errors)
         {
-            errors = null;
+            errors = new List<string>();
             return true;
         }
 
         /// <summary>
-            /// Queries the <see cref="CommonData.Thing"/> that was the source of the DTO
-            /// </summary>        
-            /// <returns>
-            /// The <see cref="Thing"/> that is the source from which the DTO may have been created.
-            /// </returns>
-            /// <remarks>
-            /// The return value may be null if the DTO was not created based on an existing POCO.
-            /// </remarks>
-            public CommonData.Thing QuerySourceThing()
+        /// Tries to remove references to id's if they don't exist in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids</param>
+        /// <param name="errors">The errors collected while trying to remove references</param>
+        /// <returns>True if no errors were found while trying to remove references</returns>
+        public virtual bool TryRemoveReferencesNotIn(IEnumerable<Guid> ids, out List<string> errors)
+        {
+            errors = new List<string>();
+            return true;
+        }
+
+        /// <summary>
+        /// Queries the <see cref="CommonData.Thing"/> that was the source of the DTO
+        /// </summary>        
+        /// <returns>
+        /// The <see cref="Thing"/> that is the source from which the DTO may have been created.
+        /// </returns>
+        /// <remarks>
+        /// The return value may be null if the DTO was not created based on an existing POCO.
+        /// </remarks>
+        public CommonData.Thing QuerySourceThing()
         {
             return this.SourceThing;
         }

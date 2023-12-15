@@ -308,6 +308,199 @@ namespace CDP4Common.DTO
         }
 
         /// <summary>
+        /// Tries to remove references to id's if they don't exist in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids</param>
+        /// <param name="errors">The errors collected while trying to remove references</param>
+        /// <returns>True if no errors were found while trying to remove references</returns>
+        public override bool TryRemoveReferencesNotIn(IEnumerable<Guid> ids, out List<string> errors)
+        {
+            errors = new List<string>();
+            var result = true;
+
+            foreach (var referencedProperty in this.GetReferenceProperties())
+            {
+                switch (referencedProperty.Key)
+                {
+                    case "ActiveDomain":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ActiveDomain.Remove(toBeRemoved);
+                        } 
+                        if (!this.ActiveDomain.Any())
+                        {
+                            errors.Add($"Removed reference '{referencedProperty.Key}' from ActiveDomain property results in inconsistent EngineeringModelSetup.");
+                            result = false;
+                        }
+                        break;
+
+                    case "Alias":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Alias.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "DefaultOrganizationalParticipant":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            this.DefaultOrganizationalParticipant = null;
+                        }
+                        break;
+
+                    case "Definition":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Definition.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "ExcludedDomain":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ExcludedDomain.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "ExcludedPerson":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ExcludedPerson.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "HyperLink":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.HyperLink.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "IterationSetup":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.IterationSetup.Remove(toBeRemoved);
+                        } 
+                        if (!this.IterationSetup.Any())
+                        {
+                            errors.Add($"Removed reference '{referencedProperty.Key}' from IterationSetup property results in inconsistent EngineeringModelSetup.");
+                            result = false;
+                        }
+                        break;
+
+                    case "OrganizationalParticipant":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.OrganizationalParticipant.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Participant":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Participant.Remove(toBeRemoved);
+                        } 
+                        if (!this.Participant.Any())
+                        {
+                            errors.Add($"Removed reference '{referencedProperty.Key}' from Participant property results in inconsistent EngineeringModelSetup.");
+                            result = false;
+                        }
+                        break;
+
+                    case "RequiredRdl":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.RequiredRdl.Remove(toBeRemoved);
+                        } 
+                        if (!this.RequiredRdl.Any())
+                        {
+                            errors.Add($"Removed reference '{referencedProperty.Key}' from RequiredRdl property results in inconsistent EngineeringModelSetup.");
+                            result = false;
+                        }
+                        break;
+                }
+            }
+            
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to any of the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to search for.</param>
+        /// <returns>True is any of the id's in <paramref name="ids"/> is found in this instance's reference properties.</returns>
+        public override bool HasMandatoryReferenceToAny(IEnumerable<Guid> ids)
+        {
+            var result = false;
+
+            if (!ids.Any())
+            {
+                return false;
+            }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "RequiredRdl":
+                        if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "ActiveDomain":
+                        if (!kvp.Value.Intersect(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "IterationSetup":
+                        if (!kvp.Value.Intersect(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "Participant":
+                        if (!kvp.Value.Intersect(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "RequiredRdl":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Instantiate a <see cref="CDP4Common.SiteDirectoryData.EngineeringModelSetup"/> from a <see cref="EngineeringModelSetup"/>
         /// </summary>
         /// <param name="cache">The cache that stores all the <see cref="CommonData.Thing"/>s</param>.

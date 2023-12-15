@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingConverterExtensions.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft
 //
@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer.JsonConverter
+namespace CDP4Common.Extensions
 {
     using System;
     using System.Linq;
@@ -43,7 +43,7 @@ namespace CDP4JsonSerializer.JsonConverter
         /// the <see cref="object"/> for which the serialization is to be asserted
         /// </param>
         /// <param name="metaDataProvider">
-        /// The <see cref="IMetaDataProvider"/> used to provide meta data
+        /// The <see cref="CDP4Common.MetaInfo.IMetaDataProvider"/> used to provide meta data
         /// </param>
         /// <param name="version">
         /// The data model version to be used to determine whether a class shall be serialized or not
@@ -77,13 +77,13 @@ namespace CDP4JsonSerializer.JsonConverter
         }
 
         /// <summary>
-        /// Checks the <see cref="Category"/>'s <see cref="Category.PermissibleClass"/> property for <see cref="Version"/> compatibility
+        /// Checks the <see cref="CDP4Common.DTO.Category"/>'s <see cref="CDP4Common.DTO.Category.PermissibleClass"/> property for <see cref="System.Version"/> compatibility
         /// </summary>
         /// <param name="value">
         /// the <see cref="object"/> for which the serialization is to be asserted
         /// </param>
         /// <param name="metaDataProvider">
-        /// The <see cref="IMetaDataProvider"/> used to provide meta data
+        /// The <see cref="CDP4Common.MetaInfo.IMetaDataProvider"/> used to provide meta data
         /// </param>
         /// <param name="version">
         /// The data model version to be used to determine whether a class shall be serialized or not

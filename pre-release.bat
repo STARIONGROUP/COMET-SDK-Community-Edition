@@ -28,14 +28,14 @@ IF EXIST "%~dp0\PreReleaseBuilds" (
 mkdir "%~dp0\PreReleaseBuilds"
 
 rem Cleaning Builds...
-dotnet clean -c Debug CDP4-SDK.sln
+dotnet clean -c Debug CDP4-SDK.sln /p:Platform="Any CPU" 
 
 ECHO.
 ECHO Packing nugets...
 ECHO.
 
 rem Packing New Versions...
-dotnet pack -c Debug --version-suffix "%versionSuffix%" -o PreReleaseBuilds CDP4-SDK.sln
+dotnet pack -c Debug --version-suffix "%versionSuffix%" -o PreReleaseBuilds CDP4-SDK.sln /p:Platform="Any CPU"
 
 ECHO.
 ECHO Pushing to github ...
