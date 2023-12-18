@@ -379,7 +379,7 @@ namespace CDP4JsonFileDal.Tests
             operationContainer.AddOperation(operation);
             operationContainers = new[] { operationContainer, operationContainer };
 
-            var things = await this.dal.Write(operationContainers, files);
+            var things = await this.dal.Write(operationContainers);
             Assert.That(things, Is.Empty);
         }
 

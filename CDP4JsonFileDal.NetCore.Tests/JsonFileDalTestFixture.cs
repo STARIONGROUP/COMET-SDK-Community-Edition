@@ -69,6 +69,12 @@ namespace CDP4JsonFileDal.NetCore.Tests
     using SampledFunctionParameterType = CDP4Common.SiteDirectoryData.SampledFunctionParameterType;
     using ElementDefinition = CDP4Common.EngineeringModelData.ElementDefinition;
     using Parameter = CDP4Common.EngineeringModelData.Parameter;
+    using System.Security.Cryptography;
+
+    using CDP4Common;
+    using CDP4Common.SiteDirectoryData;
+
+    using OrganizationalParticipant = CDP4Common.SiteDirectoryData.OrganizationalParticipant;
 
     [TestFixture]
     public class JsonFileDalTestFixture
@@ -373,7 +379,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             operationContainer.AddOperation(operation);
             operationContainers = new[] { operationContainer, operationContainer };
 
-            var things = await this.dal.Write(operationContainers, files);
+            var things = await this.dal.Write(operationContainers);
             Assert.That(things, Is.Empty);
         }
 
@@ -505,7 +511,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             var zipSession = new Session(this.dal, zipCredentials);
 
             this.CreateBasicModel();
-            this.AddSampledFunctionParameterAndUsage();
+            this.AddExtraThingsForExportFilteringTests();
 
             var operationContainers = this.BuildOperationContainers();
 
@@ -535,14 +541,23 @@ namespace CDP4JsonFileDal.NetCore.Tests
 
             Assert.That(readIteration.Element.Count, Is.EqualTo(2));
 
-            var mainElement = readIteration.Element.FirstOrDefault(x => x.ContainedElement.Any());
-            Assert.That(mainElement, Is.Not.Null);
+            var element1 = readIteration.Element.FirstOrDefault(x => x.ShortName == "ED1");
+            Assert.That(element1, Is.Not.Null);
 
-            Assert.That(mainElement.Parameter.Any(), Is.False);
+            Assert.That(element1.Parameter.Any(), Is.False);
 
-            var elementUsage = mainElement.ContainedElement.FirstOrDefault();
+            var elementUsage = element1.ContainedElement.FirstOrDefault();
             Assert.That(elementUsage, Is.Not.Null);
             Assert.That(elementUsage.ParameterOverride.Any(), Is.False);
+
+            Assert.That(element1.Definition.Any(), Is.True);
+            Assert.That(element1.Definition.First().Citation.Any(), Is.False);
+
+            Assert.That(element1.OrganizationalParticipant.Any(), Is.False);
+
+            var element2 = readIteration.Element.FirstOrDefault(x => x.ShortName == "ED2");
+            Assert.That(element2.OrganizationalParticipant.Any(), Is.False);
+
         }
 
         [Test]
@@ -557,14 +572,14 @@ namespace CDP4JsonFileDal.NetCore.Tests
             var zipSession = new Session(this.dal, zipCredentials);
 
             this.CreateBasicModel();
-            this.AddSampledFunctionParameterAndUsage();
+            this.AddExtraThingsForExportFilteringTests();
 
             var operationContainers = this.BuildOperationContainers();
 
             Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
 
             //Part 2 read newly created file
-            var newDal = new JsonFileDal(new Version("1.0.0"));
+            var newDal = new JsonFileDal(new Version("1.3.0"));
             var newSession = new Session(newDal, zipCredentials);
 
             await newSession.Open();
@@ -587,16 +602,16 @@ namespace CDP4JsonFileDal.NetCore.Tests
 
             Assert.That(readIteration.Element.Count, Is.EqualTo(2));
 
-            var mainElement = readIteration.Element.FirstOrDefault(x => x.ContainedElement.Any());
-            Assert.That(mainElement, Is.Not.Null);
+            var element1 = readIteration.Element.FirstOrDefault(x => x.ShortName == "ED1");
+            Assert.That(element1, Is.Not.Null);
 
-            Assert.That(mainElement.Parameter.Count(), Is.EqualTo(1));
+            Assert.That(element1.Parameter.Count(), Is.EqualTo(1));
 
-            var parameter = mainElement.Parameter.FirstOrDefault();
+            var parameter = element1.Parameter.FirstOrDefault();
             Assert.That(parameter, Is.Not.Null);
             Assert.That(parameter.ParameterType.GetType(), Is.EqualTo(typeof(SampledFunctionParameterType)));
 
-            var elementUsage = mainElement.ContainedElement.First();
+            var elementUsage = element1.ContainedElement.First();
             Assert.That(elementUsage, Is.Not.Null);
             Assert.That(elementUsage.ParameterOverride.Any(), Is.True);
 
@@ -604,6 +619,17 @@ namespace CDP4JsonFileDal.NetCore.Tests
             Assert.That(parameterOverride, Is.Not.Null);
 
             Assert.That(parameterOverride.Parameter.ParameterType.GetType(), Is.EqualTo(typeof(SampledFunctionParameterType)));
+
+            Assert.That(element1.Definition.Any(), Is.True);
+            Assert.That(element1.Definition.First().Citation.Any(), Is.False);
+
+            Assert.That(element1.OrganizationalParticipant.Any(), Is.False);
+
+            var element2 = readIteration.Element.FirstOrDefault(x => x.ShortName == "ED2");
+            Assert.That(element2.OrganizationalParticipant.Count, Is.EqualTo(1));
+
+
+
         }
 
         /// <summary>
@@ -668,6 +694,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             participant.Person.Role = role;
             participant.Role = participantRole;
             participant.Domain.Add(domain);
+            participant.SelectedDomain = domain;
             modelSetup.Participant.Add(participant);
 
             var lazyPerson = new Lazy<Thing>(() => person);
@@ -684,30 +711,104 @@ namespace CDP4JsonFileDal.NetCore.Tests
             this.iteration = (Iteration)this.iterationPoco.ToDto();
         }
 
-        private void AddSampledFunctionParameterAndUsage()
+        private void AddExtraThingsForExportFilteringTests()
         {
             var sampledFunctionParameterType = new SampledFunctionParameterType(Guid.NewGuid(), this.cache, this.credentials.Uri);
             this.siteDirectoryData.Model.First().RequiredRdl.First().ParameterType.Add(sampledFunctionParameterType);
 
             var elementDefinition1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementDefinition1.ShortName = "ED1";
+            elementDefinition1.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
+
             var elementDefinition2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementDefinition2.ShortName = "ED2";
+            elementDefinition2.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
+
+            var elementDefinition3 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementDefinition3.ShortName = "ED3";
+
+            var elementDefinition4 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementDefinition4.ShortName = "ED4";
+            elementDefinition4.Owner = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.credentials.Uri); //Not in file
+
             var sampledFunctionParameter1 = new Parameter(Guid.NewGuid(), this.cache, this.credentials.Uri);
             var sampledFunctionParameter2 = new Parameter(Guid.NewGuid(), this.cache, this.credentials.Uri);
 
+            sampledFunctionParameter1.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
+            sampledFunctionParameter2.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
+
             sampledFunctionParameter1.ParameterType = sampledFunctionParameterType;
             sampledFunctionParameter2.ParameterType = sampledFunctionParameterType;
+
+            sampledFunctionParameter1.ValueSet.Add(new CDP4Common.EngineeringModelData.ParameterValueSet(Guid.NewGuid(), this.cache, this.credentials.Uri));
+            sampledFunctionParameter2.ValueSet.Add(new CDP4Common.EngineeringModelData.ParameterValueSet(Guid.NewGuid(), this.cache, this.credentials.Uri));
+
             elementDefinition1.Parameter.Add(sampledFunctionParameter1);
             elementDefinition2.Parameter.Add(sampledFunctionParameter2);
+
             this.iterationPoco.Element.Add(elementDefinition1);
             this.iterationPoco.Element.Add(elementDefinition2);
+            this.iterationPoco.Element.Add(elementDefinition3);
+            this.iterationPoco.Element.Add(elementDefinition4);
 
             var elementUsage = new CDP4Common.EngineeringModelData.ElementUsage(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            elementUsage.Owner = elementDefinition2.Owner;
             elementUsage.ElementDefinition = elementDefinition2;
+
             var parameterOverride = new CDP4Common.EngineeringModelData.ParameterOverride(Guid.NewGuid(), this.cache, this.credentials.Uri);
             parameterOverride.Parameter = sampledFunctionParameter2;
+            parameterOverride.Owner = sampledFunctionParameter2.Owner;
+            parameterOverride.ValueSet.Add(new CDP4Common.EngineeringModelData.ParameterOverrideValueSet(Guid.NewGuid(), this.cache, this.credentials.Uri));
+            parameterOverride.ValueSet.First().ParameterValueSet = sampledFunctionParameter2.ValueSet.First();
             elementUsage.ParameterOverride.Add(parameterOverride);
 
             elementDefinition1.ContainedElement.Add(elementUsage);
+
+            var citation = new CDP4Common.CommonData.Citation(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            citation.ShortName = "a";
+            citation.Source = SentinelThingProvider.GetSentinel<ReferenceSource>();
+
+            var definition = new CDP4Common.CommonData.Definition(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            definition.Citation.Add(citation);
+            definition.Content = "a";
+            definition.LanguageCode = "NL-nl";
+
+            elementDefinition1.Definition.Add(definition);
+
+            var organization1 = new Organization(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            var organizationalParticipant1 = new OrganizationalParticipant(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            organizationalParticipant1.Organization = organization1;
+            organizationalParticipant1.Actor = this.siteDirectoryData.Person.First();
+
+            elementDefinition1.OrganizationalParticipant.Add(organizationalParticipant1);
+            this.model.EngineeringModelSetup.OrganizationalParticipant.Add(organizationalParticipant1);
+
+            var organization2 = new Organization(Guid.NewGuid(), null, null);
+            var organizationalParticipant2 = new OrganizationalParticipant(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            organizationalParticipant2.Organization = organization2;
+            organizationalParticipant2.Actor = this.siteDirectoryData.Person.First();
+
+            elementDefinition2.OrganizationalParticipant.Add(organizationalParticipant2);
+            this.model.EngineeringModelSetup.OrganizationalParticipant.Add(organizationalParticipant2);
+
+            this.siteDirectoryData.Organization.Add(organization2);
+
+            var organization3 = new Organization(Guid.NewGuid(), null, null);
+            var organizationalParticipant3 = new OrganizationalParticipant(Guid.NewGuid(), this.cache, this.credentials.Uri);
+            organizationalParticipant3.Organization = organization3;
+            organizationalParticipant3.Actor = this.siteDirectoryData.Person.First();
+
+            elementDefinition2.OrganizationalParticipant.Add(organizationalParticipant3);
+            this.model.EngineeringModelSetup.OrganizationalParticipant.Add(organizationalParticipant3);
+
+            this.siteDirectoryData.Organization.Add(organization3);
+
+            var source = new ReferenceSource(Guid.NewGuid(), this.cache, this.credentials.Uri)
+            {
+                Publisher = organization3
+            };
+
+            this.model.EngineeringModelSetup.RequiredRdl.First().ReferenceSource.Add(source);
 
             //Create the DTO again as it might have been changed
             this.iteration = (Iteration)this.iterationPoco.ToDto();
