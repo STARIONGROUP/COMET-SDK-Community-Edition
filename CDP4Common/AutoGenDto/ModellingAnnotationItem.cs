@@ -272,6 +272,167 @@ namespace CDP4Common.DTO
             
             return result;
         }
+
+        /// <summary>
+        /// Tries to remove references to id's if they don't exist in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids</param>
+        /// <param name="errors">The errors collected while trying to remove references</param>
+        /// <returns>True if no errors were found while trying to remove references</returns>
+        public override bool TryRemoveReferencesNotIn(IEnumerable<Guid> ids, out List<string> errors)
+        {
+            errors = new List<string>();
+            var result = true;
+
+            foreach (var referencedProperty in this.GetReferenceProperties())
+            {
+                switch (referencedProperty.Key)
+                {
+                    case "ApprovedBy":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ApprovedBy.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Author":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            errors.Add($"Removed reference '{referencedProperty.Key}' from Author property results in inconsistent ModellingAnnotationItem.");
+                            result = false;
+                        }
+                        break;
+
+                    case "Category":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Category.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Discussion":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Discussion.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "ExcludedDomain":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ExcludedDomain.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "ExcludedPerson":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ExcludedPerson.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Owner":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            errors.Add($"Removed reference '{referencedProperty.Key}' from Owner property results in inconsistent ModellingAnnotationItem.");
+                            result = false;
+                        }
+                        break;
+
+                    case "PrimaryAnnotatedThing":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            this.PrimaryAnnotatedThing = null;
+                        }
+                        break;
+
+                    case "RelatedThing":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.RelatedThing.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "SourceAnnotation":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.SourceAnnotation.Remove(toBeRemoved);
+                        } 
+                        break;
+                }
+            }
+            
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to any of the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to search for.</param>
+        /// <returns>True is any of the id's in <paramref name="ids"/> is found in this instance's reference properties.</returns>
+        public override bool HasMandatoryReferenceToAny(IEnumerable<Guid> ids)
+        {
+            var result = false;
+
+            if (!ids.Any())
+            {
+                return false;
+            }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "Author":
+                        if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "Owner":
+                        if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "Author":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "Owner":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
     }
 }
 

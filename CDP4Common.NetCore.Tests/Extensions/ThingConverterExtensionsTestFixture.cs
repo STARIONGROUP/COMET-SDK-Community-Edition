@@ -22,20 +22,19 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer.Tests.JsonConverter
+namespace CDP4Common.NetCore.Tests.Extensions
 {
     using System;
 
     using CDP4Common.CommonData;
     using CDP4Common.DTO;
+    using CDP4Common.Extensions;
     using CDP4Common.MetaInfo;
-
-    using CDP4JsonSerializer.JsonConverter;
 
     using NUnit.Framework;
 
     /// <summary>
-    /// Suite of tests for the <see cref="ThingConverterExtensions"/> class
+    /// Suite of tests for the <see cref="CDP4Common.Extensions.ThingConverterExtensions"/> class
     /// </summary>
     public class ThingConverterExtensionsTestFixture
     {
@@ -56,9 +55,9 @@ namespace CDP4JsonSerializer.Tests.JsonConverter
             var personPermission = new PersonPermission(Guid.NewGuid(), 1);
             personPermission.ObjectClass = ClassKind.SampledFunctionParameterType;
 
-            Assert.That(this.thingConverterExtensions.AssertSerialization(personPermission,
-                    this.metaDataProvider, new Version(1, 0, 0)),
-                Is.False);
+            Assert.That(this.thingConverterExtensions.AssertSerialization(personPermission, 
+                this.metaDataProvider, new Version(1, 0, 0)),
+                Is.False); 
         }
 
         [Test]

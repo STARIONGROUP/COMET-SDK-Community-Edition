@@ -477,6 +477,236 @@ namespace CDP4Common.DTO
         }
 
         /// <summary>
+        /// Tries to remove references to id's if they don't exist in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids</param>
+        /// <param name="errors">The errors collected while trying to remove references</param>
+        /// <returns>True if no errors were found while trying to remove references</returns>
+        public override bool TryRemoveReferencesNotIn(IEnumerable<Guid> ids, out List<string> errors)
+        {
+            errors = new List<string>();
+            var result = true;
+
+            foreach (var referencedProperty in this.GetReferenceProperties())
+            {
+                switch (referencedProperty.Key)
+                {
+                    case "ActualFiniteStateList":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ActualFiniteStateList.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "DefaultOption":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            this.DefaultOption = null;
+                        }
+                        break;
+
+                    case "DiagramCanvas":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.DiagramCanvas.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "DomainFileStore":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.DomainFileStore.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Element":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Element.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "ExcludedDomain":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ExcludedDomain.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "ExcludedPerson":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ExcludedPerson.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "ExternalIdentifierMap":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ExternalIdentifierMap.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Goal":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Goal.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "IterationSetup":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            errors.Add($"Removed reference '{referencedProperty.Key}' from IterationSetup property results in inconsistent Iteration.");
+                            result = false;
+                        }
+                        break;
+
+                    case "PossibleFiniteStateList":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.PossibleFiniteStateList.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Publication":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Publication.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Relationship":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Relationship.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "RequirementsSpecification":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.RequirementsSpecification.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "RuleVerificationList":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.RuleVerificationList.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "SharedDiagramStyle":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.SharedDiagramStyle.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Stakeholder":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Stakeholder.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "StakeholderValue":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.StakeholderValue.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "StakeholderValueMap":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.StakeholderValueMap.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "TopElement":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            this.TopElement = null;
+                        }
+                        break;
+
+                    case "ValueGroup":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ValueGroup.Remove(toBeRemoved);
+                        } 
+                        break;
+                }
+            }
+            
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to any of the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to search for.</param>
+        /// <returns>True is any of the id's in <paramref name="ids"/> is found in this instance's reference properties.</returns>
+        public override bool HasMandatoryReferenceToAny(IEnumerable<Guid> ids)
+        {
+            var result = false;
+
+            if (!ids.Any())
+            {
+                return false;
+            }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "IterationSetup":
+                        if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                    case "IterationSetup":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
+                    case "Option":
+                        if (!kvp.Value.Intersect(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Instantiate a <see cref="CDP4Common.EngineeringModelData.Iteration"/> from a <see cref="Iteration"/>
         /// </summary>
         /// <param name="cache">The cache that stores all the <see cref="CommonData.Thing"/>s</param>.

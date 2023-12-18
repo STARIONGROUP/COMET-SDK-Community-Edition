@@ -336,6 +336,139 @@ namespace CDP4Common.DTO
         }
 
         /// <summary>
+        /// Tries to remove references to id's if they don't exist in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids</param>
+        /// <param name="errors">The errors collected while trying to remove references</param>
+        /// <returns>True if no errors were found while trying to remove references</returns>
+        public override bool TryRemoveReferencesNotIn(IEnumerable<Guid> ids, out List<string> errors)
+        {
+            errors = new List<string>();
+            var result = true;
+
+            foreach (var referencedProperty in this.GetReferenceProperties())
+            {
+                switch (referencedProperty.Key)
+                {
+                    case "DefaultDomain":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            this.DefaultDomain = null;
+                        }
+                        break;
+
+                    case "DefaultEmailAddress":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            this.DefaultEmailAddress = null;
+                        }
+                        break;
+
+                    case "DefaultTelephoneNumber":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            this.DefaultTelephoneNumber = null;
+                        }
+                        break;
+
+                    case "EmailAddress":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.EmailAddress.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "ExcludedDomain":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ExcludedDomain.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "ExcludedPerson":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.ExcludedPerson.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Organization":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            this.Organization = null;
+                        }
+                        break;
+
+                    case "Role":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            this.Role = null;
+                        }
+                        break;
+
+                    case "TelephoneNumber":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.TelephoneNumber.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "UserPreference":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.UserPreference.Remove(toBeRemoved);
+                        } 
+                        break;
+                }
+            }
+            
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to any of the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The collection of Guids to search for.</param>
+        /// <returns>True is any of the id's in <paramref name="ids"/> is found in this instance's reference properties.</returns>
+        public override bool HasMandatoryReferenceToAny(IEnumerable<Guid> ids)
+        {
+            var result = false;
+
+            if (!ids.Any())
+            {
+                return false;
+            }
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if this instance has mandatory references to an id that cannot be found in the id's in a collection of id's (Guid's)
+        /// </summary>
+        /// <param name="ids">The HashSet of Guids to search for.</param>
+        /// <returns>True is the id in this instance's mandatory reference properties is not found in in <paramref name="ids"/>.</returns>
+        public override bool HasMandatoryReferenceNotIn(HashSet<Guid> ids)
+        {
+            var result = false;
+
+            foreach (var kvp in this.GetReferenceProperties())
+            {
+                switch (kvp.Key)
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Instantiate a <see cref="CDP4Common.SiteDirectoryData.Person"/> from a <see cref="Person"/>
         /// </summary>
         /// <param name="cache">The cache that stores all the <see cref="CommonData.Thing"/>s</param>.

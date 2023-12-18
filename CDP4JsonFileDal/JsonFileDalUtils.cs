@@ -189,15 +189,24 @@ namespace CDP4JsonFileDal
         /// <param name="organizations">
         /// The target <see cref="HashSet{Organization}"/>
         /// </param>
+        /// <param name="participants">
+        /// The target <see cref="HashSet{Participant}"/>
+        /// </param>
         internal static void AddPersons(
             EngineeringModelSetup engineeringModelSetup,
             ref HashSet<Person> persons,
             ref HashSet<PersonRole> personRoles,
             ref HashSet<ParticipantRole> participantRoles,
-            ref HashSet<Organization> organizations)
+            ref HashSet<Organization> organizations,
+            ref HashSet<Participant> participants)
         {
             foreach (var participant in engineeringModelSetup.Participant)
             {
+                if (!participants.Contains(participant))
+                {
+                    participants.Add(participant);
+                }
+
                 if (!persons.Contains(participant.Person))
                 {
                     persons.Add(participant.Person);

@@ -29,6 +29,7 @@ namespace CDP4JsonSerializer.JsonConverter
     using System.Linq;
 
     using CDP4Common.DTO;
+    using CDP4Common.Extensions;
     using CDP4Common.MetaInfo;
     using CDP4Common.Polyfills;
 
@@ -53,7 +54,7 @@ namespace CDP4JsonSerializer.JsonConverter
         private readonly Version dataModelVersion;
 
         /// <summary>
-        /// The <see cref="ThingConverterExtensions"/> used to determine whether a class is to be serialized or not
+        /// The <see cref="CDP4Common.Extensions.ThingConverterExtensions"/> used to determine whether a class is to be serialized or not
         /// </summary>
         private readonly ThingConverterExtensions thingConverterExtensions;
 
