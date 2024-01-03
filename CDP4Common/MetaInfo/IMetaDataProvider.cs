@@ -96,6 +96,6 @@ namespace CDP4Common.MetaInfo
         /// <returns>
         /// The highest supported model <see cref="Version"/> 
         /// </returns>
-        Version GetMaxSupportedModelVersions();
+        Version GetMaxSupportedModelVersion();
     }
 }

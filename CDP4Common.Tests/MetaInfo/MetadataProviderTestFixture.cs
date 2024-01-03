@@ -60,7 +60,7 @@ namespace CDP4Common.Tests.MetaInfo
         {
             var expected = new Version(1, 3, 0);
 
-            var version = new MetaDataProvider().GetMaxSupportedModelVersions();
+            var version = new MetaDataProvider().GetMaxSupportedModelVersion();
 
             Assert.That(version.ToString(), Is.EqualTo(expected.ToString()));
         }

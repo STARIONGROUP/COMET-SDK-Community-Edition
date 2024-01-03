@@ -328,7 +328,7 @@ namespace CDP4Common.MetaInfo
         /// <returns>
         /// The highest supported model <see cref="Version"/> 
         /// </returns>
-        public Version GetMaxSupportedModelVersions()
+        public Version GetMaxSupportedModelVersion()
         {
             return this.QuerySupportedModelVersions().Max();
         }
