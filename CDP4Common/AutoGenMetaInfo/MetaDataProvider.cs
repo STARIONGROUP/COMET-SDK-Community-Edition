@@ -1,18 +1,19 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MetaDataProvider.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -30,6 +31,7 @@ namespace CDP4Common.MetaInfo
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Utility class that responsible for providing meta-data for any <see cref="Thing"/>.
@@ -303,6 +305,32 @@ namespace CDP4Common.MetaInfo
         {
             var metaInfo = this.GetMetaInfo(typeName);
             return metaInfo.GetPropertyVersion(propertyName) ?? DefaultModelVersion;
+        }
+
+        /// <summary>
+        /// Queries the supported model versions
+        /// </summary>
+        /// <returns>
+        /// A collection of supported model versions represented as a <see cref="Version"/> object
+        /// </returns>
+        public IEnumerable<Version> QuerySupportedModelVersions()
+        {
+        
+            yield return Version.Parse("1.0.0");
+            yield return Version.Parse("1.1.0");
+            yield return Version.Parse("1.2.0");
+            yield return Version.Parse("1.3.0");
+        }
+
+        /// <summary>
+        /// Queries the supported model versions and returns the highest version number
+        /// </summary>
+        /// <returns>
+        /// The highest supported model <see cref="Version"/> 
+        /// </returns>
+        public Version GetMaxSupportedModelVersions()
+        {
+            return this.QuerySupportedModelVersions().Max();
         }
     }
 }
