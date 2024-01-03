@@ -40,7 +40,7 @@ namespace CDP4Common.NetCore.Tests.MetaInfo
     public class MetadataProviderTestFixture
     {
         [Test]
-        public void verify_that_correct_versions_are_extracted_drom_dto_classes()
+        public void verify_that_correct_versions_are_returned()
         {
             var expected = new List<Version>
             {
@@ -53,6 +53,16 @@ namespace CDP4Common.NetCore.Tests.MetaInfo
             var versions = new MetaDataProvider().QuerySupportedModelVersions();
 
             CollectionAssert.AreEquivalent(expected.Select(x => x.ToString()), versions.Select(x => x.ToString()));
+        }
+
+        [Test]
+        public void verify_that_correct_max_version_is_returned()
+        {
+            var expected = new Version(1, 3, 0);
+
+            var version = new MetaDataProvider().GetMaxSupportedModelVersions();
+
+            Assert.That(version.ToString(), Is.EqualTo(expected.ToString()));
         }
     }
 }

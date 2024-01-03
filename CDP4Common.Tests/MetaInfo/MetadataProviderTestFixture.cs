@@ -54,5 +54,15 @@ namespace CDP4Common.Tests.MetaInfo
 
             CollectionAssert.AreEquivalent(expected.Select(x => x.ToString()), versions.Select(x => x.ToString()));
         }
+
+        [Test]
+        public void verify_that_correct_max_version_is_returned()
+        {
+            var expected = new Version(1, 3, 0);
+
+            var version = new MetaDataProvider().GetMaxSupportedModelVersions();
+
+            Assert.That(version.ToString(), Is.EqualTo(expected.ToString()));
+        }
     }
 }
