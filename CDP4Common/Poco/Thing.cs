@@ -110,7 +110,6 @@ namespace CDP4Common.CommonData
             this.IDalUri = iDalUri;
             this.Cache = cache;
             this.ClassKind = this.ComputeCurrentClassKind();
-            this.ClassKind = this.ComputeCurrentClassKind();
             this.ExcludedDomain = new List<DomainOfExpertise>();
             this.ExcludedPerson = new List<Person>();
             this.Relationships = new List<Relationship>();
