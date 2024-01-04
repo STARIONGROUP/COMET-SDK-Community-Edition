@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IMetaDataProvider.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-SDK Community Edition
 //
@@ -24,6 +24,9 @@
 
 namespace CDP4Common.MetaInfo
 {
+    using System.Collections.Generic;
+    using System;
+    
     /// <summary>
     /// Utility class that responsible for providing meta-data for any Thing.
     /// </summary>
@@ -78,5 +81,21 @@ namespace CDP4Common.MetaInfo
         /// The version string.
         /// </returns>
         string GetPropertyVersion(string typeName, string propertyName);
+
+        /// <summary>
+        /// Queries the supported model versions
+        /// </summary>
+        /// <returns>
+        /// A collection of supported model versions represented as a <see cref="Version"/> object
+        /// </returns>
+        IEnumerable<Version> QuerySupportedModelVersions();
+
+        /// <summary>
+        /// Queries the supported model versions and returns the highest version number
+        /// </summary>
+        /// <returns>
+        /// The highest supported model <see cref="Version"/> 
+        /// </returns>
+        Version GetMaxSupportedModelVersion();
     }
 }
