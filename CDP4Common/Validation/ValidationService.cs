@@ -117,7 +117,7 @@ namespace CDP4Common.Validation
             // get the value, if the value is null set to empty string (assume user entered no value to begin with) and check against that
             var validationPass = Regex.IsMatch(newValue, rule.Rule);
 
-            return validationPass ? null : $"{rule.ErrorText} - {value}";
+            return validationPass ? null : $"{rule.ErrorText}";
         }
 
         /// <summary>
