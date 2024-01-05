@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="IEnumerableExtensionsTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
@@ -41,7 +41,7 @@ namespace CDP4Common.NetCore.Tests.Extensions
             {
                 Assert.That(((IEnumerable<string>)null).IsNullOrEmpty, Is.True);
                 Assert.That(Enumerable.Empty<string>().IsNullOrEmpty, Is.True);
-                Assert.That(new[]{"a"}.IsNullOrEmpty, Is.False);
+                Assert.That(new[] { "a" }.IsNullOrEmpty, Is.False);
             });
         }
     }

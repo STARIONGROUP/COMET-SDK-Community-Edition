@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="SessionServiceTestFixtures.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
@@ -145,7 +145,7 @@ namespace CDP4Web.Tests.Services.SessionService
 
             this.siteDirectory = new SiteDirectory(Guid.NewGuid(), this.assembler.Cache, this.uri)
             {
-                Model = { this.engineeringSetup, new EngineeringModelSetup(){IterationSetup = { new IterationSetup() }}}
+                Model = { this.engineeringSetup, new EngineeringModelSetup() { IterationSetup = { new IterationSetup() } } }
             };
 
             this.siteDirectory.Person.Add(this.person);
@@ -205,18 +205,18 @@ namespace CDP4Web.Tests.Services.SessionService
 
             Assert.Multiple(() =>
             {
-                Assert.That(() => this.sessionService.OpenSession("", "",""), Throws.Exception);
-                Assert.That(() => this.sessionService.OpenSession("a", "",""), Throws.Exception);
-                Assert.That(() => this.sessionService.OpenSession("a", "p",""), Throws.Exception);
+                Assert.That(() => this.sessionService.OpenSession("", "", ""), Throws.Exception);
+                Assert.That(() => this.sessionService.OpenSession("a", "", ""), Throws.Exception);
+                Assert.That(() => this.sessionService.OpenSession("a", "p", ""), Throws.Exception);
                 Assert.That(() => this.sessionService.OpenSession("admin", "pass", "something"), Throws.Exception);
                 Assert.That(() => this.sessionService.OpenSession("admin", "pass", "http://a.com"), Throws.Nothing);
                 Assert.That(this.sessionService.IsSessionOpen, Is.False);
-                Assert.That(async () =>(await this.sessionService.OpenSession("admin","pass", publicServerUrl)).IsSuccess, Is.True);
+                Assert.That(async () => (await this.sessionService.OpenSession("admin", "pass", publicServerUrl)).IsSuccess, Is.True);
                 Assert.That(this.sessionService.IsSessionOpen, Is.True);
-                Assert.That(async () =>(await this.sessionService.OpenSession("admin","pas", publicServerUrl)).IsSuccess, Is.False);
+                Assert.That(async () => (await this.sessionService.OpenSession("admin", "pas", publicServerUrl)).IsSuccess, Is.False);
                 Assert.That(this.sessionService.IsSessionOpen, Is.False);
-                Assert.That( () =>this.sessionService.OpenSession(new Credentials("","", this.uri)) , Throws.Exception);
-                Assert.That( () =>this.sessionService.OpenSession(new Credentials("a","", this.uri)) , Throws.Exception);
+                Assert.That(() => this.sessionService.OpenSession(new Credentials("", "", this.uri)), Throws.Exception);
+                Assert.That(() => this.sessionService.OpenSession(new Credentials("a", "", this.uri)), Throws.Exception);
             });
         }
 
@@ -225,7 +225,7 @@ namespace CDP4Web.Tests.Services.SessionService
         {
             Assert.Multiple(() =>
             {
-                Assert.That( () => this.sessionService.OpenIteration(null, null), Throws.ArgumentNullException);
+                Assert.That(() => this.sessionService.OpenIteration(null, null), Throws.ArgumentNullException);
                 Assert.That(() => this.sessionService.OpenIteration(this.iteration.IterationSetup, null), Throws.ArgumentNullException);
                 Assert.That(() => this.sessionService.OpenIteration(this.iteration.IterationSetup, this.domain), Throws.InvalidOperationException);
                 Assert.That(() => this.sessionService.OpenActiveIteration(null, this.domain), Throws.ArgumentNullException);
@@ -239,10 +239,7 @@ namespace CDP4Web.Tests.Services.SessionService
             Assert.That(openIterationResult.IsSuccess, Is.False);
 
             this.session.Setup(x => x.Read(It.IsAny<Iteration>(), It.IsAny<DomainOfExpertise>(), true))
-                .Callback(() =>
-                {
-                    this.openIteration[this.iteration] = new Tuple<DomainOfExpertise, Participant>(this.domain, this.participant);
-                });
+                .Callback(() => { this.openIteration[this.iteration] = new Tuple<DomainOfExpertise, Participant>(this.domain, this.participant); });
 
             openIterationResult = await this.sessionService.OpenIteration(this.iteration.IterationSetup, this.domain);
             Assert.That(openIterationResult.IsSuccess, Is.True);
@@ -337,7 +334,7 @@ namespace CDP4Web.Tests.Services.SessionService
             Assert.Multiple(() =>
             {
                 Assert.That(() => this.sessionService.GetAvailableDomains(null), Throws.ArgumentNullException);
-                Assert.That(this.sessionService.GetAvailableDomains(this.iteration.IterationSetup.Container as EngineeringModelSetup), Is.EquivalentTo(new []{this.domain}));
+                Assert.That(this.sessionService.GetAvailableDomains(this.iteration.IterationSetup.Container as EngineeringModelSetup), Is.EquivalentTo(new[] { this.domain }));
                 Assert.That(this.sessionService.GetAvailableDomains(this.siteDirectory.Model[1]), Is.Empty);
             });
         }
@@ -397,7 +394,7 @@ namespace CDP4Web.Tests.Services.SessionService
             });
 
             this.SetIsSessionOpen();
-            
+
             Assert.That(this.sessionService.GetParticipant(this.iteration), Is.EqualTo(this.participant));
 
             var newIteration = new Iteration()
@@ -437,7 +434,7 @@ namespace CDP4Web.Tests.Services.SessionService
 
             this.SetIsSessionOpen();
             this.sessionService.SwitchDomain(this.iteration, this.domain);
-            
+
             this.session.Verify(x => x.SwitchDomain(this.iteration.Iid, this.domain), Times.Once);
         }
 
@@ -445,7 +442,7 @@ namespace CDP4Web.Tests.Services.SessionService
         public async Task VerifyCreateOrUpdateThings()
         {
             var thingsToAdd = new List<Thing>();
-            
+
             var element = new ElementDefinition()
             {
                 Iid = Guid.NewGuid()
@@ -529,7 +526,7 @@ namespace CDP4Web.Tests.Services.SessionService
 
             this.session.Setup(x => x.Write(operationContainer)).ThrowsAsync(new InvalidOperationException());
             result = await this.sessionService.WriteTransaction(operationContainer);
-            
+
             Assert.Multiple(() =>
             {
                 this.session.Verify(x => x.Write(operationContainer), Times.Exactly(2));
@@ -539,7 +536,7 @@ namespace CDP4Web.Tests.Services.SessionService
 
             this.session.Setup(x => x.Write(operationContainer)).ThrowsAsync(new DalWriteException());
             result = await this.sessionService.WriteTransaction(operationContainer);
-            
+
             Assert.Multiple(() =>
             {
                 this.session.Verify(x => x.Write(operationContainer), Times.Exactly(3));

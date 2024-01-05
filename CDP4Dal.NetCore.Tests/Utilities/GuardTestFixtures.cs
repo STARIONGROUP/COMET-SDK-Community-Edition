@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="GuardTestFixtures.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
@@ -68,7 +68,7 @@ namespace CDP4Dal.NetCore.Tests.Utilities
 
             elementDefinition.Cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>
             {
-                [elementDefinition.CacheKey] = new (elementDefinition)
+                [elementDefinition.CacheKey] = new(elementDefinition)
             };
 
             Assert.Multiple(() =>
@@ -104,7 +104,7 @@ namespace CDP4Dal.NetCore.Tests.Utilities
                 Assert.That(() => Guard.ThrowIfNullOrEmpty((IEnumerable<int>)null, "something"), Throws.ArgumentNullException);
                 Assert.That(() => Guard.ThrowIfNullOrEmpty(Enumerable.Empty<int>(), "something"), Throws.Exception);
                 Assert.That(() => Guard.ThrowIfNullOrEmpty("a", "something"), Throws.Nothing);
-                Assert.That(() => Guard.ThrowIfNullOrEmpty(new[]{1,2,3}, "something"), Throws.Nothing);
+                Assert.That(() => Guard.ThrowIfNullOrEmpty(new[] { 1, 2, 3 }, "something"), Throws.Nothing);
             });
         }
     }

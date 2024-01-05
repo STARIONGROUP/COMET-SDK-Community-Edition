@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="HttpStatusCodeExtensionsTestFixtures.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
@@ -56,7 +56,7 @@ namespace CDP4Web.Tests.Extensions
         {
             var httpStatusCodes = new List<HttpStatusCode>
             {
-                HttpStatusCode.Unauthorized, 
+                HttpStatusCode.Unauthorized,
                 HttpStatusCode.Accepted,
                 HttpStatusCode.AlreadyReported,
                 HttpStatusCode.InsufficientStorage
