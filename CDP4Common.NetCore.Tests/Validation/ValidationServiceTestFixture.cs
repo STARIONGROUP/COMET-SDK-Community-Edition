@@ -60,87 +60,89 @@ namespace CDP4Common.NetCore.Tests.Validation
                 "i.like.underscores@but_they_are_not_allowed_in_this_part"
             };
 
+            var validationService = new ValidationService();
+
             Assert.Multiple(() =>
             {
-                Assert.That(ValidationService.ValidateProperty("SelectedSource", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("SelectedSource", "valid source"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ShortName", "invalid ShortName"), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ShortName", "validShortName"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("RDLShortName", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("RDLShortName", "validRDL"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("RDLName", " invalidRDLName"), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("RDLName", "validRDLName"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("NativeName", "1nativeName1"), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("NativeName", "nativeName"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("FileRevisionName", " invalid FileRevisionName"), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("FileRevisionName", "FileRevisionName"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Name", "invalidName)"), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Name", "validName"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("SelectedSource", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("SelectedSource", "valid source"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ShortName", "invalid ShortName"), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ShortName", "validShortName"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("RDLShortName", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("RDLShortName", "validRDL"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("RDLName", " invalidRDLName"), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("RDLName", "validRDLName"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("NativeName", "1nativeName1"), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("NativeName", "nativeName"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("FileRevisionName", " invalid FileRevisionName"), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("FileRevisionName", "FileRevisionName"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Name", "invalidName)"), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Name", "validName"), Is.Null.Or.Empty);
 
                 foreach (var validEmail in validEmails)
                 {
-                    Assert.That(ValidationService.ValidateProperty("EmailAddress", validEmail), Is.Null.Or.Empty);
+                    Assert.That(validationService.ValidateProperty("EmailAddress", validEmail), Is.Null.Or.Empty);
                 }
 
                 foreach (var invalid in invalidEmails)
                 {
-                    Assert.That(ValidationService.ValidateProperty("EmailAddress", invalid), Is.Not.Null.Or.Empty);
+                    Assert.That(validationService.ValidateProperty("EmailAddress", invalid), Is.Not.Null.Or.Empty);
                 }
 
-                Assert.That(ValidationService.ValidateProperty("TelephoneNumber", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("TelephoneNumber", "000 000 000"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("UserPreference", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("UserPreference", "userPref"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("LanguageCode", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("LanguageCode", "language code"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Content", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Content", "content"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Password", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Password", "password"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ForwardRelationshipName", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ForwardRelationshipName", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("InverseRelationshipName", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("InverseRelationshipName", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Exponent", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Exponent", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Symbol", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Symbol", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ScaleValueDefinition", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ScaleValueDefinition", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ScaleReferenceQuantityValue", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ScaleReferenceQuantityValue", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Factor", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Factor", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Modulus", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Modulus", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Extension", "invalidExtension"), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Extension", "valid1"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("FileTypeName", "invented"), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("FileTypeName", "audio/1"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Value", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Value", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ModelSetupShortName", "invalid!"), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ModelSetupShortName", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("PersonShortName", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("PersonShortName", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("PersonGivenName", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("PersonGivenName", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("PersonSurname", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("PersonSurname", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("RequirementShortName", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("RequirementShortName", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ModelSetupName", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ModelSetupName", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ConversionFactor", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("ConversionFactor", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Description", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Description", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Title", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("Title", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("EnumerationValueDefinitionShortName", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("EnumerationValueDefinitionShortName", "valid"), Is.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("EnumerationValueDefinitionName", ""), Is.Not.Null.Or.Empty);
-                Assert.That(ValidationService.ValidateProperty("EnumerationValueDefinitionName", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("TelephoneNumber", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("TelephoneNumber", "000 000 000"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("UserPreference", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("UserPreference", "userPref"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("LanguageCode", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("LanguageCode", "language code"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Content", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Content", "content"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Password", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Password", "password"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ForwardRelationshipName", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ForwardRelationshipName", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("InverseRelationshipName", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("InverseRelationshipName", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Exponent", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Exponent", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Symbol", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Symbol", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ScaleValueDefinition", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ScaleValueDefinition", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ScaleReferenceQuantityValue", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ScaleReferenceQuantityValue", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Factor", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Factor", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Modulus", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Modulus", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Extension", "invalidExtension"), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Extension", "valid1"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("FileTypeName", "invented"), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("FileTypeName", "audio/1"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Value", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Value", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ModelSetupShortName", "invalid!"), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ModelSetupShortName", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("PersonShortName", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("PersonShortName", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("PersonGivenName", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("PersonGivenName", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("PersonSurname", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("PersonSurname", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("RequirementShortName", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("RequirementShortName", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ModelSetupName", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ModelSetupName", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ConversionFactor", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("ConversionFactor", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Description", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Description", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Title", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("Title", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("EnumerationValueDefinitionShortName", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("EnumerationValueDefinitionShortName", "valid"), Is.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("EnumerationValueDefinitionName", ""), Is.Not.Null.Or.Empty);
+                Assert.That(validationService.ValidateProperty("EnumerationValueDefinitionName", "valid"), Is.Null.Or.Empty);
             });
         }
     }

@@ -24,7 +24,6 @@
 
 namespace CDP4Common.Validation
 {
-    using System;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
@@ -33,27 +32,32 @@ namespace CDP4Common.Validation
     /// <summary>
     /// The purpose of the <see cref="ValidationService" /> is to check and report on the validity of a field in a form
     /// </summary>
-    public class ValidationService
+    public class ValidationService : IValidationService
     {
         /// <summary>
         /// Gets the RFC 5321 REGEX to validate Email address.
         /// <remarks>This regex is not 100% compliant with RFC 5321 but covers most cases</remarks>
         /// </summary>
-        private const string Rfc5321Regex = @"^(?!\.)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]{1,64}(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.?)+[a-zA-Z]{2,}$";
+        public const string Rfc5321Regex = @"^(?!\.)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]{1,64}(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.?)+[a-zA-Z]{2,}$";
 
         /// <summary>
-        /// The validation map provides the mapping between field names and <see cref="ValidationRule" />s.
+        /// Gets the validation map provides the mapping between field names and <see cref="ValidationRule" />s.
         /// </summary>
-        private static readonly Dictionary<string, ValidationRule> ValidationMap = new Dictionary<string, ValidationRule>()
+        public Dictionary<string, ValidationRule> ValidationMap { get; }
+
+        /// <summary>
+        /// The default validation map provides the mapping between field names and <see cref="ValidationRule" />s.
+        /// </summary>
+        protected static readonly Dictionary<string, ValidationRule> InitialValidationMap = new Dictionary<string, ValidationRule>
         {
             { "SelectedSource", new ValidationRule { PropertyName = "SelectedSource", Rule = @"^(?!\s*$).+", ErrorText = "The SelectedSource must not be empty." } },
-            { "ShortName", new ValidationRule { PropertyName = "ShortName", Rule = @"^[a-zA-Z][a-zA-Z0-9_]*$", ErrorText = "The ShortName must start with a letter and not contain any spaces or non alphanumeric characters." } },
+            { "ShortName", new ValidationRule { PropertyName = "ShortName", Rule = "^[a-zA-Z][a-zA-Z0-9_]*$", ErrorText = "The ShortName must start with a letter and not contain any spaces or non alphanumeric characters." } },
             { "RDLShortName", new ValidationRule { PropertyName = "ShortName", Rule = @"^([^()\s][\S\s]*)$", ErrorText = "The ShortName can not be empty or start with a whitespace." } },
             { "RDLName", new ValidationRule { PropertyName = "Name", Rule = @"^([^()\s][\S\s]*)$", ErrorText = "The Name can not be empty or start with a whitespace." } },
-            { "NativeName", new ValidationRule { PropertyName = "NativeName", Rule = @"^[a-zA-Z][a-zA-Z0-9_]*$", ErrorText = "The NativeName must start with a letter and not contain any spaces or non alphanumeric characters." } },
+            { "NativeName", new ValidationRule { PropertyName = "NativeName", Rule = "^[a-zA-Z][a-zA-Z0-9_]*$", ErrorText = "The NativeName must start with a letter and not contain any spaces or non alphanumeric characters." } },
             { "FileRevisionName", new ValidationRule { PropertyName = "Name", Rule = @"^([^()\s][\S\s]*)$", ErrorText = "The Name can not be empty or start with a whitespace." } },
             { "Name", new ValidationRule { PropertyName = "Name", Rule = @"^(\p{L}|\p{L}[^()]*[^()\s])$", ErrorText = "The Name must start with a letter and not contain any parentheses or trailing spaces." } },
-            { "EmailAddress", new ValidationRule { PropertyName = "EmailAddress", Rule =Rfc5321Regex, ErrorText = "The Email must follow the RFC 5321 protocol." } },
+            { "EmailAddress", new ValidationRule { PropertyName = "EmailAddress", Rule = Rfc5321Regex, ErrorText = "The Email must follow the RFC 5321 protocol." } },
             { "TelephoneNumber", new ValidationRule { PropertyName = "TelephoneNumber", Rule = @"^(?!\s*$).+", ErrorText = "The Telephone Number must not be empty." } },
             { "UserPreference", new ValidationRule { PropertyName = "UserPreference", Rule = @"^(?!\s*$).+", ErrorText = "The User Preference must not be empty." } },
             { "LanguageCode", new ValidationRule { PropertyName = "LanguageCode", Rule = @"^(?!\s*$).+", ErrorText = "The Language Code must not be empty." } },
@@ -67,10 +71,10 @@ namespace CDP4Common.Validation
             { "ScaleReferenceQuantityValue", new ValidationRule { PropertyName = "ScaleReferenceQuantityValue", Rule = @"^(?!\s*$).+", ErrorText = "The Value must not be empty." } },
             { "Factor", new ValidationRule { PropertyName = "Factor", Rule = @"^(?!\s*$).+", ErrorText = "The factor must not be empty." } },
             { "Modulus", new ValidationRule { PropertyName = "Modulus", Rule = @"^(?!\s*$).+", ErrorText = "The Modulus must not be empty." } },
-            { "Extension", new ValidationRule { PropertyName = "Extension", Rule = @"^[a-z0-9]+$", ErrorText = "The Extension shall only contain lower cases or digits and cannot be empty." } },
+            { "Extension", new ValidationRule { PropertyName = "Extension", Rule = "^[a-z0-9]+$", ErrorText = "The Extension shall only contain lower cases or digits and cannot be empty." } },
             { "FileTypeName", new ValidationRule { PropertyName = "FileTypeName", Rule = @"^(application|audio|example|image|message|model|multipart|text|video)/\S+$", ErrorText = "The Name or short-name shall be consistent with the IANA standard and starts with either \"application/\", \"audio/\", \"example/\", \"image/\", \"message/\", \"model/\", \"multipart/\", \"text/\" or \"video/\" followed by any characters except white-spaces." } },
             { "Value", new ValidationRule { PropertyName = "Value", Rule = @"^(?!\s*$).+", ErrorText = "The Value must not be empty." } },
-            { "ModelSetupShortName", new ValidationRule { PropertyName = "ShortName", Rule = @"^[a-zA-Z0-9_]*$", ErrorText = "The ShortName shall only contain alpha-numerical character." } },
+            { "ModelSetupShortName", new ValidationRule { PropertyName = "ShortName", Rule = "^[a-zA-Z0-9_]*$", ErrorText = "The ShortName shall only contain alpha-numerical character." } },
             { "PersonShortName", new ValidationRule { PropertyName = "Value", Rule = @"^(?!\s*$).+", ErrorText = "The User Name must not be empty." } },
             { "PersonGivenName", new ValidationRule { PropertyName = "Value", Rule = @"^(?!\s*$).+", ErrorText = "The Given Name must not be empty." } },
             { "PersonSurname", new ValidationRule { PropertyName = "Value", Rule = @"^(?!\s*$).+", ErrorText = "The Surname must not be empty." } },
@@ -82,9 +86,17 @@ namespace CDP4Common.Validation
             { "EnumerationValueDefinitionShortName", new ValidationRule { PropertyName = "ShortName", Rule = @"^([^()\s][\S]*)$", ErrorText = "The ShortName can not be empty or contain a whitespace." } },
             { "EnumerationValueDefinitionName", new ValidationRule { PropertyName = "Name", Rule = @"^([^()\s][\S\s]*)$", ErrorText = "The Name can not be empty nor start with a whitespace." } }
         };
-        
+
         /// <summary>
-        /// Validate a property of a <see cref="Thing"/>
+        /// Initializes a new instance of the <see cref="ValidationService" /> class.
+        /// </summary>
+        public ValidationService()
+        {
+            this.ValidationMap = new Dictionary<string, ValidationRule>(InitialValidationMap);
+        }
+
+        /// <summary>
+        /// Validate a property of a <see cref="Thing" />
         /// </summary>
         /// <param name="propertyName">the name of the property to validate</param>
         /// <param name="value">the value to validate</param>
@@ -92,10 +104,10 @@ namespace CDP4Common.Validation
         /// The <see cref="string" /> with the error text, or null if there is no validation error
         /// (either because there is no rule for the given property or because the given value is correct)
         /// </returns>
-        public static string ValidateProperty(string propertyName, object value)
+        public string ValidateProperty(string propertyName, object value)
         {
             // if no rule exists just return null in sign of ignorance
-            if (!ValidationMap.TryGetValue(propertyName, out var rule))
+            if (!this.ValidationMap.TryGetValue(propertyName, out var rule))
             {
                 return null;
             }
