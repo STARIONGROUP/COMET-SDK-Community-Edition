@@ -97,7 +97,7 @@ The CDP4WspDal library is a C# library that provides an implementation of ECSS-E
 
 ## CDP4Web
 
-The CDP4Web library is a C# library that provides helpful classes that facilitate the CDP4ServicesDal to any client.
+The CDP4Web library is a C# library that provides helpful classes that facilitate the use of the CDP4ServicesDal to any client.
 
 # License
 

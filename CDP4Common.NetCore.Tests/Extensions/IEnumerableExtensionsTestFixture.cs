@@ -34,6 +34,8 @@ namespace CDP4Common.NetCore.Tests.Extensions
     [TestFixture]
     public class IEnumerableExtensionsTestFixture
     {
+        private static readonly string[] NonEmptyCollection = { "a" };
+
         [Test]
         public void VerifyIsNullOrEmpty()
         {
@@ -41,7 +43,7 @@ namespace CDP4Common.NetCore.Tests.Extensions
             {
                 Assert.That(((IEnumerable<string>)null).IsNullOrEmpty, Is.True);
                 Assert.That(Enumerable.Empty<string>().IsNullOrEmpty, Is.True);
-                Assert.That(new[] { "a" }.IsNullOrEmpty, Is.False);
+                Assert.That(NonEmptyCollection.IsNullOrEmpty, Is.False);
             });
         }
     }
