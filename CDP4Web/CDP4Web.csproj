@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Company>RHEA System S.A.</Company>
+        <Title>CDP4Web Community Edition</Title>
+        <VersionPrefix>24.5.0</VersionPrefix>
+        <Description>CDP4Web Dedicated Sdk for CDPServicesDal</Description>
+        <Copyright>Copyright © RHEA System S.A.</Copyright>
+        <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
+        <PackageId>CDP4Web-CE</PackageId>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageProjectUrl>http://sdk.cdp4.org</PackageProjectUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageIcon>cdp4-icon.png</PackageIcon>
+        <IncludeSource>true</IncludeSource>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
+        <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
+        <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+        <PackageReleaseNotes>
+            [UPGRADE] CDP4Common 24.5.0
+        </PackageReleaseNotes>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png">
+            <PackagePath>\</PackagePath>
+            <Pack>true</Pack>
+        </None>
+        <None Include="..\README.md" Link="README.md">
+          <PackagePath>\</PackagePath>
+          <Pack>true</Pack>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentResults" Version="3.15.2" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\CDP4ServicesDal\CDP4ServicesDal.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>CDP4Web.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+</Project>
