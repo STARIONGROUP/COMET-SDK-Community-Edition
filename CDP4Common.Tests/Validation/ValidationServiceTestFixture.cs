@@ -34,7 +34,7 @@ namespace CDP4Common.Tests.Validation
         [Test]
         public void VerifyValidateProperty()
         {
-                        var validEmails = new []
+            var validEmails = new []
             {
                 "simple@example.com",
                 "very.common@example.com",
