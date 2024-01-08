@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="IValidationService.cs" company="RHEA System S.A.">
+// <copyright file="ReasonExtensionsTestFixtures.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
@@ -22,31 +22,29 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Validation
+namespace CDP4Web.Tests.Extensions
 {
-    using System.Collections.Generic;
+    using System.Net;
 
-    using CDP4Common.CommonData;
+    using CDP4Web.Extensions;
 
-    /// <summary>
-    /// The purpose of the <see cref="IValidationService" /> is to check and report on the validity of a field in a form
-    /// </summary>
-    public interface IValidationService
+    using FluentResults;
+
+    using NUnit.Framework;
+
+    using ReasonExtensions = CDP4Web.Extensions.ReasonExtensions;
+
+    [TestFixture]
+    public class ReasonExtensionsTestFixtures
     {
-        /// <summary>
-        /// Gets the validation map provides the mapping between field names and <see cref="ValidationService.ValidationRule" />s.
-        /// </summary>
-        Dictionary<string, ValidationService.ValidationRule> ValidationMap { get; }
+        [Test]
+        public void VerifyAddReasonIdentifier()
+        {
+            var reason = new Success("A message");
+            Assert.That(reason.Metadata, Is.Empty);
 
-        /// <summary>
-        /// Validate a property of a <see cref="Thing" />
-        /// </summary>
-        /// <param name="propertyName">the name of the property to validate</param>
-        /// <param name="value">the value to validate</param>
-        /// <returns>
-        /// The <see cref="string" /> with the error text, or null if there is no validation error
-        /// (either because there is no rule for the given property or because the given value is correct)
-        /// </returns>
-        string ValidateProperty(string propertyName, object value);
+            reason.AddReasonIdentifier(HttpStatusCode.Accepted);
+            Assert.That(reason.Metadata[ReasonExtensions.Cdp4CometReasonIdentifier], Is.EqualTo(HttpStatusCode.Accepted));
+        }
     }
 }

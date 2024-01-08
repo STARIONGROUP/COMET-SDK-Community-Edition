@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="IValidationService.cs" company="RHEA System S.A.">
+// <copyright file="ReasonExtensions.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
@@ -22,31 +22,32 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Validation
+namespace CDP4Web.Extensions
 {
-    using System.Collections.Generic;
+    using System.Net;
 
-    using CDP4Common.CommonData;
+    using FluentResults;
 
     /// <summary>
-    /// The purpose of the <see cref="IValidationService" /> is to check and report on the validity of a field in a form
+    /// Extensions class for <see cref="IReason"/>
     /// </summary>
-    public interface IValidationService
+    public static class ReasonExtensions
     {
         /// <summary>
-        /// Gets the validation map provides the mapping between field names and <see cref="ValidationService.ValidationRule" />s.
+        /// Gets the identifier for a <see cref="IReason"/> that has been created by the current application
         /// </summary>
-        Dictionary<string, ValidationService.ValidationRule> ValidationMap { get; }
+        public const string Cdp4CometReasonIdentifier = "CDP4CometReason";
 
         /// <summary>
-        /// Validate a property of a <see cref="Thing" />
+        /// Add the current <see cref="Cdp4CometReasonIdentifier"/> to the Metadata of a <typeparamref name="TReason"/>
         /// </summary>
-        /// <param name="propertyName">the name of the property to validate</param>
-        /// <param name="value">the value to validate</param>
-        /// <returns>
-        /// The <see cref="string" /> with the error text, or null if there is no validation error
-        /// (either because there is no rule for the given property or because the given value is correct)
-        /// </returns>
-        string ValidateProperty(string propertyName, object value);
+        /// <param name="reason">The <typeparamref name="TReason"/></param>
+        /// <param name="statusCode">The <see cref="HttpStatusCode"/> to add more context about the <typeparamref name="TReason"/></param>
+        /// <typeparam name="TReason">Any <see cref="IReason"/></typeparam>
+        public static TReason AddReasonIdentifier<TReason>(this TReason reason, HttpStatusCode statusCode) where TReason : IReason
+        {
+            reason.Metadata[Cdp4CometReasonIdentifier] = statusCode;
+            return reason;
+        }
     }
 }

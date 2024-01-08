@@ -14,6 +14,7 @@ The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with
   - CDP4JsonFileDal
   - CDP4ServicesDal
   - CDP4WspDal
+  - CDP4Web
 
 ## Nuget
 
@@ -31,6 +32,7 @@ CDP4Dal | [![NuGet Badge](https://buildstats.info/nuget/CDP4Dal-CE)](https://bui
 CDP4JsonFileDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonFileDal-CE)](https://buildstats.info/nuget/CDP4JsonFileDal-CE)
 CDP4ServicesDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4ServicesDal-CE)](https://buildstats.info/nuget/CDP4ServicesDal-CE)
 CDP4WspDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4WspDal-CE)](https://buildstats.info/nuget/CDP4WspDal-CE)
+CDP4Web | [![NuGet Badge](https://buildstats.info/nuget/CDP4Web-CE)](https://buildstats.info/nuget/CDP4Web-CE)
 
 ## Build status
 
@@ -92,6 +94,10 @@ The CDP4ServicesDal library is a C# library that provides an implementation of E
 ## CDP4WspDal
 
 The CDP4WspDal library is a C# library that provides an implementation of ECSS-E-TM-10-25A Annex C.2, the JSON REST API. The CDP4WspDal can be used to communicate with any ECSS-E-TM-10-25A Annex C.2 implementation, including the COMET Services.
+
+## CDP4Web
+
+The CDP4Web library is a C# library that provides helpful classes that facilitate the use of the CDP4ServicesDal to any client.
 
 # License
 

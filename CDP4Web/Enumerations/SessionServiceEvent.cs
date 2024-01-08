@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="IValidationService.cs" company="RHEA System S.A.">
+// <copyright file="SessionServiceEvent.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
@@ -22,31 +22,47 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Validation
+namespace CDP4Web.Enumerations
 {
-    using System.Collections.Generic;
+    using CDP4Common.EngineeringModelData;
 
-    using CDP4Common.CommonData;
+    using CDP4Dal;
+
+    using CDP4Web.Services.SessionService;
 
     /// <summary>
-    /// The purpose of the <see cref="IValidationService" /> is to check and report on the validity of a field in a form
+    /// Enumeration used by the <see cref="SessionService"/> to send event on the <see cref="CDPMessageBus"/>
     /// </summary>
-    public interface IValidationService
+    public enum SessionServiceEvent
     {
         /// <summary>
-        /// Gets the validation map provides the mapping between field names and <see cref="ValidationService.ValidationRule" />s.
+        /// To use when an <see cref="Iteration"/> has been opened
         /// </summary>
-        Dictionary<string, ValidationService.ValidationRule> ValidationMap { get; }
+        IterationOpened,
 
         /// <summary>
-        /// Validate a property of a <see cref="Thing" />
+        /// To use when an <see cref="Iteration"/> has been closed
         /// </summary>
-        /// <param name="propertyName">the name of the property to validate</param>
-        /// <param name="value">the value to validate</param>
-        /// <returns>
-        /// The <see cref="string" /> with the error text, or null if there is no validation error
-        /// (either because there is no rule for the given property or because the given value is correct)
-        /// </returns>
-        string ValidateProperty(string propertyName, object value);
+        IterationClosed,
+
+        /// <summary>
+        /// To use before refreshing the <see cref="ISession"/>
+        /// </summary>
+        SessionRefreshing,
+
+        /// <summary>
+        /// To use when the <see cref="ISession"/> has been refreshed
+        /// </summary>
+        SessionRefreshed,
+
+        /// <summary>
+        /// To use before reloading the <see cref="ISession"/>
+        /// </summary>
+        SessionReloading,
+
+        /// <summary>
+        /// To use when the <see cref="ISession"/> has been reloaded
+        /// </summary>
+        SessionReloaded
     }
 }

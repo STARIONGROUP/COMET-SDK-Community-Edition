@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValidationServiceTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
@@ -34,7 +34,7 @@ namespace CDP4Common.Tests.Validation
         [Test]
         public void VerifyValidateProperty()
         {
-            var validEmails = new []
+            var validEmails = new[]
             {
                 "simple@example.com",
                 "very.common@example.com",

@@ -69,6 +69,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Github Actions", "Github Ac
 		.github\workflows\CodeQuality.yml = .github\workflows\CodeQuality.yml
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Web", "CDP4Web\CDP4Web.csproj", "{7192A78E-654C-4993-A9D7-A3EFE78DD66F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP4Web.Tests", "CDP4Web.Tests\CDP4Web.Tests.csproj", "{DC9B5826-822F-4CC3-97D6-38D3AFC552EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -179,6 +183,14 @@ Global
 		{CBECE184-A79F-4D71-82F6-3DA29FF9E048}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBECE184-A79F-4D71-82F6-3DA29FF9E048}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBECE184-A79F-4D71-82F6-3DA29FF9E048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7192A78E-654C-4993-A9D7-A3EFE78DD66F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7192A78E-654C-4993-A9D7-A3EFE78DD66F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7192A78E-654C-4993-A9D7-A3EFE78DD66F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7192A78E-654C-4993-A9D7-A3EFE78DD66F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC9B5826-822F-4CC3-97D6-38D3AFC552EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC9B5826-822F-4CC3-97D6-38D3AFC552EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC9B5826-822F-4CC3-97D6-38D3AFC552EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC9B5826-822F-4CC3-97D6-38D3AFC552EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
