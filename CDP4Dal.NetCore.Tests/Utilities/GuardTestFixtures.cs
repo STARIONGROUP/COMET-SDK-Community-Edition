@@ -40,6 +40,8 @@ namespace CDP4Dal.NetCore.Tests.Utilities
     [TestFixture]
     public class GuardTestFixtures
     {
+        private static readonly int[] NotEmptyArray = { 1, 2, 3 };
+
         [Test]
         public void VerifyThrowsIfNull()
         {
@@ -104,7 +106,7 @@ namespace CDP4Dal.NetCore.Tests.Utilities
                 Assert.That(() => Guard.ThrowIfNullOrEmpty((IEnumerable<int>)null, "something"), Throws.ArgumentNullException);
                 Assert.That(() => Guard.ThrowIfNullOrEmpty(Enumerable.Empty<int>(), "something"), Throws.Exception);
                 Assert.That(() => Guard.ThrowIfNullOrEmpty("a", "something"), Throws.Nothing);
-                Assert.That(() => Guard.ThrowIfNullOrEmpty(new[] { 1, 2, 3 }, "something"), Throws.Nothing);
+                Assert.That(() => Guard.ThrowIfNullOrEmpty(NotEmptyArray, "something"), Throws.Nothing);
             });
         }
     }
