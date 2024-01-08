@@ -21,6 +21,7 @@
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
       [ADD] Support for querying supported data model versions
+      [ADD] ValidationService and EmailAddress validation improvement
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
