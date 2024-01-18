@@ -95,6 +95,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             var clone = (ModelReferenceDataLibrary)this.MemberwiseClone();
             clone.Alias = cloneContainedThings ? new ContainerList<Alias>(clone) : new ContainerList<Alias>(this.Alias, clone);
+            clone.Attachment = cloneContainedThings ? new ContainerList<Attachment>(clone) : new ContainerList<Attachment>(this.Attachment, clone);
             clone.BaseQuantityKind = new OrderedItemList<QuantityKind>(this.BaseQuantityKind, this);
             clone.BaseUnit = new List<MeasurementUnit>(this.BaseUnit);
             clone.Constant = cloneContainedThings ? new ContainerList<Constant>(clone) : new ContainerList<Constant>(this.Constant, clone);
@@ -115,6 +116,7 @@ namespace CDP4Common.SiteDirectoryData
             if (cloneContainedThings)
             {
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
+                clone.Attachment.AddRange(this.Attachment.Select(x => x.Clone(true)));
                 clone.Constant.AddRange(this.Constant.Select(x => x.Clone(true)));
                 clone.DefinedCategory.AddRange(this.DefinedCategory.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
@@ -179,6 +181,7 @@ namespace CDP4Common.SiteDirectoryData
 
             this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
+            this.Attachment.ResolveList(dto.Attachment, dto.IterationContainerId, this.Cache);
             this.BaseQuantityKind.ResolveList(dto.BaseQuantityKind, dto.IterationContainerId, this.Cache);
             this.BaseUnit.ResolveList(dto.BaseUnit, dto.IterationContainerId, this.Cache);
             this.Constant.ResolveList(dto.Constant, dto.IterationContainerId, this.Cache);
@@ -214,6 +217,7 @@ namespace CDP4Common.SiteDirectoryData
 
             dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
+            dto.Attachment.AddRange(this.Attachment.Select(x => x.Iid));
             dto.BaseQuantityKind.AddRange(this.BaseQuantityKind.ToDtoOrderedItemList());
             dto.BaseUnit.AddRange(this.BaseUnit.Select(x => x.Iid));
             dto.Constant.AddRange(this.Constant.Select(x => x.Iid));

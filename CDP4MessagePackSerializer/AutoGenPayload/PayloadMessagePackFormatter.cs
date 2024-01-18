@@ -2,8 +2,8 @@
 // <copyright file="PayloadMessagePackFormatter.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft,
-//            Nathanael Smiechowski, Antoine Théate, Omar Elabiary
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -178,6 +178,13 @@
      | 144   | LogEntryChangelogItem               |  1.2.0  |
      | 145   | OrganizationalParticipant           |  1.2.0  |
      | 146   | SampledFunctionParameterType        |  1.2.0  |
+     | 147   | ArchitectureDiagram                 |  1.4.0  |
+     | 148   | ArchitectureElement                 |  1.4.0  |
+     | 149   | Attachment                          |  1.4.0  |
+     | 150   | Behavior                            |  1.4.0  |
+     | 151   | BehavioralParameter                 |  1.4.0  |
+     | 152   | DiagramFrame                        |  1.4.0  |
+     | 153   | DiagramPort                         |  1.4.0  |
      * ------------------------------------------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -216,7 +223,7 @@ namespace CDP4MessagePackSerializer
 
             var formatterResolver = options.Resolver;
 
-            writer.WriteArrayHeader(147);
+            writer.WriteArrayHeader(154);
 
             writer.Write(payload.Created);
 
@@ -373,8 +380,7 @@ namespace CDP4MessagePackSerializer
             writer.WriteArrayHeader(payload.ElementDefinition.Count);
             foreach (var elementDefinition in payload.ElementDefinition)
             {
-                var x = formatterResolver.GetFormatterWithVerify<ElementDefinition>();
-                x.Serialize(ref writer, elementDefinition, options);
+                formatterResolver.GetFormatterWithVerify<ElementDefinition>().Serialize(ref writer, elementDefinition, options);
             }
 
             writer.WriteArrayHeader(payload.ElementUsage.Count);
@@ -1095,6 +1101,48 @@ namespace CDP4MessagePackSerializer
             foreach (var sampledFunctionParameterType in payload.SampledFunctionParameterType)
             {
                 formatterResolver.GetFormatterWithVerify<SampledFunctionParameterType>().Serialize(ref writer, sampledFunctionParameterType, options);
+            }
+
+            writer.WriteArrayHeader(payload.ArchitectureDiagram.Count);
+            foreach (var architectureDiagram in payload.ArchitectureDiagram)
+            {
+                formatterResolver.GetFormatterWithVerify<ArchitectureDiagram>().Serialize(ref writer, architectureDiagram, options);
+            }
+
+            writer.WriteArrayHeader(payload.ArchitectureElement.Count);
+            foreach (var architectureElement in payload.ArchitectureElement)
+            {
+                formatterResolver.GetFormatterWithVerify<ArchitectureElement>().Serialize(ref writer, architectureElement, options);
+            }
+
+            writer.WriteArrayHeader(payload.Attachment.Count);
+            foreach (var attachment in payload.Attachment)
+            {
+                formatterResolver.GetFormatterWithVerify<Attachment>().Serialize(ref writer, attachment, options);
+            }
+
+            writer.WriteArrayHeader(payload.Behavior.Count);
+            foreach (var behavior in payload.Behavior)
+            {
+                formatterResolver.GetFormatterWithVerify<Behavior>().Serialize(ref writer, behavior, options);
+            }
+
+            writer.WriteArrayHeader(payload.BehavioralParameter.Count);
+            foreach (var behavioralParameter in payload.BehavioralParameter)
+            {
+                formatterResolver.GetFormatterWithVerify<BehavioralParameter>().Serialize(ref writer, behavioralParameter, options);
+            }
+
+            writer.WriteArrayHeader(payload.DiagramFrame.Count);
+            foreach (var diagramFrame in payload.DiagramFrame)
+            {
+                formatterResolver.GetFormatterWithVerify<DiagramFrame>().Serialize(ref writer, diagramFrame, options);
+            }
+
+            writer.WriteArrayHeader(payload.DiagramPort.Count);
+            foreach (var diagramPort in payload.DiagramPort)
+            {
+                formatterResolver.GetFormatterWithVerify<DiagramPort>().Serialize(ref writer, diagramPort, options);
             }
 
             
@@ -2303,6 +2351,62 @@ namespace CDP4MessagePackSerializer
                         {
                             var sampledFunctionParameterType = formatterResolver.GetFormatterWithVerify<SampledFunctionParameterType>().Deserialize(ref reader, options);
                             payload.SampledFunctionParameterType.Add(sampledFunctionParameterType);
+                        }
+                        break;
+                    case 147:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            var architectureDiagram = formatterResolver.GetFormatterWithVerify<ArchitectureDiagram>().Deserialize(ref reader, options);
+                            payload.ArchitectureDiagram.Add(architectureDiagram);
+                        }
+                        break;
+                    case 148:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            var architectureElement = formatterResolver.GetFormatterWithVerify<ArchitectureElement>().Deserialize(ref reader, options);
+                            payload.ArchitectureElement.Add(architectureElement);
+                        }
+                        break;
+                    case 149:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            var attachment = formatterResolver.GetFormatterWithVerify<Attachment>().Deserialize(ref reader, options);
+                            payload.Attachment.Add(attachment);
+                        }
+                        break;
+                    case 150:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            var behavior = formatterResolver.GetFormatterWithVerify<Behavior>().Deserialize(ref reader, options);
+                            payload.Behavior.Add(behavior);
+                        }
+                        break;
+                    case 151:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            var behavioralParameter = formatterResolver.GetFormatterWithVerify<BehavioralParameter>().Deserialize(ref reader, options);
+                            payload.BehavioralParameter.Add(behavioralParameter);
+                        }
+                        break;
+                    case 152:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            var diagramFrame = formatterResolver.GetFormatterWithVerify<DiagramFrame>().Deserialize(ref reader, options);
+                            payload.DiagramFrame.Add(diagramFrame);
+                        }
+                        break;
+                    case 153:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            var diagramPort = formatterResolver.GetFormatterWithVerify<DiagramPort>().Deserialize(ref reader, options);
+                            payload.DiagramPort.Add(diagramPort);
                         }
                         break;
                 }

@@ -2,17 +2,18 @@
 // <copyright file="EnumerationParameterTypeMetaInfo.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -52,6 +53,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.EnumerationParameterType, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.EnumerationParameterType, IEnumerable<Guid>>>
         {
             { "Alias", enumerationParameterType => enumerationParameterType.Alias },
+            { "Attachment", enumerationParameterType => enumerationParameterType.Attachment },
             { "Definition", enumerationParameterType => enumerationParameterType.Definition },
             { "HyperLink", enumerationParameterType => enumerationParameterType.HyperLink },
             { "ValueDefinition", enumerationParameterType => enumerationParameterType.ValueDefinition.ToIdList() },
@@ -71,6 +73,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.EnumerationParameterType>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.EnumerationParameterType>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.EnumerationParameterType>(item => item.Alias != null, "The 'Alias' property of a 'EnumerationParameterType' is mandatory and cannot be null.") },
+            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.EnumerationParameterType>(item => item.Attachment != null, "The 'Attachment' property of a 'EnumerationParameterType' is mandatory and cannot be null.") },
             { "Category", new DtoValidationHelper<CDP4Common.DTO.EnumerationParameterType>(item => item.Category != null, "The 'Category' property of a 'EnumerationParameterType' is mandatory and cannot be null.") },
             { "Definition", new DtoValidationHelper<CDP4Common.DTO.EnumerationParameterType>(item => item.Definition != null, "The 'Definition' property of a 'EnumerationParameterType' is mandatory and cannot be null.") },
             { "ExcludedDomain", new DtoValidationHelper<CDP4Common.DTO.EnumerationParameterType>(item => item.ExcludedDomain != null, "The 'ExcludedDomain' property of a 'EnumerationParameterType' is mandatory and cannot be null.") },
@@ -217,6 +220,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "HyperLink", new PropertyMetaInfo("HyperLink", "HyperLink", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "ValueDefinition", new PropertyMetaInfo("ValueDefinition", "EnumerationValueDefinition", PropertyKind.OrderedList, AggregationKind.Composite, false, true, true, 1, "*", true) },
@@ -249,6 +253,7 @@ namespace CDP4Common.MetaInfo
             { "Actor", thing => thing.Actor },
             { "Alias", thing => thing.Alias },
             { "AllowMultiSelect", thing => thing.AllowMultiSelect },
+            { "Attachment", thing => thing.Attachment },
             { "Category", thing => thing.Category },
             { "ClassKind", thing => thing.ClassKind },
             { "Definition", thing => thing.Definition },
@@ -297,6 +302,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
+            { "Attachment", (value) => (Guid)value },
             { "Category", (value) => (Guid)value },
             { "Definition", (value) => (Guid)value },
             { "ExcludedDomain", (value) => (Guid)value },

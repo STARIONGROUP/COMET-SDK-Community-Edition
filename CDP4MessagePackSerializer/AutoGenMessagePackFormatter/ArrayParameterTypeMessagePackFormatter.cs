@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,22 +34,23 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 4     | component                            | Guid                         | 1..*        |  1.0.0  |
- | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 6     | dimension                            | int                          | 1..*        |  1.0.0  |
- | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 9     | isFinalized                          | bool                         | 1..1        |  1.0.0  |
- | 10    | isTensor                             | bool                         | 1..1        |  1.0.0  |
- | 11    | name                                 | string                       | 1..1        |  1.0.0  |
- | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 13    | symbol                               | string                       | 1..1        |  1.0.0  |
- | 14    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 15    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 16    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | component                            | Guid                         | 1..*        |  1.0.0  |
+ | 6     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 7     | dimension                            | int                          | 1..*        |  1.0.0  |
+ | 8     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 9     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 10    | isFinalized                          | bool                         | 1..1        |  1.0.0  |
+ | 11    | isTensor                             | bool                         | 1..1        |  1.0.0  |
+ | 12    | name                                 | string                       | 1..1        |  1.0.0  |
+ | 13    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 14    | symbol                               | string                       | 1..1        |  1.0.0  |
+ | 15    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 16    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 17    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 18    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 19    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -102,13 +103,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(arrayParameterType), "The ArrayParameterType may not be null");
             }
 
-            writer.WriteArrayHeader(19);
+            writer.WriteArrayHeader(20);
 
             writer.Write(arrayParameterType.Iid.ToByteArray());
             writer.Write(arrayParameterType.RevisionNumber);
 
             writer.WriteArrayHeader(arrayParameterType.Alias.Count);
             foreach (var identifier in arrayParameterType.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(arrayParameterType.Attachment.Count);
+            foreach (var identifier in arrayParameterType.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -221,10 +227,17 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            arrayParameterType.Category.Add(reader.ReadBytes().ToGuid());
+                            arrayParameterType.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            arrayParameterType.Category.Add(reader.ReadBytes().ToGuid());
+                        }
+                        break;
+                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
@@ -235,14 +248,14 @@ namespace CDP4MessagePackSerializer
                             arrayParameterType.Component.Add(orderedItem);
                         }
                         break;
-                    case 5:
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             arrayParameterType.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
@@ -253,52 +266,52 @@ namespace CDP4MessagePackSerializer
                             arrayParameterType.Dimension.Add(orderedItem);
                         }
                         break;
-                    case 7:
+                    case 8:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             arrayParameterType.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 8:
+                    case 9:
                         arrayParameterType.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 9:
+                    case 10:
                         arrayParameterType.IsFinalized = reader.ReadBoolean();
                         break;
-                    case 10:
+                    case 11:
                         arrayParameterType.IsTensor = reader.ReadBoolean();
                         break;
-                    case 11:
+                    case 12:
                         arrayParameterType.Name = reader.ReadString();
                         break;
-                    case 12:
+                    case 13:
                         arrayParameterType.ShortName = reader.ReadString();
                         break;
-                    case 13:
+                    case 14:
                         arrayParameterType.Symbol = reader.ReadString();
                         break;
-                    case 14:
+                    case 15:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             arrayParameterType.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 15:
+                    case 16:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             arrayParameterType.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 16:
+                    case 17:
                         arrayParameterType.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 17:
+                    case 18:
                         arrayParameterType.ThingPreference = reader.ReadString();
                         break;
-                    case 18:
+                    case 19:
                         if (reader.TryReadNil())
                         {
                             arrayParameterType.Actor = null;

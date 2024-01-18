@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,18 +34,19 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 6     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 7     | name                                 | string                       | 1..1        |  1.0.0  |
- | 8     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 9     | term                                 | Guid                         | 0..*        |  1.0.0  |
- | 10    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 8     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 10    | term                                 | Guid                         | 0..*        |  1.0.0  |
+ | 11    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 12    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 13    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 14    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 15    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -98,13 +99,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(glossary), "The Glossary may not be null");
             }
 
-            writer.WriteArrayHeader(15);
+            writer.WriteArrayHeader(16);
 
             writer.Write(glossary.Iid.ToByteArray());
             writer.Write(glossary.RevisionNumber);
 
             writer.WriteArrayHeader(glossary.Alias.Count);
             foreach (var identifier in glossary.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(glossary.Attachment.Count);
+            foreach (var identifier in glossary.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -205,60 +211,67 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            glossary.Category.Add(reader.ReadBytes().ToGuid());
+                            glossary.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            glossary.Definition.Add(reader.ReadBytes().ToGuid());
+                            glossary.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            glossary.HyperLink.Add(reader.ReadBytes().ToGuid());
+                            glossary.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 6:
-                        glossary.IsDeprecated = reader.ReadBoolean();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            glossary.HyperLink.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 7:
-                        glossary.Name = reader.ReadString();
+                        glossary.IsDeprecated = reader.ReadBoolean();
                         break;
                     case 8:
-                        glossary.ShortName = reader.ReadString();
+                        glossary.Name = reader.ReadString();
                         break;
                     case 9:
+                        glossary.ShortName = reader.ReadString();
+                        break;
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             glossary.Term.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 10:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             glossary.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             glossary.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 13:
                         glossary.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 13:
+                    case 14:
                         glossary.ThingPreference = reader.ReadString();
                         break;
-                    case 14:
+                    case 15:
                         if (reader.TryReadNil())
                         {
                             glossary.Actor = null;

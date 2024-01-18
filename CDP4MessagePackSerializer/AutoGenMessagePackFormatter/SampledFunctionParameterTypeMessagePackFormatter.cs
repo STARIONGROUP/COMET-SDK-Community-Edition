@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -37,19 +37,20 @@
  | 3     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 4     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 5     | alias                                | Guid                         | 0..*        |  1.2.0  |
- | 6     | category                             | Guid                         | 0..*        |  1.2.0  |
- | 7     | definition                           | Guid                         | 0..*        |  1.2.0  |
- | 8     | degreeOfInterpolation                | int                          | 0..1        |  1.2.0  |
- | 9     | dependentParameterType               | Guid                         | 1..*        |  1.2.0  |
- | 10    | hyperLink                            | Guid                         | 0..*        |  1.2.0  |
- | 11    | independentParameterType             | Guid                         | 1..*        |  1.2.0  |
- | 12    | interpolationPeriod                  | ValueArray<string>           | 1..*        |  1.2.0  |
- | 13    | isDeprecated                         | bool                         | 1..1        |  1.2.0  |
- | 14    | name                                 | string                       | 1..1        |  1.2.0  |
- | 15    | shortName                            | string                       | 1..1        |  1.2.0  |
- | 16    | symbol                               | string                       | 1..1        |  1.2.0  |
- | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 6     | attachment                           | Guid                         | 0..*        |  1.2.0  |
+ | 7     | category                             | Guid                         | 0..*        |  1.2.0  |
+ | 8     | definition                           | Guid                         | 0..*        |  1.2.0  |
+ | 9     | degreeOfInterpolation                | int                          | 0..1        |  1.2.0  |
+ | 10    | dependentParameterType               | Guid                         | 1..*        |  1.2.0  |
+ | 11    | hyperLink                            | Guid                         | 0..*        |  1.2.0  |
+ | 12    | independentParameterType             | Guid                         | 1..*        |  1.2.0  |
+ | 13    | interpolationPeriod                  | ValueArray<string>           | 1..*        |  1.2.0  |
+ | 14    | isDeprecated                         | bool                         | 1..1        |  1.2.0  |
+ | 15    | name                                 | string                       | 1..1        |  1.2.0  |
+ | 16    | shortName                            | string                       | 1..1        |  1.2.0  |
+ | 17    | symbol                               | string                       | 1..1        |  1.2.0  |
+ | 18    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 19    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -102,7 +103,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(sampledFunctionParameterType), "The SampledFunctionParameterType may not be null");
             }
 
-            writer.WriteArrayHeader(19);
+            writer.WriteArrayHeader(20);
 
             writer.Write(sampledFunctionParameterType.Iid.ToByteArray());
             writer.Write(sampledFunctionParameterType.RevisionNumber);
@@ -120,6 +121,11 @@ namespace CDP4MessagePackSerializer
             writer.Write(sampledFunctionParameterType.ModifiedOn);
             writer.WriteArrayHeader(sampledFunctionParameterType.Alias.Count);
             foreach (var identifier in sampledFunctionParameterType.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(sampledFunctionParameterType.Attachment.Count);
+            foreach (var identifier in sampledFunctionParameterType.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -249,17 +255,24 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            sampledFunctionParameterType.Category.Add(reader.ReadBytes().ToGuid());
+                            sampledFunctionParameterType.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            sampledFunctionParameterType.Definition.Add(reader.ReadBytes().ToGuid());
+                            sampledFunctionParameterType.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 8:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            sampledFunctionParameterType.Definition.Add(reader.ReadBytes().ToGuid());
+                        }
+                        break;
+                    case 9:
                         if (reader.TryReadNil())
                         {
                             sampledFunctionParameterType.DegreeOfInterpolation = null;
@@ -269,7 +282,7 @@ namespace CDP4MessagePackSerializer
                             sampledFunctionParameterType.DegreeOfInterpolation = reader.ReadInt32();
                         }
                         break;
-                    case 9:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
@@ -280,14 +293,14 @@ namespace CDP4MessagePackSerializer
                             sampledFunctionParameterType.DependentParameterType.Add(orderedItem);
                         }
                         break;
-                    case 10:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             sampledFunctionParameterType.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
@@ -298,7 +311,7 @@ namespace CDP4MessagePackSerializer
                             sampledFunctionParameterType.IndependentParameterType.Add(orderedItem);
                         }
                         break;
-                    case 12:
+                    case 13:
                         valueLength = reader.ReadArrayHeader();
                         var sampledFunctionParameterTypeInterpolationPeriod = new List<string>();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
@@ -307,22 +320,22 @@ namespace CDP4MessagePackSerializer
                         }
                         sampledFunctionParameterType.InterpolationPeriod = new ValueArray<string>(sampledFunctionParameterTypeInterpolationPeriod);
                         break;
-                    case 13:
+                    case 14:
                         sampledFunctionParameterType.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 14:
+                    case 15:
                         sampledFunctionParameterType.Name = reader.ReadString();
                         break;
-                    case 15:
+                    case 16:
                         sampledFunctionParameterType.ShortName = reader.ReadString();
                         break;
-                    case 16:
+                    case 17:
                         sampledFunctionParameterType.Symbol = reader.ReadString();
                         break;
-                    case 17:
+                    case 18:
                         sampledFunctionParameterType.ThingPreference = reader.ReadString();
                         break;
-                    case 18:
+                    case 19:
                         if (reader.TryReadNil())
                         {
                             sampledFunctionParameterType.Actor = null;

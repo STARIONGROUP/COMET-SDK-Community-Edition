@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,28 +34,29 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | baseQuantityKind                     | Guid                         | 0..*        |  1.0.0  |
- | 4     | baseUnit                             | Guid                         | 0..*        |  1.0.0  |
- | 5     | constant                             | Guid                         | 0..*        |  1.0.0  |
- | 6     | definedCategory                      | Guid                         | 0..*        |  1.0.0  |
- | 7     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 8     | fileType                             | Guid                         | 0..*        |  1.0.0  |
- | 9     | glossary                             | Guid                         | 0..*        |  1.0.0  |
- | 10    | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 11    | name                                 | string                       | 1..1        |  1.0.0  |
- | 12    | parameterType                        | Guid                         | 0..*        |  1.0.0  |
- | 13    | referenceSource                      | Guid                         | 0..*        |  1.0.0  |
- | 14    | requiredRdl                          | Guid                         | 0..1        |  1.0.0  |
- | 15    | rule                                 | Guid                         | 0..*        |  1.0.0  |
- | 16    | scale                                | Guid                         | 0..*        |  1.0.0  |
- | 17    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 18    | unit                                 | Guid                         | 0..*        |  1.0.0  |
- | 19    | unitPrefix                           | Guid                         | 0..*        |  1.0.0  |
- | 20    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 21    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 22    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 23    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 24    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | baseQuantityKind                     | Guid                         | 0..*        |  1.0.0  |
+ | 5     | baseUnit                             | Guid                         | 0..*        |  1.0.0  |
+ | 6     | constant                             | Guid                         | 0..*        |  1.0.0  |
+ | 7     | definedCategory                      | Guid                         | 0..*        |  1.0.0  |
+ | 8     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 9     | fileType                             | Guid                         | 0..*        |  1.0.0  |
+ | 10    | glossary                             | Guid                         | 0..*        |  1.0.0  |
+ | 11    | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 12    | name                                 | string                       | 1..1        |  1.0.0  |
+ | 13    | parameterType                        | Guid                         | 0..*        |  1.0.0  |
+ | 14    | referenceSource                      | Guid                         | 0..*        |  1.0.0  |
+ | 15    | requiredRdl                          | Guid                         | 0..1        |  1.0.0  |
+ | 16    | rule                                 | Guid                         | 0..*        |  1.0.0  |
+ | 17    | scale                                | Guid                         | 0..*        |  1.0.0  |
+ | 18    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 19    | unit                                 | Guid                         | 0..*        |  1.0.0  |
+ | 20    | unitPrefix                           | Guid                         | 0..*        |  1.0.0  |
+ | 21    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 22    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 23    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 24    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 25    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -108,13 +109,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(modelReferenceDataLibrary), "The ModelReferenceDataLibrary may not be null");
             }
 
-            writer.WriteArrayHeader(25);
+            writer.WriteArrayHeader(26);
 
             writer.Write(modelReferenceDataLibrary.Iid.ToByteArray());
             writer.Write(modelReferenceDataLibrary.RevisionNumber);
 
             writer.WriteArrayHeader(modelReferenceDataLibrary.Alias.Count);
             foreach (var identifier in modelReferenceDataLibrary.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(modelReferenceDataLibrary.Attachment.Count);
+            foreach (var identifier in modelReferenceDataLibrary.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -274,6 +280,13 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
+                            modelReferenceDataLibrary.Attachment.Add(reader.ReadBytes().ToGuid());
+                        }
+                        break;
+                    case 4:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
@@ -281,73 +294,73 @@ namespace CDP4MessagePackSerializer
                             modelReferenceDataLibrary.BaseQuantityKind.Add(orderedItem);
                         }
                         break;
-                    case 4:
+                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.BaseUnit.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 5:
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.Constant.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.DefinedCategory.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 8:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 8:
+                    case 9:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.FileType.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 9:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.Glossary.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 10:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 12:
                         modelReferenceDataLibrary.Name = reader.ReadString();
                         break;
-                    case 12:
+                    case 13:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.ParameterType.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 13:
+                    case 14:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.ReferenceSource.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 14:
+                    case 15:
                         if (reader.TryReadNil())
                         {
                             modelReferenceDataLibrary.RequiredRdl = null;
@@ -357,58 +370,58 @@ namespace CDP4MessagePackSerializer
                             modelReferenceDataLibrary.RequiredRdl = reader.ReadBytes().ToGuid();
                         }
                         break;
-                    case 15:
+                    case 16:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.Rule.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 16:
+                    case 17:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.Scale.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 17:
+                    case 18:
                         modelReferenceDataLibrary.ShortName = reader.ReadString();
                         break;
-                    case 18:
+                    case 19:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.Unit.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 19:
+                    case 20:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.UnitPrefix.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 20:
+                    case 21:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 21:
+                    case 22:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             modelReferenceDataLibrary.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 22:
+                    case 23:
                         modelReferenceDataLibrary.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 23:
+                    case 24:
                         modelReferenceDataLibrary.ThingPreference = reader.ReadString();
                         break;
-                    case 24:
+                    case 25:
                         if (reader.TryReadNil())
                         {
                             modelReferenceDataLibrary.Actor = null;

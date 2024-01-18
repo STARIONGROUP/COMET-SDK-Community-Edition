@@ -2,17 +2,18 @@
 // <copyright file="SiteReferenceDataLibraryMetaInfo.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -52,6 +53,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<CDP4Common.DTO.SiteReferenceDataLibrary, IEnumerable<Guid>>> containmentPropertyValueMap = new Dictionary<string, Func<CDP4Common.DTO.SiteReferenceDataLibrary, IEnumerable<Guid>>>
         {
             { "Alias", siteReferenceDataLibrary => siteReferenceDataLibrary.Alias },
+            { "Attachment", siteReferenceDataLibrary => siteReferenceDataLibrary.Attachment },
             { "Constant", siteReferenceDataLibrary => siteReferenceDataLibrary.Constant },
             { "DefinedCategory", siteReferenceDataLibrary => siteReferenceDataLibrary.DefinedCategory },
             { "Definition", siteReferenceDataLibrary => siteReferenceDataLibrary.Definition },
@@ -77,6 +79,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, DtoValidationHelper<CDP4Common.DTO.SiteReferenceDataLibrary>> validationRules = new Dictionary<string, DtoValidationHelper<CDP4Common.DTO.SiteReferenceDataLibrary>>
         {
             { "Alias", new DtoValidationHelper<CDP4Common.DTO.SiteReferenceDataLibrary>(item => item.Alias != null, "The 'Alias' property of a 'SiteReferenceDataLibrary' is mandatory and cannot be null.") },
+            { "Attachment", new DtoValidationHelper<CDP4Common.DTO.SiteReferenceDataLibrary>(item => item.Attachment != null, "The 'Attachment' property of a 'SiteReferenceDataLibrary' is mandatory and cannot be null.") },
             { "BaseQuantityKind", new DtoValidationHelper<CDP4Common.DTO.SiteReferenceDataLibrary>(item => item.BaseQuantityKind != null, "The 'BaseQuantityKind' property of a 'SiteReferenceDataLibrary' is mandatory and cannot be null.") },
             { "BaseUnit", new DtoValidationHelper<CDP4Common.DTO.SiteReferenceDataLibrary>(item => item.BaseUnit != null, "The 'BaseUnit' property of a 'SiteReferenceDataLibrary' is mandatory and cannot be null.") },
             { "Constant", new DtoValidationHelper<CDP4Common.DTO.SiteReferenceDataLibrary>(item => item.Constant != null, "The 'Constant' property of a 'SiteReferenceDataLibrary' is mandatory and cannot be null.") },
@@ -232,6 +235,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, PropertyMetaInfo> containmentTypeMap = new Dictionary<string, PropertyMetaInfo>
         {
             { "Alias", new PropertyMetaInfo("Alias", "Alias", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
+            { "Attachment", new PropertyMetaInfo("Attachment", "Attachment", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Constant", new PropertyMetaInfo("Constant", "Constant", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "DefinedCategory", new PropertyMetaInfo("DefinedCategory", "Category", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
             { "Definition", new PropertyMetaInfo("Definition", "Definition", PropertyKind.List, AggregationKind.Composite, false, false, true, 0, "*", true) },
@@ -272,6 +276,7 @@ namespace CDP4Common.MetaInfo
         {
             { "Actor", thing => thing.Actor },
             { "Alias", thing => thing.Alias },
+            { "Attachment", thing => thing.Attachment },
             { "BaseQuantityKind", thing => thing.BaseQuantityKind },
             { "BaseUnit", thing => thing.BaseUnit },
             { "ClassKind", thing => thing.ClassKind },
@@ -329,6 +334,7 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, Func<object, object>> collectionPropertyValueDeserializationMap = new Dictionary<string, Func<object, object>>
         {
             { "Alias", (value) => (Guid)value },
+            { "Attachment", (value) => (Guid)value },
             { "BaseQuantityKind", (value) => (Guid)value },
             { "BaseUnit", (value) => (Guid)value },
             { "Constant", (value) => (Guid)value },

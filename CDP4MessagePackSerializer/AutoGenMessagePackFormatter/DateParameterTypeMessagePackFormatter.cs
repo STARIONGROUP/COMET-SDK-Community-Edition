@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,18 +34,19 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 6     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 7     | name                                 | string                       | 1..1        |  1.0.0  |
- | 8     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 9     | symbol                               | string                       | 1..1        |  1.0.0  |
- | 10    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 8     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 10    | symbol                               | string                       | 1..1        |  1.0.0  |
+ | 11    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 12    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 13    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 14    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 15    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -98,13 +99,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(dateParameterType), "The DateParameterType may not be null");
             }
 
-            writer.WriteArrayHeader(15);
+            writer.WriteArrayHeader(16);
 
             writer.Write(dateParameterType.Iid.ToByteArray());
             writer.Write(dateParameterType.RevisionNumber);
 
             writer.WriteArrayHeader(dateParameterType.Alias.Count);
             foreach (var identifier in dateParameterType.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(dateParameterType.Attachment.Count);
+            foreach (var identifier in dateParameterType.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -201,56 +207,63 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            dateParameterType.Category.Add(reader.ReadBytes().ToGuid());
+                            dateParameterType.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            dateParameterType.Definition.Add(reader.ReadBytes().ToGuid());
+                            dateParameterType.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            dateParameterType.HyperLink.Add(reader.ReadBytes().ToGuid());
+                            dateParameterType.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 6:
-                        dateParameterType.IsDeprecated = reader.ReadBoolean();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            dateParameterType.HyperLink.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 7:
-                        dateParameterType.Name = reader.ReadString();
+                        dateParameterType.IsDeprecated = reader.ReadBoolean();
                         break;
                     case 8:
-                        dateParameterType.ShortName = reader.ReadString();
+                        dateParameterType.Name = reader.ReadString();
                         break;
                     case 9:
-                        dateParameterType.Symbol = reader.ReadString();
+                        dateParameterType.ShortName = reader.ReadString();
                         break;
                     case 10:
+                        dateParameterType.Symbol = reader.ReadString();
+                        break;
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             dateParameterType.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             dateParameterType.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 13:
                         dateParameterType.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 13:
+                    case 14:
                         dateParameterType.ThingPreference = reader.ReadString();
                         break;
-                    case 14:
+                    case 15:
                         if (reader.TryReadNil())
                         {
                             dateParameterType.Actor = null;

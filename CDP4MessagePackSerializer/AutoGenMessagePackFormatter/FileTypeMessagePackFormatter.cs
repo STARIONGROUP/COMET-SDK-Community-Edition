@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,18 +34,19 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | extension                            | string                       | 1..1        |  1.0.0  |
- | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 8     | name                                 | string                       | 1..1        |  1.0.0  |
- | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 10    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | extension                            | string                       | 1..1        |  1.0.0  |
+ | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 10    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 11    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 12    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 13    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 14    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 15    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -98,13 +99,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(fileType), "The FileType may not be null");
             }
 
-            writer.WriteArrayHeader(15);
+            writer.WriteArrayHeader(16);
 
             writer.Write(fileType.Iid.ToByteArray());
             writer.Write(fileType.RevisionNumber);
 
             writer.WriteArrayHeader(fileType.Alias.Count);
             foreach (var identifier in fileType.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(fileType.Attachment.Count);
+            foreach (var identifier in fileType.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -201,56 +207,63 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            fileType.Category.Add(reader.ReadBytes().ToGuid());
+                            fileType.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            fileType.Definition.Add(reader.ReadBytes().ToGuid());
+                            fileType.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
-                        fileType.Extension = reader.ReadString();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            fileType.Definition.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 6:
+                        fileType.Extension = reader.ReadString();
+                        break;
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             fileType.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 8:
                         fileType.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 8:
+                    case 9:
                         fileType.Name = reader.ReadString();
                         break;
-                    case 9:
+                    case 10:
                         fileType.ShortName = reader.ReadString();
                         break;
-                    case 10:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             fileType.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             fileType.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 13:
                         fileType.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 13:
+                    case 14:
                         fileType.ThingPreference = reader.ReadString();
                         break;
-                    case 14:
+                    case 15:
                         if (reader.TryReadNil())
                         {
                             fileType.Actor = null;

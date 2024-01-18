@@ -3,17 +3,17 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of CDP4-COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -35,12 +35,15 @@
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | bounds                               | Guid                         | 0..1        |  1.1.0  |
  | 3     | createdOn                            | DateTime                     | 1..1        |  1.1.0  |
- | 4     | diagramElement                       | Guid                         | 0..*        |  1.1.0  |
- | 5     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 6     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 7     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 8     | name                                 | string                       | 1..1        |  1.1.0  |
- | 9     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 4     | description                          | string                       | 1..1        |  1.1.0  |
+ | 5     | diagramElement                       | Guid                         | 0..*        |  1.1.0  |
+ | 6     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.1.0  |
+ | 10    | publicationState                     | PublicationState             | 1..1        |  1.1.0  |
+ | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -84,6 +87,9 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.CreatedOn.Equals(other.CreatedOn)) return false;
 
+            if (me.Description == null && other.Description != null) return false;
+            if (me.Description != null && !me.Description.Equals(other.Description)) return false;
+
             if (!me.DiagramElement.OrderBy(x => x).SequenceEqual(other.DiagramElement.OrderBy(x => x))) return false;
 
             if (!me.ExcludedDomain.OrderBy(x => x).SequenceEqual(other.ExcludedDomain.OrderBy(x => x))) return false;
@@ -95,8 +101,13 @@ namespace CDP4Common.DTO.Equatable
             if (me.Name == null && other.Name != null) return false;
             if (me.Name != null && !me.Name.Equals(other.Name)) return false;
 
+            if (!me.PublicationState.Equals(other.PublicationState)) return false;
+
             if (me.ThingPreference == null && other.ThingPreference != null) return false;
             if (me.ThingPreference != null && !me.ThingPreference.Equals(other.ThingPreference)) return false;
+
+            if (me.Actor.HasValue != other.Actor.HasValue) return false;
+            if (!me.Actor.Equals(other.Actor)) return false;
 
             return true;
         }

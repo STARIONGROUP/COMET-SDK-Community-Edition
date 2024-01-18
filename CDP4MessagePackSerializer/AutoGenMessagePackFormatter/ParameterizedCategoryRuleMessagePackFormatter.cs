@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,18 +34,19 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | category                             | Guid                         | 1..1        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 6     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 7     | name                                 | string                       | 1..1        |  1.0.0  |
- | 8     | parameterType                        | Guid                         | 1..*        |  1.0.0  |
- | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 10    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | category                             | Guid                         | 1..1        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 8     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 9     | parameterType                        | Guid                         | 1..*        |  1.0.0  |
+ | 10    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 11    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 12    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 13    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 14    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 15    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -98,13 +99,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(parameterizedCategoryRule), "The ParameterizedCategoryRule may not be null");
             }
 
-            writer.WriteArrayHeader(15);
+            writer.WriteArrayHeader(16);
 
             writer.Write(parameterizedCategoryRule.Iid.ToByteArray());
             writer.Write(parameterizedCategoryRule.RevisionNumber);
 
             writer.WriteArrayHeader(parameterizedCategoryRule.Alias.Count);
             foreach (var identifier in parameterizedCategoryRule.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(parameterizedCategoryRule.Attachment.Count);
+            foreach (var identifier in parameterizedCategoryRule.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -198,59 +204,66 @@ namespace CDP4MessagePackSerializer
                         }
                         break;
                     case 3:
-                        parameterizedCategoryRule.Category = reader.ReadBytes().ToGuid();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            parameterizedCategoryRule.Attachment.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 4:
+                        parameterizedCategoryRule.Category = reader.ReadBytes().ToGuid();
+                        break;
+                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             parameterizedCategoryRule.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 5:
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             parameterizedCategoryRule.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 7:
                         parameterizedCategoryRule.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 7:
+                    case 8:
                         parameterizedCategoryRule.Name = reader.ReadString();
                         break;
-                    case 8:
+                    case 9:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             parameterizedCategoryRule.ParameterType.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 9:
+                    case 10:
                         parameterizedCategoryRule.ShortName = reader.ReadString();
                         break;
-                    case 10:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             parameterizedCategoryRule.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             parameterizedCategoryRule.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 13:
                         parameterizedCategoryRule.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 13:
+                    case 14:
                         parameterizedCategoryRule.ThingPreference = reader.ReadString();
                         break;
-                    case 14:
+                    case 15:
                         if (reader.TryReadNil())
                         {
                             parameterizedCategoryRule.Actor = null;

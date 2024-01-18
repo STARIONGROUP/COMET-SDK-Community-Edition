@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,31 +34,32 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | exponent                             | string                       | 1..1        |  1.0.0  |
- | 5     | factor                               | string                       | 1..1        |  1.0.0  |
- | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 8     | isMaximumInclusive                   | bool                         | 1..1        |  1.0.0  |
- | 9     | isMinimumInclusive                   | bool                         | 1..1        |  1.0.0  |
- | 10    | logarithmBase                        | LogarithmBaseKind            | 1..1        |  1.0.0  |
- | 11    | mappingToReferenceScale              | Guid                         | 0..*        |  1.0.0  |
- | 12    | maximumPermissibleValue              | string                       | 0..1        |  1.0.0  |
- | 13    | minimumPermissibleValue              | string                       | 0..1        |  1.0.0  |
- | 14    | name                                 | string                       | 1..1        |  1.0.0  |
- | 15    | negativeValueConnotation             | string                       | 0..1        |  1.0.0  |
- | 16    | numberSet                            | NumberSetKind                | 1..1        |  1.0.0  |
- | 17    | positiveValueConnotation             | string                       | 0..1        |  1.0.0  |
- | 18    | referenceQuantityKind                | Guid                         | 1..1        |  1.0.0  |
- | 19    | referenceQuantityValue               | Guid                         | 0..1        |  1.0.0  |
- | 20    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 21    | unit                                 | Guid                         | 1..1        |  1.0.0  |
- | 22    | valueDefinition                      | Guid                         | 0..*        |  1.0.0  |
- | 23    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 24    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 25    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 26    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 27    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 5     | exponent                             | string                       | 1..1        |  1.0.0  |
+ | 6     | factor                               | string                       | 1..1        |  1.0.0  |
+ | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 9     | isMaximumInclusive                   | bool                         | 1..1        |  1.0.0  |
+ | 10    | isMinimumInclusive                   | bool                         | 1..1        |  1.0.0  |
+ | 11    | logarithmBase                        | LogarithmBaseKind            | 1..1        |  1.0.0  |
+ | 12    | mappingToReferenceScale              | Guid                         | 0..*        |  1.0.0  |
+ | 13    | maximumPermissibleValue              | string                       | 0..1        |  1.0.0  |
+ | 14    | minimumPermissibleValue              | string                       | 0..1        |  1.0.0  |
+ | 15    | name                                 | string                       | 1..1        |  1.0.0  |
+ | 16    | negativeValueConnotation             | string                       | 0..1        |  1.0.0  |
+ | 17    | numberSet                            | NumberSetKind                | 1..1        |  1.0.0  |
+ | 18    | positiveValueConnotation             | string                       | 0..1        |  1.0.0  |
+ | 19    | referenceQuantityKind                | Guid                         | 1..1        |  1.0.0  |
+ | 20    | referenceQuantityValue               | Guid                         | 0..1        |  1.0.0  |
+ | 21    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 22    | unit                                 | Guid                         | 1..1        |  1.0.0  |
+ | 23    | valueDefinition                      | Guid                         | 0..*        |  1.0.0  |
+ | 24    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 25    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 26    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 27    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 28    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -111,13 +112,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(logarithmicScale), "The LogarithmicScale may not be null");
             }
 
-            writer.WriteArrayHeader(28);
+            writer.WriteArrayHeader(29);
 
             writer.Write(logarithmicScale.Iid.ToByteArray());
             writer.Write(logarithmicScale.RevisionNumber);
 
             writer.WriteArrayHeader(logarithmicScale.Alias.Count);
             foreach (var identifier in logarithmicScale.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(logarithmicScale.Attachment.Count);
+            foreach (var identifier in logarithmicScale.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -235,103 +241,110 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            logarithmicScale.Definition.Add(reader.ReadBytes().ToGuid());
+                            logarithmicScale.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
-                        logarithmicScale.Exponent = reader.ReadString();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            logarithmicScale.Definition.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 5:
-                        logarithmicScale.Factor = reader.ReadString();
+                        logarithmicScale.Exponent = reader.ReadString();
                         break;
                     case 6:
+                        logarithmicScale.Factor = reader.ReadString();
+                        break;
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             logarithmicScale.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 8:
                         logarithmicScale.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 8:
+                    case 9:
                         logarithmicScale.IsMaximumInclusive = reader.ReadBoolean();
                         break;
-                    case 9:
+                    case 10:
                         logarithmicScale.IsMinimumInclusive = reader.ReadBoolean();
                         break;
-                    case 10:
+                    case 11:
                         logarithmicScale.LogarithmBase = (CDP4Common.SiteDirectoryData.LogarithmBaseKind)Enum.Parse(typeof(CDP4Common.SiteDirectoryData.LogarithmBaseKind), reader.ReadString(), true);
                         break;
-                    case 11:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             logarithmicScale.MappingToReferenceScale.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 13:
                         logarithmicScale.MaximumPermissibleValue = reader.ReadString();
                         break;
-                    case 13:
+                    case 14:
                         logarithmicScale.MinimumPermissibleValue = reader.ReadString();
                         break;
-                    case 14:
+                    case 15:
                         logarithmicScale.Name = reader.ReadString();
                         break;
-                    case 15:
+                    case 16:
                         logarithmicScale.NegativeValueConnotation = reader.ReadString();
                         break;
-                    case 16:
+                    case 17:
                         logarithmicScale.NumberSet = (CDP4Common.SiteDirectoryData.NumberSetKind)Enum.Parse(typeof(CDP4Common.SiteDirectoryData.NumberSetKind), reader.ReadString(), true);
                         break;
-                    case 17:
+                    case 18:
                         logarithmicScale.PositiveValueConnotation = reader.ReadString();
                         break;
-                    case 18:
+                    case 19:
                         logarithmicScale.ReferenceQuantityKind = reader.ReadBytes().ToGuid();
                         break;
-                    case 19:
+                    case 20:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             logarithmicScale.ReferenceQuantityValue.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 20:
+                    case 21:
                         logarithmicScale.ShortName = reader.ReadString();
                         break;
-                    case 21:
+                    case 22:
                         logarithmicScale.Unit = reader.ReadBytes().ToGuid();
                         break;
-                    case 22:
+                    case 23:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             logarithmicScale.ValueDefinition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 23:
+                    case 24:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             logarithmicScale.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 24:
+                    case 25:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             logarithmicScale.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 25:
+                    case 26:
                         logarithmicScale.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 26:
+                    case 27:
                         logarithmicScale.ThingPreference = reader.ReadString();
                         break;
-                    case 27:
+                    case 28:
                         if (reader.TryReadNil())
                         {
                             logarithmicScale.Actor = null;

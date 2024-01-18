@@ -93,7 +93,7 @@ namespace CDP4Common.DiagramData
         /// The documentation of this DiagramObject
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public string Documentation { get; set; }
+        public virtual string Documentation { get; set; }
 
         /// <summary>
         /// Gets or sets the Resolution.
@@ -102,7 +102,7 @@ namespace CDP4Common.DiagramData
         /// The resolution of the diagram expressed in user units per inch
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public float Resolution { get; set; }
+        public virtual float Resolution { get; set; }
 
         /// <summary>
         /// Creates and returns a copy of this <see cref="DiagramObject"/> for edit purpose.

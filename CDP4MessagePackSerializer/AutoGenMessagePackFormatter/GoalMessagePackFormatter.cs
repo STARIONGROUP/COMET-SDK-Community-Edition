@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,16 +34,17 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.1.0  |
- | 3     | category                             | Guid                         | 0..*        |  1.1.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.1.0  |
- | 5     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 6     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 7     | hyperLink                            | Guid                         | 0..*        |  1.1.0  |
- | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 9     | name                                 | string                       | 1..1        |  1.1.0  |
- | 10    | shortName                            | string                       | 1..1        |  1.1.0  |
- | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.1.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.1.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.1.0  |
+ | 6     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 8     | hyperLink                            | Guid                         | 0..*        |  1.1.0  |
+ | 9     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 10    | name                                 | string                       | 1..1        |  1.1.0  |
+ | 11    | shortName                            | string                       | 1..1        |  1.1.0  |
+ | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -96,13 +97,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(goal), "The Goal may not be null");
             }
 
-            writer.WriteArrayHeader(13);
+            writer.WriteArrayHeader(14);
 
             writer.Write(goal.Iid.ToByteArray());
             writer.Write(goal.RevisionNumber);
 
             writer.WriteArrayHeader(goal.Alias.Count);
             foreach (var identifier in goal.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(goal.Attachment.Count);
+            foreach (var identifier in goal.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -197,50 +203,57 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            goal.Category.Add(reader.ReadBytes().ToGuid());
+                            goal.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            goal.Definition.Add(reader.ReadBytes().ToGuid());
+                            goal.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            goal.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
+                            goal.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            goal.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
+                            goal.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            goal.HyperLink.Add(reader.ReadBytes().ToGuid());
+                            goal.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 8:
-                        goal.ModifiedOn = reader.ReadDateTime();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            goal.HyperLink.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 9:
-                        goal.Name = reader.ReadString();
+                        goal.ModifiedOn = reader.ReadDateTime();
                         break;
                     case 10:
-                        goal.ShortName = reader.ReadString();
+                        goal.Name = reader.ReadString();
                         break;
                     case 11:
-                        goal.ThingPreference = reader.ReadString();
+                        goal.ShortName = reader.ReadString();
                         break;
                     case 12:
+                        goal.ThingPreference = reader.ReadString();
+                        break;
+                    case 13:
                         if (reader.TryReadNil())
                         {
                             goal.Actor = null;

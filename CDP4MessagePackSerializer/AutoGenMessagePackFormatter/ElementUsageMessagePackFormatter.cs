@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,21 +34,22 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | elementDefinition                    | Guid                         | 1..1        |  1.0.0  |
- | 6     | excludeOption                        | Guid                         | 0..*        |  1.0.0  |
- | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 8     | interfaceEnd                         | InterfaceEndKind             | 1..1        |  1.0.0  |
- | 9     | name                                 | string                       | 1..1        |  1.0.0  |
- | 10    | owner                                | Guid                         | 1..1        |  1.0.0  |
- | 11    | parameterOverride                    | Guid                         | 0..*        |  1.0.0  |
- | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 13    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | elementDefinition                    | Guid                         | 1..1        |  1.0.0  |
+ | 7     | excludeOption                        | Guid                         | 0..*        |  1.0.0  |
+ | 8     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 9     | interfaceEnd                         | InterfaceEndKind             | 1..1        |  1.0.0  |
+ | 10    | name                                 | string                       | 1..1        |  1.0.0  |
+ | 11    | owner                                | Guid                         | 1..1        |  1.0.0  |
+ | 12    | parameterOverride                    | Guid                         | 0..*        |  1.0.0  |
+ | 13    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 14    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 15    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 16    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -101,13 +102,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(elementUsage), "The ElementUsage may not be null");
             }
 
-            writer.WriteArrayHeader(18);
+            writer.WriteArrayHeader(19);
 
             writer.Write(elementUsage.Iid.ToByteArray());
             writer.Write(elementUsage.RevisionNumber);
 
             writer.WriteArrayHeader(elementUsage.Alias.Count);
             foreach (var identifier in elementUsage.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(elementUsage.Attachment.Count);
+            foreach (var identifier in elementUsage.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -215,73 +221,80 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            elementUsage.Category.Add(reader.ReadBytes().ToGuid());
+                            elementUsage.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            elementUsage.Definition.Add(reader.ReadBytes().ToGuid());
+                            elementUsage.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
-                        elementUsage.ElementDefinition = reader.ReadBytes().ToGuid();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            elementUsage.Definition.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 6:
+                        elementUsage.ElementDefinition = reader.ReadBytes().ToGuid();
+                        break;
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementUsage.ExcludeOption.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 8:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementUsage.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 8:
+                    case 9:
                         elementUsage.InterfaceEnd = (CDP4Common.EngineeringModelData.InterfaceEndKind)Enum.Parse(typeof(CDP4Common.EngineeringModelData.InterfaceEndKind), reader.ReadString(), true);
                         break;
-                    case 9:
+                    case 10:
                         elementUsage.Name = reader.ReadString();
                         break;
-                    case 10:
+                    case 11:
                         elementUsage.Owner = reader.ReadBytes().ToGuid();
                         break;
-                    case 11:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementUsage.ParameterOverride.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 13:
                         elementUsage.ShortName = reader.ReadString();
                         break;
-                    case 13:
+                    case 14:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementUsage.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 14:
+                    case 15:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementUsage.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 15:
+                    case 16:
                         elementUsage.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 16:
+                    case 17:
                         elementUsage.ThingPreference = reader.ReadString();
                         break;
-                    case 17:
+                    case 18:
                         if (reader.TryReadNil())
                         {
                             elementUsage.Actor = null;

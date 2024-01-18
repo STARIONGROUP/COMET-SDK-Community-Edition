@@ -3,17 +3,17 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of CDP4-COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -34,28 +34,30 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | baseQuantityKind                     | Guid                         | 0..*        |  1.0.0  |
- | 4     | baseUnit                             | Guid                         | 0..*        |  1.0.0  |
- | 5     | constant                             | Guid                         | 0..*        |  1.0.0  |
- | 6     | definedCategory                      | Guid                         | 0..*        |  1.0.0  |
- | 7     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 8     | fileType                             | Guid                         | 0..*        |  1.0.0  |
- | 9     | glossary                             | Guid                         | 0..*        |  1.0.0  |
- | 10    | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 11    | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 12    | name                                 | string                       | 1..1        |  1.0.0  |
- | 13    | parameterType                        | Guid                         | 0..*        |  1.0.0  |
- | 14    | referenceSource                      | Guid                         | 0..*        |  1.0.0  |
- | 15    | requiredRdl                          | Guid                         | 0..1        |  1.0.0  |
- | 16    | rule                                 | Guid                         | 0..*        |  1.0.0  |
- | 17    | scale                                | Guid                         | 0..*        |  1.0.0  |
- | 18    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 19    | unit                                 | Guid                         | 0..*        |  1.0.0  |
- | 20    | unitPrefix                           | Guid                         | 0..*        |  1.0.0  |
- | 21    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 22    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 23    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 24    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | baseQuantityKind                     | Guid                         | 0..*        |  1.0.0  |
+ | 5     | baseUnit                             | Guid                         | 0..*        |  1.0.0  |
+ | 6     | constant                             | Guid                         | 0..*        |  1.0.0  |
+ | 7     | definedCategory                      | Guid                         | 0..*        |  1.0.0  |
+ | 8     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 9     | fileType                             | Guid                         | 0..*        |  1.0.0  |
+ | 10    | glossary                             | Guid                         | 0..*        |  1.0.0  |
+ | 11    | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 12    | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 13    | name                                 | string                       | 1..1        |  1.0.0  |
+ | 14    | parameterType                        | Guid                         | 0..*        |  1.0.0  |
+ | 15    | referenceSource                      | Guid                         | 0..*        |  1.0.0  |
+ | 16    | requiredRdl                          | Guid                         | 0..1        |  1.0.0  |
+ | 17    | rule                                 | Guid                         | 0..*        |  1.0.0  |
+ | 18    | scale                                | Guid                         | 0..*        |  1.0.0  |
+ | 19    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 20    | unit                                 | Guid                         | 0..*        |  1.0.0  |
+ | 21    | unitPrefix                           | Guid                         | 0..*        |  1.0.0  |
+ | 22    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 23    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 24    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 25    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 26    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -96,6 +98,8 @@ namespace CDP4Common.DTO.Equatable
             if (!me.RevisionNumber.Equals(other.RevisionNumber)) return false;
 
             if (!me.Alias.OrderBy(x => x).SequenceEqual(other.Alias.OrderBy(x => x))) return false;
+
+            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
 
             if (!me.BaseQuantityKind.OrderBy(x => x.K).Select(x => x.K).SequenceEqual(other.BaseQuantityKind.OrderBy(x => x.K).Select(x => x.K))) return false;
             if (!me.BaseQuantityKind.OrderBy(x => x.K).Select(x => x.V).SequenceEqual(other.BaseQuantityKind.OrderBy(x => x.K).Select(x => x.V))) return false;
@@ -145,6 +149,9 @@ namespace CDP4Common.DTO.Equatable
 
             if (me.ThingPreference == null && other.ThingPreference != null) return false;
             if (me.ThingPreference != null && !me.ThingPreference.Equals(other.ThingPreference)) return false;
+
+            if (me.Actor.HasValue != other.Actor.HasValue) return false;
+            if (!me.Actor.Equals(other.Actor)) return false;
 
             return true;
         }

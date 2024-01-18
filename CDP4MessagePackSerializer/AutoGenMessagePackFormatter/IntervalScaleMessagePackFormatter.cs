@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,26 +34,27 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 5     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 6     | isMaximumInclusive                   | bool                         | 1..1        |  1.0.0  |
- | 7     | isMinimumInclusive                   | bool                         | 1..1        |  1.0.0  |
- | 8     | mappingToReferenceScale              | Guid                         | 0..*        |  1.0.0  |
- | 9     | maximumPermissibleValue              | string                       | 0..1        |  1.0.0  |
- | 10    | minimumPermissibleValue              | string                       | 0..1        |  1.0.0  |
- | 11    | name                                 | string                       | 1..1        |  1.0.0  |
- | 12    | negativeValueConnotation             | string                       | 0..1        |  1.0.0  |
- | 13    | numberSet                            | NumberSetKind                | 1..1        |  1.0.0  |
- | 14    | positiveValueConnotation             | string                       | 0..1        |  1.0.0  |
- | 15    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 16    | unit                                 | Guid                         | 1..1        |  1.0.0  |
- | 17    | valueDefinition                      | Guid                         | 0..*        |  1.0.0  |
- | 18    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 19    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 20    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 21    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 22    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 6     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 7     | isMaximumInclusive                   | bool                         | 1..1        |  1.0.0  |
+ | 8     | isMinimumInclusive                   | bool                         | 1..1        |  1.0.0  |
+ | 9     | mappingToReferenceScale              | Guid                         | 0..*        |  1.0.0  |
+ | 10    | maximumPermissibleValue              | string                       | 0..1        |  1.0.0  |
+ | 11    | minimumPermissibleValue              | string                       | 0..1        |  1.0.0  |
+ | 12    | name                                 | string                       | 1..1        |  1.0.0  |
+ | 13    | negativeValueConnotation             | string                       | 0..1        |  1.0.0  |
+ | 14    | numberSet                            | NumberSetKind                | 1..1        |  1.0.0  |
+ | 15    | positiveValueConnotation             | string                       | 0..1        |  1.0.0  |
+ | 16    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 17    | unit                                 | Guid                         | 1..1        |  1.0.0  |
+ | 18    | valueDefinition                      | Guid                         | 0..*        |  1.0.0  |
+ | 19    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 20    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 21    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 22    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 23    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -106,13 +107,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(intervalScale), "The IntervalScale may not be null");
             }
 
-            writer.WriteArrayHeader(23);
+            writer.WriteArrayHeader(24);
 
             writer.Write(intervalScale.Iid.ToByteArray());
             writer.Write(intervalScale.RevisionNumber);
 
             writer.WriteArrayHeader(intervalScale.Alias.Count);
             foreach (var identifier in intervalScale.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(intervalScale.Attachment.Count);
+            foreach (var identifier in intervalScale.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -221,84 +227,91 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            intervalScale.Definition.Add(reader.ReadBytes().ToGuid());
+                            intervalScale.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            intervalScale.HyperLink.Add(reader.ReadBytes().ToGuid());
+                            intervalScale.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
-                        intervalScale.IsDeprecated = reader.ReadBoolean();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            intervalScale.HyperLink.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 6:
-                        intervalScale.IsMaximumInclusive = reader.ReadBoolean();
+                        intervalScale.IsDeprecated = reader.ReadBoolean();
                         break;
                     case 7:
-                        intervalScale.IsMinimumInclusive = reader.ReadBoolean();
+                        intervalScale.IsMaximumInclusive = reader.ReadBoolean();
                         break;
                     case 8:
+                        intervalScale.IsMinimumInclusive = reader.ReadBoolean();
+                        break;
+                    case 9:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             intervalScale.MappingToReferenceScale.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 9:
+                    case 10:
                         intervalScale.MaximumPermissibleValue = reader.ReadString();
                         break;
-                    case 10:
+                    case 11:
                         intervalScale.MinimumPermissibleValue = reader.ReadString();
                         break;
-                    case 11:
+                    case 12:
                         intervalScale.Name = reader.ReadString();
                         break;
-                    case 12:
+                    case 13:
                         intervalScale.NegativeValueConnotation = reader.ReadString();
                         break;
-                    case 13:
+                    case 14:
                         intervalScale.NumberSet = (CDP4Common.SiteDirectoryData.NumberSetKind)Enum.Parse(typeof(CDP4Common.SiteDirectoryData.NumberSetKind), reader.ReadString(), true);
                         break;
-                    case 14:
+                    case 15:
                         intervalScale.PositiveValueConnotation = reader.ReadString();
                         break;
-                    case 15:
+                    case 16:
                         intervalScale.ShortName = reader.ReadString();
                         break;
-                    case 16:
+                    case 17:
                         intervalScale.Unit = reader.ReadBytes().ToGuid();
                         break;
-                    case 17:
+                    case 18:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             intervalScale.ValueDefinition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 18:
+                    case 19:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             intervalScale.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 19:
+                    case 20:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             intervalScale.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 20:
+                    case 21:
                         intervalScale.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 21:
+                    case 22:
                         intervalScale.ThingPreference = reader.ReadString();
                         break;
-                    case 22:
+                    case 23:
                         if (reader.TryReadNil())
                         {
                             intervalScale.Actor = null;

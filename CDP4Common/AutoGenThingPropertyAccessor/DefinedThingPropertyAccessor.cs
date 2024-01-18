@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -162,6 +162,86 @@ namespace CDP4Common.CommonData
                     }
 
                     return aliasNextObjects;
+                case "attachment":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    var attachmentUpperBound = pd.Upper.Value;
+
+                    if (pd.Lower.Value == 0 && attachmentUpperBound == int.MaxValue && !this.Attachment.Any())
+                    {
+                        if (pd.Next == null)
+                        {
+                            return new List<Attachment>();
+                        }
+
+                        var sentinelAttachment = new Attachment(Guid.Empty, null, null);
+
+                        return sentinelAttachment.QuerySentinelValue(pd.NextPath, true);
+                    }
+
+                    if (pd.Upper.Value == int.MaxValue)
+                    {
+                        attachmentUpperBound = this.Attachment.Count - 1;
+                    }
+
+                    if (this.Attachment.Count - 1 < pd.Lower.Value)
+                    {
+                        throw new IndexOutOfRangeException($"Invalid Multiplicity for Attachment property, the lower bound {pd.Lower.Value} is higher than the max index of this list.");
+                    }
+
+                    if (this.Attachment.Count - 1 < attachmentUpperBound)
+                    {
+                        throw new IndexOutOfRangeException($"Invalid Multiplicity for the Attachment property, the upper bound {pd.Upper.Value} is higher than the max index of this list.");
+                    }
+
+                    if (pd.Lower.Value == pd.Upper.Value)
+                    {
+                        if (pd.Next == null)
+                        {
+                            return this.Attachment[pd.Lower.Value];
+                        }
+
+                        return this.Attachment[pd.Lower.Value].QueryValue(pd.NextPath);
+                    }
+
+                    if (pd.Next == null)
+                    {
+                        var attachmentObjects = new List<Attachment>();
+
+                        for (var i = pd.Lower.Value; i < attachmentUpperBound + 1; i++)
+                        {
+                            attachmentObjects.Add(this.Attachment[i]);
+                        }
+
+                        return attachmentObjects;
+                    }
+
+                    var attachmentNextObjects = new List<object>();
+
+                    for (var i = pd.Lower.Value; i < attachmentUpperBound + 1; i++)
+                    {
+                        var queryResult = this.Attachment[i].QueryValue(pd.Next.Input);
+
+                        if (queryResult is IEnumerable<object> queriedValues)
+                        {
+                            foreach (var queriedValue in queriedValues)
+                            {
+                                if (queriedValue != null)
+                                {
+                                    attachmentNextObjects.Add(queriedValue);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (queryResult != null)
+                            {
+                                attachmentNextObjects.Add(queryResult);
+                            }
+                        }
+                    }
+
+                    return attachmentNextObjects;
                 case "definition":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 

@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,20 +34,21 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 6     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 7     | name                                 | string                       | 1..1        |  1.0.0  |
- | 8     | parameterType                        | Guid                         | 1..1        |  1.0.0  |
- | 9     | scale                                | Guid                         | 0..1        |  1.0.0  |
- | 10    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 11    | value                                | ValueArray<string>           | 1..*        |  1.0.0  |
- | 12    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 13    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 14    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 8     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 9     | parameterType                        | Guid                         | 1..1        |  1.0.0  |
+ | 10    | scale                                | Guid                         | 0..1        |  1.0.0  |
+ | 11    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 12    | value                                | ValueArray<string>           | 1..*        |  1.0.0  |
+ | 13    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -100,13 +101,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(constant), "The Constant may not be null");
             }
 
-            writer.WriteArrayHeader(17);
+            writer.WriteArrayHeader(18);
 
             writer.Write(constant.Iid.ToByteArray());
             writer.Write(constant.RevisionNumber);
 
             writer.WriteArrayHeader(constant.Alias.Count);
             foreach (var identifier in constant.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(constant.Attachment.Count);
+            foreach (var identifier in constant.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -216,33 +222,40 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            constant.Category.Add(reader.ReadBytes().ToGuid());
+                            constant.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            constant.Definition.Add(reader.ReadBytes().ToGuid());
+                            constant.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            constant.HyperLink.Add(reader.ReadBytes().ToGuid());
+                            constant.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 6:
-                        constant.IsDeprecated = reader.ReadBoolean();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            constant.HyperLink.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 7:
-                        constant.Name = reader.ReadString();
+                        constant.IsDeprecated = reader.ReadBoolean();
                         break;
                     case 8:
-                        constant.ParameterType = reader.ReadBytes().ToGuid();
+                        constant.Name = reader.ReadString();
                         break;
                     case 9:
+                        constant.ParameterType = reader.ReadBytes().ToGuid();
+                        break;
+                    case 10:
                         if (reader.TryReadNil())
                         {
                             constant.Scale = null;
@@ -252,10 +265,10 @@ namespace CDP4MessagePackSerializer
                             constant.Scale = reader.ReadBytes().ToGuid();
                         }
                         break;
-                    case 10:
+                    case 11:
                         constant.ShortName = reader.ReadString();
                         break;
-                    case 11:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         var constantValue = new List<string>();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
@@ -264,27 +277,27 @@ namespace CDP4MessagePackSerializer
                         }
                         constant.Value = new ValueArray<string>(constantValue);
                         break;
-                    case 12:
+                    case 13:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             constant.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 13:
+                    case 14:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             constant.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 14:
+                    case 15:
                         constant.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 15:
+                    case 16:
                         constant.ThingPreference = reader.ReadString();
                         break;
-                    case 16:
+                    case 17:
                         if (reader.TryReadNil())
                         {
                             constant.Actor = null;

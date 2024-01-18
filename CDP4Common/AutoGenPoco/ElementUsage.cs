@@ -191,6 +191,7 @@ namespace CDP4Common.EngineeringModelData
         {
             var clone = (ElementUsage)this.MemberwiseClone();
             clone.Alias = cloneContainedThings ? new ContainerList<Alias>(clone) : new ContainerList<Alias>(this.Alias, clone);
+            clone.Attachment = cloneContainedThings ? new ContainerList<Attachment>(clone) : new ContainerList<Attachment>(this.Attachment, clone);
             clone.Category = new List<Category>(this.Category);
             clone.Definition = cloneContainedThings ? new ContainerList<Definition>(clone) : new ContainerList<Definition>(this.Definition, clone);
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
@@ -202,6 +203,7 @@ namespace CDP4Common.EngineeringModelData
             if (cloneContainedThings)
             {
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
+                clone.Attachment.AddRange(this.Attachment.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
                 clone.ParameterOverride.AddRange(this.ParameterOverride.Select(x => x.Clone(true)));
@@ -264,6 +266,7 @@ namespace CDP4Common.EngineeringModelData
 
             this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
+            this.Attachment.ResolveList(dto.Attachment, dto.IterationContainerId, this.Cache);
             this.Category.ResolveList(dto.Category, dto.IterationContainerId, this.Cache);
             this.Definition.ResolveList(dto.Definition, dto.IterationContainerId, this.Cache);
             this.ElementDefinition = this.Cache.Get<ElementDefinition>(dto.ElementDefinition, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<ElementDefinition>();
@@ -292,6 +295,7 @@ namespace CDP4Common.EngineeringModelData
 
             dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
+            dto.Attachment.AddRange(this.Attachment.Select(x => x.Iid));
             dto.Category.AddRange(this.Category.Select(x => x.Iid));
             dto.Definition.AddRange(this.Definition.Select(x => x.Iid));
             dto.ElementDefinition = this.ElementDefinition != null ? this.ElementDefinition.Iid : Guid.Empty;

@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -191,6 +191,13 @@ namespace CDP4MessagePackSerializer
             {typeof(LogEntryChangelogItem), new LogEntryChangelogItemMessagePackFormatter()},
             {typeof(OrganizationalParticipant), new OrganizationalParticipantMessagePackFormatter()},
             {typeof(SampledFunctionParameterType), new SampledFunctionParameterTypeMessagePackFormatter()},
+            {typeof(ArchitectureDiagram), new ArchitectureDiagramMessagePackFormatter()},
+            {typeof(ArchitectureElement), new ArchitectureElementMessagePackFormatter()},
+            {typeof(Attachment), new AttachmentMessagePackFormatter()},
+            {typeof(Behavior), new BehaviorMessagePackFormatter()},
+            {typeof(BehavioralParameter), new BehavioralParameterMessagePackFormatter()},
+            {typeof(DiagramFrame), new DiagramFrameMessagePackFormatter()},
+            {typeof(DiagramPort), new DiagramPortMessagePackFormatter()},
         };
 
         /// <summary>

@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,20 +34,21 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | containedCategory                    | Guid                         | 1..*        |  1.0.0  |
- | 4     | containingCategory                   | Guid                         | 1..1        |  1.0.0  |
- | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 8     | maxContained                         | int                          | 0..1        |  1.0.0  |
- | 9     | minContained                         | int                          | 1..1        |  1.0.0  |
- | 10    | name                                 | string                       | 1..1        |  1.0.0  |
- | 11    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 12    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 13    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 14    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | containedCategory                    | Guid                         | 1..*        |  1.0.0  |
+ | 5     | containingCategory                   | Guid                         | 1..1        |  1.0.0  |
+ | 6     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 9     | maxContained                         | int                          | 0..1        |  1.0.0  |
+ | 10    | minContained                         | int                          | 1..1        |  1.0.0  |
+ | 11    | name                                 | string                       | 1..1        |  1.0.0  |
+ | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 13    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -100,13 +101,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(decompositionRule), "The DecompositionRule may not be null");
             }
 
-            writer.WriteArrayHeader(17);
+            writer.WriteArrayHeader(18);
 
             writer.Write(decompositionRule.Iid.ToByteArray());
             writer.Write(decompositionRule.RevisionNumber);
 
             writer.WriteArrayHeader(decompositionRule.Alias.Count);
             foreach (var identifier in decompositionRule.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(decompositionRule.Attachment.Count);
+            foreach (var identifier in decompositionRule.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -212,30 +218,37 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            decompositionRule.ContainedCategory.Add(reader.ReadBytes().ToGuid());
+                            decompositionRule.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
-                        decompositionRule.ContainingCategory = reader.ReadBytes().ToGuid();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            decompositionRule.ContainedCategory.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 5:
+                        decompositionRule.ContainingCategory = reader.ReadBytes().ToGuid();
+                        break;
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             decompositionRule.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             decompositionRule.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 8:
                         decompositionRule.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 8:
+                    case 9:
                         if (reader.TryReadNil())
                         {
                             decompositionRule.MaxContained = null;
@@ -245,36 +258,36 @@ namespace CDP4MessagePackSerializer
                             decompositionRule.MaxContained = reader.ReadInt32();
                         }
                         break;
-                    case 9:
+                    case 10:
                         decompositionRule.MinContained = reader.ReadInt32();
                         break;
-                    case 10:
+                    case 11:
                         decompositionRule.Name = reader.ReadString();
                         break;
-                    case 11:
+                    case 12:
                         decompositionRule.ShortName = reader.ReadString();
                         break;
-                    case 12:
+                    case 13:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             decompositionRule.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 13:
+                    case 14:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             decompositionRule.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 14:
+                    case 15:
                         decompositionRule.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 15:
+                    case 16:
                         decompositionRule.ThingPreference = reader.ReadString();
                         break;
-                    case 16:
+                    case 17:
                         if (reader.TryReadNil())
                         {
                             decompositionRule.Actor = null;

@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,17 +34,18 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 5     | name                                 | string                       | 1..1        |  1.0.0  |
- | 6     | owner                                | Guid                         | 1..1        |  1.0.0  |
- | 7     | ruleVerification                     | Guid                         | 0..*        |  1.0.0  |
- | 8     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 9     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 10    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 11    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 6     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 7     | owner                                | Guid                         | 1..1        |  1.0.0  |
+ | 8     | ruleVerification                     | Guid                         | 0..*        |  1.0.0  |
+ | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 10    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -97,13 +98,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(ruleVerificationList), "The RuleVerificationList may not be null");
             }
 
-            writer.WriteArrayHeader(14);
+            writer.WriteArrayHeader(15);
 
             writer.Write(ruleVerificationList.Iid.ToByteArray());
             writer.Write(ruleVerificationList.RevisionNumber);
 
             writer.WriteArrayHeader(ruleVerificationList.Alias.Count);
             foreach (var identifier in ruleVerificationList.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(ruleVerificationList.Attachment.Count);
+            foreach (var identifier in ruleVerificationList.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -201,23 +207,30 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            ruleVerificationList.Definition.Add(reader.ReadBytes().ToGuid());
+                            ruleVerificationList.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            ruleVerificationList.HyperLink.Add(reader.ReadBytes().ToGuid());
+                            ruleVerificationList.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
-                        ruleVerificationList.Name = reader.ReadString();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            ruleVerificationList.HyperLink.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 6:
-                        ruleVerificationList.Owner = reader.ReadBytes().ToGuid();
+                        ruleVerificationList.Name = reader.ReadString();
                         break;
                     case 7:
+                        ruleVerificationList.Owner = reader.ReadBytes().ToGuid();
+                        break;
+                    case 8:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
@@ -228,30 +241,30 @@ namespace CDP4MessagePackSerializer
                             ruleVerificationList.RuleVerification.Add(orderedItem);
                         }
                         break;
-                    case 8:
+                    case 9:
                         ruleVerificationList.ShortName = reader.ReadString();
                         break;
-                    case 9:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             ruleVerificationList.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 10:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             ruleVerificationList.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 12:
                         ruleVerificationList.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 12:
+                    case 13:
                         ruleVerificationList.ThingPreference = reader.ReadString();
                         break;
-                    case 13:
+                    case 14:
                         if (reader.TryReadNil())
                         {
                             ruleVerificationList.Actor = null;

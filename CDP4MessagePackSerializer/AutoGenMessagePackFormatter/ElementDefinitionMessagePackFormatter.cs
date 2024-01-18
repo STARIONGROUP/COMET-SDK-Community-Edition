@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,22 +34,24 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 4     | containedElement                     | Guid                         | 0..*        |  1.0.0  |
- | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 7     | name                                 | string                       | 1..1        |  1.0.0  |
- | 8     | owner                                | Guid                         | 1..1        |  1.0.0  |
- | 9     | parameter                            | Guid                         | 0..*        |  1.0.0  |
- | 10    | parameterGroup                       | Guid                         | 0..*        |  1.0.0  |
- | 11    | referencedElement                    | Guid                         | 0..*        |  1.0.0  |
- | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 13    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 16    | organizationalParticipant            | Guid                         | 0..*        |  1.2.0  |
- | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | containedElement                     | Guid                         | 0..*        |  1.0.0  |
+ | 6     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 8     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 9     | owner                                | Guid                         | 1..1        |  1.0.0  |
+ | 10    | parameter                            | Guid                         | 0..*        |  1.0.0  |
+ | 11    | parameterGroup                       | Guid                         | 0..*        |  1.0.0  |
+ | 12    | referencedElement                    | Guid                         | 0..*        |  1.0.0  |
+ | 13    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 14    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 15    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 16    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 17    | organizationalParticipant            | Guid                         | 0..*        |  1.2.0  |
+ | 18    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 19    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 20    | behavior                             | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -102,13 +104,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(elementDefinition), "The ElementDefinition may not be null");
             }
 
-            writer.WriteArrayHeader(19);
+            writer.WriteArrayHeader(21);
 
             writer.Write(elementDefinition.Iid.ToByteArray());
             writer.Write(elementDefinition.RevisionNumber);
 
             writer.WriteArrayHeader(elementDefinition.Alias.Count);
             foreach (var identifier in elementDefinition.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(elementDefinition.Attachment.Count);
+            foreach (var identifier in elementDefinition.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -175,6 +182,11 @@ namespace CDP4MessagePackSerializer
             {
                 writer.WriteNil();
             }
+            writer.WriteArrayHeader(elementDefinition.Behavior.Count);
+            foreach (var identifier in elementDefinition.Behavior.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
 
             writer.Flush();
         }
@@ -229,88 +241,95 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            elementDefinition.Category.Add(reader.ReadBytes().ToGuid());
+                            elementDefinition.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            elementDefinition.ContainedElement.Add(reader.ReadBytes().ToGuid());
+                            elementDefinition.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            elementDefinition.Definition.Add(reader.ReadBytes().ToGuid());
+                            elementDefinition.ContainedElement.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            elementDefinition.HyperLink.Add(reader.ReadBytes().ToGuid());
+                            elementDefinition.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 7:
-                        elementDefinition.Name = reader.ReadString();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            elementDefinition.HyperLink.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 8:
-                        elementDefinition.Owner = reader.ReadBytes().ToGuid();
+                        elementDefinition.Name = reader.ReadString();
                         break;
                     case 9:
+                        elementDefinition.Owner = reader.ReadBytes().ToGuid();
+                        break;
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementDefinition.Parameter.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 10:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementDefinition.ParameterGroup.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementDefinition.ReferencedElement.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 13:
                         elementDefinition.ShortName = reader.ReadString();
                         break;
-                    case 13:
+                    case 14:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementDefinition.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 14:
+                    case 15:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementDefinition.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 15:
+                    case 16:
                         elementDefinition.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 16:
+                    case 17:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             elementDefinition.OrganizationalParticipant.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 17:
+                    case 18:
                         elementDefinition.ThingPreference = reader.ReadString();
                         break;
-                    case 18:
+                    case 19:
                         if (reader.TryReadNil())
                         {
                             elementDefinition.Actor = null;
@@ -318,6 +337,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             elementDefinition.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 20:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            elementDefinition.Behavior.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

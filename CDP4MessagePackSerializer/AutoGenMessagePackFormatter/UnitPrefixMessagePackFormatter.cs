@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,17 +34,18 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | conversionFactor                     | string                       | 1..1        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 6     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 7     | name                                 | string                       | 1..1        |  1.0.0  |
- | 8     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 9     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 10    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 11    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | conversionFactor                     | string                       | 1..1        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 8     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 10    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -97,13 +98,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(unitPrefix), "The UnitPrefix may not be null");
             }
 
-            writer.WriteArrayHeader(14);
+            writer.WriteArrayHeader(15);
 
             writer.Write(unitPrefix.Iid.ToByteArray());
             writer.Write(unitPrefix.RevisionNumber);
 
             writer.WriteArrayHeader(unitPrefix.Alias.Count);
             foreach (var identifier in unitPrefix.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(unitPrefix.Attachment.Count);
+            foreach (var identifier in unitPrefix.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -192,52 +198,59 @@ namespace CDP4MessagePackSerializer
                         }
                         break;
                     case 3:
-                        unitPrefix.ConversionFactor = reader.ReadString();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            unitPrefix.Attachment.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 4:
+                        unitPrefix.ConversionFactor = reader.ReadString();
+                        break;
+                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             unitPrefix.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 5:
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             unitPrefix.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 7:
                         unitPrefix.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 7:
+                    case 8:
                         unitPrefix.Name = reader.ReadString();
                         break;
-                    case 8:
+                    case 9:
                         unitPrefix.ShortName = reader.ReadString();
                         break;
-                    case 9:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             unitPrefix.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 10:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             unitPrefix.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 12:
                         unitPrefix.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 12:
+                    case 13:
                         unitPrefix.ThingPreference = reader.ReadString();
                         break;
-                    case 13:
+                    case 14:
                         if (reader.TryReadNil())
                         {
                             unitPrefix.Actor = null;

@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -87,10 +87,16 @@ namespace CDP4Common.DiagramData
                 case "createdon":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.CreatedOn;
+                case "description":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return this.Description;
                 case "diagramelement":
                     return base.QueryValue(pd.Input);
                 case "name":
                     return base.QueryValue(pd.Input);
+                case "publicationstate":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return this.PublicationState;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }
@@ -152,11 +158,17 @@ namespace CDP4Common.DiagramData
                 case "createdon":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return isCallerEmunerable ? (object) new List<DateTime>() : null;
+                case "description":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return isCallerEmunerable ? (object) new List<string>() : null;
                 case "diagramelement":
                     return pd.Next == null ? (object) new List<DiagramEdge>() : new DiagramEdge(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
                 case "name":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return isCallerEmunerable ? (object) new List<string>() : null;
+                case "publicationstate":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return isCallerEmunerable ? (object) new List<PublicationState>() : null;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

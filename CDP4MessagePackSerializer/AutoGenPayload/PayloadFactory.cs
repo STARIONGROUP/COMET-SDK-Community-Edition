@@ -2,8 +2,8 @@
 // <copyright file="PayloadFactory.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft,
-//            Nathanael Smiechowski, Antoine Théate, Omar Elabiary
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -66,6 +66,149 @@ namespace CDP4MessagePackSerializer
             {
                 switch (thing)
                 {
+                    
+                    
+                    case ArchitectureDiagram architectureDiagram:
+                        payload.ArchitectureDiagram.Add(architectureDiagram);
+                        break;
+                    case ArchitectureElement architectureElement:
+                        payload.ArchitectureElement.Add(architectureElement);
+                        break;
+                    case Attachment attachment:
+                        payload.Attachment.Add(attachment);
+                        break;
+                    case Behavior behavior:
+                        payload.Behavior.Add(behavior);
+                        break;
+                    case BehavioralParameter behavioralParameter:
+                        payload.BehavioralParameter.Add(behavioralParameter);
+                        break;
+                    case DiagramFrame diagramFrame:
+                        payload.DiagramFrame.Add(diagramFrame);
+                        break;
+                    case DiagramPort diagramPort:
+                        payload.DiagramPort.Add(diagramPort);
+                        break;
+                    case DependentParameterTypeAssignment dependentParameterTypeAssignment:
+                        payload.DependentParameterTypeAssignment.Add(dependentParameterTypeAssignment);
+                        break;
+                    case IndependentParameterTypeAssignment independentParameterTypeAssignment:
+                        payload.IndependentParameterTypeAssignment.Add(independentParameterTypeAssignment);
+                        break;
+                    case LogEntryChangelogItem logEntryChangelogItem:
+                        payload.LogEntryChangelogItem.Add(logEntryChangelogItem);
+                        break;
+                    case OrganizationalParticipant organizationalParticipant:
+                        payload.OrganizationalParticipant.Add(organizationalParticipant);
+                        break;
+                    case SampledFunctionParameterType sampledFunctionParameterType:
+                        payload.SampledFunctionParameterType.Add(sampledFunctionParameterType);
+                        break;
+                    case ActionItem actionItem:
+                        payload.ActionItem.Add(actionItem);
+                        break;
+                    case Approval approval:
+                        payload.Approval.Add(approval);
+                        break;
+                    case BinaryNote binaryNote:
+                        payload.BinaryNote.Add(binaryNote);
+                        break;
+                    case Book book:
+                        payload.Book.Add(book);
+                        break;
+                    case Bounds bounds:
+                        payload.Bounds.Add(bounds);
+                        break;
+                    case ChangeProposal changeProposal:
+                        payload.ChangeProposal.Add(changeProposal);
+                        break;
+                    case ChangeRequest changeRequest:
+                        payload.ChangeRequest.Add(changeRequest);
+                        break;
+                    case ContractChangeNotice contractChangeNotice:
+                        payload.ContractChangeNotice.Add(contractChangeNotice);
+                        break;
+                    case DiagramCanvas diagramCanvas:
+                        payload.DiagramCanvas.Add(diagramCanvas);
+                        break;
+                    case DiagramEdge diagramEdge:
+                        payload.DiagramEdge.Add(diagramEdge);
+                        break;
+                    case DiagramObject diagramObject:
+                        payload.DiagramObject.Add(diagramObject);
+                        break;
+                    case EngineeringModelDataDiscussionItem engineeringModelDataDiscussionItem:
+                        payload.EngineeringModelDataDiscussionItem.Add(engineeringModelDataDiscussionItem);
+                        break;
+                    case EngineeringModelDataNote engineeringModelDataNote:
+                        payload.EngineeringModelDataNote.Add(engineeringModelDataNote);
+                        break;
+                    case Goal goal:
+                        payload.Goal.Add(goal);
+                        break;
+                    case ModellingThingReference modellingThingReference:
+                        payload.ModellingThingReference.Add(modellingThingReference);
+                        break;
+                    case OwnedStyle ownedStyle:
+                        payload.OwnedStyle.Add(ownedStyle);
+                        break;
+                    case Page page:
+                        payload.Page.Add(page);
+                        break;
+                    case Point point:
+                        payload.Point.Add(point);
+                        break;
+                    case RelationshipParameterValue relationshipParameterValue:
+                        payload.RelationshipParameterValue.Add(relationshipParameterValue);
+                        break;
+                    case RequestForDeviation requestForDeviation:
+                        payload.RequestForDeviation.Add(requestForDeviation);
+                        break;
+                    case RequestForWaiver requestForWaiver:
+                        payload.RequestForWaiver.Add(requestForWaiver);
+                        break;
+                    case RequirementsContainerParameterValue requirementsContainerParameterValue:
+                        payload.RequirementsContainerParameterValue.Add(requirementsContainerParameterValue);
+                        break;
+                    case ReviewItemDiscrepancy reviewItemDiscrepancy:
+                        payload.ReviewItemDiscrepancy.Add(reviewItemDiscrepancy);
+                        break;
+                    case Section section:
+                        payload.Section.Add(section);
+                        break;
+                    case SharedStyle sharedStyle:
+                        payload.SharedStyle.Add(sharedStyle);
+                        break;
+                    case SiteDirectoryDataAnnotation siteDirectoryDataAnnotation:
+                        payload.SiteDirectoryDataAnnotation.Add(siteDirectoryDataAnnotation);
+                        break;
+                    case SiteDirectoryDataDiscussionItem siteDirectoryDataDiscussionItem:
+                        payload.SiteDirectoryDataDiscussionItem.Add(siteDirectoryDataDiscussionItem);
+                        break;
+                    case SiteDirectoryThingReference siteDirectoryThingReference:
+                        payload.SiteDirectoryThingReference.Add(siteDirectoryThingReference);
+                        break;
+                    case Solution solution:
+                        payload.Solution.Add(solution);
+                        break;
+                    case Stakeholder stakeholder:
+                        payload.Stakeholder.Add(stakeholder);
+                        break;
+                    case StakeholderValue stakeholderValue:
+                        payload.StakeholderValue.Add(stakeholderValue);
+                        break;
+                    case StakeHolderValueMap stakeHolderValueMap:
+                        payload.StakeHolderValueMap.Add(stakeHolderValueMap);
+                        break;
+                    case StakeHolderValueMapSettings stakeHolderValueMapSettings:
+                        payload.StakeHolderValueMapSettings.Add(stakeHolderValueMapSettings);
+                        break;
+                    case TextualNote textualNote:
+                        payload.TextualNote.Add(textualNote);
+                        break;
+                    case ValueGroup valueGroup:
+                        payload.ValueGroup.Add(valueGroup);
+                        break;
                     case ActualFiniteState actualFiniteState:
                         payload.ActualFiniteState.Add(actualFiniteState);
                         break;
@@ -384,126 +527,6 @@ namespace CDP4MessagePackSerializer
                     case UserRuleVerification userRuleVerification:
                         payload.UserRuleVerification.Add(userRuleVerification);
                         break;
-                    case ActionItem actionItem:
-                        payload.ActionItem.Add(actionItem);
-                        break;
-                    case Approval approval:
-                        payload.Approval.Add(approval);
-                        break;
-                    case BinaryNote binaryNote:
-                        payload.BinaryNote.Add(binaryNote);
-                        break;
-                    case Book book:
-                        payload.Book.Add(book);
-                        break;
-                    case Bounds bounds:
-                        payload.Bounds.Add(bounds);
-                        break;
-                    case ChangeProposal changeProposal:
-                        payload.ChangeProposal.Add(changeProposal);
-                        break;
-                    case ChangeRequest changeRequest:
-                        payload.ChangeRequest.Add(changeRequest);
-                        break;
-                    case ContractChangeNotice contractChangeNotice:
-                        payload.ContractChangeNotice.Add(contractChangeNotice);
-                        break;
-                    case DiagramCanvas diagramCanvas:
-                        payload.DiagramCanvas.Add(diagramCanvas);
-                        break;
-                    case DiagramEdge diagramEdge:
-                        payload.DiagramEdge.Add(diagramEdge);
-                        break;
-                    case DiagramObject diagramObject:
-                        payload.DiagramObject.Add(diagramObject);
-                        break;
-                    case EngineeringModelDataDiscussionItem engineeringModelDataDiscussionItem:
-                        payload.EngineeringModelDataDiscussionItem.Add(engineeringModelDataDiscussionItem);
-                        break;
-                    case EngineeringModelDataNote engineeringModelDataNote:
-                        payload.EngineeringModelDataNote.Add(engineeringModelDataNote);
-                        break;
-                    case Goal goal:
-                        payload.Goal.Add(goal);
-                        break;
-                    case ModellingThingReference modellingThingReference:
-                        payload.ModellingThingReference.Add(modellingThingReference);
-                        break;
-                    case OwnedStyle ownedStyle:
-                        payload.OwnedStyle.Add(ownedStyle);
-                        break;
-                    case Page page:
-                        payload.Page.Add(page);
-                        break;
-                    case Point point:
-                        payload.Point.Add(point);
-                        break;
-                    case RelationshipParameterValue relationshipParameterValue:
-                        payload.RelationshipParameterValue.Add(relationshipParameterValue);
-                        break;
-                    case RequestForDeviation requestForDeviation:
-                        payload.RequestForDeviation.Add(requestForDeviation);
-                        break;
-                    case RequestForWaiver requestForWaiver:
-                        payload.RequestForWaiver.Add(requestForWaiver);
-                        break;
-                    case RequirementsContainerParameterValue requirementsContainerParameterValue:
-                        payload.RequirementsContainerParameterValue.Add(requirementsContainerParameterValue);
-                        break;
-                    case ReviewItemDiscrepancy reviewItemDiscrepancy:
-                        payload.ReviewItemDiscrepancy.Add(reviewItemDiscrepancy);
-                        break;
-                    case Section section:
-                        payload.Section.Add(section);
-                        break;
-                    case SharedStyle sharedStyle:
-                        payload.SharedStyle.Add(sharedStyle);
-                        break;
-                    case SiteDirectoryDataAnnotation siteDirectoryDataAnnotation:
-                        payload.SiteDirectoryDataAnnotation.Add(siteDirectoryDataAnnotation);
-                        break;
-                    case SiteDirectoryDataDiscussionItem siteDirectoryDataDiscussionItem:
-                        payload.SiteDirectoryDataDiscussionItem.Add(siteDirectoryDataDiscussionItem);
-                        break;
-                    case SiteDirectoryThingReference siteDirectoryThingReference:
-                        payload.SiteDirectoryThingReference.Add(siteDirectoryThingReference);
-                        break;
-                    case Solution solution:
-                        payload.Solution.Add(solution);
-                        break;
-                    case Stakeholder stakeholder:
-                        payload.Stakeholder.Add(stakeholder);
-                        break;
-                    case StakeholderValue stakeholderValue:
-                        payload.StakeholderValue.Add(stakeholderValue);
-                        break;
-                    case StakeHolderValueMap stakeHolderValueMap:
-                        payload.StakeHolderValueMap.Add(stakeHolderValueMap);
-                        break;
-                    case StakeHolderValueMapSettings stakeHolderValueMapSettings:
-                        payload.StakeHolderValueMapSettings.Add(stakeHolderValueMapSettings);
-                        break;
-                    case TextualNote textualNote:
-                        payload.TextualNote.Add(textualNote);
-                        break;
-                    case ValueGroup valueGroup:
-                        payload.ValueGroup.Add(valueGroup);
-                        break;
-                    case DependentParameterTypeAssignment dependentParameterTypeAssignment:
-                        payload.DependentParameterTypeAssignment.Add(dependentParameterTypeAssignment);
-                        break;
-                    case IndependentParameterTypeAssignment independentParameterTypeAssignment:
-                        payload.IndependentParameterTypeAssignment.Add(independentParameterTypeAssignment);
-                        break;
-                    case LogEntryChangelogItem logEntryChangelogItem:
-                        payload.LogEntryChangelogItem.Add(logEntryChangelogItem);
-                        break;
-                    case OrganizationalParticipant organizationalParticipant:
-                        payload.OrganizationalParticipant.Add(organizationalParticipant);
-                        break;
-                    case SampledFunctionParameterType sampledFunctionParameterType:
-                        payload.SampledFunctionParameterType.Add(sampledFunctionParameterType);
-                        break;
                 }
             }
 
@@ -674,6 +697,13 @@ namespace CDP4MessagePackSerializer
             result.AddRange(payload.LogEntryChangelogItem);
             result.AddRange(payload.OrganizationalParticipant);
             result.AddRange(payload.SampledFunctionParameterType);
+            result.AddRange(payload.ArchitectureDiagram);
+            result.AddRange(payload.ArchitectureElement);
+            result.AddRange(payload.Attachment);
+            result.AddRange(payload.Behavior);
+            result.AddRange(payload.BehavioralParameter);
+            result.AddRange(payload.DiagramFrame);
+            result.AddRange(payload.DiagramPort);
 
             return result;
         }

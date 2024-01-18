@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,20 +34,21 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 4     | component                            | Guid                         | 1..*        |  1.0.0  |
- | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 8     | isFinalized                          | bool                         | 1..1        |  1.0.0  |
- | 9     | name                                 | string                       | 1..1        |  1.0.0  |
- | 10    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 11    | symbol                               | string                       | 1..1        |  1.0.0  |
- | 12    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 13    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 14    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | component                            | Guid                         | 1..*        |  1.0.0  |
+ | 6     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 9     | isFinalized                          | bool                         | 1..1        |  1.0.0  |
+ | 10    | name                                 | string                       | 1..1        |  1.0.0  |
+ | 11    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 12    | symbol                               | string                       | 1..1        |  1.0.0  |
+ | 13    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -100,13 +101,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(compoundParameterType), "The CompoundParameterType may not be null");
             }
 
-            writer.WriteArrayHeader(17);
+            writer.WriteArrayHeader(18);
 
             writer.Write(compoundParameterType.Iid.ToByteArray());
             writer.Write(compoundParameterType.RevisionNumber);
 
             writer.WriteArrayHeader(compoundParameterType.Alias.Count);
             foreach (var identifier in compoundParameterType.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(compoundParameterType.Attachment.Count);
+            foreach (var identifier in compoundParameterType.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -211,10 +217,17 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            compoundParameterType.Category.Add(reader.ReadBytes().ToGuid());
+                            compoundParameterType.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            compoundParameterType.Category.Add(reader.ReadBytes().ToGuid());
+                        }
+                        break;
+                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
@@ -225,56 +238,56 @@ namespace CDP4MessagePackSerializer
                             compoundParameterType.Component.Add(orderedItem);
                         }
                         break;
-                    case 5:
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             compoundParameterType.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             compoundParameterType.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 8:
                         compoundParameterType.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 8:
+                    case 9:
                         compoundParameterType.IsFinalized = reader.ReadBoolean();
                         break;
-                    case 9:
+                    case 10:
                         compoundParameterType.Name = reader.ReadString();
                         break;
-                    case 10:
+                    case 11:
                         compoundParameterType.ShortName = reader.ReadString();
                         break;
-                    case 11:
+                    case 12:
                         compoundParameterType.Symbol = reader.ReadString();
                         break;
-                    case 12:
+                    case 13:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             compoundParameterType.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 13:
+                    case 14:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             compoundParameterType.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 14:
+                    case 15:
                         compoundParameterType.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 15:
+                    case 16:
                         compoundParameterType.ThingPreference = reader.ReadString();
                         break;
-                    case 16:
+                    case 17:
                         if (reader.TryReadNil())
                         {
                             compoundParameterType.Actor = null;

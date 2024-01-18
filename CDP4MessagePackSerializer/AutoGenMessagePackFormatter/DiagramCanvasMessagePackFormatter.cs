@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -35,13 +35,15 @@
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | bounds                               | Guid                         | 0..1        |  1.1.0  |
  | 3     | createdOn                            | DateTime                     | 1..1        |  1.1.0  |
- | 4     | diagramElement                       | Guid                         | 0..*        |  1.1.0  |
- | 5     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 6     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 7     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 8     | name                                 | string                       | 1..1        |  1.1.0  |
- | 9     | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 4     | description                          | string                       | 1..1        |  1.1.0  |
+ | 5     | diagramElement                       | Guid                         | 0..*        |  1.1.0  |
+ | 6     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.1.0  |
+ | 10    | publicationState                     | PublicationState             | 1..1        |  1.1.0  |
+ | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -94,7 +96,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(diagramCanvas), "The DiagramCanvas may not be null");
             }
 
-            writer.WriteArrayHeader(11);
+            writer.WriteArrayHeader(13);
 
             writer.Write(diagramCanvas.Iid.ToByteArray());
             writer.Write(diagramCanvas.RevisionNumber);
@@ -105,6 +107,7 @@ namespace CDP4MessagePackSerializer
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(diagramCanvas.CreatedOn);
+            writer.Write(diagramCanvas.Description);
             writer.WriteArrayHeader(diagramCanvas.DiagramElement.Count);
             foreach (var identifier in diagramCanvas.DiagramElement.OrderBy(x => x, guidComparer))
             {
@@ -122,6 +125,7 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(diagramCanvas.ModifiedOn);
             writer.Write(diagramCanvas.Name);
+            writer.Write(diagramCanvas.PublicationState.ToString());
             writer.Write(diagramCanvas.ThingPreference);
             if (diagramCanvas.Actor.HasValue)
             {
@@ -185,36 +189,42 @@ namespace CDP4MessagePackSerializer
                         diagramCanvas.CreatedOn = reader.ReadDateTime();
                         break;
                     case 4:
+                        diagramCanvas.Description = reader.ReadString();
+                        break;
+                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             diagramCanvas.DiagramElement.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 5:
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             diagramCanvas.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             diagramCanvas.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 8:
                         diagramCanvas.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 8:
+                    case 9:
                         diagramCanvas.Name = reader.ReadString();
                         break;
-                    case 9:
+                    case 10:
+                        diagramCanvas.PublicationState = (CDP4Common.DiagramData.PublicationState)Enum.Parse(typeof(CDP4Common.DiagramData.PublicationState), reader.ReadString(), true);
+                        break;
+                    case 11:
                         diagramCanvas.ThingPreference = reader.ReadString();
                         break;
-                    case 10:
+                    case 12:
                         if (reader.TryReadNil())
                         {
                             diagramCanvas.Actor = null;

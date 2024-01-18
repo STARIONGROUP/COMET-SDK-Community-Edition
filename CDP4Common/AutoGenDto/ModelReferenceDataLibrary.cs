@@ -89,6 +89,8 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Alias", this.Alias);
 
+            dictionary.Add("Attachment", this.Attachment);
+
             dictionary.Add("BaseUnit", this.BaseUnit);
 
             dictionary.Add("Constant", this.Constant);
@@ -152,6 +154,10 @@ namespace CDP4Common.DTO
                         {
                             case "Alias":
                                 this.Alias.Remove(id);
+                                break;
+
+                            case "Attachment":
+                                this.Attachment.Remove(id);
                                 break;
 
                             case "BaseUnit":
@@ -244,6 +250,13 @@ namespace CDP4Common.DTO
                         foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
                         {
                             this.Alias.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Attachment":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Attachment.Remove(toBeRemoved);
                         } 
                         break;
 
@@ -440,6 +453,17 @@ namespace CDP4Common.DTO
                 }
 
                 this.Alias.Add(copy.Value.Iid);
+            }
+
+            foreach (var guid in original.Attachment)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
+                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
+                {
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
+                }
+
+                this.Attachment.Add(copy.Value.Iid);
             }
 
             foreach (var orderedItem in original.BaseQuantityKind)

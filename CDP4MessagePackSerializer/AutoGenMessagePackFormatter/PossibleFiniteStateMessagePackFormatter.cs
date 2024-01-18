@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,15 +34,16 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 5     | name                                 | string                       | 1..1        |  1.0.0  |
- | 6     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 7     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 8     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 9     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 10    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 11    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 6     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 7     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 8     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 9     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 10    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -95,13 +96,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(possibleFiniteState), "The PossibleFiniteState may not be null");
             }
 
-            writer.WriteArrayHeader(12);
+            writer.WriteArrayHeader(13);
 
             writer.Write(possibleFiniteState.Iid.ToByteArray());
             writer.Write(possibleFiniteState.RevisionNumber);
 
             writer.WriteArrayHeader(possibleFiniteState.Alias.Count);
             foreach (var identifier in possibleFiniteState.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(possibleFiniteState.Attachment.Count);
+            foreach (var identifier in possibleFiniteState.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -191,43 +197,50 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            possibleFiniteState.Definition.Add(reader.ReadBytes().ToGuid());
+                            possibleFiniteState.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            possibleFiniteState.HyperLink.Add(reader.ReadBytes().ToGuid());
+                            possibleFiniteState.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
-                        possibleFiniteState.Name = reader.ReadString();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            possibleFiniteState.HyperLink.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 6:
-                        possibleFiniteState.ShortName = reader.ReadString();
+                        possibleFiniteState.Name = reader.ReadString();
                         break;
                     case 7:
+                        possibleFiniteState.ShortName = reader.ReadString();
+                        break;
+                    case 8:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             possibleFiniteState.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 8:
+                    case 9:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             possibleFiniteState.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 9:
+                    case 10:
                         possibleFiniteState.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 10:
+                    case 11:
                         possibleFiniteState.ThingPreference = reader.ReadString();
                         break;
-                    case 11:
+                    case 12:
                         if (reader.TryReadNil())
                         {
                             possibleFiniteState.Actor = null;

@@ -3,17 +3,17 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of CDP4-COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -34,20 +34,22 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | group                                | Guid                         | 0..1        |  1.0.0  |
- | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 8     | name                                 | string                       | 1..1        |  1.0.0  |
- | 9     | owner                                | Guid                         | 1..1        |  1.0.0  |
- | 10    | parameterValue                       | Guid                         | 0..*        |  1.0.0  |
- | 11    | parametricConstraint                 | Guid                         | 0..*        |  1.0.0  |
- | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 13    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | group                                | Guid                         | 0..1        |  1.0.0  |
+ | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 10    | owner                                | Guid                         | 1..1        |  1.0.0  |
+ | 11    | parameterValue                       | Guid                         | 0..*        |  1.0.0  |
+ | 12    | parametricConstraint                 | Guid                         | 0..*        |  1.0.0  |
+ | 13    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 14    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 15    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 16    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -89,6 +91,8 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Alias.OrderBy(x => x).SequenceEqual(other.Alias.OrderBy(x => x))) return false;
 
+            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
+
             if (!me.Category.OrderBy(x => x).SequenceEqual(other.Category.OrderBy(x => x))) return false;
 
             if (!me.Definition.OrderBy(x => x).SequenceEqual(other.Definition.OrderBy(x => x))) return false;
@@ -121,6 +125,9 @@ namespace CDP4Common.DTO.Equatable
 
             if (me.ThingPreference == null && other.ThingPreference != null) return false;
             if (me.ThingPreference != null && !me.ThingPreference.Equals(other.ThingPreference)) return false;
+
+            if (me.Actor.HasValue != other.Actor.HasValue) return false;
+            if (!me.Actor.Equals(other.Actor)) return false;
 
             return true;
         }

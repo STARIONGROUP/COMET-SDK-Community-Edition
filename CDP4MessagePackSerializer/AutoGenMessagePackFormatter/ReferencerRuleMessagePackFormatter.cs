@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -34,20 +34,21 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 5     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 6     | maxReferenced                        | int                          | 1..1        |  1.0.0  |
- | 7     | minReferenced                        | int                          | 1..1        |  1.0.0  |
- | 8     | name                                 | string                       | 1..1        |  1.0.0  |
- | 9     | referencedCategory                   | Guid                         | 1..*        |  1.0.0  |
- | 10    | referencingCategory                  | Guid                         | 1..1        |  1.0.0  |
- | 11    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 12    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 13    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 14    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 6     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 7     | maxReferenced                        | int                          | 1..1        |  1.0.0  |
+ | 8     | minReferenced                        | int                          | 1..1        |  1.0.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 10    | referencedCategory                   | Guid                         | 1..*        |  1.0.0  |
+ | 11    | referencingCategory                  | Guid                         | 1..1        |  1.0.0  |
+ | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 13    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -100,13 +101,18 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(referencerRule), "The ReferencerRule may not be null");
             }
 
-            writer.WriteArrayHeader(17);
+            writer.WriteArrayHeader(18);
 
             writer.Write(referencerRule.Iid.ToByteArray());
             writer.Write(referencerRule.RevisionNumber);
 
             writer.WriteArrayHeader(referencerRule.Alias.Count);
             foreach (var identifier in referencerRule.Alias.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.WriteArrayHeader(referencerRule.Attachment.Count);
+            foreach (var identifier in referencerRule.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -205,62 +211,69 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            referencerRule.Definition.Add(reader.ReadBytes().ToGuid());
+                            referencerRule.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            referencerRule.HyperLink.Add(reader.ReadBytes().ToGuid());
+                            referencerRule.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
-                        referencerRule.IsDeprecated = reader.ReadBoolean();
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            referencerRule.HyperLink.Add(reader.ReadBytes().ToGuid());
+                        }
                         break;
                     case 6:
-                        referencerRule.MaxReferenced = reader.ReadInt32();
+                        referencerRule.IsDeprecated = reader.ReadBoolean();
                         break;
                     case 7:
-                        referencerRule.MinReferenced = reader.ReadInt32();
+                        referencerRule.MaxReferenced = reader.ReadInt32();
                         break;
                     case 8:
-                        referencerRule.Name = reader.ReadString();
+                        referencerRule.MinReferenced = reader.ReadInt32();
                         break;
                     case 9:
+                        referencerRule.Name = reader.ReadString();
+                        break;
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             referencerRule.ReferencedCategory.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 10:
+                    case 11:
                         referencerRule.ReferencingCategory = reader.ReadBytes().ToGuid();
                         break;
-                    case 11:
+                    case 12:
                         referencerRule.ShortName = reader.ReadString();
                         break;
-                    case 12:
+                    case 13:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             referencerRule.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 13:
+                    case 14:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             referencerRule.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 14:
+                    case 15:
                         referencerRule.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 15:
+                    case 16:
                         referencerRule.ThingPreference = reader.ReadString();
                         break;
-                    case 16:
+                    case 17:
                         if (reader.TryReadNil())
                         {
                             referencerRule.Actor = null;
