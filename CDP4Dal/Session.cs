@@ -851,9 +851,12 @@ namespace CDP4Dal
         /// </returns>
         public bool CanCancel()
         {
-            foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys)
+            foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys.ToList())
             {
-                this.cancellationTokenSourceDictionary.TryGetValue(cancellationTokenSourceKey, out var cancellationTokenSource);
+                if (!this.cancellationTokenSourceDictionary.TryGetValue(cancellationTokenSourceKey, out var cancellationTokenSource))
+                {
+                    continue;
+                }
 
                 if (!CanCancel(cancellationTokenSource))
                 {
@@ -871,9 +874,9 @@ namespace CDP4Dal
         /// </summary>
         public void Cancel()
         {
-            foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys)
+            foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys.ToList())
             {
-                if (this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenSourceKey, out var cancellationTokenSource))
+                if (this.cancellationTokenSourceDictionary.TryGetValue(cancellationTokenSourceKey, out var cancellationTokenSource))
                 {
                     if (CanCancel(cancellationTokenSource))
                     {

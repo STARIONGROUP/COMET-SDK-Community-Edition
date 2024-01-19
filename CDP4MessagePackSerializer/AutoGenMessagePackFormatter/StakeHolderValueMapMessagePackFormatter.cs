@@ -34,22 +34,22 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.1.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.1.0  |
- | 4     | category                             | Guid                         | 0..*        |  1.1.0  |
- | 5     | definition                           | Guid                         | 0..*        |  1.1.0  |
- | 6     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 8     | goal                                 | Guid                         | 0..*        |  1.1.0  |
- | 9     | hyperLink                            | Guid                         | 0..*        |  1.1.0  |
- | 10    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 11    | name                                 | string                       | 1..1        |  1.1.0  |
- | 12    | requirement                          | Guid                         | 0..*        |  1.1.0  |
- | 13    | settings                             | Guid                         | 1..1        |  1.1.0  |
- | 14    | shortName                            | string                       | 1..1        |  1.1.0  |
- | 15    | stakeholderValue                     | Guid                         | 0..*        |  1.1.0  |
- | 16    | valueGroup                           | Guid                         | 0..*        |  1.1.0  |
- | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | category                             | Guid                         | 0..*        |  1.1.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.1.0  |
+ | 5     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 6     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 7     | goal                                 | Guid                         | 0..*        |  1.1.0  |
+ | 8     | hyperLink                            | Guid                         | 0..*        |  1.1.0  |
+ | 9     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 10    | name                                 | string                       | 1..1        |  1.1.0  |
+ | 11    | requirement                          | Guid                         | 0..*        |  1.1.0  |
+ | 12    | settings                             | Guid                         | 1..1        |  1.1.0  |
+ | 13    | shortName                            | string                       | 1..1        |  1.1.0  |
+ | 14    | stakeholderValue                     | Guid                         | 0..*        |  1.1.0  |
+ | 15    | valueGroup                           | Guid                         | 0..*        |  1.1.0  |
+ | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 18    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -109,11 +109,6 @@ namespace CDP4MessagePackSerializer
 
             writer.WriteArrayHeader(stakeHolderValueMap.Alias.Count);
             foreach (var identifier in stakeHolderValueMap.Alias.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
-            writer.WriteArrayHeader(stakeHolderValueMap.Attachment.Count);
-            foreach (var identifier in stakeHolderValueMap.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -179,6 +174,11 @@ namespace CDP4MessagePackSerializer
             {
                 writer.WriteNil();
             }
+            writer.WriteArrayHeader(stakeHolderValueMap.Attachment.Count);
+            foreach (var identifier in stakeHolderValueMap.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
 
             writer.Flush();
         }
@@ -233,92 +233,85 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeHolderValueMap.Attachment.Add(reader.ReadBytes().ToGuid());
+                            stakeHolderValueMap.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeHolderValueMap.Category.Add(reader.ReadBytes().ToGuid());
+                            stakeHolderValueMap.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeHolderValueMap.Definition.Add(reader.ReadBytes().ToGuid());
+                            stakeHolderValueMap.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeHolderValueMap.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
+                            stakeHolderValueMap.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeHolderValueMap.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
+                            stakeHolderValueMap.Goal.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 8:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeHolderValueMap.Goal.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 9:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             stakeHolderValueMap.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 10:
+                    case 9:
                         stakeHolderValueMap.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 11:
+                    case 10:
                         stakeHolderValueMap.Name = reader.ReadString();
                         break;
-                    case 12:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             stakeHolderValueMap.Requirement.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 13:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             stakeHolderValueMap.Settings.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 14:
+                    case 13:
                         stakeHolderValueMap.ShortName = reader.ReadString();
                         break;
-                    case 15:
+                    case 14:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             stakeHolderValueMap.StakeholderValue.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 16:
+                    case 15:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             stakeHolderValueMap.ValueGroup.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 17:
+                    case 16:
                         stakeHolderValueMap.ThingPreference = reader.ReadString();
                         break;
-                    case 18:
+                    case 17:
                         if (reader.TryReadNil())
                         {
                             stakeHolderValueMap.Actor = null;
@@ -326,6 +319,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             stakeHolderValueMap.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 18:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            stakeHolderValueMap.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

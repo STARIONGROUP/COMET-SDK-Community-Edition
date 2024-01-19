@@ -34,20 +34,20 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | group                                | Guid                         | 0..*        |  1.0.0  |
- | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 7     | name                                 | string                       | 1..1        |  1.0.0  |
- | 8     | owner                                | Guid                         | 1..1        |  1.0.0  |
- | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 10    | category                             | Guid                         | 0..*        |  1.1.0  |
- | 11    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 12    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 13    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 14    | parameterValue                       | Guid                         | 0..*        |  1.1.0  |
- | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | group                                | Guid                         | 0..*        |  1.0.0  |
+ | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 6     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 7     | owner                                | Guid                         | 1..1        |  1.0.0  |
+ | 8     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 9     | category                             | Guid                         | 0..*        |  1.1.0  |
+ | 10    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 13    | parameterValue                       | Guid                         | 0..*        |  1.1.0  |
+ | 14    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 15    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 16    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -110,11 +110,6 @@ namespace CDP4MessagePackSerializer
             {
                 writer.Write(identifier.ToByteArray());
             }
-            writer.WriteArrayHeader(requirementsGroup.Attachment.Count);
-            foreach (var identifier in requirementsGroup.Attachment.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
             writer.WriteArrayHeader(requirementsGroup.Definition.Count);
             foreach (var identifier in requirementsGroup.Definition.OrderBy(x => x, guidComparer))
             {
@@ -162,6 +157,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(requirementsGroup.Attachment.Count);
+            foreach (var identifier in requirementsGroup.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -217,74 +217,67 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            requirementsGroup.Attachment.Add(reader.ReadBytes().ToGuid());
+                            requirementsGroup.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            requirementsGroup.Definition.Add(reader.ReadBytes().ToGuid());
+                            requirementsGroup.Group.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            requirementsGroup.Group.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 6:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             requirementsGroup.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 6:
                         requirementsGroup.Name = reader.ReadString();
                         break;
-                    case 8:
+                    case 7:
                         requirementsGroup.Owner = reader.ReadBytes().ToGuid();
                         break;
-                    case 9:
+                    case 8:
                         requirementsGroup.ShortName = reader.ReadString();
                         break;
-                    case 10:
+                    case 9:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             requirementsGroup.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             requirementsGroup.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             requirementsGroup.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 13:
+                    case 12:
                         requirementsGroup.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 14:
+                    case 13:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             requirementsGroup.ParameterValue.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 15:
+                    case 14:
                         requirementsGroup.ThingPreference = reader.ReadString();
                         break;
-                    case 16:
+                    case 15:
                         if (reader.TryReadNil())
                         {
                             requirementsGroup.Actor = null;
@@ -292,6 +285,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             requirementsGroup.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 16:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            requirementsGroup.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

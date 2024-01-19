@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ParticipantRoleTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="ILocalFile.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
@@ -22,24 +22,21 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Tests.Poco
+namespace CDP4Common.DTO
 {
-    using System.Linq;
-
-    using CDP4Common.CommonData;
-    using CDP4Common.SiteDirectoryData;
-
-    using NUnit.Framework;
-
-    [TestFixture]
-    internal class ParticipantRoleTestFixture
+    /// <summary>
+    /// An interface for DTO classes containing data that's needed in a file upload scenario.
+    /// Typically used for <see cref="FileRevision"/> objects.
+    /// </summary>
+    public interface ILocalFile
     {
-        [Test]
-        public void VerifyPopulateParticipantPermissions()
-        {
-            var participantRole = new ParticipantRole();
-            Assert.That(participantRole.ParticipantPermission.Count, Is.EqualTo(49));
-            Assert.IsTrue(participantRole.ParticipantPermission.All(x => x.AccessRight == ParticipantAccessRightKind.NONE));
-        }
+        /// <summary>
+        /// Gets or sets the ContentHash.
+        /// </summary>
+        /// <remarks>
+        /// SHA-1 hash code of the content (byte stream) of this object
+        /// Note: The SHA-1 cryptographic hash is described in <a href="http://en.wikipedia.org/wiki/SHA-1">http://en.wikipedia.org/wiki/SHA-1</a>. It provides a unique hash to the file content of the file and was selected for future compatibility with a GIT (<a href="http://git-scm.com/">http://git-scm.com/</a>) version controlled file store. Implementations of E-TM-10-25 need to provide a way to associate a SHA-1 hash to the content of a file. Whether or not the content of two FileRevisions differs can then be determined by just comparing the SHA-1 hashes without the need for having access to the actual file content itself.
+        /// </remarks>
+        string ContentHash { get; }
     }
 }

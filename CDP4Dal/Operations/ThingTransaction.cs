@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTransaction.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.copy
@@ -625,7 +625,7 @@ namespace CDP4Dal.Operations
         {
             var files = new List<string>();
 
-            foreach (var thing in this.AddedThing.OfType<ILocalFile>().Union(this.UpdatedThing.OfType<ILocalFile>()).Where(x => x.LocalPath != null))
+            foreach (var thing in this.AddedThing.OfType<ILocalFile>().Where(x => x.LocalPath != null))
             {
                 if (string.IsNullOrWhiteSpace(thing.ContentHash))
                 {

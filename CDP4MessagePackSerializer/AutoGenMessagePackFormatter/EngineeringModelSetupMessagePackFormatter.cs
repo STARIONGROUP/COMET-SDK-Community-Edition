@@ -35,25 +35,25 @@
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | activeDomain                         | Guid                         | 1..*        |  1.0.0  |
  | 3     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 4     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 6     | engineeringModelIid                  | Guid                         | 1..1        |  1.0.0  |
- | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 8     | iterationSetup                       | Guid                         | 1..*        |  1.0.0  |
- | 9     | kind                                 | EngineeringModelKind         | 1..1        |  1.0.0  |
- | 10    | name                                 | string                       | 1..1        |  1.0.0  |
- | 11    | participant                          | Guid                         | 1..*        |  1.0.0  |
- | 12    | requiredRdl                          | Guid                         | 1..1        |  1.0.0  |
- | 13    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 14    | sourceEngineeringModelSetupIid       | Guid                         | 0..1        |  1.0.0  |
- | 15    | studyPhase                           | StudyPhaseKind               | 1..1        |  1.0.0  |
- | 16    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 17    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 18    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 19    | defaultOrganizationalParticipant     | Guid                         | 0..1        |  1.2.0  |
- | 20    | organizationalParticipant            | Guid                         | 0..*        |  1.2.0  |
- | 21    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 22    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 5     | engineeringModelIid                  | Guid                         | 1..1        |  1.0.0  |
+ | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 7     | iterationSetup                       | Guid                         | 1..*        |  1.0.0  |
+ | 8     | kind                                 | EngineeringModelKind         | 1..1        |  1.0.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 10    | participant                          | Guid                         | 1..*        |  1.0.0  |
+ | 11    | requiredRdl                          | Guid                         | 1..1        |  1.0.0  |
+ | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 13    | sourceEngineeringModelSetupIid       | Guid                         | 0..1        |  1.0.0  |
+ | 14    | studyPhase                           | StudyPhaseKind               | 1..1        |  1.0.0  |
+ | 15    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 16    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 17    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 18    | defaultOrganizationalParticipant     | Guid                         | 0..1        |  1.2.0  |
+ | 19    | organizationalParticipant            | Guid                         | 0..*        |  1.2.0  |
+ | 20    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 21    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 22    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -118,11 +118,6 @@ namespace CDP4MessagePackSerializer
             }
             writer.WriteArrayHeader(engineeringModelSetup.Alias.Count);
             foreach (var identifier in engineeringModelSetup.Alias.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
-            writer.WriteArrayHeader(engineeringModelSetup.Attachment.Count);
-            foreach (var identifier in engineeringModelSetup.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -197,6 +192,11 @@ namespace CDP4MessagePackSerializer
             {
                 writer.WriteNil();
             }
+            writer.WriteArrayHeader(engineeringModelSetup.Attachment.Count);
+            foreach (var identifier in engineeringModelSetup.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
 
             writer.Flush();
         }
@@ -258,57 +258,50 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            engineeringModelSetup.Attachment.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 5:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             engineeringModelSetup.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 5:
                         engineeringModelSetup.EngineeringModelIid = reader.ReadBytes().ToGuid();
                         break;
-                    case 7:
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             engineeringModelSetup.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 8:
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             engineeringModelSetup.IterationSetup.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 9:
+                    case 8:
                         engineeringModelSetup.Kind = (CDP4Common.SiteDirectoryData.EngineeringModelKind)Enum.Parse(typeof(CDP4Common.SiteDirectoryData.EngineeringModelKind), reader.ReadString(), true);
                         break;
-                    case 10:
+                    case 9:
                         engineeringModelSetup.Name = reader.ReadString();
                         break;
-                    case 11:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             engineeringModelSetup.Participant.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             engineeringModelSetup.RequiredRdl.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 13:
+                    case 12:
                         engineeringModelSetup.ShortName = reader.ReadString();
                         break;
-                    case 14:
+                    case 13:
                         if (reader.TryReadNil())
                         {
                             engineeringModelSetup.SourceEngineeringModelSetupIid = null;
@@ -318,27 +311,27 @@ namespace CDP4MessagePackSerializer
                             engineeringModelSetup.SourceEngineeringModelSetupIid = reader.ReadBytes().ToGuid();
                         }
                         break;
-                    case 15:
+                    case 14:
                         engineeringModelSetup.StudyPhase = (CDP4Common.SiteDirectoryData.StudyPhaseKind)Enum.Parse(typeof(CDP4Common.SiteDirectoryData.StudyPhaseKind), reader.ReadString(), true);
                         break;
-                    case 16:
+                    case 15:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             engineeringModelSetup.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 17:
+                    case 16:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             engineeringModelSetup.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 18:
+                    case 17:
                         engineeringModelSetup.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 19:
+                    case 18:
                         if (reader.TryReadNil())
                         {
                             engineeringModelSetup.DefaultOrganizationalParticipant = null;
@@ -348,17 +341,17 @@ namespace CDP4MessagePackSerializer
                             engineeringModelSetup.DefaultOrganizationalParticipant = reader.ReadBytes().ToGuid();
                         }
                         break;
-                    case 20:
+                    case 19:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             engineeringModelSetup.OrganizationalParticipant.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 21:
+                    case 20:
                         engineeringModelSetup.ThingPreference = reader.ReadString();
                         break;
-                    case 22:
+                    case 21:
                         if (reader.TryReadNil())
                         {
                             engineeringModelSetup.Actor = null;
@@ -366,6 +359,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             engineeringModelSetup.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 22:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            engineeringModelSetup.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

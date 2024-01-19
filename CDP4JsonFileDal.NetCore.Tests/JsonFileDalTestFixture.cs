@@ -10,7 +10,7 @@
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-// 
+//
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -422,7 +422,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             this.dal = new JsonFileDal(null);
 
             Assert.That(this.dal.DalVersion.Major, Is.EqualTo(1));
-            Assert.That(this.dal.DalVersion.Minor, Is.EqualTo(3));
+            Assert.That(this.dal.DalVersion.Minor, Is.EqualTo(4));
             Assert.That(this.dal.DalVersion.Build, Is.EqualTo(0));
         }
 
@@ -564,7 +564,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         [Test]
         public async Task VerifyWriteOfCompatibleVersionFile()
         {
-            this.dal = new JsonFileDal(new Version("1.3.0"))
+            this.dal = new JsonFileDal(new Version("1.4.0"))
             {
                 Session = this.session.Object
             };
@@ -580,7 +580,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
 
             //Part 2 read newly created file
-            var newDal = new JsonFileDal(new Version("1.3.0"));
+            var newDal = new JsonFileDal(new Version("1.4.0"));
             var newSession = new Session(newDal, zipCredentials, this.messageBus);
 
             await newSession.Open();

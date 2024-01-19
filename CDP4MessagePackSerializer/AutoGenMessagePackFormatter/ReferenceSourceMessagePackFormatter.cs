@@ -34,25 +34,25 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | author                               | string                       | 0..1        |  1.0.0  |
- | 5     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 6     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 9     | language                             | string                       | 0..1        |  1.0.0  |
- | 10    | name                                 | string                       | 1..1        |  1.0.0  |
- | 11    | publicationYear                      | int                          | 0..1        |  1.0.0  |
- | 12    | publishedIn                          | Guid                         | 0..1        |  1.0.0  |
- | 13    | publisher                            | Guid                         | 0..1        |  1.0.0  |
- | 14    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 15    | versionDate                          | DateTime                     | 0..1        |  1.0.0  |
- | 16    | versionIdentifier                    | string                       | 0..1        |  1.0.0  |
- | 17    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 18    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 19    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 20    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 21    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | author                               | string                       | 0..1        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 8     | language                             | string                       | 0..1        |  1.0.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 10    | publicationYear                      | int                          | 0..1        |  1.0.0  |
+ | 11    | publishedIn                          | Guid                         | 0..1        |  1.0.0  |
+ | 12    | publisher                            | Guid                         | 0..1        |  1.0.0  |
+ | 13    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 14    | versionDate                          | DateTime                     | 0..1        |  1.0.0  |
+ | 15    | versionIdentifier                    | string                       | 0..1        |  1.0.0  |
+ | 16    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 17    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 18    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 19    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 20    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 21    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -112,11 +112,6 @@ namespace CDP4MessagePackSerializer
 
             writer.WriteArrayHeader(referenceSource.Alias.Count);
             foreach (var identifier in referenceSource.Alias.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
-            writer.WriteArrayHeader(referenceSource.Attachment.Count);
-            foreach (var identifier in referenceSource.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -193,6 +188,11 @@ namespace CDP4MessagePackSerializer
             {
                 writer.WriteNil();
             }
+            writer.WriteArrayHeader(referenceSource.Attachment.Count);
+            foreach (var identifier in referenceSource.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
 
             writer.Flush();
         }
@@ -244,46 +244,39 @@ namespace CDP4MessagePackSerializer
                         }
                         break;
                     case 3:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            referenceSource.Attachment.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 4:
                         referenceSource.Author = reader.ReadString();
                         break;
-                    case 5:
+                    case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             referenceSource.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             referenceSource.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             referenceSource.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 8:
+                    case 7:
                         referenceSource.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 9:
+                    case 8:
                         referenceSource.Language = reader.ReadString();
                         break;
-                    case 10:
+                    case 9:
                         referenceSource.Name = reader.ReadString();
                         break;
-                    case 11:
+                    case 10:
                         if (reader.TryReadNil())
                         {
                             referenceSource.PublicationYear = null;
@@ -293,7 +286,7 @@ namespace CDP4MessagePackSerializer
                             referenceSource.PublicationYear = reader.ReadInt32();
                         }
                         break;
-                    case 12:
+                    case 11:
                         if (reader.TryReadNil())
                         {
                             referenceSource.PublishedIn = null;
@@ -303,7 +296,7 @@ namespace CDP4MessagePackSerializer
                             referenceSource.PublishedIn = reader.ReadBytes().ToGuid();
                         }
                         break;
-                    case 13:
+                    case 12:
                         if (reader.TryReadNil())
                         {
                             referenceSource.Publisher = null;
@@ -313,10 +306,10 @@ namespace CDP4MessagePackSerializer
                             referenceSource.Publisher = reader.ReadBytes().ToGuid();
                         }
                         break;
-                    case 14:
+                    case 13:
                         referenceSource.ShortName = reader.ReadString();
                         break;
-                    case 15:
+                    case 14:
                         if (reader.TryReadNil())
                         {
                             referenceSource.VersionDate = null;
@@ -326,30 +319,30 @@ namespace CDP4MessagePackSerializer
                             referenceSource.VersionDate = reader.ReadDateTime();
                         }
                         break;
-                    case 16:
+                    case 15:
                         referenceSource.VersionIdentifier = reader.ReadString();
                         break;
-                    case 17:
+                    case 16:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             referenceSource.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 18:
+                    case 17:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             referenceSource.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 19:
+                    case 18:
                         referenceSource.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 20:
+                    case 19:
                         referenceSource.ThingPreference = reader.ReadString();
                         break;
-                    case 21:
+                    case 20:
                         if (reader.TryReadNil())
                         {
                             referenceSource.Actor = null;
@@ -357,6 +350,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             referenceSource.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 21:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            referenceSource.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

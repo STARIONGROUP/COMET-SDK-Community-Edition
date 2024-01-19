@@ -107,6 +107,7 @@ namespace CDP4Common.CommonData
         /// <remarks>
         /// Reference to one or more Attachments that are linked to this DefinedThing
         /// </remarks>
+        [CDPVersion("1.4.0")]
         [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         public virtual ContainerList<Attachment> Attachment { get; protected set; }
 

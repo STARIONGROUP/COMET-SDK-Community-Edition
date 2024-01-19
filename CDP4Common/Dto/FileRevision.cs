@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ParticipantRoleTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="Attachment.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //
@@ -22,24 +22,16 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Tests.Poco
+namespace CDP4Common.DTO
 {
-    using System.Linq;
-
-    using CDP4Common.CommonData;
-    using CDP4Common.SiteDirectoryData;
-
-    using NUnit.Framework;
-
-    [TestFixture]
-    internal class ParticipantRoleTestFixture
+    /// <summary>
+    /// The extended part of the auto-generated <see cref="FileRevision"/>
+    /// </summary>
+    public partial class FileRevision : ILocalFile
     {
-        [Test]
-        public void VerifyPopulateParticipantPermissions()
-        {
-            var participantRole = new ParticipantRole();
-            Assert.That(participantRole.ParticipantPermission.Count, Is.EqualTo(49));
-            Assert.IsTrue(participantRole.ParticipantPermission.All(x => x.AccessRight == ParticipantAccessRightKind.NONE));
-        }
+        /// <summary>
+        /// Contains the path of the file in the context of the User's PC
+        /// </summary>
+        public string LocalPath { get; set; }
     }
 }

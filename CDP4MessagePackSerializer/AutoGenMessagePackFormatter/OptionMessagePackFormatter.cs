@@ -34,18 +34,18 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 7     | name                                 | string                       | 1..1        |  1.0.0  |
- | 8     | nestedElement                        | Guid                         | 0..*        |  1.0.0  |
- | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 10    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 6     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 7     | nestedElement                        | Guid                         | 0..*        |  1.0.0  |
+ | 8     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 9     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 10    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 11    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 14    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -108,11 +108,6 @@ namespace CDP4MessagePackSerializer
             {
                 writer.Write(identifier.ToByteArray());
             }
-            writer.WriteArrayHeader(option.Attachment.Count);
-            foreach (var identifier in option.Attachment.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
             writer.WriteArrayHeader(option.Category.Count);
             foreach (var identifier in option.Category.OrderBy(x => x, guidComparer))
             {
@@ -154,6 +149,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(option.Attachment.Count);
+            foreach (var identifier in option.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -209,64 +209,57 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            option.Attachment.Add(reader.ReadBytes().ToGuid());
+                            option.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            option.Category.Add(reader.ReadBytes().ToGuid());
+                            option.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            option.Definition.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 6:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             option.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 6:
                         option.Name = reader.ReadString();
                         break;
-                    case 8:
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             option.NestedElement.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 9:
+                    case 8:
                         option.ShortName = reader.ReadString();
                         break;
-                    case 10:
+                    case 9:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             option.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             option.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 11:
                         option.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 13:
+                    case 12:
                         option.ThingPreference = reader.ReadString();
                         break;
-                    case 14:
+                    case 13:
                         if (reader.TryReadNil())
                         {
                             option.Actor = null;
@@ -274,6 +267,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             option.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 14:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            option.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

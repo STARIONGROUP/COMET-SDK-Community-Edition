@@ -34,30 +34,30 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | baseQuantityKind                     | Guid                         | 0..*        |  1.0.0  |
- | 5     | baseUnit                             | Guid                         | 0..*        |  1.0.0  |
- | 6     | constant                             | Guid                         | 0..*        |  1.0.0  |
- | 7     | definedCategory                      | Guid                         | 0..*        |  1.0.0  |
- | 8     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 9     | fileType                             | Guid                         | 0..*        |  1.0.0  |
- | 10    | glossary                             | Guid                         | 0..*        |  1.0.0  |
- | 11    | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 12    | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 13    | name                                 | string                       | 1..1        |  1.0.0  |
- | 14    | parameterType                        | Guid                         | 0..*        |  1.0.0  |
- | 15    | referenceSource                      | Guid                         | 0..*        |  1.0.0  |
- | 16    | requiredRdl                          | Guid                         | 0..1        |  1.0.0  |
- | 17    | rule                                 | Guid                         | 0..*        |  1.0.0  |
- | 18    | scale                                | Guid                         | 0..*        |  1.0.0  |
- | 19    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 20    | unit                                 | Guid                         | 0..*        |  1.0.0  |
- | 21    | unitPrefix                           | Guid                         | 0..*        |  1.0.0  |
- | 22    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 23    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 24    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 25    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 26    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | baseQuantityKind                     | Guid                         | 0..*        |  1.0.0  |
+ | 4     | baseUnit                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | constant                             | Guid                         | 0..*        |  1.0.0  |
+ | 6     | definedCategory                      | Guid                         | 0..*        |  1.0.0  |
+ | 7     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 8     | fileType                             | Guid                         | 0..*        |  1.0.0  |
+ | 9     | glossary                             | Guid                         | 0..*        |  1.0.0  |
+ | 10    | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 11    | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 12    | name                                 | string                       | 1..1        |  1.0.0  |
+ | 13    | parameterType                        | Guid                         | 0..*        |  1.0.0  |
+ | 14    | referenceSource                      | Guid                         | 0..*        |  1.0.0  |
+ | 15    | requiredRdl                          | Guid                         | 0..1        |  1.0.0  |
+ | 16    | rule                                 | Guid                         | 0..*        |  1.0.0  |
+ | 17    | scale                                | Guid                         | 0..*        |  1.0.0  |
+ | 18    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 19    | unit                                 | Guid                         | 0..*        |  1.0.0  |
+ | 20    | unitPrefix                           | Guid                         | 0..*        |  1.0.0  |
+ | 21    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 22    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 23    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 24    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 25    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 26    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -117,11 +117,6 @@ namespace CDP4MessagePackSerializer
 
             writer.WriteArrayHeader(siteReferenceDataLibrary.Alias.Count);
             foreach (var identifier in siteReferenceDataLibrary.Alias.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
-            writer.WriteArrayHeader(siteReferenceDataLibrary.Attachment.Count);
-            foreach (var identifier in siteReferenceDataLibrary.Attachment.OrderBy(x => x, guidComparer))
             {
                 writer.Write(identifier.ToByteArray());
             }
@@ -228,6 +223,11 @@ namespace CDP4MessagePackSerializer
             {
                 writer.WriteNil();
             }
+            writer.WriteArrayHeader(siteReferenceDataLibrary.Attachment.Count);
+            foreach (var identifier in siteReferenceDataLibrary.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
 
             writer.Flush();
         }
@@ -282,13 +282,6 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            siteReferenceDataLibrary.Attachment.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 4:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             reader.ReadArrayHeader();
                             orderedItem = new OrderedItem();
                             orderedItem.K = reader.ReadInt64();
@@ -296,76 +289,76 @@ namespace CDP4MessagePackSerializer
                             siteReferenceDataLibrary.BaseQuantityKind.Add(orderedItem);
                         }
                         break;
-                    case 5:
+                    case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.BaseUnit.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.Constant.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.DefinedCategory.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 8:
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 9:
+                    case 8:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.FileType.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 10:
+                    case 9:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.Glossary.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 11:
                         siteReferenceDataLibrary.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 13:
+                    case 12:
                         siteReferenceDataLibrary.Name = reader.ReadString();
                         break;
-                    case 14:
+                    case 13:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.ParameterType.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 15:
+                    case 14:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.ReferenceSource.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 16:
+                    case 15:
                         if (reader.TryReadNil())
                         {
                             siteReferenceDataLibrary.RequiredRdl = null;
@@ -375,58 +368,58 @@ namespace CDP4MessagePackSerializer
                             siteReferenceDataLibrary.RequiredRdl = reader.ReadBytes().ToGuid();
                         }
                         break;
-                    case 17:
+                    case 16:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.Rule.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 18:
+                    case 17:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.Scale.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 19:
+                    case 18:
                         siteReferenceDataLibrary.ShortName = reader.ReadString();
                         break;
-                    case 20:
+                    case 19:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.Unit.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 21:
+                    case 20:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.UnitPrefix.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 22:
+                    case 21:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 23:
+                    case 22:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             siteReferenceDataLibrary.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 24:
+                    case 23:
                         siteReferenceDataLibrary.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 25:
+                    case 24:
                         siteReferenceDataLibrary.ThingPreference = reader.ReadString();
                         break;
-                    case 26:
+                    case 25:
                         if (reader.TryReadNil())
                         {
                             siteReferenceDataLibrary.Actor = null;
@@ -434,6 +427,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             siteReferenceDataLibrary.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 26:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            siteReferenceDataLibrary.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

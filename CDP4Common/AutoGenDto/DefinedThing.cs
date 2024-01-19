@@ -88,6 +88,7 @@ namespace CDP4Common.DTO
         /// <summary>
         /// Gets or sets the unique identifiers of the contained Attachment instances.
         /// </summary>
+        [CDPVersion("1.4.0")]
         [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual List<Guid> Attachment { get; set; }

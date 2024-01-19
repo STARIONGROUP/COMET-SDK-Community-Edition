@@ -34,21 +34,21 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 6     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 7     | maxRelated                           | int                          | 1..1        |  1.0.0  |
- | 8     | minRelated                           | int                          | 1..1        |  1.0.0  |
- | 9     | name                                 | string                       | 1..1        |  1.0.0  |
- | 10    | relatedCategory                      | Guid                         | 1..*        |  1.0.0  |
- | 11    | relationshipCategory                 | Guid                         | 1..1        |  1.0.0  |
- | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 13    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 5     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 6     | maxRelated                           | int                          | 1..1        |  1.0.0  |
+ | 7     | minRelated                           | int                          | 1..1        |  1.0.0  |
+ | 8     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 9     | relatedCategory                      | Guid                         | 1..*        |  1.0.0  |
+ | 10    | relationshipCategory                 | Guid                         | 1..1        |  1.0.0  |
+ | 11    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 12    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 13    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 14    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 17    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -111,11 +111,6 @@ namespace CDP4MessagePackSerializer
             {
                 writer.Write(identifier.ToByteArray());
             }
-            writer.WriteArrayHeader(multiRelationshipRule.Attachment.Count);
-            foreach (var identifier in multiRelationshipRule.Attachment.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
             writer.WriteArrayHeader(multiRelationshipRule.Definition.Count);
             foreach (var identifier in multiRelationshipRule.Definition.OrderBy(x => x, guidComparer))
             {
@@ -156,6 +151,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(multiRelationshipRule.Attachment.Count);
+            foreach (var identifier in multiRelationshipRule.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -211,69 +211,62 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            multiRelationshipRule.Attachment.Add(reader.ReadBytes().ToGuid());
+                            multiRelationshipRule.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            multiRelationshipRule.Definition.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 5:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             multiRelationshipRule.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 5:
                         multiRelationshipRule.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 7:
+                    case 6:
                         multiRelationshipRule.MaxRelated = reader.ReadInt32();
                         break;
-                    case 8:
+                    case 7:
                         multiRelationshipRule.MinRelated = reader.ReadInt32();
                         break;
-                    case 9:
+                    case 8:
                         multiRelationshipRule.Name = reader.ReadString();
                         break;
-                    case 10:
+                    case 9:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             multiRelationshipRule.RelatedCategory.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 10:
                         multiRelationshipRule.RelationshipCategory = reader.ReadBytes().ToGuid();
                         break;
-                    case 12:
+                    case 11:
                         multiRelationshipRule.ShortName = reader.ReadString();
                         break;
-                    case 13:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             multiRelationshipRule.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 14:
+                    case 13:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             multiRelationshipRule.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 15:
+                    case 14:
                         multiRelationshipRule.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 16:
+                    case 15:
                         multiRelationshipRule.ThingPreference = reader.ReadString();
                         break;
-                    case 17:
+                    case 16:
                         if (reader.TryReadNil())
                         {
                             multiRelationshipRule.Actor = null;
@@ -281,6 +274,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             multiRelationshipRule.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 17:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            multiRelationshipRule.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

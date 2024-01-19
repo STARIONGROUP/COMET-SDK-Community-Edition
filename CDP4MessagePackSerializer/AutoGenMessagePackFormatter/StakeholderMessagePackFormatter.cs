@@ -34,18 +34,18 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.1.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.1.0  |
- | 4     | category                             | Guid                         | 0..*        |  1.1.0  |
- | 5     | definition                           | Guid                         | 0..*        |  1.1.0  |
- | 6     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 8     | hyperLink                            | Guid                         | 0..*        |  1.1.0  |
- | 9     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 10    | name                                 | string                       | 1..1        |  1.1.0  |
- | 11    | shortName                            | string                       | 1..1        |  1.1.0  |
- | 12    | stakeholderValue                     | Guid                         | 0..*        |  1.1.0  |
- | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | category                             | Guid                         | 0..*        |  1.1.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.1.0  |
+ | 5     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 6     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 7     | hyperLink                            | Guid                         | 0..*        |  1.1.0  |
+ | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.1.0  |
+ | 10    | shortName                            | string                       | 1..1        |  1.1.0  |
+ | 11    | stakeholderValue                     | Guid                         | 0..*        |  1.1.0  |
+ | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 14    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -108,11 +108,6 @@ namespace CDP4MessagePackSerializer
             {
                 writer.Write(identifier.ToByteArray());
             }
-            writer.WriteArrayHeader(stakeholder.Attachment.Count);
-            foreach (var identifier in stakeholder.Attachment.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
             writer.WriteArrayHeader(stakeholder.Category.Count);
             foreach (var identifier in stakeholder.Category.OrderBy(x => x, guidComparer))
             {
@@ -154,6 +149,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(stakeholder.Attachment.Count);
+            foreach (var identifier in stakeholder.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -209,64 +209,57 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeholder.Attachment.Add(reader.ReadBytes().ToGuid());
+                            stakeholder.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeholder.Category.Add(reader.ReadBytes().ToGuid());
+                            stakeholder.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeholder.Definition.Add(reader.ReadBytes().ToGuid());
+                            stakeholder.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeholder.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
+                            stakeholder.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            stakeholder.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 8:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             stakeholder.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 9:
+                    case 8:
                         stakeholder.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 10:
+                    case 9:
                         stakeholder.Name = reader.ReadString();
                         break;
-                    case 11:
+                    case 10:
                         stakeholder.ShortName = reader.ReadString();
                         break;
-                    case 12:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             stakeholder.StakeholderValue.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 13:
+                    case 12:
                         stakeholder.ThingPreference = reader.ReadString();
                         break;
-                    case 14:
+                    case 13:
                         if (reader.TryReadNil())
                         {
                             stakeholder.Actor = null;
@@ -274,6 +267,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             stakeholder.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 14:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            stakeholder.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

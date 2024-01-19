@@ -34,23 +34,23 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 5     | defaultScale                         | Guid                         | 1..1        |  1.0.0  |
- | 6     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 7     | general                              | Guid                         | 1..1        |  1.0.0  |
- | 8     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 9     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 10    | name                                 | string                       | 1..1        |  1.0.0  |
- | 11    | possibleScale                        | Guid                         | 0..*        |  1.0.0  |
- | 12    | quantityDimensionSymbol              | string                       | 0..1        |  1.0.0  |
- | 13    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 14    | symbol                               | string                       | 1..1        |  1.0.0  |
- | 15    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 16    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 17    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 18    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 19    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 4     | defaultScale                         | Guid                         | 1..1        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | general                              | Guid                         | 1..1        |  1.0.0  |
+ | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 10    | possibleScale                        | Guid                         | 0..*        |  1.0.0  |
+ | 11    | quantityDimensionSymbol              | string                       | 0..1        |  1.0.0  |
+ | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 13    | symbol                               | string                       | 1..1        |  1.0.0  |
+ | 14    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 15    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 16    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 19    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -113,11 +113,6 @@ namespace CDP4MessagePackSerializer
             {
                 writer.Write(identifier.ToByteArray());
             }
-            writer.WriteArrayHeader(specializedQuantityKind.Attachment.Count);
-            foreach (var identifier in specializedQuantityKind.Attachment.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
             writer.WriteArrayHeader(specializedQuantityKind.Category.Count);
             foreach (var identifier in specializedQuantityKind.Category.OrderBy(x => x, guidComparer))
             {
@@ -164,6 +159,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(specializedQuantityKind.Attachment.Count);
+            foreach (var identifier in specializedQuantityKind.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -219,79 +219,72 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            specializedQuantityKind.Attachment.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 4:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             specializedQuantityKind.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 5:
+                    case 4:
                         specializedQuantityKind.DefaultScale = reader.ReadBytes().ToGuid();
                         break;
-                    case 6:
+                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             specializedQuantityKind.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 6:
                         specializedQuantityKind.General = reader.ReadBytes().ToGuid();
                         break;
-                    case 8:
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             specializedQuantityKind.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 9:
+                    case 8:
                         specializedQuantityKind.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 10:
+                    case 9:
                         specializedQuantityKind.Name = reader.ReadString();
                         break;
-                    case 11:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             specializedQuantityKind.PossibleScale.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 11:
                         specializedQuantityKind.QuantityDimensionSymbol = reader.ReadString();
                         break;
-                    case 13:
+                    case 12:
                         specializedQuantityKind.ShortName = reader.ReadString();
                         break;
-                    case 14:
+                    case 13:
                         specializedQuantityKind.Symbol = reader.ReadString();
                         break;
-                    case 15:
+                    case 14:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             specializedQuantityKind.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 16:
+                    case 15:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             specializedQuantityKind.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 17:
+                    case 16:
                         specializedQuantityKind.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 18:
+                    case 17:
                         specializedQuantityKind.ThingPreference = reader.ReadString();
                         break;
-                    case 19:
+                    case 18:
                         if (reader.TryReadNil())
                         {
                             specializedQuantityKind.Actor = null;
@@ -299,6 +292,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             specializedQuantityKind.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 19:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            specializedQuantityKind.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

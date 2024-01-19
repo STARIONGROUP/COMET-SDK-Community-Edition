@@ -34,16 +34,16 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 6     | name                                 | string                       | 1..1        |  1.0.0  |
- | 7     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 8     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 9     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 10    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 5     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 6     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 7     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 8     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 9     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 10    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 11    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 12    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -106,11 +106,6 @@ namespace CDP4MessagePackSerializer
             {
                 writer.Write(identifier.ToByteArray());
             }
-            writer.WriteArrayHeader(possibleFiniteState.Attachment.Count);
-            foreach (var identifier in possibleFiniteState.Attachment.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
             writer.WriteArrayHeader(possibleFiniteState.Definition.Count);
             foreach (var identifier in possibleFiniteState.Definition.OrderBy(x => x, guidComparer))
             {
@@ -142,6 +137,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(possibleFiniteState.Attachment.Count);
+            foreach (var identifier in possibleFiniteState.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -197,50 +197,43 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            possibleFiniteState.Attachment.Add(reader.ReadBytes().ToGuid());
+                            possibleFiniteState.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            possibleFiniteState.Definition.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 5:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             possibleFiniteState.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 5:
                         possibleFiniteState.Name = reader.ReadString();
                         break;
-                    case 7:
+                    case 6:
                         possibleFiniteState.ShortName = reader.ReadString();
                         break;
-                    case 8:
+                    case 7:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             possibleFiniteState.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 9:
+                    case 8:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             possibleFiniteState.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 10:
+                    case 9:
                         possibleFiniteState.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 11:
+                    case 10:
                         possibleFiniteState.ThingPreference = reader.ReadString();
                         break;
-                    case 12:
+                    case 11:
                         if (reader.TryReadNil())
                         {
                             possibleFiniteState.Actor = null;
@@ -248,6 +241,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             possibleFiniteState.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 12:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            possibleFiniteState.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

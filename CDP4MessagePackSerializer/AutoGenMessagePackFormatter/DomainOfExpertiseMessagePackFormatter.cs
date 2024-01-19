@@ -34,18 +34,18 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 8     | name                                 | string                       | 1..1        |  1.0.0  |
- | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 10    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 6     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 7     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 8     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 9     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 10    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 11    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 14    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -108,11 +108,6 @@ namespace CDP4MessagePackSerializer
             {
                 writer.Write(identifier.ToByteArray());
             }
-            writer.WriteArrayHeader(domainOfExpertise.Attachment.Count);
-            foreach (var identifier in domainOfExpertise.Attachment.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
             writer.WriteArrayHeader(domainOfExpertise.Category.Count);
             foreach (var identifier in domainOfExpertise.Category.OrderBy(x => x, guidComparer))
             {
@@ -150,6 +145,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(domainOfExpertise.Attachment.Count);
+            foreach (var identifier in domainOfExpertise.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -205,60 +205,53 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            domainOfExpertise.Attachment.Add(reader.ReadBytes().ToGuid());
+                            domainOfExpertise.Category.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            domainOfExpertise.Category.Add(reader.ReadBytes().ToGuid());
+                            domainOfExpertise.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            domainOfExpertise.Definition.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 6:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             domainOfExpertise.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 6:
                         domainOfExpertise.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 8:
+                    case 7:
                         domainOfExpertise.Name = reader.ReadString();
                         break;
-                    case 9:
+                    case 8:
                         domainOfExpertise.ShortName = reader.ReadString();
                         break;
-                    case 10:
+                    case 9:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             domainOfExpertise.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 11:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             domainOfExpertise.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 11:
                         domainOfExpertise.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 13:
+                    case 12:
                         domainOfExpertise.ThingPreference = reader.ReadString();
                         break;
-                    case 14:
+                    case 13:
                         if (reader.TryReadNil())
                         {
                             domainOfExpertise.Actor = null;
@@ -266,6 +259,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             domainOfExpertise.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 14:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            domainOfExpertise.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

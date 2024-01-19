@@ -34,20 +34,20 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 6     | isAbstract                           | bool                         | 1..1        |  1.0.0  |
- | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 8     | name                                 | string                       | 1..1        |  1.0.0  |
- | 9     | permissibleClass                     | ClassKind                    | 1..*        |  1.0.0  |
- | 10    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 11    | superCategory                        | Guid                         | 0..*        |  1.0.0  |
- | 12    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 13    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 14    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 5     | isAbstract                           | bool                         | 1..1        |  1.0.0  |
+ | 6     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 7     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 8     | permissibleClass                     | ClassKind                    | 1..*        |  1.0.0  |
+ | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 10    | superCategory                        | Guid                         | 0..*        |  1.0.0  |
+ | 11    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 12    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 13    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 14    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 15    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 16    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -110,11 +110,6 @@ namespace CDP4MessagePackSerializer
             {
                 writer.Write(identifier.ToByteArray());
             }
-            writer.WriteArrayHeader(category.Attachment.Count);
-            foreach (var identifier in category.Attachment.OrderBy(x => x, guidComparer))
-            {
-                writer.Write(identifier.ToByteArray());
-            }
             writer.WriteArrayHeader(category.Definition.Count);
             foreach (var identifier in category.Definition.OrderBy(x => x, guidComparer))
             {
@@ -158,6 +153,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(category.Attachment.Count);
+            foreach (var identifier in category.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -213,33 +213,26 @@ namespace CDP4MessagePackSerializer
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            category.Attachment.Add(reader.ReadBytes().ToGuid());
+                            category.Definition.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     case 4:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            category.Definition.Add(reader.ReadBytes().ToGuid());
-                        }
-                        break;
-                    case 5:
-                        valueLength = reader.ReadArrayHeader();
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
                             category.HyperLink.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 5:
                         category.IsAbstract = reader.ReadBoolean();
                         break;
-                    case 7:
+                    case 6:
                         category.IsDeprecated = reader.ReadBoolean();
                         break;
-                    case 8:
+                    case 7:
                         category.Name = reader.ReadString();
                         break;
-                    case 9:
+                    case 8:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
@@ -247,37 +240,37 @@ namespace CDP4MessagePackSerializer
                             category.PermissibleClass.Add(@enum);
                         }
                         break;
-                    case 10:
+                    case 9:
                         category.ShortName = reader.ReadString();
                         break;
-                    case 11:
+                    case 10:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             category.SuperCategory.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 12:
+                    case 11:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             category.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 13:
+                    case 12:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             category.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 14:
+                    case 13:
                         category.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 15:
+                    case 14:
                         category.ThingPreference = reader.ReadString();
                         break;
-                    case 16:
+                    case 15:
                         if (reader.TryReadNil())
                         {
                             category.Actor = null;
@@ -285,6 +278,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             category.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 16:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            category.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:
