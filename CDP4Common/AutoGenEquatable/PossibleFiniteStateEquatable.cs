@@ -34,16 +34,16 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 6     | name                                 | string                       | 1..1        |  1.0.0  |
- | 7     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 8     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 9     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 10    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 5     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 6     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 7     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 8     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 9     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 10    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 11    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 12    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -85,8 +85,6 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Alias.OrderBy(x => x).SequenceEqual(other.Alias.OrderBy(x => x))) return false;
 
-            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
-
             if (!me.Definition.OrderBy(x => x).SequenceEqual(other.Definition.OrderBy(x => x))) return false;
 
             if (!me.HyperLink.OrderBy(x => x).SequenceEqual(other.HyperLink.OrderBy(x => x))) return false;
@@ -108,6 +106,8 @@ namespace CDP4Common.DTO.Equatable
 
             if (me.Actor.HasValue != other.Actor.HasValue) return false;
             if (!me.Actor.Equals(other.Actor)) return false;
+
+            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
 
             return true;
         }

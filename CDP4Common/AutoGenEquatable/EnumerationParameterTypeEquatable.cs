@@ -35,20 +35,20 @@
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
  | 3     | allowMultiSelect                     | bool                         | 1..1        |  1.0.0  |
- | 4     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 6     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 9     | name                                 | string                       | 1..1        |  1.0.0  |
- | 10    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 11    | symbol                               | string                       | 1..1        |  1.0.0  |
- | 12    | valueDefinition                      | Guid                         | 1..*        |  1.0.0  |
- | 13    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 8     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 10    | symbol                               | string                       | 1..1        |  1.0.0  |
+ | 11    | valueDefinition                      | Guid                         | 1..*        |  1.0.0  |
+ | 12    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 13    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 14    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 17    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -92,8 +92,6 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.AllowMultiSelect.Equals(other.AllowMultiSelect)) return false;
 
-            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
-
             if (!me.Category.OrderBy(x => x).SequenceEqual(other.Category.OrderBy(x => x))) return false;
 
             if (!me.Definition.OrderBy(x => x).SequenceEqual(other.Definition.OrderBy(x => x))) return false;
@@ -125,6 +123,8 @@ namespace CDP4Common.DTO.Equatable
 
             if (me.Actor.HasValue != other.Actor.HasValue) return false;
             if (!me.Actor.Equals(other.Actor)) return false;
+
+            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
 
             return true;
         }

@@ -34,18 +34,18 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.1.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.1.0  |
- | 4     | category                             | Guid                         | 0..*        |  1.1.0  |
- | 5     | definition                           | Guid                         | 0..*        |  1.1.0  |
- | 6     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 8     | hyperLink                            | Guid                         | 0..*        |  1.1.0  |
- | 9     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 10    | name                                 | string                       | 1..1        |  1.1.0  |
- | 11    | shortName                            | string                       | 1..1        |  1.1.0  |
- | 12    | stakeholderValue                     | Guid                         | 0..*        |  1.1.0  |
- | 13    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 14    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | category                             | Guid                         | 0..*        |  1.1.0  |
+ | 4     | definition                           | Guid                         | 0..*        |  1.1.0  |
+ | 5     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 6     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 7     | hyperLink                            | Guid                         | 0..*        |  1.1.0  |
+ | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.1.0  |
+ | 10    | shortName                            | string                       | 1..1        |  1.1.0  |
+ | 11    | stakeholderValue                     | Guid                         | 0..*        |  1.1.0  |
+ | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 14    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -87,8 +87,6 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Alias.OrderBy(x => x).SequenceEqual(other.Alias.OrderBy(x => x))) return false;
 
-            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
-
             if (!me.Category.OrderBy(x => x).SequenceEqual(other.Category.OrderBy(x => x))) return false;
 
             if (!me.Definition.OrderBy(x => x).SequenceEqual(other.Definition.OrderBy(x => x))) return false;
@@ -114,6 +112,8 @@ namespace CDP4Common.DTO.Equatable
 
             if (me.Actor.HasValue != other.Actor.HasValue) return false;
             if (!me.Actor.Equals(other.Actor)) return false;
+
+            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
 
             return true;
         }

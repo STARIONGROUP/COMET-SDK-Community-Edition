@@ -34,23 +34,23 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 5     | defaultScale                         | Guid                         | 1..1        |  1.0.0  |
- | 6     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 7     | general                              | Guid                         | 1..1        |  1.0.0  |
- | 8     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 9     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 10    | name                                 | string                       | 1..1        |  1.0.0  |
- | 11    | possibleScale                        | Guid                         | 0..*        |  1.0.0  |
- | 12    | quantityDimensionSymbol              | string                       | 0..1        |  1.0.0  |
- | 13    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 14    | symbol                               | string                       | 1..1        |  1.0.0  |
- | 15    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 16    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 17    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 18    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 19    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 4     | defaultScale                         | Guid                         | 1..1        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | general                              | Guid                         | 1..1        |  1.0.0  |
+ | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 10    | possibleScale                        | Guid                         | 0..*        |  1.0.0  |
+ | 11    | quantityDimensionSymbol              | string                       | 0..1        |  1.0.0  |
+ | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 13    | symbol                               | string                       | 1..1        |  1.0.0  |
+ | 14    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 15    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 16    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 19    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -92,8 +92,6 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Alias.OrderBy(x => x).SequenceEqual(other.Alias.OrderBy(x => x))) return false;
 
-            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
-
             if (!me.Category.OrderBy(x => x).SequenceEqual(other.Category.OrderBy(x => x))) return false;
 
             if (!me.DefaultScale.Equals(other.DefaultScale)) return false;
@@ -131,6 +129,8 @@ namespace CDP4Common.DTO.Equatable
 
             if (me.Actor.HasValue != other.Actor.HasValue) return false;
             if (!me.Actor.Equals(other.Actor)) return false;
+
+            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
 
             return true;
         }

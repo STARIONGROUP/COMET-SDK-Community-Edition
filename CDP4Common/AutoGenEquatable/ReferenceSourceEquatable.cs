@@ -34,25 +34,25 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | author                               | string                       | 0..1        |  1.0.0  |
- | 5     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 6     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 8     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
- | 9     | language                             | string                       | 0..1        |  1.0.0  |
- | 10    | name                                 | string                       | 1..1        |  1.0.0  |
- | 11    | publicationYear                      | int                          | 0..1        |  1.0.0  |
- | 12    | publishedIn                          | Guid                         | 0..1        |  1.0.0  |
- | 13    | publisher                            | Guid                         | 0..1        |  1.0.0  |
- | 14    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 15    | versionDate                          | DateTime                     | 0..1        |  1.0.0  |
- | 16    | versionIdentifier                    | string                       | 0..1        |  1.0.0  |
- | 17    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 18    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 19    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 20    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 21    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | author                               | string                       | 0..1        |  1.0.0  |
+ | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 7     | isDeprecated                         | bool                         | 1..1        |  1.0.0  |
+ | 8     | language                             | string                       | 0..1        |  1.0.0  |
+ | 9     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 10    | publicationYear                      | int                          | 0..1        |  1.0.0  |
+ | 11    | publishedIn                          | Guid                         | 0..1        |  1.0.0  |
+ | 12    | publisher                            | Guid                         | 0..1        |  1.0.0  |
+ | 13    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 14    | versionDate                          | DateTime                     | 0..1        |  1.0.0  |
+ | 15    | versionIdentifier                    | string                       | 0..1        |  1.0.0  |
+ | 16    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 17    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 18    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 19    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 20    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 21    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -93,8 +93,6 @@ namespace CDP4Common.DTO.Equatable
             if (!me.RevisionNumber.Equals(other.RevisionNumber)) return false;
 
             if (!me.Alias.OrderBy(x => x).SequenceEqual(other.Alias.OrderBy(x => x))) return false;
-
-            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
 
             if (me.Author == null && other.Author != null) return false;
             if (me.Author != null && !me.Author.Equals(other.Author)) return false;
@@ -142,6 +140,8 @@ namespace CDP4Common.DTO.Equatable
 
             if (me.Actor.HasValue != other.Actor.HasValue) return false;
             if (!me.Actor.Equals(other.Actor)) return false;
+
+            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
 
             return true;
         }

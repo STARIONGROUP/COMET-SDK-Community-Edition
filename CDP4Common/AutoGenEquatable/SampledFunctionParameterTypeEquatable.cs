@@ -37,20 +37,20 @@
  | 3     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
  | 4     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 5     | alias                                | Guid                         | 0..*        |  1.2.0  |
- | 6     | attachment                           | Guid                         | 0..*        |  1.2.0  |
- | 7     | category                             | Guid                         | 0..*        |  1.2.0  |
- | 8     | definition                           | Guid                         | 0..*        |  1.2.0  |
- | 9     | degreeOfInterpolation                | int                          | 0..1        |  1.2.0  |
- | 10    | dependentParameterType               | Guid                         | 1..*        |  1.2.0  |
- | 11    | hyperLink                            | Guid                         | 0..*        |  1.2.0  |
- | 12    | independentParameterType             | Guid                         | 1..*        |  1.2.0  |
- | 13    | interpolationPeriod                  | ValueArray<string>           | 1..*        |  1.2.0  |
- | 14    | isDeprecated                         | bool                         | 1..1        |  1.2.0  |
- | 15    | name                                 | string                       | 1..1        |  1.2.0  |
- | 16    | shortName                            | string                       | 1..1        |  1.2.0  |
- | 17    | symbol                               | string                       | 1..1        |  1.2.0  |
- | 18    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 19    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 6     | category                             | Guid                         | 0..*        |  1.2.0  |
+ | 7     | definition                           | Guid                         | 0..*        |  1.2.0  |
+ | 8     | degreeOfInterpolation                | int                          | 0..1        |  1.2.0  |
+ | 9     | dependentParameterType               | Guid                         | 1..*        |  1.2.0  |
+ | 10    | hyperLink                            | Guid                         | 0..*        |  1.2.0  |
+ | 11    | independentParameterType             | Guid                         | 1..*        |  1.2.0  |
+ | 12    | interpolationPeriod                  | ValueArray<string>           | 1..*        |  1.2.0  |
+ | 13    | isDeprecated                         | bool                         | 1..1        |  1.2.0  |
+ | 14    | name                                 | string                       | 1..1        |  1.2.0  |
+ | 15    | shortName                            | string                       | 1..1        |  1.2.0  |
+ | 16    | symbol                               | string                       | 1..1        |  1.2.0  |
+ | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 19    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -98,8 +98,6 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Alias.OrderBy(x => x).SequenceEqual(other.Alias.OrderBy(x => x))) return false;
 
-            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
-
             if (!me.Category.OrderBy(x => x).SequenceEqual(other.Category.OrderBy(x => x))) return false;
 
             if (!me.Definition.OrderBy(x => x).SequenceEqual(other.Definition.OrderBy(x => x))) return false;
@@ -133,6 +131,8 @@ namespace CDP4Common.DTO.Equatable
 
             if (me.Actor.HasValue != other.Actor.HasValue) return false;
             if (!me.Actor.Equals(other.Actor)) return false;
+
+            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
 
             return true;
         }

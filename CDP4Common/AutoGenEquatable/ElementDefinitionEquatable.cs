@@ -34,23 +34,23 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | category                             | Guid                         | 0..*        |  1.0.0  |
- | 5     | containedElement                     | Guid                         | 0..*        |  1.0.0  |
- | 6     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 7     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 8     | name                                 | string                       | 1..1        |  1.0.0  |
- | 9     | owner                                | Guid                         | 1..1        |  1.0.0  |
- | 10    | parameter                            | Guid                         | 0..*        |  1.0.0  |
- | 11    | parameterGroup                       | Guid                         | 0..*        |  1.0.0  |
- | 12    | referencedElement                    | Guid                         | 0..*        |  1.0.0  |
- | 13    | shortName                            | string                       | 1..1        |  1.0.0  |
- | 14    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 15    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 16    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 17    | organizationalParticipant            | Guid                         | 0..*        |  1.2.0  |
- | 18    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 19    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | category                             | Guid                         | 0..*        |  1.0.0  |
+ | 4     | containedElement                     | Guid                         | 0..*        |  1.0.0  |
+ | 5     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 7     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 8     | owner                                | Guid                         | 1..1        |  1.0.0  |
+ | 9     | parameter                            | Guid                         | 0..*        |  1.0.0  |
+ | 10    | parameterGroup                       | Guid                         | 0..*        |  1.0.0  |
+ | 11    | referencedElement                    | Guid                         | 0..*        |  1.0.0  |
+ | 12    | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 13    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 14    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 16    | organizationalParticipant            | Guid                         | 0..*        |  1.2.0  |
+ | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 19    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  | 20    | behavior                             | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
@@ -93,8 +93,6 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Alias.OrderBy(x => x).SequenceEqual(other.Alias.OrderBy(x => x))) return false;
 
-            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
-
             if (!me.Category.OrderBy(x => x).SequenceEqual(other.Category.OrderBy(x => x))) return false;
 
             if (!me.ContainedElement.OrderBy(x => x).SequenceEqual(other.ContainedElement.OrderBy(x => x))) return false;
@@ -130,6 +128,8 @@ namespace CDP4Common.DTO.Equatable
 
             if (me.Actor.HasValue != other.Actor.HasValue) return false;
             if (!me.Actor.Equals(other.Actor)) return false;
+
+            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
 
             if (!me.Behavior.OrderBy(x => x).SequenceEqual(other.Behavior.OrderBy(x => x))) return false;
 

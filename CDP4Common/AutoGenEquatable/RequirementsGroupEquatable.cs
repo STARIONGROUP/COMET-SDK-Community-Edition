@@ -34,20 +34,20 @@
  | 1     | revisionNumber                       | int                          |  1..1       |  1.0.0  |
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | alias                                | Guid                         | 0..*        |  1.0.0  |
- | 3     | attachment                           | Guid                         | 0..*        |  1.0.0  |
- | 4     | definition                           | Guid                         | 0..*        |  1.0.0  |
- | 5     | group                                | Guid                         | 0..*        |  1.0.0  |
- | 6     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
- | 7     | name                                 | string                       | 1..1        |  1.0.0  |
- | 8     | owner                                | Guid                         | 1..1        |  1.0.0  |
- | 9     | shortName                            | string                       | 1..1        |  1.0.0  |
- | 10    | category                             | Guid                         | 0..*        |  1.1.0  |
- | 11    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 12    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 13    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 14    | parameterValue                       | Guid                         | 0..*        |  1.1.0  |
- | 15    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 16    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 3     | definition                           | Guid                         | 0..*        |  1.0.0  |
+ | 4     | group                                | Guid                         | 0..*        |  1.0.0  |
+ | 5     | hyperLink                            | Guid                         | 0..*        |  1.0.0  |
+ | 6     | name                                 | string                       | 1..1        |  1.0.0  |
+ | 7     | owner                                | Guid                         | 1..1        |  1.0.0  |
+ | 8     | shortName                            | string                       | 1..1        |  1.0.0  |
+ | 9     | category                             | Guid                         | 0..*        |  1.1.0  |
+ | 10    | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 11    | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 12    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 13    | parameterValue                       | Guid                         | 0..*        |  1.1.0  |
+ | 14    | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 15    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 16    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -89,8 +89,6 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.Alias.OrderBy(x => x).SequenceEqual(other.Alias.OrderBy(x => x))) return false;
 
-            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
-
             if (!me.Definition.OrderBy(x => x).SequenceEqual(other.Definition.OrderBy(x => x))) return false;
 
             if (!me.Group.OrderBy(x => x).SequenceEqual(other.Group.OrderBy(x => x))) return false;
@@ -120,6 +118,8 @@ namespace CDP4Common.DTO.Equatable
 
             if (me.Actor.HasValue != other.Actor.HasValue) return false;
             if (!me.Actor.Equals(other.Actor)) return false;
+
+            if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
 
             return true;
         }
