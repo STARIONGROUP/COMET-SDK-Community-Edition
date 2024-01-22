@@ -162,7 +162,7 @@ namespace CDP4Web.Tests.Services.SessionService
         [TearDown]
         public void Teardown()
         {
-            CDPMessageBus.Current.ClearSubscriptions();
+            SingletonCDPMessageBus.Current.ClearSubscriptions();
         }
 
         [Test]
@@ -270,7 +270,7 @@ namespace CDP4Web.Tests.Services.SessionService
 
             var isIterationClose = false;
 
-            CDPMessageBus.Current.Listen<SessionServiceEvent>(this.session.Object).Where(x => x == SessionServiceEvent.IterationClosed)
+            SingletonCDPMessageBus.Current.Listen<SessionServiceEvent>(this.session.Object).Where(x => x == SessionServiceEvent.IterationClosed)
                 .Subscribe(_ => isIterationClose = true);
 
             Assert.That(isIterationClose, Is.False);
@@ -290,7 +290,7 @@ namespace CDP4Web.Tests.Services.SessionService
             this.SetIsSessionOpen();
             var closedIterationsCount = 0;
 
-            CDPMessageBus.Current.Listen<SessionServiceEvent>(this.session.Object).Where(x => x == SessionServiceEvent.IterationClosed)
+            SingletonCDPMessageBus.Current.Listen<SessionServiceEvent>(this.session.Object).Where(x => x == SessionServiceEvent.IterationClosed)
                 .Subscribe(_ => closedIterationsCount++);
 
             await this.sessionService.CloseIterations();

@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WSPDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -39,18 +39,13 @@ namespace CDP4WspDal.Tests
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    
+
     using CDP4Dal;
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Operations;
-    
-    using CDP4WspDal;
-    
+
     using NUnit.Framework;
-    
-    using File = System.IO.File;
-    using Thing = CDP4Common.CommonData.Thing;
 
     /// <summary>
     /// Suite of tests for the <see cref="WspDal"/>
@@ -71,7 +66,8 @@ namespace CDP4WspDal.Tests
         private IterationSetup iterationSetup;
         private SiteReferenceDataLibrary siteReferenceDataLibrary;
         private ModelReferenceDataLibrary modelReferenceDataLibrary;
-        
+        private CDPMessageBus messageBus;
+
         [SetUp]
         public void SetUp()
         {
@@ -79,13 +75,14 @@ namespace CDP4WspDal.Tests
 
             this.credentials = new Credentials("admin", "pass", this.uri);
             this.dal = new WspDal();
-            this.session = new Session(this.dal, this.credentials);
+            this.messageBus = new CDPMessageBus();
+            this.session = new Session(this.dal, this.credentials, this.messageBus);
 
             // Add SiteDirectory to cache
             this.siteDirectory = new SiteDirectory(Guid.Parse("f13de6f8-b03a-46e7-a492-53b2f260f294"), this.session.Assembler.Cache, this.uri);
             var lazySiteDirectory = new Lazy<Thing>(() => this.siteDirectory);
             lazySiteDirectory.Value.Cache.TryAdd(new CacheKey(lazySiteDirectory.Value.Iid, null), lazySiteDirectory);
-            
+
             this.PopulateSiteDirectory();
         }
 
@@ -116,7 +113,7 @@ namespace CDP4WspDal.Tests
         [TearDown]
         public void TearDown()
         {
-            CDPMessageBus.Current.ClearSubscriptions();
+            this.messageBus.ClearSubscriptions();
             this.credentials = null;
             this.dal = null;
         }
@@ -127,16 +124,16 @@ namespace CDP4WspDal.Tests
             var dal = new WspDal();
             Assert.IsNotNull(dal);
         }
-        
+
         [Test]
         [Category("WebServicesDependent")]
         public async Task VerifyThatOpenReturnsDTOs()
         {
             var uriBuilder = new UriBuilder(this.credentials.Uri) { Path = "/Data/Restore" };
             var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{this.credentials.UserName}:{this.credentials.Password}")));
             await httpClient.PostAsync(uriBuilder.Uri, null);
-            
+
             var dal = new WspDal();
             var result = await dal.Open(this.credentials, new CancellationToken());
 
@@ -144,7 +141,7 @@ namespace CDP4WspDal.Tests
 
             Assert.AreEqual(60, amountOfDtos);
         }
-        
+
         [Test]
         [Category("WebServicesDependent")]
         public async Task VerifThatAClosedDalCannotBeClosedAgain()
@@ -161,7 +158,7 @@ namespace CDP4WspDal.Tests
         public void VerifyThatIfCredentialsAreNullExceptionIsThrown()
         {
             var dal = new WspDal();
-            
+
             Assert.That(async () => await dal.Open(null, new CancellationToken()), Throws.TypeOf<ArgumentNullException>());
         }
 
@@ -172,10 +169,10 @@ namespace CDP4WspDal.Tests
             var invalidCredentials = new Credentials("John", "a password", uri);
 
             var dal = new WspDal();
-            
+
             Assert.That(async () => await dal.Open(invalidCredentials, new CancellationToken()), Throws.TypeOf<ArgumentException>());
         }
-        
+
         [Test]
         public void VerifyThatIfCredentialsAreNullOnReadExceptionIsThrown()
         {
@@ -184,10 +181,10 @@ namespace CDP4WspDal.Tests
             organizationDto.AddContainer(ClassKind.SiteDirectory, Guid.Parse("eb77f3e1-a0f3-412d-8ed6-b8ce881c0145"));
 
             var dal = new WspDal();
-            
+
             Assert.That(async () => await dal.Read(organizationDto, new CancellationToken()), Throws.TypeOf<InvalidOperationException>());
         }
-        
+
         [Test]
         public void VerifyThatCreateThrowsException()
         {
@@ -229,7 +226,7 @@ namespace CDP4WspDal.Tests
             var sd = returned.First();
 
             var attributes = new QueryAttributes();
-            var readResult = await dal.Read(sd, this.cancelationTokenSource.Token, attributes);
+            var readResult = await this.dal.Read(sd, this.cancelationTokenSource.Token, attributes);
 
             // General assertions for any kind of Thing we read
             Assert.NotNull(readResult);
@@ -259,12 +256,12 @@ namespace CDP4WspDal.Tests
         {
             this.dal = new WspDal();
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
-            var assembler = new Assembler(this.credentials.Uri);
+            var assembler = new Assembler(this.credentials.Uri, this.messageBus);
 
             await assembler.Synchronize(returned);
 
             var attributes = new DalQueryAttributes { RevisionNumber = 0 };
-            var topcontainers = assembler.Cache.Select(x => x.Value).Where(x => x.Value is CDP4Common.CommonData.TopContainer).ToList();
+            var topcontainers = assembler.Cache.Select(x => x.Value).Where(x => x.Value is TopContainer).ToList();
 
             Assert.That(async () =>
                 {
@@ -285,38 +282,42 @@ namespace CDP4WspDal.Tests
 
             var context = "/SiteDirectory/f289023d-41e8-4aaf-aae5-1be1ecf24bac";
             var operationContainer = new OperationContainer(context);
-            
-            var testDtoOriginal = new CDP4Common.DTO.Alias(iid: Guid.NewGuid(), rev: 1)
+
+            var testDtoOriginal = new CDP4Common.DTO.Alias(Guid.NewGuid(), 1)
             {
                 Content = "content",
                 IsSynonym = false,
                 LanguageCode = "en",
             };
+
             testDtoOriginal.AddContainer(ClassKind.DomainOfExpertise, domainOfExpertiseIid);
             testDtoOriginal.AddContainer(ClassKind.SiteDirectory, siteDirecortoryIid);
-            
-            var testDtoModified = new CDP4Common.DTO.Alias(iid: testDtoOriginal.Iid, rev: 1)
+
+            var testDtoModified = new CDP4Common.DTO.Alias(testDtoOriginal.Iid, 1)
             {
                 Content = "content2",
                 IsSynonym = true,
                 LanguageCode = "en",
             };
+
             testDtoModified.AddContainer(ClassKind.DomainOfExpertise, domainOfExpertiseIid);
             testDtoModified.AddContainer(ClassKind.SiteDirectory, siteDirecortoryIid);
 
-            var testDtoOriginal2 = new CDP4Common.DTO.Definition(iid: Guid.NewGuid(), rev: 1)
+            var testDtoOriginal2 = new CDP4Common.DTO.Definition(Guid.NewGuid(), 1)
             {
                 Content = "somecontent",
                 LanguageCode = "en",
             };
+
             testDtoOriginal2.AddContainer(ClassKind.DomainOfExpertise, domainOfExpertiseIid);
             testDtoOriginal2.AddContainer(ClassKind.SiteDirectory, siteDirecortoryIid);
 
-            var testDtoModified2 = new CDP4Common.DTO.Definition(iid: testDtoOriginal2.Iid, rev: 1)
+            var testDtoModified2 = new CDP4Common.DTO.Definition(testDtoOriginal2.Iid, 1)
             {
                 Content = "somecontent2",
                 LanguageCode = "en",
             };
+
             testDtoModified2.AddContainer(ClassKind.DomainOfExpertise, domainOfExpertiseIid);
             testDtoModified2.AddContainer(ClassKind.SiteDirectory, siteDirecortoryIid);
 
@@ -376,14 +377,14 @@ namespace CDP4WspDal.Tests
         [Category("WebServicesDependent")]
         public async Task VerifyThatReadIterationWorks()
         {
-            var dal = new WspDal { Session = this.session};
-            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));            
-            var session = new Session(dal, credentials);
-            
+            var dal = new WspDal { Session = this.session };
+            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
+            var session = new Session(dal, credentials, this.messageBus);
+
             var returned = await dal.Open(credentials, this.cancelationTokenSource.Token);
 
             await session.Assembler.Synchronize(returned);
-            
+
             var siteDir = session.Assembler.RetrieveSiteDirectory();
             var modelSetup = siteDir.Model.Single(x => x.ShortName == "LOFT");
             var iterationSetup = modelSetup.IterationSetup.First();
@@ -417,7 +418,7 @@ namespace CDP4WspDal.Tests
                 {
                     for (var i = 0; i < iterationNumber; i++)
                     {
-                        var assemble = new Assembler(this.uri);
+                        var assemble = new Assembler(this.uri, this.messageBus);
                         var stopwatch = Stopwatch.StartNew();
                         await assemble.Synchronize(returnedlist);
                         elapsedTimes.Add(stopwatch.ElapsedMilliseconds);
@@ -429,6 +430,7 @@ namespace CDP4WspDal.Tests
             var synchronizeMeanElapsedTime = elapsedTimes.Average();
             var maxElapsedTime = elapsedTimes.Max();
             var minElapsedTime = elapsedTimes.Min();
+
             // 204.64 | 181 | 458 ms
             // refactor: 31.61 | 26 | 283
         }
@@ -445,17 +447,17 @@ namespace CDP4WspDal.Tests
             var files = new List<string> { filepath };
 
             var contentHash = "F73747371CFD9473C19A0A7F99BCAB008474C4CA";
-            var uri = new Uri("https://cdp4services-test.cdp4.org");            
+            var uri = new Uri("https://cdp4services-test.cdp4.org");
             this.credentials = new Credentials("admin", "pass", uri);
 
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
 
             var engineeringModeliid = Guid.Parse("9ec982e4-ef72-4953-aa85-b158a95d8d56");
             var iterationiid = Guid.Parse("e163c5ad-f32b-4387-b805-f4b34600bc2c");
-            var domainFileStoreIid = Guid.Parse("da7dddaa-02aa-4897-9935-e8d66c811a96");            
+            var domainFileStoreIid = Guid.Parse("da7dddaa-02aa-4897-9935-e8d66c811a96");
             var fileIid = Guid.NewGuid();
             var fileRevisionIid = Guid.NewGuid();
-            var domainOfExpertiseIid = Guid.Parse("0e92edde-fdff-41db-9b1d-f2e484f12535"); 
+            var domainOfExpertiseIid = Guid.Parse("0e92edde-fdff-41db-9b1d-f2e484f12535");
             var fileTypeIid = Guid.Parse("b16894e4-acb5-4e81-a118-16c00eb86d8f"); //PDF
             var participantIid = Guid.Parse("284334dd-e8e5-42d6-bc8a-715c507a7f02");
 
@@ -486,7 +488,7 @@ namespace CDP4WspDal.Tests
 
             var context = $"/EngineeringModel/{engineeringModeliid}/iteration/{iterationiid}";
             var operationContainer = new OperationContainer(context);
-            
+
             var updateCommonFileStoreOperation = new Operation(originalDomainFileStore, modifiedDomainFileStore, OperationKind.Update);
             operationContainer.AddOperation(updateCommonFileStoreOperation);
 
@@ -496,7 +498,7 @@ namespace CDP4WspDal.Tests
             var createFileRevisionOperation = new Operation(null, fileRevision, OperationKind.Create);
             operationContainer.AddOperation(createFileRevisionOperation);
 
-            Assert.DoesNotThrowAsync(async () => await dal.Write(operationContainer, files));
+            Assert.DoesNotThrowAsync(async () => await this.dal.Write(operationContainer, files));
         }
 
         [Test]
@@ -515,7 +517,7 @@ namespace CDP4WspDal.Tests
 
             Assert.Throws<NotSupportedException>(() => dal.Write(operationContainers));
 
-            Assert.Throws<NotSupportedException>(() => dal.Write(operationContainers));            
+            Assert.Throws<NotSupportedException>(() => dal.Write(operationContainers));
         }
 
         [Test]
@@ -529,7 +531,7 @@ namespace CDP4WspDal.Tests
 
             Assert.That(await dal.Write(operationContainer), Is.Empty);
         }
-        
+
         [Test]
         [Category("WebServicesDependent")]
         public async Task Verify_that_person_can_be_Posted()
@@ -559,7 +561,7 @@ namespace CDP4WspDal.Tests
             var result = await wspdal.Write(operationContainer);
 
             var resultPerson = (CDP4Common.DTO.Person)result.Single(x => x.Iid == person.Iid);
-            
+
             Assert.NotNull(resultPerson);
         }
 
@@ -567,7 +569,7 @@ namespace CDP4WspDal.Tests
         public void VerifyCherryPick()
         {
             Assert.That(async () => await this.dal.CherryPick(Guid.NewGuid(), Guid.NewGuid(), new List<ClassKind>(),
-                new List<Guid>(), CancellationToken.None),Throws.Exception.TypeOf<NotSupportedException>());
+                new List<Guid>(), CancellationToken.None), Throws.Exception.TypeOf<NotSupportedException>());
         }
 
         /// <summary>

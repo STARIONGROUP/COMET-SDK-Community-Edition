@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblerIntegrationTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -24,18 +24,21 @@
 
 namespace CDP4ServicesDal.Tests
 {
-    using System.Diagnostics;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
+
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
+
     using CDP4Dal;
-    using File = System.IO.File;
+
     using NUnit.Framework;
+
+    using File = System.IO.File;
 
     /// <summary>
     /// Suite of tests to test the <see cref="Assembler"/> class using DTO's produced from JSON
@@ -63,13 +66,12 @@ namespace CDP4ServicesDal.Tests
             {
                 this.dtos = jsonSerializer.Deserialize(stream);
             }
-            
         }
 
         [Test]
         public async Task Verify_that_Thing_Revisions_is_populated_on_second_load()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, null);
 
             var sw = Stopwatch.StartNew();
             await assembler.Synchronize(this.dtos);
@@ -79,23 +81,24 @@ namespace CDP4ServicesDal.Tests
             await assembler.Synchronize(this.dtos);
             Console.WriteLine($"re-Synchronize took {sw.ElapsedMilliseconds} [ms]");
 
-            foreach (var dto in dtos)
+            foreach (var dto in this.dtos)
             {
                 dto.RevisionNumber++;
             }
-            
+
             sw.Restart();
             await assembler.Synchronize(this.dtos);
             Console.WriteLine($"update-Synchronize took {sw.ElapsedMilliseconds} [ms]");
 
             var things = assembler.Cache.Values.Select(x => x.Value);
+
             foreach (var thing in things)
             {
                 Assert.AreEqual(1, thing.Revisions.Count);
             }
 
             sw.Restart();
-            await assembler.Synchronize(this.dtos); 
+            await assembler.Synchronize(this.dtos);
             Console.WriteLine($"re-Synchronize took {sw.ElapsedMilliseconds} [ms]");
         }
 

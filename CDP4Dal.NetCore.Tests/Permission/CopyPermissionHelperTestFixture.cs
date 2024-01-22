@@ -1,46 +1,48 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CopyPermissionHelperTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests.Permission
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+
     using CDP4Dal.Permission;
+
     using Moq;
+
     using NUnit.Framework;
 
     [TestFixture]
     public class CopyPermissionHelperTestFixture
     {
         private Mock<ISession> session;
-        private Mock<IPermissionService> permissionService; 
+        private Mock<IPermissionService> permissionService;
         private Uri uri = new Uri("http://test.com");
         private Assembler assembler;
 
@@ -89,7 +91,7 @@ namespace CDP4Dal.Tests.Permission
             this.permissionService = new Mock<IPermissionService>();
             this.session.Setup(x => x.PermissionService).Returns(this.permissionService.Object);
 
-            this.assembler = new Assembler(this.uri);
+            this.assembler = new Assembler(this.uri, null);
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
 
             this.siteDir = new SiteDirectory(Guid.NewGuid(), this.assembler.Cache, this.uri);
@@ -144,6 +146,7 @@ namespace CDP4Dal.Tests.Permission
             this.modelsetup2.RequiredRdl.Add(this.mrdl2);
 
             this.session.Setup(x => x.ActivePerson).Returns(this.person);
+
             this.session.Setup(x => x.ActivePersonParticipants)
                 .Returns(new List<Participant> { this.participant1, this.participant2 });
         }
@@ -193,8 +196,9 @@ namespace CDP4Dal.Tests.Permission
         public void VerifyThatCanCopyAll()
         {
             this.permissionService.Setup(x => x.CanWrite(It.IsAny<ClassKind>(), It.IsAny<Thing>())).Returns(true);
+
             this.session.Setup(x => x.OpenIterations)
-                .Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>> {{ this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) }} );
+                .Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>> { { this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) } });
 
             var copy = this.def1.Clone(false);
             var target = this.iteration2.Clone(false);
@@ -209,13 +213,15 @@ namespace CDP4Dal.Tests.Permission
         [Test]
         public void VerifyThatComputationWorksIfPermissionDenied()
         {
-            this.permissionService.Setup(x => x.CanWrite(It.Is<ClassKind>(cls => 
-                cls == ClassKind.ElementDefinition || 
-                cls == ClassKind.ElementUsage || 
-                cls == ClassKind.Parameter || 
+            this.permissionService.Setup(x => x.CanWrite(It.Is<ClassKind>(cls =>
+                cls == ClassKind.ElementDefinition ||
+                cls == ClassKind.ElementUsage ||
+                cls == ClassKind.Parameter ||
                 cls == ClassKind.ParameterSubscription), It.IsAny<Thing>())).Returns(true);
+
             this.session.Setup(x => x.OpenIterations)
                 .Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>> { { this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) } });
+
             // permission denied for Override
 
             var copy = this.def1.Clone(false);
@@ -233,6 +239,7 @@ namespace CDP4Dal.Tests.Permission
         {
             this.def2.Category.Add(this.category);
             this.permissionService.Setup(x => x.CanWrite(It.IsAny<ClassKind>(), It.IsAny<Thing>())).Returns(true);
+
             this.session.Setup(x => x.OpenIterations)
                 .Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>> { { this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) } });
 
@@ -253,6 +260,7 @@ namespace CDP4Dal.Tests.Permission
         {
             this.subscription1.Owner = this.domain3;
             this.permissionService.Setup(x => x.CanWrite(It.IsAny<ClassKind>(), It.IsAny<Thing>())).Returns(true);
+
             this.session.Setup(x => x.OpenIterations)
                 .Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>> { { this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) } });
 
@@ -281,7 +289,7 @@ namespace CDP4Dal.Tests.Permission
         {
             var helper = new CopyPermissionHelper(this.session.Object, false);
             var target = this.iteration2.Clone(false);
-            
+
             Assert.Throws<ArgumentNullException>(() =>
             {
                 var res = helper.ComputeCopyPermission(null, target);
@@ -294,7 +302,7 @@ namespace CDP4Dal.Tests.Permission
             var helper = new CopyPermissionHelper(this.session.Object, false);
             var copy = this.def1.Clone(false);
             var target = this.iteration2.Clone(false);
-            
+
             Assert.Throws<ArgumentNullException>(() =>
             {
                 var res = helper.ComputeCopyPermission(copy, null);
@@ -310,7 +318,7 @@ namespace CDP4Dal.Tests.Permission
             var helper = new CopyPermissionHelper(this.session.Object, false);
             var copy = this.def1.Clone(false);
             var target = this.model2.Clone(false);
-            
+
             Assert.Throws<InvalidOperationException>(() =>
             {
                 var res = helper.ComputeCopyPermission(copy, target);
@@ -321,12 +329,12 @@ namespace CDP4Dal.Tests.Permission
         public void VerifyException5()
         {
             this.session.Setup(x => x.OpenIterations)
-                .Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>> {{ this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) }} );
+                .Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>> { { this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) } });
 
             var helper = new CopyPermissionHelper(this.session.Object, false);
             var copy = this.def1.Clone(false);
             var target = this.iteration1.Clone(false);
-            
+
             Assert.Throws<InvalidOperationException>(() =>
             {
                 var res = helper.ComputeCopyPermission(copy, target);

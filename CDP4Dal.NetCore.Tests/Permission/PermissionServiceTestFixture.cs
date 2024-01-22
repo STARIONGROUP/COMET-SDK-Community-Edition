@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PermissionServiceTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2023 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -74,7 +74,7 @@ namespace CDP4Dal.Tests.Permission
         [SetUp]
         public void Setup()
         {
-            this.assembler = new Assembler(this.uri);
+            this.assembler = new Assembler(this.uri, null);
             this.session = new Mock<ISession>();
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
             var dal = new Mock<IDal>();

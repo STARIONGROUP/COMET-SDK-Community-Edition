@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -68,6 +68,7 @@ namespace CDP4ServicesDal.Tests
         private IterationSetup iterationSetup;
         private SiteReferenceDataLibrary siteReferenceDataLibrary;
         private ModelReferenceDataLibrary modelReferenceDataLibrary;
+        private ICDPMessageBus messageBus;
 
         [SetUp]
         public void Setup()
@@ -76,7 +77,8 @@ namespace CDP4ServicesDal.Tests
 
             this.credentials = new Credentials("admin", "pass", this.uri);
             this.dal = new CdpServicesDal();
-            this.session = new Session(this.dal, this.credentials);
+            this.messageBus = new CDPMessageBus();
+            this.session = new Session(this.dal, this.credentials, this.messageBus);
 
             // Add SiteDirectory to cache
             this.siteDirectory = new SiteDirectory(Guid.Parse("f13de6f8-b03a-46e7-a492-53b2f260f294"), this.session.Assembler.Cache, this.uri);
@@ -113,7 +115,7 @@ namespace CDP4ServicesDal.Tests
         [TearDown]
         public void TearDown()
         {
-            CDPMessageBus.Current.ClearSubscriptions();
+            this.messageBus.ClearSubscriptions();
             this.credentials = null;
             this.dal = null;
             this.session = null;
@@ -278,7 +280,7 @@ namespace CDP4ServicesDal.Tests
         {
             this.dal = new CdpServicesDal();
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
-            var assembler = new Assembler(this.credentials.Uri);
+            var assembler = new Assembler(this.credentials.Uri, this.messageBus);
 
             await assembler.Synchronize(returned);
 
@@ -396,7 +398,7 @@ namespace CDP4ServicesDal.Tests
         {
             var dal = new CdpServicesDal { Session = this.session };
             var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
-            var session = new Session(dal, credentials);
+            var session = new Session(dal, credentials, this.messageBus);
 
             var returned = await dal.Open(credentials, this.cancelationTokenSource.Token);
 
@@ -435,7 +437,7 @@ namespace CDP4ServicesDal.Tests
             {
                 for (int i = 0; i < iterationNumber; i++)
                 {
-                    var assembler = new Assembler(this.uri);
+                    var assembler = new Assembler(this.uri, this.messageBus);
                     var stopwatch = Stopwatch.StartNew();
                     await assembler.Synchronize(returnedlist);
                     elapsedTimes.Add(stopwatch.ElapsedMilliseconds);
@@ -602,10 +604,10 @@ namespace CDP4ServicesDal.Tests
         {
             var uri = new Uri("https://cdp4services-test.cdp4.org");
             var credentials = new Credentials("admin", "pass", uri);
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
 
             var dal = new CdpServicesDal();
-            var session = new Session(dal, credentials);
+            var session = new Session(dal, credentials, this.messageBus);
 
             var result = await dal.Open(credentials, new CancellationToken());
 

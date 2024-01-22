@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -71,6 +71,8 @@ namespace CDP4Dal.NetCore.Tests
 
         private CDP4Common.DTO.SiteDirectory sieSiteDirectoryDto;
 
+        private ICDPMessageBus messageBus;
+
         [SetUp]
         public void SetUp()
         {
@@ -103,7 +105,9 @@ namespace CDP4Dal.NetCore.Tests
             this.mockedDal = new Mock<IDal>();
             this.mockedDal.SetupProperty(d => d.Session);
 
-            this.session = new Session(this.mockedDal.Object, credentials);
+            this.messageBus = new CDPMessageBus();
+
+            this.session = new Session(this.mockedDal.Object, credentials, this.messageBus);
 
             var openTaskCompletionSource = new TaskCompletionSource<IEnumerable<Thing>>();
             openTaskCompletionSource.SetResult(this.dalOutputs);
@@ -113,14 +117,14 @@ namespace CDP4Dal.NetCore.Tests
         [TearDown]
         public void TearDown()
         {
-            CDPMessageBus.Current.ClearSubscriptions();
+            this.messageBus.ClearSubscriptions();
         }
 
         [Test]
         public async Task VerifythatOpenCallAssemblerSynchronizeWithDtos()
         {
             var eventReceived = false;
-            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x =>
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x =>
             {
                 eventReceived = true;
             });
@@ -140,7 +144,7 @@ namespace CDP4Dal.NetCore.Tests
             writeWithNoResultsTaskCompletionSource.SetResult(new List<Thing>());
             this.mockedDal.Setup(x => x.Open(It.IsAny<Credentials>(), It.IsAny<CancellationToken>())).Returns(writeWithNoResultsTaskCompletionSource.Task);
 
-            CDPMessageBus.Current.Listen<SessionEvent>()                
+            this.messageBus.Listen<SessionEvent>()                
                 .Subscribe(x => 
             {
                 if (x.Status == SessionStatus.BeginUpdate)
@@ -180,7 +184,7 @@ namespace CDP4Dal.NetCore.Tests
             
             await this.session.Open();
 
-            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x =>
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x =>
             {
                 eventReceived = true;
             });
@@ -207,7 +211,7 @@ namespace CDP4Dal.NetCore.Tests
 
             await this.session.Open();
 
-            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x =>
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x =>
             {
                 eventReceived = true;
             });
@@ -242,7 +246,7 @@ namespace CDP4Dal.NetCore.Tests
             rdlDto.RequiredRdl = requiredPocoDto.Iid;
 
             var credentials = new Credentials("admin", "pass", new Uri("http://www.rheagroup.com"));
-            var session2 = new Session(this.mockedDal.Object, credentials);
+            var session2 = new Session(this.mockedDal.Object, credentials, this.messageBus);
             var rdlPoco = new CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary { Iid = rdlDto.Iid, Name = rdlDto.Name, ShortName = rdlDto.ShortName, Container = siteDir, RequiredRdl = requiredPocoRdl };
             var thingsToAdd = new List<Thing>() { siteDirDto, requiredPocoDto, rdlDto };
 
@@ -382,7 +386,7 @@ namespace CDP4Dal.NetCore.Tests
             siteDir.Person.Add(JohnDoe);
             
             var credentials = new Credentials("admin", "pass", new Uri("http://www.rheagroup.com"));
-            var session2 = new Session(this.mockedDal.Object, credentials);
+            var session2 = new Session(this.mockedDal.Object, credentials, this.messageBus);
             session2.GetType().GetProperty("ActivePerson").SetValue(session2, JohnDoe, null);
 
             var modelRdlPoco = new ModelReferenceDataLibrary { Iid = modelRdlDto.Iid, Name = modelRdlDto.Name, ShortName = modelRdlDto.ShortName, Container = containerEngModelSetup, RequiredRdl = requiredPocoRdl };
@@ -419,7 +423,7 @@ namespace CDP4Dal.NetCore.Tests
             modelRdlDto.RequiredRdl = requiredPocoDto.Iid;
 
             var credentials = new Credentials("admin", "pass", new Uri("http://www.rheagroup.com"));
-            var session2 = new Session(this.mockedDal.Object, credentials);
+            var session2 = new Session(this.mockedDal.Object, credentials, this.messageBus);
 
             var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup { Iid = iterationSetupDto.Iid, Container = containerEngModelSetup, IterationIid = iteration.Iid };
             var thingsToAdd = new List<Thing> { siteDirDto, requiredPocoDto, containerEngModelSetupDto, modelRdlDto, iterationSetupDto };
@@ -430,7 +434,7 @@ namespace CDP4Dal.NetCore.Tests
             session2.Assembler.Cache.GetOrAdd(new CacheKey(iterationDto.Iid, null), lazyiteration);
 
             CDP4Common.CommonData.Thing changedObject = null;
-            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(CDP4Common.EngineeringModelData.Iteration)).Subscribe(x => changedObject = x.ChangedThing);
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(CDP4Common.EngineeringModelData.Iteration)).Subscribe(x => changedObject = x.ChangedThing);
             await session2.CloseIterationSetup(iterationSetup);
             Assert.NotNull(changedObject);
         }
@@ -567,7 +571,7 @@ namespace CDP4Dal.NetCore.Tests
             var testDal = new TestDal();
             var credentials = new Credentials("John", "Doe", this.uri);
 
-            this.session = new Session(testDal, credentials);
+            this.session = new Session(testDal, credentials, this.messageBus);
             var version = new Version("1.1.0");
             
             Assert.AreEqual(version.Major, this.session.DalVersion.Major);
@@ -580,7 +584,7 @@ namespace CDP4Dal.NetCore.Tests
         {
             var testDal = new TestDal();
             var credentials = new Credentials("John", "Doe", this.uri);
-            this.session = new Session(testDal, credentials);
+            this.session = new Session(testDal, credentials, this.messageBus);
 
             var supportedVersion = new Version("1.0.0");
             Assert.IsTrue(this.session.IsVersionSupported(supportedVersion));

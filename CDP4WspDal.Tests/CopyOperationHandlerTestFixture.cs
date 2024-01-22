@@ -1,42 +1,45 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CopyOperationHandlerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4WspDal.Tests
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
+
     using Moq;
+
     using NUnit.Framework;
+
     using Dto = CDP4Common.DTO;
 
     [TestFixture]
@@ -99,7 +102,7 @@ namespace CDP4WspDal.Tests
             this.permissionService = new Mock<IPermissionService>();
             this.session.Setup(x => x.PermissionService).Returns(this.permissionService.Object);
 
-            this.assembler = new Assembler(this.uri);
+            this.assembler = new Assembler(this.uri, null);
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
 
             this.siteDir = new SiteDirectory(Guid.NewGuid(), this.assembler.Cache, this.uri);
@@ -154,6 +157,7 @@ namespace CDP4WspDal.Tests
             this.modelsetup2.RequiredRdl.Add(this.mrdl2);
 
             this.session.Setup(x => x.ActivePerson).Returns(this.person);
+
             this.session.Setup(x => x.ActivePersonParticipants)
                 .Returns(new List<Participant> { this.participant1, this.participant2 });
         }
@@ -165,7 +169,7 @@ namespace CDP4WspDal.Tests
             this.iteration1 = new Iteration(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.iteration2 = new Iteration(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.rootDef = new ElementDefinition(Guid.NewGuid(), this.assembler.Cache, this.uri) { Name = "rootdef" };
-            this.def1 = new ElementDefinition(Guid.NewGuid(), this.assembler.Cache, this.uri) {Name = "def1"};
+            this.def1 = new ElementDefinition(Guid.NewGuid(), this.assembler.Cache, this.uri) { Name = "def1" };
             this.def2 = new ElementDefinition(Guid.NewGuid(), this.assembler.Cache, this.uri) { Name = "def2" };
             this.usage1 = new ElementUsage(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.usage11 = new ElementUsage(Guid.NewGuid(), this.assembler.Cache, this.uri);
@@ -235,11 +239,12 @@ namespace CDP4WspDal.Tests
         public void VerifyThatModifyShiftCopyOperationsWorks()
         {
             this.permissionService.Setup(x => x.CanWrite(It.IsAny<ClassKind>(), It.IsAny<Thing>())).Returns(true);
+
             this.session.Setup(x => x.OpenIterations).Returns(
                 new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>
                 {
-                    {this.iteration1, new Tuple<DomainOfExpertise, Participant>(domain1, null)}, 
-                    {this.iteration2, new Tuple<DomainOfExpertise, Participant>(domain2, null)}
+                    { this.iteration1, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) },
+                    { this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain2, null) }
                 });
 
             var iteration2Clone = this.iteration2.Clone(false);
@@ -247,10 +252,9 @@ namespace CDP4WspDal.Tests
             defClone.Iid = Guid.NewGuid();
             iteration2Clone.Element.Add(defClone);
 
-            
             var transactionContext = TransactionContextResolver.ResolveContext(this.iteration2);
             var context = transactionContext.ContextRoute();
-            
+
             var operationContainer = new OperationContainer(context, this.model2.RevisionNumber);
             operationContainer.AddOperation(new Operation(this.iteration2.ToDto(), iteration2Clone.ToDto(), OperationKind.Update));
             operationContainer.AddOperation(new Operation(this.rootDef.ToDto(), defClone.ToDto(), OperationKind.Copy));
@@ -272,11 +276,12 @@ namespace CDP4WspDal.Tests
         {
             // all the things cannot be copied
             this.permissionService.Setup(x => x.CanWrite(It.Is<ClassKind>(cl => cl != ClassKind.ParameterSubscription), It.IsAny<Thing>())).Returns(true);
+
             this.session.Setup(x => x.OpenIterations).Returns(
                 new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>
                 {
-                    {this.iteration1, new Tuple<DomainOfExpertise, Participant>(domain1, null)}, 
-                    {this.iteration2, new Tuple<DomainOfExpertise, Participant>(domain2, null)}
+                    { this.iteration1, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) },
+                    { this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain2, null) }
                 });
 
             var iteration2Clone = this.iteration2.Clone(false);
@@ -303,11 +308,12 @@ namespace CDP4WspDal.Tests
         public void VerifyThatDryCopyWorks()
         {
             this.permissionService.Setup(x => x.CanWrite(It.IsAny<ClassKind>(), It.IsAny<Thing>())).Returns(true);
+
             this.session.Setup(x => x.OpenIterations).Returns(
                 new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>
                 {
-                    {this.iteration1, new Tuple<DomainOfExpertise, Participant>(domain1, null)}, 
-                    {this.iteration2, new Tuple<DomainOfExpertise, Participant>(domain3, null)}
+                    { this.iteration1, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) },
+                    { this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain3, null) }
                 });
 
             var iteration2Clone = this.iteration2.Clone(false);
@@ -326,9 +332,9 @@ namespace CDP4WspDal.Tests
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();
-            Assert.AreEqual(14, operations.Count); 
+            Assert.AreEqual(14, operations.Count);
             Assert.IsNotEmpty(operationContainer.Context); // check that operation container is correctly built
-            
+
             var ownedThings =
                 operationContainer.Operations.Select(x => x.ModifiedThing)
                     .Where(x => x.ClassKind != ClassKind.ParameterSubscription)
@@ -341,6 +347,7 @@ namespace CDP4WspDal.Tests
             var sub =
                 operationContainer.Operations.Select(x => x.ModifiedThing)
                     .OfType<Dto.ParameterSubscription>().Single();
+
             Assert.AreEqual(sub.Owner, this.subscription1.Owner.Iid);
         }
 
@@ -348,11 +355,12 @@ namespace CDP4WspDal.Tests
         public void VerifyThatDryCopyDoesNotCopySubscriptionWithOwnerAsActiveDomain()
         {
             this.permissionService.Setup(x => x.CanWrite(It.IsAny<ClassKind>(), It.IsAny<Thing>())).Returns(true);
+
             this.session.Setup(x => x.OpenIterations).Returns(
                 new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>
                 {
-                    {this.iteration1, new Tuple<DomainOfExpertise, Participant>(domain1, null)}, 
-                    {this.iteration2, new Tuple<DomainOfExpertise, Participant>(domain1, null)}
+                    { this.iteration1, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) },
+                    { this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) }
                 });
 
             var iteration2Clone = this.iteration2.Clone(false);
@@ -386,6 +394,7 @@ namespace CDP4WspDal.Tests
             var subCount =
                 operationContainer.Operations.Select(x => x.ModifiedThing)
                     .OfType<Dto.ParameterSubscription>().Count();
+
             Assert.AreEqual(0, subCount);
         }
 
@@ -393,12 +402,14 @@ namespace CDP4WspDal.Tests
         public void VerifyThatDryCopyDoesNotCopySubscriptionWithInactiveDomain()
         {
             this.permissionService.Setup(x => x.CanWrite(It.IsAny<ClassKind>(), It.IsAny<Thing>())).Returns(true);
+
             this.session.Setup(x => x.OpenIterations).Returns(
                 new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>
                 {
-                    {this.iteration1, new Tuple<DomainOfExpertise, Participant>(domain1, null)}, 
-                    {this.iteration2, new Tuple<DomainOfExpertise, Participant>(domain1, null)}
+                    { this.iteration1, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) },
+                    { this.iteration2, new Tuple<DomainOfExpertise, Participant>(this.domain1, null) }
                 });
+
             this.subscription1.Owner = this.domain3;
 
             var iteration2Clone = this.iteration2.Clone(false);
@@ -432,6 +443,7 @@ namespace CDP4WspDal.Tests
             var subCount =
                 operationContainer.Operations.Select(x => x.ModifiedThing)
                     .OfType<Dto.ParameterSubscription>().Count();
+
             Assert.AreEqual(0, subCount);
         }
     }

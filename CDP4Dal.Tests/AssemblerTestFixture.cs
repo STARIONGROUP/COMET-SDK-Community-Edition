@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -47,11 +47,14 @@ namespace CDP4Dal.Tests
         private Dto.SiteDirectory siteDir;
         private Dto.SiteReferenceDataLibrary siteRdl;
         private Uri uri;
+        private CDPMessageBus messageBus;
 
         [SetUp]
         public void SetUp()
         {
             this.uri = new Uri("http://www.rheagroup.com");
+
+            this.messageBus = new CDPMessageBus();
 
             this.testInput = new List<Dto.Thing>();
 
@@ -96,7 +99,7 @@ namespace CDP4Dal.Tests
         public void TearDown()
         {
             this.testInput.Clear();
-            CDPMessageBus.Current.ClearSubscriptions();
+            this.messageBus.ClearSubscriptions();
         }
 
         [Test]
@@ -104,14 +107,14 @@ namespace CDP4Dal.Tests
         {
             Assert.Throws<NullReferenceException>(() =>
             {
-                var assembler = new Assembler(null);
+                var assembler = new Assembler(null, this.messageBus);
             });
         }
 
         [Test]
         public void AssertThatCacheCanStoreThings()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
 
             // Check that the cache is empty
             Assert.IsFalse(assembler.Cache.Skip(0).Any());
@@ -141,7 +144,7 @@ namespace CDP4Dal.Tests
         [Test]
         public async Task AssertThatAssemblerSynchronizationWorks()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
 
             // 1st call of Synnchronize
             await assembler.Synchronize(this.testInput);
@@ -191,7 +194,7 @@ namespace CDP4Dal.Tests
         [Test]
         public async Task AssertThatRevisionsAreCachedCorrectly()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
 
             var parameterIid = Guid.NewGuid();
             var parameterRevision1 = new Dto.Parameter(parameterIid, 1); //The Parameter's 1st Revision
@@ -292,7 +295,7 @@ namespace CDP4Dal.Tests
         [Test]
         public async Task VerifyThatAssemblerCanUpdateExistingPoco()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
             await assembler.Synchronize(this.testInput);
 
             var siteDir = assembler.Cache.Select(x => x.Value)
@@ -321,7 +324,7 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatArgumentThrown()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
             
             Assert.ThrowsAsync<ArgumentNullException>(async() =>
             {
@@ -349,7 +352,7 @@ namespace CDP4Dal.Tests
                 category
             };
 
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
             await assembler.Synchronize(dtos);
 
             Assert.AreEqual(4, assembler.Cache.Count);
@@ -424,7 +427,7 @@ namespace CDP4Dal.Tests
                 category
             };
 
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
             assembler.Synchronize(dtos);
 
             dtos = new List<Dto.Thing>
@@ -446,7 +449,7 @@ namespace CDP4Dal.Tests
         [Test]
         public async Task VerifyThatCloseRdlWorks()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
             // 1st call of Synnchronize
             await assembler.Synchronize(this.testInput);
 
@@ -477,7 +480,7 @@ namespace CDP4Dal.Tests
             domain.Definition.Add(definition.Iid);
             definition.Citation.Add(citation.Iid);
 
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
             var input = new List<Dto.Thing>();
             input.Add(sitedir);
             input.Add(domain);
@@ -505,7 +508,7 @@ namespace CDP4Dal.Tests
         [Test]
         public async Task VerifyThatIterationIsDeletedWhenSetupIsDeleted()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
 
             var model = new EngineeringModel(Guid.NewGuid(), assembler.Cache, this.uri);
             var it1 = new Iteration(Guid.NewGuid(), assembler.Cache, this.uri);
@@ -544,7 +547,7 @@ namespace CDP4Dal.Tests
         [Test]
         public async Task VerifyThatModelIsDeletedWhenSetupIsDeleted()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
 
             var model = new EngineeringModel(Guid.NewGuid(), assembler.Cache, this.uri);
             var it1 = new Iteration(Guid.NewGuid(), assembler.Cache, this.uri);
@@ -583,28 +586,28 @@ namespace CDP4Dal.Tests
             var engineeringModelSetupIid = Guid.NewGuid();
             var iterationIid = Guid.NewGuid();            
             var iterationSetupIid = Guid.NewGuid();
-            
-            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(EngineeringModel)).Subscribe(x =>
+
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(EngineeringModel)).Subscribe(x =>
             {
                 Assert.AreEqual(engineeringModelIid, x.ChangedThing.Iid);
             });
 
-            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(EngineeringModelSetup)).Subscribe(x =>
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(EngineeringModelSetup)).Subscribe(x =>
             {
                 Assert.AreEqual(engineeringModelSetupIid, x.ChangedThing.Iid);
             });
 
-            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(Iteration)).Subscribe(x =>
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(Iteration)).Subscribe(x =>
             {
                 Assert.AreEqual(iterationIid, x.ChangedThing.Iid);
             });
 
-            CDPMessageBus.Current.Listen<ObjectChangedEvent>(typeof(IterationSetup)).Subscribe(x =>
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(IterationSetup)).Subscribe(x =>
             {
                 Assert.AreEqual(iterationSetupIid, x.ChangedThing.Iid);
             });
 
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
 
             var model = new EngineeringModel(engineeringModelIid, assembler.Cache, this.uri);
             var iteration = new Iteration(iterationIid, assembler.Cache, this.uri);            
@@ -636,7 +639,7 @@ namespace CDP4Dal.Tests
         [Test]
         public async Task VerifyThatSynchronizationPreservesKeysOfOrderedItemList()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
 
             var simpleUnit = new Dto.SimpleUnit(Guid.NewGuid(), 1) { Name = "Unit", ShortName = "unit" };
             var ratioScale = new Dto.RatioScale(Guid.NewGuid(), 1) { Name = "Ration", ShortName = "ratio", NumberSet = NumberSetKind.INTEGER_NUMBER_SET };
@@ -677,7 +680,7 @@ namespace CDP4Dal.Tests
         [Test]
         public async Task AssertThatIterationIdsForCommonFileStoreRelatedDtosIsNull()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
             var iterationIid = Guid.NewGuid();
             var commonFileStore = new Dto.CommonFileStore(Guid.NewGuid(), 1);
             var folder = new Dto.Folder(Guid.NewGuid(), 1) { IterationContainerId = iterationIid };
@@ -721,7 +724,7 @@ namespace CDP4Dal.Tests
         [Test]
         public async Task AssertThatIterationIdsForDomainFileStoreRelatedDtosStayFilled()
         {
-            var assembler = new Assembler(this.uri);
+            var assembler = new Assembler(this.uri, this.messageBus);
             var iterationIid = Guid.NewGuid();
             var domainFileStore = new Dto.DomainFileStore(Guid.NewGuid(), 1);
             var folder = new Dto.Folder(Guid.NewGuid(), 1) { IterationContainerId = iterationIid };

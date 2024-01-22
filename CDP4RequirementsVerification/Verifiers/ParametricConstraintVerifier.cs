@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParametricConstraintVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -60,7 +60,7 @@ namespace CDP4RequirementsVerification.Verifiers
         /// <remarks>
         /// Normally we don't put code in a property setter.
         /// In this exceptional case we do, because we might want a <see cref="RequirementStateOfComplianceChangedEvent"/>
-        /// to be called through the <see cref="CDPMessageBus"/>
+        /// to be called through the <see cref="ICDPMessageBus"/>
         /// </remarks>
         /// </summary>
         public RequirementStateOfCompliance RequirementStateOfCompliance
@@ -71,7 +71,7 @@ namespace CDP4RequirementsVerification.Verifiers
                 if (this.requirementStateOfCompliance != value)
                 {
                     this.requirementStateOfCompliance = value;
-                    CDPMessageBus.Current.SendMessage(new RequirementStateOfComplianceChangedEvent(value), this.parametricConstraint);
+                    this.MessageBus.SendMessage(new RequirementStateOfComplianceChangedEvent(value), this.parametricConstraint);
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace CDP4RequirementsVerification.Verifiers
         /// </summary>
         /// <param name="parametricConstraint">The <see cref="ParametricConstraint"/> that is used for verification</param>
         /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/></param>
-        public ParametricConstraintVerifier(ParametricConstraint parametricConstraint, IRequirementVerificationConfiguration configuration) : base(configuration)
+        public ParametricConstraintVerifier(ParametricConstraint parametricConstraint, IRequirementVerificationConfiguration configuration, ICDPMessageBus messageBus) : base(configuration, messageBus)
         {
             this.parametricConstraint = parametricConstraint;
         }
@@ -156,27 +156,27 @@ namespace CDP4RequirementsVerification.Verifiers
         {
             if (booleanExpression is NotExpression notExpression)
             {
-                return new NotExpressionVerifier(notExpression, this.Configuration);
+                return new NotExpressionVerifier(notExpression, this.Configuration, this.MessageBus);
             }
 
             if (booleanExpression is AndExpression andExpression)
             {
-                return new AndExpressionVerifier(andExpression, this.Configuration);
+                return new AndExpressionVerifier(andExpression, this.Configuration, this.MessageBus);
             }
 
             if (booleanExpression is OrExpression orExpression)
             {
-                return new OrExpressionVerifier(orExpression, this.Configuration);
+                return new OrExpressionVerifier(orExpression, this.Configuration, this.MessageBus);
             }
 
             if (booleanExpression is ExclusiveOrExpression exclusiveOrExpression)
             {
-                return new ExclusiveOrExpressionVerifier(exclusiveOrExpression, this.Configuration);
+                return new ExclusiveOrExpressionVerifier(exclusiveOrExpression, this.Configuration, this.MessageBus);
             }
 
             if (booleanExpression is RelationalExpression relationalExpression)
             {
-                return new RelationalExpressionVerifier(relationalExpression, this.Configuration);
+                return new RelationalExpressionVerifier(relationalExpression, this.Configuration, this.MessageBus);
             }
 
             return null;

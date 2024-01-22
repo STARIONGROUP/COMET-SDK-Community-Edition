@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementsContainerVerifierTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -28,6 +28,8 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
     using System.Threading.Tasks;
 
     using CDP4Common.EngineeringModelData;
+
+    using CDP4Dal;
 
     using CDP4RequirementsVerification.Tests.Builders;
     using CDP4RequirementsVerification.Verifiers;
@@ -58,10 +60,13 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
         private ElementDefinition elementDefinition;
         private RequirementsContainerVerifier requirementsGroupVerifier1;
         private RequirementsContainerVerifier requirementsGroupVerifier2;
+        private CDPMessageBus messageBus;
 
         [SetUp]
         public void SetUp()
         {
+            this.messageBus = new CDPMessageBus();
+
             this.parametricConstraint = new ParametricConstraint(Guid.NewGuid(), null, null);
 
             this.relationalExpression =
@@ -87,10 +92,10 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             this.requirement1.Group = this.requirementsGroup1;
 
-            this.requirementsContainerVerifier = new RequirementsContainerVerifier(this.requirementsSpecification, null);
+            this.requirementsContainerVerifier = new RequirementsContainerVerifier(this.requirementsSpecification, null, this.messageBus);
 
-            this.requirementsGroupVerifier1 = new RequirementsContainerVerifier(this.requirementsGroup1, null);
-            this.requirementsGroupVerifier2 = new RequirementsContainerVerifier(this.requirementsGroup2, null);
+            this.requirementsGroupVerifier1 = new RequirementsContainerVerifier(this.requirementsGroup1, null, this.messageBus);
+            this.requirementsGroupVerifier2 = new RequirementsContainerVerifier(this.requirementsGroup2, null, this.messageBus);
 
             this.iteration = new Iteration(Guid.NewGuid(), null, null);
 

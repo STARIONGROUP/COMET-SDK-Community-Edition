@@ -63,12 +63,19 @@ namespace CDP4Web.Services.SessionService
         private readonly ILogger<SessionService> logger;
 
         /// <summary>
+        /// The INJECTED <see cref="ICDPMessageBus"/>
+        /// </summary>
+        private readonly ICDPMessageBus messageBus;
+
+        /// <summary>
         /// Initialize a new instance of <see cref="SessionService" />
         /// </summary>
         /// <param name="logger">The <see cref="ILogger{TCategoryName}" /></param>
-        public SessionService(ILogger<SessionService> logger)
+        /// <param name="messageBus">The <see cref="ICDPMessageBus"/></param>
+        public SessionService(ILogger<SessionService> logger, ICDPMessageBus messageBus)
         {
             this.logger = logger;
+            this.messageBus = messageBus;
         }
 
         /// <summary>
@@ -113,7 +120,7 @@ namespace CDP4Web.Services.SessionService
 
             try
             {
-                this.Session = new Session(new CdpServicesDal(), credentials);
+                this.Session = new Session(new CdpServicesDal(), credentials, this.messageBus);
                 await this.Session.Open();
                 this.logger.LogInformation("CDP4Comet Session opened against {url} in {time} [ms]", credentials.Uri, stopWatch.ElapsedMilliseconds);
             }
@@ -184,7 +191,7 @@ namespace CDP4Web.Services.SessionService
 
             this.logger.LogInformation("Closing iteration with id {iterationId}", iteration.Iid);
             await this.Session.CloseIterationSetup(iteration.IterationSetup);
-            CDPMessageBus.Current.SendMessage(SessionServiceEvent.IterationClosed, this.Session);
+            this.messageBus.SendMessage(SessionServiceEvent.IterationClosed, this.Session);
             this.logger.LogInformation("Iteration {iterationId} closed", iteration.Iid);
         }
 
@@ -243,12 +250,12 @@ namespace CDP4Web.Services.SessionService
             }
 
             var stopWatch = Stopwatch.StartNew();
-            CDPMessageBus.Current.SendMessage(SessionServiceEvent.SessionRefreshing, this.Session);
+            this.messageBus.SendMessage(SessionServiceEvent.SessionRefreshing, this.Session);
 
             await this.Session.Refresh();
             stopWatch.Stop();
 
-            CDPMessageBus.Current.SendMessage(SessionServiceEvent.SessionRefreshed, this.Session);
+            this.messageBus.SendMessage(SessionServiceEvent.SessionRefreshed, this.Session);
             this.logger.LogInformation("Session refreshed in {time} [ms]", stopWatch.ElapsedMilliseconds);
         }
 
@@ -264,12 +271,12 @@ namespace CDP4Web.Services.SessionService
             }
 
             var stopWatch = Stopwatch.StartNew();
-            CDPMessageBus.Current.SendMessage(SessionServiceEvent.SessionReloading, this.Session);
+            this.messageBus.SendMessage(SessionServiceEvent.SessionReloading, this.Session);
 
             await this.Session.Reload();
             stopWatch.Stop();
 
-            CDPMessageBus.Current.SendMessage(SessionServiceEvent.SessionReloaded, this.Session);
+            this.messageBus.SendMessage(SessionServiceEvent.SessionReloaded, this.Session);
             this.logger.LogInformation("Session reloaed in {time} [ms]", stopWatch.ElapsedMilliseconds);
         }
 
@@ -320,7 +327,7 @@ namespace CDP4Web.Services.SessionService
                 }
 
                 this.logger.LogInformation("Iteration {iterationId} successfully opened", openedIteration.Iid);
-                CDPMessageBus.Current.SendMessage(SessionServiceEvent.IterationOpened, this.Session);
+                this.messageBus.SendMessage(SessionServiceEvent.IterationOpened, this.Session);
                 return Result.Ok(openedIteration);
             }
             catch (InvalidOperationException invalidOperation)
