@@ -97,11 +97,6 @@ namespace CDP4Dal
         IPermissionService PermissionService { get; }
 
         /// <summary>
-        /// Gets the <see cref="ICDPMessageBus"/> that handles messaging for this session
-        /// </summary>
-        ICDPMessageBus MessageBus { get; }
-
-        /// <summary>
         /// Gets the uri of the connected data-source
         /// </summary>
         string DataSourceUri { get; }
