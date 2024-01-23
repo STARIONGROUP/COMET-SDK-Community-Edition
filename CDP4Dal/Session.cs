@@ -54,7 +54,6 @@ namespace CDP4Dal
     /// </summary>
     public class Session : ISession
     {
-
         /// <summary>
         /// Executes just before data from an <see cref="OperationContainer"/> is written to the datastore.
         /// </summary>

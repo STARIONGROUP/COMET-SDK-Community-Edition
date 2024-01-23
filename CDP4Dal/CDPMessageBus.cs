@@ -44,9 +44,9 @@ namespace CDP4Dal
     /// The CDP specific MessageBus implementation.
     /// </summary>
     /// <remarks>
-    /// Be carefull with DI registration and its lifetime scope as the CDPMessageBus implements a publish/subscribe mechanism.
-    /// The <see cref="ISession"/> should have the same lifetime scope, otherwise publications and subscriptions might be made
-    /// to different instances of CDPMessageBus.
+    /// Be carefull with Lifetime scope for DI registration as the CDPMessageBus implements a publish/subscribe mechanism.
+    /// The <see cref="ISession"/> Lifetime scope for DI registration should have the same lifetime scope as CDPMessageBus,
+    /// otherwise publications and subscriptions might be made to different instances of CDPMessageBus which breaks the pub/sub pattern.
     /// </remarks>
 #if NETFRAMEWORK
     [Export(typeof(ICDPMessageBus))]
