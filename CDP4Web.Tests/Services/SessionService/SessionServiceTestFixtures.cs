@@ -69,19 +69,21 @@ namespace CDP4Web.Tests.Services.SessionService
         private Mock<ISession> session;
         private SessionService sessionService;
         private SiteDirectory siteDirectory;
+        private CDPMessageBus messageBus;
 
         [SetUp]
         public void Setup()
         {
             this.logger = TestLoggerFactory.Create();
             this.session = new Mock<ISession>();
+            this.messageBus = new CDPMessageBus();
 
-            this.sessionService = new SessionService(this.logger.CreateLogger<SessionService>())
+            this.sessionService = new SessionService(this.logger.CreateLogger<SessionService>(), this.messageBus)
             {
                 Session = this.session.Object
             };
 
-            this.assembler = new Assembler(this.uri);
+            this.assembler = new Assembler(this.uri, this.messageBus);
             this.domain = new DomainOfExpertise(Guid.NewGuid(), this.assembler.Cache, this.uri);
 
             this.person = new Person(Guid.NewGuid(), this.assembler.Cache, this.uri);
@@ -162,7 +164,7 @@ namespace CDP4Web.Tests.Services.SessionService
         [TearDown]
         public void Teardown()
         {
-            CDPMessageBus.Current.ClearSubscriptions();
+            this.messageBus.ClearSubscriptions();
         }
 
         [Test]
@@ -270,7 +272,7 @@ namespace CDP4Web.Tests.Services.SessionService
 
             var isIterationClose = false;
 
-            CDPMessageBus.Current.Listen<SessionServiceEvent>(this.session.Object).Where(x => x == SessionServiceEvent.IterationClosed)
+            this.messageBus.Listen<SessionServiceEvent>(this.session.Object).Where(x => x == SessionServiceEvent.IterationClosed)
                 .Subscribe(_ => isIterationClose = true);
 
             Assert.That(isIterationClose, Is.False);
@@ -290,7 +292,7 @@ namespace CDP4Web.Tests.Services.SessionService
             this.SetIsSessionOpen();
             var closedIterationsCount = 0;
 
-            CDPMessageBus.Current.Listen<SessionServiceEvent>(this.session.Object).Where(x => x == SessionServiceEvent.IterationClosed)
+            this.messageBus.Listen<SessionServiceEvent>(this.session.Object).Where(x => x == SessionServiceEvent.IterationClosed)
                 .Subscribe(_ => closedIterationsCount++);
 
             await this.sessionService.CloseIterations();

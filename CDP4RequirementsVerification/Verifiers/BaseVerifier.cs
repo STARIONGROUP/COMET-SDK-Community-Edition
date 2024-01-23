@@ -24,6 +24,8 @@
 
 namespace CDP4RequirementsVerification.Verifiers
 {
+    using CDP4Dal;
+
     /// <summary>
     /// Abstract base class for all Requirement State of Compliance verifiers.
     /// </summary>
@@ -35,12 +37,19 @@ namespace CDP4RequirementsVerification.Verifiers
         public IRequirementVerificationConfiguration Configuration { get; }
 
         /// <summary>
+        /// Gets the <see cref="ICDPMessageBus"/>
+        /// </summary>
+        public ICDPMessageBus MessageBus { get; }
+
+        /// <summary>
         /// Creates a new instance of the <see cref="BaseVerifier"/> class
         /// </summary>
         /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/> to be used.</param>
-        protected BaseVerifier(IRequirementVerificationConfiguration configuration)
+        /// <param name="messageBus">The <see cref="ICDPMessageBus"/></param>
+        protected BaseVerifier(IRequirementVerificationConfiguration configuration, ICDPMessageBus messageBus)
         {
             this.Configuration = configuration;
+            this.MessageBus = messageBus;
         }
     }
 }

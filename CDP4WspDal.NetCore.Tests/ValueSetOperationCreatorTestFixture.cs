@@ -1,43 +1,46 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValueSetOperationCreatorTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4WspDal.Tests
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
+
     using Moq;
+
     using NUnit.Framework;
+
     using Dto = CDP4Common.DTO;
 
     [TestFixture]
@@ -99,8 +102,8 @@ namespace CDP4WspDal.Tests
         private ActualFiniteStateList asl1;
         private ActualFiniteState as1;
 
-        private List<string> manual = new List<string>{"manual"};
-            
+        private List<string> manual = new List<string> { "manual" };
+
         [SetUp]
         public void Setup()
         {
@@ -126,7 +129,7 @@ namespace CDP4WspDal.Tests
             this.permissionService = new Mock<IPermissionService>();
             this.session.Setup(x => x.PermissionService).Returns(this.permissionService.Object);
 
-            this.assembler = new Assembler(this.uri);
+            this.assembler = new Assembler(this.uri, new CDPMessageBus());
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
 
             this.siteDir = new SiteDirectory(Guid.NewGuid(), this.assembler.Cache, this.uri);
@@ -181,6 +184,7 @@ namespace CDP4WspDal.Tests
             this.modelsetup2.RequiredRdl.Add(this.mrdl2);
 
             this.session.Setup(x => x.ActivePerson).Returns(this.person);
+
             this.session.Setup(x => x.ActivePersonParticipants)
                 .Returns(new List<Participant> { this.participant1, this.participant2 });
         }
@@ -192,7 +196,7 @@ namespace CDP4WspDal.Tests
             this.iteration1 = new Iteration(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.iteration2 = new Iteration(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.rootDef = new ElementDefinition(Guid.NewGuid(), this.assembler.Cache, this.uri) { Name = "rootdef" };
-            this.def1 = new ElementDefinition(Guid.NewGuid(), this.assembler.Cache, this.uri) {Name = "def1"};
+            this.def1 = new ElementDefinition(Guid.NewGuid(), this.assembler.Cache, this.uri) { Name = "def1" };
             this.def2 = new ElementDefinition(Guid.NewGuid(), this.assembler.Cache, this.uri) { Name = "def2" };
             this.usage1 = new ElementUsage(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.usage11 = new ElementUsage(Guid.NewGuid(), this.assembler.Cache, this.uri);
@@ -202,7 +206,6 @@ namespace CDP4WspDal.Tests
             this.parameter1 = new Parameter(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.override1 = new ParameterOverride(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.subscription1 = new ParameterSubscription(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            
 
             this.model1.EngineeringModelSetup = this.modelsetup1;
             this.model2.EngineeringModelSetup = this.modelsetup2;
@@ -279,11 +282,11 @@ namespace CDP4WspDal.Tests
         public void VerifyThatCreateValueSetsUpdateOperationsWorks()
         {
             var valueset = new ParameterValueSet(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            valueset.Manual = new ValueArray<string>(manual);
+            valueset.Manual = new ValueArray<string>(this.manual);
             this.parameter1.ValueSet.Add(valueset);
 
             var subscriptionvalueset = new ParameterSubscriptionValueSet(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            subscriptionvalueset.Manual = new ValueArray<string>(manual);
+            subscriptionvalueset.Manual = new ValueArray<string>(this.manual);
             this.subscription1.ValueSet.Add(subscriptionvalueset);
 
             var modeldto = this.model2.ToDto();
@@ -330,7 +333,7 @@ namespace CDP4WspDal.Tests
         public void VerifyThatCreateValueSetsUpdateOperationsWorksOptionDependent()
         {
             var valueset1 = new ParameterValueSet(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            valueset1.Manual = new ValueArray<string>(manual);
+            valueset1.Manual = new ValueArray<string>(this.manual);
             this.parameter1.ValueSet.Add(valueset1);
             valueset1.ActualOption = this.option1;
 
@@ -379,7 +382,7 @@ namespace CDP4WspDal.Tests
         public void VerifyThatCreateValueSetsUpdateOperationsWorksStateDependent()
         {
             var valueset1 = new ParameterValueSet(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            valueset1.Manual = new ValueArray<string>(manual);
+            valueset1.Manual = new ValueArray<string>(this.manual);
             this.parameter1.ValueSet.Add(valueset1);
             valueset1.ActualState = this.as1;
 
@@ -424,7 +427,7 @@ namespace CDP4WspDal.Tests
         public void VerifyThatCreateValueSetsUpdateOperationsWorksStateOptionDependent()
         {
             var valueset1 = new ParameterValueSet(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            valueset1.Manual = new ValueArray<string>(manual);
+            valueset1.Manual = new ValueArray<string>(this.manual);
             this.parameter1.ValueSet.Add(valueset1);
             valueset1.ActualOption = this.option1;
             valueset1.ActualState = this.as1;
@@ -476,7 +479,7 @@ namespace CDP4WspDal.Tests
         public void VerifyInvalidOperationException()
         {
             var valueset1 = new ParameterValueSet(Guid.NewGuid(), this.assembler.Cache, this.uri);
-            valueset1.Manual = new ValueArray<string>(manual);
+            valueset1.Manual = new ValueArray<string>(this.manual);
             this.parameter1.ValueSet.Add(valueset1);
             valueset1.ActualOption = this.option1;
             valueset1.ActualState = this.as1;

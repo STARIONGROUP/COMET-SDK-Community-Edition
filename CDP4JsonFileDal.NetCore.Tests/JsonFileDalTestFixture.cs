@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2023 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -69,10 +69,8 @@ namespace CDP4JsonFileDal.NetCore.Tests
     using SampledFunctionParameterType = CDP4Common.SiteDirectoryData.SampledFunctionParameterType;
     using ElementDefinition = CDP4Common.EngineeringModelData.ElementDefinition;
     using Parameter = CDP4Common.EngineeringModelData.Parameter;
-    using System.Security.Cryptography;
 
     using CDP4Common;
-    using CDP4Common.SiteDirectoryData;
 
     using OrganizationalParticipant = CDP4Common.SiteDirectoryData.OrganizationalParticipant;
 
@@ -124,6 +122,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         private CDP4Common.EngineeringModelData.Iteration iterationPoco;
         private Guid iterationIid;
         private Guid modelSetupId;
+        private CDPMessageBus messageBus;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -142,6 +141,8 @@ namespace CDP4JsonFileDal.NetCore.Tests
         [SetUp]
         public void SetUp()
         {
+            this.messageBus = new CDPMessageBus();
+
             var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "LOFT_ECSS-E-TM-10-25_AnnexC.zip");
             var migrationSourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "migration.json");
 
@@ -472,7 +473,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         public void VerifyWritingWithoutMigrationFile()
         {
             var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
-            var zipSession = new Session(this.dal, zipCredentials);
+            var zipSession = new Session(this.dal, zipCredentials, this.messageBus);
 
             this.CreateBasicModel();
             var operationContainers = this.BuildOperationContainers();
@@ -484,7 +485,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
         public void VerifyWritingMigrationFile()
         {
             var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
-            var zipSession = new Session(this.dal, zipCredentials);
+            var zipSession = new Session(this.dal, zipCredentials, this.messageBus);
 
             this.CreateBasicModel();
             var operationContainers = this.BuildOperationContainers();
@@ -508,7 +509,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             };
 
             var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
-            var zipSession = new Session(this.dal, zipCredentials);
+            var zipSession = new Session(this.dal, zipCredentials, this.messageBus);
 
             this.CreateBasicModel();
             this.AddExtraThingsForExportFilteringTests();
@@ -519,7 +520,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
 
             //Part 2 read newly created file
             var newDal = new JsonFileDal(new Version("1.0.0"));
-            var newSession = new Session(newDal, zipCredentials);
+            var newSession = new Session(newDal, zipCredentials, this.messageBus);
 
             await newSession.Open();
 
@@ -569,7 +570,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             };
 
             var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
-            var zipSession = new Session(this.dal, zipCredentials);
+            var zipSession = new Session(this.dal, zipCredentials, this.messageBus);
 
             this.CreateBasicModel();
             this.AddExtraThingsForExportFilteringTests();
@@ -580,7 +581,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
 
             //Part 2 read newly created file
             var newDal = new JsonFileDal(new Version("1.3.0"));
-            var newSession = new Session(newDal, zipCredentials);
+            var newSession = new Session(newDal, zipCredentials, this.messageBus);
 
             await newSession.Open();
 

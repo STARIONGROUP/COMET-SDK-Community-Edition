@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ExclusiveOrExpressionVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -30,6 +30,8 @@ namespace CDP4RequirementsVerification.Verifiers
 
     using CDP4Common.EngineeringModelData;
 
+    using CDP4Dal;
+
     /// <summary>
     /// Class used for the verification if a <see cref="ExclusiveOrExpression"/> is compliant to data in an <see cref="Iteration"/>  
     /// </summary>
@@ -40,7 +42,8 @@ namespace CDP4RequirementsVerification.Verifiers
         /// </summary>
         /// <param name="exclusiveOrExpression">The <see cref="ExclusiveOrExpression"/> that is verified.</param>
         /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/></param>
-        public ExclusiveOrExpressionVerifier(ExclusiveOrExpression exclusiveOrExpression, IRequirementVerificationConfiguration configuration) : base(configuration)
+        /// <param name="messageBus">The <see cref="ICDPMessageBus"/></param>
+        public ExclusiveOrExpressionVerifier(ExclusiveOrExpression exclusiveOrExpression, IRequirementVerificationConfiguration configuration, ICDPMessageBus messageBus) : base(configuration, messageBus)
         {
             this.Expression = exclusiveOrExpression;
         }

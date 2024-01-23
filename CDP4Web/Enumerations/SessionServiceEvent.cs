@@ -31,7 +31,7 @@ namespace CDP4Web.Enumerations
     using CDP4Web.Services.SessionService;
 
     /// <summary>
-    /// Enumeration used by the <see cref="SessionService"/> to send event on the <see cref="CDPMessageBus"/>
+    /// Enumeration used by the <see cref="SessionService"/> to send event on the <see cref="ICDPMessageBus"/>
     /// </summary>
     public enum SessionServiceEvent
     {

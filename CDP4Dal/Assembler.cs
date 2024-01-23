@@ -1,27 +1,26 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Assembler.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace CDP4Dal
 {
     using System;
@@ -57,6 +56,11 @@ namespace CDP4Dal
         public readonly Uri IDalUri;
 
         /// <summary>
+        /// The <see cref="ICDPMessageBus"/> to use
+        /// </summary>
+        private readonly ICDPMessageBus messageBus;
+
+        /// <summary>
         /// The current logger
         /// </summary>
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -85,13 +89,19 @@ namespace CDP4Dal
         /// Initializes a new instance of the <see cref="Assembler"/> class.
         /// </summary>
         /// <param name="uri">the <see cref="Uri"/> associated with this <see cref="Assembler"/></param>
-        public Assembler(Uri uri)
+        /// <param name="messageBus">
+        /// The instance of <see cref="ICDPMessageBus"/>
+        /// </param>
+        public Assembler(Uri uri, ICDPMessageBus messageBus)
         {
             Utils.AssertNotNull(uri, "The Uri may not be mull");
+
+            Utils.AssertNotNull(messageBus, "The MessageBus may not be mull");
 
             this.Cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
             this.unresolvedDtos = new List<Dto>();
             this.IDalUri = uri;
+            this.messageBus = messageBus;
         }
 
         /// <summary>
@@ -111,7 +121,7 @@ namespace CDP4Dal
         /// the DTOs
         /// </param>
         /// <param name="activeMessageBus">
-        /// An optional value indicating whether the <see cref="CDPMessageBus"/> should publish <see cref="ObjectChangedEvent"/> or not.
+        /// An optional value indicating whether the <see cref="ICDPMessageBus"/> should publish <see cref="ObjectChangedEvent"/> or not.
         /// The default value is true
         /// </param>
         /// <returns>
@@ -218,7 +228,7 @@ namespace CDP4Dal
 
                             if (!existentGuid.Select(x => x.Item1).Contains(cacheId))
                             {
-                                CDPMessageBus.Current.SendObjectChangeEvent(thingObject, EventKind.Added);
+                                this.messageBus.SendObjectChangeEvent(thingObject, EventKind.Added);
                                 messageCounter++;
                             }
                             else
@@ -228,15 +238,15 @@ namespace CDP4Dal
                                 if (dtoThing.RevisionNumber > cacheThingRevisionNumber)
                                 {
                                     // send event if revision number has increased from the old cached version
-                                    CDPMessageBus.Current.SendObjectChangeEvent(thingObject, EventKind.Updated);
+                                    this.messageBus.SendObjectChangeEvent(thingObject, EventKind.Updated);
                                     messageCounter++;
                                 }
                                 else if (dtoThing.RevisionNumber < cacheThingRevisionNumber)
                                 {
                                     if (this.Cache.TryGetValue(cacheId, out var cacheThing))
                                     {
-                                        // send event if revision number is lower. That means that the original cached item was changed (revision was added!)                                        CDPMessageBus.Current.SendObjectChangeEvent(cacheThing.Value, EventKind.Updated);
-                                        CDPMessageBus.Current.SendObjectChangeEvent(cacheThing.Value, EventKind.Updated);
+                                        // send event if revision number is lower. That means that the original cached item was changed (revision was added!)                                        ICDPMessageBus.Current.SendObjectChangeEvent(cacheThing.Value, EventKind.Updated);
+                                        this.messageBus.SendObjectChangeEvent(cacheThing.Value, EventKind.Updated);
                                         messageCounter++;
                                     }
                                 }
@@ -393,11 +403,11 @@ namespace CDP4Dal
                 {
                     if (iteration.IterationSetup != null)
                     {
-                        CDPMessageBus.Current.SendObjectChangeEvent(iteration.IterationSetup, EventKind.Removed);
+                        this.messageBus.SendObjectChangeEvent(iteration.IterationSetup, EventKind.Removed);
                         logger.Trace("IterationSetup with iid {0} removed", iteration.IterationSetup.Iid);
                     }
 
-                    CDPMessageBus.Current.SendObjectChangeEvent(iteration, EventKind.Removed);
+                    this.messageBus.SendObjectChangeEvent(iteration, EventKind.Removed);
                     logger.Trace("Iteration with iid {0} removed", iteration.Iid);
                 }
 
@@ -411,11 +421,11 @@ namespace CDP4Dal
                 {
                     if (model.EngineeringModelSetup != null)
                     {
-                        CDPMessageBus.Current.SendObjectChangeEvent(model.EngineeringModelSetup, EventKind.Removed);
+                        this.messageBus.SendObjectChangeEvent(model.EngineeringModelSetup, EventKind.Removed);
                         logger.Trace("EngineeringModelSetup with iid {0} removed", model.EngineeringModelSetup.Iid);
                     }
 
-                    CDPMessageBus.Current.SendObjectChangeEvent(model, EventKind.Removed);
+                    this.messageBus.SendObjectChangeEvent(model, EventKind.Removed);
                     logger.Trace("Model with iid {0} removed", model.Iid);
                 }
 
@@ -512,7 +522,7 @@ namespace CDP4Dal
                     this.RemoveThingFromCache(thing);
                 }
 
-                CDPMessageBus.Current.SendObjectChangeEvent(rdl, EventKind.Updated);
+                this.messageBus.SendObjectChangeEvent(rdl, EventKind.Updated);
 
                 this.thingsMarkedForDeletion.Clear();
                 logger.Trace("Finish closing of {0} ({1}) in {2} [ms]", rdl.Name, this.IDalUri, startwatch.ElapsedMilliseconds);
@@ -752,7 +762,7 @@ namespace CDP4Dal
                     relationship.CleanReferencedThingRelationship();
                 }
 
-                CDPMessageBus.Current.SendObjectChangeEvent(outLazy.Value, EventKind.Removed);
+                this.messageBus.SendObjectChangeEvent(outLazy.Value, EventKind.Removed);
             }
 
             logger.Trace("Remove of thing with Iid {0} succeeded : {1}", thingToRemove, succeed);

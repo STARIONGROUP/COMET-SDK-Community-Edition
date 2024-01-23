@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BooleanExpressionVerifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -50,15 +50,16 @@ namespace CDP4RequirementsVerification.Verifiers
         public T Expression { get; protected set; }
 
         /// <summary>
-        /// Indication that the CDPMessageBus can be used.
+        /// Indication that the ICDPMessageBus can be used.
         /// </summary>
         protected bool IsMessageBusActive { get; set; } = true;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BooleanExpressionVerifier{T}"/> class.
         /// </summary>
-        /// <param name="configuration"></param>
-        protected BooleanExpressionVerifier(IRequirementVerificationConfiguration configuration) : base(configuration)
+        /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/></param>
+        /// <param name="messageBus">The <see cref="ICDPMessageBus"/></param>
+        protected BooleanExpressionVerifier(IRequirementVerificationConfiguration configuration, ICDPMessageBus messageBus) : base(configuration, messageBus)
         {
         }
 
@@ -67,7 +68,7 @@ namespace CDP4RequirementsVerification.Verifiers
         /// <remarks>
         /// Normally we don't put code in a property setter.
         /// In this exceptional case we do, because we might want a <see cref="RequirementStateOfComplianceChangedEvent"/>
-        /// to be called through the <see cref="CDPMessageBus"/>
+        /// to be called through the <see cref="ICDPMessageBus"/>
         /// </remarks>
         /// </summary>
         public RequirementStateOfCompliance RequirementStateOfCompliance
@@ -81,7 +82,7 @@ namespace CDP4RequirementsVerification.Verifiers
 
                     if (this.IsMessageBusActive)
                     {
-                        CDPMessageBus.Current.SendMessage(new RequirementStateOfComplianceChangedEvent(value), this.Expression);
+                        this.MessageBus.SendMessage(new RequirementStateOfComplianceChangedEvent(value), this.Expression);
                     }
                 }
             }

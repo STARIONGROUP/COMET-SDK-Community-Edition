@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParametricConstraintVerifierTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -30,6 +30,8 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Types;
+
+    using CDP4Dal;
 
     using CDP4RequirementsVerification.Tests.Builders;
     using CDP4RequirementsVerification.Verifiers;
@@ -80,10 +82,13 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
         private ElementDefinition elementDefinition2;
         private ParametricConstraintVerifier option1ConfigurationParametricConstraintVerifier;
         private ParametricConstraintVerifier option2ConfigurationParametricConstraintVerifier;
+        private CDPMessageBus messageBus;
 
         [SetUp]
         public void SetUp()
         {
+            this.messageBus = new CDPMessageBus();
+
             this.parametricConstraint = new ParametricConstraint(Guid.NewGuid(), null, null);
             this.orExpression = new OrExpression(Guid.NewGuid(), null, null);
             this.andExpression = new AndExpression(Guid.NewGuid(), null, null);
@@ -164,9 +169,9 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
             this.RegisterBinaryRelationShip(this.parameter, this.relationalExpression1);
             this.RegisterBinaryRelationShip(parameterOverride, this.relationalExpression2);
 
-            this.nullConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, null);
-            this.option1ConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, new RequirementVerificationConfiguration { Option = this.option1 });
-            this.option2ConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, new RequirementVerificationConfiguration { Option = this.option2 });
+            this.nullConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, null, this.messageBus);
+            this.option1ConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, new RequirementVerificationConfiguration { Option = this.option1 }, this.messageBus);
+            this.option2ConfigurationParametricConstraintVerifier = new ParametricConstraintVerifier(this.parametricConstraint, new RequirementVerificationConfiguration { Option = this.option2 }, this.messageBus);
         }
 
         private void RegisterBinaryRelationShip(ParameterOrOverrideBase parameter, RelationalExpression expression)

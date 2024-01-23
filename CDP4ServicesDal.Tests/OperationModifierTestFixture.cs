@@ -1,21 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WspOperationModifierTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -26,12 +26,16 @@ namespace CDP4ServicesDal.Tests
 {
     using System;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Types;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
+
     using Moq;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -45,13 +49,14 @@ namespace CDP4ServicesDal.Tests
         public void SetUp()
         {
             this.session = new Mock<ISession>();
-            this.assembler = new Assembler(this.uri);
+            this.assembler = new Assembler(this.uri, new CDPMessageBus());
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
         }
 
         [TearDown]
         public void TearDown()
-        { }
+        {
+        }
 
         [Test]
         public void VerifyThatActualFiniteStateKindIsUpdatedOnNewDefault()
@@ -90,10 +95,10 @@ namespace CDP4ServicesDal.Tests
             var as12 = new ActualFiniteState(Guid.NewGuid(), this.assembler.Cache, this.uri);
             as12.PossibleState.Add(ps11);
             as12.PossibleState.Add(ps22);
-            var as13 = new ActualFiniteState(Guid.NewGuid(), this.assembler.Cache, this.uri); 
+            var as13 = new ActualFiniteState(Guid.NewGuid(), this.assembler.Cache, this.uri);
             as13.PossibleState.Add(ps12);
             as13.PossibleState.Add(ps21);
-            var as14 = new ActualFiniteState(Guid.NewGuid(), this.assembler.Cache, this.uri); 
+            var as14 = new ActualFiniteState(Guid.NewGuid(), this.assembler.Cache, this.uri);
             as14.PossibleState.Add(ps12);
             as14.PossibleState.Add(ps22);
 
@@ -154,7 +159,7 @@ namespace CDP4ServicesDal.Tests
             possibleList1.DefaultState = ps11;
             as11.Kind = ActualFiniteStateKind.FORBIDDEN;
 
-            var transactionContext =  TransactionContextResolver.ResolveContext(iteration);
+            var transactionContext = TransactionContextResolver.ResolveContext(iteration);
             var context = transactionContext.ContextRoute();
 
             var operationContainer = new OperationContainer(context, model.RevisionNumber);
