@@ -117,6 +117,11 @@ namespace CDP4Dal
         IReadOnlyDictionary<Iteration, Tuple<DomainOfExpertise,Participant> > OpenIterations { get; }
 
         /// <summary>
+        /// Gets the <see cref="ICDPMessageBus"/> that handles messaging for this session
+        /// </summary>
+        ICDPMessageBus CDPMessageBus { get; }
+
+        /// <summary>
         /// Retrieves the <see cref="SiteDirectory"/> in the context of the current session
         /// </summary>
         /// <returns>

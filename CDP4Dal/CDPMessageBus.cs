@@ -52,7 +52,7 @@ namespace CDP4Dal
     [Export(typeof(ICDPMessageBus))]
     [PartCreationPolicy(CreationPolicy.Shared)]
 #endif
-    public class CDPMessageBus : ICDPMessageBus, IDisposable
+    public class CDPMessageBus : ICDPMessageBus
     {
         /// <summary>
         /// The <see cref="Dictionary{TKey,TValue}"/> holding the subscriptions.

@@ -33,7 +33,7 @@ namespace CDP4Dal
     /// <summary>
     /// Defines the properties and methods of the <see cref="ICDPMessageBus"/> interface
     /// </summary>
-    public interface ICDPMessageBus
+    public interface ICDPMessageBus : IDisposable
     {
         /// <summary>
         /// Number of currently active Observables in this instance of the <see cref="ICDPMessageBus"/>;

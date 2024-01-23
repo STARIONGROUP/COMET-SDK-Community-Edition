@@ -4,7 +4,7 @@
       <TargetFrameworks>net462;net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
       <Company>RHEA System S.A.</Company>
       <Title>CDP4MessagePackSerializer Community Edition</Title>
-      <VersionPrefix>25.0.0</VersionPrefix>
+      <VersionPrefix>25.0.1</VersionPrefix>
       <Description>CDP4 MessagePack Serialization Library</Description>
       <Copyright>Copyright © RHEA System S.A.</Copyright>
       <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar</Authors>
@@ -20,7 +20,7 @@
       <PackageTags>CDP COMET ECSS-E-TM-10-25 MessagePack</PackageTags>
       <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
       <PackageReleaseNotes>
-        [UPGRADE] CDP4Common 25.0.0
+        [UPGRADE] CDP4Common 25.0.1
       </PackageReleaseNotes>
       <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
