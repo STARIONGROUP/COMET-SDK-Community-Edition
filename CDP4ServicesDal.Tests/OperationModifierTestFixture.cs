@@ -49,7 +49,7 @@ namespace CDP4ServicesDal.Tests
         public void SetUp()
         {
             this.session = new Mock<ISession>();
-            this.assembler = new Assembler(this.uri, null);
+            this.assembler = new Assembler(this.uri, new CDPMessageBus());
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
         }
 

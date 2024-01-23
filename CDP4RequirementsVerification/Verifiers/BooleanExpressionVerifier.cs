@@ -50,7 +50,7 @@ namespace CDP4RequirementsVerification.Verifiers
         public T Expression { get; protected set; }
 
         /// <summary>
-        /// Indication that the SingletonCDPMessageBus can be used.
+        /// Indication that the ICDPMessageBus can be used.
         /// </summary>
         protected bool IsMessageBusActive { get; set; } = true;
 

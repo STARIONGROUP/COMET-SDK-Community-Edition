@@ -54,7 +54,6 @@ namespace CDP4Dal
     /// </summary>
     public class Session : ISession
     {
-        private readonly ICDPMessageBus messageBus;
 
         /// <summary>
         /// Executes just before data from an <see cref="OperationContainer"/> is written to the datastore.
@@ -95,7 +94,7 @@ namespace CDP4Dal
         /// </param>
         public Session(IDal dal, Credentials credentials, ICDPMessageBus messageBus)
         {
-            this.messageBus = messageBus;
+            this.MessageBus = messageBus;
             this.Credentials = credentials;
             this.Dal = dal;
             this.Dal.Session = this;
@@ -105,6 +104,11 @@ namespace CDP4Dal
             this.openIterations = new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>();
             this.cancellationTokenSourceDictionary = new ConcurrentDictionary<Guid, CancellationTokenSource>();
         }
+
+        /// <summary>
+        /// Gets the <see cref="ICDPMessageBus"/> that handles messaging for this session
+        /// </summary>
+        public ICDPMessageBus MessageBus { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="Credentials"/> that are use to connect to the data source
@@ -306,7 +310,7 @@ namespace CDP4Dal
         /// an await-able <see cref="Task"/>
         /// </returns>
         /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="SingletonCDPMessageBus"/>
+        /// The Cache is updated with the returned objects and the <see cref="ICDPMessageBus"/>
         /// is used or not to send messages to notify listeners of updates to the Cache
         /// </remarks>
         public async Task Open(bool activeMessageBus = true)
@@ -341,7 +345,7 @@ namespace CDP4Dal
                 logger.Warn("no data returned upon Open on {0}", this.DataSourceUri);
             }
 
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
 
             await this.Assembler.Synchronize(dtoThings, activeMessageBus);
 
@@ -358,12 +362,12 @@ namespace CDP4Dal
                 throw new IncompleteModelException("The Person object that matches the user specified in the Credentials could not be found");
             }
 
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
 
             logger.Info("Synchronization with the {0} server done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
 
             var sessionChange = new SessionEvent(this, SessionStatus.Open);
-            this.messageBus.SendMessage(sessionChange);
+            this.MessageBus.SendMessage(sessionChange);
 
             logger.Info("Session {0} opened successfully in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
         }
@@ -382,7 +386,7 @@ namespace CDP4Dal
                 var selectedParticipation = new Tuple<DomainOfExpertise, Participant>(domain, iterationPair.Value.Item2);
                 this.openIterations.Remove(iterationPair.Key);
                 this.openIterations.Add(iterationPair.Key, selectedParticipation);
-                this.messageBus.SendMessage(new DomainChangedEvent(iterationPair.Key, domain));
+                this.MessageBus.SendMessage(new DomainChangedEvent(iterationPair.Key, domain));
             }
         }
 
@@ -391,12 +395,12 @@ namespace CDP4Dal
         /// </summary>
         /// <param name="iteration">The <see cref="Iteration"/> to read</param>
         /// <param name="domain">The active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/></param>
-        /// <param name="activeMessageBus">Specify if the <see cref="SingletonCDPMessageBus"/> is used or not to notify listeners</param>
+        /// <param name="activeMessageBus">Specify if the <see cref="ICDPMessageBus"/> is used or not to notify listeners</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
         /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="SingletonCDPMessageBus"/>
+        /// The Cache is updated with the returned objects and the <see cref="ICDPMessageBus"/>
         /// is used or not to send messages to notify listeners of updates to the Cache
         /// </remarks>
         public async Task Read(Iteration iteration, DomainOfExpertise domain, bool activeMessageBus = true)
@@ -450,13 +454,13 @@ namespace CDP4Dal
                 logger.Warn("no data returned upon Read on {0}", this.DataSourceUri);
             }
 
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
 
             await this.Assembler.Synchronize(enumerable, activeMessageBus);
 
             this.AddIterationToOpenList(iteration.Iid, domain);
 
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
             logger.Info("Synchronization with the {0} server done", this.DataSourceUri);
         }
 
@@ -468,7 +472,7 @@ namespace CDP4Dal
         /// an await-able <see cref="Task"/>
         /// </returns>
         /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="SingletonCDPMessageBus"/> is used to send messages to notify listeners of updates to the Cache
+        /// The Cache is updated with the returned objects and the <see cref="ICDPMessageBus"/> is used to send messages to notify listeners of updates to the Cache
         /// </remarks>
         public async Task Read(ReferenceDataLibrary rdl)
         {
@@ -660,9 +664,9 @@ namespace CDP4Dal
 
             var sw = new Stopwatch();
             logger.Info($"Synchronization of DTOs for {caller} from/to server {0} started", this.DataSourceUri);
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
             await this.Assembler.Synchronize(things);
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
             logger.Info($"Synchronization of DTOs for {caller} from/to server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
         }
 
@@ -832,7 +836,7 @@ namespace CDP4Dal
             await this.Assembler.Clear();
 
             var sessionChange = new SessionEvent(this, SessionStatus.Closed);
-            this.messageBus.SendMessage(sessionChange);
+            this.MessageBus.SendMessage(sessionChange);
 
             logger.Info("Session {0} closed successfully", this.DataSourceUri);
             this.openReferenceDataLibraries.Clear();
@@ -878,16 +882,16 @@ namespace CDP4Dal
                 tasks.Add(this.Assembler.CloseRdl(siteReferenceDataLibrary));
             }
 
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
             await Task.WhenAll(tasks);
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
 
             foreach (var siteReferenceDataLibrary in orderedRdlsToClose)
             {
                 this.openReferenceDataLibraries.Remove(siteReferenceDataLibrary);
             }
 
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.RdlClosed));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.RdlClosed));
         }
 
         /// <summary>
@@ -946,11 +950,11 @@ namespace CDP4Dal
         /// </returns>
         public async Task CloseModelRdl(ModelReferenceDataLibrary modelRdl)
         {
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
             await this.Assembler.CloseRdl(modelRdl);
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
             this.openReferenceDataLibraries.Remove(modelRdl);
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.RdlClosed));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.RdlClosed));
         }
 
         /// <summary>
@@ -961,7 +965,7 @@ namespace CDP4Dal
         /// </param>
         public async Task CloseIterationSetup(IterationSetup iterationSetup)
         {
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
 
             await this.Assembler.CloseIterationSetup(iterationSetup);
 
@@ -972,7 +976,7 @@ namespace CDP4Dal
                 this.openIterations.Remove(iterationToRemove);
             }
 
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
         }
 
         /// <summary>
@@ -1054,7 +1058,7 @@ namespace CDP4Dal
             this.openReferenceDataLibraries.Add(rdl);
             this.openReferenceDataLibraries.AddRange(rdl.GetRequiredRdls().Except(this.openReferenceDataLibraries));
 
-            this.messageBus.SendMessage(new SessionEvent(this, SessionStatus.RdlOpened));
+            this.MessageBus.SendMessage(new SessionEvent(this, SessionStatus.RdlOpened));
         }
 
         /// <summary>

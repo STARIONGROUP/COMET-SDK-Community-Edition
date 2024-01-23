@@ -97,6 +97,11 @@ namespace CDP4Dal
         IPermissionService PermissionService { get; }
 
         /// <summary>
+        /// Gets the <see cref="ICDPMessageBus"/> that handles messaging for this session
+        /// </summary>
+        ICDPMessageBus MessageBus { get; }
+
+        /// <summary>
         /// Gets the uri of the connected data-source
         /// </summary>
         string DataSourceUri { get; }
@@ -192,12 +197,12 @@ namespace CDP4Dal
         /// </summary>
         /// <param name="iteration">The <see cref="Iteration"/> to read</param>
         /// <param name="domain">The active <see cref="DomainOfExpertise"/> for the <see cref="Iteration"/></param>
-        /// <param name="activeMessageBus">Specify if the <see cref="SingletonCDPMessageBus"/> is used or not to notify listeners</param>
+        /// <param name="activeMessageBus">Specify if the <see cref="ICDPMessageBus"/> is used or not to notify listeners</param>
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
         /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="SingletonCDPMessageBus"/>
+        /// The Cache is updated with the returned objects and the <see cref="ICDPMessageBus"/>
         /// is used to send messages to notify listeners of updates to the Cache
         /// </remarks>
         Task Read(Iteration iteration, DomainOfExpertise domain, bool activeMessageBus = true);
@@ -210,7 +215,7 @@ namespace CDP4Dal
         /// an await-able <see cref="Task"/>
         /// </returns>
         /// <remarks>
-        /// The Cache is updated with the returned objects and the <see cref="SingletonCDPMessageBus"/> is used to send messages to notify listeners of updates to the Cache
+        /// The Cache is updated with the returned objects and the <see cref="ICDPMessageBus"/> is used to send messages to notify listeners of updates to the Cache
         /// </remarks>
         Task Read(ReferenceDataLibrary rdl);
 

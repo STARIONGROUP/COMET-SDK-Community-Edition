@@ -74,7 +74,7 @@ namespace CDP4Dal.Tests.Permission
         [SetUp]
         public void Setup()
         {
-            this.assembler = new Assembler(this.uri, null);
+            this.assembler = new Assembler(this.uri, new CDPMessageBus());
             this.session = new Mock<ISession>();
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
             var dal = new Mock<IDal>();

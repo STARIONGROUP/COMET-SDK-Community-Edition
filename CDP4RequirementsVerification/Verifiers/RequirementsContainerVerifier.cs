@@ -55,7 +55,7 @@ namespace CDP4RequirementsVerification.Verifiers
         /// <remarks>
         /// Normally we don't put code in a property setter.
         /// In this exceptional case we do, because we might want a <see cref="RequirementStateOfComplianceChangedEvent"/>
-        /// to be called through the <see cref="SingletonCDPMessageBus"/>
+        /// to be called through the <see cref="ICDPMessageBus"/>
         /// </remarks>
         /// </summary>
         public RequirementStateOfCompliance RequirementStateOfCompliance

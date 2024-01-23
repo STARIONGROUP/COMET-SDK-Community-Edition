@@ -96,6 +96,8 @@ namespace CDP4Dal
         {
             Utils.AssertNotNull(uri, "The Uri may not be mull");
 
+            Utils.AssertNotNull(messageBus, "The MessageBus may not be mull");
+
             this.Cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
             this.unresolvedDtos = new List<Dto>();
             this.IDalUri = uri;
@@ -243,7 +245,7 @@ namespace CDP4Dal
                                 {
                                     if (this.Cache.TryGetValue(cacheId, out var cacheThing))
                                     {
-                                        // send event if revision number is lower. That means that the original cached item was changed (revision was added!)                                        SingletonCDPMessageBus.Current.SendObjectChangeEvent(cacheThing.Value, EventKind.Updated);
+                                        // send event if revision number is lower. That means that the original cached item was changed (revision was added!)                                        ICDPMessageBus.Current.SendObjectChangeEvent(cacheThing.Value, EventKind.Updated);
                                         this.messageBus.SendObjectChangeEvent(cacheThing.Value, EventKind.Updated);
                                         messageCounter++;
                                     }

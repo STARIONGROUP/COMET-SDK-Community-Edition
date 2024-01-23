@@ -71,7 +71,7 @@ namespace CDP4ServicesDal.Tests
         [Test]
         public async Task Verify_that_Thing_Revisions_is_populated_on_second_load()
         {
-            var assembler = new Assembler(this.uri, null);
+            var assembler = new Assembler(this.uri, new CDPMessageBus());
 
             var sw = Stopwatch.StartNew();
             await assembler.Synchronize(this.dtos);

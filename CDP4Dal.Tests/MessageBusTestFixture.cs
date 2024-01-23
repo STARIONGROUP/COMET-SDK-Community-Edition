@@ -153,7 +153,7 @@ namespace CDP4Dal.Tests
             dotMemory.Check(x =>
             {
                 result2 = x.SizeInBytes;
-                Assert.IsTrue(result2 - result1 < 253000000, "SingletonCDPMessageBus uses more memory that expected on creation of Observables and Subscriptions");
+                Assert.IsTrue(result2 - result1 < 253000000, "ICDPMessageBus uses more memory that expected on creation of Observables and Subscriptions");
             });
 
             TestContext.WriteLine($"Number of bytes: {result2}");
@@ -170,8 +170,8 @@ namespace CDP4Dal.Tests
             dotMemory.Check(x =>
             {
                 result3 = x.SizeInBytes;
-                Assert.IsTrue(result2 - result3 > 94000000, "SingletonCDPMessageBus frees up LESS memory than expected on disposing subscriptions");
-                Assert.IsTrue(result2 - result3 < 98000000, "SingletonCDPMessageBus frees up MORE memory than expected on disposing subscriptions");
+                Assert.IsTrue(result2 - result3 > 94000000, "ICDPMessageBus frees up LESS memory than expected on disposing subscriptions");
+                Assert.IsTrue(result2 - result3 < 98000000, "ICDPMessageBus frees up MORE memory than expected on disposing subscriptions");
             });
 
             TestContext.WriteLine($"Number of bytes: {result3}");
@@ -188,7 +188,7 @@ namespace CDP4Dal.Tests
             dotMemory.Check(x =>
             {
                 result4 = x.SizeInBytes;
-                Assert.IsTrue(result4 - result1 < 6000000, "SingletonCDPMessageBus seems to leak some memory.");
+                Assert.IsTrue(result4 - result1 < 6000000, "ICDPMessageBus seems to leak some memory.");
             });
 
             TestContext.WriteLine($"Number of bytes: {result4}");

@@ -31,6 +31,10 @@ namespace CDP4Dal
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
 
+#if NETFRAMEWORK
+    using System.ComponentModel.Composition;
+#endif
+
     using CDP4Common.CommonData;
     using CDP4Common.Helpers;
 
@@ -39,6 +43,15 @@ namespace CDP4Dal
     /// <summary>
     /// The CDP specific MessageBus implementation.
     /// </summary>
+    /// <remarks>
+    /// Be carefull with DI registration and its lifetime scope as the CDPMessageBus implements a publish/subscribe mechanism.
+    /// The <see cref="ISession"/> should have the same lifetime scope, otherwise publications and subscriptions might be made
+    /// to different instances of CDPMessageBus.
+    /// </remarks>
+#if NETFRAMEWORK
+    [Export(typeof(ICDPMessageBus))]
+    [PartCreationPolicy(CreationPolicy.Shared)]
+#endif
     public class CDPMessageBus : ICDPMessageBus, IDisposable
     {
         /// <summary>

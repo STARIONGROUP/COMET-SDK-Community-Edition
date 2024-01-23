@@ -129,7 +129,7 @@ namespace CDP4ServicesDal.Tests
             this.permissionService = new Mock<IPermissionService>();
             this.session.Setup(x => x.PermissionService).Returns(this.permissionService.Object);
 
-            this.assembler = new Assembler(this.uri, null);
+            this.assembler = new Assembler(this.uri, new CDPMessageBus());
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
 
             this.siteDir = new SiteDirectory(Guid.NewGuid(), this.assembler.Cache, this.uri);

@@ -61,7 +61,7 @@ namespace CDP4Dal.Tests.Helpers
             this.iteration.PossibleFiniteStateList.Add(this.statelist.Iid);
             this.statelist.PossibleState.Add(new OrderedItem { K = 1, V = this.state.Iid });
 
-            this.assembler = new Assembler(this.uri, null);
+            this.assembler = new Assembler(this.uri, new CDPMessageBus());
             this.session = new Mock<ISession>();
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
 
