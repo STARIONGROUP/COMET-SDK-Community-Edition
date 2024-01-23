@@ -21,6 +21,8 @@
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
       [REFACTOR] CDPMessageBus from static class to injectable interface implementation
+      [ADD] CDPMessageBus property to ISession
+      [FIX] ICDPMessageBus inherits IDisposable
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
