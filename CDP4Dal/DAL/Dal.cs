@@ -28,7 +28,6 @@ namespace CDP4Dal.DAL
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
@@ -52,9 +51,6 @@ namespace CDP4Dal.DAL
     /// </summary>
     public abstract class Dal : IDal
     {
-        //TODO: the EngineeringModelKinds property should be generated from the model, the risk by coding it here is that
-        // we forget to update this when we update the uml data-model. -> T1459
-
         /// <summary>
         /// The current logger
         /// </summary>
@@ -65,10 +61,6 @@ namespace CDP4Dal.DAL
         /// </summary>
         protected Dal()
         {
-            #if NET462
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
-            #endif
-
             this.MetaDataProvider = StaticMetadataProvider.GetMetaDataProvider;
             this.SetCdpVersion();
         }
@@ -164,6 +156,24 @@ namespace CDP4Dal.DAL
         /// </returns>
         public abstract Task<IEnumerable<Thing>> Read(Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null);
 
+        /// <summary>
+        /// Reads the <see cref="EngineeringModel"/> instances from the data-source
+        /// </summary>
+        /// <param name="engineeringModels">
+        /// The <see cref="EngineeringModel"/>s that needs to be read from the data-source, in case the list is empty
+        /// all the <see cref="EngineeringModel"/>s will be read
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="EngineeringModel"/>s
+        /// </returns>
+        /// <remarks>
+        /// Only those <see cref="EngineeringModel"/>s are retunred that the <see cref="Person"/> is a <see cref="Participant"/> in
+        /// </remarks>
+        public abstract Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken);
+        
         /// <summary>
         /// Reads a physical file from a DataStore
         /// </summary>

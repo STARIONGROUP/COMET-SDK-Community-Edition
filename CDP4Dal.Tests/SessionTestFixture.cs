@@ -888,6 +888,11 @@ namespace CDP4Dal.Tests
             throw new NotImplementedException();
         }
 
+        public Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<byte[]> ReadFile(Thing localFile, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();

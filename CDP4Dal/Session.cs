@@ -38,6 +38,7 @@ namespace CDP4Dal
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
+    using CDP4Common.Extensions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
@@ -482,6 +483,62 @@ namespace CDP4Dal
 
             await this.Read((Thing) rdl);
             this.AddRdlToOpenList(rdl);
+        }
+
+        /// <summary>
+        /// Reads the <see cref="EngineeringModel"/> instances from the data-source
+        /// </summary>
+        /// <param name="engineeringModels">
+        /// The unique identifiers of the <see cref="EngineeringModel"/>s that needs to be read from the data-source, in case the list is empty
+        /// all the <see cref="EngineeringModel"/>s will be read
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="EngineeringModel"/>s
+        /// </returns>
+        /// <remarks>
+        /// Only those <see cref="EngineeringModel"/>s are retunred that the <see cref="Person"/> is a <see cref="Participant"/> in
+        /// </remarks>
+        public async Task Read(IEnumerable<Guid> engineeringModels)
+        {
+            if (engineeringModels == null)
+            {
+                throw new ArgumentNullException(nameof(engineeringModels), $"The {nameof(engineeringModels)} may not be null");
+            }
+
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException($"The EngineeringModel cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
+            }
+
+            logger.Info("Session.Read {EngineeringModel} {0}", !engineeringModels.Any() ? "*" : $"EngineeringModel/{engineeringModels.ToShortGuidArray()}");
+            
+            // Create the token source
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+
+            IEnumerable<CDP4Common.DTO.Thing> dtoThings;
+
+            try
+            {
+                var dtos = engineeringModels.Select(iid => new CDP4Common.DTO.EngineeringModel { Iid = iid }).ToList();
+
+                dtoThings = await this.Dal.Read(dtos, cancellationTokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                logger.Info("Session.Read EngineeringModel {0} cancelled", !engineeringModels.Any() ? "*" : $"EngineeringModel/{engineeringModels.Select(x => x).ToList().ToShortGuidArray()}");
+                return;
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
+            }
+
+            // proceed if no problem
+            var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
+
+            await this.AfterReadOrWriteOrUpdate(enumerable);
         }
 
         /// <summary>

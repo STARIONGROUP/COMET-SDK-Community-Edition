@@ -423,6 +423,25 @@ namespace CDP4ServicesDal.Tests
 
         [Test]
         [Category("WebServicesDependent")]
+        public async Task Verify_that_EngineeringModels_only_can_be_read()
+        {
+            this.dal = new CdpServicesDal();
+
+            var creds = new Credentials("admin", "pass", new Uri("http://localhost:5000"));
+
+            var session = new Session(dal, credentials, this.messageBus);
+
+            var returned = await this.dal.Open(creds, this.cancelationTokenSource.Token);
+
+            var engineeringModels = new List<CDP4Common.DTO.EngineeringModel>();
+
+            var models = await this.dal.Read(engineeringModels, this.cancelationTokenSource.Token);
+
+            Assert.That(models, Is.Not.Empty);
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
         [Category("Performance")]
         public async Task AssemblerSynchronizePerformanceTest()
         {
@@ -604,10 +623,9 @@ namespace CDP4ServicesDal.Tests
         {
             var uri = new Uri("https://cdp4services-test.cdp4.org");
             var credentials = new Credentials("admin", "pass", uri);
-            var assembler = new Assembler(this.uri, this.messageBus);
-
+            
             var dal = new CdpServicesDal();
-            var session = new Session(dal, credentials, this.messageBus);
+            
 
             var result = await dal.Open(credentials, new CancellationToken());
 
@@ -624,7 +642,7 @@ namespace CDP4ServicesDal.Tests
 
             Assert.That(readresult, Is.Not.Empty);
         }
-        
+
         [Test]
         [Category("WebServicesDependent")]
         public async Task Verify_that_person_can_be_Posted()

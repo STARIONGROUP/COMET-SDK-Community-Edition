@@ -472,6 +472,51 @@ namespace CDP4Dal.NetCore.Tests
         }
 
         [Test]
+        public async Task Verify_that_EngineeringModel_returns_result()
+        {
+            var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
+            var mrdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var srdl = new SiteReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            var activeDomain = new DomainOfExpertise(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
+            mrdl.RequiredRdl = srdl;
+            modelSetup.RequiredRdl.Add(mrdl);
+            modelSetup.IterationSetup.Add(iterationSetup);
+            siteDir.Model.Add(modelSetup);
+            siteDir.SiteReferenceDataLibrary.Add(srdl);
+            siteDir.Domain.Add(activeDomain);
+            siteDir.Person.Add(JohnDoe);
+
+            var engineeringModel = new CDP4Common.DTO.EngineeringModel(Guid.NewGuid(), 1)
+            {
+                EngineeringModelSetup = modelSetup.Iid
+            };
+
+            modelSetup.EngineeringModelIid = engineeringModel.Iid;
+            var dalResult = new List<CDP4Common.DTO.EngineeringModel>() { engineeringModel };
+
+            this.mockedDal.Setup(x => x.Read(It.IsAny<IEnumerable<CDP4Common.DTO.EngineeringModel>>(), It.IsAny<CancellationToken>())).ReturnsAsync(dalResult);
+
+            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(JohnDoe.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => JohnDoe));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(modelSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => modelSetup));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(mrdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => mrdl));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(srdl.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => srdl));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
+            this.session.Assembler.Cache.TryAdd(new CacheKey(iterationSetup.Iid, null), new Lazy<CDP4Common.CommonData.Thing>(() => iterationSetup));
+
+            this.session.GetType().GetProperty("ActivePerson").SetValue(this.session, JohnDoe, null);
+
+            var iids = new List<Guid>();
+
+            await this.session.Read(iids);
+
+            Assert.That(this.session.Assembler.Cache.ContainsKey(new CacheKey(engineeringModel.Iid, null)), Is.True); 
+        }
+
+        [Test]
         public async Task VerifyThatReadIterationWorks()
         {
             var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
@@ -735,6 +780,27 @@ namespace CDP4Dal.NetCore.Tests
         /// All the <see cref="Thing"/>s that have been updated since the last read will be returned.
         /// </returns>
         public Task<IEnumerable<Thing>> Read(Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Reads the <see cref="EngineeringModel"/> instances from the data-source
+        /// </summary>
+        /// <param name="engineeringModels">
+        /// The <see cref="EngineeringModel"/>s that needs to be read from the data-source, in case the list is empty
+        /// all the <see cref="EngineeringModel"/>s will be read
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="EngineeringModel"/>s
+        /// </returns>
+        /// <remarks>
+        /// Only those <see cref="EngineeringModel"/>s are retunred that the <see cref="Person"/> is a <see cref="Participant"/> in
+        /// </remarks>
+        public Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

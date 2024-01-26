@@ -285,6 +285,27 @@ namespace CDP4WspDal
         }
 
         /// <summary>
+        /// Reads the <see cref="EngineeringModel"/> instances from the data-source
+        /// </summary>
+        /// <param name="engineeringModels">
+        /// The <see cref="EngineeringModel"/>s that needs to be read from the data-source, in case the list is empty
+        /// all the <see cref="EngineeringModel"/>s will be read
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="EngineeringModel"/>s
+        /// </returns>
+        /// <remarks>
+        /// Only those <see cref="EngineeringModel"/>s are retunred that the <see cref="Person"/> is a <see cref="Participant"/> in
+        /// </remarks>
+        public override Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("The Read EngineeringModel operation is not supported");
+        }
+
+        /// <summary>
         /// Reads a physical file from a DataStore
         /// </summary>
         /// <param name="thing">Download a localfile</param>

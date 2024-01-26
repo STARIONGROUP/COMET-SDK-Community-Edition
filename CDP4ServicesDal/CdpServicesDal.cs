@@ -60,6 +60,9 @@ namespace CDP4ServicesDal
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
     using Thing = CDP4Common.DTO.Thing;
     using UriExtensions = CDP4Dal.UriExtensions;
+    using System.Net.NetworkInformation;
+
+    using CDP4Common.Extensions;
 
     /// <summary>
     /// The purpose of the <see cref="CdpServicesDal"/> is to provide the Data Access Layer for CDP4 ECSS-E-TM-10-25
@@ -298,6 +301,93 @@ namespace CDP4ServicesDal
             var engineeringModelData = await this.Read((Thing)iteration, cancellationToken);
             result.AddRange(engineeringModelData);
             return result;
+        }
+
+        /// <summary>
+        /// Reads the <see cref="EngineeringModel"/> instances from the data-source
+        /// </summary>
+        /// <param name="engineeringModels">
+        /// The <see cref="EngineeringModel"/>s that needs to be read from the data-source, in case the list is empty
+        /// all the <see cref="EngineeringModel"/>s will be read
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="EngineeringModel"/>s
+        /// </returns>
+        /// <remarks>
+        /// Only those <see cref="EngineeringModel"/>s are retunred that the <see cref="Person"/> is a <see cref="Participant"/> in
+        /// </remarks>
+        public override async Task<IEnumerable<EngineeringModel>> Read(IEnumerable<CDP4Common.DTO.EngineeringModel> engineeringModels, CancellationToken cancellationToken)
+        {
+            if (this.Session == null)
+            {
+                throw new InvalidOperationException("The Session may not be null and must be set prior to reading the EngineeringModels");
+            }
+
+            if (this.Credentials == null || this.Credentials.Uri == null)
+            {
+                throw new InvalidOperationException("The CDP4-COMET DAL is not open.");
+            }
+
+            if (engineeringModels == null)
+            {
+                throw new ArgumentNullException(nameof(engineeringModels), $"The {nameof(engineeringModels)} may not be null");
+            }
+
+            var resourcePath = !engineeringModels.Any() ? "EngineeringModel/*" : $"EngineeringModel/{engineeringModels.Select(x => x.Iid).ToList().ToShortGuidArray()}";
+
+            var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
+            Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, readToken);
+
+            var requestsw = Stopwatch.StartNew();
+
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+            {
+                Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+                requestsw.Stop();
+
+                if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                {
+                    var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                    Logger.Error(msg);
+                    throw new DalReadException(msg);
+                }
+
+                this.ProcessHeaders(httpResponseMessage);
+
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
+                {
+                    var deserializationWatch = Stopwatch.StartNew();
+
+                    IEnumerable<Thing> returned = new List<Thing>();
+
+                    switch (this.QueryContentTypeKind(httpResponseMessage))
+                    {
+                        case ContentTypeKind.JSON:
+                            Logger.Info("Deserializing JSON response");
+                            returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
+                            Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
+                        case ContentTypeKind.MESSAGEPACK:
+                            Logger.Info("Deserializing MESSAGEPACK response");
+                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
+                            Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
+                    }
+
+                    deserializationWatch.Stop();
+
+                    return returned.OfType<EngineeringModel>() ;
+                }
+            }
         }
 
         /// <summary>

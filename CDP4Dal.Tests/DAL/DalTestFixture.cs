@@ -349,6 +349,11 @@ namespace CDP4Dal.Tests.DAL
             throw new System.NotImplementedException();
         }
 
+        public override Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -420,6 +425,11 @@ namespace CDP4Dal.Tests.DAL
         }
 
         public override Task<IEnumerable<Thing>> Read(Iteration iteration, CancellationToken cancellationToken, IQueryAttributes attributes = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
