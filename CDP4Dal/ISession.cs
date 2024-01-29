@@ -249,6 +249,21 @@ namespace CDP4Dal
         Task Read(IEnumerable<Thing> things, IQueryAttributes queryAttributes);
 
         /// <summary>
+        /// Reads the <see cref="EngineeringModel"/> instances from the data-source
+        /// </summary>
+        /// <param name="engineeringModels">
+        /// The unique identifiers of the <see cref="EngineeringModel"/>s that needs to be read from the data-source, in case the list is empty
+        /// all the <see cref="EngineeringModel"/>s will be read
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="EngineeringModel"/>s
+        /// </returns>
+        /// <remarks>
+        /// Only those <see cref="EngineeringModel"/>s are retunred that the <see cref="Person"/> is a <see cref="Participant"/> in
+        /// </remarks>
+        Task Read(IEnumerable<Guid> engineeringModels);
+
+        /// <summary>
         /// Reads a physical file from a DataStore
         /// </summary>
         /// <param name="localFile">Download a localfile</param>
