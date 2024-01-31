@@ -268,7 +268,7 @@ namespace CDP4JsonSerializer
         /// <returns>
         /// an instance of <see cref="JsonSerializer"/>
         /// </returns>
-        private JsonSerializer CreateJsonSerializer()
+        protected JsonSerializer CreateJsonSerializer()
         {
             Logger.Trace("initializing JsonSerializer");
             var serializer = new JsonSerializer
