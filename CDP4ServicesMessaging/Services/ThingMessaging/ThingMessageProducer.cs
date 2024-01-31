@@ -69,7 +69,6 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging
         /// <return>A <see cref="Task"/></return>
         public Task PushParallel(ThingsChangedMessage message, CancellationToken cancellationToken = default)
         {
-            this.InitializeSerializer(message.ModelVersion);
             return this.PushParallel(nameof(ThingsChangedMessage), message, ExchangeType.Fanout, cancellationToken);
         }
         
@@ -80,20 +79,7 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
         public async Task Push(ThingsChangedMessage message, CancellationToken cancellationToken = default)
         {
-            this.InitializeSerializer(message.ModelVersion);
             await this.Push(nameof(ThingsChangedMessage), message, ExchangeType.Fanout, cancellationToken);
-        }
-
-        /// <summary>
-        /// Initialize the serializer
-        /// </summary>
-        /// <param name="modelVersion">The supported <see cref="Version"/></param>
-        private void InitializeSerializer(Version modelVersion)
-        {
-            if (this.Serializer is ICdp4MessageSerializer serializer)
-            {
-                serializer.Initialize(this.metaDataProvider, modelVersion);
-            }
         }
     }
 }

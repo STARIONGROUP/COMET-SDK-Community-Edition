@@ -52,20 +52,18 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
             this.Model.Setup(x => x.QueueDeclare(
                 It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()))
                 .Returns(new QueueDeclareOk("", 1, 1));
-
-            var version = new Version(1, 0, 0);
-
+            
             var messageReceived = new List<ThingsChangedMessage>();
 
-            Assert.DoesNotThrowAsync(() => this.Service.AddListener(x => messageReceived.Add(x), version));
+            Assert.DoesNotThrowAsync(() => this.Service.AddListener(x => messageReceived.Add(x)));
 
             Assert.That(messageReceived, Is.Empty);
 
-            var disposable = await this.Service.AddListener(x => messageReceived.Add(x), version);
+            var disposable = await this.Service.AddListener(x => messageReceived.Add(x));
 
             Assert.That(disposable, Is.SameAs(this.Model.Object));
             this.Model.Setup(x => x.IsOpen).Returns(false);
-            Assert.ThrowsAsync<TimeoutException>(() => this.Service.AddListener(x => messageReceived.Add(x), version));
+            Assert.ThrowsAsync<TimeoutException>(() => this.Service.AddListener(x => messageReceived.Add(x)));
             this.Model.Verify(x => x.IsOpen, Times.Exactly(10));
             
             this.Model.Verify(x => x.QueueDeclare(
@@ -84,24 +82,21 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
             this.Model.Setup(x => x.QueueDeclare(
                     It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()))
                 .Returns(new QueueDeclareOk("", 1, 1));
-
-            var version = new Version(1, 0, 0);
-
+            
             var messageReceived = new List<ThingsChangedMessage>();
             
-            Assert.DoesNotThrowAsync(async () => (await this.Service.Listen(version))
+            Assert.DoesNotThrowAsync(async () => (await this.Service.Listen())
                 .Subscribe(x => messageReceived.Add(x), x => throw x));
             
             Assert.That(messageReceived, Is.Empty);
 
-            using var observable = (await this.Service.Listen(version))
+            using var observable = (await this.Service.Listen())
                 .Subscribe(x => messageReceived.Add(x), x => throw x);
 
             this.Model.Setup(x => x.IsOpen).Returns(false);
 
-            Assert.ThrowsAsync<TimeoutException>(async () => (await this.Service.Listen(version))
-                .Subscribe(x => messageReceived.Add(x), x => 
-                    throw x));
+            Assert.ThrowsAsync<TimeoutException>(async () => (await this.Service.Listen())
+                .Subscribe(x => messageReceived.Add(x), x => throw x));
 
             this.Model.Verify(x => x.IsOpen, Times.AtLeast(10));
 

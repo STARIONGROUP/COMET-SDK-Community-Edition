@@ -60,8 +60,7 @@ namespace CDP4ServicesMessaging.Serializers.Json
         /// Initializes a new <see cref="Cdp4JsonSerializer"/>
         /// </summary>
         /// <param name="metaInfoProvider">The <see cref="IMetaDataProvider"/></param>
-        /// <param name="supportedVersion">The supported <see cref="Version"/></param>
-        public Cdp4MessageSerializer(IMetaDataProvider metaInfoProvider, Version supportedVersion) : base(metaInfoProvider, supportedVersion)
+        public Cdp4MessageSerializer(IMetaDataProvider metaInfoProvider) : base(metaInfoProvider, metaInfoProvider.GetMaxSupportedModelVersion())
         {    
         }
 
@@ -103,7 +102,6 @@ namespace CDP4ServicesMessaging.Serializers.Json
         /// <returns>The deserialized message of type <typeparamref name="T"/>.</returns>
         public T Deserialize<T>(ReadOnlyMemory<byte> message)
         {
-            this.Initialize(new MetaDataProvider(), new Version(1, 0, 0));
             using var stream = new MemoryStream(message.ToArray());
             return this.Deserialize<T>(stream);
         }

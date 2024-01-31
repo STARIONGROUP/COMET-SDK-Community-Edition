@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="BackgroundMessagePublisher.cs" company="RHEA System S.A.">
+// <copyright file="BackgroundThingsMessageProducer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Antoine Théate, Nathanael Smiechowski
@@ -37,7 +37,7 @@ namespace CDP4ServicesMessaging.Services.BackgroundMessageProducers
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Background service for BackgroundThingsMessageProducer messages from a message queue.
+    /// The <see cref="BackgroundThingsMessageProducer"/> wraps the <see cref="IThingMessageProducer"/> as a <see cref="BackgroundService"/>
     /// </summary>
     public class BackgroundThingsMessageProducer : BackgroundService, IBackgroundThingsMessageProducer
     {

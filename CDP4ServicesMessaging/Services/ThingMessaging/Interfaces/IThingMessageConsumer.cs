@@ -38,18 +38,16 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging.Interfaces
         /// <summary>
         /// Listens and emmits <see cref="ThingsChangedMessage"/> message
         /// </summary>
-        /// <param name="modelVersion">The supported model <see cref="Version"/></param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
         /// <returns>An awaitable of <see cref="IObservable{T}"/> of <see cref="ThingsChangedMessage"/></returns>
-        Task<IObservable<ThingsChangedMessage>> Listen(Version modelVersion, CancellationToken cancellationToken = default);
+        Task<IObservable<ThingsChangedMessage>> Listen(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds a listener to the specified queue
         /// </summary>
         /// <param name="onReceive">An <see cref="Action"/> that takes the received <see cref="ThingsChangedMessage"/></param>
-        /// <param name="modelVersion">The supported model <see cref="Version"/></param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
         /// <return>A <see cref="Task"/> of <see cref="IDisposable"/></return>
-        Task<IDisposable> AddListener(Action<ThingsChangedMessage> onReceive, Version modelVersion, CancellationToken cancellationToken = default);
+        Task<IDisposable> AddListener(Action<ThingsChangedMessage> onReceive, CancellationToken cancellationToken = default);
     }
 }

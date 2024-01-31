@@ -64,12 +64,10 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging
         /// <summary>
         /// Listens and emmits <see cref="ThingsChangedMessage"/> message
         /// </summary>
-        /// <param name="modelVersion">The supported model <see cref="Version"/></param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
         /// <returns>An awaitable of <see cref="IObservable{T}"/> of <see cref="ThingsChangedMessage"/></returns>
-        public async Task<IObservable<ThingsChangedMessage>> Listen(Version modelVersion, CancellationToken cancellationToken = default)
+        public async Task<IObservable<ThingsChangedMessage>> Listen(CancellationToken cancellationToken = default)
         {
-            this.InitializeSerializer(modelVersion);
             return await this.Listen<ThingsChangedMessage>(nameof(ThingsChangedMessage), ExchangeType.Fanout, cancellationToken);
         }
 
@@ -77,30 +75,15 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging
         /// Adds a listener to the specified queue
         /// </summary>
         /// <param name="onReceive">An <see cref="Action"/> that takes the received <see cref="ThingsChangedMessage"/></param>
-        /// <param name="modelVersion">The supported model <see cref="Version"/></param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
         /// <return>A <see cref="Task"/> of <see cref="IDisposable"/></return>
-        public async Task<IDisposable> AddListener(Action<ThingsChangedMessage> onReceive, Version modelVersion, CancellationToken cancellationToken = default)
+        public async Task<IDisposable> AddListener(Action<ThingsChangedMessage> onReceive, CancellationToken cancellationToken = default)
         {
-            this.InitializeSerializer(modelVersion);
-
             return await this.AddListener(nameof(ThingsChangedMessage), (_, m) =>
             {
                 var thingsChangedMessage = this.Serializer.Deserialize<ThingsChangedMessage>(m.Body);
                 onReceive(thingsChangedMessage);
             }, ExchangeType.Fanout, cancellationToken);
-        }
-        
-        /// <summary>
-        /// Initialize the serializer
-        /// </summary>
-        /// <param name="modelVersion">The supported <see cref="Version"/></param>
-        private void InitializeSerializer(Version modelVersion)
-        {
-            if (this.Serializer is ICdp4MessageSerializer serializer)
-            {
-                serializer.Initialize(this.metaDataProvider, modelVersion);
-            }
         }
     }
 }

@@ -58,10 +58,5 @@ namespace CDP4ServicesMessaging.Messages
         /// Gets or sets the actor Id the unique identifier of the person who posted the things
         /// </summary>
         public Guid ActorId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the model version
-        /// </summary>
-        public Version ModelVersion { get; set; }
     }
 }
