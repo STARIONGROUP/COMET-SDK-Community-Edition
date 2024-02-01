@@ -37,10 +37,8 @@ namespace CDP4ServicesMessaging.Services.Messaging
     using CDP4ServicesMessaging.Services.Messaging.Interfaces;
 
     using Polly;
-    using System.Net.Http;
-    using System.Runtime.CompilerServices;
+
     using System.Threading.Tasks;
-    using System.Threading.Channels;
 
     /// <summary>
     /// The <see cref="MessageClientBaseService"/> is the base RabbitMQ client
@@ -71,6 +69,16 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// The <see cref="IConfiguration"/>
         /// </summary>
         private readonly IConfiguration configuration;
+
+        /// <summary>
+        /// The <see cref="IConnection"/>
+        /// </summary>
+        private IConnection connection;
+
+        /// <summary>
+        /// The per thread <see cref="IModel"/>
+        /// </summary>
+        private readonly ThreadLocal<IModel> threadLocalChannel = new ();
 
         /// <summary>
         /// Initializes a new <see cref="MessageClientBaseService"/>
@@ -122,25 +130,27 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// <returns>An asynchronous task returning a <see cref="IModel"/> Channel.</returns>
         protected async Task<IModel> GetChannelAsync(CancellationToken cancellationToken = default)
         {
+            var currentThreadChannel = this.threadLocalChannel.Value;
+
+            if (currentThreadChannel is { IsOpen: true })
+            {
+                return currentThreadChannel;
+            }
+
             var attemptNumber = 0;
-            IConnection connection = default;
-            IModel channel = default;
 
-            var policy = Policy.HandleResult<(IConnection connection, IModel channel)>(result =>
+            var policy = Policy.HandleResult<bool>(result =>
                 {
-                    (connection, channel) = result;
-                    var isClosed = channel is not { IsOpen: true };
-
-                    if (!isClosed)
+                    if (result)
                     {
                         this.Logger.LogInformation("Established connection to the message broker.");
                         return false;
                     }
 
-                    this.HandleConnectionFailed(connection, channel, ref attemptNumber);
+                    this.HandleConnectionFailed(ref attemptNumber);
                     return true;
                 })
-                .Or<Exception>(x => this.HandleConnectionFailed(connection, channel, ref attemptNumber, x))
+                .Or<Exception>(x => this.HandleConnectionFailed(ref attemptNumber, x))
                 .WaitAndRetryAsync(this.maxConnectionRetryAttempts, _ => TimeSpan.FromSeconds(this.timeSpanBetweenAttempts));
             
             var result = await policy.ExecuteAndCaptureAsync(x => this.GetChannel(), cancellationToken);
@@ -151,49 +161,49 @@ namespace CDP4ServicesMessaging.Services.Messaging
                     $"Unable to connect to {(this.ConnectionFactory is ConnectionFactory connectionFactory ? connectionFactory.Endpoint : "Unknown")} after {attemptNumber} attempts");
             }
 
-            return channel;
+            return this.threadLocalChannel.Value;
         }
         
         /// <summary>
         /// Creates a RabbitMQ connection and a channel, establishing a connection to the server.
         /// </summary>
-        /// <returns>An asynchronous task returning the created <see cref="IModel"/> Channel.</returns>
-        private Task<(IConnection, IModel)> GetChannel()
+        /// <returns>An asynchronous task returning a value indicating whether the channel is open.</returns>
+        private Task<bool> GetChannel()
         {
-            var connection = this.ConnectionFactory.CreateConnection();
+            this.connection = this.ConnectionFactory.CreateConnection();
 
-            connection.ConnectionBlocked += this.OnConnectionBlocked;
-            connection.ConnectionShutdown += this.OnConnectionShutdown;
-            connection.ConnectionUnblocked += this.OnConnectionUnblocked;
+            this.connection.ConnectionBlocked += this.OnConnectionBlocked;
+            this.connection.ConnectionShutdown += this.OnConnectionShutdown;
+            this.connection.ConnectionUnblocked += this.OnConnectionUnblocked;
 
-            var channel = connection.CreateModel();
+            var newChannel = this.connection.CreateModel();
 
-            channel.ModelShutdown += this.OnChannelModelShutdown;
+            newChannel.ModelShutdown += this.OnChannelModelShutdown;
+
+            this.threadLocalChannel.Value = newChannel;
 
             this.AfterChannelCreation();
 
-            return Task.FromResult((connection, channel));
+            return Task.FromResult(newChannel is { IsOpen: true });
         }
 
         /// <summary>
         /// Handles connection to the RabbitMQ server failures
         /// </summary>
-        /// <param name="connection">The <see cref="IConnection"/></param>
-        /// <param name="channel">The <see cref="IModel"/></param>
         /// <param name="attemptNumber">The current attempt number</param>
         /// <param name="exception">The exception which occured</param>
-        private bool HandleConnectionFailed(IConnection connection, IModel channel, ref int attemptNumber, Exception exception = null)
+        private bool HandleConnectionFailed(ref int attemptNumber, Exception exception = null)
         {
-            if (connection != null)
+            if (this.connection != null)
             {
-                connection.ConnectionBlocked -= this.OnConnectionBlocked;
-                connection.ConnectionShutdown -= this.OnConnectionShutdown;
-                connection.ConnectionUnblocked -= this.OnConnectionUnblocked;
+                this.connection.ConnectionBlocked -= this.OnConnectionBlocked;
+                this.connection.ConnectionShutdown -= this.OnConnectionShutdown;
+                this.connection.ConnectionUnblocked -= this.OnConnectionUnblocked;
             }
 
-            if (channel != null)
+            if (this.threadLocalChannel.Value != null)
             {
-                channel.ModelShutdown -= this.OnChannelModelShutdown;
+                this.threadLocalChannel.Value.ModelShutdown -= this.OnChannelModelShutdown;
             }
 
             var message = $"The message client failed to connect to {(this.ConnectionFactory is ConnectionFactory connectionFactory ? connectionFactory.Endpoint : "Unknown")}. {(exception?.Message ?? "")}";
@@ -254,6 +264,41 @@ namespace CDP4ServicesMessaging.Services.Messaging
         protected virtual void OnConnectionBlocked(object sender, RabbitMQ.Client.Events.ConnectionBlockedEventArgs e)
         {
             this.Logger.LogWarning("Message broker connection blocked. {Reason}", e.Reason);
+        }
+
+        /// <summary>
+        /// Disposes of the even handlers
+        /// </summary>
+        /// <param name="disposing">A value indicating whether this client is disposing</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing)
+            {
+                return;
+            }
+
+            if (this.connection != null)
+            {
+                this.connection.ConnectionBlocked -= this.OnConnectionBlocked;
+                this.connection.ConnectionShutdown -= this.OnConnectionShutdown;
+                this.connection.ConnectionUnblocked -= this.OnConnectionUnblocked;
+                this.connection.Dispose();
+            }
+
+            if (this.threadLocalChannel.IsValueCreated)
+            {
+                this.threadLocalChannel.Value.ModelShutdown -= this.OnChannelModelShutdown;
+                this.threadLocalChannel.Value.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

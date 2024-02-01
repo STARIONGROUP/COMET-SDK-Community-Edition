@@ -45,20 +45,13 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging
     public class ThingMessageConsumer : MessageClientService, IThingMessageConsumer
     {
         /// <summary>
-        /// The <see cref="IMetaDataProvider"/>
-        /// </summary>
-        private readonly IMetaDataProvider metaDataProvider;
-
-        /// <summary>
         /// Initializes a new <see cref="MessageClientBaseService"/>
         /// </summary>
         /// <param name="configuration">The <see cref="IConfiguration"/></param>
         /// <param name="logger">The <see cref="ILogger"/></param>
         /// <param name="serializer">The <see cref="IMessageSerializer"/></param>
-        /// <param name="metaDataProvider">The <see cref="IMetaDataProvider"/></param>
-        public ThingMessageConsumer(IConfiguration configuration, ILogger<MessageClientService> logger, ICdp4MessageSerializer serializer, IMetaDataProvider metaDataProvider) : base(configuration, logger, serializer)
+        public ThingMessageConsumer(IConfiguration configuration, ILogger<MessageClientService> logger, ICdp4MessageSerializer serializer) : base(configuration, logger, serializer)
         {
-            this.metaDataProvider = metaDataProvider;
         }
 
         /// <summary>

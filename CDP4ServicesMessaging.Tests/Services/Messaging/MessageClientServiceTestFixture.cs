@@ -73,7 +73,7 @@ namespace CDP4ServicesMessaging.Tests.Services.Messaging
                 this.Connection.VerifyAdd(m => m.ConnectionUnblocked += It.IsAny<EventHandler<EventArgs>>(), Times.Exactly(5));
                 this.Connection.VerifyAdd(m => m.ConnectionShutdown += It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
             
-                this.Model.Verify(x => x.IsOpen, Times.Exactly(5));
+                this.Model.Verify(x => x.IsOpen, Times.Exactly(4));
 
                 this.ConnectionFactory
                     .Verify(x => x.CreateConnection(), Times.Exactly(5));
@@ -81,10 +81,10 @@ namespace CDP4ServicesMessaging.Tests.Services.Messaging
                 this.Connection
                     .Verify(x => x.CreateModel(), Times.Exactly(5));
 
-                this.Model.VerifyRemove(m => m.ModelShutdown -= It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
-                this.Connection.VerifyRemove(m => m.ConnectionBlocked -= It.IsAny<EventHandler<ConnectionBlockedEventArgs>>(), Times.Exactly(5));
-                this.Connection.VerifyRemove(m => m.ConnectionUnblocked -= It.IsAny<EventHandler<EventArgs>>(), Times.Exactly(5));
-                this.Connection.VerifyRemove(m => m.ConnectionShutdown -= It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
+                this.Model.VerifyRemove(m => m.ModelShutdown -= It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(6));
+                this.Connection.VerifyRemove(m => m.ConnectionBlocked -= It.IsAny<EventHandler<ConnectionBlockedEventArgs>>(), Times.Exactly(6));
+                this.Connection.VerifyRemove(m => m.ConnectionUnblocked -= It.IsAny<EventHandler<EventArgs>>(), Times.Exactly(6));
+                this.Connection.VerifyRemove(m => m.ConnectionShutdown -= It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(6));
             });
         }
     }

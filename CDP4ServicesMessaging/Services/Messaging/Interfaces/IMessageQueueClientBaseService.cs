@@ -24,10 +24,12 @@
 
 namespace CDP4ServicesMessaging.Services.Messaging.Interfaces
 {
+    using System;
+
     /// <summary>
     /// The <see cref="IMessageQueueClientBaseService"/> is the interface definition for the <see cref="MessageClientBaseService"/>
     /// </summary>
-    public interface IMessageQueueClientBaseService
+    public interface IMessageQueueClientBaseService : IDisposable
     {
         /// <summary>
         /// Initializes the <see cref="MessageClientBaseService.ConnectionFactory"/> based on the specified <paramref name="configurationSectionName"></paramref>

@@ -47,12 +47,10 @@ namespace CDP4ServicesMessaging.Tests.Services.Messaging
         protected Mock<IConfigurationSection> MessageBrokerSettings;
         protected T Service;
         protected Mock<ICdp4MessageSerializer> Serializer;
-        protected Mock<IMetaDataProvider> MetaDataProvider;
 
         public BaseClientTestFixture()
         {
             this.Configuration = new Mock<IConfiguration>();
-            this.MetaDataProvider = new Mock<IMetaDataProvider>();
 
             this.Logger = new Mock<ILogger<T>>();
 

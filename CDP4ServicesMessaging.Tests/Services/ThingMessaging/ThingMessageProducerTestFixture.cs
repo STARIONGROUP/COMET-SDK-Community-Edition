@@ -40,7 +40,7 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
         [SetUp]
         public void Setup()
         {
-            this.Service = new ThingMessageProducer(this.Configuration.Object, this.Logger.Object, this.Serializer.Object, this.MetaDataProvider.Object)
+            this.Service = new ThingMessageProducer(this.Configuration.Object, this.Logger.Object, this.Serializer.Object)
             {
                 ConnectionFactory = this.ConnectionFactory.Object
             };

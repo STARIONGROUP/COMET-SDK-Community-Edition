@@ -38,7 +38,7 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
         [SetUp]
         public void Setup()
         {
-            this.Service = new ThingMessageConsumer(this.Configuration.Object, this.Logger.Object, this.Serializer.Object, this.MetaDataProvider.Object)
+            this.Service = new ThingMessageConsumer(this.Configuration.Object, this.Logger.Object, this.Serializer.Object)
             {
                 ConnectionFactory = this.ConnectionFactory.Object
             };
@@ -69,7 +69,7 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
             Assert.Multiple(() =>
             {
                 Assert.That(() => this.Service.AddListener(x => messageReceived.Add(x)), Throws.Exception.TypeOf<TimeoutException>());
-                this.Model.Verify(x => x.IsOpen, Times.Exactly(10));
+                this.Model.Verify(x => x.IsOpen, Times.Exactly(8));
             
                 this.Model.Verify(x => x.QueueDeclare(
                         It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()), 
