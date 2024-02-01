@@ -36,8 +36,7 @@ namespace CDP4ServicesMessaging.Tests.Services.Messaging
     using Moq;
 
     using RabbitMQ.Client;
-
-    [TestFixture]
+    
     public class BaseClientTestFixture<T> where T : MessageClientService
     {
         protected Mock<ILogger<T>> Logger;

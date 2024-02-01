@@ -45,10 +45,13 @@ namespace CDP4ServicesMessaging.Tests.Services.Messaging
         public void Verify_that_Start_Works()
         {
             this.Service.ThrowErrorOnRegisterListenersAndDeclareQueues = true;
-            Assert.ThrowsAsync<TimeoutException>(() => this.Service.Connect());
 
-            this.ConnectionFactory.Verify(x => x.CreateConnection(), Times.Exactly(10));
-            this.Connection.Verify(x => x.CreateModel(), Times.Exactly(10));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => this.Service.Connect(), Throws.Exception.TypeOf<TimeoutException>());
+                this.ConnectionFactory.Verify(x => x.CreateConnection(), Times.Exactly(10));
+                this.Connection.Verify(x => x.CreateModel(), Times.Exactly(10));
+            });
         }
         
         [Test]
@@ -60,25 +63,29 @@ namespace CDP4ServicesMessaging.Tests.Services.Messaging
             this.Connection.SetupAdd(m => m.ConnectionShutdown += (sender, args) => { });
             
             this.Service.ThrowErrorOnRegisterListenersAndDeclareQueues = true;
-            Assert.ThrowsAsync<TimeoutException>(() => this.Service.Connect());
 
-            this.Model.VerifyAdd(m => m.ModelShutdown += It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
-            this.Connection.VerifyAdd(m => m.ConnectionBlocked += It.IsAny<EventHandler<ConnectionBlockedEventArgs>>(), Times.Exactly(5));
-            this.Connection.VerifyAdd(m => m.ConnectionUnblocked += It.IsAny<EventHandler<EventArgs>>(), Times.Exactly(5));
-            this.Connection.VerifyAdd(m => m.ConnectionShutdown += It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => this.Service.Connect(), Throws.Exception.TypeOf<TimeoutException>());
+
+                this.Model.VerifyAdd(m => m.ModelShutdown += It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
+                this.Connection.VerifyAdd(m => m.ConnectionBlocked += It.IsAny<EventHandler<ConnectionBlockedEventArgs>>(), Times.Exactly(5));
+                this.Connection.VerifyAdd(m => m.ConnectionUnblocked += It.IsAny<EventHandler<EventArgs>>(), Times.Exactly(5));
+                this.Connection.VerifyAdd(m => m.ConnectionShutdown += It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
             
-            this.Model.Verify(x => x.IsOpen, Times.Exactly(5));
+                this.Model.Verify(x => x.IsOpen, Times.Exactly(5));
 
-            this.ConnectionFactory
-                .Verify(x => x.CreateConnection(), Times.Exactly(5));
+                this.ConnectionFactory
+                    .Verify(x => x.CreateConnection(), Times.Exactly(5));
 
-            this.Connection
-                .Verify(x => x.CreateModel(), Times.Exactly(5));
+                this.Connection
+                    .Verify(x => x.CreateModel(), Times.Exactly(5));
 
-            this.Model.VerifyRemove(m => m.ModelShutdown -= It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
-            this.Connection.VerifyRemove(m => m.ConnectionBlocked -= It.IsAny<EventHandler<ConnectionBlockedEventArgs>>(), Times.Exactly(5));
-            this.Connection.VerifyRemove(m => m.ConnectionUnblocked -= It.IsAny<EventHandler<EventArgs>>(), Times.Exactly(5));
-            this.Connection.VerifyRemove(m => m.ConnectionShutdown -= It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
+                this.Model.VerifyRemove(m => m.ModelShutdown -= It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
+                this.Connection.VerifyRemove(m => m.ConnectionBlocked -= It.IsAny<EventHandler<ConnectionBlockedEventArgs>>(), Times.Exactly(5));
+                this.Connection.VerifyRemove(m => m.ConnectionUnblocked -= It.IsAny<EventHandler<EventArgs>>(), Times.Exactly(5));
+                this.Connection.VerifyRemove(m => m.ConnectionShutdown -= It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
+            });
         }
     }
 }

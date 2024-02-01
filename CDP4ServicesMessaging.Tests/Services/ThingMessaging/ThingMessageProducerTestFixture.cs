@@ -66,12 +66,15 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
             
             await this.Service.Push(message);
             await this.Service.PushParallel(message);
-            
-            this.Model.Verify(x => x.BasicPublish(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(),It.IsAny<IBasicProperties>(), It.IsAny<ReadOnlyMemory<byte>>()),
-                Times.Exactly(2));
 
-            this.Serializer.Verify(x => x.Serialize(message), Times.Exactly(2));
-            this.Model.Verify(x => x.ExchangeDeclare("ThingsChangedMessage", "fanout", true, false, null), Times.Exactly(2));
+            Assert.Multiple(() =>
+            {
+                this.Model.Verify(x => x.BasicPublish(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(),It.IsAny<IBasicProperties>(), It.IsAny<ReadOnlyMemory<byte>>()),
+                    Times.Exactly(2));
+
+                this.Serializer.Verify(x => x.Serialize(message), Times.Exactly(2));
+                this.Model.Verify(x => x.ExchangeDeclare("ThingsChangedMessage", "fanout", true, false, null), Times.Exactly(2));
+            });
         }
     }
 }

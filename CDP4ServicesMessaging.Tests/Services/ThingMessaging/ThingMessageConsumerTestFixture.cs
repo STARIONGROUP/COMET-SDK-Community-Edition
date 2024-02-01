@@ -55,23 +55,29 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
             
             var messageReceived = new List<ThingsChangedMessage>();
 
-            Assert.DoesNotThrowAsync(() => this.Service.AddListener(x => messageReceived.Add(x)));
-
-            Assert.That(messageReceived, Is.Empty);
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => this.Service.AddListener(x => messageReceived.Add(x)), Throws.Exception.TypeOf<TimeoutException>());
+                Assert.That(messageReceived, Is.Empty);
+            });
 
             var disposable = await this.Service.AddListener(x => messageReceived.Add(x));
 
             Assert.That(disposable, Is.SameAs(this.Model.Object));
             this.Model.Setup(x => x.IsOpen).Returns(false);
-            Assert.ThrowsAsync<TimeoutException>(() => this.Service.AddListener(x => messageReceived.Add(x)));
-            this.Model.Verify(x => x.IsOpen, Times.Exactly(10));
-            
-            this.Model.Verify(x => x.QueueDeclare(
-                It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()), 
-                Times.Exactly(2));
 
-            this.Model.Verify(x => x.ExchangeDeclare("ThingsChangedMessage", "fanout", true, false, null),
-                Times.Exactly(2));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => this.Service.AddListener(x => messageReceived.Add(x)), Throws.Exception.TypeOf<TimeoutException>());
+                this.Model.Verify(x => x.IsOpen, Times.Exactly(10));
+            
+                this.Model.Verify(x => x.QueueDeclare(
+                        It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()), 
+                    Times.Exactly(2));
+
+                this.Model.Verify(x => x.ExchangeDeclare("ThingsChangedMessage", "fanout", true, false, null),
+                    Times.Exactly(2));
+            });
         }
 
         [Test]
@@ -84,24 +90,30 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
                 .Returns(new QueueDeclareOk("", 1, 1));
             
             var messageReceived = new List<ThingsChangedMessage>();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(async () => (await this.Service.Listen())
+                    .Subscribe(x => messageReceived.Add(x), x => throw x), Throws.Nothing);
             
-            Assert.DoesNotThrowAsync(async () => (await this.Service.Listen())
-                .Subscribe(x => messageReceived.Add(x), x => throw x));
-            
-            Assert.That(messageReceived, Is.Empty);
+                Assert.That(messageReceived, Is.Empty);
+            });
 
             using var observable = (await this.Service.Listen())
                 .Subscribe(x => messageReceived.Add(x), x => throw x);
 
             this.Model.Setup(x => x.IsOpen).Returns(false);
 
-            Assert.ThrowsAsync<TimeoutException>(async () => (await this.Service.Listen())
-                .Subscribe(x => messageReceived.Add(x), x => throw x));
+            Assert.Multiple(() =>
+            {
+                Assert.That(async () => (await this.Service.Listen())
+                    .Subscribe(x => messageReceived.Add(x), x => throw x), Throws.Exception.TypeOf<TimeoutException>());
 
-            this.Model.Verify(x => x.IsOpen, Times.AtLeast(10));
+                this.Model.Verify(x => x.IsOpen, Times.AtLeast(10));
 
-            this.Model.Verify(x => x.ExchangeDeclare("ThingsChangedMessage", "fanout", true, false, null),
-                Times.AtLeast(2));
+                this.Model.Verify(x => x.ExchangeDeclare("ThingsChangedMessage", "fanout", true, false, null),
+                    Times.AtLeast(2));
+            });
         }
     }
 }

@@ -45,7 +45,7 @@ namespace CDP4ServicesMessaging.Tests.Serializers.Json
         {
             var metadataInfoProvider = new MetaDataProvider();
 
-            this.cdp4JsonSerializer = new Cdp4MessageSerializer(metadataInfoProvider, new Version(1, 0, 0));
+            this.cdp4JsonSerializer = new Cdp4MessageSerializer(metadataInfoProvider);
         }
 
         [Test]
@@ -63,8 +63,11 @@ namespace CDP4ServicesMessaging.Tests.Serializers.Json
 
             var newMessage = this.cdp4JsonSerializer.Deserialize<ThingsChangedMessage>(new ReadOnlyMemory<byte>(Encoding.UTF8.GetBytes(json)));
 
-            Assert.That(newMessage.ChangedThings.Count(), Is.EqualTo(3));
-            Assert.That(newMessage.ActorId, Is.EqualTo(message.ActorId));
+            Assert.Multiple(() =>
+            {
+                Assert.That(newMessage.ChangedThings.Count, Is.EqualTo(3));
+                Assert.That(newMessage.ActorId, Is.EqualTo(message.ActorId));
+            });
         }
     }
 }

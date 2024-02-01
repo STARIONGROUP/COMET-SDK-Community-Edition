@@ -22,8 +22,4 @@
     <ProjectReference Include="..\CDP4ServicesMessaging\CDP4ServicesMessaging.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Messaging\" />
-  </ItemGroup>
-
 </Project>

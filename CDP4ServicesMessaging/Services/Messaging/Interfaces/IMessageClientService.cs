@@ -86,6 +86,7 @@ namespace CDP4ServicesMessaging.Services.Messaging.Interfaces
         /// <param name="messageQueue">The <see cref="string"/> queue name on which to send to the <paramref name="messages"/></param>
         /// <param name="messages">The collection of <typeparamref name="TMessage"/> to push</param>
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
+        /// <param name="cancellationToken">A possible <see cref="CancellationToken"/></param>
         /// <returns>A <see cref="Task"/></returns>
         Task Push<TMessage>(string messageQueue, IEnumerable<TMessage> messages, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default);
 
