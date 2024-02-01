@@ -57,7 +57,7 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
 
             Assert.Multiple(() =>
             {
-                Assert.That(() => this.Service.AddListener(x => messageReceived.Add(x)), Throws.Exception.TypeOf<TimeoutException>());
+                Assert.That(() => this.Service.AddListener(x => messageReceived.Add(x)), Throws.Nothing);
                 Assert.That(messageReceived, Is.Empty);
             });
 
