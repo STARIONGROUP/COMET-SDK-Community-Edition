@@ -27,13 +27,10 @@ namespace CDP4ServicesMessaging.Serializers.Json
     using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Text;
-
+    
     using CDP4Common.MetaInfo;
 
     using CDP4JsonSerializer;
-
-    using CDP4ServicesMessaging.Messages;
 
     using Newtonsoft.Json;
 

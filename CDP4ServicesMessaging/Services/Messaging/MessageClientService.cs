@@ -29,19 +29,14 @@ namespace CDP4ServicesMessaging.Services.Messaging
     using System.Linq;
     using System.Reactive.Disposables;
     using System.Reactive.Linq;
-    using System.Text;
     using System.Threading;
-    using System.Threading.Channels;
     using System.Threading.Tasks;
-
-    using CDP4JsonSerializer;
 
     using CDP4ServicesMessaging.Serializers;
     using CDP4ServicesMessaging.Services.Messaging.Interfaces;
+
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
-
-    using Newtonsoft.Json;
 
     using RabbitMQ.Client;
     using RabbitMQ.Client.Events;

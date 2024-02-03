@@ -29,7 +29,6 @@ namespace CDP4ServicesMessaging.Messages
     using System.Collections.Generic;
     using System.IO;
 
-    using CDP4Common;
     using CDP4Common.DTO;
 
     /// <summary>

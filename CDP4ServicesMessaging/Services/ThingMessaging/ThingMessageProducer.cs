@@ -24,11 +24,8 @@
 
 namespace CDP4ServicesMessaging.Services.ThingMessaging
 {
-    using System;
     using System.Threading.Tasks;
     using System.Threading;
-
-    using CDP4Common.MetaInfo;
 
     using CDP4ServicesMessaging.Messages;
     using CDP4ServicesMessaging.Services.Messaging;
@@ -40,7 +37,7 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging
     using CDP4ServicesMessaging.Serializers.Json;
 
     /// <summary>
-    /// The <see cref="ThingMessageProducer"/> provides consumers for <see cref="ThingsChangedMessage"/>.
+    /// The <see cref="ThingMessageProducer"/> provides producers for <see cref="ThingsChangedMessage"/>.
     /// </summary>
     public class ThingMessageProducer : MessageClientService, IThingMessageProducer
     {

@@ -22,8 +22,6 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo($"{nameof(CDP4ServicesMessaging)}.Tests")]
-
 namespace CDP4ServicesMessaging.Services.Messaging
 {
     using System;

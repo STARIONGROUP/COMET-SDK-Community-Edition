@@ -24,9 +24,6 @@
 
 namespace CDP4ServicesMessaging.Tests.Services.Messaging
 {
-    using CDP4Common.MetaInfo;
-
-    using CDP4ServicesMessaging.Serializers;
     using CDP4ServicesMessaging.Serializers.Json;
     using CDP4ServicesMessaging.Services.Messaging;
 

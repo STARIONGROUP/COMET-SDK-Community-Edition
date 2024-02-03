@@ -28,8 +28,6 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging
     using System.Threading;
     using System.Threading.Tasks;
 
-    using CDP4Common.MetaInfo;
-
     using CDP4ServicesMessaging.Messages;
     using CDP4ServicesMessaging.Serializers;
     using CDP4ServicesMessaging.Serializers.Json;
