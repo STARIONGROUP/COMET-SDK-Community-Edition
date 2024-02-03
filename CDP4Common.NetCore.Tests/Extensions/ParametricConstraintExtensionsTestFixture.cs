@@ -105,7 +105,7 @@ namespace CDP4Common.NetCore.Tests.Extensions
             this.FillRelationalExpression(this.relationalExpression4, "accel", "pretty_fast");
             this.FillRelationalExpression(this.relationalExpression5, "comment", "lx_is_awesome");
 
-            Assert.AreEqual("NOT (((mass = 100) OR (accel = pretty_fast)) XOR ((length = 180) AND (width = 40))) AND (comment = lx_is_awesome)", this.parametricConstraint.ToExpressionString());
+            Assert.That(this.parametricConstraint.ToExpressionString(), Is.EqualTo("NOT (((mass = 100) OR (accel = pretty_fast)) XOR ((length = 180) AND (width = 40))) AND (comment = lx_is_awesome)"));
         }
 
         /// <summary>

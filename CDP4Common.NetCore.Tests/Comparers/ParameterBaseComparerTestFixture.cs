@@ -43,13 +43,13 @@ namespace CDP4Common.Tests.Comparers
             var para2 = new Parameter {ParameterType = type2};
 
             var comparer = new ParameterBaseComparer();
-            Assert.AreEqual(-2, comparer.Compare(para1, para2));
+            Assert.That(comparer.Compare(para1, para2), Is.EqualTo(-2));
 
             type1.Name = "d";
-            Assert.AreEqual(1, comparer.Compare(para1, para2));
+            Assert.That(comparer.Compare(para1, para2), Is.EqualTo(1));
 
             type2.Name = "d";
-            Assert.AreEqual(0, comparer.Compare(para1, para2));
+            Assert.That(comparer.Compare(para1, para2), Is.EqualTo(0));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace CDP4Common.Tests.Comparers
             var para2 = new Parameter { ParameterType = type2 };
 
             var comparer = new ParameterBaseComparer();
-            Assert.AreEqual(2, comparer.Compare(para1, para2));
+            Assert.That(comparer.Compare(para1, para2), Is.EqualTo(2));
         }
     }
 }

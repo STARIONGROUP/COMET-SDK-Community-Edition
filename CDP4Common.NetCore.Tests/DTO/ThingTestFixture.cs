@@ -157,7 +157,7 @@ namespace CDP4Common.Tests.DTO
             elementDefinition.AddContainer(ClassKind.Iteration, iterationId);
             elementDefinition.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
 
-            Assert.AreEqual($"/EngineeringModel/{engineeringModelId}/iteration/{iterationId}", elementDefinition.GetTopContainerRoute());
+            Assert.That(elementDefinition.GetTopContainerRoute(), Is.EqualTo($"/EngineeringModel/{engineeringModelId}/iteration/{iterationId}"));
 
             // engineering model thing
             Book book;
@@ -169,13 +169,13 @@ namespace CDP4Common.Tests.DTO
             section.AddContainer(ClassKind.Book, book.Iid);
             section.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
 
-            Assert.AreEqual($"/EngineeringModel/{engineeringModelId}", book.GetTopContainerRoute());
-            Assert.AreEqual($"/EngineeringModel/{engineeringModelId}", section.GetTopContainerRoute());
+            Assert.That(book.GetTopContainerRoute(), Is.EqualTo($"/EngineeringModel/{engineeringModelId}"));
+            Assert.That(section.GetTopContainerRoute(), Is.EqualTo($"/EngineeringModel/{engineeringModelId}"));
             
             EngineeringModel enModel;
             enModel = new EngineeringModel(Guid.NewGuid(), 1);
 
-            Assert.AreEqual($"/EngineeringModel/{enModel.Iid}", enModel.GetTopContainerRoute());
+            Assert.That(enModel.GetTopContainerRoute(), Is.EqualTo($"/EngineeringModel/{enModel.Iid}"));
             
             // site directory thing
             BooleanParameterType booleanParameterType;

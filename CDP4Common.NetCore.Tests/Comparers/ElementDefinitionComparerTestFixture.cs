@@ -39,7 +39,7 @@ namespace CDP4Common.Tests.Comparers
             var usage2 = new ElementDefinition { Name = "type5" };
 
             var comparer = new ElementDefinitionComparer();
-            Assert.AreEqual(-4, comparer.Compare(usage1, usage2));
+            Assert.That(comparer.Compare(usage1, usage2), Is.EqualTo(-4));
         }
     }
 }

@@ -316,7 +316,7 @@ namespace CDP4Common.Tests.Helpers
                 Console.WriteLine(nestedElement.ShortName);
             }
 
-            Assert.AreEqual(2, nestedElements.Count);
+            Assert.That(nestedElements.Count, Is.EqualTo(2));
         }
 
         [Test]
@@ -332,7 +332,7 @@ namespace CDP4Common.Tests.Helpers
                 Console.WriteLine(nestedElement.ShortName);
             }
 
-            Assert.AreEqual(2, nestedElements.Count);
+            Assert.That(nestedElements.Count, Is.EqualTo(2));
         }
 
         [Test]
@@ -347,7 +347,7 @@ namespace CDP4Common.Tests.Helpers
                 Console.WriteLine(nestedElement.ShortName);
             }
 
-            Assert.AreEqual(3, nestedElements.Count);
+            Assert.That(nestedElements.Count, Is.EqualTo(3));
         }
 
         [Test]
@@ -356,7 +356,7 @@ namespace CDP4Common.Tests.Helpers
             var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
             var flatNestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise).ToList();
 
-            Assert.IsNotEmpty(flatNestedParameters);
+            Assert.That(flatNestedParameters, Is.Not.Empty);
         }
 
         [Test]
@@ -383,11 +383,11 @@ namespace CDP4Common.Tests.Helpers
 
             foreach (var nestedElement in nestedElements)
             {
-                Assert.AreEqual(option, nestedElement.Container);
+                Assert.That(nestedElement.Container, Is.EqualTo(option));
 
                 foreach (var nestedParameter in nestedElement.NestedParameter)
                 {
-                    Assert.AreEqual(option, nestedParameter.Option);
+                    Assert.That(nestedParameter.Option, Is.EqualTo(option));
                 }
             }
         }
@@ -401,7 +401,7 @@ namespace CDP4Common.Tests.Helpers
 
             foreach (var nestedParameter in NestedParameters)
             {
-                Assert.IsNotNull(nestedParameter.ValueSet);
+                Assert.That(nestedParameter.ValueSet, Is.Not.Null);
             }
         }
 
@@ -412,11 +412,11 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise, false).ToList();
 
-            Assert.AreEqual(4, NestedParameters.Count);
+            Assert.That(NestedParameters.Count, Is.EqualTo(4));
 
             NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise_2, false).ToList();
 
-            Assert.AreEqual(2, NestedParameters.Count);
+            Assert.That(NestedParameters.Count, Is.EqualTo(2));
         }
 
         [Test]
@@ -426,7 +426,7 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, false).ToList();
 
-            Assert.AreEqual(6, NestedParameters.Count);
+            Assert.That(NestedParameters.Count, Is.EqualTo(6));
         }
 
         [Test]
@@ -436,12 +436,12 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedElements = this.nestedElementTreeGenerator.Generate(option, this.domainOfExpertise, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
             Assert.AreEqual(4, NestedElements.SelectMany(x => x.NestedParameter).Count());
 
             NestedElements = this.nestedElementTreeGenerator.Generate(option, this.domainOfExpertise_2, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
             Assert.AreEqual(2, NestedElements.SelectMany(x => x.NestedParameter).Count());
         }
 
@@ -452,7 +452,7 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedElements = this.nestedElementTreeGenerator.Generate(option, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
             Assert.AreEqual(6, NestedElements.SelectMany(x => x.NestedParameter).Count());
         }
 
@@ -463,12 +463,12 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.domainOfExpertise, this.elementDefinition_1, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
             Assert.AreEqual(4, NestedElements.SelectMany(x => x.NestedParameter).Count());
 
             NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.domainOfExpertise_2, this.elementDefinition_1, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
             Assert.AreEqual(2, NestedElements.SelectMany(x => x.NestedParameter).Count());
         }
 
@@ -479,7 +479,7 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.elementDefinition_1, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
             Assert.AreEqual(6, NestedElements.SelectMany(x => x.NestedParameter).Count());
         }
 

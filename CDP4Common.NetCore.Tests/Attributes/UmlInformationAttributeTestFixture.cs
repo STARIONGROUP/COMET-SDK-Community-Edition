@@ -43,11 +43,11 @@ namespace CDP4Common.Tests.Attributes
 
             var umlInformationAttribute = new UmlInformationAttribute(aggregationKind, isDerived, isOrdered, isNullable, isPersistent);
 
-            Assert.AreEqual(aggregationKind, umlInformationAttribute.Aggregation);
-            Assert.AreEqual(isDerived, umlInformationAttribute.IsDerived);
-            Assert.AreEqual(isOrdered, umlInformationAttribute.IsOrdered);
-            Assert.AreEqual(isNullable, umlInformationAttribute.IsNullable);
-            Assert.AreEqual(isPersistent, umlInformationAttribute.IsPersistent);
+            Assert.That(umlInformationAttribute.Aggregation, Is.EqualTo(aggregationKind));
+            Assert.That(umlInformationAttribute.IsDerived, Is.EqualTo(isDerived));
+            Assert.That(umlInformationAttribute.IsOrdered, Is.EqualTo(isOrdered));
+            Assert.That(umlInformationAttribute.IsNullable, Is.EqualTo(isNullable));
+            Assert.That(umlInformationAttribute.IsPersistent, Is.EqualTo(isPersistent));
         }
     }
 }

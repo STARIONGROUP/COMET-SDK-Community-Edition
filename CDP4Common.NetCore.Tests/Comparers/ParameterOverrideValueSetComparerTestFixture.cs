@@ -62,11 +62,13 @@ namespace CDP4Common.Tests.Comparers
                 Name = "state a",
                 ShortName = "statea"
             };
+
             var possibleFiniteStateb = new PossibleFiniteState(Guid.NewGuid(), null, null)
             {
                 Name = "state b",
                 ShortName = "stateb"
             };
+
             possibleFiniteStateList.PossibleState.Add(possibleFiniteStateb);
             possibleFiniteStateList.PossibleState.Add(possibleFiniteStatea);
             this.iteration.PossibleFiniteStateList.Add(possibleFiniteStateList);
@@ -105,16 +107,16 @@ namespace CDP4Common.Tests.Comparers
 
             var comparer = new ParameterOverrideValueSetComparer();
             var comparisonab = comparer.Compare(parameterOverrideValueSeta, optiondepaparametervaluesetb);
-            Assert.AreEqual(1, comparisonab);
+            Assert.That(comparisonab, Is.EqualTo(1));
 
             var comparisonba = comparer.Compare(optiondepaparametervaluesetb, parameterOverrideValueSeta);
-            Assert.AreEqual(-1, comparisonba);
+            Assert.That(comparisonba, Is.EqualTo(-1));
 
             var comparisonaa = comparer.Compare(parameterOverrideValueSeta, parameterOverrideValueSeta);
-            Assert.AreEqual(0, comparisonaa);
+            Assert.That(comparisonaa, Is.EqualTo(0));
 
             var comparisonbb = comparer.Compare(optiondepaparametervaluesetb, optiondepaparametervaluesetb);
-            Assert.AreEqual(0, comparisonbb);
+            Assert.That(comparisonbb, Is.EqualTo(0));
         }
 
         [Test]
@@ -141,16 +143,16 @@ namespace CDP4Common.Tests.Comparers
 
             var comparer = new ParameterOverrideValueSetComparer();
             var comparisonab = comparer.Compare(parameterOverrideValueSeta, parameterOverrideValueSetb);
-            Assert.AreEqual(1, comparisonab);
+            Assert.That(comparisonab, Is.EqualTo(1));
 
             var comparisonba = comparer.Compare(parameterOverrideValueSetb, parameterOverrideValueSeta);
-            Assert.AreEqual(-1, comparisonba);
+            Assert.That(comparisonba, Is.EqualTo(-1));
 
             var comparisonaa = comparer.Compare(parameterOverrideValueSeta, parameterOverrideValueSeta);
-            Assert.AreEqual(0, comparisonaa);
+            Assert.That(comparisonaa, Is.EqualTo(0));
 
             var comparisonbb = comparer.Compare(parameterOverrideValueSetb, parameterOverrideValueSetb);
-            Assert.AreEqual(0, comparisonbb);
+            Assert.That(comparisonbb, Is.EqualTo(0));
         }
 
         [Test]
@@ -197,10 +199,10 @@ namespace CDP4Common.Tests.Comparers
             var comparer = new ParameterOverrideValueSetComparer();
 
             var comparison_aa_ab = comparer.Compare(aa, ab);
-            Assert.AreEqual(1, comparison_aa_ab);
+            Assert.That(comparison_aa_ab, Is.EqualTo(1));
 
             var comparison_aa_bb = comparer.Compare(aa, ab);
-            Assert.AreEqual(1, comparison_aa_bb);
+            Assert.That(comparison_aa_bb, Is.EqualTo(1));
         }
     }
 }

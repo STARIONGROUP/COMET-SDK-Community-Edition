@@ -56,10 +56,9 @@ namespace CDP4Common.Tests.AutoGenHelpers
                 Assert.DoesNotThrow(() => this.defaultPermissionProvider.GetDefaultPersonPermission(classKind.ToString()));
             }
 
-            Assert.AreEqual(PersonAccessRightKind.NONE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.Person.ToString()));
-            Assert.AreEqual(PersonAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.NotThing.ToString()));
-
-            Assert.AreEqual(PersonAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.ElementDefinition.ToString()));
+            Assert.That(this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.Person.ToString()), Is.EqualTo(PersonAccessRightKind.NONE));
+            Assert.That(this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.NotThing.ToString()), Is.EqualTo(PersonAccessRightKind.NOT_APPLICABLE));
+            Assert.That(this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.ElementDefinition.ToString()), Is.EqualTo(PersonAccessRightKind.NOT_APPLICABLE));
         }
 
         [Test]
@@ -78,10 +77,10 @@ namespace CDP4Common.Tests.AutoGenHelpers
                 Assert.DoesNotThrow(() => this.defaultPermissionProvider.GetDefaultPersonPermission(classKind));
             }
 
-            Assert.AreEqual(PersonAccessRightKind.NONE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.Person));
+            Assert.That(this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.Person), Is.EqualTo(PersonAccessRightKind.NONE));
 
-            Assert.AreEqual(PersonAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.NotThing));
-            Assert.AreEqual(PersonAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.ElementDefinition));
+            Assert.That(this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.NotThing), Is.EqualTo(PersonAccessRightKind.NOT_APPLICABLE));
+            Assert.That(this.defaultPermissionProvider.GetDefaultPersonPermission(ClassKind.ElementDefinition), Is.EqualTo(PersonAccessRightKind.NOT_APPLICABLE));
         }
 
         [Test]
@@ -94,9 +93,9 @@ namespace CDP4Common.Tests.AutoGenHelpers
                 Assert.DoesNotThrow(() => this.defaultPermissionProvider.GetDefaultParticipantPermission(classKind.ToString()));
             }
 
-            Assert.AreEqual(ParticipantAccessRightKind.NONE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.ElementDefinition.ToString()));
-            Assert.AreEqual(ParticipantAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.Person.ToString()));
-            Assert.AreEqual(ParticipantAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.NotThing.ToString()));
+            Assert.That(this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.ElementDefinition.ToString()), Is.EqualTo(ParticipantAccessRightKind.NONE));
+            Assert.That(this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.Person.ToString()), Is.EqualTo(ParticipantAccessRightKind.NOT_APPLICABLE));
+            Assert.That(this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.NotThing.ToString()), Is.EqualTo(ParticipantAccessRightKind.NOT_APPLICABLE));
         }
 
         [Test]
@@ -115,9 +114,9 @@ namespace CDP4Common.Tests.AutoGenHelpers
                 Assert.DoesNotThrow(() => this.defaultPermissionProvider.GetDefaultParticipantPermission(classKind));
             }
 
-            Assert.AreEqual(ParticipantAccessRightKind.NONE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.ElementDefinition));
-            Assert.AreEqual(ParticipantAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.Person));
-            Assert.AreEqual(ParticipantAccessRightKind.NOT_APPLICABLE, this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.NotThing));
+            Assert.That(this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.ElementDefinition), Is.EqualTo(ParticipantAccessRightKind.NONE));
+            Assert.That(this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.Person), Is.EqualTo(ParticipantAccessRightKind.NOT_APPLICABLE));
+            Assert.That(this.defaultPermissionProvider.GetDefaultParticipantPermission(ClassKind.NotThing), Is.EqualTo(ParticipantAccessRightKind.NOT_APPLICABLE));
         }
     }
 }

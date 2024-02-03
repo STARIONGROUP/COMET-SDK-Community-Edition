@@ -41,8 +41,8 @@ namespace CDP4Common.Tests
             var propertyName = "EmailAddress";
             var containerPropertyNameAttribute = new ContainerAttribute(typeof(Person), propertyName);
 
-            Assert.AreEqual(propertyName, containerPropertyNameAttribute.PropertyName);
-            Assert.AreEqual(typeof(Person), containerPropertyNameAttribute.ClassType);
+            Assert.That(containerPropertyNameAttribute.PropertyName, Is.EqualTo(propertyName));
+            Assert.That(containerPropertyNameAttribute.ClassType, Is.EqualTo(typeof(Person)));
         }
     }
 }

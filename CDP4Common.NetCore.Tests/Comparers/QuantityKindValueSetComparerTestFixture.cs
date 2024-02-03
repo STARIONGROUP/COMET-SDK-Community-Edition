@@ -81,13 +81,13 @@ namespace CDP4Common.Tests.Comparers
         [Test]
         public void verify_that_value_equals()
         {
-            Assert.AreEqual(-1, this.quantityKindValueSetComparer.Compare(this.valueArray1, this.valueArray2));
-            Assert.AreEqual(1, this.quantityKindValueSetComparer.Compare(this.valueArray2, this.valueArray1));
-            Assert.AreEqual(0, this.quantityKindValueSetComparer.Compare(this.valueArray1, new ValueArray<string>(this.valueArray1)));
+            Assert.That(this.quantityKindValueSetComparer.Compare(this.valueArray1, this.valueArray2), Is.EqualTo(-1));
+            Assert.That(this.quantityKindValueSetComparer.Compare(this.valueArray2, this.valueArray1), Is.EqualTo(1));
+            Assert.That(this.quantityKindValueSetComparer.Compare(this.valueArray1, new ValueArray<string>(this.valueArray1)), Is.EqualTo(0));
 
-            Assert.AreEqual(1, this.quantityKindValueSetComparer.Compare(this.valueArray1, this.valueArrayNull));
-            Assert.AreEqual(-1, this.quantityKindValueSetComparer.Compare(this.valueArrayNull, this.valueArray1));
-            Assert.AreEqual(0, this.quantityKindValueSetComparer.Compare(this.valueArrayNull, new ValueArray<string>(this.valueArrayNull)));
+            Assert.That(this.quantityKindValueSetComparer.Compare(this.valueArray1, this.valueArrayNull), Is.EqualTo(1));
+            Assert.That(this.quantityKindValueSetComparer.Compare(this.valueArrayNull, this.valueArray1), Is.EqualTo(-1));
+            Assert.That(this.quantityKindValueSetComparer.Compare(this.valueArrayNull, new ValueArray<string>(this.valueArrayNull)), Is.EqualTo(0));
 
             Assert.AreEqual(1, this.quantityKindValueSetComparer.Compare(this.valueArray1, this.valueArrayNegative));
             Assert.AreEqual(-1, this.quantityKindValueSetComparer.Compare(this.valueArrayNegative, this.valueArray1));

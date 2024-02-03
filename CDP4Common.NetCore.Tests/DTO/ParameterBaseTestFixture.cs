@@ -48,7 +48,7 @@ namespace CDP4Common.Tests.DTO
             var parameter = new Parameter(Guid.NewGuid(), 1);
             parameter.ValueSet.AddRange(this.valuesets);
 
-            CollectionAssert.AreEqual(this.valuesets, parameter.ValueSets);
+            Assert.That(parameter.ValueSets, Is.EqualTo(this.valuesets) );
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace CDP4Common.Tests.DTO
             var parameterOverride = new ParameterOverride(Guid.NewGuid(), 1);
             parameterOverride.ValueSet.AddRange(this.valuesets);
 
-            CollectionAssert.AreEqual(this.valuesets, parameterOverride.ValueSets);
+            Assert.That(parameterOverride.ValueSets, Is.EqualTo(this.valuesets));
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace CDP4Common.Tests.DTO
             var parameterSubscription = new ParameterSubscription(Guid.NewGuid(), 1);
             parameterSubscription.ValueSet.AddRange(this.valuesets);
 
-            CollectionAssert.AreEqual(this.valuesets, parameterSubscription.ValueSets);
+            Assert.That(parameterSubscription.ValueSets, Is.EqualTo(this.valuesets));
         }
     }
 }

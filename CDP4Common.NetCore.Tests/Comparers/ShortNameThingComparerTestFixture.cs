@@ -54,7 +54,7 @@ namespace CDP4Common.Tests.Comparers
             this.domainOfExpertise_1.ShortName = "a";
             this.domainOfExpertise_2.ShortName = "A";
             
-            Assert.AreEqual(0, this.comparer.Compare(this.domainOfExpertise_1, this.domainOfExpertise_2));            
+            Assert.That(this.comparer.Compare(this.domainOfExpertise_1, this.domainOfExpertise_2), Is.EqualTo(0));
         }
     }
 }
