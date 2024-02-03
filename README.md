@@ -15,6 +15,7 @@ The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with
   - CDP4ServicesDal
   - CDP4WspDal
   - CDP4Web
+  - CDP4ServicesMessaging
 
 ## Nuget
 
@@ -33,6 +34,7 @@ CDP4JsonFileDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonFileDal-
 CDP4ServicesDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4ServicesDal-CE)](https://buildstats.info/nuget/CDP4ServicesDal-CE)
 CDP4WspDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4WspDal-CE)](https://buildstats.info/nuget/CDP4WspDal-CE)
 CDP4Web | [![NuGet Badge](https://buildstats.info/nuget/CDP4Web-CE)](https://buildstats.info/nuget/CDP4Web-CE)
+CDP4ServicesMessaging | [![NuGet Badge](https://buildstats.info/nuget/CDP4ServicesMessaging-CE)](https://buildstats.info/nuget/CDP4ServicesMessaging-CE)
 
 ## Build status
 
@@ -98,6 +100,10 @@ The CDP4WspDal library is a C# library that provides an implementation of ECSS-E
 ## CDP4Web
 
 The CDP4Web library is a C# library that provides helpful classes that facilitate the use of the CDP4ServicesDal to any client.
+
+## CDP4ServicesMessaging
+
+The CDP4ServicesMessaging library is a C# library that provides abstractions over Rabbit MQ to support AMQP messaging
 
 # License
 
