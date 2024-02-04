@@ -81,6 +81,9 @@ namespace CDP4RequirementsVerification.Verifiers
         /// </summary>
         /// <param name="parametricConstraint">The <see cref="ParametricConstraint"/> that is used for verification</param>
         /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/></param>
+        /// <param name="messageBus">
+        /// The <see cref="ICDPMessageBus"/> used to publish or subscribe to events
+        /// </param>
         public ParametricConstraintVerifier(ParametricConstraint parametricConstraint, IRequirementVerificationConfiguration configuration, ICDPMessageBus messageBus) : base(configuration, messageBus)
         {
             this.parametricConstraint = parametricConstraint;

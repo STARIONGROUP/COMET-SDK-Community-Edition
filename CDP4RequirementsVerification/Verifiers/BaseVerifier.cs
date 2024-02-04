@@ -45,7 +45,9 @@ namespace CDP4RequirementsVerification.Verifiers
         /// Creates a new instance of the <see cref="BaseVerifier"/> class
         /// </summary>
         /// <param name="configuration">The <see cref="IRequirementVerificationConfiguration"/> to be used.</param>
-        /// <param name="messageBus">The <see cref="ICDPMessageBus"/></param>
+        /// <param name="messageBus">
+        /// The <see cref="ICDPMessageBus"/> used to publish or subscribe to events
+        /// </param>
         protected BaseVerifier(IRequirementVerificationConfiguration configuration, ICDPMessageBus messageBus)
         {
             this.Configuration = configuration;
