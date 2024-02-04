@@ -47,11 +47,6 @@ namespace CDP4Common.Types
         private readonly List<T> items;
 
         /// <summary>
-        /// The container of this <see cref="ValueArray{T}"/>
-        /// </summary>
-        private readonly Thing container;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ValueArray{T}"/> class.
         /// </summary>
         public ValueArray()
@@ -65,7 +60,7 @@ namespace CDP4Common.Types
         /// <param name="container">The container of this <see cref="ValueArray{T}"/></param>
         public ValueArray(Thing container)
         {
-            this.container = container;
+            this.Container = container;
             this.items = new List<T>();
         }
 
@@ -90,7 +85,7 @@ namespace CDP4Common.Types
         public ValueArray(IEnumerable<T> initializationCollection, Thing container)
         {
             this.items = initializationCollection == null ? new List<T>() : new List<T>(initializationCollection);
-            this.container = container;
+            this.Container = container;
         }
         
         /// <summary>
@@ -177,13 +172,11 @@ namespace CDP4Common.Types
         /// <summary>
         /// Gets the number of elements contained in the <see cref="ValueArray{T}"/>
         /// </summary>
-        public int Count {
-            get
-            {
-                {
-                    return this.items.Count;
-                }
-            }
-        }
+        public int Count => this.items.Count;
+
+        /// <summary>
+        /// Gets or sets the container <see cref="Thing"/>
+        /// </summary>
+        public Thing Container { get; private set; }
     }
 }
