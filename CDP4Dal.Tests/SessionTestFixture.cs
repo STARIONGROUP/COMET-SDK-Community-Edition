@@ -70,6 +70,7 @@ namespace CDP4Dal.Tests
         private CDP4Common.DTO.Person person;
 
         private CDP4Common.DTO.SiteDirectory sieSiteDirectoryDto;
+
         private CDPMessageBus messageBus;
 
         [SetUp]

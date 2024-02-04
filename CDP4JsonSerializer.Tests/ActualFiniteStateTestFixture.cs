@@ -1,18 +1,17 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ActualFiniteStateTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,14 +21,15 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer.Tests
 {
     using System;
     using System.IO;
+
     using CDP4Common.EngineeringModelData;
     using CDP4Common.MetaInfo;
+
     using NUnit.Framework;
 
     using ActualFiniteState = CDP4Common.DTO.ActualFiniteState;
@@ -51,11 +51,13 @@ namespace CDP4JsonSerializer.Tests
             this.possibleStateId_1 = Guid.Parse("1d208dff-d9fb-4abe-83d1-83b70eb2e9e9");
             this.possibleStateId_2 = Guid.Parse("2d208dff-d9fb-4abe-83d1-83b70eb2e9e9");
             this.actualFiniteStateId = Guid.Parse("b31df883-6c03-4401-bcd9-da729f87df55");
+
             this.actualFiniteState = new ActualFiniteState(this.actualFiniteStateId, 1)
                                          {
                                              ModifiedOn =  DateTime.Parse("1976-08-20T12:01:02"),
                                              Kind = ActualFiniteStateKind.FORBIDDEN
                                          };
+
             this.actualFiniteState.PossibleState.Add(this.possibleStateId_1);
             this.actualFiniteState.PossibleState.Add(this.possibleStateId_2);
         }
@@ -76,7 +78,7 @@ namespace CDP4JsonSerializer.Tests
                 {
                     var result = reader.ReadToEnd();
                     Console.WriteLine(result);
-                    Assert.AreEqual(expectedResult.Length, result.Length);
+                    Assert.That(result.Length, Is.EqualTo(expectedResult.Length));
                 }
             }
         }

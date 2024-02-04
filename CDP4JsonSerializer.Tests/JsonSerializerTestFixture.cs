@@ -4,14 +4,14 @@
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -97,7 +97,7 @@ namespace CDP4JsonSerializer.Tests
                 using (var reader = new StreamReader(memoryStream))
                 {
                     var txt = reader.ReadToEnd();
-                    Assert.IsTrue(txt.Contains("\"frozenOn\":null"));
+                    Assert.That(txt, Does.Contain("\"frozenOn\":null"));
                 }
             }
         }
@@ -119,8 +119,8 @@ namespace CDP4JsonSerializer.Tests
                 using (var reader = new StreamReader(memoryStream))
                 {
                     var txt = reader.ReadToEnd();
-                    Assert.IsFalse(txt.Contains("2222-02-02T22:22:22.222222"));
-                    Assert.IsTrue(txt.Contains("2222-02-02T22:22:22.222Z"));
+                    Assert.That(txt, Does.Not.Contain("2222-02-02T22:22:22.222222"));
+                    Assert.That(txt, Does.Contain("2222-02-02T22:22:22.222Z"));
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace CDP4JsonSerializer.Tests
                 using (var reader = new StreamReader(memoryStream))
                 {
                     var txt = reader.ReadToEnd();
-                    Assert.IsTrue(txt.Contains("abc \\\"hello world\\\""));
+                    Assert.That(txt, Does.Contain("abc \\\"hello world\\\""));
                 }
             }
         }
@@ -170,7 +170,7 @@ namespace CDP4JsonSerializer.Tests
                     var txt = reader.ReadToEnd();
 
                     // output:  "manual":"[\"123\",\"abc\"]"
-                    Assert.IsTrue(txt.Contains("\"manual\":\"[\\\"123\\\",\\\"abc\\\"]\""));
+                    Assert.That(txt, Does.Contain("\"manual\":\"[\\\"123\\\",\\\"abc\\\"]\"")); 
                 }
             }
         }
@@ -198,21 +198,21 @@ namespace CDP4JsonSerializer.Tests
                     var txt = reader.ReadToEnd();
 
                     // output:  "manual":"[\"123\",\"abc\"]"
-                    Assert.IsTrue(txt.Contains("\"manual\":\"[\\\"123\\\\\\\"(,)\\\\\\\"\\\",\\\"abc\\\\\\\\\\\"]\""));
+                    Assert.That(txt, Does.Contain("\"manual\":\"[\\\"123\\\\\\\"(,)\\\\\\\"\\\",\\\"abc\\\\\\\\\\\"]\""));
 
                     memoryStream.Position = 0;
                     var thing = (Dto.ParameterValueSet)this.serializer.Deserialize(memoryStream).Single();
-                    Assert.AreEqual(thing.Manual[0], parameterValueSet.Manual[0]);
-                    Assert.AreEqual(thing.Manual[1], parameterValueSet.Manual[1]);
+                    Assert.That(parameterValueSet.Manual[0], Is.EqualTo(thing.Manual[0]));
+                    Assert.That(parameterValueSet.Manual[1], Is.EqualTo(thing.Manual[1]));
 
-                    Assert.AreEqual(thing.Computed[0], parameterValueSet.Computed[0]);
-                    Assert.AreEqual(thing.Computed[1], parameterValueSet.Computed[1]);
+                    Assert.That(parameterValueSet.Computed[0], Is.EqualTo(thing.Computed[0]));
+                    Assert.That(parameterValueSet.Computed[1], Is.EqualTo(thing.Computed[1]));
 
-                    Assert.AreEqual(thing.Reference[0], parameterValueSet.Reference[0]);
-                    Assert.AreEqual(thing.Reference[1], parameterValueSet.Reference[1]);
+                    Assert.That(parameterValueSet.Reference[0], Is.EqualTo(thing.Reference[0]));
+                    Assert.That(parameterValueSet.Reference[1], Is.EqualTo(thing.Reference[1]));
 
-                    Assert.AreEqual(thing.Published[0], parameterValueSet.Published[0]);
-                    Assert.AreEqual(thing.Published[1], parameterValueSet.Published[1]);
+                    Assert.That(parameterValueSet.Published[0], Is.EqualTo(thing.Published[0]));
+                    Assert.That(parameterValueSet.Published[1], Is.EqualTo(thing.Published[1]));
                 }
             }
         }
@@ -234,7 +234,7 @@ namespace CDP4JsonSerializer.Tests
                 using (var reader = new StreamReader(memoryStream))
                 {
                     var txt = reader.ReadToEnd();
-                    Assert.IsTrue(txt.Contains("WORK"));
+                    Assert.That(txt, Does.Contain("WORK"));
                 }
             }
         }
@@ -256,7 +256,7 @@ namespace CDP4JsonSerializer.Tests
                 using (var reader = new StreamReader(memoryStream))
                 {
                     var txt = reader.ReadToEnd();
-                    Assert.IsTrue(txt.Contains("HOME"));
+                    Assert.That(txt, Does.Contain("HOME"));
                 }
             }
         }
@@ -279,8 +279,8 @@ namespace CDP4JsonSerializer.Tests
                 using (var reader = new StreamReader(memoryStream))
                 {
                     var txt = reader.ReadToEnd();
-                    Assert.IsTrue(txt.Contains("CELL"));
-                    Assert.IsTrue(txt.Contains("FAX"));
+                    Assert.That(txt, Does.Contain("CELL"));
+                    Assert.That(txt, Does.Contain("FAX"));
                 }
             }
         }
@@ -346,19 +346,18 @@ namespace CDP4JsonSerializer.Tests
 
                 var resDtos = this.serializer.Deserialize(memoryStream).ToList();
 
-                Assert.AreEqual(10, resDtos.Count);
+                Assert.That(resDtos.Count, Is.EqualTo(10));
+
                 var resEngineeringModel = resDtos.OfType<Dto.EngineeringModel>().Single();
-                var resBook1 = resDtos.OfType<Dto.Book>().Single(x => x.Iid == this.book1.Iid);
                 var resBook2 = resDtos.OfType<Dto.Book>().Single(x => x.Iid == this.book2.Iid);
                 var resSection = resDtos.OfType<Dto.Section>().Single();
                 var resSubscriptionValueset = resDtos.OfType<Dto.ParameterSubscriptionValueSet>().Single();
 
-                Assert.AreEqual(resSection.ShortName, this.section1.ShortName);
-                Assert.IsTrue(resBook2.Section.Any(x => x.V.ToString() == this.section1.Iid.ToString()));
-                Assert.IsTrue(resEngineeringModel.Book.Any(x => x.V.ToString() == this.book1.Iid.ToString()));
-                Assert.IsTrue(resEngineeringModel.Book.Any(x => x.V.ToString() == this.book2.Iid.ToString()));
-
-                Assert.AreEqual(resSubscriptionValueset.Manual, new ValueArray<string>(valuearrayvalues));
+                Assert.That(this.section1.ShortName, Is.EqualTo(resSection.ShortName));
+                Assert.That(resBook2.Section.Any(x => x.V.ToString() == this.section1.Iid.ToString()), Is.True);
+                Assert.That(resEngineeringModel.Book.Any(x => x.V.ToString() == this.book1.Iid.ToString()), Is.True);
+                Assert.That(resEngineeringModel.Book.Any(x => x.V.ToString() == this.book2.Iid.ToString()), Is.True);
+                Assert.That(resSubscriptionValueset.Manual, Is.EqualTo(new ValueArray<string>(valuearrayvalues)));
             }
         }
 
@@ -415,20 +414,23 @@ namespace CDP4JsonSerializer.Tests
                 memoryStream.Position = 0;
 
                 var result = this.serializer.Deserialize<TestPostOperation>(memoryStream);
-                Assert.AreEqual(1, result.Delete.Count);
-                Assert.AreEqual(1, result.Create.Count);
-                Assert.AreEqual(2, result.Update.Count);
+                
+                Assert.That(result.Delete.Count, Is.EqualTo(1));
+                Assert.That(result.Create.Count, Is.EqualTo(1));
+                Assert.That(result.Update.Count, Is.EqualTo(2));
 
                 var subscriptionValueSetClasslessDto =
                     result.Update.Single(x => x["Iid"].ToString() == subscriptionValueset.Iid.ToString());
 
                 var valueArray = (ValueArray<string>)subscriptionValueSetClasslessDto["Manual"];
-                Assert.IsTrue(subscriptionValueSetClasslessDto["Iid"] is Guid);
-                Assert.IsTrue(subscriptionValueSetClasslessDto["ClassKind"] is ClassKind);
-                Assert.AreEqual(3, valueArray.Count);
-                Assert.AreEqual("123", valueArray[0]);
-                Assert.AreEqual("456", valueArray[1]);
-                Assert.AreEqual("789.0", valueArray[2]);
+
+                Assert.That(subscriptionValueSetClasslessDto["Iid"] is Guid, Is.True);
+                Assert.That(subscriptionValueSetClasslessDto["ClassKind"] is ClassKind, Is.True);
+
+                Assert.That(valueArray.Count, Is.EqualTo(3));
+                Assert.That(valueArray[0], Is.EqualTo("123"));
+                Assert.That(valueArray[1], Is.EqualTo("456"));
+                Assert.That(valueArray[2], Is.EqualTo("789.0"));
             }
         }
 
@@ -450,7 +452,7 @@ namespace CDP4JsonSerializer.Tests
 
             var serializeDeep = this.serializer.SerializeToString(this.engModel, true);
 
-            Assert.IsTrue(serializeDeep.Length > serializeShallow.Length);
+            Assert.That(serializeDeep.Length > serializeShallow.Length, Is.True);
         }
 
         [Test]
@@ -472,7 +474,7 @@ namespace CDP4JsonSerializer.Tests
                 using (var reader = new StreamReader(stream))
                 {
                     var serializerResult = reader.ReadToEnd().Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-                    Assert.AreEqual(serializerResult.Length, response.Length);
+                    Assert.That(response.Length, Is.EqualTo(serializerResult.Length));
                 }
             }
         }
@@ -513,7 +515,8 @@ namespace CDP4JsonSerializer.Tests
                 using (var reader = new StreamReader(stream))
                 {
                     var serializerResult = reader.ReadToEnd();
-                    Assert.AreEqual(serializerResult.Length, serializedParameterValueSet.Length);
+
+                    Assert.That(serializedParameterValueSet.Length, Is.EqualTo(serializerResult.Length));
                 }
             }
         }
@@ -528,7 +531,7 @@ namespace CDP4JsonSerializer.Tests
             stream.Position = 0;
             var deserializeResult = this.serializer.Deserialize(stream);
 
-            CollectionAssert.AreEquivalent(this.category2.PermissibleClass.Except(new[] { ClassKind.Page }), (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+            Assert.That((deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass, Is.EquivalentTo(this.category2.PermissibleClass.Except(new[] { ClassKind.Page })));
         }
 
         [Test]
@@ -541,7 +544,7 @@ namespace CDP4JsonSerializer.Tests
             stream.Position = 0;
             var deserializeResult = this.serializer.Deserialize(stream);
 
-            CollectionAssert.AreEquivalent(this.category1.PermissibleClass, (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+            Assert.That((deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass, Is.EquivalentTo(this.category2.PermissibleClass.Except(new[] { ClassKind.Page })));
         }
 
         [Test]
@@ -554,7 +557,7 @@ namespace CDP4JsonSerializer.Tests
             stream.Position = 0;
             var deserializeResult = this.serializer.Deserialize(stream);
 
-            CollectionAssert.AreEquivalent(this.category2.PermissibleClass, (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+            Assert.That((deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass, Is.EquivalentTo(this.category2.PermissibleClass));
         }
 
         [Test]
@@ -567,7 +570,7 @@ namespace CDP4JsonSerializer.Tests
             stream.Position = 0;
             var deserializeResult = this.serializer.Deserialize(stream);
 
-            CollectionAssert.AreEquivalent(this.category1.PermissibleClass, (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+            Assert.That((deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass, Is.EquivalentTo(this.category2.PermissibleClass.Except(new[] { ClassKind.Page })));
         }
 
         [Test]
@@ -580,7 +583,7 @@ namespace CDP4JsonSerializer.Tests
             stream.Position = 0;
             var deserializeResult = this.serializer.Deserialize(stream);
 
-            CollectionAssert.AreEquivalent(this.category2.PermissibleClass, (deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass);
+            Assert.That((deserializeResult.First(x => x is Dto.Category) as Dto.Category).PermissibleClass, Is.EquivalentTo(this.category2.PermissibleClass));
         }
 
         [Test]
@@ -601,7 +604,7 @@ namespace CDP4JsonSerializer.Tests
             {
                 using (var stream = new MemoryStream())
                 {
-                    Assert.DoesNotThrow(() => this.serializer.SerializeToStream(result, stream));
+                    Assert.That(() => this.serializer.SerializeToStream(result, stream), Throws.Nothing);
                 }
             }
 

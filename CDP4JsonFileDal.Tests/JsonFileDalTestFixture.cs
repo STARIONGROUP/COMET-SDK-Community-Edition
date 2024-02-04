@@ -553,12 +553,10 @@ namespace CDP4JsonFileDal.Tests
 
             Assert.That(element1.Definition.Any(), Is.True);
             Assert.That(element1.Definition.First().Citation.Any(), Is.False);
-
-            Assert.That(element1.OrganizationalParticipant.Any(), Is.False);
+            Assert.That(element1.OrganizationalParticipant, Is.Empty);
 
             var element2 = readIteration.Element.FirstOrDefault(x => x.ShortName == "ED2");
-            Assert.That(element2.OrganizationalParticipant.Any(), Is.False);
-
+            Assert.That(element2.OrganizationalParticipant, Is.Empty);
         }
 
         [Test]

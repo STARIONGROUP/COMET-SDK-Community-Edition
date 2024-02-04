@@ -71,7 +71,7 @@ namespace CDP4Dal.NetCore.Tests
 
         private CDP4Common.DTO.SiteDirectory sieSiteDirectoryDto;
 
-        private ICDPMessageBus messageBus;
+        private CDPMessageBus messageBus;
 
         [SetUp]
         public void SetUp()

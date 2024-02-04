@@ -27,11 +27,13 @@ namespace CDP4Common.Tests
     using System;
     using System.Collections.Concurrent;
     using System.Linq;
+
     using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
+
     using NUnit.Framework;
 
     /// <summary>

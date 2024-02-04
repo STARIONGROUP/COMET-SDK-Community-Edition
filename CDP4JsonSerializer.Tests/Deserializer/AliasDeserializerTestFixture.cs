@@ -1,18 +1,17 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AliasDeserializerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,18 +21,19 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
-
-using System.Globalization;
-using System.IO;
 
 namespace CDP4JsonSerializer.Tests.Deserializer
 {
     using System;
+    using System.Globalization;
+    using System.IO;
     using System.Linq;
+
     using CDP4Common.DTO;
-    using CDP4Common.MetaInfo;    
+    using CDP4Common.MetaInfo;
+
     using CDP4JsonSerializer.Tests.Helper;
+    
     using NUnit.Framework;
 
     [TestFixture]
@@ -68,7 +68,7 @@ namespace CDP4JsonSerializer.Tests.Deserializer
 
                 var expectedModifiedOnDate = DateTime.Parse("2015-04-17T07:48:14.56Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
 
-                Assert.AreEqual(expectedModifiedOnDate, alias.ModifiedOn);
+                Assert.That(alias.ModifiedOn, Is.EqualTo(expectedModifiedOnDate));
             }
         }
 
@@ -96,7 +96,7 @@ namespace CDP4JsonSerializer.Tests.Deserializer
 
                     Console.WriteLine(txt);
 
-                    Assert.IsTrue(txt.Contains("\"modifiedOn\":\"2015-04-17T07:48:14.560Z\""));
+                    Assert.That(txt, Does.Contain("\"modifiedOn\":\"2015-04-17T07:48:14.560Z\""));
                 }
             }            
         }

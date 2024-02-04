@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SerializerHelperTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -27,9 +27,11 @@ namespace CDP4JsonSerializer.Tests.Helper
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.EngineeringModelData;
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -54,16 +56,16 @@ namespace CDP4JsonSerializer.Tests.Helper
             propertyInfo.SetValue(orderedItem, value);
 
             var jObject = SerializerHelper.ToJsonObject(orderedItem);
-            Assert.AreEqual(3, jObject.Properties().Count());
+            Assert.That(jObject.Properties().Count(), Is.EqualTo(3));
 
             var k = jObject.Property("k");
-            Assert.IsNotNull(k);            
+            Assert.That(k, Is.Not.Null);
 
             var v = jObject.Property("v");
-            Assert.IsNotNull(v);
+            Assert.That(v, Is.Not.Null);
 
             var m = jObject.Property("m");
-            Assert.IsNotNull(m);
+            Assert.That(m, Is.Not.Null);
         }
 
         [Test]
@@ -106,11 +108,11 @@ namespace CDP4JsonSerializer.Tests.Helper
             var json = valueArray.ToJsonString();
             var result = SerializerHelper.ToValueArray<string>(json);
 
-            Assert.AreEqual(valueArray, result, "ValueArray creation failed for string \"{0}\"", input);
+            Assert.That(result, Is.EqualTo(valueArray), $"ValueArray creation failed for string \"{input}\".");
 
             var resultjson = result.ToJsonString();
 
-            Assert.AreEqual(json, resultjson, "Json creation failed for string \"{0}\"", input);
+            Assert.That(resultjson, Is.EqualTo(json), $"Json creation failed for string \"{input}\".");
         }
 
         private const string JsonString = @"{""widget"": {

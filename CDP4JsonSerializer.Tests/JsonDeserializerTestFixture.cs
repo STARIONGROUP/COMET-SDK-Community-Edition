@@ -4,14 +4,14 @@
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -62,6 +62,7 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatDeserializingSpecialCharWorks()
         {
             var response = "[{\"citation\":[],\"classKind\":\"Definition\",\"content\":\"abc \\\"hello world\\\"\",\"example\":[],\"iid\":\"2fa9d296-37e6-4bc3-9710-ad6b93327792\",\"languageCode\":null,\"note\":[],\"revisionNumber\":1}]";
+
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
                 var returnedTested = this.serializer.Deserialize(stream);
@@ -86,6 +87,7 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyDeserializeOrderedItemWorks()
         {
             var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/LOFT_EngineeringModel.json"));
+
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
                 var returned = this.serializer.Deserialize(stream);

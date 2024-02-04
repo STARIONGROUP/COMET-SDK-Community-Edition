@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonDeserializerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -62,12 +62,12 @@ namespace CDP4JsonSerializer.Tests
         public void VerifyThatDeserializingSpecialCharWorks()
         {
             var response = "[{\"citation\":[],\"classKind\":\"Definition\",\"content\":\"abc \\\"hello world\\\"\",\"example\":[],\"iid\":\"2fa9d296-37e6-4bc3-9710-ad6b93327792\",\"languageCode\":null,\"note\":[],\"revisionNumber\":1}]";
-            using (var stream = StreamHelper.GenerateStreamFromString(response))
-            {
-                var returnedTested = this.serializer.Deserialize(stream);
-                var def = returnedTested.OfType<CDP4Common.DTO.Definition>().Single();
-                Assert.That(def.Content, Is.EqualTo("abc \"hello world\""));
-            }
+
+            using var stream = StreamHelper.GenerateStreamFromString(response);
+
+            var returnedTested = this.serializer.Deserialize(stream);
+            var def = returnedTested.OfType<CDP4Common.DTO.Definition>().Single();
+            Assert.That(def.Content, Is.EqualTo("abc \"hello world\""));
         }
 
         [Test]
@@ -75,24 +75,23 @@ namespace CDP4JsonSerializer.Tests
         {
             var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory,  "TestData/SiteDirectory.json"));
 
-            using (var stream = StreamHelper.GenerateStreamFromString(response))
-            {
-                var returnedTested = this.serializer.Deserialize(stream);
-                Assert.That(returnedTested.Count(), Is.EqualTo(445));
-            }
+            using var stream = StreamHelper.GenerateStreamFromString(response);
+
+            var returnedTested = this.serializer.Deserialize(stream);
+            Assert.That(returnedTested.Count(), Is.EqualTo(445));
         }
 
         [Test]
         public void VerifyDeserializeOrderedItemWorks()
         {
             var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/LOFT_EngineeringModel.json"));
-            using (var stream = StreamHelper.GenerateStreamFromString(response))
-            {
-                var returned = this.serializer.Deserialize(stream);
-                var statelist = (CDP4Common.DTO.PossibleFiniteStateList)returned.First(dto => dto.ClassKind == ClassKind.PossibleFiniteStateList);
 
-                Assert.That(statelist.PossibleState, Is.Not.Empty);
-            }
+            using var stream = StreamHelper.GenerateStreamFromString(response);
+
+            var returned = this.serializer.Deserialize(stream);
+            var statelist = (CDP4Common.DTO.PossibleFiniteStateList)returned.First(dto => dto.ClassKind == ClassKind.PossibleFiniteStateList);
+
+            Assert.That(statelist.PossibleState, Is.Not.Empty);
         }
 
         [Test]
@@ -100,38 +99,37 @@ namespace CDP4JsonSerializer.Tests
         {
             var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/LOFT_EngineeringModel.json"));
 
-            using (var stream = StreamHelper.GenerateStreamFromString(response))
-            {
-                var returned = this.serializer.Deserialize(stream);
+            using var stream = StreamHelper.GenerateStreamFromString(response);
 
-                var arrayPt = (CDP4Common.DTO.ArrayParameterType)returned.First(dto => dto.ClassKind == ClassKind.ArrayParameterType);
+            var returned = this.serializer.Deserialize(stream);
 
-                Assert.That(arrayPt.Dimension, Is.Not.Empty);
-                Assert.That(arrayPt.Dimension.Count, Is.Not.EqualTo(1));
-            }
+            var arrayPt = (CDP4Common.DTO.ArrayParameterType)returned.First(dto => dto.ClassKind == ClassKind.ArrayParameterType);
+
+            Assert.That(arrayPt.Dimension, Is.Not.Empty);
+            Assert.That(arrayPt.Dimension.Count, Is.Not.EqualTo(1));
         }
 
         [Test]
         public void VerifyThatDeserializeValueArrayWorks()
         {
             var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/LOFT_EngineeringModel.json"));
-            using (var stream = StreamHelper.GenerateStreamFromString(response))
-            {
-                var returned = this.serializer.Deserialize(stream);
-                var valueset = (CDP4Common.DTO.ParameterValueSet)returned.First(dto => dto.ClassKind == ClassKind.ParameterValueSet);
 
-                Assert.That(valueset.Manual, Is.Not.Empty);
-            }
+            using var stream = StreamHelper.GenerateStreamFromString(response);
+
+            var returned = this.serializer.Deserialize(stream);
+            var valueset = (CDP4Common.DTO.ParameterValueSet)returned.First(dto => dto.ClassKind == ClassKind.ParameterValueSet);
+
+            Assert.That(valueset.Manual, Is.Not.Empty);
         }
 
         [Test]
         public void VerifyThatDeserializeBigModelWorks()
         {
             var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/bigmodel.json"));
-            using (var stream = StreamHelper.GenerateStreamFromString(response))
-            {
-                Assert.DoesNotThrow(() => this.serializer.Deserialize(stream));
-            }
+
+            using var stream = StreamHelper.GenerateStreamFromString(response);
+
+            Assert.DoesNotThrow(() => this.serializer.Deserialize(stream));
         }
 
         [Test]
@@ -160,6 +158,7 @@ namespace CDP4JsonSerializer.Tests
         {
             var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/jsonTestSample.json")).Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
             IReadOnlyList<CDP4Common.DTO.Thing> result;
+
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
                 result = this.serializer.Deserialize(stream).ToList();

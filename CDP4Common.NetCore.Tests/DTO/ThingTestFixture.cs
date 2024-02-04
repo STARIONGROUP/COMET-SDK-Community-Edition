@@ -347,8 +347,8 @@ namespace CDP4Common.Tests.DTO
 
             Assert.That(copyparam.ValueSet.Contains(copyvs1.Iid), Is.True);
             Assert.That(copyparam.ValueSet.Contains(copyvs2.Iid), Is.True);
-            Assert.That(copyvs1.Manual.Any(), Is.True);
-            Assert.That(copyvs2.Computed.Any(), Is.True);
+            Assert.That(copyvs1.Manual.Count, Is.AtLeast(1));
+            Assert.That(copyvs2.Computed.Count, Is.AtLeast(1));
         }
 
         [Test]
