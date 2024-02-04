@@ -78,7 +78,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
 
             return Observable.Create<TMessage>(async observer =>
             {
-                this.InitializeListener(observer, channel, queueName, exchangeType, cancellationToken);
+                this.InitializeListener(observer, channel, queueName, exchangeType);
                 
                 return Disposable.Create(() =>
                 {
@@ -96,9 +96,8 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// <param name="channel">The <see cref="IModel"/></param>
         /// <param name="queueName">The queue name</param>
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
-        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
         /// <returns>A channel</returns>
-        private void InitializeListener<T>(IObserver<T> observer, IModel channel, string queueName, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default) where T : class
+        private void InitializeListener<T>(IObserver<T> observer, IModel channel, string queueName, ExchangeType exchangeType = ExchangeType.Default) where T : class
         {
             try
             {
