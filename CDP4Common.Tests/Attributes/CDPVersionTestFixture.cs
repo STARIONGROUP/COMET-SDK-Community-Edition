@@ -45,7 +45,7 @@ namespace CDP4Common.Tests.Attributes
         [Test]
         public void VerifyThatExceptionIsThrownWhenArgumentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new CDPVersionAttribute(null));
+            Assert.That(() => new CDPVersionAttribute(null), Throws.ArgumentNullException);
         }
     }
 }

@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CategoryTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -68,12 +68,12 @@ namespace CDP4Common.Tests.Poco
 
             var allSuperCategories = category.AllSuperCategories();
 
-            Assert.AreEqual(4, allSuperCategories.Count());
+            Assert.That(allSuperCategories.Count(), Is.EqualTo(4));
 
             var shortnames = allSuperCategories.Aggregate(string.Empty,
                 (current, cat) => current + " " + cat.ShortName);
 
-            Assert.AreEqual("A11 A1 A2 B", shortnames.Trim());
+            Assert.That(shortnames.Trim(), Is.EqualTo("A11 A1 A2 B"));
         }
 
         [Test]
@@ -115,15 +115,17 @@ namespace CDP4Common.Tests.Poco
             bbb.SuperCategory.Add(bb);
             bb.SuperCategory.Add(b);
 
-            Assert.AreEqual(8, this.cache.Count);
+            Assert.That(this.cache.Count, Is.EqualTo(8));
 
             var derivedCategoriesOfA = a.AllDerivedCategories().ToList();
 
-            Assert.AreEqual(3, derivedCategoriesOfA.Count);
+            Assert.That(derivedCategoriesOfA.Count, Is.EqualTo(3));
 
-            CollectionAssert.Contains(derivedCategoriesOfA, aa);
-            CollectionAssert.Contains(derivedCategoriesOfA, aaa);
-            CollectionAssert.Contains(derivedCategoriesOfA, aaaa);
+            Assert.That(derivedCategoriesOfA, Does.Contain(aa));
+
+            Assert.That(derivedCategoriesOfA, Does.Contain(aaa));
+           
+            Assert.That(derivedCategoriesOfA, Does.Contain(aaaa));
         }
 
         [Test]
@@ -142,11 +144,13 @@ namespace CDP4Common.Tests.Poco
 
             mrdl.DefinedCategory.Add(category);
 
-            Assert.IsTrue(category.RequiredRdls.Contains(mrdl));
-            Assert.IsTrue(category.RequiredRdls.Contains(srdl1_1));
-            Assert.IsTrue(category.RequiredRdls.Contains(srdl1));
+            Assert.That(category.RequiredRdls.Contains(mrdl), Is.True);
 
-            Assert.IsFalse(category.RequiredRdls.Contains(srdl2));
+            Assert.That(category.RequiredRdls.Contains(srdl1_1), Is.True);
+
+            Assert.That(category.RequiredRdls.Contains(srdl1), Is.True);
+
+            Assert.That(category.RequiredRdls.Contains(srdl2), Is.False);
         }
 
         [Test]
@@ -197,12 +201,12 @@ namespace CDP4Common.Tests.Poco
             elementDefinitionA.Category.Add(categorya11);
             elementDefinitionB.Category.Add(categoryb111);
 
-            Assert.Contains(elementDefinitionA, categorya1.CategorizedThings().ToList());
-            Assert.Contains(elementDefinitionA, categorya11.CategorizedThings().ToList());
+            Assert.That(categorya1.CategorizedThings().ToList(), Does.Contain(elementDefinitionA));
+            Assert.That(categorya11.CategorizedThings().ToList(), Does.Contain(elementDefinitionA));
 
-            Assert.Contains(elementDefinitionB, categoryb1.CategorizedThings().ToList());
-            Assert.Contains(elementDefinitionB, categoryb11.CategorizedThings().ToList());
-            Assert.Contains(elementDefinitionB, categoryb111.CategorizedThings().ToList());
+            Assert.That(categoryb1.CategorizedThings().ToList(), Does.Contain(elementDefinitionB));
+            Assert.That(categoryb11.CategorizedThings().ToList(), Does.Contain(elementDefinitionB));
+            Assert.That(categoryb111.CategorizedThings().ToList(), Does.Contain(elementDefinitionB));
         }
 
         [Test]
@@ -212,7 +216,7 @@ namespace CDP4Common.Tests.Poco
             categorya1.PermissibleClass.Add(ClassKind.ElementDefinition);
             this.cache.TryAdd(new CDP4Common.Types.CacheKey(categorya1.Iid, null), new Lazy<Thing>(() => categorya1));
 
-            CollectionAssert.IsEmpty(categorya1.CategorizedThings());
+            Assert.That(categorya1.CategorizedThings(), Is.Empty);
         }
     }
 }

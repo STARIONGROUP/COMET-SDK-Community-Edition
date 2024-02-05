@@ -4,14 +4,14 @@
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -91,7 +91,7 @@ namespace CDP4Common.Tests.DTO
             booleanParameterType.AddContainer(ClassKind.SiteReferenceDataLibrary, siteReferenceDataLibraryId);
             booleanParameterType.AddContainer(ClassKind.SiteDirectory, siteDirectoryId);
 
-            Assert.Throws<InvalidOperationException>(() => booleanParameterType.AddContainer(ClassKind.EngineeringModel, Guid.NewGuid()));
+            Assert.That(() => booleanParameterType.AddContainer(ClassKind.EngineeringModel, Guid.NewGuid()), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace CDP4Common.Tests.DTO
             elementDefinition.AddContainer(ClassKind.Iteration, iterationId);
             elementDefinition.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
 
-            Assert.Throws<InvalidOperationException>(() => elementDefinition.AddContainer(ClassKind.Person, Guid.NewGuid()));
+            Assert.That(() => elementDefinition.AddContainer(ClassKind.Person, Guid.NewGuid()), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -126,9 +126,9 @@ namespace CDP4Common.Tests.DTO
             iteration = new Iteration(iterationId,1);
             iteration.Element.Add(elementDefinitionId);
             
-            Assert.IsTrue(iteration.Contains(elementDefinition));
-            Assert.IsFalse(iteration.Contains(elementDefinition2));
-
+            Assert.That(iteration.Contains(elementDefinition), Is.True);
+            Assert.That(iteration.Contains(elementDefinition2), Is.False);
+            
             // check ordered items
             var state1 = new PossibleFiniteState(Guid.NewGuid(), 1);
             var state2 = new PossibleFiniteState(Guid.NewGuid(), 1);
@@ -204,7 +204,7 @@ namespace CDP4Common.Tests.DTO
             booleanParameterType = new BooleanParameterType(booleanParameterTypeId, 1);
             booleanParameterType.AddContainer(ClassKind.SiteReferenceDataLibrary, siteReferenceDataLibraryId);
 
-            Assert.Throws<InvalidOperationException>(() => booleanParameterType.AddContainer(ClassKind.Person, Guid.NewGuid()));
+            Assert.That(() => booleanParameterType.AddContainer(ClassKind.Person, Guid.NewGuid()), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -221,10 +221,8 @@ namespace CDP4Common.Tests.DTO
         public void VerifyThatExceptionIsRaisedWhenNoClassKindExistsForDTO()
         {
             var thing = new TestDto();
-            Assert.Throws<NotSupportedException>(() =>
-            {
-                Console.WriteLine(thing.Route);
-            });
+            
+            Assert.That(() => { Console.WriteLine(thing.Route); }, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

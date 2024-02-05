@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BinaryRelationshipTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -93,18 +93,18 @@ namespace CDP4Common.Tests.Poco
             iteration.Relationship.Add(relationship);
 
             // test
-            Assert.IsEmpty(relationship.QueryAppliedBinaryRelationshipRules());
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules(), Is.Empty);
 
             relationship.Category.Add(cat3);
-            Assert.IsTrue(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule3));
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule3), Is.True);
 
             relationship.Category.Add(cat1);
-            Assert.IsTrue(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule3));
-            Assert.IsTrue(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule1));
-            Assert.IsTrue(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule11));
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule3), Is.True);
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule1), Is.True);
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule11), Is.True);
 
             relationship.Category = null;
-            Assert.IsEmpty(relationship.QueryAppliedBinaryRelationshipRules());
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules(), Is.Empty);
         }
     }
 }

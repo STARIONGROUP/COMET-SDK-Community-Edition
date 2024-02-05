@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BinaryRelationshipRuleTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2020 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -91,7 +91,8 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatNullIterationThrowsArgumentException()
         {
             var rule = new BinaryRelationshipRule(Guid.NewGuid(), this.cache, this.uri);
-            Assert.Throws<ArgumentNullException>(() => rule.Verify(null));
+            
+            Assert.That(() => rule.Verify(null), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -103,7 +104,8 @@ namespace CDP4Common.Tests.Poco
             this.iteration.Relationship.Add(multiRelationship);
 
             var violations = rule.Verify(this.iteration);
-            CollectionAssert.IsEmpty(violations);
+            
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]
@@ -115,7 +117,7 @@ namespace CDP4Common.Tests.Poco
 
             var violations = rule.Verify(this.iteration);
 
-            CollectionAssert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]
@@ -146,15 +148,16 @@ namespace CDP4Common.Tests.Poco
             this.iteration.Relationship.Add(binaryRelationship);
 
             var violations = rule.Verify(this.iteration);
-            CollectionAssert.IsNotEmpty(violations);
+            
+            Assert.That(violations, Is.Not.Empty);
 
             var sourceViolation = violations.Single(x => x.ViolatingThing.Contains(binaryRelationship.Iid) && x.Description.Contains("The Source"));
-            Assert.IsNotNull(sourceViolation);
-            Console.WriteLine(sourceViolation.Description);
+            
+            Assert.That(sourceViolation, Is.Not.Null);
 
             var targetViolation = violations.Single(x => x.ViolatingThing.Contains(binaryRelationship.Iid) && x.Description.Contains("The Target"));
-            Assert.IsNotNull(targetViolation);
-            Console.WriteLine(targetViolation.Description);
+            
+            Assert.That(targetViolation, Is.Not.Null);
         }
 
         [Test]
@@ -178,32 +181,37 @@ namespace CDP4Common.Tests.Poco
                                Name = "Binary Relationship Rule",
                                RelationshipCategory = relationshipCategory
                            };
+
             rule.SourceCategory = sourceAndTargetCategory;
             rule.TargetCategory = sourceAndTargetCategory;
             
             var elementDefinitionBattery1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
             var elementDefinitionBattery2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
+
             var binaryRelationship = new BinaryRelationship(Guid.NewGuid(), this.cache, this.uri)
                             {
                                 Source = elementDefinitionBattery1,
                                 Target = elementDefinitionBattery2
                             };
+
             binaryRelationship.Category.Add(relationshipCategory);
             this.iteration.Relationship.Add(binaryRelationship);
 
             var violations = rule.Verify(this.iteration);
 
-            Assert.IsNotEmpty(violations);
+            Assert.That(violations, Is.Not.Empty);
 
             var sourceViolation = violations.Single(x => x.ViolatingThing.Contains(binaryRelationship.Iid) && x.Description.Contains("The Source"));
-            Assert.IsNotNull(sourceViolation);
-            Assert.IsTrue(sourceViolation.ViolatingThing.Contains(elementDefinitionBattery1.Iid));
-            Console.WriteLine(sourceViolation.Description);
+            
+            Assert.That(sourceViolation, Is.Not.Null);
+
+            Assert.That(sourceViolation.ViolatingThing.Contains(elementDefinitionBattery1.Iid), Is.True);
 
             var targetViolation = violations.Single(x => x.ViolatingThing.Contains(binaryRelationship.Iid) && x.Description.Contains("The Target"));
-            Assert.IsNotNull(targetViolation);
-            Assert.IsTrue(targetViolation.ViolatingThing.Contains(elementDefinitionBattery2.Iid));
-            Console.WriteLine(targetViolation.Description);
+            
+            Assert.That(targetViolation, Is.Not.Null);
+
+            Assert.That(targetViolation.ViolatingThing.Contains(elementDefinitionBattery2.Iid), Is.True);
         }
 
         [Test]
@@ -224,11 +232,13 @@ namespace CDP4Common.Tests.Poco
 
             var requiredRdls = rule.RequiredRdls.ToList();
 
-            Assert.IsTrue(requiredRdls.Contains(mrdl));
-            Assert.IsTrue(requiredRdls.Contains(srdl1_1));
-            Assert.IsTrue(requiredRdls.Contains(srdl1));
+            Assert.That(requiredRdls.Contains(mrdl), Is.True);
 
-            Assert.IsFalse(requiredRdls.Contains(srdl2));
+            Assert.That(requiredRdls.Contains(srdl1_1), Is.True);
+
+            Assert.That(requiredRdls.Contains(srdl1), Is.True);
+
+            Assert.That(requiredRdls.Contains(srdl2), Is.False);
         }
     }
 }

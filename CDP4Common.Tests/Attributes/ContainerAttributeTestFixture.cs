@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ContainerAttributeTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,13 +21,12 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests
 {
     using CDP4Common;
-    using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -43,8 +41,8 @@ namespace CDP4Common.Tests
             var propertyName = "EmailAddress";
             var containerPropertyNameAttribute = new ContainerAttribute(typeof(Person), propertyName);
 
-            Assert.AreEqual(propertyName, containerPropertyNameAttribute.PropertyName);
-            Assert.AreEqual(typeof(Person), containerPropertyNameAttribute.ClassType);
+            Assert.That(containerPropertyNameAttribute.PropertyName, Is.EqualTo(propertyName));
+            Assert.That(containerPropertyNameAttribute.ClassType, Is.EqualTo(typeof(Person)));
         }
     }
 }
