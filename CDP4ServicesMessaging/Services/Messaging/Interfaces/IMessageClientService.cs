@@ -66,6 +66,7 @@ namespace CDP4ServicesMessaging.Services.Messaging.Interfaces
         /// <param name="message">The <typeparamref name="TMessage"/> to push</param>
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
+        /// <exception cref="ArgumentNullException">When the provided <typeparamref name="TMessage"/> is null</exception>
         /// <return>A <see cref="Task"/></return>
         Task PushParallel<TMessage>(string messageQueue, TMessage message, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default);
 
@@ -77,6 +78,7 @@ namespace CDP4ServicesMessaging.Services.Messaging.Interfaces
         /// <param name="messages">The collection of <typeparamref name="TMessage"/> to push</param>
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
+        /// <exception cref="ArgumentNullException">When any of the provided <typeparamref name="TMessage"/> is null</exception>
         void PushParallel<TMessage>(string messageQueue, IEnumerable<TMessage> messages, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -88,6 +90,7 @@ namespace CDP4ServicesMessaging.Services.Messaging.Interfaces
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
         /// <param name="cancellationToken">A possible <see cref="CancellationToken"/></param>
         /// <returns>A <see cref="Task"/></returns>
+        /// <exception cref="ArgumentNullException">When any of the provided <typeparamref name="TMessage"/> is null</exception>
         Task Push<TMessage>(string messageQueue, IEnumerable<TMessage> messages, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -99,6 +102,7 @@ namespace CDP4ServicesMessaging.Services.Messaging.Interfaces
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
         /// <param name="cancellationToken">A possible <see cref="CancellationToken"/></param>
         /// <returns>A <see cref="Task"/></returns>
+        /// <exception cref="ArgumentNullException">When the provided <typeparamref name="TMessage"/> is null</exception>
         Task Push<TMessage>(string messageQueue, TMessage message, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default);
     }
 }

@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingMessageProducer.cs" company="RHEA System S.A.">
 //    Copyright (c) 2024 RHEA System S.A.
 //
@@ -24,9 +24,10 @@
 
 namespace CDP4ServicesMessaging.Services.ThingMessaging
 {
+    using System;
     using System.Threading.Tasks;
     using System.Threading;
-
+    
     using CDP4ServicesMessaging.Messages;
     using CDP4ServicesMessaging.Services.Messaging;
     using CDP4ServicesMessaging.Services.ThingMessaging.Interfaces;
@@ -57,16 +58,19 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging
         /// <param name="message">The <see cref="ThingsChangedMessage"/></param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
         /// <return>A <see cref="Task"/></return>
+        /// <exception cref="ArgumentNullException">When the provided <param name="message"></param> is null</exception>
         public Task PushParallel(ThingsChangedMessage message, CancellationToken cancellationToken = default)
         {
             return this.PushParallel(nameof(ThingsChangedMessage), message, ExchangeType.Fanout, cancellationToken);
         }
-        
+
         /// <summary>
         /// Pushes synchroniously the specified <paramref name="message"/> to the ThingsChangedMessage queue or exchange
         /// </summary>
         /// <param name="message">The <see cref="ThingsChangedMessage"/> to push</param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
+        /// <return>A <see cref="Task"/></return>
+        /// <exception cref="ArgumentNullException">When the provided <param name="message"></param> is null</exception>
         public async Task Push(ThingsChangedMessage message, CancellationToken cancellationToken = default)
         {
             await this.Push(nameof(ThingsChangedMessage), message, ExchangeType.Fanout, cancellationToken);

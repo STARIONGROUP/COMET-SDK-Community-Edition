@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="MessageClientService.cs" company="RHEA System S.A.">
 //    Copyright (c) 2024 RHEA System S.A.
 //
@@ -65,51 +65,55 @@ namespace CDP4ServicesMessaging.Services.Messaging
         }
 
         /// <summary>
-        /// Listens and emmits <typeparamref name="TMessage"/> message
+        /// Listens for messages of type <typeparamref name="TMessage"/> on the specified queue.
         /// </summary>
-        /// <typeparam name="TMessage">The type of message</typeparam>
-        /// <param name="queueName">The queue name</param>
-        /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
-        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
-        /// <returns>An awaitable of <see cref="IObservable{T}"/> of <typeparamref name="TMessage"/></returns>
+        /// <typeparam name="TMessage">The type of messages to listen for.</typeparam>
+        /// <param name="queueName">The name of the queue to listen on.</param>
+        /// <param name="exchangeType">The exchange type. Default is <see cref="ExchangeType.Default"/>.</param>
+        /// <param name="cancellationToken">Cancellation token for the asynchronous operation.</param>
+        /// <returns>An observable sequence of messages.</returns>
         public async Task<IObservable<TMessage>> Listen<TMessage>(string queueName, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default) where TMessage : class
         {
             var channel = await this.GetChannelAsync(cancellationToken);
 
-            return Observable.Create<TMessage>(async observer =>
+            return Observable.Create<TMessage>(observer =>
             {
-                this.InitializeListener(observer, channel, queueName, exchangeType);
-                
-                return Disposable.Create(() =>
-                {
-                    channel?.Close();
-                    channel?.Dispose();
-                });
+                var disposables = this.InitializeListener(observer, channel, queueName, exchangeType);
+
+                return Disposable.Create(() => disposables.Dispose());
             });
         }
 
         /// <summary>
-        /// Initializes a listener on the specified <paramref name="queueName"/>
+        /// Initializes the listener by setting up event handlers and consuming messages.
         /// </summary>
-        /// <typeparam name="T">The type of message</typeparam>
-        /// <param name="observer">The <see cref="IObserver{T}"/></param>
-        /// <param name="channel">The <see cref="IModel"/></param>
-        /// <param name="queueName">The queue name</param>
-        /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
-        /// <returns>A channel</returns>
-        private void InitializeListener<T>(IObserver<T> observer, IModel channel, string queueName, ExchangeType exchangeType = ExchangeType.Default) where T : class
+        /// <typeparam name="TMessage">The type of messages to listen for.</typeparam>
+        /// <param name="observer">The observer to push messages to.</param>
+        /// <param name="channel">The RabbitMQ channel.</param>
+        /// <param name="queueName">The name of the queue to listen on.</param>
+        /// <param name="exchangeType">The exchange type. Default is <see cref="ExchangeType.Default"/>.</param>
+        /// <returns>A disposable to clean up resources.</returns>
+        private IDisposable InitializeListener<TMessage>(IObserver<TMessage> observer, IModel channel, string queueName, ExchangeType exchangeType) where TMessage : class
         {
+            EventingBasicConsumer consumer = null;
+
+            void ConsumerOnReceived(object _, BasicDeliverEventArgs m) =>
+                observer.OnNext(this.Serializer.Deserialize<TMessage>(m.Body));
+
+            void ConsumerOnShutdown(object _, ShutdownEventArgs a) =>
+                observer.OnError(new OperationCanceledException($"The channel has shutdown [Reply: {a.ReplyText}, AMQPcode: {a.ReplyCode}]"));
+
+            void ChannelOnCallbackException(object _, CallbackExceptionEventArgs m) =>
+                observer.OnError(m.Exception);
+
             try
             {
-                channel.CallbackException += (_, m) => observer.OnError(m.Exception);
+                channel.CallbackException += ChannelOnCallbackException;
 
-                var consumer = new EventingBasicConsumer(channel);
+                consumer = new EventingBasicConsumer(channel);
 
-                consumer.Received += (_, m) =>
-                    observer.OnNext(this.Serializer.Deserialize<T>(m.Body));
-
-                consumer.Shutdown += (e, a) =>
-                    observer.OnError(new OperationCanceledException($"The channel has shutdown [Reply: {a.ReplyText}, AMQPcode: {a.ReplyCode}]"));
+                consumer.Received += ConsumerOnReceived;
+                consumer.Shutdown += ConsumerOnShutdown;
 
                 channel.BasicConsume(this.EnsureQueueAndExchangeAreDeclared(queueName, channel, exchangeType), true, consumer);
             }
@@ -117,8 +121,21 @@ namespace CDP4ServicesMessaging.Services.Messaging
             {
                 observer.OnError(exception);
             }
-        }
 
+            return Disposable.Create(() =>
+            {
+                channel.CallbackException -= ChannelOnCallbackException; 
+                
+                if (consumer == null)
+                {
+                    return;
+                }
+
+                consumer.Received -= ConsumerOnReceived;
+                consumer.Shutdown -= ConsumerOnShutdown;
+            });
+        }
+        
         /// <summary>
         /// Adds a listener to the specified queue
         /// </summary>
@@ -130,6 +147,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
         public async Task<IDisposable> AddListener(string queueName, EventHandler<BasicDeliverEventArgs> onReceive, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default)
         {
             IModel channel = default;
+            EventingBasicConsumer consumer = default;
 
             try
             {
@@ -137,7 +155,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
 
                 this.EnsureQueueAndExchangeAreDeclared(queueName, channel, exchangeType);
 
-                var consumer = new EventingBasicConsumer(channel);
+                consumer = new EventingBasicConsumer(channel);
                 consumer.Received += onReceive;
 
                 channel.BasicConsume(queueName, true, consumer);
@@ -149,6 +167,13 @@ namespace CDP4ServicesMessaging.Services.Messaging
             catch (Exception exception)
             {
                 this.Logger.LogError(exception, "Error while adding a listener to the {QueueName}", queueName);
+            }
+            finally
+            {
+                if (consumer != null)
+                {
+                    consumer.Received -= onReceive;
+                }
             }
 
             return channel;
@@ -222,16 +247,14 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
         /// <param name="cancellationToken">A possible <see cref="CancellationToken"/></param>
         /// <returns>A <see cref="Task"/></returns>
+        /// <exception cref="ArgumentNullException">When the provided <typeparamref name="TMessage"/> is null</exception>
         public async Task Push<TMessage>(string messageQueue, TMessage message, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
+            this.VerifyMessageIsNotNull(message);
 
             try
             {
-                using var channel = await this.GetChannelAsync(cancellationToken);
+                var channel = await this.GetChannelAsync(cancellationToken);
                 this.EnsureQueueAndExchangeAreDeclared(messageQueue, channel, exchangeType, true);
 
                 var properties = channel.CreateBasicProperties();
@@ -249,6 +272,20 @@ namespace CDP4ServicesMessaging.Services.Messaging
             catch (Exception exception)
             {
                 this.Logger.LogError("The message {MessageName} could not be queued to {MessageQueue} reason : {exception}", typeof(TMessage).Name, messageQueue, exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// Verifies that the specified message is not null.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="message">The message to verify.</param>
+        /// <exception cref="ArgumentNullException">When the provided <typeparamref name="TMessage"/> is null</exception>
+        private void VerifyMessageIsNotNull<TMessage>(TMessage message)
+        {
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
             }
         }
 
