@@ -24,6 +24,7 @@
 
 namespace CDP4ServicesMessaging.Services.ThingMessaging.Interfaces
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -40,6 +41,7 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging.Interfaces
         /// <param name="message">The <see cref="ThingsChangedMessage"/></param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
         /// <return>A <see cref="Task"/></return>
+        /// <exception cref="ArgumentNullException">When the provided <param name="message"></param> is null</exception>
         Task PushParallel(ThingsChangedMessage message, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -47,6 +49,8 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging.Interfaces
         /// </summary>
         /// <param name="message">The <see cref="ThingsChangedMessage"/> to push</param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
+        /// <return>A <see cref="Task"/></return>
+        /// <exception cref="ArgumentNullException">When the provided <param name="message"></param> is null</exception>
         Task Push(ThingsChangedMessage message, CancellationToken cancellationToken = default);
     }
 }

@@ -38,7 +38,7 @@ namespace CDP4ServicesMessaging.Tests.Serializers.Json
     [TestFixture]
     public class Cdp4MessageSerializerTestFixture
     {
-        private IMessageSerializer cdp4JsonSerializer;
+        private Cdp4MessageSerializer cdp4JsonSerializer;
 
         [SetUp]
         public void Setup()
