@@ -684,8 +684,28 @@ namespace CDP4Common.Helpers
         private NestedParameter CreatedNestedParameter(ParameterOrOverrideBase parameter, ParameterTypeComponent component, ParameterValueSetBase valueSet, Option option)
         {
             var componentIndex = component?.Index ?? 0;
-            var actualValue = valueSet.ActualValue == null ? "-" :  valueSet.ActualValue[componentIndex];
-            var formula = valueSet.Formula == null ? "-" : valueSet.Formula[componentIndex];
+
+            string actualValue;
+
+            try
+            {
+                actualValue = valueSet.ActualValue == null ? "-" : valueSet.ActualValue[componentIndex];
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                actualValue = "-";
+            }
+
+            string formula;
+
+            try
+            {
+                formula = valueSet.Formula == null ? "-" : valueSet.Formula[componentIndex];
+            }
+            catch (Exception e)
+            {
+                formula = "-";
+            }
 
             var nestedParameter = new NestedParameter(Guid.NewGuid(), parameter.Cache, parameter.IDalUri)
             {
@@ -727,8 +747,18 @@ namespace CDP4Common.Helpers
         private NestedParameter CreateNestedParameter(ParameterSubscription subscription, ParameterTypeComponent component, ParameterSubscriptionValueSet valueSet, Option option)
         {
             var componentIndex = component?.Index ?? 0;
-            var actualValue = valueSet.ActualValue == null ? "-" : valueSet.ActualValue[componentIndex];
             
+            string actualValue;
+
+            try
+            {
+                actualValue = valueSet.ActualValue == null ? "-" : valueSet.ActualValue[componentIndex];
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                actualValue = "-";
+            }
+
             var nestedParameter = new NestedParameter(Guid.NewGuid(), subscription.Cache, subscription.IDalUri)
             {
                 IsVolatile = true,
