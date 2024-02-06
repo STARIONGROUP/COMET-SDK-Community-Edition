@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>26.1.0</VersionPrefix>
+    <VersionPrefix>26.2.0</VersionPrefix>
     <Description>CDP4 Services Messaging is a Class Library that contains clients and messages class that can be used for inter services communication</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Alex, Alexander, Nathanael, Antoine</Authors>
@@ -41,7 +41,7 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-        <PackageReference Include="Polly" Version="8.2.1" />
+        <PackageReference Include="Polly" Version="8.3.0" />
         <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     </ItemGroup>
     <ItemGroup>
