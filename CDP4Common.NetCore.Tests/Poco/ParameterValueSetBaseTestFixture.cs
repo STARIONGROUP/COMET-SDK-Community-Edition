@@ -82,10 +82,10 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetOwnerThrowsEx()
         {
-            Assert.Throws<ContainmentException>(() =>
+            Assert.That(() =>
             {
-                Console.WriteLine(this.parameterValueSetBase.Owner);    
-            });
+                Console.WriteLine(this.parameterValueSetBase.Owner);
+            }, Throws.TypeOf<ContainmentException>());
         }
     }
 }

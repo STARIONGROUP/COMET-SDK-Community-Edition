@@ -48,10 +48,11 @@ namespace CDP4Common.Tests.Poco
         public void TestGetOwnerThrowEx()
         {
             var thing = new PossibleFiniteState();
-            Assert.Throws<ContainmentException>(() =>
+            
+            Assert.That(() =>
             {
                 var d = thing.Owner;
-            });
+            }, Throws.TypeOf<ContainmentException>());
         }
 
         [Test]

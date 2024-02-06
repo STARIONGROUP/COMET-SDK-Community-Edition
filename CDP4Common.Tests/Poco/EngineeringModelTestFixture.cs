@@ -62,7 +62,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatMethodThrow()
         {
-            Assert.Throws<ArgumentNullException>(() => this.model.GetActiveParticipant(null));
+            Assert.That(() => this.model.GetActiveParticipant(null), Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]

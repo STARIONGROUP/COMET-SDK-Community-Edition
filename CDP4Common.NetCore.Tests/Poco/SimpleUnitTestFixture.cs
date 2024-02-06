@@ -67,11 +67,10 @@ namespace CDP4Common.Tests.Poco
 
             var requiredRdls = simpleUnit.RequiredRdls.ToList();
 
-            Assert.IsTrue(requiredRdls.Contains(mrdl));
-            Assert.IsTrue(requiredRdls.Contains(srdl1_1));
-            Assert.IsTrue(requiredRdls.Contains(srdl1));
-
-            Assert.IsFalse(requiredRdls.Contains(srdl2));
+            Assert.That(requiredRdls.Contains(mrdl), Is.True);
+            Assert.That(requiredRdls.Contains(srdl1_1), Is.True);
+            Assert.That(requiredRdls.Contains(srdl1), Is.True);
+            Assert.That(requiredRdls.Contains(srdl2), Is.False);
         }
     }
 }

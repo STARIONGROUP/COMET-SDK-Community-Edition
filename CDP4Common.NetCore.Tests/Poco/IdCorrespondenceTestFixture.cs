@@ -52,10 +52,10 @@ namespace CDP4Common.Tests.Poco
         {
             var thing = new IdCorrespondence(Guid.NewGuid(), null, null);
 
-            Assert.Throws<ContainmentException>(() =>
+            Assert.That(() =>
             {
                 Console.WriteLine(thing.Owner);
-            });
+            }, Throws.TypeOf<ContainmentException>());
         }
     }
 }

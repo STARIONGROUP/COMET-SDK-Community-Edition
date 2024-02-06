@@ -230,7 +230,7 @@ namespace CDP4Common.Tests.Types
         {
             this.testList = new OrderedItemList<Thing>(this.person, true);
             
-            Assert.Throws<ArgumentNullException>(() => this.testList.Add(null));
+            Assert.That(() => this.testList.Add(null), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -243,7 +243,7 @@ namespace CDP4Common.Tests.Types
 
             this.testList = new OrderedItemList<Thing>(this.person, true);
 
-            Assert.Throws<ModelErrorException>(() => this.testList.AddOrderedItems(listOrderedItem));
+            Assert.That(() => this.testList.AddOrderedItems(listOrderedItem), Throws.TypeOf<ModelErrorException>());
         }
 
         [Test]
@@ -274,7 +274,7 @@ namespace CDP4Common.Tests.Types
             
             list.Add(email_0);
             
-            Assert.Throws<InvalidOperationException>(() => list.Add(email_0));
+            Assert.That(() => list.Add(email_0), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -282,15 +282,15 @@ namespace CDP4Common.Tests.Types
         {
             var list = new OrderedItemList<Thing>(this.person, false);
             EmailAddress email;
-            Assert.Throws<ArgumentOutOfRangeException>(() => email = (EmailAddress)list[-1]);
+            Assert.That(() => email = (EmailAddress)list[-1], Throws.TypeOf<ArgumentOutOfRangeException>());
 
             email = new EmailAddress(Guid.NewGuid(), null, null);
             list.Add(email);
             var invalidIndex = list.Count;
-            Assert.Throws<ArgumentOutOfRangeException>(() => email = (EmailAddress)list[invalidIndex]);
+                Assert.That(() => email = (EmailAddress)list[invalidIndex], Throws.TypeOf<ArgumentOutOfRangeException>());
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => list[-1] = email);
-            Assert.Throws<ArgumentOutOfRangeException>(() => list[invalidIndex] = email);
+            Assert.That(() => list[-1] = email, Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => list[invalidIndex] = email, Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -299,14 +299,14 @@ namespace CDP4Common.Tests.Types
             var list = new OrderedItemList<Thing>(this.person, false);
             var email = new EmailAddress(Guid.NewGuid(), null, null);
             list.Add(email);
-            Assert.Throws<ArgumentNullException>(() => list[0] = null);
+            Assert.That(() => list[0] = null, Throws.ArgumentNullException);
         }
 
         [Test]
         public void VerifyThatNullCannotBeInserted()
         {
             var list = new OrderedItemList<Thing>(this.person, false);
-            Assert.Throws<ArgumentNullException>(() =>list.Insert(1, null));
+            Assert.That(() => list.Insert(1, null), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -334,7 +334,7 @@ namespace CDP4Common.Tests.Types
             list.Add(email_0);
             list.Add(email_1);
 
-            Assert.Throws<InvalidOperationException>(() => list[0] = email_1);
+            Assert.That(() => list[0] = email_1, Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -394,7 +394,7 @@ namespace CDP4Common.Tests.Types
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(-1, 1));
+            Assert.That(() => testlist.Move(-1, 1), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -407,7 +407,7 @@ namespace CDP4Common.Tests.Types
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(2, 1));
+            Assert.That(() => testlist.Move(2, 1), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -420,7 +420,7 @@ namespace CDP4Common.Tests.Types
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(0, -1));
+            Assert.That(() => testlist.Move(0, -1), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -433,7 +433,7 @@ namespace CDP4Common.Tests.Types
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => testlist.Move(0, 3));
+            Assert.That(() => testlist.Move(0, 3), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -448,7 +448,7 @@ namespace CDP4Common.Tests.Types
 
             Assert.AreEqual(0, testlist.FindIndex(x => x.Iid == email0.Iid));
             Assert.AreEqual(-1, testlist.FindIndex(x => x.Iid == Guid.NewGuid()));
-            Assert.Throws<ArgumentNullException>(() => testlist.FindIndex(null));
+            Assert.That(() => testlist.FindIndex(null), Throws.ArgumentNullException);
         }
     }
 }

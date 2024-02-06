@@ -244,7 +244,7 @@ namespace CDP4Common.Tests
 
             Assert.IsFalse(sitedir.IsContainedBy(x => x.Iid == sitedir.Iid));
 
-            Assert.Throws<ArgumentNullException>(() => factor.IsContainedBy(matchPredicate: null));
+            Assert.That(() => factor.IsContainedBy(matchPredicate: null), Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
@@ -253,7 +253,7 @@ namespace CDP4Common.Tests
             SiteDirectory sitedir = null;
             var rdl = new SiteReferenceDataLibrary(Guid.NewGuid(), null, null);
 
-            Assert.Throws<ArgumentNullException>(() => rdl.IsContainedBy(sitedir));
+            Assert.That(() => rdl.IsContainedBy(sitedir), Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
@@ -277,7 +277,7 @@ namespace CDP4Common.Tests
 
             Assert.IsFalse(sitedir.IsContainedBy(sitedir.Iid));
 
-            Assert.Throws<ArgumentNullException>(() => factor.IsContainedBy(iid: Guid.Empty));
+            Assert.That(() => factor.IsContainedBy(iid: Guid.Empty), Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]

@@ -91,7 +91,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatNullIterationThrowsArgumentException()
         {
             var rule = new MultiRelationshipRule(Guid.NewGuid(), this.cache, this.uri);
-            Assert.Throws<ArgumentNullException>(() => rule.Verify(null));
+            Assert.That(() => rule.Verify(null), Throws.ArgumentNullException);
         }
 
         [Test]

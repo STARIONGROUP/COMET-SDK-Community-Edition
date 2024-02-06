@@ -133,10 +133,8 @@ namespace CDP4Common.NetCore.Tests.Helpers
         {
             this.orderedItem3.K = 2;
 
-            var exception = Assert.Throws<ModelErrorException>(
-                () => this.possibleFiniteStateList.PossibleState.ResolveList(this.orderedItems, this.iteration.Iid, this.cache));
-
-            Assert.That(exception.Message.ToUpper(), Contains.Substring("The key already exists".ToUpper()));
+            Assert.That(() => this.possibleFiniteStateList.PossibleState.ResolveList(this.orderedItems, this.iteration.Iid, this.cache), 
+                Throws.TypeOf<ModelErrorException>().With.Message.Contains("The key already exists"));
         }
     }
 }

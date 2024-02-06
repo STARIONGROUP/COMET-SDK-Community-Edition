@@ -91,7 +91,7 @@ namespace CDP4Common.Tests.Comparers
 
             iterationy.Option.Add(optiony);
 
-            Assert.Throws<InvalidOperationException>(() => comparer.Compare(optionx, optiony));
+            Assert.That(() => comparer.Compare(optionx, optiony), Throws.TypeOf<InvalidOperationException>());
         }
     }
 }

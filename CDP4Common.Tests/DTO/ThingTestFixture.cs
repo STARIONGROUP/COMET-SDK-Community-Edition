@@ -90,8 +90,8 @@ namespace CDP4Common.Tests.DTO
             booleanParameterType = new BooleanParameterType(booleanParameterTypeId, 1);
             booleanParameterType.AddContainer(ClassKind.SiteReferenceDataLibrary, siteReferenceDataLibraryId);
             booleanParameterType.AddContainer(ClassKind.SiteDirectory, siteDirectoryId);
-
-            Assert.Throws<InvalidOperationException>(() => booleanParameterType.AddContainer(ClassKind.EngineeringModel, Guid.NewGuid()));
+                
+            Assert.That(() => booleanParameterType.AddContainer(ClassKind.EngineeringModel, Guid.NewGuid()), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace CDP4Common.Tests.DTO
             elementDefinition.AddContainer(ClassKind.Iteration, iterationId);
             elementDefinition.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
 
-            Assert.Throws<InvalidOperationException>(() => elementDefinition.AddContainer(ClassKind.Person, Guid.NewGuid()));
+            Assert.That(() => elementDefinition.AddContainer(ClassKind.Person, Guid.NewGuid()), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -204,7 +204,7 @@ namespace CDP4Common.Tests.DTO
             booleanParameterType = new BooleanParameterType(booleanParameterTypeId, 1);
             booleanParameterType.AddContainer(ClassKind.SiteReferenceDataLibrary, siteReferenceDataLibraryId);
 
-            Assert.Throws<InvalidOperationException>(() => booleanParameterType.AddContainer(ClassKind.Person, Guid.NewGuid()));
+            Assert.That(() => booleanParameterType.AddContainer(ClassKind.Person, Guid.NewGuid()), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]

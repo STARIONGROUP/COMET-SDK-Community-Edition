@@ -130,10 +130,10 @@ namespace CDP4Common.Tests.Poco
         {
             this.parameterSubscription = new ParameterSubscription();
 
-            Assert.Throws<ContainmentException>(() =>
+            Assert.That(() =>
             {
-                Console.WriteLine(this.parameterSubscription.ParameterType);    
-            });
+                Console.WriteLine(this.parameterSubscription.ParameterType);
+            }, Throws.TypeOf<ContainmentException>());
         }
 
         [Test]

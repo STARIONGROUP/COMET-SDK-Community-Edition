@@ -117,7 +117,7 @@ namespace CDP4Common.Tests.Types
             this.person.EmailAddress.Add(email);
             var invalidIndex = this.person.EmailAddress.Count;
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => email = this.person.EmailAddress[invalidIndex]);
+            Assert.That(() => email = this.person.EmailAddress[invalidIndex], Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace CDP4Common.Tests.Types
             this.person.EmailAddress.Add(email);
             var invalidIndex = this.person.EmailAddress.Count;
             
-            Assert.Throws<ArgumentOutOfRangeException>(() => this.person.EmailAddress[invalidIndex] = email);
+            Assert.That(() => this.person.EmailAddress[invalidIndex] = email, Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace CDP4Common.Tests.Types
             var email = new EmailAddress(Guid.NewGuid(), null, null);
             this.person.EmailAddress.Add(email);
 
-            Assert.Throws<ArgumentNullException>(() => this.person.EmailAddress[0] = null);
+            Assert.That(() => this.person.EmailAddress[0] = null, Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
@@ -148,9 +148,9 @@ namespace CDP4Common.Tests.Types
             var otheremail = new EmailAddress(Guid.NewGuid(), null, null);
             this.person.EmailAddress.Add(otheremail);
 
-            Assert.Throws<InvalidOperationException>(() => this.person.EmailAddress.Add(email));
+            Assert.That(() => this.person.EmailAddress.Add(email), Throws.TypeOf<InvalidOperationException>());
 
-            Assert.Throws<InvalidOperationException>(() => this.person.EmailAddress[1] = email);
+            Assert.That(() => this.person.EmailAddress[1] = email, Throws.TypeOf<InvalidOperationException>());
         }
     }
 }

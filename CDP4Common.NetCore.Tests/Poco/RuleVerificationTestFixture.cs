@@ -43,17 +43,18 @@ namespace CDP4Common.Tests.Poco
             list.Owner = new DomainOfExpertise();
             list.RuleVerification.Add(thing);
 
-            Assert.IsTrue(ReferenceEquals(list.Owner, thing.Owner));
+            Assert.That(ReferenceEquals(list.Owner, thing.Owner), Is.True);
         }
 
         [Test]        
         public void TestGetOwnerThrowEx()
         {
             var userRuleVerification = new UserRuleVerification();
-            Assert.Throws<ContainmentException>(() =>
+            
+            Assert.That(() =>
             {
                 Console.WriteLine(userRuleVerification.Owner);
-            });            
+            }, Throws.TypeOf<ContainmentException>());
         }
     }
 }

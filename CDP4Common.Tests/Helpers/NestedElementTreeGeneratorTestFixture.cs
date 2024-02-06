@@ -279,15 +279,15 @@ namespace CDP4Common.Tests.Helpers
         {
             var option = this.iteration.Option.First();
 
-            Assert.Throws<ArgumentNullException>(() => this.nestedElementTreeGenerator.Generate(null, null));
+            Assert.That(() => this.nestedElementTreeGenerator.Generate(null, null), Throws.TypeOf<ArgumentNullException>());
 
-            Assert.Throws<ArgumentNullException>(() => this.nestedElementTreeGenerator.Generate(option, null));
+            Assert.That(() => this.nestedElementTreeGenerator.Generate(option, null), Throws.TypeOf<ArgumentNullException>());
 
-            Assert.Throws<ArgumentNullException>(() => this.nestedElementTreeGenerator.GetNestedParameters(option, null));
+            Assert.That(() => this.nestedElementTreeGenerator.GetNestedParameters(option, null), Throws.TypeOf<ArgumentNullException>());
+            
+            Assert.That(() => this.nestedElementTreeGenerator.GetNestedParameters(null, null), Throws.TypeOf<ArgumentNullException>());
 
-            Assert.Throws<ArgumentNullException>(() => this.nestedElementTreeGenerator.GetNestedParameters(null, null));
-
-            Assert.Throws<ArgumentNullException>(() => this.nestedElementTreeGenerator.GetNestedParameters(null, this.domainOfExpertise));
+            Assert.That(() => this.nestedElementTreeGenerator.GetNestedParameters(null, this.domainOfExpertise), Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]

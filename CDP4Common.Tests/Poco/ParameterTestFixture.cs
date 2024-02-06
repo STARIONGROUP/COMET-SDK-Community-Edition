@@ -179,7 +179,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatWhenContainmentNotSetAContainmentExceptionIsThrown()
         {
             var parameter = new Parameter(Guid.NewGuid(), null, null);
-            Assert.Throws<ContainmentException>(() => parameter.ModelCode());
+            Assert.That(() => parameter.ModelCode(), Throws.TypeOf<ContainmentException>());
         }
 
         [Test]

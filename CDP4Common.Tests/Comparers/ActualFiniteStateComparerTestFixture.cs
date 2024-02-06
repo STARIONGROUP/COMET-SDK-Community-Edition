@@ -100,7 +100,7 @@ namespace CDP4Common.Tests.Comparers
 
             otherActualFiniteStateList.ActualState.Add(otherActualFiniteState);
 
-            Assert.Throws<InvalidOperationException>(() => this.comparer.Compare(this.actualFiniteState_1, otherActualFiniteState));
+            Assert.That(() => this.comparer.Compare(this.actualFiniteState_1, otherActualFiniteState), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]

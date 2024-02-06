@@ -137,7 +137,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatHasUsageOfThrowsException()
         {
             var def1 = new ElementDefinition();
-            Assert.Throws<ArgumentNullException>(() => def1.HasUsageOf(null));
+            Assert.That(() => def1.HasUsageOf(null), Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
@@ -156,7 +156,7 @@ namespace CDP4Common.Tests.Poco
         {
             var elementDefinition = new ElementDefinition();
 
-            Assert.Throws<ArgumentException>(() => elementDefinition.ModelCode(1));
+            Assert.That(() => elementDefinition.ModelCode(1), Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -230,7 +230,7 @@ namespace CDP4Common.Tests.Poco
         {
             var def1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
 
-            Assert.Throws<ContainmentException>(() => def1.ReferencingElementUsages());
+            Assert.That(() => def1.ReferencingElementUsages(), Throws.TypeOf<ContainmentException>());
         }
 
         [Test]

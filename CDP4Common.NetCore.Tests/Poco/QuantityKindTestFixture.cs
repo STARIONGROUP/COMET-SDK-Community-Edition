@@ -62,14 +62,14 @@ namespace CDP4Common.Tests.Poco
         public void TestGetDerivedQuantityDimensionExponent()
         {
             var quantityKind = new SpecializedQuantityKind();
-            Assert.Throws<NotSupportedException>(() => { var test = quantityKind.QuantityDimensionExponent; });
+            Assert.That(() => { var test = quantityKind.QuantityDimensionExponent; }, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
         public void TestGetDerivedQuantityDimensionExpression()
         {
             var quantityKind = new SpecializedQuantityKind();
-            Assert.Throws<NotSupportedException>(() => { var test = quantityKind.QuantityDimensionExpression; });
+            Assert.That(() => { var test = quantityKind.QuantityDimensionExpression; }, Throws.TypeOf<NotSupportedException>());
         }
     }
 }

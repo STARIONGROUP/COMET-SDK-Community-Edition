@@ -103,14 +103,14 @@ namespace CDP4Common.Tests
         public void TestNullThing()
         {
             Thing thing = null;
-            Assert.Throws<ArgumentNullException>(() => ClasslessDtoFactory.FromThing(this.metaDataProvider, thing));
+            Assert.That(() => ClasslessDtoFactory.FromThing(this.metaDataProvider, thing), Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
         public void TestNullThing2()
         {
             Thing thing = null;
-            Assert.Throws<ArgumentNullException>(() => ClasslessDtoFactory.FullFromThing(this.metaDataProvider, thing));
+            Assert.That(() => ClasslessDtoFactory.FullFromThing(this.metaDataProvider, thing), Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]

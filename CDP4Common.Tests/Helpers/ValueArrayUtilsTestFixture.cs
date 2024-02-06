@@ -42,7 +42,7 @@ namespace CDP4Common.Tests.Helpers
         public void Verify_that_when_size_smaller_than_one_ArgumentOutOfRangeException_is_trown()
         {
             var size = 0;
-            Assert.Throws<ArgumentOutOfRangeException>(() => ValueArrayUtils.CreateDefaultValueArray(size));
+            Assert.That(() => ValueArrayUtils.CreateDefaultValueArray(size), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]

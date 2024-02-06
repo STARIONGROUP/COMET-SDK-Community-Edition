@@ -80,13 +80,13 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatWhenContainmentNotSetAContainmentExceptionIsThrown()
         {
             var elementUsage = new ElementUsage(Guid.NewGuid(), null, null);
-            Assert.Throws<ContainmentException>(() => elementUsage.ModelCode());
+            Assert.That(() => elementUsage.ModelCode(), Throws.TypeOf<ContainmentException>());
         }
 
         [Test]
         public void VerifyThatWhenComponentIndexNotNullArgumentExceptionIsThrown()
         {
-            Assert.Throws<ArgumentException>(() => this.elementUsage.ModelCode(1));
+            Assert.That(() => this.elementUsage.ModelCode(1), Throws.TypeOf<ArgumentException>());
         }
     }
 }

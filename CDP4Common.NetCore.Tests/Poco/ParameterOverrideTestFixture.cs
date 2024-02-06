@@ -173,14 +173,14 @@ namespace CDP4Common.Tests.Poco
             var parameterOverride = new ParameterOverride { Parameter = this.parameter };
             this.elementUsage.ParameterOverride.Add(parameterOverride);
 
-            Assert.Throws<ArgumentException>(() => parameterOverride.ModelCode(1));
+            Assert.That(() => parameterOverride.ModelCode(1), Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
         public void VerifyThatWhenContainmentNotSetAContainmentExceptionIsThrown()
         {
             var parameterOverride = new ParameterOverride { Parameter = this.parameter };
-            Assert.Throws<ContainmentException>(() => parameterOverride.ModelCode());
+            Assert.That(() => parameterOverride.ModelCode(), Throws.TypeOf<ContainmentException>());
         }
 
         [Test]
@@ -314,7 +314,7 @@ namespace CDP4Common.Tests.Poco
         {
             var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
 
-            Assert.Throws<ContainmentException>(() => parameterOverrideValueSet.QueryParameterType());
+            Assert.That(() => parameterOverrideValueSet.QueryParameterType(), Throws.TypeOf<ContainmentException>());
         }
 
         [Test]

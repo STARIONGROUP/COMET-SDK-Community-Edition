@@ -189,7 +189,7 @@ namespace CDP4Common.NetCore.Tests.Poco
             var freeExpressions = AllRelationaExpressionNumbers & ~(ExpressionNumber.Relational1 | ExpressionNumber.Relational2);
 
             Assert.That(this.GetBooleanExpressionList(expectedExpressionNumbers), Is.EquivalentTo(descendantCollection));
-            CollectionAssert.AreEquivalent(myAndFreeCollection, this.GetBooleanExpressionList(myExpressions | freeExpressions));
+            Assert.That(this.GetBooleanExpressionList(myExpressions | freeExpressions), Is.EquivalentTo(myAndFreeCollection));
         }
 
         [TestCase(ExpressionNumber.And, ExpressionNumber.And)]

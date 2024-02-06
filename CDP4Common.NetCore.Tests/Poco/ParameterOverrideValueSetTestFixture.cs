@@ -233,7 +233,7 @@ namespace CDP4Common.Tests.Poco
         {
             var parameterOverrideValueSet = new ParameterOverrideValueSet(Guid.NewGuid(), null, null);
 
-            Assert.Throws<ContainmentException>(() => parameterOverrideValueSet.QueryParameterType());
+            Assert.That(() => parameterOverrideValueSet.QueryParameterType(), Throws.TypeOf<ContainmentException>());
         }
     }
 }

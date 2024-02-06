@@ -64,7 +64,7 @@ namespace CDP4Common.Tests.AutoGenHelpers
         [Test]
         public void Verify_that_For_unknown_type_exception_is_thrown_on_GetDefaultPersonPermission()
         {
-            Assert.Throws<ArgumentException>(() => this.defaultPermissionProvider.GetDefaultPersonPermission("unknown-type"));
+            Assert.That(() => this.defaultPermissionProvider.GetDefaultPersonPermission("unknown-type"), Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace CDP4Common.Tests.AutoGenHelpers
         [Test]
         public void Verify_that_For_unknown_type_exception_is_thrown_on_GetDefaultParticipantPermission()
         {
-            Assert.Throws<ArgumentException>(() => this.defaultPermissionProvider.GetDefaultParticipantPermission("unknown-type"));
+            Assert.That(() => this.defaultPermissionProvider.GetDefaultParticipantPermission("unknown-type"), Throws.TypeOf<ArgumentException>());
         }
 
         [Test]

@@ -58,7 +58,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatTheVerifyMethodThrowsNotSupportedException()
         {
             var rule = new ReferencerRule(Guid.NewGuid(), this.cache, this.uri);
-            Assert.Throws<NotSupportedException>(() => rule.Verify(this.iteration));
+            Assert.That(() => rule.Verify(this.iteration), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

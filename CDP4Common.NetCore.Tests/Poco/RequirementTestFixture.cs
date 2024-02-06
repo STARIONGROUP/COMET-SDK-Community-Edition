@@ -37,7 +37,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatInvalidOperationIsThrownWhenContainerIsNotSet()
         {
             var requirement = new Requirement();
-            Assert.Throws<InvalidOperationException>(() => requirement.GroupPath());
+            Assert.That(() => requirement.GroupPath(), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace CDP4Common.Tests.Poco
 
             requirement.Group = requirementsGroupAA;
 
-            Assert.AreEqual("spec.a.a_a.req", requirement.GroupPath());
+            Assert.That(requirement.GroupPath(), Is.EqualTo("spec.a.a_a.req"));
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace CDP4Common.Tests.Poco
 
             requirement.Group = requirementsGroupAA;
 
-            Assert.AreEqual("spec;a;a_a;req", requirement.GroupPath(';'));
+            Assert.That(requirement.GroupPath(';'), Is.EqualTo(("spec;a;a_a;req")));
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace CDP4Common.Tests.Poco
 
             requirementsSpecification.Requirement.Add(requirement);
 
-            Assert.AreEqual("spec.req", requirement.GroupPath());            
+            Assert.That(requirement.GroupPath(), Is.EqualTo("spec.req"));
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace CDP4Common.Tests.Poco
 
             requirementsSpecification.Requirement.Add(requirement);
 
-            Assert.AreEqual("spec,req", requirement.GroupPath(','));
+            Assert.That(requirement.GroupPath(','), Is.EqualTo("spec,req"));
         }
     }
 }

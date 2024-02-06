@@ -43,7 +43,7 @@ namespace CDP4Common.Tests.Poco
             requirement.Owner = new DomainOfExpertise();
             requirement.ParameterValue.Add(simpleParameterValue);
 
-            Assert.IsTrue(ReferenceEquals(requirement.Owner, simpleParameterValue.Owner));
+            Assert.That(ReferenceEquals(requirement.Owner, simpleParameterValue.Owner), Is.True);
         }
 
         [Test]
@@ -51,10 +51,10 @@ namespace CDP4Common.Tests.Poco
         {
             var simpleParameterValue = new SimpleParameterValue();
 
-            Assert.Throws<ContainmentException>(() =>
+            Assert.That(() =>
             {
                 Console.WriteLine(simpleParameterValue.Owner);
-            });
+            }, Throws.TypeOf<ContainmentException>());
         }
     }
 }

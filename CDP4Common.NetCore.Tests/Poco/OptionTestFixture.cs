@@ -68,7 +68,7 @@ namespace CDP4Common.Tests.Poco
             Assert.AreEqual("2", stringParameters.First());
             Assert.AreEqual("3", stringParameters.Last());
 
-            Assert.Throws<FormatException>(() => option.GetNestedParameterValuesByPath<bool>(@"Sat\m\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise));
+            Assert.That(() => option.GetNestedParameterValuesByPath<bool>(@"Sat\m\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise), Throws.TypeOf<FormatException>());
 
             var objectParameters = option.GetNestedParameterValuesByPath<object>(@"Sat\m\\OPT_A", nestedElementTreeGeneratorTestFixture.domainOfExpertise).ToList();
             Assert.AreEqual(2, objectParameters.Count);

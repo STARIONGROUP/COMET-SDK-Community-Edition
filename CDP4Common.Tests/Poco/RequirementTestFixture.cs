@@ -38,7 +38,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatInvalidOperationIsThrownWhenContainerIsNotSet()
         {
             var requirement = new Requirement();
-            Assert.Throws<InvalidOperationException>(() => requirement.GroupPath());
+            Assert.That(() => requirement.GroupPath(), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]

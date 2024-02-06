@@ -38,7 +38,7 @@ namespace CDP4Common.Tests.Poco
             var userRuleVerif = new UserRuleVerification();
             userRuleVerif.Rule = new DecompositionRule(){Name = "rule"};
 
-            Assert.AreEqual("rule", userRuleVerif.Name);
+            Assert.That(userRuleVerif.Name, Is.EqualTo("rule"));
         }
     }
 }

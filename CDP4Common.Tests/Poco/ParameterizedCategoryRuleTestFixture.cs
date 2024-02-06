@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterizedCategoryRuleTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
@@ -33,6 +31,7 @@ namespace CDP4Common.Tests.Poco
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -98,14 +97,15 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatNullIterationThrowsArgumentException()
         {
             var rule = new ParameterizedCategoryRule(Guid.NewGuid(), this.cache, this.uri);
-            Assert.Throws<ArgumentNullException>(() => rule.Verify(null));
+            
+            Assert.That(() => rule.Verify(null), Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
         public void VerifyThatIfCategoryNotSetOnRuleInvalidOperationIsThrown()
         {
             var rule = new ParameterizedCategoryRule(Guid.NewGuid(), this.cache, this.uri);
-            Assert.Throws<InvalidOperationException>(() => rule.Verify(this.iteration));
+            Assert.That(() => rule.Verify(this.iteration), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]

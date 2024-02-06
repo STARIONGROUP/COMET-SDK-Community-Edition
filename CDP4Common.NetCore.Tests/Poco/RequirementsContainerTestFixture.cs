@@ -59,13 +59,13 @@ namespace CDP4Common.Tests.Poco
             grp2.Group.Add(grp21);
 
             var specAllGroups = spec.GetAllContainedGroups();
-            Assert.AreEqual(7, specAllGroups.Count());
+            Assert.That(specAllGroups.Count(), Is.EqualTo(7));
 
             var grp1AllGroup = grp1.GetAllContainedGroups();
-            Assert.AreEqual(3, grp1AllGroup.Count());
+            Assert.That(grp1AllGroup.Count(), Is.EqualTo(3));
 
             var grp2AllGroup = grp2.GetAllContainedGroups();
-            Assert.AreEqual(1, grp2AllGroup.Count());
+            Assert.That(grp2AllGroup.Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -79,18 +79,18 @@ namespace CDP4Common.Tests.Poco
 
             iteration.RequirementsSpecification.Add(spec);
 
-            Assert.AreEqual("a", group_a.Path());
-            Assert.AreEqual("a_a", group_a_a.Path());
-            Assert.AreEqual("a_a_a", group_a_a_a.Path());
+            Assert.That(group_a.Path(), Is.EqualTo("a"));
+            Assert.That(group_a_a.Path(), Is.EqualTo("a_a"));
+            Assert.That(group_a_a_a.Path(), Is.EqualTo("a_a_a"));
             
             group_a_a.Group.Add(group_a_a_a);
-            Assert.AreEqual("a_a.a_a_a", group_a_a_a.Path());
+            Assert.That(group_a_a_a.Path(), Is.EqualTo("a_a.a_a_a"));
 
             group_a.Group.Add(group_a_a);
-            Assert.AreEqual("a.a_a.a_a_a", group_a_a_a.Path());
+            Assert.That(group_a_a_a.Path(), Is.EqualTo("a.a_a.a_a_a"));
 
             spec.Group.Add(group_a);
-            Assert.AreEqual("spec.a.a_a.a_a_a", group_a_a_a.Path());
+            Assert.That(group_a_a_a.Path(), Is.EqualTo("spec.a.a_a.a_a_a"));
         }
         
         [Test]
@@ -100,7 +100,7 @@ namespace CDP4Common.Tests.Poco
             var spec = new RequirementsSpecification() { ShortName = "spec" };
             iteration.RequirementsSpecification.Add(spec);
 
-            Assert.AreEqual("spec", spec.Path());
+            Assert.That(spec.Path(), Is.EqualTo("spec"));
         }
 
         [Test]
@@ -114,18 +114,18 @@ namespace CDP4Common.Tests.Poco
 
             iteration.RequirementsSpecification.Add(spec);
 
-            Assert.AreEqual("a", group_a.Path(';'));
-            Assert.AreEqual("a_a", group_a_a.Path(';'));
-            Assert.AreEqual("a_a_a", group_a_a_a.Path(';'));
+            Assert.That(group_a.Path(';'), Is.EqualTo("a"));
+            Assert.That(group_a_a.Path(';'), Is.EqualTo("a_a"));
+            Assert.That(group_a_a_a.Path(';'), Is.EqualTo("a_a_a"));
 
             group_a_a.Group.Add(group_a_a_a);
-            Assert.AreEqual("a_a;a_a_a", group_a_a_a.Path(';'));
+            Assert.That(group_a_a_a.Path(';'), Is.EqualTo("a_a;a_a_a"));
 
             group_a.Group.Add(group_a_a);
-            Assert.AreEqual("a;a_a;a_a_a", group_a_a_a.Path(';'));
+            Assert.That(group_a_a_a.Path(';'), Is.EqualTo("a;a_a;a_a_a"));
 
             spec.Group.Add(group_a);
-            Assert.AreEqual("spec;a;a_a;a_a_a", group_a_a_a.Path(';'));
+            Assert.That(group_a_a_a.Path(';'), Is.EqualTo("spec;a;a_a;a_a_a"));
         }
     }
 }

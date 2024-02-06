@@ -133,10 +133,10 @@ namespace CDP4Common.Tests.Poco
         {
             this.parameterSubscriptionValueSet = new ParameterSubscriptionValueSet();
 
-            Assert.Throws<ContainmentException>(() =>
+            Assert.That(() =>
             {
                 Console.WriteLine(this.parameterSubscriptionValueSet.Owner);
-            });
+            }, Throws.TypeOf<ContainmentException>());
         }
 
         [Test]
@@ -253,21 +253,21 @@ namespace CDP4Common.Tests.Poco
         public void Verify_that_ResetComputed_throws_exception()
         {
             var psvs = new ParameterSubscriptionValueSet(Guid.NewGuid(), null, null);
-            Assert.Throws<NotSupportedException>(() => psvs.ResetComputed());
+            Assert.That(() => psvs.ResetComputed(), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
         public void Verify_that_ResetReference_throws_exception()
         {
             var psvs = new ParameterSubscriptionValueSet(Guid.NewGuid(), null, null);
-            Assert.Throws<NotSupportedException>(() => psvs.ResetReference());
+            Assert.That(() => psvs.ResetReference(), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
         public void Verify_that_ResetFormula_throws_exception()
         {
             var psvs = new ParameterSubscriptionValueSet(Guid.NewGuid(), null, null);
-            Assert.Throws<NotSupportedException>(() => psvs.ResetFormula());
+            Assert.That(() => psvs.ResetFormula(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

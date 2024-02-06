@@ -171,14 +171,14 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatExpectedExceptionIsThrownWhenComponentIndexIsSuppliedForScalarParameterType()
         {
-            Assert.Throws<ArgumentException>(() => this.scalarParameter.ModelCode(1));
+            Assert.That(() => this.scalarParameter.ModelCode(1), Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
         public void VerifyThatWhenContainmentNotSetAContainmentExceptionIsThrown()
         {
             var parameter = new Parameter(Guid.NewGuid(), null, null);
-            Assert.Throws<ContainmentException>(() => parameter.ModelCode());
+            Assert.That(() => parameter.ModelCode(), Throws.TypeOf<ContainmentException>());
         }
 
         [Test]

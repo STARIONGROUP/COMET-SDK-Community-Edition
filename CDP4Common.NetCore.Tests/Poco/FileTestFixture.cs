@@ -65,7 +65,7 @@ namespace CDP4Common.Tests.Poco
             
             //When any FileRevision is present, the CurrentContainingFolder is readonly and returns the latest FileRevisions folder
             this.file.FileRevision.Add(this.oldFileRevision);
-            Assert.Throws<InvalidOperationException>(() => this.file.CurrentContainingFolder = this.folder1);
+            Assert.That(() => this.file.CurrentContainingFolder = this.folder1, Throws.TypeOf<InvalidOperationException>());
             Assert.That(this.file.CurrentContainingFolder, Is.EqualTo(this.folder1));
 
             this.file.FileRevision.Add(this.newFileRevision);

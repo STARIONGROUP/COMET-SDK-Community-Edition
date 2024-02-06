@@ -173,7 +173,7 @@ namespace CDP4Common.Tests.Poco
         public void Verify_that_when_container_not_set_ModelCode_throws_exception()
         {
             var parameterValueSet = new ParameterValueSet(Guid.NewGuid(), null, null);
-            Assert.Throws<ContainmentException>(() => parameterValueSet.ModelCode(0));
+            Assert.That(() => parameterValueSet.ModelCode(0), Throws.TypeOf<ContainmentException>());
         }
 
         [Test]
@@ -187,7 +187,7 @@ namespace CDP4Common.Tests.Poco
         public void Verify_that_when_container_not_set_QueryParameterType_throws_Exception()
         {
             var parameterValueSet = new ParameterValueSet(Guid.NewGuid(), null, null);
-            Assert.Throws<ContainmentException>(() => parameterValueSet.QueryParameterType()) ;
+            Assert.That(() => parameterValueSet.QueryParameterType(), Throws.TypeOf<ContainmentException>()) ;
         }
 
         [Test]

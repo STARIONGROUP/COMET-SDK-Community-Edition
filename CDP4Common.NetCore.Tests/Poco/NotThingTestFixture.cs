@@ -54,7 +54,7 @@ namespace CDP4Common.Tests
             var name = "nothing";
             var nothing = new NotThing(name);
 
-            Assert.Throws<NotSupportedException>(() => nothing.ResolveProperties(null));
+            Assert.That(() => nothing.ResolveProperties(null), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace CDP4Common.Tests
             var name = "nothing";
             var nothing = new NotThing(name);
 
-            Assert.Throws<NotSupportedException>(() => nothing.Clone(false));
+            Assert.That(() => nothing.Clone(false), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace CDP4Common.Tests
             var name = "nothing";
             var nothing = new NotThing(name);
 
-            Assert.Throws<NotSupportedException>(() => nothing.ToDto());
+            Assert.That(() => nothing.ToDto(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -51,10 +51,10 @@ namespace CDP4Common.Tests.Poco
         {
             var parametricConstraint = new ParametricConstraint();
 
-            Assert.Throws<ContainmentException>(() =>
+            Assert.That(() =>
             {
-                Console.WriteLine(parametricConstraint.Owner);    
-            });
+                Console.WriteLine(parametricConstraint.Owner);
+            }, Throws.TypeOf<ContainmentException>());
         }
     }
 }

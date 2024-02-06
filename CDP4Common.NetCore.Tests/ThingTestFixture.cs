@@ -90,10 +90,10 @@ namespace CDP4Common.Tests
         {
             var person = new Person();
 
-            Assert.Throws<ContainmentException>(() =>
+            Assert.That(() =>
             {
-                Console.WriteLine(person.Route);    
-            });
+                Console.WriteLine(person.Route);
+            }, Throws.TypeOf<ContainmentException>());
         }
 
         [Test]
@@ -133,10 +133,10 @@ namespace CDP4Common.Tests
             var email = new EmailAddress();
             person.EmailAddress.Add(email);
 
-            Assert.Throws<ContainmentException>(() =>
+            Assert.That(() =>
             {
                 var t = email.TopContainer;
-            });
+            }, Throws.TypeOf<ContainmentException>());
         }
 
         [Test]
@@ -244,7 +244,7 @@ namespace CDP4Common.Tests
 
             Assert.IsFalse(sitedir.IsContainedBy(x => x.Iid == sitedir.Iid));
 
-            Assert.Throws<ArgumentNullException>(() => factor.IsContainedBy(matchPredicate: null));
+            Assert.That(() => factor.IsContainedBy(matchPredicate: null), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -253,7 +253,7 @@ namespace CDP4Common.Tests
             SiteDirectory sitedir = null;
             var rdl = new SiteReferenceDataLibrary(Guid.NewGuid(), null, null);
 
-            Assert.Throws<ArgumentNullException>(() => rdl.IsContainedBy(sitedir));
+            Assert.That(() => rdl.IsContainedBy(sitedir), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -277,7 +277,7 @@ namespace CDP4Common.Tests
 
             Assert.IsFalse(sitedir.IsContainedBy(sitedir.Iid));
 
-            Assert.Throws<ArgumentNullException>(() => factor.IsContainedBy(iid: Guid.Empty));
+            Assert.That(() => factor.IsContainedBy(iid: Guid.Empty), Throws.ArgumentNullException);
         }
 
         [Test]

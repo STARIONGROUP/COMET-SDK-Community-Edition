@@ -61,7 +61,7 @@ namespace CDP4Common.Tests.Poco
 
             var actualContainedGroups = topGroup.ContainedGroup().ToList();
 
-            CollectionAssert.AreEquivalent(containedGroups, actualContainedGroups);
+            Assert.That(actualContainedGroups, Is.EquivalentTo(containedGroups));
         }
     }
 }
