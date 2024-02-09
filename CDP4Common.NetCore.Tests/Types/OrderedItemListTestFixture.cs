@@ -77,7 +77,7 @@ namespace CDP4Common.Tests.Types
         {
             this.testList = new OrderedItemList<Thing>(this.person) { new EmailAddress(Guid.NewGuid(), null, null) };
 
-            Assert.AreEqual(1, this.testList.Count);
+            Assert.That(this.testList.Count, Is.EqualTo(1));
             Assert.IsNull(this.testList[0].Container);
         }
 
@@ -86,8 +86,8 @@ namespace CDP4Common.Tests.Types
         {
             this.testList = new OrderedItemList<Thing>(this.person, true) { new EmailAddress(Guid.NewGuid(), null, null) };
 
-            Assert.AreEqual(1, this.testList.Count);
-            Assert.AreEqual(this.person, this.testList[0].Container);
+            Assert.That(this.testList.Count, Is.EqualTo(1));
+            Assert.That( this.testList[0].Container, Is.EqualTo(this.person));
 
             Assert.IsTrue((-20000000L < this.testList.SortedItems.First().Key) && (20000000L > this.testList.SortedItems.First().Key));
         }
@@ -110,7 +110,7 @@ namespace CDP4Common.Tests.Types
 
             this.testList.Remove(email);
 
-            Assert.AreEqual(0, this.testList.Count);
+            Assert.That(this.testList.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace CDP4Common.Tests.Types
             this.testList.Add(new EmailAddress(Guid.NewGuid(), null, null));
 
             this.testList.Clear();
-            Assert.AreEqual(0, this.testList.Count);
+            Assert.That(this.testList.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -135,7 +135,7 @@ namespace CDP4Common.Tests.Types
             this.testList = new OrderedItemList<Thing>(this.person, true);
 
             this.testList.AddOrderedItems(listOrderedItem);
-            Assert.AreEqual(3, this.testList.Count);
+            Assert.That(this.testList.Count, Is.EqualTo(3));
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace CDP4Common.Tests.Types
             listItemToAdd.Add(new TelephoneNumber(Guid.NewGuid(), null, null));
 
             this.testList.AddRange(listItemToAdd);
-            Assert.AreEqual(listItemToAdd.Count, this.testList.Count);
+            Assert.That(this.testList.Count, Is.EqualTo(listItemToAdd.Count));
         }
 
         [Test]
@@ -165,7 +165,7 @@ namespace CDP4Common.Tests.Types
             var inserted = new Person(Guid.NewGuid(), null, null);
             this.testList.Insert(1, inserted);
 
-            Assert.AreEqual(inserted, this.testList[1]);
+            Assert.That(this.testList[1], Is.EqualTo(inserted));
             Assert.IsTrue(this.testList.SortedItems.Keys[1] > this.testList.SortedItems.Keys[0] && this.testList.SortedItems.Keys[2] > this.testList.SortedItems.Keys[1]);
         }
 
@@ -206,12 +206,12 @@ namespace CDP4Common.Tests.Types
             this.testList.Add(tel);
 
             var dtoOrderedList = this.testList.ToDtoOrderedItemList().ToList();
-            Assert.AreEqual(this.testList.Count, dtoOrderedList.Count);
-            Assert.AreEqual(this.testList.SortedItems.Keys[0], dtoOrderedList[0].K);
-            Assert.AreEqual(this.testList.SortedItems.Keys[1], dtoOrderedList[1].K);
+            Assert.That(dtoOrderedList.Count, Is.EqualTo(this.testList.Count));
+            Assert.That(dtoOrderedList[0].K, Is.EqualTo(this.testList.SortedItems.Keys[0]));
+            Assert.That(dtoOrderedList[1].K, Is.EqualTo(this.testList.SortedItems.Keys[1]));
 
-            Assert.AreEqual(this.testList.SortedItems.Values[0].Iid, dtoOrderedList[0].V);
-            Assert.AreEqual(this.testList.SortedItems.Values[1].Iid, dtoOrderedList[1].V);
+            Assert.That(dtoOrderedList[0].V, Is.EqualTo(this.testList.SortedItems.Values[0].Iid));
+            Assert.That(dtoOrderedList[1].V, Is.EqualTo(this.testList.SortedItems.Values[1].Iid));
         }
 
         [Test]
@@ -222,7 +222,7 @@ namespace CDP4Common.Tests.Types
             var orderedItem1 = new OrderedItem() { K = 1, V = "2" };
             orderedList.AddOrderedItems(new List<OrderedItem>(){orderedItem1});
 
-            Assert.AreEqual(1, orderedList.Count);
+            Assert.That(orderedList.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -259,11 +259,11 @@ namespace CDP4Common.Tests.Types
             this.testList.Add(email_1);
             this.testList.Add(email_2);
 
-            Assert.AreEqual(0, this.testList.IndexOf(email_0));
-            Assert.AreEqual(1, this.testList.IndexOf(email_1));
-            Assert.AreEqual(2, this.testList.IndexOf(email_2));
+            Assert.That(this.testList.IndexOf(email_0), Is.EqualTo(0));
+            Assert.That(this.testList.IndexOf(email_1), Is.EqualTo(1));
+            Assert.That(this.testList.IndexOf(email_2), Is.EqualTo(2));
 
-            Assert.AreEqual(-1, this.testList.IndexOf(email_notcontained));
+            Assert.That(this.testList.IndexOf(email_notcontained), Is.EqualTo(-1));
         }
 
         [Test]
@@ -446,8 +446,8 @@ namespace CDP4Common.Tests.Types
             testlist.Add(email0);
             testlist.Add(email1);
 
-            Assert.AreEqual(0, testlist.FindIndex(x => x.Iid == email0.Iid));
-            Assert.AreEqual(-1, testlist.FindIndex(x => x.Iid == Guid.NewGuid()));
+            Assert.That(testlist.FindIndex(x => x.Iid == email0.Iid), Is.EqualTo(0));
+            Assert.That(testlist.FindIndex(x => x.Iid == Guid.NewGuid()), Is.EqualTo(-1));
             Assert.That(() => testlist.FindIndex(null), Throws.ArgumentNullException);
         }
     }

@@ -59,8 +59,8 @@ namespace CDP4Common.Tests.Types
 
             this.emailAddresses.Add(email);
 
-            Assert.AreEqual(1, this.emailAddresses.Count);
-            Assert.AreEqual(this.person, this.emailAddresses.Single().Container);
+            Assert.That(this.emailAddresses.Count, Is.EqualTo(1));
+            Assert.That(this.emailAddresses.Single().Container, Is.EqualTo(this.person));
         }
 
         [Test]
@@ -75,10 +75,10 @@ namespace CDP4Common.Tests.Types
 
             this.emailAddresses.AddRange(emails);
 
-            Assert.AreEqual(3, this.emailAddresses.Count);
+            Assert.That(this.emailAddresses.Count, Is.EqualTo(3));
             foreach (var email in this.emailAddresses)
             {
-                Assert.AreEqual(this.person, email.Container);
+                Assert.That(email.Container, Is.EqualTo(this.person));
             }
         }
 
@@ -92,8 +92,8 @@ namespace CDP4Common.Tests.Types
 
             var returnedEmail = this.emailAddresses[0];
 
-            Assert.AreEqual(this.person, returnedEmail.Container);
-            Assert.AreEqual(email.Iid, returnedEmail.Iid);
+            Assert.That(returnedEmail.Container, Is.EqualTo(this.person));
+            Assert.That(returnedEmail.Iid, Is.EqualTo(email.Iid));
         }
 
         [Test]

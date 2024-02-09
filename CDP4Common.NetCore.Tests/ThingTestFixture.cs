@@ -46,23 +46,23 @@ namespace CDP4Common.Tests
         public void VerifyRoutePropertyOfSiteDirectory()
         {
             var siteDirectory = new SiteDirectory();
-            Assert.AreEqual("/SiteDirectory/*", siteDirectory.Route);
+            Assert.That(siteDirectory.Route, Is.EqualTo("/SiteDirectory/*"));
 
             var siteDirectoryiid = Guid.NewGuid();
             siteDirectory.Iid = siteDirectoryiid;
-            Assert.AreEqual("/SiteDirectory/" + siteDirectoryiid, siteDirectory.Route);
+            Assert.That(siteDirectory.Route, Is.EqualTo("/SiteDirectory/" + siteDirectoryiid));
         }
 
         [Test]
         public void VerifyRouteOfEngineeringModel()
         {
             var engineeringModel = new EngineeringModel();
-            Assert.AreEqual("/EngineeringModel/" + Guid.Empty, engineeringModel.Route);
+            Assert.That(engineeringModel.Route, Is.EqualTo("/EngineeringModel/" + Guid.Empty));
 
             var engineeringModelIid = Guid.NewGuid();
             engineeringModel.Iid = engineeringModelIid;
 
-            Assert.AreEqual("/EngineeringModel/" + engineeringModelIid, engineeringModel.Route);
+            Assert.That(engineeringModel.Route, Is.EqualTo("/EngineeringModel/" + engineeringModelIid));
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace CDP4Common.Tests
 
             var person = new Person { Iid = persionIid, Container = siteDirectory };
 
-            Assert.AreEqual("/SiteDirectory/*/person/" + persionIid, person.Route);
+            Assert.That(person.Route, Is.EqualTo("/SiteDirectory/*/person/" + persionIid));
 
             var emailIid = Guid.NewGuid();
             var email = new EmailAddress();
@@ -82,7 +82,7 @@ namespace CDP4Common.Tests
             email.Container = person;
             person.EmailAddress.Add(email);
 
-            Assert.AreEqual("/SiteDirectory/*/person/" + persionIid + "/emailAddress/" + emailIid, email.Route);
+            Assert.That(email.Route, Is.EqualTo("/SiteDirectory/*/person/" + persionIid + "/emailAddress/" + emailIid));
         }
 
         [Test]        
@@ -109,7 +109,7 @@ namespace CDP4Common.Tests
             person.EmailAddress.Add(email);
             email.Container = person;
 
-            Assert.AreEqual(siteDirectory, email.TopContainer);
+            Assert.That(email.TopContainer, Is.EqualTo(siteDirectory));
         }
 
         [Test]
@@ -118,7 +118,7 @@ namespace CDP4Common.Tests
             var siteDirectory = new SiteDirectory();
             var topcontainer = siteDirectory.TopContainer;
 
-            Assert.AreEqual(siteDirectory, topcontainer);
+            Assert.That(topcontainer, Is.EqualTo(siteDirectory));
         }
 
         [Test]
@@ -149,11 +149,11 @@ namespace CDP4Common.Tests
 
             var siteDirectory = new SiteDirectory(iid: iid, iDalUri:uri, cache:cache) { RevisionNumber = revisionNumber };
 
-            Assert.AreEqual(iid, siteDirectory.Iid);
-            Assert.AreEqual(revisionNumber, siteDirectory.RevisionNumber);
-            Assert.AreEqual(uri, siteDirectory.IDalUri);
-            Assert.AreEqual(cache, siteDirectory.Cache);
-            Assert.AreEqual(ClassKind.SiteDirectory, siteDirectory.ClassKind);
+            Assert.That(siteDirectory.Iid, Is.EqualTo(iid));
+            Assert.That(siteDirectory.RevisionNumber, Is.EqualTo(revisionNumber));
+            Assert.That(siteDirectory.IDalUri, Is.EqualTo(uri));
+            Assert.That(siteDirectory.Cache, Is.EqualTo(cache));
+            Assert.That(siteDirectory.ClassKind, Is.EqualTo(ClassKind.SiteDirectory));
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace CDP4Common.Tests
             var clone = testThing.Clone(false);
 
             Assert.AreNotSame(testThing.TelephoneNumber, clone.TelephoneNumber);
-            Assert.AreEqual(testThing.TelephoneNumber.Count, clone.TelephoneNumber.Count);
+            Assert.That(clone.TelephoneNumber.Count, Is.EqualTo(testThing.TelephoneNumber.Count));
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace CDP4Common.Tests
 
             var clone = testThing.Clone(false);
             Assert.AreNotSame(testThing.Group, clone.Group);
-            Assert.AreEqual(testThing.Group.Count, clone.Group.Count);
+            Assert.That(clone.Group.Count, Is.EqualTo(testThing.Group.Count));
         }
 
         [Test]
@@ -208,7 +208,7 @@ namespace CDP4Common.Tests
 
             var clone = iteration.Clone(false);
             Assert.AreNotSame(iteration.Option, clone.Option);
-            Assert.AreEqual(iteration.Option.Count, clone.Option.Count);
+            Assert.That(clone.Option.Count, Is.EqualTo(iteration.Option.Count));
         }
 
         [Test]
@@ -328,7 +328,7 @@ namespace CDP4Common.Tests
         public void VerifyThatRouteOfNothingReturnsExpectedString()
         {
             var nothing = new NotThing("nothing");
-            Assert.AreEqual("no thing, no route", nothing.Route); 
+            Assert.That(nothing.Route, Is.EqualTo("no thing, no route")); 
         }
 
         [Test]
@@ -370,7 +370,7 @@ namespace CDP4Common.Tests
 
             var things = iteration.QueryContainedThingsDeep();
 
-            Assert.AreEqual(11, things.Count());
+            Assert.That(things.Count(), Is.EqualTo(11));
 
             CollectionAssert.Contains(things, iteration);
             CollectionAssert.Contains(things, elementDefinition1);

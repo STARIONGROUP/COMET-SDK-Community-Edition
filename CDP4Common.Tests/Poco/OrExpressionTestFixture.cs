@@ -46,7 +46,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatStringValueReturnsExpectedResult()
         {
-            Assert.AreEqual("OR", this.orExpression.StringValue);
+            Assert.That(this.orExpression.StringValue, Is.EqualTo("OR"));
         }
     }
 }

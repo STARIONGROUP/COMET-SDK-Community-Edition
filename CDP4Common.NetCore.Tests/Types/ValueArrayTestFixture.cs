@@ -42,7 +42,7 @@ namespace CDP4Common.Tests.Types
             var array = new ValueArray<float>(new List<float> {1, 2, 3, 4.1f});
             var s = array.ToString();
 
-            Assert.AreEqual("{1; 2; 3; 4.1}", s);
+            Assert.That(s, Is.EqualTo("{1; 2; 3; 4.1}"));
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace CDP4Common.Tests.Types
             var array = new ValueArray<string>(new List<string> { "abc", "def", "3", "4.1" });
             var s = array.ToString();
 
-            Assert.AreEqual("{\"abc\"; \"def\"; \"3\"; \"4.1\"}", s);
+            Assert.That(s, Is.EqualTo("{\"abc\"; \"def\"; \"3\"; \"4.1\"}"));
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace CDP4Common.Tests.Types
         {
             var array = new ValueArray<string>(new List<string>());
 
-            Assert.AreEqual(string.Empty, array.ToString());
+            Assert.That(array.ToString(), Is.EqualTo(string.Empty));
         }
     }
 }

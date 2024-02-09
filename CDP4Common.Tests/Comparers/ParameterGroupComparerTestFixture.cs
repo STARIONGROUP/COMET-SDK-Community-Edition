@@ -26,6 +26,7 @@ namespace CDP4Common.Tests.Comparers
 {
     using CDP4Common.Comparers;
     using CDP4Common.EngineeringModelData;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -38,7 +39,7 @@ namespace CDP4Common.Tests.Comparers
             var para2 = new ParameterGroup { Name = "type5" };
 
             var comparer = new ParameterGroupComparer();
-            Assert.AreEqual(-4, comparer.Compare(para1, para2));
+            Assert.That(comparer.Compare(para1, para2), Is.EqualTo(-4));
         }
     }
 }

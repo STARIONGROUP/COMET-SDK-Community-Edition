@@ -64,15 +64,15 @@ namespace CDP4Common.Tests.Comparers
         {
             Assert.IsTrue(this.booleanValueSetComparer.Compare(this.valueArrayTrue, this.valueArrayFalse) > 0);
             Assert.IsTrue(this.booleanValueSetComparer.Compare(this.valueArrayTrue, this.valueArrayNotSet) > 0);
-            Assert.AreEqual(0, this.booleanValueSetComparer.Compare(this.valueArrayTrue, this.valueArrayLowerTrue));
-            Assert.AreEqual(0, this.booleanValueSetComparer.Compare(this.valueArrayFalse, this.valueArrayLowerFalse));
+            Assert.That(this.booleanValueSetComparer.Compare(this.valueArrayTrue, this.valueArrayLowerTrue), Is.EqualTo(0));
+            Assert.That(this.booleanValueSetComparer.Compare(this.valueArrayFalse, this.valueArrayLowerFalse), Is.EqualTo(0));
             Assert.IsTrue(this.booleanValueSetComparer.Compare(this.valueArrayTrue, this.valueArrayWrongTrue) > 0);
             Assert.IsTrue(this.booleanValueSetComparer.Compare(this.valueArrayFalse, this.valueArrayWrongFalse) > 0);
 
             Assert.IsTrue(this.booleanValueSetComparer.Compare(this.valueArrayFalse, this.valueArrayTrue) < 0);
             Assert.IsTrue(this.booleanValueSetComparer.Compare(this.valueArrayNotSet, this.valueArrayTrue) < 0);
-            Assert.AreEqual(0, this.booleanValueSetComparer.Compare(this.valueArrayLowerTrue, this.valueArrayTrue));
-            Assert.AreEqual(0, this.booleanValueSetComparer.Compare(this.valueArrayLowerFalse, this.valueArrayFalse));
+            Assert.That(this.booleanValueSetComparer.Compare(this.valueArrayLowerTrue, this.valueArrayTrue), Is.EqualTo(0));
+            Assert.That(this.booleanValueSetComparer.Compare(this.valueArrayLowerFalse, this.valueArrayFalse), Is.EqualTo(0));
             Assert.IsTrue(this.booleanValueSetComparer.Compare(this.valueArrayWrongTrue, this.valueArrayTrue) < 0);
             Assert.IsTrue(this.booleanValueSetComparer.Compare(this.valueArrayWrongFalse, this.valueArrayFalse) < 0);
         }

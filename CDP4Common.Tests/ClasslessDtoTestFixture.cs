@@ -53,10 +53,10 @@ namespace CDP4Common.Tests
 
             var returned = ClasslessDtoFactory.FromThing(this.metaDataProvider, siteDir, properties);
 
-            Assert.AreEqual(3, returned.Count);
+            Assert.That(returned.Count, Is.EqualTo(3));
             object guid;
             Assert.IsTrue(returned.TryGetValue("DefaultPersonRole", out guid));
-            Assert.AreEqual(siteDir.DefaultPersonRole, (guid as Guid?).Value);
+            Assert.That((guid as Guid?).Value, Is.EqualTo(siteDir.DefaultPersonRole));
         }
 
         [Test]
@@ -92,11 +92,11 @@ namespace CDP4Common.Tests
             Assert.IsTrue(returned.ContainsKey("Annotation"));
             Assert.IsTrue(returned.ContainsKey("ThingPreference"));
 
-            Assert.AreEqual(24, returned.Count);
+            Assert.That(returned.Count, Is.EqualTo(24));
 
             object guid;
             Assert.IsTrue(returned.TryGetValue("DefaultPersonRole", out guid));
-            Assert.AreEqual(siteDir.DefaultPersonRole, (guid as Guid?).Value);
+            Assert.That((guid as Guid?).Value, Is.EqualTo(siteDir.DefaultPersonRole));
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace CDP4Common.Tests
             object name;
             classlessDTO.TryGetValue("Name", out name);
             Assert.IsNotNull(name);
-            Assert.AreEqual(string.Empty, name);
+            Assert.That(name, Is.EqualTo(string.Empty));
         }
     }
 }

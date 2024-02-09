@@ -45,7 +45,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatStringValueReturnsExpectedResult()
         {
-            Assert.AreEqual("NOT", this.notExpression.StringValue);
+            Assert.That(this.notExpression.StringValue, Is.EqualTo("NOT"));
         }
     }
 }

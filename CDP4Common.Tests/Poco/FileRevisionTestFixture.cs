@@ -56,7 +56,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyPath()
         {
-            Assert.AreEqual("/path/filerev.ext1.ext2", this.filerev.Path);
+            Assert.That(this.filerev.Path, Is.EqualTo("/path/filerev.ext1.ext2"));
         }
     }
 }

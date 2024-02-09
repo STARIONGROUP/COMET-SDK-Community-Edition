@@ -26,7 +26,7 @@ namespace CDP4Common.Tests.Comparers
 {
     using CDP4Common.Comparers;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.SiteDirectoryData;
+    
     using NUnit.Framework;
 
     [TestFixture]
@@ -39,11 +39,11 @@ namespace CDP4Common.Tests.Comparers
             var type2 = new Requirement { Name = "c" };
 
             var comparer = new DefinedThingComparer();
-            Assert.AreEqual(-2, comparer.Compare(type1, type2));
+            Assert.That(comparer.Compare(type1, type2), Is.EqualTo(-2));
 
-            Assert.AreEqual(2, comparer.Compare(type2, type1));
+            Assert.That(comparer.Compare(type2, type1), Is.EqualTo(2));
 
-            Assert.AreEqual(0, comparer.Compare(type2, type2));
+            Assert.That(comparer.Compare(type2, type2), Is.EqualTo(0));
         }
     }
 }

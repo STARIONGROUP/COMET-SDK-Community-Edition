@@ -47,13 +47,13 @@ namespace CDP4Common.Tests.Poco
         public void TestGetActualValue()
         {
             this.parameterValueSetBase.ValueSwitch = ParameterSwitchKind.COMPUTED;
-            Assert.AreEqual(this.parameterValueSetBase.Computed, this.parameterValueSetBase.ActualValue);
+            Assert.That(this.parameterValueSetBase.ActualValue, Is.EqualTo(this.parameterValueSetBase.Computed));
 
             this.parameterValueSetBase.ValueSwitch = ParameterSwitchKind.REFERENCE;
-            Assert.AreEqual(this.parameterValueSetBase.Reference, this.parameterValueSetBase.ActualValue);
+            Assert.That(this.parameterValueSetBase.ActualValue, Is.EqualTo(this.parameterValueSetBase.Reference));
 
             this.parameterValueSetBase.ValueSwitch = ParameterSwitchKind.MANUAL;
-            Assert.AreEqual(this.parameterValueSetBase.Manual, this.parameterValueSetBase.ActualValue);
+            Assert.That(this.parameterValueSetBase.ActualValue, Is.EqualTo(this.parameterValueSetBase.Manual));
         }
 
         [Test]

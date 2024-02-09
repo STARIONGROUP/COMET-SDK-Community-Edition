@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NotThingTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,12 +21,13 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using System;
+
     using CDP4Common.CommonData;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -43,9 +43,9 @@ namespace CDP4Common.Tests.Poco
 
             var nothing = new NotThing(name);
 
-            Assert.AreEqual(name, nothing.Name);
+            Assert.That(nothing.Name, Is.EqualTo(name));
             Assert.IsNull(nothing.Container);
-            Assert.AreEqual(ClassKind.NotThing, nothing.ClassKind);
+            Assert.That(nothing.ClassKind, Is.EqualTo(ClassKind.NotThing));
         }
 
         [Test]

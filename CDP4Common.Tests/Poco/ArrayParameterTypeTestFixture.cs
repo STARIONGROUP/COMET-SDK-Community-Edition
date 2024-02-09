@@ -44,7 +44,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetters()
         {
-            Assert.AreEqual(0, this.arrayParameterType.Rank);
+            Assert.That(this.arrayParameterType.Rank, Is.EqualTo(0));
             Assert.IsFalse(this.arrayParameterType.HasSingleComponentType);
         }
     }

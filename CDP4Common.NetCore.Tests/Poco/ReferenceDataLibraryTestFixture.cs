@@ -60,7 +60,7 @@ namespace CDP4Common.Tests.Poco
                 i++;
             }
 
-            Assert.AreEqual(2, i);
+            Assert.That(i, Is.EqualTo(2));
 
             i = 0;
             foreach (var rdl in sRdl2.GetRequiredRdls())
@@ -68,7 +68,7 @@ namespace CDP4Common.Tests.Poco
                 i++;
             }
 
-            Assert.AreEqual(0, i);
+            Assert.That(i, Is.EqualTo(0));
         }
 
         [Test]

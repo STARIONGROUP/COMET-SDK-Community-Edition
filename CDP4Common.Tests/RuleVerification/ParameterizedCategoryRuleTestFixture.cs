@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterizedCategoryRuleTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,18 +21,18 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.RuleVerification
 {
     using System;
     using System.Collections.Concurrent;
     using System.Linq;
-    using CommonData;
-    using EngineeringModelData;
-    using Moq;
+
+    using CDP4Common.CommonData;
+    using CDP4Common.EngineeringModelData;
+    using CDP4Common.SiteDirectoryData;
+
     using NUnit.Framework;
-    using SiteDirectoryData;
 
     [TestFixture]
     internal class ParameterizedCategoryRuleTestFixture
@@ -142,12 +141,12 @@ namespace CDP4Common.Tests.RuleVerification
         public void VerifythatRuleVerificationWorks()
         {
             var violations = this.rule.Verify(this.iteration).ToList();
-            Assert.AreEqual(5, violations.Count);
-            Assert.AreEqual(1, violations.Count(x => x.ViolatingThing.Contains(this.def2.Iid)));
-            Assert.AreEqual(1, violations.Count(x => x.ViolatingThing.Contains(this.relation2.Iid)));
-            Assert.AreEqual(1, violations.Count(x => x.ViolatingThing.Contains(this.spec2.Iid)));
-            Assert.AreEqual(1, violations.Count(x => x.ViolatingThing.Contains(this.gr2.Iid)));
-            Assert.AreEqual(1, violations.Count(x => x.ViolatingThing.Contains(this.req2.Iid)));
+            Assert.That( violations.Count, Is.EqualTo(5));
+            Assert.That(violations.Count(x => x.ViolatingThing.Contains(this.def2.Iid)), Is.EqualTo(1));
+            Assert.That(violations.Count(x => x.ViolatingThing.Contains(this.relation2.Iid)), Is.EqualTo(1));
+            Assert.That(violations.Count(x => x.ViolatingThing.Contains(this.spec2.Iid)), Is.EqualTo(1));
+            Assert.That(violations.Count(x => x.ViolatingThing.Contains(this.gr2.Iid)), Is.EqualTo(1));
+            Assert.That(violations.Count(x => x.ViolatingThing.Contains(this.req2.Iid)), Is.EqualTo(1));
         }
     }
 }

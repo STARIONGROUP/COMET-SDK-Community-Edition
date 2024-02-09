@@ -112,7 +112,7 @@ namespace CDP4Common.Tests.Poco
         public void TestGets()
         {
             Assert.IsTrue(ReferenceEquals(this.parameter.ParameterType, this.parameterOverride.ParameterType));
-            Assert.AreEqual(this.parameter.IsOptionDependent, this.parameterOverride.IsOptionDependent);
+            Assert.That(this.parameterOverride.IsOptionDependent, Is.EqualTo(this.parameter.IsOptionDependent));
             Assert.IsTrue(ReferenceEquals(this.parameter.Scale, this.parameterOverride.Scale));
             Assert.IsTrue(ReferenceEquals(this.parameter.StateDependence, this.parameterOverride.StateDependence));
             Assert.IsTrue(ReferenceEquals(this.parameter.Group, this.parameterOverride.Group));
@@ -124,7 +124,7 @@ namespace CDP4Common.Tests.Poco
             var parameterOverride = new ParameterOverride { Parameter = this.parameter };
             this.elementUsage.ParameterOverride.Add(parameterOverride);
 
-            Assert.AreEqual("Sat.battery_1.bool", parameterOverride.ModelCode());
+            Assert.That(parameterOverride.ModelCode(), Is.EqualTo("Sat.battery_1.bool"));
         }
 
         [Test]
@@ -144,7 +144,7 @@ namespace CDP4Common.Tests.Poco
 
             this.elementUsage.ParameterOverride.Add(parameterOverride);
 
-            Assert.AreEqual("Sat.battery_1.coord.x", parameterOverride.ModelCode(0));
+            Assert.That(parameterOverride.ModelCode(0), Is.EqualTo("Sat.battery_1.coord.x"));
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace CDP4Common.Tests.Poco
 
             this.elementUsage.ParameterOverride.Add(parameterOverride);
 
-            Assert.AreEqual("Sat.battery_1.coord", parameterOverride.ModelCode());
+            Assert.That(parameterOverride.ModelCode(), Is.EqualTo("Sat.battery_1.coord"));
         }
 
         [Test]
@@ -326,10 +326,10 @@ namespace CDP4Common.Tests.Poco
             parameterOverride.ValueSet.Add(parameterOverrideValueSet);
 
             parameterOverrideValueSet.ResetManual();
-            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Manual);
+            Assert.That(parameterOverrideValueSet.Manual, Is.EqualTo(defaultValueArray));
 
             parameterOverrideValueSet.ResetManual();
-            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Manual);
+            Assert.That(parameterOverrideValueSet.Manual, Is.EqualTo(defaultValueArray));
         }
 
         [Test]
@@ -341,10 +341,10 @@ namespace CDP4Common.Tests.Poco
             parameterOverride.ValueSet.Add(parameterOverrideValueSet);
 
             parameterOverrideValueSet.ResetComputed();
-            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Computed);
+            Assert.That(parameterOverrideValueSet.Computed, Is.EqualTo(defaultValueArray));
 
             parameterOverrideValueSet.ResetComputed();
-            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Computed);
+            Assert.That(parameterOverrideValueSet.Computed, Is.EqualTo(defaultValueArray));
         }
 
         [Test]
@@ -356,10 +356,10 @@ namespace CDP4Common.Tests.Poco
             parameterOverride.ValueSet.Add(parameterOverrideValueSet);
 
             parameterOverrideValueSet.ResetFormula();
-            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Formula);
+            Assert.That(parameterOverrideValueSet.Formula, Is.EqualTo(defaultValueArray));
 
             parameterOverrideValueSet.ResetFormula();
-            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Formula);
+            Assert.That(parameterOverrideValueSet.Formula, Is.EqualTo(defaultValueArray));
         }
 
         [Test]
@@ -371,10 +371,10 @@ namespace CDP4Common.Tests.Poco
             parameterOverride.ValueSet.Add(parameterOverrideValueSet);
 
             parameterOverrideValueSet.ResetReference();
-            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Reference);
+            Assert.That(parameterOverrideValueSet.Reference, Is.EqualTo(defaultValueArray));
 
             parameterOverrideValueSet.ResetReference();
-            Assert.AreEqual(defaultValueArray, parameterOverrideValueSet.Reference);
+            Assert.That(parameterOverrideValueSet.Reference, Is.EqualTo(defaultValueArray));
         }
     }
 }

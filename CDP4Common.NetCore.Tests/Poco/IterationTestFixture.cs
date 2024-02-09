@@ -66,7 +66,7 @@ namespace CDP4Common.Tests.Poco
             CollectionAssert.Contains(requiredRdls, familyofRdl);
             CollectionAssert.Contains(requiredRdls, modelrdl);
 
-            Assert.AreEqual(3, requiredRdls.Count());
+            Assert.That(requiredRdls.Count(), Is.EqualTo(3));
         }
     }
 }

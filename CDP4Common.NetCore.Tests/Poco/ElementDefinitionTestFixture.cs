@@ -148,7 +148,7 @@ namespace CDP4Common.Tests.Poco
 
             elementDefinition.ShortName = shortname;
 
-            Assert.AreEqual(shortname, elementDefinition.ModelCode());
+            Assert.That(elementDefinition.ModelCode(), Is.EqualTo(shortname));
         }
 
         [Test]
@@ -179,7 +179,7 @@ namespace CDP4Common.Tests.Poco
             def.Category.Add(cat1);
             def.Category.Add(cat2);
 
-            Assert.AreEqual(2, def.RequiredRdls.Count());
+            Assert.That(def.RequiredRdls.Count(), Is.EqualTo(2));
             Assert.IsTrue(def.RequiredRdls.Contains(srdl1));
             Assert.IsTrue(def.RequiredRdls.Contains(mrdl));
             Assert.IsFalse(def.RequiredRdls.Contains(srdl2));
@@ -220,7 +220,7 @@ namespace CDP4Common.Tests.Poco
             def2.ContainedElement.Add(usage1_1);
             def2.ContainedElement.Add(usage1_2);
             
-            Assert.AreEqual(2, def1.ReferencingElementUsages().Count());
+            Assert.That(def1.ReferencingElementUsages().Count(), Is.EqualTo(2));
             Assert.Contains(usage1_1, def1.ReferencingElementUsages().ToList());
             Assert.Contains(usage1_2, def1.ReferencingElementUsages().ToList());
         }

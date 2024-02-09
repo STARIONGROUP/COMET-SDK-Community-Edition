@@ -68,12 +68,12 @@ namespace CDP4Common.Tests.Poco
 
             var allSuperCategories = category.AllSuperCategories();
 
-            Assert.AreEqual(4, allSuperCategories.Count());
+            Assert.That(allSuperCategories.Count(), Is.EqualTo(4));
 
             var shortnames = allSuperCategories.Aggregate(string.Empty,
                 (current, cat) => current + " " + cat.ShortName);
 
-            Assert.AreEqual("A11 A1 A2 B", shortnames.Trim());
+            Assert.That(shortnames.Trim(), Is.EqualTo("A11 A1 A2 B"));
         }
 
         [Test]
@@ -115,11 +115,11 @@ namespace CDP4Common.Tests.Poco
             bbb.SuperCategory.Add(bb);
             bb.SuperCategory.Add(b);
 
-            Assert.AreEqual(8, this.cache.Count);
+            Assert.That(this.cache.Count, Is.EqualTo(8));
 
             var derivedCategoriesOfA = a.AllDerivedCategories().ToList();
 
-            Assert.AreEqual(3, derivedCategoriesOfA.Count);
+            Assert.That(derivedCategoriesOfA.Count, Is.EqualTo(3));
 
             CollectionAssert.Contains(derivedCategoriesOfA, aa);
             CollectionAssert.Contains(derivedCategoriesOfA, aaa);

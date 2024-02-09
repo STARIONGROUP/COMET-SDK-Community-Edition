@@ -141,12 +141,12 @@ namespace CDP4Common.Tests.RuleVerification
         public void VerifythatRuleVerificationWorks()
         {
             var violations = this.rule.Verify(this.iteration).ToList();
-            Assert.AreEqual(5, violations.Count);
-            Assert.AreEqual(1, violations.Count(x => x.ViolatingThing.Contains(this.def2.Iid)));
-            Assert.AreEqual(1, violations.Count(x => x.ViolatingThing.Contains(this.relation2.Iid)));
-            Assert.AreEqual(1, violations.Count(x => x.ViolatingThing.Contains(this.spec2.Iid)));
-            Assert.AreEqual(1, violations.Count(x => x.ViolatingThing.Contains(this.gr2.Iid)));
-            Assert.AreEqual(1, violations.Count(x => x.ViolatingThing.Contains(this.req2.Iid)));
+            Assert.That(violations.Count, Is.EqualTo(5));
+            Assert.That(violations.Count(x => x.ViolatingThing.Contains(this.def2.Iid)), Is.EqualTo(1));
+            Assert.That(violations.Count(x => x.ViolatingThing.Contains(this.relation2.Iid)), Is.EqualTo(1));
+            Assert.That(violations.Count(x => x.ViolatingThing.Contains(this.spec2.Iid)), Is.EqualTo(1));
+            Assert.That(violations.Count(x => x.ViolatingThing.Contains(this.gr2.Iid)), Is.EqualTo(1));
+            Assert.That(violations.Count(x => x.ViolatingThing.Contains(this.req2.Iid)), Is.EqualTo(1));
         }
     }
 }

@@ -54,7 +54,7 @@ namespace CDP4Common.Tests.Poco
         public void TestGetConversion()
         {
             this.prefixedUnit.Prefix = this.unitPrefix;
-            Assert.AreEqual("conv", this.prefixedUnit.ConversionFactor);
+            Assert.That(this.prefixedUnit.ConversionFactor, Is.EqualTo("conv"));
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace CDP4Common.Tests.Poco
         {
             this.prefixedUnit.Prefix = this.unitPrefix;
             this.prefixedUnit.ReferenceUnit = this.measurementUnit;
-            Assert.AreEqual("unitmeasurement", this.prefixedUnit.Name);
+            Assert.That(this.prefixedUnit.Name, Is.EqualTo("unitmeasurement"));
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace CDP4Common.Tests.Poco
         {
             this.prefixedUnit.Prefix = this.unitPrefix;
             this.prefixedUnit.ReferenceUnit = this.measurementUnit;
-            Assert.AreEqual("um", this.prefixedUnit.ShortName);
+            Assert.That(this.prefixedUnit.ShortName, Is.EqualTo("um"));
         }
 
         [Test]

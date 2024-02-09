@@ -38,7 +38,7 @@ namespace CDP4Common.Tests.Poco
             perosn.GivenName = "givenname";
             perosn.Surname = "surname";
 
-            Assert.AreEqual("givenname surname", perosn.Name);
+            Assert.That(perosn.Name, Is.EqualTo("givenname surname"));
         }
     }
 }

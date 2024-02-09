@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedParameterTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,12 +21,12 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -48,13 +47,13 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatUserFriendlyShortNameReturnsExpectedResult()
         {
-            Assert.AreEqual("TST", this.nestedParameter.UserFriendlyShortName );
+            Assert.That(this.nestedParameter.UserFriendlyShortName, Is.EqualTo("TST"));
         }
 
         [Test]
         public void VerifyThatUserFriendlyNameReturnsExpectedResult()
         {
-            Assert.AreEqual("TST", this.nestedParameter.UserFriendlyName);
+            Assert.That(this.nestedParameter.UserFriendlyName, Is.EqualTo("TST"));
         }
     }
 }

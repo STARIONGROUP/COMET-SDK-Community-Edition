@@ -73,7 +73,7 @@ namespace CDP4Common.Tests.Poco
         {
             var modelcode = "Sat.bat_1";
 
-            Assert.AreEqual(modelcode, this.elementUsage.ModelCode());
+            Assert.That(this.elementUsage.ModelCode(), Is.EqualTo(modelcode));
         }
 
         [Test]

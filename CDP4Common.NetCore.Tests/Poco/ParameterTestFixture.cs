@@ -122,7 +122,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatModelCodeReturnsTheExpectedResultForScalar()
         {
             var modelcode = "Sat.m";
-            Assert.AreEqual(modelcode, this.scalarParameter.ModelCode());
+            Assert.That(this.scalarParameter.ModelCode(), Is.EqualTo(modelcode));
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace CDP4Common.Tests.Poco
             var modelcode = "Sat.coord.1_8";
             this.component.ShortName = "{{1 -*/;%&@ 8<>}";
 
-            Assert.AreEqual(modelcode, this.compoundParameter.ModelCode(0));
+            Assert.That(this.compoundParameter.ModelCode(0), Is.EqualTo(modelcode));
         }
 
         [Test]
@@ -140,7 +140,7 @@ namespace CDP4Common.Tests.Poco
             var modelcode = "Sat.coord.1_8";
             this.component.ShortName = "1_8";
 
-            Assert.AreEqual(modelcode, this.compoundParameter.ModelCode(0));
+            Assert.That(this.compoundParameter.ModelCode(0), Is.EqualTo(modelcode));
         }
 
         [Test]
@@ -149,7 +149,7 @@ namespace CDP4Common.Tests.Poco
             var modelcode = "Sat.coord.1_8";
             this.component.ShortName = "{1;8";
 
-            Assert.AreEqual(modelcode, this.compoundParameter.ModelCode(0));
+            Assert.That(this.compoundParameter.ModelCode(0), Is.EqualTo(modelcode));
         }
 
         [Test]
@@ -158,14 +158,14 @@ namespace CDP4Common.Tests.Poco
             var modelcode = "Sat.coord.";
             this.component.ShortName = "  ";
 
-            Assert.AreEqual(modelcode, this.compoundParameter.ModelCode(0));
+            Assert.That(this.compoundParameter.ModelCode(0), Is.EqualTo(modelcode));
         }
 
         [Test]
         public void VerifyThatModelCodeReturnsTheExpectedResultForCompound()
         {
             var modelcode = "Sat.coord";
-            Assert.AreEqual(modelcode, this.compoundParameter.ModelCode());
+            Assert.That(this.compoundParameter.ModelCode(), Is.EqualTo(modelcode));
         }
 
         [Test]

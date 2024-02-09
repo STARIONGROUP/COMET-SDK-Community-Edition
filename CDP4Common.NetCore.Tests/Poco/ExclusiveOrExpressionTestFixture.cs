@@ -45,7 +45,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatStringValueReturnsExpectedResult()
         {
-            Assert.AreEqual("XOR", this.exclusiveOrExpression.StringValue);
+            Assert.That(this.exclusiveOrExpression.StringValue, Is.EqualTo("XOR"));
         }
     }
 }

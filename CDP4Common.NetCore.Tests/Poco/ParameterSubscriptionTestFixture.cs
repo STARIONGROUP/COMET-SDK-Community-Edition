@@ -101,7 +101,7 @@ namespace CDP4Common.Tests.Poco
         public void TestGets()
         {
             Assert.IsTrue(ReferenceEquals(this.parameter.ParameterType, this.parameterSubscription.ParameterType));
-            Assert.AreEqual(this.parameter.IsOptionDependent, this.parameterSubscription.IsOptionDependent);
+            Assert.That(this.parameterSubscription.IsOptionDependent, Is.EqualTo(this.parameter.IsOptionDependent));
             Assert.IsTrue(ReferenceEquals(this.parameter.Scale, this.parameterSubscription.Scale));
             Assert.IsTrue(ReferenceEquals(this.parameter.StateDependence, this.parameterSubscription.StateDependence));
             Assert.IsTrue(ReferenceEquals(this.parameter.Group, this.parameterSubscription.Group));

@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ElementDefinitionTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,18 +21,19 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using System;
-    using System.Linq;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.SiteDirectoryData;
-    using NUnit.Framework;
     using System.Collections.Concurrent;
+    using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.Exceptions;
+    using CDP4Common.EngineeringModelData;
+    using CDP4Common.SiteDirectoryData;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class ElementDefinitionTestFixture
@@ -148,7 +148,7 @@ namespace CDP4Common.Tests.Poco
 
             elementDefinition.ShortName = shortname;
 
-            Assert.AreEqual(shortname, elementDefinition.ModelCode());
+            Assert.That(elementDefinition.ModelCode(), Is.EqualTo(shortname));
         }
 
         [Test]
@@ -179,7 +179,7 @@ namespace CDP4Common.Tests.Poco
             def.Category.Add(cat1);
             def.Category.Add(cat2);
 
-            Assert.AreEqual(2, def.RequiredRdls.Count());
+            Assert.That(def.RequiredRdls.Count(), Is.EqualTo(2));
             Assert.IsTrue(def.RequiredRdls.Contains(srdl1));
             Assert.IsTrue(def.RequiredRdls.Contains(mrdl));
             Assert.IsFalse(def.RequiredRdls.Contains(srdl2));
@@ -220,7 +220,7 @@ namespace CDP4Common.Tests.Poco
             def2.ContainedElement.Add(usage1_1);
             def2.ContainedElement.Add(usage1_2);
             
-            Assert.AreEqual(2, def1.ReferencingElementUsages().Count());
+            Assert.That(def1.ReferencingElementUsages().Count(), Is.EqualTo(2));
             Assert.Contains(usage1_1, def1.ReferencingElementUsages().ToList());
             Assert.Contains(usage1_2, def1.ReferencingElementUsages().ToList());
         }

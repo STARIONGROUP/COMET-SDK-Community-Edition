@@ -56,10 +56,10 @@ namespace CDP4Common.NetCore.Tests.Poco
             var pfsListClone = pfsList.Clone(true);
             var dtoOrderedItemListClone = pfsListClone.PossibleState.ToDtoOrderedItemList().ToList();
 
-            Assert.AreEqual(dtoOrderedItemListOriginal[0].K, dtoOrderedItemListClone[0].K);
-            Assert.AreEqual(dtoOrderedItemListOriginal[0].V, dtoOrderedItemListClone[0].V);
-            Assert.AreEqual(dtoOrderedItemListOriginal[1].K, dtoOrderedItemListClone[1].K);
-            Assert.AreEqual(dtoOrderedItemListOriginal[1].V, dtoOrderedItemListClone[1].V);
+            Assert.That(dtoOrderedItemListClone[0].K, Is.EqualTo(dtoOrderedItemListOriginal[0].K));
+            Assert.That(dtoOrderedItemListClone[0].V, Is.EqualTo(dtoOrderedItemListOriginal[0].V));
+            Assert.That(dtoOrderedItemListClone[1].K, Is.EqualTo(dtoOrderedItemListOriginal[1].K));
+            Assert.That(dtoOrderedItemListClone[1].V, Is.EqualTo(dtoOrderedItemListOriginal[1].V));
         }
     }
 }

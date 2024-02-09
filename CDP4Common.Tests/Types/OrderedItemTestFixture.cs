@@ -48,8 +48,8 @@ namespace CDP4Common.Tests.Types
             var m = value1.M;
 
             value1.MoveItem(1, 1);
-            Assert.AreEqual(m, value1.M);
-            Assert.AreEqual(key, value1.K);
+            Assert.That(value1.M, Is.EqualTo(m));
+            Assert.That(value1.K, Is.EqualTo(key));
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace CDP4Common.Tests.Types
             var value1 = new OrderedItem { K = key, V = "one" };
             var value2 = new OrderedItem { K = key, V = "one" };
 
-            Assert.AreEqual(value1, value2);
+            Assert.That(value2, Is.EqualTo(value1));
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace CDP4Common.Tests.Types
             var value1 = new OrderedItem { K = key, V = value };
             var value2 = new OrderedItem { K = key, V = value };
 
-            Assert.AreEqual(value1, value2);
+            Assert.That(value2, Is.EqualTo(value1));
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace CDP4Common.Tests.Types
             var value1 = new OrderedItem { K = key, V = value };
             var value2 = new OrderedItem { K = key, V = value };
 
-            Assert.AreEqual(value1, value2);
+            Assert.That(value2, Is.EqualTo(value1));
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace CDP4Common.Tests.Types
             var list2 = new List<OrderedItem>{item1b, item2b, item3b, item4b};
             list2.Add(item5);
 
-            Assert.AreEqual(4, list1.Intersect(list2).Count());
+            Assert.That(list1.Intersect(list2).Count(), Is.EqualTo(4));
         }
     }
 }

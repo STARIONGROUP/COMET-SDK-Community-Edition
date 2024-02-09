@@ -57,23 +57,23 @@ namespace CDP4Common.Tests.Comparers
         {
             var comparer = new OptionComparer();
 
-            Assert.AreEqual(0, comparer.Compare(null, null));
+            Assert.That(comparer.Compare(null, null), Is.EqualTo(0));
 
-            Assert.AreEqual(1, comparer.Compare(null, this.optiona));
+            Assert.That(comparer.Compare(null, this.optiona), Is.EqualTo(1));
 
-            Assert.AreEqual(-1, comparer.Compare(this.optiona, null));
+            Assert.That(comparer.Compare(this.optiona, null), Is.EqualTo(-1));
 
             var comparisonab = comparer.Compare(this.optiona, this.optionb);
-            Assert.AreEqual(1, comparisonab);
+            Assert.That(comparisonab, Is.EqualTo(1));
 
             var comparisonba = comparer.Compare(this.optionb, this.optiona);
-            Assert.AreEqual(-1, comparisonba);
+            Assert.That(comparisonba, Is.EqualTo(-1));
 
             var comparisonaa = comparer.Compare(this.optiona, this.optiona);
-            Assert.AreEqual(0, comparisonaa);
+            Assert.That(comparisonaa, Is.EqualTo(0));
 
             var comparisonbb = comparer.Compare(this.optionb, this.optionb);
-            Assert.AreEqual(0, comparisonbb);
+            Assert.That(comparisonbb, Is.EqualTo(0));
         }
 
         [Test]

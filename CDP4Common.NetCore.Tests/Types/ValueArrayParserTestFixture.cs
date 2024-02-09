@@ -47,9 +47,9 @@ namespace CDP4Common.Tests.Types
             var stringArray = "{1;2;3}";
             Assert.IsTrue(stringArray.TryParseToIntValueArray(out result, out error));
 
-            Assert.AreEqual(1, this.result[0]);
-            Assert.AreEqual(2, this.result[1]);
-            Assert.AreEqual(3, this.result[2]);
+            Assert.That(this.result[0], Is.EqualTo(1));
+            Assert.That(this.result[1], Is.EqualTo(2));
+            Assert.That(this.result[2], Is.EqualTo(3));
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace CDP4Common.Tests.Types
             var stringArray = "{1}";
             Assert.IsTrue(stringArray.TryParseToIntValueArray(out result, out error));
 
-            Assert.AreEqual(1, this.result[0]);
+            Assert.That(this.result[0], Is.EqualTo(1));
         }
 
         [Test]

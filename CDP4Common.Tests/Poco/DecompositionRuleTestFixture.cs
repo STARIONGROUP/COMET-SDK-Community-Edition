@@ -217,7 +217,7 @@ namespace CDP4Common.Tests.Poco
             satelliteElementDefinition.ContainedElement.Add(batteryUsage);
 
             var violations = rule.Verify(this.iteration);
-            Assert.AreEqual(1, violations.Count());
+            Assert.That(violations.Count(), Is.EqualTo(1));
 
             var violation = violations.Single();
 
@@ -262,7 +262,7 @@ namespace CDP4Common.Tests.Poco
             satelliteElementDefinition.ContainedElement.Add(batteryUsage3);
 
             var violations = rule.Verify(this.iteration);
-            Assert.AreEqual(1, violations.Count());
+            Assert.That(violations.Count(), Is.EqualTo(1));
 
             var violation = violations.Single();
 

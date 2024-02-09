@@ -51,7 +51,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyPath()
         {
-            Assert.AreEqual("supertop/top", this.folder.Path);
+            Assert.That(this.folder.Path, Is.EqualTo("supertop/top"));
         }
     }
 }

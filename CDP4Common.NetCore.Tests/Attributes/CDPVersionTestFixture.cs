@@ -24,8 +24,6 @@
 
 namespace CDP4Common.Tests.Attributes
 {
-    using System;
-
     using NUnit.Framework;
 
     /// <summary>

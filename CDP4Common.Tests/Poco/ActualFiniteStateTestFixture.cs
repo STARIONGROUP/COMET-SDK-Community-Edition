@@ -83,7 +83,7 @@ namespace CDP4Common.Tests.Poco
         {
             Assert.IsNotNull(this.actualFiniteState.Name);
             Assert.IsNotEmpty(this.actualFiniteState.Name);
-            Assert.AreEqual("possiblestate1 → possiblestate2", this.actualFiniteState.Name);
+            Assert.That(this.actualFiniteState.Name, Is.EqualTo("possiblestate1 → possiblestate2"));
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace CDP4Common.Tests.Poco
         {
             Assert.IsNotNull(this.actualFiniteState.ShortName);
             Assert.IsNotEmpty(this.actualFiniteState.ShortName);
-            Assert.AreEqual("1.2", this.actualFiniteState.ShortName);
+            Assert.That(this.actualFiniteState.ShortName, Is.EqualTo("1.2"));
         }
 
         [Test]

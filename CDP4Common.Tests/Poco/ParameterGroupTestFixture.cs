@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterGroupTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,13 +21,14 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using System;
     using System.Linq;
+
     using CDP4Common.EngineeringModelData;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -105,10 +105,10 @@ namespace CDP4Common.Tests.Poco
             Assert.IsTrue(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1_1));
             Assert.IsTrue(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1_2));
             Assert.IsTrue(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1_1_1));
-            Assert.AreEqual(3, parameterGroup_1.ContainedGroup(true).Count());
+            Assert.That(parameterGroup_1.ContainedGroup(true).Count(), Is.EqualTo(3));
 
             Assert.IsTrue(parameterGroup_1_1.ContainedGroup(true).Contains(parameterGroup_1_1_1));
-            Assert.AreEqual(1, parameterGroup_1_1.ContainedGroup(true).Count());
+            Assert.That(parameterGroup_1_1.ContainedGroup(true).Count(), Is.EqualTo(1));
 
             Assert.IsEmpty(parameterGroup_1_2.ContainedGroup(true));
         }
@@ -175,11 +175,10 @@ namespace CDP4Common.Tests.Poco
             elementDefinition.ParameterGroup.Add(parameterGroup_1_1_1);
             parameterGroup_1_1_1.ContainingGroup = parameterGroup_1_1;
 
-            Assert.AreEqual(-1, parameterGroup_0.Level());
-            Assert.AreEqual(0, parameterGroup_1.Level());
-            Assert.AreEqual(1, parameterGroup_1_1.Level());
-            Assert.AreEqual(2, parameterGroup_1_1_1.Level());
+            Assert.That(parameterGroup_0.Level(), Is.EqualTo(-1));
+            Assert.That(parameterGroup_1.Level(), Is.EqualTo(0));
+            Assert.That(parameterGroup_1_1.Level(), Is.EqualTo(1));
+            Assert.That(parameterGroup_1_1_1.Level(), Is.EqualTo(2));
         }
     }
 }
-

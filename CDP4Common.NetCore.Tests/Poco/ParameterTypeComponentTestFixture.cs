@@ -50,10 +50,10 @@ namespace CDP4Common.Tests.Poco
             compoundParameterType.Component.Add(component1);
             compoundParameterType.Component.Add(component2);
 
-            Assert.AreEqual(0, component0.Index);
-            Assert.AreEqual(1, component1.Index);
-            Assert.AreEqual(2, component2.Index);
-            Assert.AreEqual(-1, componentnocontainer.Index);
+            Assert.That(component0.Index, Is.EqualTo(0));
+            Assert.That(component1.Index, Is.EqualTo(1));
+            Assert.That(component2.Index, Is.EqualTo(2));
+            Assert.That(componentnocontainer.Index, Is.EqualTo(-1));
         }
     }
 }

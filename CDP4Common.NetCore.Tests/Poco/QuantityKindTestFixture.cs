@@ -39,7 +39,7 @@ namespace CDP4Common.Tests.Poco
             var quantityKind = new SimpleQuantityKind();
             quantityKind.PossibleScale.Add(new LogarithmicScale());
 
-            Assert.AreEqual(1, quantityKind.AllPossibleScale.Count);
+            Assert.That(quantityKind.AllPossibleScale.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace CDP4Common.Tests.Poco
             quantityKind.General.PossibleScale.Add(new CyclicRatioScale());
             quantityKind.General.PossibleScale.Add(scale);
 
-            Assert.AreEqual(3, quantityKind.AllPossibleScale.Count);
+            Assert.That(quantityKind.AllPossibleScale.Count, Is.EqualTo(3));
         }
 
         [Test]

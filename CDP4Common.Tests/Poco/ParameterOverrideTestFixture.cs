@@ -26,11 +26,13 @@ namespace CDP4Common.Tests.Poco
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+
     using NUnit.Framework;
-    using CDP4Common.Exceptions;
 
     [TestFixture]
     internal class ParameterOverrideTestFixture
@@ -58,11 +60,13 @@ namespace CDP4Common.Tests.Poco
             this.domain = new DomainOfExpertise(Guid.NewGuid(), null, null) { Name = "domain", ShortName = "d" };
             this.elementDefinition1 = new ElementDefinition(Guid.NewGuid(), null, null) { Owner = this.domain, ShortName = "Sat" };
             this.elementDefinition2 = new ElementDefinition(Guid.NewGuid(), null, null) { Owner = this.domain, ShortName = "Bat" };
+
             this.elementUsage = new ElementUsage(Guid.NewGuid(), null, null)
             {
                 ShortName = "battery_1",
                 ElementDefinition = this.elementDefinition2
             };
+
             this.elementDefinition1.ContainedElement.Add(this.elementUsage);
 
             this.parameterOverride = new ParameterOverride(Guid.NewGuid(), null, null) { Owner = this.domain };
@@ -110,7 +114,7 @@ namespace CDP4Common.Tests.Poco
         public void TestGets()
         {
             Assert.IsTrue(ReferenceEquals(this.parameter.ParameterType, this.parameterOverride.ParameterType));
-            Assert.AreEqual(this.parameter.IsOptionDependent, this.parameterOverride.IsOptionDependent);
+            Assert.That(this.parameterOverride.IsOptionDependent, Is.EqualTo(this.parameter.IsOptionDependent));
             Assert.IsTrue(ReferenceEquals(this.parameter.Scale, this.parameterOverride.Scale));
             Assert.IsTrue(ReferenceEquals(this.parameter.StateDependence, this.parameterOverride.StateDependence));
             Assert.IsTrue(ReferenceEquals(this.parameter.Group, this.parameterOverride.Group));
@@ -122,7 +126,7 @@ namespace CDP4Common.Tests.Poco
             var parameterOverride = new ParameterOverride { Parameter = this.parameter };
             this.elementUsage.ParameterOverride.Add(parameterOverride);
 
-            Assert.AreEqual("Sat.battery_1.bool", parameterOverride.ModelCode());
+            Assert.That( parameterOverride.ModelCode(), Is.EqualTo("Sat.battery_1.bool"));
         }
 
         [Test]
@@ -142,7 +146,7 @@ namespace CDP4Common.Tests.Poco
 
             this.elementUsage.ParameterOverride.Add(parameterOverride);
 
-            Assert.AreEqual("Sat.battery_1.coord.x", parameterOverride.ModelCode(0));
+            Assert.That(parameterOverride.ModelCode(0), Is.EqualTo("Sat.battery_1.coord.x"));
         }
 
         [Test]
@@ -162,7 +166,7 @@ namespace CDP4Common.Tests.Poco
 
             this.elementUsage.ParameterOverride.Add(parameterOverride);
 
-            Assert.AreEqual("Sat.battery_1.coord", parameterOverride.ModelCode());
+            Assert.That(parameterOverride.ModelCode(), Is.EqualTo("Sat.battery_1.coord"));
         }
 
         [Test]

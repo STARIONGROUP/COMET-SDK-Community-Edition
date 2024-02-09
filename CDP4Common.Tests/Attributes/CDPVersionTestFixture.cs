@@ -39,7 +39,7 @@ namespace CDP4Common.Tests.Attributes
         public void VerifyThatTheVersionIsSet()
         {
             var cdpversion = new CDPVersionAttribute("1.2");
-            Assert.AreEqual("1.2", cdpversion.Version);
+            Assert.That(cdpversion.Version, Is.EqualTo("1.2"));
         }
 
         [Test]

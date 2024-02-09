@@ -276,10 +276,10 @@ namespace CDP4Common.Tests.Extensions
             this.FillRelationalExpression(this.relationalExpression3, "mass", 100);
             this.FillRelationalExpression(this.relationalExpression4, "accel", "pretty_fast");
 
-            Assert.AreEqual("(length = 180) AND (width = 40)", this.andExpression.ToExpressionString());
-            Assert.AreEqual("(mass = 100) OR (accel = pretty_fast)", this.orExpression.ToExpressionString());
-            Assert.AreEqual("((mass = 100) OR (accel = pretty_fast)) XOR ((length = 180) AND (width = 40))", this.exclusiveOrExpression.ToExpressionString());
-            Assert.AreEqual("NOT (((mass = 100) OR (accel = pretty_fast)) XOR ((length = 180) AND (width = 40)))", this.notExpression.ToExpressionString());
+            Assert.That(this.andExpression.ToExpressionString(), Is.EqualTo("(length = 180) AND (width = 40)"));
+            Assert.That(this.orExpression.ToExpressionString(), Is.EqualTo("(mass = 100) OR (accel = pretty_fast)"));
+            Assert.That(this.exclusiveOrExpression.ToExpressionString(), Is.EqualTo("((mass = 100) OR (accel = pretty_fast)) XOR ((length = 180) AND (width = 40))"));
+            Assert.That(this.notExpression.ToExpressionString(), Is.EqualTo("NOT (((mass = 100) OR (accel = pretty_fast)) XOR ((length = 180) AND (width = 40)))"));
         }
 
         /// <summary>

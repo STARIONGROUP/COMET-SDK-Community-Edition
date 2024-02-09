@@ -47,13 +47,13 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatUserFriendlyShortNameReturnsExpectedResult()
         {
-            Assert.AreEqual("TST", this.nestedParameter.UserFriendlyShortName );
+            Assert.That(this.nestedParameter.UserFriendlyShortName, Is.EqualTo("TST"));
         }
 
         [Test]
         public void VerifyThatUserFriendlyNameReturnsExpectedResult()
         {
-            Assert.AreEqual("TST", this.nestedParameter.UserFriendlyName);
+            Assert.That(this.nestedParameter.UserFriendlyName, Is.EqualTo("TST"));
         }
     }
 }

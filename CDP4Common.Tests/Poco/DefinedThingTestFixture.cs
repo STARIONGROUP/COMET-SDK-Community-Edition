@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DefinedThingTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2019 RHEA System S.A.
 //
@@ -22,11 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using CDP4Common.EngineeringModelData;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -47,13 +46,13 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatUserFriendlyNameReturnsExpectedResult()
         {
-            Assert.AreEqual("this is a name", this.elementDefinition.UserFriendlyName);
+            Assert.That(this.elementDefinition.UserFriendlyName, Is.EqualTo("this is a name"));
         }
 
         [Test]
         public void VerifyThatUserFriendlyShortNameReturnsExpectedResult()
         {
-            Assert.AreEqual("shortname", this.elementDefinition.UserFriendlyShortName);
+            Assert.That(this.elementDefinition.UserFriendlyShortName, Is.EqualTo("shortname"));
         }
     }
 }

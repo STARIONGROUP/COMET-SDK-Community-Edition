@@ -189,7 +189,7 @@ namespace CDP4Common.Tests.Poco
             
             var violations = rule.Verify(this.iteration);
             
-            Assert.AreEqual(2, violations.Count());
+            Assert.That(violations.Count(), Is.EqualTo(2));
 
             var aliasViolation = violations.Single(v => v.ViolatingThing.Contains(alias.Iid));
             Assert.IsTrue(aliasViolation.Description.Contains("is not a CategorizableThing"));

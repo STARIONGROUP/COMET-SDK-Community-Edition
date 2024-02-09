@@ -38,7 +38,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyPopulateParticipantPermissions()
         {
             var participantRole = new ParticipantRole();
-            Assert.AreEqual(48, participantRole.ParticipantPermission.Count);
+            Assert.That(participantRole.ParticipantPermission.Count, Is.EqualTo(48));
             Assert.IsTrue(participantRole.ParticipantPermission.All(x => x.AccessRight == ParticipantAccessRightKind.NONE));
         }
     }

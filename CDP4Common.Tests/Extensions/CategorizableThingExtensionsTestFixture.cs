@@ -118,7 +118,7 @@ namespace CDP4Common.Tests.Extensions
         {
             this.elementDefinition.Category.Add(this.equipmentCategory);
 
-            Assert.AreEqual("PROD EQT", this.elementDefinition.GetAllCategoryShortNames());
+            Assert.That(this.elementDefinition.GetAllCategoryShortNames(), Is.EqualTo("PROD EQT"));
         }
 
         [Test]

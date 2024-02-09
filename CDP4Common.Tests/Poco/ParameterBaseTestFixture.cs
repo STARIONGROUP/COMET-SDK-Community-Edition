@@ -60,9 +60,9 @@ namespace CDP4Common.Tests.Poco
             elementDefinition.Parameter.Add(parameterlevel2);
             parameterlevel2.Group = parameterGroulevel1;
             
-            Assert.AreEqual(0, parameter_0.Level());
-            Assert.AreEqual(1, parameterlevel1.Level());
-            Assert.AreEqual(2, parameterlevel2.Level());
+            Assert.That(parameter_0.Level(), Is.EqualTo(0));
+            Assert.That(parameterlevel1.Level(), Is.EqualTo(1));
+            Assert.That(parameterlevel2.Level(), Is.EqualTo(2));
         }
 
         [Test]

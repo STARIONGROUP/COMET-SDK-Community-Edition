@@ -118,7 +118,7 @@ namespace CDP4Common.Tests.Types
         {
             this.cachekey_1 = new CacheKey(this.guid_1, null);
             
-            Assert.AreEqual(this.cachekey_1.GetHashCode(), this.cachekey_1.GetHashCode());
+            Assert.That(this.cachekey_1.GetHashCode(), Is.EqualTo(this.cachekey_1.GetHashCode()));
         }
     }
 }

@@ -46,7 +46,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatStringValueReturnsExpectedResult()
         {
-            Assert.AreEqual("AND", this.andExpression.StringValue);
+            Assert.That(this.andExpression.StringValue, Is.EqualTo("AND"));
         }
     }
 }

@@ -35,7 +35,7 @@ namespace CDP4Common.Tests.Poco
         public void TestGetNumberOfValue()
         {
             var type = new BooleanParameterType();
-            Assert.AreEqual(1, type.NumberOfValues);
+            Assert.That(type.NumberOfValues, Is.EqualTo(1));
         }
     }
 }

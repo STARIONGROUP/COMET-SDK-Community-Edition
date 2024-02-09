@@ -53,14 +53,14 @@ namespace CDP4Common.Tests.Poco
         public void VerifyPathForFileRevisionLocatedInFolder()
         {
             this.filerev.ContainingFolder = this.folder;
-            Assert.AreEqual("/path/filerev.ext1.ext2", this.filerev.Path);
+            Assert.That(this.filerev.Path, Is.EqualTo("/path/filerev.ext1.ext2"));
         }
 
         [Test]
         public void VerifyPathForFileRevisionLocatedInFileStore()
         {
             this.filerev.ContainingFolder = null;
-            Assert.AreEqual("filerev.ext1.ext2", this.filerev.Path);
+            Assert.That(this.filerev.Path, Is.EqualTo("filerev.ext1.ext2"));
         }
     }
 }

@@ -125,20 +125,20 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatGetNameWorks()
         {
-            Assert.AreEqual("ElementUsage2", this.nestedElement.Name);
+            Assert.That(this.nestedElement.Name, Is.EqualTo("ElementUsage2"));
         }
 
         [Test]
         public void VerifyThatGetNameWorksWhenNoElementUsages()
         {
             this.nestedElement.ElementUsage.Clear();
-            Assert.AreEqual("ElementDef", this.nestedElement.Name);
+            Assert.That(this.nestedElement.Name, Is.EqualTo("ElementDef"));
         }
 
         [Test]
         public void VerifyShortName()
         {
-            Assert.AreEqual("Def.Use1.Use2", this.nestedElement.ShortName);
+            Assert.That(this.nestedElement.ShortName, Is.EqualTo("Def.Use1.Use2"));
         }
 
         [Test]
@@ -230,21 +230,21 @@ namespace CDP4Common.Tests.Poco
         {
             var nestedElementTreeGenerator = new NestedElementTreeGenerator();
             var nestedElements = nestedElementTreeGenerator.Generate(this.option, this.domain).ToList();
-            Assert.AreEqual(7, nestedElements.Count);
+            Assert.That(nestedElements.Count, Is.EqualTo(7));
 
             var children = nestedElements.First(x => x.IsRootElement).GetChildren(nestedElements).ToList();
-            Assert.AreEqual(1, children.Count);
-            Assert.AreEqual(this.elementUsage1.Name, children.First().Name);
+            Assert.That(children.Count, Is.EqualTo(1));
+            Assert.That(children.First().Name, Is.EqualTo(this.elementUsage1.Name));
 
             var children2 = children.First().GetChildren(nestedElements).ToList();
-            Assert.AreEqual(3, children2.Count);
-            Assert.AreEqual(this.elementUsage2.Name, children2.First().Name);
+            Assert.That(children2.Count, Is.EqualTo(3));
+            Assert.That(children2.First().Name, Is.EqualTo(this.elementUsage2.Name));
 
             var sameInstanceElementUsageNestedElement1 = nestedElements.Single(x => x.ElementUsage.LastOrDefault() == this.elementUsage3_1);
             var sameInstanceElementUsageNestedElement2 = nestedElements.Single(x => x.ElementUsage.LastOrDefault() == this.elementUsage3_2);
             
-            Assert.AreEqual(1, sameInstanceElementUsageNestedElement1.GetChildren(nestedElements).Count());
-            Assert.AreEqual(1, sameInstanceElementUsageNestedElement2.GetChildren(nestedElements).Count());
+            Assert.That(sameInstanceElementUsageNestedElement1.GetChildren(nestedElements).Count(), Is.EqualTo(1));
+            Assert.That(sameInstanceElementUsageNestedElement2.GetChildren(nestedElements).Count(), Is.EqualTo(1));
         }
     }
 }

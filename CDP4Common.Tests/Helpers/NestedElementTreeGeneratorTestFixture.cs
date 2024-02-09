@@ -302,7 +302,7 @@ namespace CDP4Common.Tests.Helpers
                 Console.WriteLine(nestedElement.ShortName);
             }
 
-            Assert.AreEqual(2, nestedElements.Count());
+            Assert.That(nestedElements.Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -318,7 +318,7 @@ namespace CDP4Common.Tests.Helpers
                 Console.WriteLine(nestedElement.ShortName);
             }
 
-            Assert.AreEqual(2, nestedElements.Count());
+            Assert.That(nestedElements.Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -333,7 +333,7 @@ namespace CDP4Common.Tests.Helpers
                 Console.WriteLine(nestedElement.ShortName);
             }
 
-            Assert.AreEqual(3, nestedElements.Count());
+            Assert.That(nestedElements.Count(), Is.EqualTo(3));
         }
 
         [Test]
@@ -369,11 +369,11 @@ namespace CDP4Common.Tests.Helpers
 
             foreach (var nestedElement in nestedElements)
             {
-                Assert.AreEqual(option, nestedElement.Container);
+                Assert.That(nestedElement.Container, Is.EqualTo(option));
 
                 foreach (var nestedParameter in nestedElement.NestedParameter)
                 {
-                    Assert.AreEqual(option, nestedParameter.Option);
+                    Assert.That(nestedParameter.Option, Is.EqualTo(option));
                 }
             }
         }
@@ -398,11 +398,11 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise, false).ToList();
 
-            Assert.AreEqual(2, NestedParameters.Count);
+            Assert.That(NestedParameters.Count, Is.EqualTo(2));
 
             NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise_2, false).ToList();
 
-            Assert.AreEqual(2, NestedParameters.Count);
+            Assert.That(NestedParameters.Count, Is.EqualTo(2));
         }
 
         [Test]
@@ -412,11 +412,11 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise, false).ToList();
 
-            Assert.AreEqual(3, NestedParameters.Count);
+            Assert.That(NestedParameters.Count, Is.EqualTo(3));
 
             NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise_2, false).ToList();
 
-            Assert.AreEqual(4, NestedParameters.Count);
+            Assert.That(NestedParameters.Count, Is.EqualTo(4));
         }
 
         [Test]
@@ -426,7 +426,7 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, false).ToList();
 
-            Assert.AreEqual(4, NestedParameters.Count);
+            Assert.That(NestedParameters.Count, Is.EqualTo(4));
         }
 
         [Test]
@@ -436,13 +436,13 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedElements = this.nestedElementTreeGenerator.Generate(option, this.domainOfExpertise, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
-            Assert.AreEqual(2, NestedElements.SelectMany(x => x.NestedParameter).Count());
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
+            Assert.That(NestedElements.SelectMany(x => x.NestedParameter).Count(), Is.EqualTo(2));
 
             NestedElements = this.nestedElementTreeGenerator.Generate(option, this.domainOfExpertise_2, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
-            Assert.AreEqual(2, NestedElements.SelectMany(x => x.NestedParameter).Count());
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
+            Assert.That(NestedElements.SelectMany(x => x.NestedParameter).Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -452,9 +452,9 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedElements = this.nestedElementTreeGenerator.Generate(option, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
-            Assert.AreEqual(4, NestedElements.SelectMany(x => x.NestedParameter).Count());
-        }
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
+            Assert.That(NestedElements.SelectMany(x => x.NestedParameter).Count(), Is.EqualTo(4));
+        }   
 
         [Test]
         public void Verify_that_GenerateNestedElements_Works_For_Specific_DomainOfExpertise()
@@ -463,13 +463,13 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.domainOfExpertise, this.elementDefinition_1, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
-            Assert.AreEqual(2, NestedElements.SelectMany(x => x.NestedParameter).Count());
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
+            Assert.That(NestedElements.SelectMany(x => x.NestedParameter).Count(), Is.EqualTo(2));
 
             NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.domainOfExpertise_2, this.elementDefinition_1, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
-            Assert.AreEqual(2, NestedElements.SelectMany(x => x.NestedParameter).Count());
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
+            Assert.That(NestedElements.SelectMany(x => x.NestedParameter).Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -479,41 +479,41 @@ namespace CDP4Common.Tests.Helpers
 
             var NestedElements = this.nestedElementTreeGenerator.GenerateNestedElements(option, this.elementDefinition_1, false).ToList();
 
-            Assert.AreEqual(2, NestedElements.Count);
-            Assert.AreEqual(4, NestedElements.SelectMany(x => x.NestedParameter).Count());
+            Assert.That(NestedElements.Count, Is.EqualTo(2));
+            Assert.That(NestedElements.SelectMany(x => x.NestedParameter).Count(), Is.EqualTo(4));
         }
 
         [Test]
         public void VerifyThatGetNestedElementShortNameWorksForElementDefinition()
         {
-            Assert.AreEqual("Sat", this.nestedElementTreeGenerator.GetNestedElementPath(this.elementDefinition_1, this.option_A));
-            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementPath(this.elementDefinition_2, this.option_A));
-            Assert.AreEqual("Sat", this.nestedElementTreeGenerator.GetNestedElementPath(this.elementDefinition_1, this.option_B));
-            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementPath(this.elementDefinition_2, this.option_B));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedElementPath(this.elementDefinition_1, this.option_A), Is.EqualTo("Sat"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedElementPath(this.elementDefinition_2, this.option_A), Is.EqualTo(null));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedElementPath(this.elementDefinition_1, this.option_B), Is.EqualTo("Sat"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedElementPath(this.elementDefinition_2, this.option_B), Is.EqualTo(null));
         }
 
         [Test]
         public void VerifyThatGetNestedElementShortNameWorksForElementUsage()
         {
-            Assert.AreEqual(null, this.nestedElementTreeGenerator.GetNestedElementPath(this.elementUsage_1, this.option_A));
-            Assert.AreEqual("Sat.bat_b", this.nestedElementTreeGenerator.GetNestedElementPath(this.elementUsage_2, this.option_A));
-            Assert.AreEqual("Sat.bat_a", this.nestedElementTreeGenerator.GetNestedElementPath(this.elementUsage_1, this.option_B));
-            Assert.AreEqual("Sat.bat_b", this.nestedElementTreeGenerator.GetNestedElementPath(this.elementUsage_2, this.option_B));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedElementPath(this.elementUsage_1, this.option_A), Is.EqualTo(null));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedElementPath(this.elementUsage_2, this.option_A), Is.EqualTo("Sat.bat_b"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedElementPath(this.elementUsage_1, this.option_B), Is.EqualTo("Sat.bat_a"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedElementPath(this.elementUsage_2, this.option_B), Is.EqualTo("Sat.bat_b"));
         }
 
         [Test]
         public void VerifyThatGetNestedParameterPathWorks()
         {
-            Assert.AreEqual(@"Sat\m\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter, this.option_A));
-            Assert.AreEqual(@"Sat.bat_b\v\1\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_A));
-            Assert.AreEqual(@"Sat.bat_b\v\1\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_A, this.actualState_3));
-            Assert.AreEqual(@"Sat.bat_b\v\2\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_A, this.actualState_4));
-            Assert.AreEqual(@"Sat\m\\OPT_A", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_A));
-            Assert.AreEqual(@"Sat\m\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter, this.option_B));
-            Assert.AreEqual(@"Sat.bat_a\v\1\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B));
-            Assert.AreEqual(@"Sat.bat_a\v\1\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B, this.actualState_3));
-            Assert.AreEqual(@"Sat.bat_a\v\2\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B, this.actualState_4));
-            Assert.AreEqual(@"Sat\m\\OPT_B", this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_B));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter, this.option_A), Is.EqualTo(@"Sat\m\\OPT_A"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_A), Is.EqualTo(@"Sat.bat_b\v\1\OPT_A"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_A, this.actualState_3), Is.EqualTo(@"Sat.bat_b\v\1\OPT_A"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_A, this.actualState_4), Is.EqualTo(@"Sat.bat_b\v\2\OPT_A"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_A), Is.EqualTo(@"Sat\m\\OPT_A"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter, this.option_B), Is.EqualTo(@"Sat\m\\OPT_B"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B), Is.EqualTo(@"Sat.bat_a\v\1\OPT_B"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B, this.actualState_3), Is.EqualTo(@"Sat.bat_a\v\1\OPT_B"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameter2, this.option_B, this.actualState_4), Is.EqualTo(@"Sat.bat_a\v\2\OPT_B"));
+            Assert.That(this.nestedElementTreeGenerator.GetNestedParameterPath(this.parameterOverride, this.option_B), Is.EqualTo(@"Sat\m\\OPT_B"));
         }
 
         [Test]

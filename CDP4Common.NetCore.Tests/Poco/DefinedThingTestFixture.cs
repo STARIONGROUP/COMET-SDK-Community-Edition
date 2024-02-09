@@ -46,13 +46,13 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatUserFriendlyNameReturnsExpectedResult()
         {
-            Assert.AreEqual("this is a name", this.elementDefinition.UserFriendlyName);
+            Assert.That(this.elementDefinition.UserFriendlyName, Is.EqualTo("this is a name"));
         }
 
         [Test]
         public void VerifyThatUserFriendlyShortNameReturnsExpectedResult()
         {
-            Assert.AreEqual("shortname", this.elementDefinition.UserFriendlyShortName);
+            Assert.That(this.elementDefinition.UserFriendlyShortName, Is.EqualTo("shortname"));
         }
     }
 }

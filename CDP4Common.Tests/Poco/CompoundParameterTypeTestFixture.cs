@@ -48,7 +48,7 @@ namespace CDP4Common.Tests.Poco
             compound.Component.Add(compound2Component);
             compound.Component.Add(scalarc1);
 
-            Assert.AreEqual(2, compound.NumberOfValues);
+            Assert.That(compound.NumberOfValues, Is.EqualTo(2));
         }
     }
 }
