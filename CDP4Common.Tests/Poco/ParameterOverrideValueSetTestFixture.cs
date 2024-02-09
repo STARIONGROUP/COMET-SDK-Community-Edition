@@ -1,18 +1,17 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterOverrideValueSetTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
@@ -94,7 +92,7 @@ namespace CDP4Common.Tests.Poco
 
             parameterOverrideValueSet.ParameterValueSet = this.scalarParameter.ValueSet.Single();
 
-            Assert.AreEqual("Sat.battery_1.l", parameterOverrideValueSet.ModelCode(0));
+            Assert.That(parameterOverrideValueSet.ModelCode(0), Is.EqualTo("Sat.battery_1.l"));
         }
 
         [Test]
@@ -117,7 +115,7 @@ namespace CDP4Common.Tests.Poco
 
             parameterOverrideValueSet.ParameterValueSet = parameterValueSet;
 
-            Assert.AreEqual(@"Sat.battery_1.l\option_1", parameterOverrideValueSet.ModelCode(0));
+            Assert.That(parameterOverrideValueSet.ModelCode(0), Is.EqualTo(@"Sat.battery_1.l\option_1"));
         }
 
         [Test]
@@ -148,7 +146,7 @@ namespace CDP4Common.Tests.Poco
 
             parameterOverrideValueSet.ParameterValueSet = parameterValueSet;
 
-            Assert.AreEqual(@"Sat.battery_1.l\SM", parameterOverrideValueSet.ModelCode(0));
+            Assert.That(parameterOverrideValueSet.ModelCode(0), Is.EqualTo(@"Sat.battery_1.l\SM"));
         }
 
         [Test]
@@ -185,7 +183,7 @@ namespace CDP4Common.Tests.Poco
 
             parameterOverrideValueSet.ParameterValueSet = parameterValueSet;
 
-            Assert.AreEqual(@"Sat.battery_1.l\option_1\SM", parameterOverrideValueSet.ModelCode(0));
+            Assert.That(parameterOverrideValueSet.ModelCode(0), Is.EqualTo(@"Sat.battery_1.l\option_1\SM"));
         }
 
         [Test]
@@ -210,23 +208,23 @@ namespace CDP4Common.Tests.Poco
             parameterOverrideValueSet.Reference = referenceValueArray;
             parameterOverrideValueSet.Computed = computedValueArray;
 
-            Assert.AreEqual(manualValue, parameterOverrideValueSet.Manual[0]);
-            Assert.AreEqual(referenceValue, parameterOverrideValueSet.Reference[0]);
-            Assert.AreEqual(computedValue, parameterOverrideValueSet.Computed[0]);
+            Assert.That(parameterOverrideValueSet.Manual[0], Is.EqualTo(manualValue));
+            Assert.That(parameterOverrideValueSet.Reference[0], Is.EqualTo(referenceValue));
+            Assert.That(parameterOverrideValueSet.Computed[0], Is.EqualTo(computedValue));
 
             var clone = parameterOverrideValueSet.Clone(false);
             clone.Manual[0] = newManualValue;
             clone.Reference[0] = newReferenceValue;
             clone.Computed[0] = newComputedValue;
 
-            Assert.AreEqual(newManualValue, clone.Manual[0]);
-            Assert.AreEqual(manualValue, parameterOverrideValueSet.Manual[0]);
+            Assert.That(clone.Manual[0], Is.EqualTo(newManualValue));
+            Assert.That(parameterOverrideValueSet.Manual[0], Is.EqualTo(manualValue));
 
-            Assert.AreEqual(newReferenceValue, clone.Reference[0]);
-            Assert.AreEqual(referenceValue, parameterOverrideValueSet.Reference[0]);
+            Assert.That(clone.Reference[0], Is.EqualTo(newReferenceValue));
+            Assert.That(parameterOverrideValueSet.Reference[0], Is.EqualTo(referenceValue));
 
-            Assert.AreEqual(newComputedValue, clone.Computed[0]);
-            Assert.AreEqual(computedValue, parameterOverrideValueSet.Computed[0]);
+            Assert.That(clone.Computed[0], Is.EqualTo(newComputedValue));
+            Assert.That(parameterOverrideValueSet.Computed[0], Is.EqualTo(computedValue));
         }
     }
 }

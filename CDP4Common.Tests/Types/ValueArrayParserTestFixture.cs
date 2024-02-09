@@ -1,18 +1,17 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValueArrayParserTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,11 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Types
 {
     using CDP4Common.Types;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -48,9 +47,9 @@ namespace CDP4Common.Tests.Types
             var stringArray = "{1;2;3}";
             Assert.IsTrue(stringArray.TryParseToIntValueArray(out result, out error));
 
-            Assert.AreEqual(1, this.result[0]);
-            Assert.AreEqual(2, this.result[1]);
-            Assert.AreEqual(3, this.result[2]);
+            Assert.That(this.result[0], Is.EqualTo(1));
+            Assert.That(this.result[1], Is.EqualTo(2));
+            Assert.That(this.result[2], Is.EqualTo(3));
         }
 
         [Test]
@@ -59,7 +58,7 @@ namespace CDP4Common.Tests.Types
             var stringArray = "{1}";
             Assert.IsTrue(stringArray.TryParseToIntValueArray(out result, out error));
 
-            Assert.AreEqual(1, this.result[0]);
+            Assert.That(this.result[0], Is.EqualTo(1));
         }
 
         [Test]

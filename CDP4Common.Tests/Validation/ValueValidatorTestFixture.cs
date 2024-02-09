@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValueValidatorTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -88,60 +88,60 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
 
             result = ValueValidator.Validate(this.booleanParameterType, "-");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, true);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, false);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, 0);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, 1);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, -1);
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             Assert.IsNotEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, "True");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, "False");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, "1");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, "0");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, "TRUE");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, "FALSE");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, "Falsch");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("Falsch is not a valid boolean, valid values are: -,true,false,True,False,1,0", result.Message);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+            Assert.That(result.Message, Is.EqualTo("Falsch is not a valid boolean, valid values are: -,true,false,True,False,1,0"));
 
             result = ValueValidator.Validate(this.booleanParameterType, "-1");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("-1 is not a valid boolean, valid values are: -,true,false,True,False,1,0", result.Message);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+            Assert.That(result.Message, Is.EqualTo("-1 is not a valid boolean, valid values are: -,true,false,True,False,1,0"));
         }
 
         [Test]
@@ -153,11 +153,11 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
 
             result = ValueValidator.Validate(this.booleanParameterType, "-");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.booleanParameterType, "True");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
         }
 
@@ -166,8 +166,8 @@ namespace CDP4Common.Tests.Validation
         public void VerifyThatDateParameterTypeValidatesValue_with_Z()
         {
             ValidationResult result = ValueValidator.Validate(this.dateParameterType, "1976-08-20Z");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("1976-08-20Z is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD", result.Message);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+            Assert.That(result.Message, Is.EqualTo("1976-08-20Z is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD"));
         }
 
         [Test]
@@ -176,29 +176,29 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
 
             result = ValueValidator.Validate(this.dateParameterType, "-");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.dateParameterType, "1976-08-20");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
             
             result = ValueValidator.Validate(this.dateParameterType, "some text");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("some text is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD", result.Message);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+            Assert.That(result.Message, Is.EqualTo("some text is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD"));
 
             result = ValueValidator.Validate(this.dateParameterType, "2012-13-13");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("2012-13-13 is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD", result.Message);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+            Assert.That(result.Message, Is.EqualTo("2012-13-13 is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD"));
 
             var date = new DateTime(2002, 12, 1);
             result = ValueValidator.Validate(this.dateParameterType, date);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             var dateTime = new DateTime(2002, 12, 1, 1, 0, 1);
             result = ValueValidator.Validate(this.dateParameterType, dateTime);
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             Assert.IsNotEmpty(result.Message);
         }
 
@@ -208,23 +208,23 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
 
             result = ValueValidator.Validate(this.dateTimeParameterType, "-");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.dateTimeParameterType, "2010-01-02T07:59:00Z");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.dateTimeParameterType, "2009-10-23T16:04:23.332+02");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.dateTimeParameterType, "2012-13-13T12:01:01+02");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
 
             var date = new DateTime(2002, 12, 1);
             result = ValueValidator.Validate(this.dateTimeParameterType, date);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
         }
 
@@ -234,24 +234,24 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
 
             result = ValueValidator.Validate(this.enumerationParameterType, "-");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.enumerationParameterType, "low");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.enumerationParameterType, "medium");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.enumerationParameterType, "high");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("The test Enumeration Parametertype does not contain the following value definition high, allowed values are: low, medium", result.Message);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+            Assert.That(result.Message, Is.EqualTo("The test Enumeration Parametertype does not contain the following value definition high, allowed values are: low, medium"));
 
             this.enumerationParameterType.AllowMultiSelect = true;
             result = ValueValidator.Validate(this.enumerationParameterType, "low | medium");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
         }
 
@@ -261,7 +261,7 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
 
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, "-");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
         }
 
@@ -271,7 +271,7 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
 
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, "13");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
         }
 
@@ -283,22 +283,22 @@ namespace CDP4Common.Tests.Validation
 
             string stringValue = "-13";
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, stringValue);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             int intValue = -13;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, intValue);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             double intdoubleValue = -13d;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, intdoubleValue);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             double doubleValue = -13.001d;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, doubleValue);
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             Assert.IsNotEmpty(result.Message);
         }
 
@@ -310,37 +310,37 @@ namespace CDP4Common.Tests.Validation
 
             string stringValue = "+13";
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, stringValue);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             string stringNegativeValue = "-13";
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, stringNegativeValue);
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             Assert.IsNotEmpty(result.Message);
 
             int intValue = +13;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, intValue);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             int intNegativeValue = -13;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, intNegativeValue);
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             Assert.IsNotEmpty(result.Message);
 
             double intdoubleValue = +13d;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, intdoubleValue);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             double intdoubleNegativeValue = -13d;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, intdoubleNegativeValue);
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             Assert.IsNotEmpty(result.Message);
 
             double doubleValue = +13.001d;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, doubleValue);
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             Assert.IsNotEmpty(result.Message);
         }
 
@@ -352,17 +352,17 @@ namespace CDP4Common.Tests.Validation
 
             string stringValue = "13.1e1";
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, stringValue);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             double doubleValue = 13d;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, doubleValue);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             int intValue = -13;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, intValue);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
         }
 
@@ -375,7 +375,7 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
             this.ratioScale.NumberSet = NumberSetKind.REAL_NUMBER_SET;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, "13.1e1");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
         }
 
@@ -385,7 +385,7 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
             this.ratioScale.NumberSet = NumberSetKind.REAL_NUMBER_SET;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, "131,1");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             Assert.IsNotEmpty(result.Message);
         }
 
@@ -401,7 +401,7 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
             this.ratioScale.NumberSet = NumberSetKind.REAL_NUMBER_SET;
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, "131,1", excelNumberFormatInfo);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
         }
 
@@ -413,8 +413,8 @@ namespace CDP4Common.Tests.Validation
             this.ratioScale.NumberSet = NumberSetKind.REAL_NUMBER_SET;
 
             result = ValueValidator.Validate(this.simpleQuantityKind, this.ratioScale, "a");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("String:\"a\" is not a member of the REAL NUMBER SET", result.Message);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+            Assert.That(result.Message, Is.EqualTo("String:\"a\" is not a member of the REAL NUMBER SET"));
         }
 
         [Test]
@@ -423,7 +423,7 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
 
             result = ValueValidator.Validate(this.textParameterType, "-");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
         }
 
@@ -433,40 +433,40 @@ namespace CDP4Common.Tests.Validation
             ValidationResult result;
 
             result = ValueValidator.Validate(this.timeOfDayParameterType, "-");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.timeOfDayParameterType, "10:15:49");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453Z");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453+01:00");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453+01");
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
             Assert.IsEmpty(result.Message);
 
             result = ValueValidator.Validate(this.timeOfDayParameterType, "17:49:30.453Z+01:00");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             Assert.IsNotEmpty(result.Message);
 
             result = ValueValidator.Validate(this.timeOfDayParameterType, "25:23");
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
-            Assert.AreEqual("25:23 is not a valid Time of Day, for valid Time Of Day formats see http://www.w3.org/TR/xmlschema-2/#time.", result.Message);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+            Assert.That(result.Message, Is.EqualTo("25:23 is not a valid Time of Day, for valid Time Of Day formats see http://www.w3.org/TR/xmlschema-2/#time."));
 
             DateTime dateTime;
             var isDateTime = DateTime.TryParse("10:15:49", CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind | DateTimeStyles.NoCurrentDateDefault, out dateTime);
             result = ValueValidator.Validate(this.timeOfDayParameterType, dateTime);
-            Assert.AreEqual(ValidationResultKind.Valid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
             result = ValueValidator.Validate(this.timeOfDayParameterType, false);
-            Assert.AreEqual(ValidationResultKind.Invalid, result.ResultKind);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             Assert.IsNotEmpty(result.Message);
         }
     }

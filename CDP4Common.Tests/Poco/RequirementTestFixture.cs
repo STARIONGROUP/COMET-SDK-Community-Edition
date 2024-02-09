@@ -1,18 +1,17 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,13 +21,13 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using System;
-    using System.Linq;
+    
     using CDP4Common.EngineeringModelData;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -56,7 +55,7 @@ namespace CDP4Common.Tests.Poco
 
             requirement.Group = requirementsGroupAA;
 
-            Assert.AreEqual("spec.a.a_a.req", requirement.GroupPath());
+            Assert.That(requirement.GroupPath(), Is.EqualTo("spec.a.a_a.req"));
         }
 
         [Test]
@@ -74,7 +73,7 @@ namespace CDP4Common.Tests.Poco
 
             requirement.Group = requirementsGroupAA;
 
-            Assert.AreEqual("spec;a;a_a;req", requirement.GroupPath(';'));
+            Assert.That(requirement.GroupPath(';'), Is.EqualTo("spec;a;a_a;req"));
         }
 
         [Test]
@@ -85,7 +84,7 @@ namespace CDP4Common.Tests.Poco
 
             requirementsSpecification.Requirement.Add(requirement);
 
-            Assert.AreEqual("spec.req", requirement.GroupPath());            
+            Assert.That(requirement.GroupPath(), Is.EqualTo("spec.req"));            
         }
 
         [Test]
@@ -96,7 +95,7 @@ namespace CDP4Common.Tests.Poco
 
             requirementsSpecification.Requirement.Add(requirement);
 
-            Assert.AreEqual("spec,req", requirement.GroupPath(','));
+            Assert.That(requirement.GroupPath(','), Is.EqualTo("spec,req"));
         }
     }
 }

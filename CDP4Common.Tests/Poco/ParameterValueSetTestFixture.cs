@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterValueSetTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -69,7 +69,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatParameterValueSetReturnsExpectedModelCode()
         {
-            Assert.AreEqual("Sat.m", this.parameterValueSet.ModelCode(0));
+            Assert.That(this.parameterValueSet.ModelCode(0), Is.EqualTo("Sat.m"));
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace CDP4Common.Tests.Poco
             this.parameter.IsOptionDependent = true;
             this.parameterValueSet.ActualOption = option;
 
-            Assert.AreEqual(@"Sat.m\option_1", this.parameterValueSet.ModelCode(0));
+            Assert.That(this.parameterValueSet.ModelCode(0), Is.EqualTo(@"Sat.m\option_1"));
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace CDP4Common.Tests.Poco
             this.parameter.StateDependence = actualFiniteStateList;
             this.parameterValueSet.ActualState = actualFiniteState;
 
-            Assert.AreEqual(@"Sat.m\SM", this.parameterValueSet.ModelCode(0));
+            Assert.That(this.parameterValueSet.ModelCode(0), Is.EqualTo(@"Sat.m\SM"));
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace CDP4Common.Tests.Poco
             this.parameter.StateDependence = actualFiniteStateList;
             this.parameterValueSet.ActualState = actualFiniteState;
 
-            Assert.AreEqual(@"Sat.m\option_1\SM", this.parameterValueSet.ModelCode(0));
+            Assert.That(this.parameterValueSet.ModelCode(0), Is.EqualTo(@"Sat.m\option_1\SM"));
         }
 
         [Test]
@@ -150,23 +150,23 @@ namespace CDP4Common.Tests.Poco
             this.parameterValueSet.Reference = referenceValueArray;
             this.parameterValueSet.Computed = computedValueArray;
 
-            Assert.AreEqual(manualValue, this.parameterValueSet.Manual[0]);
-            Assert.AreEqual(referenceValue, this.parameterValueSet.Reference[0]);
-            Assert.AreEqual(computedValue, this.parameterValueSet.Computed[0]);
+            Assert.That(this.parameterValueSet.Manual[0], Is.EqualTo(manualValue));
+            Assert.That(this.parameterValueSet.Reference[0], Is.EqualTo(referenceValue));
+            Assert.That(this.parameterValueSet.Computed[0], Is.EqualTo(computedValue));
 
             var clone = this.parameterValueSet.Clone(false);
             clone.Manual[0] = newManualValue;
             clone.Reference[0] = newReferenceValue;
             clone.Computed[0] = newComputedValue;
 
-            Assert.AreEqual(newManualValue, clone.Manual[0]);
-            Assert.AreEqual(manualValue, this.parameterValueSet.Manual[0]);
+            Assert.That(clone.Manual[0], Is.EqualTo(newManualValue));
+            Assert.That(this.parameterValueSet.Manual[0], Is.EqualTo(manualValue));
 
-            Assert.AreEqual(newReferenceValue, clone.Reference[0]);
-            Assert.AreEqual(referenceValue, this.parameterValueSet.Reference[0]);
+            Assert.That(clone.Reference[0], Is.EqualTo(newReferenceValue));
+            Assert.That(this.parameterValueSet.Reference[0], Is.EqualTo(referenceValue));
 
-            Assert.AreEqual(newComputedValue, clone.Computed[0]);
-            Assert.AreEqual(computedValue, this.parameterValueSet.Computed[0]);
+            Assert.That(clone.Computed[0], Is.EqualTo(newComputedValue));
+            Assert.That(this.parameterValueSet.Computed[0], Is.EqualTo(computedValue));
         }
 
         [Test]
@@ -180,7 +180,7 @@ namespace CDP4Common.Tests.Poco
         public void Verify_that_QueryParameterType_returns_expected_result()
         {
             var parameterType = this.parameterValueSet.QueryParameterType();
-            Assert.AreEqual(this.simpleQuantityKind, parameterType);
+            Assert.That(parameterType, Is.EqualTo(this.simpleQuantityKind));
         }
 
         [Test]
@@ -196,10 +196,10 @@ namespace CDP4Common.Tests.Poco
             var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
 
             this.parameterValueSet.ResetManual();
-            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Manual);
+            Assert.That(this.parameterValueSet.Manual, Is.EqualTo(defaultValueArray));
 
             this.parameterValueSet.ResetManual();
-            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Manual);
+            Assert.That(this.parameterValueSet.Manual, Is.EqualTo(defaultValueArray));
         }
 
         [Test]
@@ -208,10 +208,10 @@ namespace CDP4Common.Tests.Poco
             var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
 
             this.parameterValueSet.ResetComputed();
-            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Computed);
+            Assert.That(this.parameterValueSet.Computed, Is.EqualTo(defaultValueArray));
 
             this.parameterValueSet.ResetComputed();
-            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Computed);
+            Assert.That(this.parameterValueSet.Computed, Is.EqualTo(defaultValueArray));
         }
 
         [Test]
@@ -220,10 +220,10 @@ namespace CDP4Common.Tests.Poco
             var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
 
             this.parameterValueSet.ResetFormula();
-            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Formula);
+            Assert.That(this.parameterValueSet.Formula, Is.EqualTo(defaultValueArray));
 
             this.parameterValueSet.ResetFormula();
-            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Formula);
+            Assert.That(this.parameterValueSet.Formula, Is.EqualTo(defaultValueArray));
         }
 
         [Test]
@@ -232,10 +232,10 @@ namespace CDP4Common.Tests.Poco
             var defaultValueArray = new ValueArray<string>(new List<string> { "-" });
 
             this.parameterValueSet.ResetReference();
-            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Reference);
+            Assert.That(this.parameterValueSet.Reference, Is.EqualTo(defaultValueArray));
 
             this.parameterValueSet.ResetReference();
-            Assert.AreEqual(defaultValueArray, this.parameterValueSet.Reference);
+            Assert.That(this.parameterValueSet.Reference, Is.EqualTo(defaultValueArray));
         }
     }
 }

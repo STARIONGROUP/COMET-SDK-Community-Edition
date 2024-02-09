@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterSubscriptionValueSetComparerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -95,16 +95,16 @@ namespace CDP4Common.Tests.Comparers
 
             var comparer = new ParameterSubscriptionValueSetComparer();
             var comparisonab = comparer.Compare(subscriptioinvalueseta, subscriptioinvaluesetb);
-            Assert.AreEqual(1, comparisonab);
+            Assert.That(comparisonab, Is.EqualTo(1));
 
             var comparisonba = comparer.Compare(subscriptioinvaluesetb, subscriptioinvalueseta);
-            Assert.AreEqual(-1, comparisonba);
+            Assert.That(comparisonba, Is.EqualTo(-1));
 
             var comparisonaa = comparer.Compare(subscriptioinvalueseta, subscriptioinvalueseta);
-            Assert.AreEqual(0, comparisonaa);
+            Assert.That(comparisonaa, Is.EqualTo(0));
 
             var comparisonbb = comparer.Compare(subscriptioinvaluesetb, subscriptioinvaluesetb);
-            Assert.AreEqual(0, comparisonbb);
+            Assert.That(comparisonbb, Is.EqualTo(0));
         }
 
         [Test]
@@ -123,16 +123,16 @@ namespace CDP4Common.Tests.Comparers
 
             var comparer = new ParameterSubscriptionValueSetComparer();
             var comparisonab = comparer.Compare(subscriptionValueseta, subscriptionValuesetb);
-            Assert.AreEqual(1, comparisonab);
+            Assert.That(comparisonab, Is.EqualTo(1));
 
             var comparisonba = comparer.Compare(subscriptionValuesetb, subscriptionValueseta);
-            Assert.AreEqual(-1, comparisonba);
+            Assert.That(comparisonba, Is.EqualTo(-1));
 
             var comparisonaa = comparer.Compare(subscriptionValueseta, subscriptionValueseta);
-            Assert.AreEqual(0, comparisonaa);
+            Assert.That(comparisonaa, Is.EqualTo(0));
 
             var comparisonbb = comparer.Compare(subscriptionValuesetb, subscriptionValuesetb);
-            Assert.AreEqual(0, comparisonbb);
+            Assert.That(comparisonbb, Is.EqualTo(0));
         }
 
         [Test]
@@ -169,13 +169,13 @@ namespace CDP4Common.Tests.Comparers
             var comparer = new ParameterSubscriptionValueSetComparer();
 
             var comparison_aa_ab = comparer.Compare(aa, ab);
-            Assert.AreEqual(1, comparison_aa_ab);
+            Assert.That(comparison_aa_ab, Is.EqualTo(1));
 
             var comparison_aa_bb = comparer.Compare(aa, bb);
-            Assert.AreEqual(1, comparison_aa_bb);
+            Assert.That(comparison_aa_bb, Is.EqualTo(1));
 
             var comparison_ab_ab = comparer.Compare(ab, ab);
-            Assert.AreEqual(0, comparison_ab_ab);
+            Assert.That(comparison_ab_ab, Is.EqualTo(0));
         }
     }
 }

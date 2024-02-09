@@ -1,18 +1,17 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,18 +21,18 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Helpers;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+
     using NUnit.Framework;
-    using CDP4Common.Exceptions;
 
     /// <summary>
     /// Suite of tests for the <see cref="Parameter"/> class
@@ -123,7 +122,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatModelCodeReturnsTheExpectedResultForScalar()
         {
             var modelcode = "Sat.m";
-            Assert.AreEqual(modelcode, this.scalarParameter.ModelCode());
+            Assert.That(this.scalarParameter.ModelCode(), Is.EqualTo(modelcode));
         }
 
         [Test]
@@ -132,7 +131,7 @@ namespace CDP4Common.Tests.Poco
             var modelcode = "Sat.coord.1_8";
             this.component.ShortName = "{{1 -*/;%&@ 8<>}";
 
-            Assert.AreEqual(modelcode, this.compoundParameter.ModelCode(0));
+            Assert.That(this.compoundParameter.ModelCode(0), Is.EqualTo(modelcode));
         }
 
         [Test]
@@ -141,7 +140,7 @@ namespace CDP4Common.Tests.Poco
             var modelcode = "Sat.coord.1_8";
             this.component.ShortName = "1_8";
 
-            Assert.AreEqual(modelcode, this.compoundParameter.ModelCode(0));
+            Assert.That(this.compoundParameter.ModelCode(0), Is.EqualTo(modelcode));
         }
 
         [Test]
@@ -150,7 +149,7 @@ namespace CDP4Common.Tests.Poco
             var modelcode = "Sat.coord.1_8";
             this.component.ShortName = "{1;8";
 
-            Assert.AreEqual(modelcode, this.compoundParameter.ModelCode(0));
+            Assert.That(this.compoundParameter.ModelCode(0), Is.EqualTo(modelcode));
         }
 
         [Test]
@@ -159,14 +158,14 @@ namespace CDP4Common.Tests.Poco
             var modelcode = "Sat.coord.";
             this.component.ShortName = "  ";
 
-            Assert.AreEqual(modelcode, this.compoundParameter.ModelCode(0));
+            Assert.That(this.compoundParameter.ModelCode(0), Is.EqualTo(modelcode));
         }
 
         [Test]
         public void VerifyThatModelCodeReturnsTheExpectedResultForCompound()
         {
             var modelcode = "Sat.coord";
-            Assert.AreEqual(modelcode, this.compoundParameter.ModelCode());
+            Assert.That(this.compoundParameter.ModelCode(), Is.EqualTo(modelcode));
         }
 
         [Test]

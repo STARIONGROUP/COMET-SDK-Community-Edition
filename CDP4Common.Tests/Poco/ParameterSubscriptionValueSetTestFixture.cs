@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterSubscriptionValueSetTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -92,20 +92,20 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetReference()
         {
-            Assert.AreEqual("ref", this.parameterSubscriptionValueSet.Reference[0]);
+            Assert.That(this.parameterSubscriptionValueSet.Reference[0], Is.EqualTo("ref"));
         }
 
         [Test]
         public void TestGetActualValue()
         {
             this.parameterSubscriptionValueSet.ValueSwitch = ParameterSwitchKind.COMPUTED;
-            Assert.AreEqual("computed", this.parameterSubscriptionValueSet.ActualValue[0]);
+            Assert.That(this.parameterSubscriptionValueSet.ActualValue[0], Is.EqualTo("computed"));
 
             this.parameterSubscriptionValueSet.ValueSwitch = ParameterSwitchKind.REFERENCE;
-            Assert.AreEqual("ref", this.parameterSubscriptionValueSet.ActualValue[0]);
+            Assert.That(this.parameterSubscriptionValueSet.ActualValue[0], Is.EqualTo("ref"));
 
             this.parameterSubscriptionValueSet.ValueSwitch = ParameterSwitchKind.MANUAL;
-            Assert.AreEqual("manual", this.parameterSubscriptionValueSet.ActualValue[0]);
+            Assert.That(this.parameterSubscriptionValueSet.ActualValue[0], Is.EqualTo("manual"));
         }
 
         [Test]
@@ -151,7 +151,7 @@ namespace CDP4Common.Tests.Poco
 
             this.parameter.ParameterSubscription.Add(subscription);
 
-            Assert.AreEqual(@"Bat.bool", subscriptionValueSet.ModelCode(0));
+            Assert.That(subscriptionValueSet.ModelCode(0), Is.EqualTo(@"Bat.bool"));
         }
 
         [Test]
@@ -173,7 +173,7 @@ namespace CDP4Common.Tests.Poco
 
             parameterOverride.ParameterSubscription.Add(subscription);
 
-            Assert.AreEqual(@"Sat.battery_1.bool", subscriptionValueSet.ModelCode(0));
+            Assert.That(subscriptionValueSet.ModelCode(0), Is.EqualTo(@"Sat.battery_1.bool"));
         }
 
         [Test]
@@ -186,13 +186,13 @@ namespace CDP4Common.Tests.Poco
             
             this.parameterSubscriptionValueSet.Manual = manualValueArray;
 
-            Assert.AreEqual(manualValue, this.parameterSubscriptionValueSet.Manual[0]);
+            Assert.That(this.parameterSubscriptionValueSet.Manual[0], Is.EqualTo(manualValue));
 
             var clone = this.parameterSubscriptionValueSet.Clone(false);
             clone.Manual[0] = newManualValue;            
             
-            Assert.AreEqual(newManualValue, clone.Manual[0]);
-            Assert.AreEqual(manualValue, this.parameterSubscriptionValueSet.Manual[0]);
+            Assert.That(clone.Manual[0], Is.EqualTo(newManualValue));
+            Assert.That(this.parameterSubscriptionValueSet.Manual[0], Is.EqualTo(manualValue));
         }
 
         [Test]
@@ -224,7 +224,7 @@ namespace CDP4Common.Tests.Poco
 
             var errors = parameterSubscriptionValueSet.ValidationErrors;
 
-            Assert.AreEqual(2, errors.Count());
+            Assert.That(errors.Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -241,10 +241,10 @@ namespace CDP4Common.Tests.Poco
             p.ParameterSubscription.Add(ps);
             
             psvs.ResetManual();
-            Assert.AreEqual(defaultValueArray, psvs.Manual);
+            Assert.That(psvs.Manual, Is.EqualTo(defaultValueArray));
 
             psvs.ResetManual();
-            Assert.AreEqual(defaultValueArray, psvs.Manual);
+            Assert.That(psvs.Manual, Is.EqualTo(defaultValueArray));
         }
 
         [Test]

@@ -1,18 +1,17 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequirementsContainerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,12 +21,13 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests.Poco
 {
     using System.Linq;
+
     using CDP4Common.EngineeringModelData;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -59,13 +59,13 @@ namespace CDP4Common.Tests.Poco
             grp2.Group.Add(grp21);
 
             var specAllGroups = spec.GetAllContainedGroups();
-            Assert.AreEqual(7, specAllGroups.Count());
+            Assert.That(specAllGroups.Count(), Is.EqualTo(7));
 
             var grp1AllGroup = grp1.GetAllContainedGroups();
-            Assert.AreEqual(3, grp1AllGroup.Count());
+            Assert.That(grp1AllGroup.Count(), Is.EqualTo(3));
 
             var grp2AllGroup = grp2.GetAllContainedGroups();
-            Assert.AreEqual(1, grp2AllGroup.Count());
+            Assert.That(grp2AllGroup.Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -79,18 +79,18 @@ namespace CDP4Common.Tests.Poco
 
             iteration.RequirementsSpecification.Add(spec);
 
-            Assert.AreEqual("a", group_a.Path());
-            Assert.AreEqual("a_a", group_a_a.Path());
-            Assert.AreEqual("a_a_a", group_a_a_a.Path());
+            Assert.That(group_a.Path(), Is.EqualTo("a"));
+            Assert.That(group_a_a.Path(), Is.EqualTo("a_a"));
+            Assert.That(group_a_a_a.Path(), Is.EqualTo("a_a_a"));
             
             group_a_a.Group.Add(group_a_a_a);
-            Assert.AreEqual("a_a.a_a_a", group_a_a_a.Path());
+            Assert.That(group_a_a_a.Path(), Is.EqualTo("a_a.a_a_a"));
 
             group_a.Group.Add(group_a_a);
-            Assert.AreEqual("a.a_a.a_a_a", group_a_a_a.Path());
+            Assert.That(group_a_a_a.Path(), Is.EqualTo("a.a_a.a_a_a"));
 
             spec.Group.Add(group_a);
-            Assert.AreEqual("spec.a.a_a.a_a_a", group_a_a_a.Path());
+            Assert.That(group_a_a_a.Path(), Is.EqualTo("spec.a.a_a.a_a_a"));
         }
         
         [Test]
@@ -100,7 +100,7 @@ namespace CDP4Common.Tests.Poco
             var spec = new RequirementsSpecification() { ShortName = "spec" };
             iteration.RequirementsSpecification.Add(spec);
 
-            Assert.AreEqual("spec", spec.Path());
+            Assert.That(spec.Path(), Is.EqualTo("spec"));
         }
 
         [Test]
@@ -114,18 +114,18 @@ namespace CDP4Common.Tests.Poco
 
             iteration.RequirementsSpecification.Add(spec);
 
-            Assert.AreEqual("a", group_a.Path(';'));
-            Assert.AreEqual("a_a", group_a_a.Path(';'));
-            Assert.AreEqual("a_a_a", group_a_a_a.Path(';'));
+            Assert.That(group_a.Path(';'), Is.EqualTo("a"));
+            Assert.That(group_a_a.Path(';'), Is.EqualTo("a_a"));
+            Assert.That(group_a_a_a.Path(';'), Is.EqualTo("a_a_a"));
 
             group_a_a.Group.Add(group_a_a_a);
-            Assert.AreEqual("a_a;a_a_a", group_a_a_a.Path(';'));
+            Assert.That(group_a_a_a.Path(';'), Is.EqualTo("a_a;a_a_a"));
 
             group_a.Group.Add(group_a_a);
-            Assert.AreEqual("a;a_a;a_a_a", group_a_a_a.Path(';'));
+            Assert.That(group_a_a_a.Path(';'), Is.EqualTo("a;a_a;a_a_a"));
 
             spec.Group.Add(group_a);
-            Assert.AreEqual("spec;a;a_a;a_a_a", group_a_a_a.Path(';'));
+            Assert.That(group_a_a_a.Path(';'), Is.EqualTo("spec;a;a_a;a_a_a"));
         }
     }
 }

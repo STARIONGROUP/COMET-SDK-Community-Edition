@@ -1,17 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParameterOverrideValueSetComparerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -25,8 +25,10 @@
 namespace CDP4Common.Tests.Comparers
 {
     using System;
+
     using CDP4Common.Comparers;
     using CDP4Common.EngineeringModelData;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -60,11 +62,13 @@ namespace CDP4Common.Tests.Comparers
                 Name = "state a",
                 ShortName = "statea"
             };
+
             var possibleFiniteStateb = new PossibleFiniteState(Guid.NewGuid(), null, null)
             {
                 Name = "state b",
                 ShortName = "stateb"
             };
+
             possibleFiniteStateList.PossibleState.Add(possibleFiniteStateb);
             possibleFiniteStateList.PossibleState.Add(possibleFiniteStatea);
             this.iteration.PossibleFiniteStateList.Add(possibleFiniteStateList);
@@ -103,16 +107,16 @@ namespace CDP4Common.Tests.Comparers
 
             var comparer = new ParameterOverrideValueSetComparer();
             var comparisonab = comparer.Compare(parameterOverrideValueSeta, optiondepaparametervaluesetb);
-            Assert.AreEqual(1, comparisonab);
+            Assert.That(comparisonab, Is.EqualTo(1));
 
             var comparisonba = comparer.Compare(optiondepaparametervaluesetb, parameterOverrideValueSeta);
-            Assert.AreEqual(-1, comparisonba);
+            Assert.That(comparisonba, Is.EqualTo(-1));
 
             var comparisonaa = comparer.Compare(parameterOverrideValueSeta, parameterOverrideValueSeta);
-            Assert.AreEqual(0, comparisonaa);
+            Assert.That(comparisonaa, Is.EqualTo(0));
 
             var comparisonbb = comparer.Compare(optiondepaparametervaluesetb, optiondepaparametervaluesetb);
-            Assert.AreEqual(0, comparisonbb);
+            Assert.That(comparisonbb, Is.EqualTo(0));
         }
 
         [Test]
@@ -139,16 +143,16 @@ namespace CDP4Common.Tests.Comparers
 
             var comparer = new ParameterOverrideValueSetComparer();
             var comparisonab = comparer.Compare(parameterOverrideValueSeta, parameterOverrideValueSetb);
-            Assert.AreEqual(1, comparisonab);
+            Assert.That(comparisonab, Is.EqualTo(1));
 
             var comparisonba = comparer.Compare(parameterOverrideValueSetb, parameterOverrideValueSeta);
-            Assert.AreEqual(-1, comparisonba);
+            Assert.That(comparisonba, Is.EqualTo(-1));
 
             var comparisonaa = comparer.Compare(parameterOverrideValueSeta, parameterOverrideValueSeta);
-            Assert.AreEqual(0, comparisonaa);
+            Assert.That(comparisonaa, Is.EqualTo(0));
 
             var comparisonbb = comparer.Compare(parameterOverrideValueSetb, parameterOverrideValueSetb);
-            Assert.AreEqual(0, comparisonbb);
+            Assert.That(comparisonbb, Is.EqualTo(0));
         }
 
         [Test]
@@ -195,10 +199,10 @@ namespace CDP4Common.Tests.Comparers
             var comparer = new ParameterOverrideValueSetComparer();
 
             var comparison_aa_ab = comparer.Compare(aa, ab);
-            Assert.AreEqual(1, comparison_aa_ab);
+            Assert.That(comparison_aa_ab, Is.EqualTo(1));
 
             var comparison_aa_bb = comparer.Compare(aa, ab);
-            Assert.AreEqual(1, comparison_aa_bb);
+            Assert.That(comparison_aa_bb, Is.EqualTo(1));
         }
     }
 }

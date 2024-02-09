@@ -1,18 +1,17 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingExtensionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
-//    This file is part of CDP4-SDK Community Edition
+//    This file is part of CDP4-COMET-SDK Community Edition
 //
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Common.Tests
 {
@@ -70,13 +68,13 @@ namespace CDP4Common.Tests
             var aliasDto = this.alias.ToDto() as CDP4Common.DTO.Alias;
 
             Assert.IsNotNull(aliasDto);
-            Assert.AreEqual(this.alias.Iid, aliasDto.Iid);
-            Assert.AreEqual(this.alias.IsSynonym, aliasDto.IsSynonym);
-            Assert.AreEqual(this.alias.Content, aliasDto.Content);
-            Assert.AreEqual(this.alias.LanguageCode, aliasDto.LanguageCode);
-            Assert.AreEqual(this.alias.Route, aliasDto.Route);
+            Assert.That(aliasDto.Iid, Is.EqualTo(this.alias.Iid));
+            Assert.That(aliasDto.IsSynonym, Is.EqualTo(this.alias.IsSynonym));
+            Assert.That(aliasDto.Content, Is.EqualTo(this.alias.Content));
+            Assert.That(aliasDto.LanguageCode, Is.EqualTo(this.alias.LanguageCode));
+            Assert.That(aliasDto.Route, Is.EqualTo(this.alias.Route));
 
-            Assert.AreEqual(this.alias, aliasDto.QuerySourceThing());
+            Assert.That(aliasDto.QuerySourceThing(), Is.EqualTo(this.alias));
         }
 
         /// <summary>
@@ -97,12 +95,12 @@ namespace CDP4Common.Tests
             var dto = dateParameterType.ToDto() as CDP4Common.DTO.DateParameterType;
 
             Assert.IsNotNull(dto);
-            Assert.AreEqual(2, dto.HyperLink.Count);
-            Assert.AreEqual(dateParameterType.HyperLink[1].Iid, dto.HyperLink[1]);
-            Assert.AreEqual(dateParameterType.HyperLink[0].Iid, dto.HyperLink[0]);
-            Assert.AreEqual(dateParameterType.Route, dto.Route);
+            Assert.That(dto.HyperLink.Count, Is.EqualTo(2));
+            Assert.That(dto.HyperLink[1], Is.EqualTo(dateParameterType.HyperLink[1].Iid));
+            Assert.That(dto.HyperLink[0], Is.EqualTo(dateParameterType.HyperLink[0].Iid));
+            Assert.That(dto.Route, Is.EqualTo(dateParameterType.Route));
 
-            Assert.AreEqual(dateParameterType, dto.QuerySourceThing());
+            Assert.That(dto.QuerySourceThing(), Is.EqualTo(dateParameterType));
         }
 
         /// <summary>
@@ -119,10 +117,10 @@ namespace CDP4Common.Tests
             var dto = person.ToDto() as CDP4Common.DTO.Person;
 
             Assert.IsNotNull(dto);
-            Assert.AreEqual(dto.Organization, organization.Iid);
-            Assert.AreEqual(person.Route, dto.Route);
+            Assert.That(organization.Iid, Is.EqualTo(dto.Organization));
+            Assert.That(dto.Route, Is.EqualTo(person.Route));
 
-            Assert.AreEqual(person, dto.QuerySourceThing());
+            Assert.That(dto.QuerySourceThing(), Is.EqualTo(person));
         }
 
         /// <summary>
@@ -138,15 +136,15 @@ namespace CDP4Common.Tests
             var dto = compoundParameterType.ToDto() as CDP4Common.DTO.CompoundParameterType;
 
             Assert.IsNotNull(dto);
-            Assert.AreEqual(dto.Component.First().K, compoundParameterType.Component.SortedItems.Keys.First());
-            Assert.AreEqual(dto.Component.First().V, compoundParameterType.Component.SortedItems.Values.First().Iid);
+            Assert.That(compoundParameterType.Component.SortedItems.Keys.First(), Is.EqualTo(dto.Component.First().K));
+            Assert.That(compoundParameterType.Component.SortedItems.Values.First().Iid, Is.EqualTo(dto.Component.First().V));
 
-            Assert.AreEqual(dto.Component.Last().K, compoundParameterType.Component.SortedItems.Keys.Last());
-            Assert.AreEqual(dto.Component.Last().V, compoundParameterType.Component.SortedItems.Values.Last().Iid);
+            Assert.That(compoundParameterType.Component.SortedItems.Keys.Last(), Is.EqualTo(dto.Component.Last().K));
+            Assert.That(compoundParameterType.Component.SortedItems.Values.Last().Iid, Is.EqualTo(dto.Component.Last().V));
 
-            Assert.AreEqual(compoundParameterType.Route, dto.Route);
+            Assert.That(dto.Route, Is.EqualTo(compoundParameterType.Route));
 
-            Assert.AreEqual(compoundParameterType, dto.QuerySourceThing());
+            Assert.That(dto.QuerySourceThing(), Is.EqualTo(compoundParameterType));
         }
 
         [Test]
@@ -160,7 +158,7 @@ namespace CDP4Common.Tests
             constant.Container = this.siteDir;
 
             var dto = constant.ToDto() as CDP4Common.DTO.Constant;
-            Assert.AreEqual(2, dto.Value.Count);
+            Assert.That(dto.Value.Count, Is.EqualTo(2));
         }
 
         [Test]
@@ -173,9 +171,9 @@ namespace CDP4Common.Tests
             siteDirectory.Model.Add(modelSetup);
 
             var dto = modelSetup.ToDto() as CDP4Common.DTO.EngineeringModelSetup;
-            Assert.AreEqual(modelSetup.SourceEngineeringModelSetupIid, dto.SourceEngineeringModelSetupIid);
+            Assert.That(dto.SourceEngineeringModelSetupIid, Is.EqualTo(modelSetup.SourceEngineeringModelSetupIid));
 
-            Assert.AreEqual(modelSetup, dto.QuerySourceThing());
+            Assert.That(dto.QuerySourceThing(), Is.EqualTo(modelSetup));
         }
 
         [Test]
@@ -190,9 +188,9 @@ namespace CDP4Common.Tests
             var dto = siteDirectory.ToDto() as CDP4Common.DTO.SiteDirectory;
 
             Assert.IsTrue(dto.DefaultPersonRole.HasValue);
-            Assert.AreEqual(role.Iid, dto.DefaultPersonRole.Value);
+            Assert.That(dto.DefaultPersonRole.Value, Is.EqualTo(role.Iid));
 
-            Assert.AreEqual(siteDirectory, dto.QuerySourceThing());
+            Assert.That(dto.QuerySourceThing(), Is.EqualTo(siteDirectory));
         }
 
         [Test]
@@ -209,7 +207,7 @@ namespace CDP4Common.Tests
             var defDto = elementdef.ToDto();
 
             Assert.IsNull(iterationDto.IterationContainerId);
-            Assert.AreEqual(iteratio.Iid, defDto.IterationContainerId);
+            Assert.That(defDto.IterationContainerId, Is.EqualTo(iteratio.Iid));
         }
     }
 }
