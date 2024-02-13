@@ -90,6 +90,10 @@ namespace CDP4Common.DiagramData
                     return base.QueryValue(pd.Input);
                 case "diagramelement":
                     return base.QueryValue(pd.Input);
+                case "ishidden":
+                    return base.QueryValue(pd.Input);
+                case "lockedby":
+                    return base.QueryValue(pd.Input);
                 case "name":
                     return base.QueryValue(pd.Input);
                 case "owner":
@@ -107,8 +111,6 @@ namespace CDP4Common.DiagramData
 
                     var sentinelowner = new DomainOfExpertise(Guid.Empty, null, null);
                     return sentinelowner.QuerySentinelValue(pd.Next.Input, false);
-                case "publicationstate":
-                    return base.QueryValue(pd.Input);
                 case "toparchitectureelement":
                     pd.VerifyPropertyDescriptorForReferenceProperty();
 
@@ -190,6 +192,18 @@ namespace CDP4Common.DiagramData
                     return isCallerEmunerable ? (object) new List<string>() : null;
                 case "diagramelement":
                     return pd.Next == null ? (object) new List<DiagramEdge>() : new DiagramEdge(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                case "ishidden":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return isCallerEmunerable ? (object) new List<bool>() : null;
+                case "lockedby":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if (pd.Next != null)
+                    {
+                        return new Person(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                    }
+
+                    return isCallerEmunerable ? (object) new List<Person>() : default(Person);
                 case "name":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return isCallerEmunerable ? (object) new List<string>() : null;
@@ -202,9 +216,6 @@ namespace CDP4Common.DiagramData
                     }
 
                     return isCallerEmunerable ? (object) new List<DomainOfExpertise>() : default(DomainOfExpertise);
-                case "publicationstate":
-                    pd.VerifyPropertyDescriptorForValueProperty();
-                    return isCallerEmunerable ? (object) new List<PublicationState>() : null;
                 case "toparchitectureelement":
                     pd.VerifyPropertyDescriptorForReferenceProperty();
 

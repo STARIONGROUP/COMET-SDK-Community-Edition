@@ -91,6 +91,16 @@ namespace CDP4JsonSerializer
                 architectureDiagram.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["isHidden"].IsNullOrEmpty())
+            {
+                architectureDiagram.IsHidden = jObject["isHidden"].ToObject<bool>();
+            }
+
+            if (!jObject["lockedBy"].IsNullOrEmpty())
+            {
+                architectureDiagram.LockedBy = jObject["lockedBy"].ToObject<Guid>();
+            }
+
             if (!jObject["modifiedOn"].IsNullOrEmpty())
             {
                 architectureDiagram.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
@@ -104,11 +114,6 @@ namespace CDP4JsonSerializer
             if (!jObject["owner"].IsNullOrEmpty())
             {
                 architectureDiagram.Owner = jObject["owner"].ToObject<Guid>();
-            }
-
-            if (!jObject["publicationState"].IsNullOrEmpty())
-            {
-                architectureDiagram.PublicationState = jObject["publicationState"].ToObject<PublicationState>();
             }
 
             if (!jObject["thingPreference"].IsNullOrEmpty())

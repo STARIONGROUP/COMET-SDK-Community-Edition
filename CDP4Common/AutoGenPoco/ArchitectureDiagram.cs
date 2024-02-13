@@ -215,10 +215,11 @@ namespace CDP4Common.DiagramData
             this.DiagramElement.ResolveList(dto.DiagramElement, dto.IterationContainerId, this.Cache);
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
+            this.IsHidden = dto.IsHidden;
+            this.LockedBy = this.Cache.Get<Person>(dto.LockedBy, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Person>();
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
             this.Owner = this.Cache.Get<DomainOfExpertise>(dto.Owner, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<DomainOfExpertise>();
-            this.PublicationState = dto.PublicationState;
             this.RevisionNumber = dto.RevisionNumber;
             this.ThingPreference = dto.ThingPreference;
             this.TopArchitectureElement = (dto.TopArchitectureElement.HasValue) ? this.Cache.Get<ArchitectureElement>(dto.TopArchitectureElement.Value, dto.IterationContainerId) : null;
@@ -240,10 +241,11 @@ namespace CDP4Common.DiagramData
             dto.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Iid));
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
+            dto.IsHidden = this.IsHidden;
+            dto.LockedBy = this.LockedBy != null ? this.LockedBy.Iid : Guid.Empty;
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
             dto.Owner = this.Owner != null ? this.Owner.Iid : Guid.Empty;
-            dto.PublicationState = this.PublicationState;
             dto.RevisionNumber = this.RevisionNumber;
             dto.ThingPreference = this.ThingPreference;
             dto.TopArchitectureElement = this.TopArchitectureElement != null ? (Guid?)this.TopArchitectureElement.Iid : null;

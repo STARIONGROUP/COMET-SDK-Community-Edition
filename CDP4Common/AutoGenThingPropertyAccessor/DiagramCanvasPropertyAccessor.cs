@@ -92,11 +92,26 @@ namespace CDP4Common.DiagramData
                     return this.Description;
                 case "diagramelement":
                     return base.QueryValue(pd.Input);
+                case "ishidden":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return this.IsHidden;
+                case "lockedby":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if (pd.Next == null)
+                    {
+                        return this.LockedBy;
+                    }
+
+                    if (this.LockedBy != null)
+                    {
+                        return this.LockedBy.QueryValue(pd.Next.Input);
+                    }
+
+                    var sentinellockedby = new Person(Guid.Empty, null, null);
+                    return sentinellockedby.QuerySentinelValue(pd.Next.Input, false);
                 case "name":
                     return base.QueryValue(pd.Input);
-                case "publicationstate":
-                    pd.VerifyPropertyDescriptorForValueProperty();
-                    return this.PublicationState;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }
@@ -163,12 +178,21 @@ namespace CDP4Common.DiagramData
                     return isCallerEmunerable ? (object) new List<string>() : null;
                 case "diagramelement":
                     return pd.Next == null ? (object) new List<DiagramEdge>() : new DiagramEdge(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                case "ishidden":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return isCallerEmunerable ? (object) new List<bool>() : null;
+                case "lockedby":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if (pd.Next != null)
+                    {
+                        return new Person(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                    }
+
+                    return isCallerEmunerable ? (object) new List<Person>() : default(Person);
                 case "name":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return isCallerEmunerable ? (object) new List<string>() : null;
-                case "publicationstate":
-                    pd.VerifyPropertyDescriptorForValueProperty();
-                    return isCallerEmunerable ? (object) new List<PublicationState>() : null;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

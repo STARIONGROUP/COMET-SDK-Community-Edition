@@ -35,15 +35,16 @@
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | bounds                               | Guid                         | 0..1        |  1.1.0  |
  | 3     | createdOn                            | DateTime                     | 1..1        |  1.1.0  |
- | 4     | description                          | string                       | 1..1        |  1.1.0  |
- | 5     | diagramElement                       | Guid                         | 0..*        |  1.1.0  |
- | 6     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 9     | name                                 | string                       | 1..1        |  1.1.0  |
- | 10    | publicationState                     | PublicationState             | 1..1        |  1.1.0  |
- | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 4     | diagramElement                       | Guid                         | 0..*        |  1.1.0  |
+ | 5     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 6     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 7     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 8     | name                                 | string                       | 1..1        |  1.1.0  |
+ | 9     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 11    | description                          | string                       | 1..1        |  1.4.0  |
+ | 12    | isHidden                             | bool                         | 1..1        |  1.4.0  |
+ | 13    | lockedBy                             | Guid                         | 1..1        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -87,9 +88,6 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.CreatedOn.Equals(other.CreatedOn)) return false;
 
-            if (me.Description == null && other.Description != null) return false;
-            if (me.Description != null && !me.Description.Equals(other.Description)) return false;
-
             if (!me.DiagramElement.OrderBy(x => x).SequenceEqual(other.DiagramElement.OrderBy(x => x))) return false;
 
             if (!me.ExcludedDomain.OrderBy(x => x).SequenceEqual(other.ExcludedDomain.OrderBy(x => x))) return false;
@@ -101,13 +99,18 @@ namespace CDP4Common.DTO.Equatable
             if (me.Name == null && other.Name != null) return false;
             if (me.Name != null && !me.Name.Equals(other.Name)) return false;
 
-            if (!me.PublicationState.Equals(other.PublicationState)) return false;
-
             if (me.ThingPreference == null && other.ThingPreference != null) return false;
             if (me.ThingPreference != null && !me.ThingPreference.Equals(other.ThingPreference)) return false;
 
             if (me.Actor.HasValue != other.Actor.HasValue) return false;
             if (!me.Actor.Equals(other.Actor)) return false;
+
+            if (me.Description == null && other.Description != null) return false;
+            if (me.Description != null && !me.Description.Equals(other.Description)) return false;
+
+            if (!me.IsHidden.Equals(other.IsHidden)) return false;
+
+            if (!me.LockedBy.Equals(other.LockedBy)) return false;
 
             return true;
         }

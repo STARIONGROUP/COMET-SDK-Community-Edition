@@ -110,6 +110,11 @@ namespace CDP4Common.DTO
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
 
+            if (this.LockedBy != null)
+            {
+                dictionary.Add("LockedBy", new [] { this.LockedBy });
+            }
+
             if (this.Owner != null)
             {
                 dictionary.Add("Owner", new [] { this.Owner });
@@ -160,6 +165,14 @@ namespace CDP4Common.DTO
 
                             case "ExcludedPerson":
                                 this.ExcludedPerson.Remove(id);
+                                break;
+
+                            case "LockedBy":
+                                if (addModelErrors)
+                                {
+                                    errors.Add($"Removed reference '{id}' from LockedBy property results in inconsistent ArchitectureDiagram.");
+                                    result = false;
+                                }
                                 break;
 
                             case "Owner":
@@ -224,6 +237,14 @@ namespace CDP4Common.DTO
                         } 
                         break;
 
+                    case "LockedBy":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            errors.Add($"Removed reference '{referencedProperty.Key}' from LockedBy property results in inconsistent ArchitectureDiagram.");
+                            result = false;
+                        }
+                        break;
+
                     case "Owner":
                         if (referencedProperty.Value.Except(ids).Any())
                         {
@@ -262,6 +283,13 @@ namespace CDP4Common.DTO
             {
                 switch (kvp.Key)
                 {
+                    case "LockedBy":
+                        if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
                     case "Owner":
                         if (ids.Intersect(kvp.Value).Any())
                         {
@@ -287,6 +315,13 @@ namespace CDP4Common.DTO
             {
                 switch (kvp.Key)
                 {
+                    case "LockedBy":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
+
                     case "Owner":
                         if (kvp.Value.Except(ids).Any())
                         {
@@ -361,14 +396,17 @@ namespace CDP4Common.DTO
                 this.ExcludedPerson.Add(copy.Value == null ? guid : copy.Value.Iid);
             }
 
+            this.IsHidden = original.IsHidden;
+
+            var copyLockedBy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.LockedBy);
+            this.LockedBy = copyLockedBy.Value == null ? original.LockedBy : copyLockedBy.Value.Iid;
+
             this.ModifiedOn = original.ModifiedOn;
 
             this.Name = original.Name;
 
             var copyOwner = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.Owner);
             this.Owner = copyOwner.Value == null ? original.Owner : copyOwner.Value.Iid;
-
-            this.PublicationState = original.PublicationState;
 
             this.ThingPreference = original.ThingPreference;
 

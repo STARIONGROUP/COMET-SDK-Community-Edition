@@ -82,16 +82,26 @@ namespace CDP4Common.DTO
         /// <summary>
         /// Gets or sets the Description.
         /// </summary>
+        [CDPVersion("1.4.0")]
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the PublicationState.
+        /// Gets or sets a value indicating whether IsHidden.
         /// </summary>
+        [CDPVersion("1.4.0")]
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
-        public virtual PublicationState PublicationState { get; set; }
+        public virtual bool IsHidden { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier of the referenced LockedBy.
+        /// </summary>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual Guid LockedBy { get; set; }
 
         /// <summary>
         /// Gets the route for the current <see ref="DiagramCanvas"/>.
@@ -116,6 +126,11 @@ namespace CDP4Common.DTO
             dictionary.Add("ExcludedDomain", this.ExcludedDomain);
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
+
+            if (this.LockedBy != null)
+            {
+                dictionary.Add("LockedBy", new [] { this.LockedBy });
+            }
 
             return dictionary;
         }
@@ -157,6 +172,14 @@ namespace CDP4Common.DTO
 
                             case "ExcludedPerson":
                                 this.ExcludedPerson.Remove(id);
+                                break;
+
+                            case "LockedBy":
+                                if (addModelErrors)
+                                {
+                                    errors.Add($"Removed reference '{id}' from LockedBy property results in inconsistent DiagramCanvas.");
+                                    result = false;
+                                }
                                 break;
                         }
                     }
@@ -208,6 +231,14 @@ namespace CDP4Common.DTO
                             this.ExcludedPerson.Remove(toBeRemoved);
                         } 
                         break;
+
+                    case "LockedBy":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            errors.Add($"Removed reference '{referencedProperty.Key}' from LockedBy property results in inconsistent DiagramCanvas.");
+                            result = false;
+                        }
+                        break;
                 }
             }
             
@@ -232,6 +263,12 @@ namespace CDP4Common.DTO
             {
                 switch (kvp.Key)
                 {
+                    case "LockedBy":
+                        if (ids.Intersect(kvp.Value).Any())
+                        {
+                            result = true;
+                        }
+                        break;
                 }
             }
 
@@ -251,6 +288,12 @@ namespace CDP4Common.DTO
             {
                 switch (kvp.Key)
                 {
+                    case "LockedBy":
+                        if (kvp.Value.Except(ids).Any())
+                        {
+                            result = true;
+                        }
+                        break;
                 }
             }
 
@@ -319,11 +362,14 @@ namespace CDP4Common.DTO
                 this.ExcludedPerson.Add(copy.Value == null ? guid : copy.Value.Iid);
             }
 
+            this.IsHidden = original.IsHidden;
+
+            var copyLockedBy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.LockedBy);
+            this.LockedBy = copyLockedBy.Value == null ? original.LockedBy : copyLockedBy.Value.Iid;
+
             this.ModifiedOn = original.ModifiedOn;
 
             this.Name = original.Name;
-
-            this.PublicationState = original.PublicationState;
 
             this.ThingPreference = original.ThingPreference;
         }

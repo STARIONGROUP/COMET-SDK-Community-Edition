@@ -91,6 +91,16 @@ namespace CDP4JsonSerializer
                 diagramCanvas.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
             }
 
+            if (!jObject["isHidden"].IsNullOrEmpty())
+            {
+                diagramCanvas.IsHidden = jObject["isHidden"].ToObject<bool>();
+            }
+
+            if (!jObject["lockedBy"].IsNullOrEmpty())
+            {
+                diagramCanvas.LockedBy = jObject["lockedBy"].ToObject<Guid>();
+            }
+
             if (!jObject["modifiedOn"].IsNullOrEmpty())
             {
                 diagramCanvas.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
@@ -99,11 +109,6 @@ namespace CDP4JsonSerializer
             if (!jObject["name"].IsNullOrEmpty())
             {
                 diagramCanvas.Name = jObject["name"].ToObject<string>();
-            }
-
-            if (!jObject["publicationState"].IsNullOrEmpty())
-            {
-                diagramCanvas.PublicationState = jObject["publicationState"].ToObject<PublicationState>();
             }
 
             if (!jObject["thingPreference"].IsNullOrEmpty())

@@ -58,10 +58,11 @@ namespace CDP4JsonSerializer
             { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
             { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
             { "iid", iid => new JValue(iid) },
+            { "isHidden", isHidden => new JValue(isHidden) },
+            { "lockedBy", lockedBy => new JValue(lockedBy) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
             { "owner", owner => new JValue(owner) },
-            { "publicationState", publicationState => new JValue(publicationState.ToString()) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "thingPreference", thingPreference => new JValue(thingPreference) },
             { "topArchitectureElement", topArchitectureElement => new JValue(topArchitectureElement) },
@@ -83,10 +84,11 @@ namespace CDP4JsonSerializer
             jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](architectureDiagram.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](architectureDiagram.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](architectureDiagram.Iid));
+            jsonObject.Add("isHidden", this.PropertySerializerMap["isHidden"](architectureDiagram.IsHidden));
+            jsonObject.Add("lockedBy", this.PropertySerializerMap["lockedBy"](architectureDiagram.LockedBy));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](architectureDiagram.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](architectureDiagram.Name));
             jsonObject.Add("owner", this.PropertySerializerMap["owner"](architectureDiagram.Owner));
-            jsonObject.Add("publicationState", this.PropertySerializerMap["publicationState"](Enum.GetName(typeof(CDP4Common.DiagramData.PublicationState), architectureDiagram.PublicationState)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](architectureDiagram.RevisionNumber));
             jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](architectureDiagram.ThingPreference));
             jsonObject.Add("topArchitectureElement", this.PropertySerializerMap["topArchitectureElement"](architectureDiagram.TopArchitectureElement));

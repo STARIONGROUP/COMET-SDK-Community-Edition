@@ -197,8 +197,11 @@ namespace CDP4Common.MetaInfo
         private readonly Dictionary<string, string> cdpVersionedProperties = new Dictionary<string, string>
         {
             { "Actor", "1.3.0" },
+            { "Description", "1.4.0" },
             { "ExcludedDomain", "1.1.0" },
             { "ExcludedPerson", "1.1.0" },
+            { "IsHidden", "1.4.0" },
+            { "LockedBy", "1.4.0" },
             { "ModifiedOn", "1.1.0" },
             { "ThingPreference", "1.2.0" },
         };
@@ -245,9 +248,10 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", thing => thing.ExcludedDomain },
             { "ExcludedPerson", thing => thing.ExcludedPerson },
             { "Iid", thing => thing.Iid },
+            { "IsHidden", thing => thing.IsHidden },
+            { "LockedBy", thing => thing.LockedBy },
             { "ModifiedOn", thing => thing.ModifiedOn },
             { "Name", thing => thing.Name },
-            { "PublicationState", thing => thing.PublicationState },
             { "RevisionNumber", thing => thing.RevisionNumber },
             { "ThingPreference", thing => thing.ThingPreference },
         };
@@ -267,9 +271,10 @@ namespace CDP4Common.MetaInfo
             { "ExcludedDomain", new PropertyMetaInfo("ExcludedDomain", "DomainOfExpertise", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "ExcludedPerson", new PropertyMetaInfo("ExcludedPerson", "Person", PropertyKind.List, AggregationKind.None, false, false, true, 0, "*", true) },
             { "Iid", new PropertyMetaInfo("Iid", "Guid", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "IsHidden", new PropertyMetaInfo("IsHidden", "bool", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
+            { "LockedBy", new PropertyMetaInfo("LockedBy", "Person", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ModifiedOn", new PropertyMetaInfo("ModifiedOn", "DateTime", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "Name", new PropertyMetaInfo("Name", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
-            { "PublicationState", new PropertyMetaInfo("PublicationState", "CDP4Common.DiagramData.PublicationState", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "RevisionNumber", new PropertyMetaInfo("RevisionNumber", "int", PropertyKind.Scalar, AggregationKind.None, false, false, true, 1, "1", true) },
             { "ThingPreference", new PropertyMetaInfo("ThingPreference", "string", PropertyKind.Scalar, AggregationKind.None, false, false, true, 0, "1", true) },
         };
@@ -294,9 +299,10 @@ namespace CDP4Common.MetaInfo
             { "CreatedOn", (diagramCanvas, value) => diagramCanvas.CreatedOn = (DateTime)value },
             { "Description", (diagramCanvas, value) => diagramCanvas.Description = value.ToString() },
             { "Iid", (diagramCanvas, value) => diagramCanvas.Iid = (Guid)value },
+            { "IsHidden", (diagramCanvas, value) => diagramCanvas.IsHidden = (bool)value },
+            { "LockedBy", (diagramCanvas, value) => diagramCanvas.LockedBy = (Guid)value },
             { "ModifiedOn", (diagramCanvas, value) => diagramCanvas.ModifiedOn = (DateTime)value },
             { "Name", (diagramCanvas, value) => diagramCanvas.Name = value.ToString() },
-            { "PublicationState", (diagramCanvas, value) => diagramCanvas.PublicationState = (PublicationState)value },
             { "ThingPreference", (diagramCanvas, value) => diagramCanvas.ThingPreference = value == null ? (string)null : value.ToString() },
         };
 

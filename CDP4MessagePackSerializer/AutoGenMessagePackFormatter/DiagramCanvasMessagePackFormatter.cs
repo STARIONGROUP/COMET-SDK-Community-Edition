@@ -35,15 +35,16 @@
  | -------------------------------------------- | ---------------------------- | ----------- | ------- |
  | 2     | bounds                               | Guid                         | 0..1        |  1.1.0  |
  | 3     | createdOn                            | DateTime                     | 1..1        |  1.1.0  |
- | 4     | description                          | string                       | 1..1        |  1.1.0  |
- | 5     | diagramElement                       | Guid                         | 0..*        |  1.1.0  |
- | 6     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
- | 7     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
- | 8     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
- | 9     | name                                 | string                       | 1..1        |  1.1.0  |
- | 10    | publicationState                     | PublicationState             | 1..1        |  1.1.0  |
- | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
- | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 4     | diagramElement                       | Guid                         | 0..*        |  1.1.0  |
+ | 5     | excludedDomain                       | Guid                         | 0..*        |  1.1.0  |
+ | 6     | excludedPerson                       | Guid                         | 0..*        |  1.1.0  |
+ | 7     | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
+ | 8     | name                                 | string                       | 1..1        |  1.1.0  |
+ | 9     | thingPreference                      | string                       | 0..1        |  1.2.0  |
+ | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 11    | description                          | string                       | 1..1        |  1.4.0  |
+ | 12    | isHidden                             | bool                         | 1..1        |  1.4.0  |
+ | 13    | lockedBy                             | Guid                         | 1..1        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -96,7 +97,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(diagramCanvas), "The DiagramCanvas may not be null");
             }
 
-            writer.WriteArrayHeader(13);
+            writer.WriteArrayHeader(14);
 
             writer.Write(diagramCanvas.Iid.ToByteArray());
             writer.Write(diagramCanvas.RevisionNumber);
@@ -107,7 +108,6 @@ namespace CDP4MessagePackSerializer
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(diagramCanvas.CreatedOn);
-            writer.Write(diagramCanvas.Description);
             writer.WriteArrayHeader(diagramCanvas.DiagramElement.Count);
             foreach (var identifier in diagramCanvas.DiagramElement.OrderBy(x => x, guidComparer))
             {
@@ -125,7 +125,6 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(diagramCanvas.ModifiedOn);
             writer.Write(diagramCanvas.Name);
-            writer.Write(diagramCanvas.PublicationState.ToString());
             writer.Write(diagramCanvas.ThingPreference);
             if (diagramCanvas.Actor.HasValue)
             {
@@ -135,6 +134,9 @@ namespace CDP4MessagePackSerializer
             {
                 writer.WriteNil();
             }
+            writer.Write(diagramCanvas.Description);
+            writer.Write(diagramCanvas.IsHidden);
+            writer.Write(diagramCanvas.LockedBy.ToByteArray());
 
             writer.Flush();
         }
@@ -189,42 +191,36 @@ namespace CDP4MessagePackSerializer
                         diagramCanvas.CreatedOn = reader.ReadDateTime();
                         break;
                     case 4:
-                        diagramCanvas.Description = reader.ReadString();
-                        break;
-                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             diagramCanvas.DiagramElement.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 6:
+                    case 5:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             diagramCanvas.ExcludedDomain.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 7:
+                    case 6:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
                             diagramCanvas.ExcludedPerson.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
-                    case 8:
+                    case 7:
                         diagramCanvas.ModifiedOn = reader.ReadDateTime();
                         break;
-                    case 9:
+                    case 8:
                         diagramCanvas.Name = reader.ReadString();
                         break;
-                    case 10:
-                        diagramCanvas.PublicationState = (CDP4Common.DiagramData.PublicationState)Enum.Parse(typeof(CDP4Common.DiagramData.PublicationState), reader.ReadString(), true);
-                        break;
-                    case 11:
+                    case 9:
                         diagramCanvas.ThingPreference = reader.ReadString();
                         break;
-                    case 12:
+                    case 10:
                         if (reader.TryReadNil())
                         {
                             diagramCanvas.Actor = null;
@@ -233,6 +229,15 @@ namespace CDP4MessagePackSerializer
                         {
                             diagramCanvas.Actor = reader.ReadBytes().ToGuid();
                         }
+                        break;
+                    case 11:
+                        diagramCanvas.Description = reader.ReadString();
+                        break;
+                    case 12:
+                        diagramCanvas.IsHidden = reader.ReadBoolean();
+                        break;
+                    case 13:
+                        diagramCanvas.LockedBy = reader.ReadBytes().ToGuid();
                         break;
                     default:
                         reader.Skip();

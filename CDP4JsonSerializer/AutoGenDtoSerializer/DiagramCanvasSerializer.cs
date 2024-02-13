@@ -58,9 +58,10 @@ namespace CDP4JsonSerializer
             { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
             { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
             { "iid", iid => new JValue(iid) },
+            { "isHidden", isHidden => new JValue(isHidden) },
+            { "lockedBy", lockedBy => new JValue(lockedBy) },
             { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
             { "name", name => new JValue(name) },
-            { "publicationState", publicationState => new JValue(publicationState.ToString()) },
             { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
             { "thingPreference", thingPreference => new JValue(thingPreference) },
         };
@@ -81,9 +82,10 @@ namespace CDP4JsonSerializer
             jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](diagramCanvas.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](diagramCanvas.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("iid", this.PropertySerializerMap["iid"](diagramCanvas.Iid));
+            jsonObject.Add("isHidden", this.PropertySerializerMap["isHidden"](diagramCanvas.IsHidden));
+            jsonObject.Add("lockedBy", this.PropertySerializerMap["lockedBy"](diagramCanvas.LockedBy));
             jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](diagramCanvas.ModifiedOn));
             jsonObject.Add("name", this.PropertySerializerMap["name"](diagramCanvas.Name));
-            jsonObject.Add("publicationState", this.PropertySerializerMap["publicationState"](Enum.GetName(typeof(CDP4Common.DiagramData.PublicationState), diagramCanvas.PublicationState)));
             jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](diagramCanvas.RevisionNumber));
             jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](diagramCanvas.ThingPreference));
             return jsonObject;

@@ -101,16 +101,52 @@ namespace CDP4Common.DiagramData
         /// <remarks>
         /// Textual description of a DiagramCanvas.
         /// </remarks>
+        [CDPVersion("1.4.0")]
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         public virtual string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the PublicationState.
+        /// Gets or sets a value indicating whether IsHidden.
         /// </summary>
         /// <remarks>
+        /// assertion whether the DiagramCanvas is hidden or not
         /// </remarks>
+        [CDPVersion("1.4.0")]
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public virtual PublicationState PublicationState { get; set; }
+        public virtual bool IsHidden { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LockedBy.
+        /// </summary>
+        /// <remarks>
+        /// reference to a Person that has locked this DiagramCanvas for write / modify access
+        /// </remarks>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual Person LockedBy { get; set; }
+
+        /// <summary>
+        /// Queries the referenced <see cref="Thing"/>s of the current <see cref="DiagramCanvas"/>
+        /// </summary>
+        /// <remarks>
+        /// This does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
+        /// are exposed via the <see cref="ContainerLists"/> property
+        /// </remarks>
+        /// <returns>
+        /// An <see cref="IEnumerable{Thing}"/>
+        /// </returns>
+        public override IEnumerable<Thing> QueryReferencedThings()
+        {
+            foreach (var thing in base.QueryReferencedThings())
+            {
+                yield return thing;
+            }
+
+            if (this.LockedBy != null)
+            {
+                yield return this.LockedBy;
+            }
+        }
 
         /// <summary>
         /// Creates and returns a copy of this <see cref="DiagramCanvas"/> for edit purpose.
@@ -166,6 +202,13 @@ namespace CDP4Common.DiagramData
                 errorList.Add("The property Description is null or empty.");
             }
 
+            if (this.LockedBy == null || this.LockedBy.Iid == Guid.Empty)
+            {
+                errorList.Add("The property LockedBy is null.");
+                this.LockedBy = SentinelThingProvider.GetSentinel<Person>();
+                this.sentinelResetMap["LockedBy"] = () => this.LockedBy = null;
+            }
+
             return errorList;
         }
 
@@ -193,9 +236,10 @@ namespace CDP4Common.DiagramData
             this.DiagramElement.ResolveList(dto.DiagramElement, dto.IterationContainerId, this.Cache);
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
+            this.IsHidden = dto.IsHidden;
+            this.LockedBy = this.Cache.Get<Person>(dto.LockedBy, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Person>();
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
-            this.PublicationState = dto.PublicationState;
             this.RevisionNumber = dto.RevisionNumber;
             this.ThingPreference = dto.ThingPreference;
 
@@ -216,9 +260,10 @@ namespace CDP4Common.DiagramData
             dto.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Iid));
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
+            dto.IsHidden = this.IsHidden;
+            dto.LockedBy = this.LockedBy != null ? this.LockedBy.Iid : Guid.Empty;
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
-            dto.PublicationState = this.PublicationState;
             dto.RevisionNumber = this.RevisionNumber;
             dto.ThingPreference = this.ThingPreference;
 

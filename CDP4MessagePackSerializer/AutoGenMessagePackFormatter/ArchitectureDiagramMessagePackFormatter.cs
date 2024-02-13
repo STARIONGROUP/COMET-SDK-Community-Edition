@@ -42,10 +42,11 @@
  | 8     | createdOn                            | DateTime                     | 1..1        |  1.4.0  |
  | 9     | description                          | string                       | 1..1        |  1.4.0  |
  | 10    | diagramElement                       | Guid                         | 0..*        |  1.4.0  |
- | 11    | name                                 | string                       | 1..1        |  1.4.0  |
- | 12    | owner                                | Guid                         | 1..1        |  1.4.0  |
- | 13    | publicationState                     | PublicationState             | 1..1        |  1.4.0  |
- | 14    | topArchitectureElement               | Guid                         | 0..1        |  1.4.0  |
+ | 11    | isHidden                             | bool                         | 1..1        |  1.4.0  |
+ | 12    | lockedBy                             | Guid                         | 1..1        |  1.4.0  |
+ | 13    | name                                 | string                       | 1..1        |  1.4.0  |
+ | 14    | owner                                | Guid                         | 1..1        |  1.4.0  |
+ | 15    | topArchitectureElement               | Guid                         | 0..1        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -98,7 +99,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(architectureDiagram), "The ArchitectureDiagram may not be null");
             }
 
-            writer.WriteArrayHeader(15);
+            writer.WriteArrayHeader(16);
 
             writer.Write(architectureDiagram.Iid.ToByteArray());
             writer.Write(architectureDiagram.RevisionNumber);
@@ -135,9 +136,10 @@ namespace CDP4MessagePackSerializer
             {
                 writer.Write(identifier.ToByteArray());
             }
+            writer.Write(architectureDiagram.IsHidden);
+            writer.Write(architectureDiagram.LockedBy.ToByteArray());
             writer.Write(architectureDiagram.Name);
             writer.Write(architectureDiagram.Owner.ToByteArray());
-            writer.Write(architectureDiagram.PublicationState.ToString());
             if (architectureDiagram.TopArchitectureElement.HasValue)
             {
                 writer.Write(architectureDiagram.TopArchitectureElement.Value.ToByteArray());
@@ -240,15 +242,18 @@ namespace CDP4MessagePackSerializer
                         }
                         break;
                     case 11:
-                        architectureDiagram.Name = reader.ReadString();
+                        architectureDiagram.IsHidden = reader.ReadBoolean();
                         break;
                     case 12:
-                        architectureDiagram.Owner = reader.ReadBytes().ToGuid();
+                        architectureDiagram.LockedBy = reader.ReadBytes().ToGuid();
                         break;
                     case 13:
-                        architectureDiagram.PublicationState = (CDP4Common.DiagramData.PublicationState)Enum.Parse(typeof(CDP4Common.DiagramData.PublicationState), reader.ReadString(), true);
+                        architectureDiagram.Name = reader.ReadString();
                         break;
                     case 14:
+                        architectureDiagram.Owner = reader.ReadBytes().ToGuid();
+                        break;
+                    case 15:
                         if (reader.TryReadNil())
                         {
                             architectureDiagram.TopArchitectureElement = null;

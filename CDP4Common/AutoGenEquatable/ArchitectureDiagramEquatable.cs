@@ -42,10 +42,11 @@
  | 8     | createdOn                            | DateTime                     | 1..1        |  1.4.0  |
  | 9     | description                          | string                       | 1..1        |  1.4.0  |
  | 10    | diagramElement                       | Guid                         | 0..*        |  1.4.0  |
- | 11    | name                                 | string                       | 1..1        |  1.4.0  |
- | 12    | owner                                | Guid                         | 1..1        |  1.4.0  |
- | 13    | publicationState                     | PublicationState             | 1..1        |  1.4.0  |
- | 14    | topArchitectureElement               | Guid                         | 0..1        |  1.4.0  |
+ | 11    | isHidden                             | bool                         | 1..1        |  1.4.0  |
+ | 12    | lockedBy                             | Guid                         | 1..1        |  1.4.0  |
+ | 13    | name                                 | string                       | 1..1        |  1.4.0  |
+ | 14    | owner                                | Guid                         | 1..1        |  1.4.0  |
+ | 15    | topArchitectureElement               | Guid                         | 0..1        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -106,12 +107,14 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.DiagramElement.OrderBy(x => x).SequenceEqual(other.DiagramElement.OrderBy(x => x))) return false;
 
+            if (!me.IsHidden.Equals(other.IsHidden)) return false;
+
+            if (!me.LockedBy.Equals(other.LockedBy)) return false;
+
             if (me.Name == null && other.Name != null) return false;
             if (me.Name != null && !me.Name.Equals(other.Name)) return false;
 
             if (!me.Owner.Equals(other.Owner)) return false;
-
-            if (!me.PublicationState.Equals(other.PublicationState)) return false;
 
             if (me.TopArchitectureElement.HasValue != other.TopArchitectureElement.HasValue) return false;
             if (!me.TopArchitectureElement.Equals(other.TopArchitectureElement)) return false;
