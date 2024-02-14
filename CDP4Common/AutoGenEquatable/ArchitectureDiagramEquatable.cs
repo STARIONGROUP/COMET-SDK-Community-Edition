@@ -43,7 +43,7 @@
  | 9     | description                          | string                       | 1..1        |  1.4.0  |
  | 10    | diagramElement                       | Guid                         | 0..*        |  1.4.0  |
  | 11    | isHidden                             | bool                         | 1..1        |  1.4.0  |
- | 12    | lockedBy                             | Guid                         | 1..1        |  1.4.0  |
+ | 12    | lockedBy                             | Guid                         | 0..1        |  1.4.0  |
  | 13    | name                                 | string                       | 1..1        |  1.4.0  |
  | 14    | owner                                | Guid                         | 1..1        |  1.4.0  |
  | 15    | topArchitectureElement               | Guid                         | 0..1        |  1.4.0  |
@@ -109,6 +109,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.IsHidden.Equals(other.IsHidden)) return false;
 
+            if (me.LockedBy.HasValue != other.LockedBy.HasValue) return false;
             if (!me.LockedBy.Equals(other.LockedBy)) return false;
 
             if (me.Name == null && other.Name != null) return false;

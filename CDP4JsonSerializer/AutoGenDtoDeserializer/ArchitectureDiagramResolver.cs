@@ -98,7 +98,7 @@ namespace CDP4JsonSerializer
 
             if (!jObject["lockedBy"].IsNullOrEmpty())
             {
-                architectureDiagram.LockedBy = jObject["lockedBy"].ToObject<Guid>();
+                architectureDiagram.LockedBy = jObject["lockedBy"].ToObject<Guid?>();
             }
 
             if (!jObject["modifiedOn"].IsNullOrEmpty())

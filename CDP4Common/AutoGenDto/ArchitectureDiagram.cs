@@ -112,7 +112,7 @@ namespace CDP4Common.DTO
 
             if (this.LockedBy != null)
             {
-                dictionary.Add("LockedBy", new [] { this.LockedBy });
+                dictionary.Add("LockedBy", new [] { this.LockedBy.Value });
             }
 
             if (this.Owner != null)
@@ -168,11 +168,7 @@ namespace CDP4Common.DTO
                                 break;
 
                             case "LockedBy":
-                                if (addModelErrors)
-                                {
-                                    errors.Add($"Removed reference '{id}' from LockedBy property results in inconsistent ArchitectureDiagram.");
-                                    result = false;
-                                }
+                                this.LockedBy = null;
                                 break;
 
                             case "Owner":
@@ -240,8 +236,7 @@ namespace CDP4Common.DTO
                     case "LockedBy":
                         if (referencedProperty.Value.Except(ids).Any())
                         {
-                            errors.Add($"Removed reference '{referencedProperty.Key}' from LockedBy property results in inconsistent ArchitectureDiagram.");
-                            result = false;
+                            this.LockedBy = null;
                         }
                         break;
 
@@ -283,13 +278,6 @@ namespace CDP4Common.DTO
             {
                 switch (kvp.Key)
                 {
-                    case "LockedBy":
-                        if (ids.Intersect(kvp.Value).Any())
-                        {
-                            result = true;
-                        }
-                        break;
-
                     case "Owner":
                         if (ids.Intersect(kvp.Value).Any())
                         {
@@ -315,13 +303,6 @@ namespace CDP4Common.DTO
             {
                 switch (kvp.Key)
                 {
-                    case "LockedBy":
-                        if (kvp.Value.Except(ids).Any())
-                        {
-                            result = true;
-                        }
-                        break;
-
                     case "Owner":
                         if (kvp.Value.Except(ids).Any())
                         {

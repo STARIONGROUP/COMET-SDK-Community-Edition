@@ -43,7 +43,7 @@
  | 9     | description                          | string                       | 1..1        |  1.4.0  |
  | 10    | diagramElement                       | Guid                         | 0..*        |  1.4.0  |
  | 11    | isHidden                             | bool                         | 1..1        |  1.4.0  |
- | 12    | lockedBy                             | Guid                         | 1..1        |  1.4.0  |
+ | 12    | lockedBy                             | Guid                         | 0..1        |  1.4.0  |
  | 13    | name                                 | string                       | 1..1        |  1.4.0  |
  | 14    | owner                                | Guid                         | 1..1        |  1.4.0  |
  | 15    | topArchitectureElement               | Guid                         | 0..1        |  1.4.0  |
@@ -137,7 +137,14 @@ namespace CDP4MessagePackSerializer
                 writer.Write(identifier.ToByteArray());
             }
             writer.Write(architectureDiagram.IsHidden);
-            writer.Write(architectureDiagram.LockedBy.ToByteArray());
+            if (architectureDiagram.LockedBy.HasValue)
+            {
+                writer.Write(architectureDiagram.LockedBy.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
             writer.Write(architectureDiagram.Name);
             writer.Write(architectureDiagram.Owner.ToByteArray());
             if (architectureDiagram.TopArchitectureElement.HasValue)
@@ -245,7 +252,14 @@ namespace CDP4MessagePackSerializer
                         architectureDiagram.IsHidden = reader.ReadBoolean();
                         break;
                     case 12:
-                        architectureDiagram.LockedBy = reader.ReadBytes().ToGuid();
+                        if (reader.TryReadNil())
+                        {
+                            architectureDiagram.LockedBy = null;
+                        }
+                        else
+                        {
+                            architectureDiagram.LockedBy = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     case 13:
                         architectureDiagram.Name = reader.ReadString();

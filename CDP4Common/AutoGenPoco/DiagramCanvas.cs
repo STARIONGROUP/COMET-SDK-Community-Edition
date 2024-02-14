@@ -202,13 +202,6 @@ namespace CDP4Common.DiagramData
                 errorList.Add("The property Description is null or empty.");
             }
 
-            if (this.LockedBy == null || this.LockedBy.Iid == Guid.Empty)
-            {
-                errorList.Add("The property LockedBy is null.");
-                this.LockedBy = SentinelThingProvider.GetSentinel<Person>();
-                this.sentinelResetMap["LockedBy"] = () => this.LockedBy = null;
-            }
-
             return errorList;
         }
 
@@ -237,7 +230,7 @@ namespace CDP4Common.DiagramData
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
             this.IsHidden = dto.IsHidden;
-            this.LockedBy = this.Cache.Get<Person>(dto.LockedBy, dto.IterationContainerId) ?? SentinelThingProvider.GetSentinel<Person>();
+            this.LockedBy = (dto.LockedBy.HasValue) ? this.Cache.Get<Person>(dto.LockedBy.Value, dto.IterationContainerId) : null;
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
             this.RevisionNumber = dto.RevisionNumber;
@@ -261,7 +254,7 @@ namespace CDP4Common.DiagramData
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
             dto.IsHidden = this.IsHidden;
-            dto.LockedBy = this.LockedBy != null ? this.LockedBy.Iid : Guid.Empty;
+            dto.LockedBy = this.LockedBy != null ? (Guid?)this.LockedBy.Iid : null;
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
             dto.RevisionNumber = this.RevisionNumber;

@@ -44,7 +44,7 @@
  | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
  | 11    | description                          | string                       | 1..1        |  1.4.0  |
  | 12    | isHidden                             | bool                         | 1..1        |  1.4.0  |
- | 13    | lockedBy                             | Guid                         | 1..1        |  1.4.0  |
+ | 13    | lockedBy                             | Guid                         | 0..1        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -110,6 +110,7 @@ namespace CDP4Common.DTO.Equatable
 
             if (!me.IsHidden.Equals(other.IsHidden)) return false;
 
+            if (me.LockedBy.HasValue != other.LockedBy.HasValue) return false;
             if (!me.LockedBy.Equals(other.LockedBy)) return false;
 
             return true;

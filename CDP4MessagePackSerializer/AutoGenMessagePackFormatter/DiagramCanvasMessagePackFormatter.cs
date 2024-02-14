@@ -44,7 +44,7 @@
  | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
  | 11    | description                          | string                       | 1..1        |  1.4.0  |
  | 12    | isHidden                             | bool                         | 1..1        |  1.4.0  |
- | 13    | lockedBy                             | Guid                         | 1..1        |  1.4.0  |
+ | 13    | lockedBy                             | Guid                         | 0..1        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -136,7 +136,14 @@ namespace CDP4MessagePackSerializer
             }
             writer.Write(diagramCanvas.Description);
             writer.Write(diagramCanvas.IsHidden);
-            writer.Write(diagramCanvas.LockedBy.ToByteArray());
+            if (diagramCanvas.LockedBy.HasValue)
+            {
+                writer.Write(diagramCanvas.LockedBy.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
 
             writer.Flush();
         }
@@ -237,7 +244,14 @@ namespace CDP4MessagePackSerializer
                         diagramCanvas.IsHidden = reader.ReadBoolean();
                         break;
                     case 13:
-                        diagramCanvas.LockedBy = reader.ReadBytes().ToGuid();
+                        if (reader.TryReadNil())
+                        {
+                            diagramCanvas.LockedBy = null;
+                        }
+                        else
+                        {
+                            diagramCanvas.LockedBy = reader.ReadBytes().ToGuid();
+                        }
                         break;
                     default:
                         reader.Skip();
