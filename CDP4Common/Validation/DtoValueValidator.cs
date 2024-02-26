@@ -31,7 +31,6 @@ namespace CDP4Common.Validation
     using System.Linq;
 
     using CDP4Common.DTO;
-    using CDP4Common.EngineeringModelData;
     using CDP4Common.Extensions;
     using CDP4Common.Types;
 
@@ -246,10 +245,10 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
-        /// Validates all provides values of a <see cref="IValueSet" /> for a <see cref="ParameterType" />.
+        /// Validates all provides values of a <see cref="ParameterValueSetBase" /> for a <see cref="ParameterType" />.
         /// </summary>
         /// <param name="parameterType">The <see cref="ParameterType" /> to use for the validation</param>
-        /// <param name="valueSet">The <see cref="IValueSet" /> to validate</param>
+        /// <param name="valueSet">The <see cref="ParameterValueSetBase" /> to validate</param>
         /// <param name="things">The collection of <see cref="Thing" /> to retrieve referenced <see cref="Thing" /></param>
         /// <param name="measurementScale">The <see cref="MeasurementScale" /></param>
         /// <param name="provider">
@@ -265,7 +264,7 @@ namespace CDP4Common.Validation
         /// If one of the <see cref="ValueArray{T}" /> of the <paramref name="valueSet" />
         /// do not have the correct number of values
         /// </exception>
-        public static ValidationResult ValidateAndCleanup(this ParameterType parameterType, IValueSet valueSet, IReadOnlyCollection<Thing> things, MeasurementScale measurementScale = null, IFormatProvider provider = null)
+        public static ValidationResult ValidateAndCleanup(this ParameterType parameterType, ParameterValueSetBase valueSet, IReadOnlyCollection<Thing> things, MeasurementScale measurementScale = null, IFormatProvider provider = null)
         {
             switch (parameterType)
             {
@@ -296,12 +295,12 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
-        /// Validates all provides values of a <see cref="IValueSet" /> for a <see cref="CompoundParameterType" />.
+        /// Validates all provides values of a <see cref="ParameterValueSetBase" /> for a <see cref="CompoundParameterType" />.
         /// The number of provided values should be equal to the number of referenced <see cref="ParameterTypeComponent" /> and each one should be validated
         /// against the <see cref="ParameterType " /> and <see cref="MeasurementScale" /> (if applicable)
         /// </summary>
         /// <param name="compoundParameterType">The <see cref="CompoundParameterType" /> to use for the validation</param>
-        /// <param name="valueSet">The <see cref="IValueSet" /> to validate</param>
+        /// <param name="valueSet">The <see cref="ParameterValueSetBase" /> to validate</param>
         /// <param name="things">The collection of <see cref="Thing" /> to retrieve referenced <see cref="Thing" /></param>
         /// <param name="provider">
         /// The <see cref="IFormatProvider" /> used to validate, if set to null
@@ -316,7 +315,7 @@ namespace CDP4Common.Validation
         /// If one of the <see cref="ValueArray{T}" /> of the <paramref name="valueSet" />
         /// do not have the correct number of values
         /// </exception>
-        public static ValidationResult ValidateAndCleanup(this CompoundParameterType compoundParameterType, IValueSet valueSet, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
+        public static ValidationResult ValidateAndCleanup(this CompoundParameterType compoundParameterType, ParameterValueSetBase valueSet, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
         {
             var parameterTypeComponents = compoundParameterType.QueryParameterTypesAndMeasurementScale(things);
 
@@ -349,13 +348,13 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
-        /// Validates all provides values of a <see cref="IValueSet" /> for a <see cref="SampledFunctionParameterType" />.
+        /// Validates all provides values of a <see cref="ParameterValueSetBase" /> for a <see cref="SampledFunctionParameterType" />.
         /// The number of provided values should be a multiple of the number of referenced <see cref="IParameterTypeAssignment" />
         /// and each one should be validated
         /// against the <see cref="ParameterType " /> and <see cref="MeasurementScale" /> (if applicable)
         /// </summary>
         /// <param name="sampledFunctionParameterType">The <see cref="SampledFunctionParameterType" /> to use for the validation</param>
-        /// <param name="valueSet">The <see cref="IValueSet" /> to validate</param>
+        /// <param name="valueSet">The <see cref="ParameterValueSetBase" /> to validate</param>
         /// <param name="things">The collection of <see cref="Thing" /> to retrieve referenced <see cref="Thing" /></param>
         /// <param name="provider">
         /// The <see cref="IFormatProvider" /> used to validate, if set to null
@@ -370,7 +369,7 @@ namespace CDP4Common.Validation
         /// If one of the <see cref="ValueArray{T}" /> of the <paramref name="valueSet" />
         /// do not have the correct number of values
         /// </exception>
-        public static ValidationResult ValidateAndCleanup(this SampledFunctionParameterType sampledFunctionParameterType, IValueSet valueSet, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
+        public static ValidationResult ValidateAndCleanup(this SampledFunctionParameterType sampledFunctionParameterType, ParameterValueSetBase valueSet, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
         {
             var parameterTypeAssignments = sampledFunctionParameterType.QueryParameterTypesAndMeasurementScale(things);
 

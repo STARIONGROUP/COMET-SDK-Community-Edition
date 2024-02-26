@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValueSetExtensions.cs" company="RHEA System S.A.">
+// <copyright file="ParameterValueSetBaseExtensions.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
@@ -26,20 +26,20 @@ namespace CDP4Common.Extensions
 {
     using System.Collections.Generic;
 
-    using CDP4Common.EngineeringModelData;
+    using CDP4Common.DTO;
     using CDP4Common.Types;
 
     /// <summary>
-    /// Extension calss for the <see cref="IValueSet" /> interface
+    /// Extension class for the <see cref="ParameterValueSetBase" /> class
     /// </summary>
-    public static class ValueSetExtensions
+    public static class ParameterValueSetBaseExtensions
     {
         /// <summary>
-        /// Queries all <see cref="ValueArray{T}"/> of an <see cref="IValueSet"/>, with the respecting name of the <see cref="ValueArray{T}" /> kind
+        /// Queries all <see cref="ValueArray{T}"/> of an <see cref="ParameterValueSetBase"/>, with the respecting name of the <see cref="ValueArray{T}" /> kind
         /// </summary>
-        /// <param name="valueSet">The <see cref="IValueSet"/> used to retrieve all <see cref="ValueArray{T}"/></param>
+        /// <param name="valueSet">The <see cref="ParameterValueSetBase"/> used to retrieve all <see cref="ValueArray{T}"/></param>
         /// <returns>A <see cref="IEnumerable{T}"/> of combinaison of <see cref="ValueArray{T}"/> and the <see cref="ValueArray{T}"/> kind</returns>
-        public static IEnumerable<(ValueArray<string> valueArray, string valueArrayKind)> QueryAllValueArrays(this IValueSet valueSet)
+        public static IEnumerable<(ValueArray<string> valueArray, string valueArrayKind)> QueryAllValueArrays(this ParameterValueSetBase valueSet)
         {
             yield return (valueSet.Formula, "Formula");
             yield return (valueSet.Manual, "Manual");
