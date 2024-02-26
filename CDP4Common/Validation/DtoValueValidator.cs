@@ -242,7 +242,7 @@ namespace CDP4Common.Validation
                 throw new ArgumentNullException(nameof(measurementScale), "The provided MeasurementScale cannot be null");
             }
 
-            return value.ValidateNumeric(measurementScale, out cleanedValue, provider);
+            return value.ValidateNumeric(measurementScale.NumberSet, out cleanedValue, provider);
         }
 
         /// <summary>

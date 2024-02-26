@@ -53,7 +53,7 @@ namespace CDP4Common.Validation
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Valid <see cref="Boolean"/> values
+        /// Valid <see cref="bool" /> values
         /// </summary>
         public static readonly string[] ValidBoolean = { "-", "true", "false", "True", "False", "1", "0" };
 
@@ -325,14 +325,14 @@ namespace CDP4Common.Validation
                             Logger.Debug("Numeric-{0} {1} validated", numberSetKind, intValue);
                             cleanedValue = intValue.ToString();
                             return ValidationResult.ValidResult();
-                        case double doubleValue when doubleValue % 1 == 0 && doubleValue >=0:
+                        case double doubleValue when doubleValue % 1 == 0 && doubleValue >= 0:
                             Logger.Debug("Numeric-{0} {1} validated", numberSetKind, doubleValue);
                             cleanedValue = doubleValue.ToString(CultureInfo.InvariantCulture);
                             return ValidationResult.ValidResult();
                     }
 
-                    if (!string.IsNullOrEmpty(castedString) 
-                        && int.TryParse(castedString, NumberStyles.Integer, null, out var intResult) 
+                    if (!string.IsNullOrEmpty(castedString)
+                        && int.TryParse(castedString, NumberStyles.Integer, null, out var intResult)
                         && intResult >= 0)
                     {
                         Logger.Debug("Numeric-{0} {1} validated", numberSetKind, castedString);
@@ -342,7 +342,7 @@ namespace CDP4Common.Validation
 
                     cleanedValue = null;
 
-                    return new ValidationResult()
+                    return new ValidationResult
                     {
                         Message = $"The provided {value} is not a member of the NATURAL NUMBER SET",
                         ResultKind = ValidationResultKind.Invalid
@@ -369,7 +369,7 @@ namespace CDP4Common.Validation
 
                     cleanedValue = null;
 
-                    return new ValidationResult()
+                    return new ValidationResult
                     {
                         Message = $"The provided {value} is not a member of the INTEGER NUMBER SET",
                         ResultKind = ValidationResultKind.Invalid
@@ -378,7 +378,7 @@ namespace CDP4Common.Validation
                     Logger.Warn("RATIONAL NUMBER SET currently not validated and always returns ValidationResultKind.Valid");
                     cleanedValue = value.ToString();
 
-                    return new ValidationResult()
+                    return new ValidationResult
                     {
                         ResultKind = ValidationResultKind.Valid,
                         Message = "RATIONAL NUMBER SET are not validated"
@@ -405,7 +405,7 @@ namespace CDP4Common.Validation
 
                     cleanedValue = null;
 
-                    return new ValidationResult()
+                    return new ValidationResult
                     {
                         Message = $"The provided {value} is not a member of the INTEGER NUMBER SET",
                         ResultKind = ValidationResultKind.Invalid
