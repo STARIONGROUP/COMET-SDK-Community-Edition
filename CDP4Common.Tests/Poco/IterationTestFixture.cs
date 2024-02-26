@@ -51,24 +51,27 @@ namespace CDP4Common.Tests.Poco
         private DomainOfExpertise domainOfExpertise;
         private SiteDirectory siteDirectory;
 
+        private Uri uri;
+        private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache;
+
         [SetUp]
         public void SetUp()
         {
-            var uri = new Uri("http://www.rheagroup.com");
-            var cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
-            var person = new Person(Guid.NewGuid(), cache, uri);
+            this.uri = new Uri("http://www.rheagroup.com");
+            this.cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
+            var person = new Person(Guid.NewGuid(), this.cache, this.uri);
 
-            var referenceDataLibrary = new ModelReferenceDataLibrary(Guid.NewGuid(), cache, uri)
+            var referenceDataLibrary = new ModelReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "ARDL"
             };
 
-            var participant = new Participant(Guid.NewGuid(), cache, uri)
+            var participant = new Participant(Guid.NewGuid(), this.cache, this.uri)
             {
                 Person = person
             };
 
-            var engineeringSetup = new EngineeringModelSetup(Guid.NewGuid(), cache, uri)
+            var engineeringSetup = new EngineeringModelSetup(Guid.NewGuid(), this.cache, this.uri)
             {
                 RequiredRdl =
                 {
@@ -77,89 +80,89 @@ namespace CDP4Common.Tests.Poco
                 Participant = { participant }
             };
 
-            this.iteration = new Iteration(Guid.NewGuid(), cache, uri)
+            this.iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri)
             {
-                Container = new EngineeringModel(Guid.NewGuid(), cache, uri)
+                Container = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri)
                 {
-                    EngineeringModelSetup = new EngineeringModelSetup(Guid.NewGuid(), cache, uri)
+                    EngineeringModelSetup = new EngineeringModelSetup(Guid.NewGuid(), this.cache, this.uri)
                     {
                         RequiredRdl =
                         {
-                            new ModelReferenceDataLibrary(Guid.NewGuid(), cache, uri)
+                            new ModelReferenceDataLibrary(Guid.NewGuid(), this.cache, this.uri)
                             {
                                 FileType =
                                 {
-                                    new FileType(Guid.NewGuid(), cache, uri) { Extension = "tar" },
-                                    new FileType(Guid.NewGuid(), cache, uri) { Extension = "gz" },
-                                    new FileType(Guid.NewGuid(), cache, uri) { Extension = "zip" }
+                                    new FileType(Guid.NewGuid(), this.cache, this.uri) { Extension = "tar" },
+                                    new FileType(Guid.NewGuid(), this.cache, this.uri) { Extension = "gz" },
+                                    new FileType(Guid.NewGuid(), this.cache, this.uri) { Extension = "zip" }
                                 }
                             }
                         },
                         Participant = { participant }
                     }
                 },
-                IterationSetup = new IterationSetup(Guid.NewGuid(), cache, uri)
+                IterationSetup = new IterationSetup(Guid.NewGuid(), this.cache, this.uri)
                 {
                     Container = engineeringSetup
                 },
                 DomainFileStore =
                 {
-                    new DomainFileStore(Guid.NewGuid(), cache, uri) { Owner = this.domainOfExpertise }
+                    new DomainFileStore(Guid.NewGuid(), this.cache, this.uri) { Owner = this.domainOfExpertise }
                 }
             };
 
-            this.domainOfExpertise = new DomainOfExpertise(Guid.NewGuid(), cache, uri)
+            this.domainOfExpertise = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "SYS",
                 Name = "System"
             };
 
-            this.currentDomainOfExpertise = new DomainOfExpertise(Guid.NewGuid(), cache, uri)
+            this.currentDomainOfExpertise = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "AOCS",
                 Name = "Attitude and orbit control system"
             };
 
-            this.siteDirectory = new SiteDirectory(Guid.NewGuid(), cache, uri);
+            this.siteDirectory = new SiteDirectory(Guid.NewGuid(), this.cache, this.uri);
             this.siteDirectory.Person.Add(person);
             this.siteDirectory.Domain.Add(this.domainOfExpertise);
             this.siteDirectory.Domain.Add(this.currentDomainOfExpertise);
 
-            var optionA = new Option(Guid.NewGuid(), cache, uri)
+            var optionA = new Option(Guid.NewGuid(), this.cache, this.uri)
             {
                 ShortName = "OPT_A",
                 Name = "Option A"
             };
 
-            var elementDefinition1 = new ElementDefinition(Guid.NewGuid(), cache, uri)
+            var elementDefinition1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
                 ShortName = "Sat",
                 Name = "Satellite"
             };
 
-            var elementDefinition2 = new ElementDefinition(Guid.NewGuid(), cache, uri)
+            var elementDefinition2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
                 ShortName = "Bat",
                 Name = "Battery"
             };
 
-            var elementDefinition3 = new ElementDefinition(Guid.NewGuid(), cache, uri)
+            var elementDefinition3 = new ElementDefinition(Guid.NewGuid(), cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
                 ShortName = "solar_panel",
                 Name = "Solar Panel"
             };
 
-            var elementUsage1 = new ElementUsage(Guid.NewGuid(), cache, uri)
+            var elementUsage1 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri)
             {
                 ElementDefinition = elementDefinition2,
                 ShortName = "bat_a",
                 Name = "battery a"
             };
 
-            var elementUsage2 = new ElementUsage(Guid.NewGuid(), cache, uri)
+            var elementUsage2 = new ElementUsage(Guid.NewGuid(), this.cache, this.uri)
             {
                 ElementDefinition = elementDefinition2,
                 ShortName = "bat_b",
@@ -178,13 +181,13 @@ namespace CDP4Common.Tests.Poco
                 Name = "volume"
             };
 
-            var parameter = new Parameter(Guid.NewGuid(), cache, uri)
+            var parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
                 ParameterType = simpleQuantityKind
             };
 
-            var parameter2 = new Parameter(Guid.NewGuid(), cache, uri)
+            var parameter2 = new Parameter(Guid.NewGuid(), this.cache, this.uri)
             {
                 Owner = this.domainOfExpertise,
                 ParameterType = simpleQuantityKind2
@@ -298,6 +301,78 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
+        public void Verify_that_when_nested_parameters_are_generated_an_list_is_always_returned()
+        {
+            var nestedParameters = this.iteration.QueryNestedParameters(this.iteration.Option[0]);
+
+            var filterenParameters = nestedParameters
+                .Where(x => x.AssociatedParameter is ParameterOrOverrideBase)
+                .ToList();
+            
+            this.iteration.Element.Clear();
+            this.iteration.TopElement = null;
+
+            nestedParameters = this.iteration.QueryNestedParameters(this.iteration.Option[0]);
+
+            filterenParameters = nestedParameters
+                .Where(x => x.AssociatedParameter is ParameterOrOverrideBase)
+                .ToList();
+
+            Assert.That(filterenParameters, Is.Not.Null);
+            Assert.That(filterenParameters, Is.Empty);
+
+            var elementDefinition1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Owner = this.domainOfExpertise,
+                ShortName = "Sat",
+                Name = "Satellite"
+            };
+
+            this.iteration.Element.Add(elementDefinition1);
+            this.iteration.TopElement = elementDefinition1;
+
+            nestedParameters = this.iteration.QueryNestedParameters(this.iteration.Option[0]).ToList();
+
+            filterenParameters = nestedParameters
+                .Where(x => x.AssociatedParameter is ParameterOrOverrideBase)
+                .ToList();
+
+            Assert.That(filterenParameters, Is.Not.Null);
+            Assert.That(filterenParameters, Is.Empty);
+
+            var simpleQuantityKind = new SimpleQuantityKind(Guid.NewGuid(), null, null)
+            {
+                ShortName = "m",
+                Name = "mass"
+            };
+
+            var parameter = new Parameter(Guid.NewGuid(), this.cache, this.uri)
+            {
+                Owner = this.domainOfExpertise,
+                ParameterType = simpleQuantityKind
+            };
+
+            var parameterValueset1 = new ParameterValueSet
+            {
+                ActualOption = this.iteration.Option[0],
+                Iid = Guid.NewGuid()
+            };
+
+            parameter.ValueSet.Add(parameterValueset1);
+
+            elementDefinition1.Parameter.Add(parameter);
+
+            nestedParameters = this.iteration.QueryNestedParameters(this.iteration.Option[0]).ToList();
+
+            filterenParameters = nestedParameters
+                .Where(x => x.AssociatedParameter is ParameterOrOverrideBase)
+                .ToList();
+
+            Assert.That(filterenParameters, Is.Not.Null);
+            Assert.That(filterenParameters, Is.Not.Empty);
+        }
+
+        [Test]
         public void VerifyGetParameterSubscriptionsByElement()
         {
             var subscriptions = this.iteration.TopElement.QueryOwnedParameterSubscriptions(this.currentDomainOfExpertise).ToList();
@@ -392,10 +467,10 @@ namespace CDP4Common.Tests.Poco
             iteration.IterationSetup = iterationSetup;
 
             var requiredRdls = iteration.RequiredRdls;
-
-            CollectionAssert.Contains(requiredRdls, genericRdl);
-            CollectionAssert.Contains(requiredRdls, familyofRdl);
-            CollectionAssert.Contains(requiredRdls, modelrdl);
+            
+            Assert.That(requiredRdls, Does.Contain(genericRdl));
+            Assert.That(requiredRdls, Does.Contain(familyofRdl));
+            Assert.That(requiredRdls, Does.Contain(modelrdl));
 
             Assert.That(requiredRdls.Count(), Is.EqualTo(3));
         }
