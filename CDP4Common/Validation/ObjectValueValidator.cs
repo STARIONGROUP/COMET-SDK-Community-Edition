@@ -102,25 +102,25 @@ namespace CDP4Common.Validation
             switch (value)
             {
                 case bool boolValue:
-                    cleanedValue = boolValue.ToString();
+                    cleanedValue = boolValue.ToString().ToLower();
                     Logger.Debug("Boolean {0} validated", boolValue);
                     return ValidationResult.ValidResult();
                 case int intValue when intValue == 0 || intValue == 1:
                     Logger.Debug("Boolean {0} validated", intValue);
-                    cleanedValue = intValue == 0 ? false.ToString() : true.ToString();
+                    cleanedValue = (intValue == 0 ? false.ToString() : true.ToString()).ToLower();
                     return ValidationResult.ValidResult();
                 case string valueString:
                 {
                     if (bool.TryParse(valueString, out var boolResult))
                     {
-                        cleanedValue = boolResult.ToString();
+                        cleanedValue = boolResult.ToString().ToLower();
                         Logger.Debug("Boolean {0} validated", valueString);
                         return ValidationResult.ValidResult();
                     }
 
                     if (ValidBoolean.Contains(valueString))
                     {
-                        cleanedValue = valueString == "0" ? false.ToString() : true.ToString();
+                        cleanedValue = (valueString == "0" ? false.ToString() : true.ToString()).ToLower();
                         Logger.Debug("Boolean {0} validated", valueString);
                         return ValidationResult.ValidResult();
                     }

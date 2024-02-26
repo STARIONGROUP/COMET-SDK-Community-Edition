@@ -24,11 +24,12 @@
 
 namespace CDP4Common.Extensions
 {
-    using CDP4Common.DTO;
+    using System;
     using System.Collections.Generic;
     using System.IO;
-    using System;
     using System.Linq;
+
+    using CDP4Common.DTO;
 
     /// <summary>
     /// Extension class for <see cref="ParameterType" />
@@ -67,7 +68,7 @@ namespace CDP4Common.Extensions
 
             return (parameterType, scale);
         }
-        
+
         /// <summary>
         /// Retrieves inside a collection of <see cref="Thing" /> the association of a <see cref="ParameterType" />
         /// and <see cref="MeasurementScale" /> for a given <see cref="IParameterTypeAssignment" />
