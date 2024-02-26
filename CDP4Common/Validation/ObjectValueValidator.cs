@@ -30,10 +30,9 @@ namespace CDP4Common.Validation
     using System.Linq;
 
     using CDP4Common.Helpers;
+    using CDP4Common.SiteDirectoryData;
 
     using NLog;
-
-    using MeasurementScale = CDP4Common.DTO.MeasurementScale;
 
     /// <summary>
     /// The purpose of the <see cref="ObjectValueValidator" /> is to validate value based on its representation. The default value is a hyphen "-"
@@ -299,19 +298,121 @@ namespace CDP4Common.Validation
 
         /// <summary>
         /// Validate the <paramref name="value" /> object for an expected numeric value that should be inline with the provided
-        /// <see cref="MeasurementScale" />
+        /// <see cref="NumberSetKind" />
         /// </summary>
         /// <param name="value">The value that is to be validated for a numeric.</param>
-        /// <param name="measurementScale">The <see cref="MeasurementScale" /> that defines rules for the numeric value</param>
+        /// <param name="numberSetKind">The <see cref="NumberSetKind" /> that defines validation rules</param>
         /// <param name="cleanedValue">The cleaned value (-/numeric)</param>
         /// <param name="provider">
         /// The <see cref="IFormatProvider" /> used to validate, if set to null <see cref="CultureInfo.CurrentCulture" /> will be used.
         /// </param>
         /// <returns>The <see cref="ValidationResult" /> that carries the <see cref="ValidationResultKind" /> and an optional message.</returns>
-        public static ValidationResult ValidateNumeric(this object value, MeasurementScale measurementScale, out string cleanedValue, IFormatProvider provider = null)
+        /// <remarks>The Validation rule DO NOT validate Minimal and Maximal permissible values</remarks>
+        public static ValidationResult ValidateNumeric(this object value, NumberSetKind numberSetKind, out string cleanedValue, IFormatProvider provider = null)
         {
-            cleanedValue = null;
-            return ValidationResult.ValidResult();
+            if (value.IsDefaultString(out var castedString))
+            {
+                cleanedValue = castedString;
+                return ValidationResult.ValidResult();
+            }
+
+            switch (numberSetKind)
+            {
+                case NumberSetKind.NATURAL_NUMBER_SET:
+                    switch (value)
+                    {
+                        case int intValue when intValue >= 0:
+                            Logger.Debug("Numeric-{0} {1} validated", numberSetKind, intValue);
+                            cleanedValue = intValue.ToString();
+                            return ValidationResult.ValidResult();
+                        case double doubleValue when doubleValue % 1 == 0 && doubleValue >=0:
+                            Logger.Debug("Numeric-{0} {1} validated", numberSetKind, doubleValue);
+                            cleanedValue = doubleValue.ToString(CultureInfo.InvariantCulture);
+                            return ValidationResult.ValidResult();
+                    }
+
+                    if (!string.IsNullOrEmpty(castedString) 
+                        && int.TryParse(castedString, NumberStyles.Integer, null, out var intResult) 
+                        && intResult >= 0)
+                    {
+                        Logger.Debug("Numeric-{0} {1} validated", numberSetKind, castedString);
+                        cleanedValue = castedString;
+                        return ValidationResult.ValidResult();
+                    }
+
+                    cleanedValue = null;
+
+                    return new ValidationResult()
+                    {
+                        Message = $"The provided {value} is not a member of the NATURAL NUMBER SET",
+                        ResultKind = ValidationResultKind.Invalid
+                    };
+                case NumberSetKind.INTEGER_NUMBER_SET:
+                    switch (value)
+                    {
+                        case int intValue:
+                            Logger.Debug("Numeric-{0} {1} validated", numberSetKind, intValue);
+                            cleanedValue = intValue.ToString();
+                            return ValidationResult.ValidResult();
+                        case double doubleValue when doubleValue % 1 == 0:
+                            Logger.Debug("Numeric-{0} {1} validated", numberSetKind, doubleValue);
+                            cleanedValue = doubleValue.ToString(CultureInfo.InvariantCulture);
+                            return ValidationResult.ValidResult();
+                    }
+
+                    if (!string.IsNullOrEmpty(castedString) && int.TryParse(castedString, NumberStyles.Integer, null, out _))
+                    {
+                        Logger.Debug("Numeric-{0} {1} validated", numberSetKind, castedString);
+                        cleanedValue = castedString;
+                        return ValidationResult.ValidResult();
+                    }
+
+                    cleanedValue = null;
+
+                    return new ValidationResult()
+                    {
+                        Message = $"The provided {value} is not a member of the INTEGER NUMBER SET",
+                        ResultKind = ValidationResultKind.Invalid
+                    };
+                case NumberSetKind.RATIONAL_NUMBER_SET:
+                    Logger.Warn("RATIONAL NUMBER SET currently not validated and always returns ValidationResultKind.Valid");
+                    cleanedValue = value.ToString();
+
+                    return new ValidationResult()
+                    {
+                        ResultKind = ValidationResultKind.Valid,
+                        Message = "RATIONAL NUMBER SET are not validated"
+                    };
+                case NumberSetKind.REAL_NUMBER_SET:
+                    switch (value)
+                    {
+                        case int intValue:
+                            Logger.Debug("Numeric-{0} {1} validated", numberSetKind, intValue);
+                            cleanedValue = intValue.ToString();
+                            return ValidationResult.ValidResult();
+                        case double doubleValue:
+                            Logger.Debug("Numeric-{0} {1} validated", numberSetKind, doubleValue);
+                            cleanedValue = doubleValue.ToString(CultureInfo.InvariantCulture);
+                            return ValidationResult.ValidResult();
+                    }
+
+                    if (!string.IsNullOrEmpty(castedString) && double.TryParse(castedString, NumberStyles.Float, provider, out var realResult))
+                    {
+                        Logger.Debug("Numeric-{0} {1} validated", numberSetKind, castedString);
+                        cleanedValue = realResult.ToString(CultureInfo.InvariantCulture);
+                        return ValidationResult.ValidResult();
+                    }
+
+                    cleanedValue = null;
+
+                    return new ValidationResult()
+                    {
+                        Message = $"The provided {value} is not a member of the INTEGER NUMBER SET",
+                        ResultKind = ValidationResultKind.Invalid
+                    };
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(numberSetKind), numberSetKind, "Invalid NumberSetKind");
+            }
         }
 
         /// <summary>
