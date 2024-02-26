@@ -26,8 +26,10 @@ namespace CDP4Common.Extensions
 {
     using System.Collections.Generic;
 
-    using CDP4Common.DTO;
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.Types;
+
+    using ParameterValueSetBase = CDP4Common.DTO.ParameterValueSetBase;
 
     /// <summary>
     /// Extension class for the <see cref="ParameterValueSetBase" /> class
@@ -35,16 +37,21 @@ namespace CDP4Common.Extensions
     public static class ParameterValueSetBaseExtensions
     {
         /// <summary>
-        /// Queries all <see cref="ValueArray{T}"/> of an <see cref="ParameterValueSetBase"/>, with the respecting name of the <see cref="ValueArray{T}" /> kind
+        /// Queries all <see cref="ValueArray{T}" /> of an <see cref="ParameterValueSetBase" />, with the respecting name of the
+        /// <see cref="ValueArray{T}" /> kind
         /// </summary>
-        /// <param name="valueSet">The <see cref="ParameterValueSetBase"/> used to retrieve all <see cref="ValueArray{T}"/></param>
-        /// <returns>A <see cref="IEnumerable{T}"/> of combinaison of <see cref="ValueArray{T}"/> and the <see cref="ValueArray{T}"/> kind</returns>
-        public static IEnumerable<(ValueArray<string> valueArray, string valueArrayKind)> QueryAllValueArrays(this ParameterValueSetBase valueSet)
+        /// <param name="valueSet">
+        /// The <see cref="ParameterValueSetBase" /> used to retrieve all <see cref="ValueArray{T}" />
+        /// </param>
+        /// <returns>
+        /// A <see cref="IEnumerable{T}" /> of combinaison of <see cref="ValueArray{T}" /> and the
+        /// <see cref="ValueArray{T}" /> kind
+        /// </returns>
+        public static IEnumerable<(ValueArray<string> valueArray, ParameterSwitchKind switchKind)> QueryAllValueArrays(this ParameterValueSetBase valueSet)
         {
-            yield return (valueSet.Formula, "Formula");
-            yield return (valueSet.Manual, "Manual");
-            yield return (valueSet.Reference, "Reference");
-            yield return (valueSet.Computed, "Computed");
+            yield return (valueSet.Manual, ParameterSwitchKind.MANUAL);
+            yield return (valueSet.Reference, ParameterSwitchKind.REFERENCE);
+            yield return (valueSet.Computed, ParameterSwitchKind.COMPUTED);
         }
     }
 }
