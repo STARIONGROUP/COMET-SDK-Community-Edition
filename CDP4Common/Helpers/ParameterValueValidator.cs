@@ -27,6 +27,7 @@ namespace CDP4Common.Helpers
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Validation;
+
     using NLog;
 
     /// <summary>

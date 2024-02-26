@@ -42,5 +42,18 @@ namespace CDP4Common.Validation
         /// <see cref="ResultKind"/> is Valid the message is empty
         /// </summary>
         public string Message;
+
+        /// <summary>
+        /// Gets a <see cref="ValidationResult"/> with an empty <see cref="Message"/> and a <see cref="ValidationResultKind.Valid"/> resultKind
+        /// </summary>
+        /// <returns>The <see cref="ValidationResult"/></returns>
+        public static ValidationResult ValidResult()
+        {
+            return new ValidationResult()
+            {
+                Message = string.Empty,
+                ResultKind = ValidationResultKind.Valid
+            };
+        }
     }
 }

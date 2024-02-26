@@ -31,7 +31,6 @@ namespace CDP4Common.Validation
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
-
     using NLog;
 
     /// <summary>
@@ -47,16 +46,6 @@ namespace CDP4Common.Validation
         /// The NLog logger
         /// </summary>
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// The default value that is valid for all <see cref="ParameterType"/>s
-        /// </summary>
-        public const string DefaultValue = "-";
-
-        /// <summary>
-        /// Valid <see cref="Boolean"/> values
-        /// </summary>
-        public static readonly string[] ValidBoolan = { "-", "true", "false", "True", "False", "1", "0" };
 
         /// <summary>
         /// Validates the  to check whether the <paramref name="value"/> is valid with respect to the <paramref name="parameterType"/>
@@ -81,7 +70,7 @@ namespace CDP4Common.Validation
             ValidationResult result;
 
             var stringValue = value as string;
-            if (stringValue != null && stringValue == DefaultValue)
+            if (stringValue != null && stringValue == ObjectValueValidator.DefaultValue)
             {
                 result.ResultKind = ValidationResultKind.Valid;
                 result.Message = string.Empty;
@@ -172,7 +161,7 @@ namespace CDP4Common.Validation
             {
                 var lowerCaseValue = valueString.ToLower();
 
-                if (ValidBoolan.Contains(lowerCaseValue))
+                if (ObjectValueValidator.ValidBoolean.Contains(lowerCaseValue))
                 {
                     result.ResultKind = ValidationResultKind.Valid;
                     result.Message = string.Empty;
@@ -191,7 +180,7 @@ namespace CDP4Common.Validation
             }
 
             result.ResultKind = ValidationResultKind.Invalid;
-            result.Message = $"{value} is not a valid boolean, valid values are: {string.Join(",", ValidBoolan)}";
+            result.Message = $"{value} is not a valid boolean, valid values are: {string.Join(",",ObjectValueValidator.ValidBoolean)}";
             return result;
         }
 
@@ -214,7 +203,7 @@ namespace CDP4Common.Validation
             var stringValue = value as string;
             if (stringValue != null)
             {
-                if (stringValue == DefaultValue)
+                if (stringValue == ObjectValueValidator.DefaultValue)
                 {
                     result.ResultKind = ValidationResultKind.Valid;
                     result.Message = string.Empty;
@@ -271,7 +260,7 @@ namespace CDP4Common.Validation
             var stringValue = value as string;
             if (stringValue != null)
             {
-                if (stringValue == DefaultValue)
+                if (stringValue == ObjectValueValidator.DefaultValue)
                 {
                     result.ResultKind = ValidationResultKind.Valid;
                     result.Message = string.Empty;
@@ -335,7 +324,7 @@ namespace CDP4Common.Validation
             var stringValue = value as string;
             if (stringValue != null)
             {
-                if (stringValue == DefaultValue)
+                if (stringValue == ObjectValueValidator.DefaultValue)
                 {
                     result.ResultKind = ValidationResultKind.Valid;
                     result.Message = string.Empty;
@@ -417,7 +406,7 @@ namespace CDP4Common.Validation
             }
 
             var stringValue = value as string;
-            if (stringValue != null && stringValue == DefaultValue)
+            if (stringValue != null && stringValue == ObjectValueValidator.DefaultValue)
             {
                 result.ResultKind = ValidationResultKind.Valid;
                 result.Message = string.Empty;
@@ -477,7 +466,7 @@ namespace CDP4Common.Validation
             var stringValue = value as string;
             if (stringValue != null)
             {
-                if (stringValue == DefaultValue)
+                if (stringValue == ObjectValueValidator.DefaultValue)
                 {
                     result.ResultKind = ValidationResultKind.Valid;
                     result.Message = string.Empty;
