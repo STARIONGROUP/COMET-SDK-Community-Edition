@@ -133,7 +133,7 @@ namespace CDP4Common.Validation
 
             return new ValidationResult
             {
-                Message = $"{value} is not a valid boolean, valid values are: {string.Join(",", ValidBoolean)} or any representation of a boolean (true/false)",
+                Message = $"'{value}' is not a valid boolean, valid values are: {string.Join(",", ValidBoolean)} or any representation of a boolean (true/false)",
                 ResultKind = ValidationResultKind.Invalid
             };
         }
@@ -180,7 +180,7 @@ namespace CDP4Common.Validation
             return new ValidationResult
             {
                 ResultKind = ValidationResultKind.Invalid,
-                Message = $"{value} is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD"
+                Message = $"'{value}' is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD"
             };
         }
 
@@ -200,7 +200,7 @@ namespace CDP4Common.Validation
 
             if (value is string stringValue && DateTime.TryParse(stringValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTime))
             {
-                cleanedValue = dateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+                cleanedValue = dateTime.ToString("o", CultureInfo.InvariantCulture);
                 Logger.Debug("DateTime {0} validated", dateTime);
                 return ValidationResult.ValidResult();
             }
@@ -208,7 +208,7 @@ namespace CDP4Common.Validation
             try
             {
                 var dateTimeValue = Convert.ToDateTime(value);
-                cleanedValue = dateTimeValue.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+                cleanedValue = dateTimeValue.ToString("o", CultureInfo.InvariantCulture);
                 Logger.Debug("DateTime {0} validated", dateTimeValue);
                 return ValidationResult.ValidResult();
             }
@@ -222,7 +222,7 @@ namespace CDP4Common.Validation
             return new ValidationResult
             {
                 ResultKind = ValidationResultKind.Invalid,
-                Message = $"{value} is not a valid DateTime, valid date-times are specified in ISO 8601, see http://www.w3.org/TR/xmlschema-2/#dateTime."
+                Message = $"'{value}' is not a valid DateTime, valid date-times are specified in ISO 8601, see http://www.w3.org/TR/xmlschema-2/#dateTime."
             };
         }
 
@@ -249,12 +249,12 @@ namespace CDP4Common.Validation
                 return new ValidationResult
                 {
                     ResultKind = ValidationResultKind.Invalid,
-                    Message = $"The provided {value} is invalid for Enumeration value"
+                    Message = $"The provided '{value}' is invalid for Enumeration value"
                 };
             }
 
             var values = castedString.Split(Constants.MultiValueEnumSeparator);
-
+            
             if (!isMultiSelectAllowed && values.Length > 1)
             {
                 cleanedValue = null;
@@ -262,7 +262,7 @@ namespace CDP4Common.Validation
                 return new ValidationResult
                 {
                     ResultKind = ValidationResultKind.Invalid,
-                    Message = $"The provided {castedString} contains multiple values, which is not allowed for a single selection"
+                    Message = $"The provided '{castedString}' contains multiple values, which is not allowed for a single selection"
                 };
             }
 
@@ -275,11 +275,11 @@ namespace CDP4Common.Validation
                 return new ValidationResult
                 {
                     ResultKind = ValidationResultKind.Invalid,
-                    Message = $"The provided {castedString} contains duplicate"
+                    Message = $"The provided '{castedString}' contains duplicate"
                 };
             }
 
-            if (Array.Exists(values, enumerationValue => allowedValues.Any(x => x == enumerationValue)))
+            if (Array.Exists(values, enumerationValue => allowedValues.Any(x => x.Trim() == enumerationValue)))
             {
                 cleanedValue = castedString;
                 Logger.Debug("Enumeration {0} validated", castedString);
@@ -292,7 +292,7 @@ namespace CDP4Common.Validation
             return new ValidationResult
             {
                 ResultKind = ValidationResultKind.Invalid,
-                Message = $"The provided {castedString} does not contain the following defined values {joinedValues}"
+                Message = $"The provided '{castedString}' does not contain the following defined values {joinedValues}"
             };
         }
 
@@ -327,7 +327,7 @@ namespace CDP4Common.Validation
                             return ValidationResult.ValidResult();
                         case double doubleValue when doubleValue % 1 == 0 && doubleValue >= 0:
                             Logger.Debug("Numeric-{0} {1} validated", numberSetKind, doubleValue);
-                            cleanedValue = doubleValue.ToString(CultureInfo.InvariantCulture);
+                            cleanedValue = ((int)doubleValue).ToString(CultureInfo.InvariantCulture);
                             return ValidationResult.ValidResult();
                     }
 
@@ -344,7 +344,7 @@ namespace CDP4Common.Validation
 
                     return new ValidationResult
                     {
-                        Message = $"The provided {value} is not a member of the NATURAL NUMBER SET",
+                        Message = $"The provided '{value}' is not a member of the NATURAL NUMBER SET",
                         ResultKind = ValidationResultKind.Invalid
                     };
                 case NumberSetKind.INTEGER_NUMBER_SET:
@@ -356,7 +356,7 @@ namespace CDP4Common.Validation
                             return ValidationResult.ValidResult();
                         case double doubleValue when doubleValue % 1 == 0:
                             Logger.Debug("Numeric-{0} {1} validated", numberSetKind, doubleValue);
-                            cleanedValue = doubleValue.ToString(CultureInfo.InvariantCulture);
+                            cleanedValue = ((int)doubleValue).ToString(CultureInfo.InvariantCulture);
                             return ValidationResult.ValidResult();
                     }
 
@@ -371,7 +371,7 @@ namespace CDP4Common.Validation
 
                     return new ValidationResult
                     {
-                        Message = $"The provided {value} is not a member of the INTEGER NUMBER SET",
+                        Message = $"The provided '{value}' is not a member of the INTEGER NUMBER SET",
                         ResultKind = ValidationResultKind.Invalid
                     };
                 case NumberSetKind.RATIONAL_NUMBER_SET:
@@ -407,7 +407,7 @@ namespace CDP4Common.Validation
 
                     return new ValidationResult
                     {
-                        Message = $"The provided {value} is not a member of the INTEGER NUMBER SET",
+                        Message = $"The provided '{value}' is not a member of the REAL NUMBER SET",
                         ResultKind = ValidationResultKind.Invalid
                     };
                 default:
@@ -430,7 +430,7 @@ namespace CDP4Common.Validation
                 return new ValidationResult
                 {
                     ResultKind = ValidationResultKind.Invalid,
-                    Message = $"The provided {value} is not a valid value for a Text"
+                    Message = $"The provided '{value}' is not a valid value for a Text"
                 };
             }
 
@@ -474,7 +474,7 @@ namespace CDP4Common.Validation
 
                 if (isDateTime && dateTime.IsDefaultDateTime())
                 {
-                    cleanedValue = dateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+                    cleanedValue = dateTime.ToString("o", CultureInfo.InvariantCulture);
                     Logger.Debug("TimeOfDay {0} validated", parsedString);
                     return ValidationResult.ValidResult();
                 }
@@ -486,7 +486,7 @@ namespace CDP4Common.Validation
 
                 if (timeOfDayValue.IsDefaultDateTime())
                 {
-                    cleanedValue = timeOfDayValue.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+                    cleanedValue = timeOfDayValue.ToString("o", CultureInfo.InvariantCulture);
                     Logger.Debug("TimeOfDay {0} validated", value);
                     return ValidationResult.ValidResult();
                 }
@@ -501,7 +501,7 @@ namespace CDP4Common.Validation
             return new ValidationResult
             {
                 ResultKind = ValidationResultKind.Invalid,
-                Message = $"{value} is not a valid Time of Day, for valid Time Of Day formats see http://www.w3.org/TR/xmlschema-2/#time."
+                Message = $"'{value}' is not a valid Time of Day, for valid Time Of Day formats see http://www.w3.org/TR/xmlschema-2/#time."
             };
         }
     }

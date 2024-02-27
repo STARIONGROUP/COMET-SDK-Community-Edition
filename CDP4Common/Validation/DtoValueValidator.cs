@@ -264,7 +264,7 @@ namespace CDP4Common.Validation
         /// If one of the <see cref="ValueArray{T}" /> of the <paramref name="valueSet" />
         /// do not have the correct number of values
         /// </exception>
-        public static ValidationResult ValidateAndCleanup(this ParameterType parameterType, ParameterValueSetBase valueSet, IReadOnlyCollection<Thing> things, MeasurementScale measurementScale = null, IFormatProvider provider = null)
+        public static ValidationResult ValidateAndCleanup(this ParameterType parameterType, ParameterValueSetBase valueSet, IReadOnlyCollection<Thing> things = null, MeasurementScale measurementScale = null, IFormatProvider provider = null)
         {
             switch (parameterType)
             {

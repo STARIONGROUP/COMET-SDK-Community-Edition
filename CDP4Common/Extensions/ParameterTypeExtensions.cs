@@ -120,6 +120,11 @@ namespace CDP4Common.Extensions
         /// </exception>
         public static IReadOnlyList<(ParameterType parameterType, MeasurementScale scale)> QueryParameterTypesAndMeasurementScale(this CompoundParameterType compoundParameterType, IReadOnlyCollection<Thing> things)
         {
+            if (things == null)
+            {
+                throw new ArgumentNullException(nameof(things), "The provided collection of referenced Thing cannot be null");
+            }
+
             var parameterTypesAndScale = new List<(ParameterType parameterType, MeasurementScale scale)>();
 
             foreach (var componentId in compoundParameterType.Component.Select(x => x.V).OfType<Guid>())
@@ -158,6 +163,11 @@ namespace CDP4Common.Extensions
         /// </exception>
         public static IReadOnlyList<(ParameterType parameterType, MeasurementScale scale)> QueryParameterTypesAndMeasurementScale(this SampledFunctionParameterType sampledFunctionParameterType, IReadOnlyCollection<Thing> things)
         {
+            if (things == null)
+            {
+                throw new ArgumentNullException(nameof(things), "The provided collection of referenced Thing cannot be null");
+            }
+
             var parameterTypesAndScale = new List<(ParameterType parameterType, MeasurementScale scale)>();
 
             foreach (var independentId in sampledFunctionParameterType.IndependentParameterType.Select(x => x.V).OfType<Guid>())
