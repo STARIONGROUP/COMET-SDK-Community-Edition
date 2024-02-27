@@ -251,7 +251,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual[0], Is.EqualTo("2024-02-26T00:00:00.0000000"));
+                Assert.That(this.valueSet.Manual[0], Is.EqualTo("2024-02-26T00:00:00.0000000Z"));
             });
 
             this.valueSet.Manual = new ValueArray<string>(["2024-02-26Z"]);
@@ -260,7 +260,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual[0], Is.EqualTo("2024-02-26T01:00:00.0000000+01:00"));
+                Assert.That(this.valueSet.Manual[0], Is.EqualTo("2024-02-26T00:00:00.0000000Z"));
             });
 
             result = this.dateTimeParameterType.Validate(new DateTime(2024, 12, 13, 0, 0, 0, DateTimeKind.Utc), out var cleanedValue);
@@ -290,7 +290,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(cleanedValue, Is.EqualTo("2009-10-23T16:04:23.3320000+02:00"));
+                Assert.That(cleanedValue, Is.EqualTo("2009-10-23T14:04:23.3320000Z"));
             });
         }
 
@@ -406,8 +406,8 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual[0], Is.EqualTo("0001-01-01T14:00:12.0000000"));
-                Assert.That(this.valueSet.Computed[0], Is.EqualTo("0001-01-01T14:00:12.0000000"));
+                Assert.That(this.valueSet.Manual[0], Is.EqualTo("0001-01-01T14:00:12.0000000Z"));
+                Assert.That(this.valueSet.Computed[0], Is.EqualTo("0001-01-01T14:00:12.0000000Z"));
                 Assert.That(this.valueSet.Reference[0], Is.EqualTo("0001-01-01T17:49:30.4530000Z"));
             });
 

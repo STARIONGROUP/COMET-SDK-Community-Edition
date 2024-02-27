@@ -152,7 +152,7 @@ namespace CDP4Common.Validation
                 return ValidationResult.ValidResult();
             }
 
-            if (value is string stringValue && DateTime.TryParseExact(stringValue, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
+            if (value is string stringValue && DateTime.TryParseExact(stringValue, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var date))
             {
                 cleanedValue = stringValue;
                 Logger.Debug("Date {0} validated", date);
@@ -198,9 +198,9 @@ namespace CDP4Common.Validation
                 return ValidationResult.ValidResult();
             }
 
-            if (value is string stringValue && DateTime.TryParse(stringValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTime))
+            if (value is string stringValue && DateTime.TryParse(stringValue, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var dateTime))
             {
-                cleanedValue = dateTime.ToString("o", CultureInfo.InvariantCulture);
+                cleanedValue = dateTime.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
                 Logger.Debug("DateTime {0} validated", dateTime);
                 return ValidationResult.ValidResult();
             }
@@ -208,7 +208,7 @@ namespace CDP4Common.Validation
             try
             {
                 var dateTimeValue = Convert.ToDateTime(value, CultureInfo.InvariantCulture);
-                cleanedValue = dateTimeValue.ToString("o", CultureInfo.InvariantCulture);
+                cleanedValue = dateTimeValue.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
                 Logger.Debug("DateTime {0} validated", dateTimeValue);
                 return ValidationResult.ValidResult();
             }
@@ -470,11 +470,11 @@ namespace CDP4Common.Validation
                 // date of the dateTime variable is not 1-1-1 the user provided an invalid date. The loophole here is that when a user provides a
                 // value that includes 1-1-1, it will be validated as being valid.
 
-                var isDateTime = DateTime.TryParse(parsedString, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind | DateTimeStyles.NoCurrentDateDefault, out var dateTime);
+                var isDateTime = DateTime.TryParse(parsedString, CultureInfo.InvariantCulture,  DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AssumeUniversal, out var dateTime);
 
                 if (isDateTime && dateTime.IsDefaultDateTime())
                 {
-                    cleanedValue = dateTime.ToString("o", CultureInfo.InvariantCulture);
+                    cleanedValue = dateTime.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
                     Logger.Debug("TimeOfDay {0} validated", parsedString);
                     return ValidationResult.ValidResult();
                 }
@@ -486,7 +486,7 @@ namespace CDP4Common.Validation
 
                 if (timeOfDayValue.IsDefaultDateTime())
                 {
-                    cleanedValue = timeOfDayValue.ToString("o", CultureInfo.InvariantCulture);
+                    cleanedValue = timeOfDayValue.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
                     Logger.Debug("TimeOfDay {0} validated", value);
                     return ValidationResult.ValidResult();
                 }
