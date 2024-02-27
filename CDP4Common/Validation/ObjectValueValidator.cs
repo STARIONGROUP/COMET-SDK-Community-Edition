@@ -161,11 +161,11 @@ namespace CDP4Common.Validation
 
             try
             {
-                var dateValue = Convert.ToDateTime(value);
+                var dateValue = Convert.ToDateTime(value, CultureInfo.InvariantCulture);
 
                 if (dateValue.Hour == 0 && dateValue.Minute == 0 && dateValue.Second == 0 && dateValue.Millisecond == 0)
                 {
-                    cleanedValue = dateValue.ToString("yyyy-MM-dd");
+                    cleanedValue = dateValue.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     Logger.Debug("Date {0} validated", dateValue);
                     return ValidationResult.ValidResult();
                 }
@@ -207,7 +207,7 @@ namespace CDP4Common.Validation
 
             try
             {
-                var dateTimeValue = Convert.ToDateTime(value);
+                var dateTimeValue = Convert.ToDateTime(value, CultureInfo.InvariantCulture);
                 cleanedValue = dateTimeValue.ToString("o", CultureInfo.InvariantCulture);
                 Logger.Debug("DateTime {0} validated", dateTimeValue);
                 return ValidationResult.ValidResult();
@@ -482,7 +482,7 @@ namespace CDP4Common.Validation
 
             try
             {
-                var timeOfDayValue = Convert.ToDateTime(value);
+                var timeOfDayValue = Convert.ToDateTime(value, CultureInfo.InvariantCulture);
 
                 if (timeOfDayValue.IsDefaultDateTime())
                 {
