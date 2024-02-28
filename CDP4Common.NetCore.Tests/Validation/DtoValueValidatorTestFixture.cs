@@ -211,7 +211,11 @@ namespace CDP4Common.NetCore.Tests.Validation
             this.valueSet.Manual = new ValueArray<string>(["2024-02-26Z"]);
             result = this.dateParameterType.ValidateAndCleanup(this.valueSet);
 
-            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(this.valueSet.Manual[0], Is.EqualTo("2024-02-26"));
+            });
 
             result = this.dateParameterType.Validate("2024-13-13", out _);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));

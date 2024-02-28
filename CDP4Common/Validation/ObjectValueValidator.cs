@@ -152,9 +152,9 @@ namespace CDP4Common.Validation
                 return ValidationResult.ValidResult();
             }
 
-            if (value is string stringValue && DateTime.TryParseExact(stringValue, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var date))
+            if (value is string stringValue && DateTime.TryParse(stringValue, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var date))
             {
-                cleanedValue = stringValue;
+                cleanedValue = date.ToString("yyyy-MM-dd");
                 Logger.Debug("Date {0} validated", date);
                 return ValidationResult.ValidResult();
             }
