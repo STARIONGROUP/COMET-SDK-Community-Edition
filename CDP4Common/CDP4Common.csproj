@@ -39,20 +39,6 @@
     <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Attributes\" />
-    <Folder Include="AutoGenDto\" />
-    <Folder Include="AutoGenHelpers\" />
-    <Folder Include="AutoGenMetaInfo\" />
-    <Folder Include="AutoGenPoco\" />
-    <Folder Include="AutoGenSentinel\" />
-    <Folder Include="AutoGenThingPropertyAccessor\" />
-    <Folder Include="ClasslessDto\" />
-    <Folder Include="Poco\" />
-    <Folder Include="RuleVerification\" />
-    <Folder Include="Validation\" />
-  </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' Or '$(TargetFramework)' == 'net48'">
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
