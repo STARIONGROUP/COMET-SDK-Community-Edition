@@ -324,7 +324,7 @@ namespace CDP4Common.Validation
             {
                 if (valueArray.Count != parameterTypeComponents.Count)
                 {
-                    throw new InvalidDataException($"The ValueArray {valueArrayKind} ({valueArray}) do not have the required amount of values ! Expected: {parameterTypeComponents.Count} Received: {valueArray.Count}");
+                    throw new InvalidDataException($"The ValueArray {valueArrayKind} ({valueArray}) does not have the required amount of values ! Expected: {parameterTypeComponents.Count} Received: {valueArray.Count}");
                 }
 
                 for (var valueIndex = 0; valueIndex < valueArray.Count; valueIndex++)
@@ -378,7 +378,7 @@ namespace CDP4Common.Validation
             {
                 if (valueArray.Count % parameterTypeAssignments.Count != 0)
                 {
-                    throw new InvalidDataException($"The ValueArray {valueArrayKind} ({valueArray}) do not have the required amount of values !");
+                    throw new InvalidDataException($"The ValueArray {valueArrayKind} ({valueArray}) does not have the required amount of values !");
                 }
 
                 for (var valueIndex = 0; valueIndex < valueArray.Count; valueIndex++)

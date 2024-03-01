@@ -30,6 +30,7 @@ namespace CDP4Common.Tests.Validation
     using System.IO;
 
     using CDP4Common.DTO;
+    using CDP4Common.Exceptions;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
     using CDP4Common.Validation;
@@ -309,7 +310,7 @@ namespace CDP4Common.Tests.Validation
 
             var things = new List<Thing>();
 
-            Assert.That(() => this.enumerationParameterType.Validate("a", out _, things), Throws.Exception.TypeOf<InvalidDataException>());
+            Assert.That(() => this.enumerationParameterType.Validate("a", out _, things), Throws.Exception.TypeOf<ThingNotFoundException>());
 
             things.AddRange(this.valueDefinitions);
 
@@ -644,33 +645,33 @@ namespace CDP4Common.Tests.Validation
 
             var things = new List<Thing>();
 
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The provided collection of referenced Things do not contain the IndependentParameterTypeAssignment"));
+            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of referenced Things does not contain the IndependentParameterTypeAssignment"));
             
             things.Add(independentParameterAssignment);
             
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The provided collection of Things do not contains a reference to the ParameterType"));
+            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of Things does not contains a reference to the ParameterType"));
 
             things.Add(this.booleanParameterType);
 
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The provided collection of referenced Things do not contain the DependentParameterTypeAssignment"));
+            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of referenced Things does not contain the DependentParameterTypeAssignment"));
             
             things.Add(dependentParameterAssignment);
             
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The provided collection of Things do not contains a reference to the ParameterType"));
+            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of Things does not contains a reference to the ParameterType"));
 
             things.Add(this.simpleQuantityKind);
 
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The provided collection of Things do not contains a reference to the MeasurementScale"));
+            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of Things does not contains a reference to the MeasurementScale"));
 
             things.Add(this.ratioScale);
 
             Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The ValueArray MANUAL ({\"-\"}) do not have the required amount of values !"));
+                .With.Message.Contain("The ValueArray MANUAL ({\"-\"}) does not have the required amount of values !"));
 
             this.valueSet.Manual = new ValueArray<string>(new List<string>(){"-","-"});
             this.valueSet.Computed = new ValueArray<string>(new List<string>(){"-","-","-","-"});
@@ -728,28 +729,28 @@ namespace CDP4Common.Tests.Validation
 
             var things = new List<Thing>();
 
-            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The provided collection of referenced Things do not contain the ParameterTypeComponent"));
+            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of referenced Things does not contain the ParameterTypeComponent"));
             
             things.Add(boolParameterTypeComponent);
             
-            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The provided collection of Things do not contains a reference to the ParameterType"));
+            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of Things does not contains a reference to the ParameterType"));
 
             things.Add(this.booleanParameterType);
 
-            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The provided collection of referenced Things do not contain the ParameterTypeComponent"));
+            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of referenced Things does not contain the ParameterTypeComponent"));
             
             things.Add(textParameterTypeComponent);
             
-            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The provided collection of Things do not contains a reference to the ParameterType"));
+            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of Things does not contains a reference to the ParameterType"));
 
             things.Add(this.textParameterType);
 
             Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The ValueArray MANUAL ({\"-\"}) do not have the required amount of values ! Expected: 2 Received: 1"));
+                .With.Message.Contain("The ValueArray MANUAL ({\"-\"}) does not have the required amount of values ! Expected: 2 Received: 1"));
 
             this.valueSet.Manual = new ValueArray<string>(new List<string>(){"-","-"});
             this.valueSet.Computed = new ValueArray<string>(new List<string>(){"-","-"});
