@@ -54,6 +54,7 @@
  | 20    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 21    | actor                                | Guid                         | 0..1        |  1.3.0  |
  | 22    | attachment                           | Guid                         | 0..*        |  1.4.0  |
+ | 23    | autoPublish                          | bool                         | 1..1        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -106,7 +107,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(engineeringModelSetup), "The EngineeringModelSetup may not be null");
             }
 
-            writer.WriteArrayHeader(23);
+            writer.WriteArrayHeader(24);
 
             writer.Write(engineeringModelSetup.Iid.ToByteArray());
             writer.Write(engineeringModelSetup.RevisionNumber);
@@ -197,6 +198,7 @@ namespace CDP4MessagePackSerializer
             {
                 writer.Write(identifier.ToByteArray());
             }
+            writer.Write(engineeringModelSetup.AutoPublish);
 
             writer.Flush();
         }
@@ -367,6 +369,9 @@ namespace CDP4MessagePackSerializer
                         {
                             engineeringModelSetup.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
+                        break;
+                    case 23:
+                        engineeringModelSetup.AutoPublish = reader.ReadBoolean();
                         break;
                     default:
                         reader.Skip();

@@ -166,6 +166,9 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryValue(pd.Input);
                 case "attachment":
                     return base.QueryValue(pd.Input);
+                case "autopublish":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return this.AutoPublish;
                 case "defaultorganizationalparticipant":
                     pd.VerifyPropertyDescriptorForReferenceProperty();
 
@@ -583,6 +586,9 @@ namespace CDP4Common.SiteDirectoryData
                     return pd.Next == null ? (object) new List<Alias>() : new Alias(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
                 case "attachment":
                     return pd.Next == null ? (object) new List<Attachment>() : new Attachment(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                case "autopublish":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+                    return isCallerEmunerable ? (object) new List<bool>() : null;
                 case "defaultorganizationalparticipant":
                     pd.VerifyPropertyDescriptorForReferenceProperty();
 

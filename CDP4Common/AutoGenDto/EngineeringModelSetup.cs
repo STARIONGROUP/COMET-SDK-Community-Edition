@@ -89,6 +89,14 @@ namespace CDP4Common.DTO
         public List<Guid> ActiveDomain { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether AutoPublish.
+        /// </summary>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public bool AutoPublish { get; set; }
+
+        /// <summary>
         /// Gets or sets the unique identifier of the referenced DefaultOrganizationalParticipant.
         /// </summary>
         [CDPVersion("1.2.0")]
@@ -564,6 +572,8 @@ namespace CDP4Common.DTO
 
                 this.Attachment.Add(copy.Value.Iid);
             }
+
+            this.AutoPublish = original.AutoPublish;
 
             var copyDefaultOrganizationalParticipant = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.DefaultOrganizationalParticipant);
             this.DefaultOrganizationalParticipant = copyDefaultOrganizationalParticipant.Value == null ? original.DefaultOrganizationalParticipant : copyDefaultOrganizationalParticipant.Value.Iid;

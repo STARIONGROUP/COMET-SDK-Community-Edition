@@ -106,6 +106,16 @@ namespace CDP4Common.SiteDirectoryData
         public List<DomainOfExpertise> ActiveDomain { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether AutoPublish.
+        /// </summary>
+        /// <remarks>
+        /// When set to true and the value of a Parameter is updated, it is immediately available as published value without creating a new Publication
+        /// </remarks>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public bool AutoPublish { get; set; }
+
+        /// <summary>
         /// Gets or sets the DefaultOrganizationalParticipant.
         /// </summary>
         /// <remarks>
@@ -358,6 +368,7 @@ namespace CDP4Common.SiteDirectoryData
             this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
             this.Attachment.ResolveList(dto.Attachment, dto.IterationContainerId, this.Cache);
+            this.AutoPublish = dto.AutoPublish;
             this.DefaultOrganizationalParticipant = (dto.DefaultOrganizationalParticipant.HasValue) ? this.Cache.Get<OrganizationalParticipant>(dto.DefaultOrganizationalParticipant.Value, dto.IterationContainerId) : null;
             this.Definition.ResolveList(dto.Definition, dto.IterationContainerId, this.Cache);
             this.EngineeringModelIid = dto.EngineeringModelIid;
@@ -391,6 +402,7 @@ namespace CDP4Common.SiteDirectoryData
             dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
             dto.Attachment.AddRange(this.Attachment.Select(x => x.Iid));
+            dto.AutoPublish = this.AutoPublish;
             dto.DefaultOrganizationalParticipant = this.DefaultOrganizationalParticipant != null ? (Guid?)this.DefaultOrganizationalParticipant.Iid : null;
             dto.Definition.AddRange(this.Definition.Select(x => x.Iid));
             dto.EngineeringModelIid = this.EngineeringModelIid;

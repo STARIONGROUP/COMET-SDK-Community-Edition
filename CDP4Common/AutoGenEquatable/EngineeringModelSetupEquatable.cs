@@ -54,6 +54,7 @@
  | 20    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 21    | actor                                | Guid                         | 0..1        |  1.3.0  |
  | 22    | attachment                           | Guid                         | 0..*        |  1.4.0  |
+ | 23    | autoPublish                          | bool                         | 1..1        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -140,6 +141,8 @@ namespace CDP4Common.DTO.Equatable
             if (!me.Actor.Equals(other.Actor)) return false;
 
             if (!me.Attachment.OrderBy(x => x).SequenceEqual(other.Attachment.OrderBy(x => x))) return false;
+
+            if (!me.AutoPublish.Equals(other.AutoPublish)) return false;
 
             return true;
         }

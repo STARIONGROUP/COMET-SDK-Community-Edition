@@ -53,6 +53,7 @@ namespace CDP4JsonSerializer
             { "actor", actor => new JValue(actor) },
             { "alias", alias => new JArray(alias) },
             { "attachment", attachment => new JArray(attachment) },
+            { "autoPublish", autoPublish => new JValue(autoPublish) },
             { "classKind", classKind => new JValue(classKind.ToString()) },
             { "defaultOrganizationalParticipant", defaultOrganizationalParticipant => new JValue(defaultOrganizationalParticipant) },
             { "definition", definition => new JArray(definition) },
@@ -86,6 +87,7 @@ namespace CDP4JsonSerializer
             jsonObject.Add("activeDomain", this.PropertySerializerMap["activeDomain"](engineeringModelSetup.ActiveDomain.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("alias", this.PropertySerializerMap["alias"](engineeringModelSetup.Alias.OrderBy(x => x, this.guidComparer)));
             jsonObject.Add("attachment", this.PropertySerializerMap["attachment"](engineeringModelSetup.Attachment.OrderBy(x => x, this.guidComparer)));
+            jsonObject.Add("autoPublish", this.PropertySerializerMap["autoPublish"](engineeringModelSetup.AutoPublish));
             jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), engineeringModelSetup.ClassKind)));
             jsonObject.Add("defaultOrganizationalParticipant", this.PropertySerializerMap["defaultOrganizationalParticipant"](engineeringModelSetup.DefaultOrganizationalParticipant));
             jsonObject.Add("definition", this.PropertySerializerMap["definition"](engineeringModelSetup.Definition.OrderBy(x => x, this.guidComparer)));
