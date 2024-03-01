@@ -30,6 +30,7 @@ namespace CDP4Common.Extensions
     using System.Linq;
 
     using CDP4Common.DTO;
+    using CDP4Common.Exceptions;
 
     /// <summary>
     /// Extension class for <see cref="ParameterType" />
@@ -56,14 +57,14 @@ namespace CDP4Common.Extensions
         public static (ParameterType parameterType, MeasurementScale scale) QueryParameterTypeAndMeasurementScale(this ParameterTypeComponent component, IReadOnlyCollection<Thing> things)
         {
             var parameterType = things.OfType<ParameterType>().FirstOrDefault(x => x.Iid == component.ParameterType)
-                                ?? throw new InvalidDataException($"The provided collection of Things do not contains a reference to the ParameterType {component.ParameterType}");
+                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the ParameterType {component.ParameterType}");
 
             MeasurementScale scale = null;
 
             if (component.Scale.HasValue)
             {
                 scale = things.OfType<MeasurementScale>().FirstOrDefault(x => x.Iid == component.Scale.Value)
-                        ?? throw new InvalidDataException($"The provided collection of Things do not contains a reference to the MeasurementScale {component.Scale.Value}");
+                        ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the MeasurementScale {component.Scale.Value}");
             }
 
             return (parameterType, scale);
@@ -89,14 +90,14 @@ namespace CDP4Common.Extensions
         public static (ParameterType parameterType, MeasurementScale scale) QueryParameterTypeAndMeasurementScale(this IParameterTypeAssignment assignment, IReadOnlyCollection<Thing> things)
         {
             var parameterType = things.OfType<ParameterType>().FirstOrDefault(x => x.Iid == assignment.ParameterType)
-                                ?? throw new InvalidDataException($"The provided collection of Things do not contains a reference to the ParameterType {assignment.ParameterType}");
+                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the ParameterType {assignment.ParameterType}");
 
             MeasurementScale scale = null;
 
             if (assignment.MeasurementScale.HasValue)
             {
                 scale = things.OfType<MeasurementScale>().FirstOrDefault(x => x.Iid == assignment.MeasurementScale.Value)
-                        ?? throw new InvalidDataException($"The provided collection of Things do not contains a reference to the MeasurementScale {assignment.MeasurementScale.Value}");
+                        ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the MeasurementScale {assignment.MeasurementScale.Value}");
             }
 
             return (parameterType, scale);
@@ -138,7 +139,7 @@ namespace CDP4Common.Extensions
                 }
                 else
                 {
-                    throw new InvalidDataException($"The provided collection of referenced Things do not contain the ParameterTypeComponent {componentId}");
+                    throw new ThingNotFoundException($"The provided collection of referenced Things does not contain the ParameterTypeComponent {componentId}");
                 }
             }
 
@@ -181,7 +182,7 @@ namespace CDP4Common.Extensions
                 }
                 else
                 {
-                    throw new InvalidDataException($"The provided collection of referenced Things do not contain the IndependentParameterTypeAssignment {independentId}");
+                    throw new ThingNotFoundException($"The provided collection of referenced Things does not contain the IndependentParameterTypeAssignment {independentId}");
                 }
             }
 
@@ -196,7 +197,7 @@ namespace CDP4Common.Extensions
                 }
                 else
                 {
-                    throw new InvalidDataException($"The provided collection of referenced Things do not contain the DependentParameterTypeAssignment {dependentId}");
+                    throw new ThingNotFoundException($"The provided collection of referenced Things does not contain the DependentParameterTypeAssignment {dependentId}");
                 }
             }
 

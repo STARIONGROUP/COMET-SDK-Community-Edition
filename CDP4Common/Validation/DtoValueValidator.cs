@@ -31,6 +31,7 @@ namespace CDP4Common.Validation
     using System.Linq;
 
     using CDP4Common.DTO;
+    using CDP4Common.Exceptions;
     using CDP4Common.Extensions;
     using CDP4Common.Types;
 
@@ -181,7 +182,7 @@ namespace CDP4Common.Validation
 
             if (enumerationValueDefinitions.Count != enumerationParameter.ValueDefinition.Count)
             {
-                throw new InvalidDataException($"Some EnumerationValueDefinition are missing from the provided {nameof(things)} data, cannot proceed");
+                throw new ThingNotFoundException($"Some EnumerationValueDefinition are missing from the provided {nameof(things)} data, cannot proceed");
             }
 
             return value.ValidateEnumeration(enumerationValueDefinitions.Select(x => x.ShortName).ToList(), enumerationParameter.AllowMultiSelect, out cleanedValue);
