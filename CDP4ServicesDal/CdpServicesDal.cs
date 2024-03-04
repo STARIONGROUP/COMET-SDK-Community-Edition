@@ -74,14 +74,14 @@ namespace CDP4ServicesDal
     public class CdpServicesDal : Dal
     {
         /// <summary>
+        /// Gets the API route for the <see cref="CometTask" />
+        /// </summary>
+        public const string CometTaskRoute = "/tasks";
+
+        /// <summary>
         /// The NLog Logger
         /// </summary>
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// Gets the API route for the <see cref="CometTask" />
-        /// </summary>
-        private const string CometTaskRoute = "tasks";
 
         /// <summary>
         /// The <see cref="HttpClient"/> that is reused for each HTTP request by the current <see cref="Dal"/>.
