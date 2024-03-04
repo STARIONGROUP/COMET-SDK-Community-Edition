@@ -427,7 +427,7 @@ namespace CDP4ServicesDal.Tests
         {
             this.dal = new CdpServicesDal();
 
-            var creds = new Credentials("admin", "pass", new Uri("http://localhost:5000"));
+            var creds = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
 
             var session = new Session(dal, credentials, this.messageBus);
 
