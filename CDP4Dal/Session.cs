@@ -680,8 +680,9 @@ namespace CDP4Dal
         /// Reads a <see cref="CometTask" /> identified by the provided <see cref="Guid" />
         /// </summary>
         /// <param name="id">The <see cref="Guid"/> identifier for the <see cref="CometTask" /></param>
+        /// <returns>An await-able <see cref="Task"/> with the read <see cref="CometTask"/></returns>
         /// <exception cref="InvalidOperationException">If the <see cref="ActivePerson"/> is null, meaning that the session is not opened</exception>
-        public async Task ReadCometTask(Guid id)
+        public async Task<CometTask> ReadCometTask(Guid id)
         {
             if (this.ActivePerson == null)
             {
@@ -692,13 +693,13 @@ namespace CDP4Dal
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationTokenKey = Guid.NewGuid();
             this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+            CometTask cometTask = default;
 
             try
             {
                 this.Dal.Session = this;
-                var cometTask = await this.Dal.ReadCometTask(id, cancellationTokenSource.Token);
+                cometTask = await this.Dal.ReadCometTask(id, cancellationTokenSource.Token);
                 this.cometTasks[cometTask.Id] = cometTask;
-                this.CDPMessageBus.SendMessage(new CometTaskEvent(this, cometTask));
                 cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }
             catch (OperationCanceledException)
@@ -709,13 +710,16 @@ namespace CDP4Dal
             {
                 this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out _);
             }
+
+            return cometTask;
         }
 
         /// <summary>
         /// Reads all <see cref="CometTask" /> available for the current logged <see cref="Person" />
         /// </summary>
+        /// <returns>An await-able <see cref="Task"/> with the <see cref="IReadOnlyCollection{T}"/> of read <see cref="CometTask"/></returns>
         /// <exception cref="InvalidOperationException">If the <see cref="ActivePerson"/> is null, meaning that the session is not opened</exception>
-        public async Task ReadCometTasks()
+        public async Task<IReadOnlyCollection<CometTask>> ReadCometTasks()
         {
             if (this.ActivePerson == null)
             {
@@ -726,18 +730,18 @@ namespace CDP4Dal
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationTokenKey = Guid.NewGuid();
             this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+            var readCometTasks = new List<CometTask>();
 
             try
             {
                 this.Dal.Session = this;
-                var readCometTasks = (await this.Dal.ReadCometTasks(cancellationTokenSource.Token)).ToList();
+                readCometTasks.AddRange(await this.Dal.ReadCometTasks(cancellationTokenSource.Token));
 
                 foreach (var cometTask in readCometTasks)
                 {
                     this.cometTasks[cometTask.Id] = cometTask;
                 }
 
-                this.CDPMessageBus.SendMessage(new CometTaskEvent(this, readCometTasks));
                 cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }
             catch (OperationCanceledException)
@@ -748,6 +752,8 @@ namespace CDP4Dal
             {
                 this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out _);
             }
+
+            return readCometTasks;
         }
 
         /// <summary>
@@ -859,23 +865,25 @@ namespace CDP4Dal
         /// The path to the files that need to be uploaded. If <paramref name="files" /> is null, then no files are to be uploaded
         /// </param>
         /// <returns>
-        /// An await-able <see cref="Task" />
+        /// An await-able <see cref="Task" /> with nullable <see cref="CometTask" />. If the write operation took less time
+        /// than the provided <paramref name="waitTime"/>, null is returned.
+        /// If the write operation takes longer than the provided <paramref name="waitTime" />, the associated <see cref="CometTask" />
+        /// is returned.
         /// </returns>
-        public async Task Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
+        public async Task<CometTask?> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
         {
             var filesList = this.BeforeDalWriteAndProcessFiles(operationContainer, files);
             var longRunningTaskResult = await this.Dal.Write(operationContainer, waitTime, filesList);
-
+            
             if (longRunningTaskResult.IsWaitTimeReached)
             {
                 this.cometTasks[longRunningTaskResult.Task.Id] = longRunningTaskResult.Task;
-                this.CDPMessageBus.SendMessage(new CometTaskEvent(this, longRunningTaskResult.Task));
+                return longRunningTaskResult.Task;
             }
-            else
-            {
-                var things = longRunningTaskResult.Things as IList<CDP4Common.DTO.Thing> ?? longRunningTaskResult.Things.ToList();
-                await this.AfterReadOrWriteOrUpdate(things);
-            }
+
+            var things = longRunningTaskResult.Things as IList<CDP4Common.DTO.Thing> ?? longRunningTaskResult.Things.ToList();
+            await this.AfterReadOrWriteOrUpdate(things);
+            return null;
         }
 
         /// <summary>

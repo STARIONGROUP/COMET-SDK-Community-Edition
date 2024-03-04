@@ -34,6 +34,7 @@ namespace CDP4JsonSerializer
     using CDP4JsonSerializer.JsonConverter;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
     using Newtonsoft.Json.Serialization;
     
     using NLog;
@@ -281,6 +282,7 @@ namespace CDP4JsonSerializer
             serializer.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
             serializer.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
             serializer.Converters.Add(new ClassKindConverter());
+            serializer.Converters.Add(new StringEnumConverter());
 
             return serializer;
         }

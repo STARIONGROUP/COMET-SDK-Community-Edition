@@ -816,26 +816,21 @@ namespace CDP4Dal.Tests
 
             this.mockedDal.Setup(x => x.ReadCometTask(cometTaskId, It.IsAny<CancellationToken>())).ReturnsAsync(returnedCometTask);
 
-            CometTaskEvent listenedCometTaskEvent = default;
-            this.messageBus.Listen<CometTaskEvent>().Subscribe(x => listenedCometTaskEvent = x);
-
-            Assert.That(listenedCometTaskEvent, Is.Null);
-            await this.session.ReadCometTask(cometTaskId);
+            var cometTask = await this.session.ReadCometTask(cometTaskId);
 
             Assert.Multiple(() =>
             {
-                Assert.That(listenedCometTaskEvent, Is.Not.Null);
-                Assert.That(listenedCometTaskEvent.CometTasks.Single(), Is.EqualTo(returnedCometTask));
+                Assert.That(cometTask, Is.Not.Null);
+                Assert.That(cometTask, Is.EqualTo(returnedCometTask));
                 Assert.That(this.session.CometTasks[cometTaskId], Is.EqualTo(returnedCometTask));
             });
 
             this.mockedDal.Setup(x => x.ReadCometTask(cometTaskId, It.IsAny<CancellationToken>())).Throws<OperationCanceledException>();
-            listenedCometTaskEvent = default;
-            await this.session.ReadCometTask(cometTaskId);
+            cometTask = await this.session.ReadCometTask(cometTaskId);
 
             Assert.Multiple(() =>
             {
-                Assert.That(listenedCometTaskEvent, Is.Null);
+                Assert.That(cometTask, Is.EqualTo((CometTask)default));
                 Assert.That(this.session.CometTasks[cometTaskId], Is.EqualTo(returnedCometTask));
             });
 
@@ -868,26 +863,21 @@ namespace CDP4Dal.Tests
 
             this.mockedDal.Setup(x => x.ReadCometTasks(It.IsAny<CancellationToken>())).ReturnsAsync(returnedCometTasks);
 
-            CometTaskEvent listenedCometTaskEvent = default;
-            this.messageBus.Listen<CometTaskEvent>().Subscribe(x => listenedCometTaskEvent = x);
-
-            Assert.That(listenedCometTaskEvent, Is.Null);
-            await this.session.ReadCometTasks();
+            var cometTasks = await this.session.ReadCometTasks();
 
             Assert.Multiple(() =>
             {
-                Assert.That(listenedCometTaskEvent, Is.Not.Null);
-                Assert.That(listenedCometTaskEvent.CometTasks, Is.EquivalentTo(returnedCometTasks));
+                Assert.That(cometTasks, Is.Not.Empty);
+                Assert.That(cometTasks, Is.EquivalentTo(returnedCometTasks));
                 Assert.That(this.session.CometTasks, Has.Count.EqualTo(returnedCometTasks.Count));
             });
 
             this.mockedDal.Setup(x => x.ReadCometTasks(It.IsAny<CancellationToken>())).Throws<OperationCanceledException>();
-            listenedCometTaskEvent = default;
-            await this.session.ReadCometTasks();
+            cometTasks = await this.session.ReadCometTasks();
 
             Assert.Multiple(() =>
             {
-                Assert.That(listenedCometTaskEvent, Is.Null);
+                Assert.That(cometTasks, Is.Empty);
                 Assert.That(this.session.CometTasks, Has.Count.EqualTo(returnedCometTasks.Count));
             });
 
@@ -904,14 +894,11 @@ namespace CDP4Dal.Tests
             this.mockedDal.Setup(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<int>(), It.IsAny<IEnumerable<string>>()))
                 .ReturnsAsync(new LongRunningTaskResult(new CometTask() { Id = Guid.Empty }));
             
-            CometTaskEvent listenedCometTaskEvent = default;
-            this.messageBus.Listen<CometTaskEvent>().Subscribe(x => listenedCometTaskEvent = x);
-
-            await this.session.Write(new OperationContainer(context), 1);
+            var cometTask = await this.session.Write(new OperationContainer(context), 1);
 
             Assert.Multiple(() =>
             {
-                Assert.That(listenedCometTaskEvent, Is.Not.Null);
+                Assert.That(cometTask.HasValue, Is.True);
                 Assert.That(this.session.CometTasks, Is.Not.Empty);
             });
 
@@ -924,13 +911,11 @@ namespace CDP4Dal.Tests
                     }
                 }));
 
-            listenedCometTaskEvent = default;
-
-            await this.session.Write(new OperationContainer(context), 1);
+            cometTask = await this.session.Write(new OperationContainer(context), 1);
 
             Assert.Multiple(() =>
             {
-                Assert.That(listenedCometTaskEvent, Is.Null);
+                Assert.That(cometTask.HasValue, Is.False);
                 Assert.That(this.session.CometTasks, Is.Not.Empty);
             });
 
@@ -939,7 +924,6 @@ namespace CDP4Dal.Tests
 
             Assert.That(() =>this.session.Write(new OperationContainer(context), 1), Throws.Exception.TypeOf<DalReadException>());
         }
-
         private void AssignActivePerson()
         {
             var johnDoe = new Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };

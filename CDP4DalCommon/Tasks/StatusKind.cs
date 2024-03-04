@@ -35,21 +35,21 @@ namespace CDP4DalCommon.Tasks
         /// <summary>
         /// Assertion that the Task is being processed
         /// </summary>
-        Processing,
+        PROCESSING,
 
         /// <summary>
         /// Assertion that the Task completed with success
         /// </summary>
-        Succeeded,
+        SUCCEEDED,
 
         /// <summary>
         /// Assertion that the Task failed
         /// </summary>
-        Failed,
+        FAILED,
 
         /// <summary>
         /// Assertion that the Task has been cancelled
         /// </summary>
-        Cancelled
+        CANCELLED
     }
 }

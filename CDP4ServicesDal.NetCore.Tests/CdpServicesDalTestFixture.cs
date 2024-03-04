@@ -34,6 +34,7 @@ namespace CDP4ServicesDal.Tests
     using System.Net.Http.Headers;
     using System.Text;
     using System.Text.Json;
+    using System.Text.Json.Serialization;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -94,7 +95,8 @@ namespace CDP4ServicesDal.Tests
             
             this.jsonSerializerOptions = new JsonSerializerOptions()
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                Converters = { new JsonStringEnumConverter() }
             };
 
             this.PopulateSiteDirectory();
@@ -720,7 +722,7 @@ namespace CDP4ServicesDal.Tests
                 FinishedAt = DateTime.UtcNow,
                 StartedAt = DateTime.UtcNow - TimeSpan.FromSeconds(10),
                 TopContainer = "SiteDirectory",
-                StatusKind = StatusKind.Succeeded
+                StatusKind = StatusKind.SUCCEEDED
             };
 
             foundHttpResponse.Content = new StringContent(JsonSerializer.Serialize(cometTask, this.jsonSerializerOptions));
@@ -769,7 +771,7 @@ namespace CDP4ServicesDal.Tests
                     FinishedAt = DateTime.UtcNow,
                     StartedAt = DateTime.UtcNow - TimeSpan.FromSeconds(10),
                     TopContainer = "SiteDirectory",
-                    StatusKind = StatusKind.Succeeded
+                    StatusKind = StatusKind.SUCCEEDED
                 }
             };
 

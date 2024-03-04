@@ -269,19 +269,21 @@ namespace CDP4Dal
         /// Only those <see cref="EngineeringModel"/>s are retunred that the <see cref="Person"/> is a <see cref="Participant"/> in
         /// </remarks>
         Task Read(IEnumerable<Guid> engineeringModels);
-        
+
         /// <summary>
         /// Reads a <see cref="CometTask" /> identified by the provided <see cref="Guid" />
         /// </summary>
         /// <param name="id">The <see cref="Guid"/> identifier for the <see cref="CometTask" /></param>
-        /// <exception cref="InvalidOperationException">If the <see cref="Session.ActivePerson"/> is null, meaning that the session is not opened</exception>
-        Task ReadCometTask(Guid id);
+        /// <returns>An await-able <see cref="Task"/> with the read <see cref="CometTask"/></returns>
+        /// <exception cref="InvalidOperationException">If the <see cref="ActivePerson"/> is null, meaning that the session is not opened</exception>
+        Task<CometTask> ReadCometTask(Guid id);
 
         /// <summary>
         /// Reads all <see cref="CometTask" /> available for the current logged <see cref="Person" />
         /// </summary>
-        /// <exception cref="InvalidOperationException">If the <see cref="Session.ActivePerson"/> is null, meaning that the session is not opened</exception>
-        Task ReadCometTasks();
+        /// <returns>An await-able <see cref="Task"/> with the <see cref="IReadOnlyCollection{T}"/> of read <see cref="CometTask"/></returns>
+        /// <exception cref="InvalidOperationException">If the <see cref="ActivePerson"/> is null, meaning that the session is not opened</exception>
+        Task<IReadOnlyCollection<CometTask>> ReadCometTasks();
 
         /// <summary>
         /// Reads a physical file from a DataStore
@@ -325,9 +327,12 @@ namespace CDP4Dal
         /// The path to the files that need to be uploaded. If <paramref name="files" /> is null, then no files are to be uploaded
         /// </param>
         /// <returns>
-        /// An await-able <see cref="Task" />
+        /// An await-able <see cref="Task" /> with nullable <see cref="CometTask" />. If the write operation took less time
+        /// than the provided <paramref name="waitTime"/>, null is returned.
+        /// If the write operation takes longer than the provided <paramref name="waitTime" />, the associated <see cref="CometTask" />
+        /// is returned.
         /// </returns>
-        Task Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null);
+        Task<CometTask?> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null);
 
         /// <summary>
         /// Refreshes all the <see cref="TopContainer"/>s in the cache

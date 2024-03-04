@@ -719,7 +719,7 @@ namespace CDP4ServicesDal.Tests
                 FinishedAt = DateTime.UtcNow,
                 StartedAt = DateTime.UtcNow - TimeSpan.FromSeconds(10),
                 TopContainer = "SiteDirectory",
-                StatusKind = StatusKind.Succeeded
+                StatusKind = StatusKind.SUCCEEDED
             };
 
             foundHttpResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTask));
@@ -768,7 +768,7 @@ namespace CDP4ServicesDal.Tests
                     FinishedAt = DateTime.UtcNow,
                     StartedAt = DateTime.UtcNow - TimeSpan.FromSeconds(10),
                     TopContainer = "SiteDirectory",
-                    StatusKind = StatusKind.Succeeded
+                    StatusKind = StatusKind.SUCCEEDED
                 }
             };
 
