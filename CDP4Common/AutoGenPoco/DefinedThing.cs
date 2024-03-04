@@ -64,6 +64,7 @@ namespace CDP4Common.CommonData
         protected DefinedThing()
         {
             this.Alias = new ContainerList<Alias>(this);
+            this.Attachment = new ContainerList<Attachment>(this);
             this.Definition = new ContainerList<Definition>(this);
             this.HyperLink = new ContainerList<HyperLink>(this);
         }
@@ -85,6 +86,7 @@ namespace CDP4Common.CommonData
         protected DefinedThing(Guid iid, ConcurrentDictionary<CacheKey, Lazy<CommonData.Thing>> cache, Uri iDalUri) : base(iid, cache, iDalUri)
         {
             this.Alias = new ContainerList<Alias>(this);
+            this.Attachment = new ContainerList<Attachment>(this);
             this.Definition = new ContainerList<Definition>(this);
             this.HyperLink = new ContainerList<HyperLink>(this);
         }
@@ -98,6 +100,16 @@ namespace CDP4Common.CommonData
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         public virtual ContainerList<Alias> Alias { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a list of contained Attachment.
+        /// </summary>
+        /// <remarks>
+        /// Reference to one or more Attachments that are linked to this DefinedThing
+        /// </remarks>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual ContainerList<Attachment> Attachment { get; protected set; }
 
         /// <summary>
         /// Gets or sets a list of contained Definition.
@@ -149,6 +161,7 @@ namespace CDP4Common.CommonData
             {
                 var containers = new List<IEnumerable>(base.ContainerLists);
                 containers.Add(this.Alias);
+                containers.Add(this.Attachment);
                 containers.Add(this.Definition);
                 containers.Add(this.HyperLink);
                 return containers;

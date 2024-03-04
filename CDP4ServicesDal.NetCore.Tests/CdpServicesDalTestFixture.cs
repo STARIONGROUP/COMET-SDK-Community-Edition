@@ -250,7 +250,7 @@ namespace CDP4ServicesDal.Tests
             Assert.NotNull(returned);
             Assert.IsNotEmpty(returned);
 
-            var sd = returned.First();
+            var sd = returned.OfType<CDP4Common.DTO.SiteDirectory>().First() as CDP4Common.DTO.Thing;
 
             var attributes = new QueryAttributes();
             var readResult = await dal.Read(sd, this.cancelationTokenSource.Token, attributes);
@@ -427,7 +427,7 @@ namespace CDP4ServicesDal.Tests
         {
             this.dal = new CdpServicesDal();
 
-            var creds = new Credentials("admin", "pass", new Uri("http://localhost:5000"));
+            var creds = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
 
             var session = new Session(dal, credentials, this.messageBus);
 

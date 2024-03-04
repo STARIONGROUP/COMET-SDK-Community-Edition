@@ -139,6 +139,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             var clone = (DomainOfExpertiseGroup)this.MemberwiseClone();
             clone.Alias = cloneContainedThings ? new ContainerList<Alias>(clone) : new ContainerList<Alias>(this.Alias, clone);
+            clone.Attachment = cloneContainedThings ? new ContainerList<Attachment>(clone) : new ContainerList<Attachment>(this.Attachment, clone);
             clone.Definition = cloneContainedThings ? new ContainerList<Definition>(clone) : new ContainerList<Definition>(this.Definition, clone);
             clone.Domain = new List<DomainOfExpertise>(this.Domain);
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
@@ -148,6 +149,7 @@ namespace CDP4Common.SiteDirectoryData
             if (cloneContainedThings)
             {
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
+                clone.Attachment.AddRange(this.Attachment.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
             }
@@ -202,6 +204,7 @@ namespace CDP4Common.SiteDirectoryData
 
             this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
+            this.Attachment.ResolveList(dto.Attachment, dto.IterationContainerId, this.Cache);
             this.Definition.ResolveList(dto.Definition, dto.IterationContainerId, this.Cache);
             this.Domain.ResolveList(dto.Domain, dto.IterationContainerId, this.Cache);
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
@@ -226,6 +229,7 @@ namespace CDP4Common.SiteDirectoryData
 
             dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
+            dto.Attachment.AddRange(this.Attachment.Select(x => x.Iid));
             dto.Definition.AddRange(this.Definition.Select(x => x.Iid));
             dto.Domain.AddRange(this.Domain.Select(x => x.Iid));
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));

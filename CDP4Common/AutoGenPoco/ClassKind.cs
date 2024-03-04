@@ -68,9 +68,34 @@ namespace CDP4Common.CommonData
         Approval,
 
         /// <summary>
+        /// Assertion that the Class is an instance of ArchitectureDiagram
+        /// </summary>
+        ArchitectureDiagram,
+
+        /// <summary>
+        /// Assertion that the Class is an instance of ArchitectureElement
+        /// </summary>
+        ArchitectureElement,
+
+        /// <summary>
         /// Assertion that the Class is an instance of ArrayParameterType
         /// </summary>
         ArrayParameterType,
+
+        /// <summary>
+        /// Assertion that the Class is an instance of Attachment
+        /// </summary>
+        Attachment,
+
+        /// <summary>
+        /// Assertion that the Class is an instance of Behavior
+        /// </summary>
+        Behavior,
+
+        /// <summary>
+        /// Assertion that the Class is an instance of BehavioralParameter
+        /// </summary>
+        BehavioralParameter,
 
         /// <summary>
         /// Assertion that the Class is an instance of BinaryNote
@@ -233,6 +258,11 @@ namespace CDP4Common.CommonData
         DiagramElementThing,
 
         /// <summary>
+        /// Assertion that the Class is an instance of DiagramFrame
+        /// </summary>
+        DiagramFrame,
+
+        /// <summary>
         /// Assertion that the Class is an instance of DiagrammingStyle
         /// </summary>
         DiagrammingStyle,
@@ -241,6 +271,11 @@ namespace CDP4Common.CommonData
         /// Assertion that the Class is an instance of DiagramObject
         /// </summary>
         DiagramObject,
+
+        /// <summary>
+        /// Assertion that the Class is an instance of DiagramPort
+        /// </summary>
+        DiagramPort,
 
         /// <summary>
         /// Assertion that the Class is an instance of DiagramShape

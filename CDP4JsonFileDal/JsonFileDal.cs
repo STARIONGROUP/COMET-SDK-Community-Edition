@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2023 RHEA System S.A.
+//    Copyright (c) 2015-2024 RHEA System S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
@@ -65,7 +65,7 @@ namespace CDP4JsonFileDal
     /// <summary>
     /// Provides the Data Access Layer for file based import/export
     /// </summary>
-    [DalExport("JSON File Based", "A file based JSON Data Access Layer", "1.3.0", DalType.File)]
+    [DalExport("JSON File Based", "A file based JSON Data Access Layer", "1.4.0", DalType.File)]
 #if NETFRAMEWORK
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif

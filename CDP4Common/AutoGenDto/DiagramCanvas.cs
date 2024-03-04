@@ -77,7 +77,31 @@ namespace CDP4Common.DTO
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
-        public DateTime CreatedOn { get; set; }
+        public virtual DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Description.
+        /// </summary>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsHidden.
+        /// </summary>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual bool IsHidden { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier of the referenced LockedBy.
+        /// </summary>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: true, isPersistent: true)]
+        [DataMember]
+        public virtual Guid? LockedBy { get; set; }
 
         /// <summary>
         /// Gets the route for the current <see ref="DiagramCanvas"/>.
@@ -102,6 +126,11 @@ namespace CDP4Common.DTO
             dictionary.Add("ExcludedDomain", this.ExcludedDomain);
 
             dictionary.Add("ExcludedPerson", this.ExcludedPerson);
+
+            if (this.LockedBy != null)
+            {
+                dictionary.Add("LockedBy", new [] { this.LockedBy.Value });
+            }
 
             return dictionary;
         }
@@ -143,6 +172,10 @@ namespace CDP4Common.DTO
 
                             case "ExcludedPerson":
                                 this.ExcludedPerson.Remove(id);
+                                break;
+
+                            case "LockedBy":
+                                this.LockedBy = null;
                                 break;
                         }
                     }
@@ -193,6 +226,13 @@ namespace CDP4Common.DTO
                         {
                             this.ExcludedPerson.Remove(toBeRemoved);
                         } 
+                        break;
+
+                    case "LockedBy":
+                        if (referencedProperty.Value.Except(ids).Any())
+                        {
+                            this.LockedBy = null;
+                        }
                         break;
                 }
             }
@@ -280,6 +320,8 @@ namespace CDP4Common.DTO
 
             this.CreatedOn = original.CreatedOn;
 
+            this.Description = original.Description;
+
             foreach (var guid in original.DiagramElement)
             {
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
@@ -302,6 +344,11 @@ namespace CDP4Common.DTO
                 var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
                 this.ExcludedPerson.Add(copy.Value == null ? guid : copy.Value.Iid);
             }
+
+            this.IsHidden = original.IsHidden;
+
+            var copyLockedBy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.LockedBy);
+            this.LockedBy = copyLockedBy.Value == null ? original.LockedBy : copyLockedBy.Value.Iid;
 
             this.ModifiedOn = original.ModifiedOn;
 

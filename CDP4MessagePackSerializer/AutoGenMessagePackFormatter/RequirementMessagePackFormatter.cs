@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -49,6 +49,7 @@
  | 15    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 16    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 17    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 18    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -101,7 +102,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(requirement), "The Requirement may not be null");
             }
 
-            writer.WriteArrayHeader(18);
+            writer.WriteArrayHeader(19);
 
             writer.Write(requirement.Iid.ToByteArray());
             writer.Write(requirement.RevisionNumber);
@@ -169,6 +170,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(requirement.Attachment.Count);
+            foreach (var identifier in requirement.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -309,6 +315,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             requirement.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 18:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            requirement.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

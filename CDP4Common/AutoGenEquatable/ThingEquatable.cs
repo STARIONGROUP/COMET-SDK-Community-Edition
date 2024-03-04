@@ -3,17 +3,17 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of CDP4-COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The CDP4-COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -178,6 +178,13 @@
      | 144   | LogEntryChangelogItem               |  1.2.0  |
      | 145   | OrganizationalParticipant           |  1.2.0  |
      | 146   | SampledFunctionParameterType        |  1.2.0  |
+     | 147   | ArchitectureDiagram                 |  1.4.0  |
+     | 148   | ArchitectureElement                 |  1.4.0  |
+     | 149   | Attachment                          |  1.4.0  |
+     | 150   | Behavior                            |  1.4.0  |
+     | 151   | BehavioralParameter                 |  1.4.0  |
+     | 152   | DiagramFrame                        |  1.4.0  |
+     | 153   | DiagramPort                         |  1.4.0  |
      * ------------------------------------------- | ------- */
 
 namespace CDP4Common.DTO.Equatable
@@ -219,6 +226,101 @@ namespace CDP4Common.DTO.Equatable
 
             switch (me)
             {
+           	
+                case ArchitectureDiagram architectureDiagram:
+                    return architectureDiagram.ArePropertiesEqual((ArchitectureDiagram)other);
+                case ArchitectureElement architectureElement:
+                    return architectureElement.ArePropertiesEqual((ArchitectureElement)other);
+                case Attachment attachment:
+                    return attachment.ArePropertiesEqual((Attachment)other);
+                case Behavior behavior:
+                    return behavior.ArePropertiesEqual((Behavior)other);
+                case BehavioralParameter behavioralParameter:
+                    return behavioralParameter.ArePropertiesEqual((BehavioralParameter)other);
+                case DiagramFrame diagramFrame:
+                    return diagramFrame.ArePropertiesEqual((DiagramFrame)other);
+                case DiagramPort diagramPort:
+                    return diagramPort.ArePropertiesEqual((DiagramPort)other);
+                case DependentParameterTypeAssignment dependentParameterTypeAssignment:
+                    return dependentParameterTypeAssignment.ArePropertiesEqual((DependentParameterTypeAssignment)other);
+                case IndependentParameterTypeAssignment independentParameterTypeAssignment:
+                    return independentParameterTypeAssignment.ArePropertiesEqual((IndependentParameterTypeAssignment)other);
+                case LogEntryChangelogItem logEntryChangelogItem:
+                    return logEntryChangelogItem.ArePropertiesEqual((LogEntryChangelogItem)other);
+                case OrganizationalParticipant organizationalParticipant:
+                    return organizationalParticipant.ArePropertiesEqual((OrganizationalParticipant)other);
+                case SampledFunctionParameterType sampledFunctionParameterType:
+                    return sampledFunctionParameterType.ArePropertiesEqual((SampledFunctionParameterType)other);
+                case ActionItem actionItem:
+                    return actionItem.ArePropertiesEqual((ActionItem)other);
+                case Approval approval:
+                    return approval.ArePropertiesEqual((Approval)other);
+                case BinaryNote binaryNote:
+                    return binaryNote.ArePropertiesEqual((BinaryNote)other);
+                case Book book:
+                    return book.ArePropertiesEqual((Book)other);
+                case Bounds bounds:
+                    return bounds.ArePropertiesEqual((Bounds)other);
+                case ChangeProposal changeProposal:
+                    return changeProposal.ArePropertiesEqual((ChangeProposal)other);
+                case ChangeRequest changeRequest:
+                    return changeRequest.ArePropertiesEqual((ChangeRequest)other);
+                case ContractChangeNotice contractChangeNotice:
+                    return contractChangeNotice.ArePropertiesEqual((ContractChangeNotice)other);
+                case DiagramCanvas diagramCanvas:
+                    return diagramCanvas.ArePropertiesEqual((DiagramCanvas)other);
+                case DiagramEdge diagramEdge:
+                    return diagramEdge.ArePropertiesEqual((DiagramEdge)other);
+                case DiagramObject diagramObject:
+                    return diagramObject.ArePropertiesEqual((DiagramObject)other);
+                case EngineeringModelDataDiscussionItem engineeringModelDataDiscussionItem:
+                    return engineeringModelDataDiscussionItem.ArePropertiesEqual((EngineeringModelDataDiscussionItem)other);
+                case EngineeringModelDataNote engineeringModelDataNote:
+                    return engineeringModelDataNote.ArePropertiesEqual((EngineeringModelDataNote)other);
+                case Goal goal:
+                    return goal.ArePropertiesEqual((Goal)other);
+                case ModellingThingReference modellingThingReference:
+                    return modellingThingReference.ArePropertiesEqual((ModellingThingReference)other);
+                case OwnedStyle ownedStyle:
+                    return ownedStyle.ArePropertiesEqual((OwnedStyle)other);
+                case Page page:
+                    return page.ArePropertiesEqual((Page)other);
+                case Point point:
+                    return point.ArePropertiesEqual((Point)other);
+                case RelationshipParameterValue relationshipParameterValue:
+                    return relationshipParameterValue.ArePropertiesEqual((RelationshipParameterValue)other);
+                case RequestForDeviation requestForDeviation:
+                    return requestForDeviation.ArePropertiesEqual((RequestForDeviation)other);
+                case RequestForWaiver requestForWaiver:
+                    return requestForWaiver.ArePropertiesEqual((RequestForWaiver)other);
+                case RequirementsContainerParameterValue requirementsContainerParameterValue:
+                    return requirementsContainerParameterValue.ArePropertiesEqual((RequirementsContainerParameterValue)other);
+                case ReviewItemDiscrepancy reviewItemDiscrepancy:
+                    return reviewItemDiscrepancy.ArePropertiesEqual((ReviewItemDiscrepancy)other);
+                case Section section:
+                    return section.ArePropertiesEqual((Section)other);
+                case SharedStyle sharedStyle:
+                    return sharedStyle.ArePropertiesEqual((SharedStyle)other);
+                case SiteDirectoryDataAnnotation siteDirectoryDataAnnotation:
+                    return siteDirectoryDataAnnotation.ArePropertiesEqual((SiteDirectoryDataAnnotation)other);
+                case SiteDirectoryDataDiscussionItem siteDirectoryDataDiscussionItem:
+                    return siteDirectoryDataDiscussionItem.ArePropertiesEqual((SiteDirectoryDataDiscussionItem)other);
+                case SiteDirectoryThingReference siteDirectoryThingReference:
+                    return siteDirectoryThingReference.ArePropertiesEqual((SiteDirectoryThingReference)other);
+                case Solution solution:
+                    return solution.ArePropertiesEqual((Solution)other);
+                case Stakeholder stakeholder:
+                    return stakeholder.ArePropertiesEqual((Stakeholder)other);
+                case StakeholderValue stakeholderValue:
+                    return stakeholderValue.ArePropertiesEqual((StakeholderValue)other);
+                case StakeHolderValueMap stakeHolderValueMap:
+                    return stakeHolderValueMap.ArePropertiesEqual((StakeHolderValueMap)other);
+                case StakeHolderValueMapSettings stakeHolderValueMapSettings:
+                    return stakeHolderValueMapSettings.ArePropertiesEqual((StakeHolderValueMapSettings)other);
+                case TextualNote textualNote:
+                    return textualNote.ArePropertiesEqual((TextualNote)other);
+                case ValueGroup valueGroup:
+                    return valueGroup.ArePropertiesEqual((ValueGroup)other);
                 case ActualFiniteState actualFiniteState:
                     return actualFiniteState.ArePropertiesEqual((ActualFiniteState)other);
                 case ActualFiniteStateList actualFiniteStateList:
@@ -431,86 +533,6 @@ namespace CDP4Common.DTO.Equatable
                     return userPreference.ArePropertiesEqual((UserPreference)other);
                 case UserRuleVerification userRuleVerification:
                     return userRuleVerification.ArePropertiesEqual((UserRuleVerification)other);
-                case ActionItem actionItem:
-                    return actionItem.ArePropertiesEqual((ActionItem)other);
-                case Approval approval:
-                    return approval.ArePropertiesEqual((Approval)other);
-                case BinaryNote binaryNote:
-                    return binaryNote.ArePropertiesEqual((BinaryNote)other);
-                case Book book:
-                    return book.ArePropertiesEqual((Book)other);
-                case Bounds bounds:
-                    return bounds.ArePropertiesEqual((Bounds)other);
-                case ChangeProposal changeProposal:
-                    return changeProposal.ArePropertiesEqual((ChangeProposal)other);
-                case ChangeRequest changeRequest:
-                    return changeRequest.ArePropertiesEqual((ChangeRequest)other);
-                case ContractChangeNotice contractChangeNotice:
-                    return contractChangeNotice.ArePropertiesEqual((ContractChangeNotice)other);
-                case DiagramCanvas diagramCanvas:
-                    return diagramCanvas.ArePropertiesEqual((DiagramCanvas)other);
-                case DiagramEdge diagramEdge:
-                    return diagramEdge.ArePropertiesEqual((DiagramEdge)other);
-                case DiagramObject diagramObject:
-                    return diagramObject.ArePropertiesEqual((DiagramObject)other);
-                case EngineeringModelDataDiscussionItem engineeringModelDataDiscussionItem:
-                    return engineeringModelDataDiscussionItem.ArePropertiesEqual((EngineeringModelDataDiscussionItem)other);
-                case EngineeringModelDataNote engineeringModelDataNote:
-                    return engineeringModelDataNote.ArePropertiesEqual((EngineeringModelDataNote)other);
-                case Goal goal:
-                    return goal.ArePropertiesEqual((Goal)other);
-                case ModellingThingReference modellingThingReference:
-                    return modellingThingReference.ArePropertiesEqual((ModellingThingReference)other);
-                case OwnedStyle ownedStyle:
-                    return ownedStyle.ArePropertiesEqual((OwnedStyle)other);
-                case Page page:
-                    return page.ArePropertiesEqual((Page)other);
-                case Point point:
-                    return point.ArePropertiesEqual((Point)other);
-                case RelationshipParameterValue relationshipParameterValue:
-                    return relationshipParameterValue.ArePropertiesEqual((RelationshipParameterValue)other);
-                case RequestForDeviation requestForDeviation:
-                    return requestForDeviation.ArePropertiesEqual((RequestForDeviation)other);
-                case RequestForWaiver requestForWaiver:
-                    return requestForWaiver.ArePropertiesEqual((RequestForWaiver)other);
-                case RequirementsContainerParameterValue requirementsContainerParameterValue:
-                    return requirementsContainerParameterValue.ArePropertiesEqual((RequirementsContainerParameterValue)other);
-                case ReviewItemDiscrepancy reviewItemDiscrepancy:
-                    return reviewItemDiscrepancy.ArePropertiesEqual((ReviewItemDiscrepancy)other);
-                case Section section:
-                    return section.ArePropertiesEqual((Section)other);
-                case SharedStyle sharedStyle:
-                    return sharedStyle.ArePropertiesEqual((SharedStyle)other);
-                case SiteDirectoryDataAnnotation siteDirectoryDataAnnotation:
-                    return siteDirectoryDataAnnotation.ArePropertiesEqual((SiteDirectoryDataAnnotation)other);
-                case SiteDirectoryDataDiscussionItem siteDirectoryDataDiscussionItem:
-                    return siteDirectoryDataDiscussionItem.ArePropertiesEqual((SiteDirectoryDataDiscussionItem)other);
-                case SiteDirectoryThingReference siteDirectoryThingReference:
-                    return siteDirectoryThingReference.ArePropertiesEqual((SiteDirectoryThingReference)other);
-                case Solution solution:
-                    return solution.ArePropertiesEqual((Solution)other);
-                case Stakeholder stakeholder:
-                    return stakeholder.ArePropertiesEqual((Stakeholder)other);
-                case StakeholderValue stakeholderValue:
-                    return stakeholderValue.ArePropertiesEqual((StakeholderValue)other);
-                case StakeHolderValueMap stakeHolderValueMap:
-                    return stakeHolderValueMap.ArePropertiesEqual((StakeHolderValueMap)other);
-                case StakeHolderValueMapSettings stakeHolderValueMapSettings:
-                    return stakeHolderValueMapSettings.ArePropertiesEqual((StakeHolderValueMapSettings)other);
-                case TextualNote textualNote:
-                    return textualNote.ArePropertiesEqual((TextualNote)other);
-                case ValueGroup valueGroup:
-                    return valueGroup.ArePropertiesEqual((ValueGroup)other);
-                case DependentParameterTypeAssignment dependentParameterTypeAssignment:
-                    return dependentParameterTypeAssignment.ArePropertiesEqual((DependentParameterTypeAssignment)other);
-                case IndependentParameterTypeAssignment independentParameterTypeAssignment:
-                    return independentParameterTypeAssignment.ArePropertiesEqual((IndependentParameterTypeAssignment)other);
-                case LogEntryChangelogItem logEntryChangelogItem:
-                    return logEntryChangelogItem.ArePropertiesEqual((LogEntryChangelogItem)other);
-                case OrganizationalParticipant organizationalParticipant:
-                    return organizationalParticipant.ArePropertiesEqual((OrganizationalParticipant)other);
-                case SampledFunctionParameterType sampledFunctionParameterType:
-                    return sampledFunctionParameterType.ArePropertiesEqual((SampledFunctionParameterType)other);
                 default:
                     return false;
             }

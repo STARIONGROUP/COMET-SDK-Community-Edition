@@ -54,7 +54,12 @@ namespace CDP4Common.MetaInfo
             { "Alias", new AliasMetaInfo() },
             { "AndExpression", new AndExpressionMetaInfo() },
             { "Approval", new ApprovalMetaInfo() },
+            { "ArchitectureDiagram", new ArchitectureDiagramMetaInfo() },
+            { "ArchitectureElement", new ArchitectureElementMetaInfo() },
             { "ArrayParameterType", new ArrayParameterTypeMetaInfo() },
+            { "Attachment", new AttachmentMetaInfo() },
+            { "Behavior", new BehaviorMetaInfo() },
+            { "BehavioralParameter", new BehavioralParameterMetaInfo() },
             { "BinaryNote", new BinaryNoteMetaInfo() },
             { "BinaryRelationship", new BinaryRelationshipMetaInfo() },
             { "BinaryRelationshipRule", new BinaryRelationshipRuleMetaInfo() },
@@ -87,8 +92,10 @@ namespace CDP4Common.MetaInfo
             { "DiagramEdge", new DiagramEdgeMetaInfo() },
             { "DiagramElementContainer", new DiagramElementContainerMetaInfo() },
             { "DiagramElementThing", new DiagramElementThingMetaInfo() },
+            { "DiagramFrame", new DiagramFrameMetaInfo() },
             { "DiagrammingStyle", new DiagrammingStyleMetaInfo() },
             { "DiagramObject", new DiagramObjectMetaInfo() },
+            { "DiagramPort", new DiagramPortMetaInfo() },
             { "DiagramShape", new DiagramShapeMetaInfo() },
             { "DiagramThingBase", new DiagramThingBaseMetaInfo() },
             { "DiscussionItem", new DiscussionItemMetaInfo() },
@@ -320,6 +327,7 @@ namespace CDP4Common.MetaInfo
             yield return Version.Parse("1.1.0");
             yield return Version.Parse("1.2.0");
             yield return Version.Parse("1.3.0");
+            yield return Version.Parse("1.4.0");
         }
 
         /// <summary>

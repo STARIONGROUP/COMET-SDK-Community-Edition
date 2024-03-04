@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -44,6 +44,7 @@
  | 10    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 11    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 12    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 13    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -96,7 +97,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(term), "The Term may not be null");
             }
 
-            writer.WriteArrayHeader(13);
+            writer.WriteArrayHeader(14);
 
             writer.Write(term.Iid.ToByteArray());
             writer.Write(term.RevisionNumber);
@@ -138,6 +139,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(term.Attachment.Count);
+            foreach (var identifier in term.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -240,6 +246,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             term.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 13:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            term.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

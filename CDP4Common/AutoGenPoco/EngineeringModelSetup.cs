@@ -106,6 +106,16 @@ namespace CDP4Common.SiteDirectoryData
         public List<DomainOfExpertise> ActiveDomain { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether AutoPublish.
+        /// </summary>
+        /// <remarks>
+        /// When set to true and the value of a Parameter is updated, it is immediately available as published value without creating a new Publication
+        /// </remarks>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public bool AutoPublish { get; set; }
+
+        /// <summary>
         /// Gets or sets the DefaultOrganizationalParticipant.
         /// </summary>
         /// <remarks>
@@ -260,6 +270,7 @@ namespace CDP4Common.SiteDirectoryData
             var clone = (EngineeringModelSetup)this.MemberwiseClone();
             clone.ActiveDomain = new List<DomainOfExpertise>(this.ActiveDomain);
             clone.Alias = cloneContainedThings ? new ContainerList<Alias>(clone) : new ContainerList<Alias>(this.Alias, clone);
+            clone.Attachment = cloneContainedThings ? new ContainerList<Attachment>(clone) : new ContainerList<Attachment>(this.Attachment, clone);
             clone.Definition = cloneContainedThings ? new ContainerList<Definition>(clone) : new ContainerList<Definition>(this.Definition, clone);
             clone.ExcludedDomain = new List<DomainOfExpertise>(this.ExcludedDomain);
             clone.ExcludedPerson = new List<Person>(this.ExcludedPerson);
@@ -272,6 +283,7 @@ namespace CDP4Common.SiteDirectoryData
             if (cloneContainedThings)
             {
                 clone.Alias.AddRange(this.Alias.Select(x => x.Clone(true)));
+                clone.Attachment.AddRange(this.Attachment.Select(x => x.Clone(true)));
                 clone.Definition.AddRange(this.Definition.Select(x => x.Clone(true)));
                 clone.HyperLink.AddRange(this.HyperLink.Select(x => x.Clone(true)));
                 clone.IterationSetup.AddRange(this.IterationSetup.Select(x => x.Clone(true)));
@@ -355,6 +367,8 @@ namespace CDP4Common.SiteDirectoryData
             this.ActiveDomain.ResolveList(dto.ActiveDomain, dto.IterationContainerId, this.Cache);
             this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Alias.ResolveList(dto.Alias, dto.IterationContainerId, this.Cache);
+            this.Attachment.ResolveList(dto.Attachment, dto.IterationContainerId, this.Cache);
+            this.AutoPublish = dto.AutoPublish;
             this.DefaultOrganizationalParticipant = (dto.DefaultOrganizationalParticipant.HasValue) ? this.Cache.Get<OrganizationalParticipant>(dto.DefaultOrganizationalParticipant.Value, dto.IterationContainerId) : null;
             this.Definition.ResolveList(dto.Definition, dto.IterationContainerId, this.Cache);
             this.EngineeringModelIid = dto.EngineeringModelIid;
@@ -387,6 +401,8 @@ namespace CDP4Common.SiteDirectoryData
             dto.ActiveDomain.AddRange(this.ActiveDomain.Select(x => x.Iid));
             dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Alias.AddRange(this.Alias.Select(x => x.Iid));
+            dto.Attachment.AddRange(this.Attachment.Select(x => x.Iid));
+            dto.AutoPublish = this.AutoPublish;
             dto.DefaultOrganizationalParticipant = this.DefaultOrganizationalParticipant != null ? (Guid?)this.DefaultOrganizationalParticipant.Iid : null;
             dto.Definition.AddRange(this.Definition.Select(x => x.Iid));
             dto.EngineeringModelIid = this.EngineeringModelIid;

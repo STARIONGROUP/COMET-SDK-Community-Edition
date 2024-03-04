@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -42,6 +42,9 @@
  | 8     | name                                 | string                       | 1..1        |  1.1.0  |
  | 9     | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 10    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 11    | description                          | string                       | 1..1        |  1.4.0  |
+ | 12    | isHidden                             | bool                         | 1..1        |  1.4.0  |
+ | 13    | lockedBy                             | Guid                         | 0..1        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -94,7 +97,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(diagramCanvas), "The DiagramCanvas may not be null");
             }
 
-            writer.WriteArrayHeader(11);
+            writer.WriteArrayHeader(14);
 
             writer.Write(diagramCanvas.Iid.ToByteArray());
             writer.Write(diagramCanvas.RevisionNumber);
@@ -126,6 +129,16 @@ namespace CDP4MessagePackSerializer
             if (diagramCanvas.Actor.HasValue)
             {
                 writer.Write(diagramCanvas.Actor.Value.ToByteArray());
+            }
+            else
+            {
+                writer.WriteNil();
+            }
+            writer.Write(diagramCanvas.Description);
+            writer.Write(diagramCanvas.IsHidden);
+            if (diagramCanvas.LockedBy.HasValue)
+            {
+                writer.Write(diagramCanvas.LockedBy.Value.ToByteArray());
             }
             else
             {
@@ -222,6 +235,22 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             diagramCanvas.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 11:
+                        diagramCanvas.Description = reader.ReadString();
+                        break;
+                    case 12:
+                        diagramCanvas.IsHidden = reader.ReadBoolean();
+                        break;
+                    case 13:
+                        if (reader.TryReadNil())
+                        {
+                            diagramCanvas.LockedBy = null;
+                        }
+                        else
+                        {
+                            diagramCanvas.LockedBy = reader.ReadBytes().ToGuid();
                         }
                         break;
                     default:

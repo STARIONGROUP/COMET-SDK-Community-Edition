@@ -56,6 +56,7 @@ namespace CDP4Common.DTO
         protected DefinedThing()
         {
             this.Alias = new List<Guid>();
+            this.Attachment = new List<Guid>();
             this.Definition = new List<Guid>();
             this.HyperLink = new List<Guid>();
         }
@@ -72,6 +73,7 @@ namespace CDP4Common.DTO
         protected DefinedThing(Guid iid, int rev) : base(iid: iid, rev: rev)
         {
             this.Alias = new List<Guid>();
+            this.Attachment = new List<Guid>();
             this.Definition = new List<Guid>();
             this.HyperLink = new List<Guid>();
         }
@@ -82,6 +84,14 @@ namespace CDP4Common.DTO
         [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
         public virtual List<Guid> Alias { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifiers of the contained Attachment instances.
+        /// </summary>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public virtual List<Guid> Attachment { get; set; }
 
         /// <summary>
         /// Gets or sets the unique identifiers of the contained Definition instances.
@@ -120,6 +130,7 @@ namespace CDP4Common.DTO
             {
                 var containers = new List<IEnumerable>(base.ContainerLists);
                 containers.Add(this.Alias);
+                containers.Add(this.Attachment);
                 containers.Add(this.Definition);
                 containers.Add(this.HyperLink);
                 return containers;
@@ -135,6 +146,8 @@ namespace CDP4Common.DTO
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Alias", this.Alias);
+
+            dictionary.Add("Attachment", this.Attachment);
 
             dictionary.Add("Definition", this.Definition);
 
@@ -172,6 +185,10 @@ namespace CDP4Common.DTO
                         {
                             case "Alias":
                                 this.Alias.Remove(id);
+                                break;
+
+                            case "Attachment":
+                                this.Attachment.Remove(id);
                                 break;
 
                             case "Definition":
@@ -216,6 +233,13 @@ namespace CDP4Common.DTO
                         foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
                         {
                             this.Alias.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Attachment":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Attachment.Remove(toBeRemoved);
                         } 
                         break;
 

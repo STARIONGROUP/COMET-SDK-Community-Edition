@@ -154,6 +154,8 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Alias", this.Alias);
 
+            dictionary.Add("Attachment", this.Attachment);
+
             dictionary.Add("Category", this.Category);
 
             if (this.DefaultScale != null)
@@ -199,6 +201,10 @@ namespace CDP4Common.DTO
                         {
                             case "Alias":
                                 this.Alias.Remove(id);
+                                break;
+
+                            case "Attachment":
+                                this.Attachment.Remove(id);
                                 break;
 
                             case "Category":
@@ -259,6 +265,13 @@ namespace CDP4Common.DTO
                         foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
                         {
                             this.Alias.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Attachment":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Attachment.Remove(toBeRemoved);
                         } 
                         break;
 

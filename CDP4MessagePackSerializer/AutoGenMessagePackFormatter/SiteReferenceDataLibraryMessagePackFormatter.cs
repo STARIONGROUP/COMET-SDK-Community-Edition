@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -57,6 +57,7 @@
  | 23    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 24    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 25    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 26    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -109,7 +110,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(siteReferenceDataLibrary), "The SiteReferenceDataLibrary may not be null");
             }
 
-            writer.WriteArrayHeader(26);
+            writer.WriteArrayHeader(27);
 
             writer.Write(siteReferenceDataLibrary.Iid.ToByteArray());
             writer.Write(siteReferenceDataLibrary.RevisionNumber);
@@ -221,6 +222,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(siteReferenceDataLibrary.Attachment.Count);
+            foreach (var identifier in siteReferenceDataLibrary.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -421,6 +427,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             siteReferenceDataLibrary.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 26:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            siteReferenceDataLibrary.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

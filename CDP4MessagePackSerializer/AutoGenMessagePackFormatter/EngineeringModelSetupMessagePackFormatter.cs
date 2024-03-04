@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -53,6 +53,8 @@
  | 19    | organizationalParticipant            | Guid                         | 0..*        |  1.2.0  |
  | 20    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 21    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 22    | attachment                           | Guid                         | 0..*        |  1.4.0  |
+ | 23    | autoPublish                          | bool                         | 1..1        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -105,7 +107,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(engineeringModelSetup), "The EngineeringModelSetup may not be null");
             }
 
-            writer.WriteArrayHeader(22);
+            writer.WriteArrayHeader(24);
 
             writer.Write(engineeringModelSetup.Iid.ToByteArray());
             writer.Write(engineeringModelSetup.RevisionNumber);
@@ -191,6 +193,12 @@ namespace CDP4MessagePackSerializer
             {
                 writer.WriteNil();
             }
+            writer.WriteArrayHeader(engineeringModelSetup.Attachment.Count);
+            foreach (var identifier in engineeringModelSetup.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
+            }
+            writer.Write(engineeringModelSetup.AutoPublish);
 
             writer.Flush();
         }
@@ -354,6 +362,16 @@ namespace CDP4MessagePackSerializer
                         {
                             engineeringModelSetup.Actor = reader.ReadBytes().ToGuid();
                         }
+                        break;
+                    case 22:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            engineeringModelSetup.Attachment.Add(reader.ReadBytes().ToGuid());
+                        }
+                        break;
+                    case 23:
+                        engineeringModelSetup.AutoPublish = reader.ReadBoolean();
                         break;
                     default:
                         reader.Skip();

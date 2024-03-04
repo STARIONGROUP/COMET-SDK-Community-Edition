@@ -56,6 +56,7 @@ namespace CDP4Common.DTO
         /// </summary>
         public ElementDefinition()
         {
+            this.Behavior = new List<Guid>();
             this.ContainedElement = new List<Guid>();
             this.OrganizationalParticipant = new List<Guid>();
             this.Parameter = new List<Guid>();
@@ -74,12 +75,21 @@ namespace CDP4Common.DTO
         /// </param>
         public ElementDefinition(Guid iid, int rev) : base(iid: iid, rev: rev)
         {
+            this.Behavior = new List<Guid>();
             this.ContainedElement = new List<Guid>();
             this.OrganizationalParticipant = new List<Guid>();
             this.Parameter = new List<Guid>();
             this.ParameterGroup = new List<Guid>();
             this.ReferencedElement = new List<Guid>();
         }
+
+        /// <summary>
+        /// Gets or sets the unique identifiers of the contained Behavior instances.
+        /// </summary>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.Composite, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public List<Guid> Behavior { get; set; }
 
         /// <summary>
         /// Gets or sets the unique identifiers of the contained ContainedElement instances.
@@ -133,6 +143,7 @@ namespace CDP4Common.DTO
             get 
             {
                 var containers = new List<IEnumerable>(base.ContainerLists);
+                containers.Add(this.Behavior);
                 containers.Add(this.ContainedElement);
                 containers.Add(this.Parameter);
                 containers.Add(this.ParameterGroup);
@@ -149,6 +160,10 @@ namespace CDP4Common.DTO
             var dictionary = new Dictionary<string, IEnumerable<Guid>>();
 
             dictionary.Add("Alias", this.Alias);
+
+            dictionary.Add("Attachment", this.Attachment);
+
+            dictionary.Add("Behavior", this.Behavior);
 
             dictionary.Add("Category", this.Category);
 
@@ -203,6 +218,14 @@ namespace CDP4Common.DTO
                         {
                             case "Alias":
                                 this.Alias.Remove(id);
+                                break;
+
+                            case "Attachment":
+                                this.Attachment.Remove(id);
+                                break;
+
+                            case "Behavior":
+                                this.Behavior.Remove(id);
                                 break;
 
                             case "Category":
@@ -279,6 +302,20 @@ namespace CDP4Common.DTO
                         foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
                         {
                             this.Alias.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Attachment":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Attachment.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Behavior":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Behavior.Remove(toBeRemoved);
                         } 
                         break;
 
@@ -453,6 +490,28 @@ namespace CDP4Common.DTO
                 }
 
                 this.Alias.Add(copy.Value.Iid);
+            }
+
+            foreach (var guid in original.Attachment)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
+                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
+                {
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
+                }
+
+                this.Attachment.Add(copy.Value.Iid);
+            }
+
+            foreach (var guid in original.Behavior)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
+                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
+                {
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
+                }
+
+                this.Behavior.Add(copy.Value.Iid);
             }
 
             foreach (var guid in original.Category)

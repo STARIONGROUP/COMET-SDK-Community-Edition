@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -84,6 +84,88 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
+                case "attachment":
+                    return base.QueryValue(pd.Input);
+                case "behavior":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    var behaviorUpperBound = pd.Upper.Value;
+
+                    if (pd.Lower.Value == 0 && behaviorUpperBound == int.MaxValue && !this.Behavior.Any())
+                    {
+                        if (pd.Next == null)
+                        {
+                            return new List<Behavior>();
+                        }
+
+                        var sentinelBehavior = new Behavior(Guid.Empty, null, null);
+
+                        return sentinelBehavior.QuerySentinelValue(pd.NextPath, true);
+                    }
+
+                    if (pd.Upper.Value == int.MaxValue)
+                    {
+                        behaviorUpperBound = this.Behavior.Count - 1;
+                    }
+
+                    if (this.Behavior.Count - 1 < pd.Lower.Value)
+                    {
+                        throw new IndexOutOfRangeException($"Invalid Multiplicity for Behavior property, the lower bound {pd.Lower.Value} is higher than the max index of this list.");
+                    }
+
+                    if (this.Behavior.Count - 1 < behaviorUpperBound)
+                    {
+                        throw new IndexOutOfRangeException($"Invalid Multiplicity for the Behavior property, the upper bound {pd.Upper.Value} is higher than the max index of this list.");
+                    }
+
+                    if (pd.Lower.Value == pd.Upper.Value)
+                    {
+                        if (pd.Next == null)
+                        {
+                            return this.Behavior[pd.Lower.Value];
+                        }
+
+                        return this.Behavior[pd.Lower.Value].QueryValue(pd.NextPath);
+                    }
+
+                    if (pd.Next == null)
+                    {
+                        var behaviorObjects = new List<Behavior>();
+
+                        for (var i = pd.Lower.Value; i < behaviorUpperBound + 1; i++)
+                        {
+                            behaviorObjects.Add(this.Behavior[i]);
+                        }
+
+                        return behaviorObjects;
+                    }
+
+                    var behaviorNextObjects = new List<object>();
+
+                    for (var i = pd.Lower.Value; i < behaviorUpperBound + 1; i++)
+                    {
+                        var queryResult = this.Behavior[i].QueryValue(pd.Next.Input);
+
+                        if (queryResult is IEnumerable<object> queriedValues)
+                        {
+                            foreach (var queriedValue in queriedValues)
+                            {
+                                if (queriedValue != null)
+                                {
+                                    behaviorNextObjects.Add(queriedValue);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (queryResult != null)
+                            {
+                                behaviorNextObjects.Add(queryResult);
+                            }
+                        }
+                    }
+
+                    return behaviorNextObjects;
                 case "category":
                     return base.QueryValue(pd.Input);
                 case "containedelement":
@@ -554,6 +636,10 @@ namespace CDP4Common.EngineeringModelData
                     return isCallerEmunerable ? (object) new List<Person>() : default(Person);
                 case "alias":
                     return pd.Next == null ? (object) new List<Alias>() : new Alias(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                case "attachment":
+                    return pd.Next == null ? (object) new List<Attachment>() : new Attachment(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                case "behavior":
+                    return pd.Next == null ? (object) new List<Behavior>() : new Behavior(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
                 case "category":
                     return pd.Next == null ? (object) new List<Category>() : new Category(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
                 case "containedelement":

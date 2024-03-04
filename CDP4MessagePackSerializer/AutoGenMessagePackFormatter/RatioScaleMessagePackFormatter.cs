@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -54,6 +54,7 @@
  | 20    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 21    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 22    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 23    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -106,7 +107,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(ratioScale), "The RatioScale may not be null");
             }
 
-            writer.WriteArrayHeader(23);
+            writer.WriteArrayHeader(24);
 
             writer.Write(ratioScale.Iid.ToByteArray());
             writer.Write(ratioScale.RevisionNumber);
@@ -166,6 +167,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(ratioScale.Attachment.Count);
+            foreach (var identifier in ratioScale.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -306,6 +312,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             ratioScale.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 23:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            ratioScale.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

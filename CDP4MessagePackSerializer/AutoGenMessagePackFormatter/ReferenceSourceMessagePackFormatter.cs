@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -52,6 +52,7 @@
  | 18    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 19    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 20    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 21    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -104,7 +105,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(referenceSource), "The ReferenceSource may not be null");
             }
 
-            writer.WriteArrayHeader(21);
+            writer.WriteArrayHeader(22);
 
             writer.Write(referenceSource.Iid.ToByteArray());
             writer.Write(referenceSource.RevisionNumber);
@@ -186,6 +187,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(referenceSource.Attachment.Count);
+            foreach (var identifier in referenceSource.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -344,6 +350,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             referenceSource.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 21:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            referenceSource.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

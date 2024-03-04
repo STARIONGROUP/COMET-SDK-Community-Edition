@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -45,6 +45,7 @@
  | 11    | stakeholderValue                     | Guid                         | 0..*        |  1.1.0  |
  | 12    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 13    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 14    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -97,7 +98,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(stakeholder), "The Stakeholder may not be null");
             }
 
-            writer.WriteArrayHeader(14);
+            writer.WriteArrayHeader(15);
 
             writer.Write(stakeholder.Iid.ToByteArray());
             writer.Write(stakeholder.RevisionNumber);
@@ -148,6 +149,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(stakeholder.Attachment.Count);
+            foreach (var identifier in stakeholder.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -261,6 +267,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             stakeholder.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 14:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            stakeholder.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

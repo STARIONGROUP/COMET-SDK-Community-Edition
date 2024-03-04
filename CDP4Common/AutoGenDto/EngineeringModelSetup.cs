@@ -89,6 +89,14 @@ namespace CDP4Common.DTO
         public List<Guid> ActiveDomain { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether AutoPublish.
+        /// </summary>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        [DataMember]
+        public bool AutoPublish { get; set; }
+
+        /// <summary>
         /// Gets or sets the unique identifier of the referenced DefaultOrganizationalParticipant.
         /// </summary>
         [CDPVersion("1.2.0")]
@@ -189,6 +197,8 @@ namespace CDP4Common.DTO
 
             dictionary.Add("Alias", this.Alias);
 
+            dictionary.Add("Attachment", this.Attachment);
+
             if (this.DefaultOrganizationalParticipant != null)
             {
                 dictionary.Add("DefaultOrganizationalParticipant", new [] { this.DefaultOrganizationalParticipant.Value });
@@ -247,6 +257,10 @@ namespace CDP4Common.DTO
 
                             case "Alias":
                                 this.Alias.Remove(id);
+                                break;
+
+                            case "Attachment":
+                                this.Attachment.Remove(id);
                                 break;
 
                             case "DefaultOrganizationalParticipant":
@@ -338,6 +352,13 @@ namespace CDP4Common.DTO
                         foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
                         {
                             this.Alias.Remove(toBeRemoved);
+                        } 
+                        break;
+
+                    case "Attachment":
+                        foreach (var toBeRemoved in referencedProperty.Value.Except(ids).ToList())
+                        {
+                            this.Attachment.Remove(toBeRemoved);
                         } 
                         break;
 
@@ -540,6 +561,19 @@ namespace CDP4Common.DTO
 
                 this.Alias.Add(copy.Value.Iid);
             }
+
+            foreach (var guid in original.Attachment)
+            {
+                var copy = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == guid);
+                if (Equals(copy, default(KeyValuePair<Thing, Thing>)))
+                {
+                    throw new InvalidOperationException($"The copy could not be found for {guid}");
+                }
+
+                this.Attachment.Add(copy.Value.Iid);
+            }
+
+            this.AutoPublish = original.AutoPublish;
 
             var copyDefaultOrganizationalParticipant = originalCopyMap.SingleOrDefault(kvp => kvp.Key.Iid == original.DefaultOrganizationalParticipant);
             this.DefaultOrganizationalParticipant = copyDefaultOrganizationalParticipant.Value == null ? original.DefaultOrganizationalParticipant : copyDefaultOrganizationalParticipant.Value.Iid;

@@ -93,7 +93,60 @@ namespace CDP4Common.DiagramData
         /// Note 2: All persistent date-and-time-stamps in this model shall be stored in UTC. When local calendar dates and clock times in a specific timezone are needed they shall be converted on the fly from and to UTC by client applications.
         /// </remarks>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
-        public DateTime CreatedOn { get; set; }
+        public virtual DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Description.
+        /// </summary>
+        /// <remarks>
+        /// Textual description of a DiagramCanvas.
+        /// </remarks>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsHidden.
+        /// </summary>
+        /// <remarks>
+        /// assertion whether the DiagramCanvas is hidden or not
+        /// </remarks>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual bool IsHidden { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LockedBy.
+        /// </summary>
+        /// <remarks>
+        /// reference to a Person that has locked this DiagramCanvas for write / modify access
+        /// </remarks>
+        [CDPVersion("1.4.0")]
+        [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
+        public virtual Person LockedBy { get; set; }
+
+        /// <summary>
+        /// Queries the referenced <see cref="Thing"/>s of the current <see cref="DiagramCanvas"/>
+        /// </summary>
+        /// <remarks>
+        /// This does not include the contained <see cref="Thing"/>s, the contained <see cref="Thing"/>s
+        /// are exposed via the <see cref="ContainerLists"/> property
+        /// </remarks>
+        /// <returns>
+        /// An <see cref="IEnumerable{Thing}"/>
+        /// </returns>
+        public override IEnumerable<Thing> QueryReferencedThings()
+        {
+            foreach (var thing in base.QueryReferencedThings())
+            {
+                yield return thing;
+            }
+
+            if (this.LockedBy != null)
+            {
+                yield return this.LockedBy;
+            }
+        }
 
         /// <summary>
         /// Creates and returns a copy of this <see cref="DiagramCanvas"/> for edit purpose.
@@ -144,6 +197,11 @@ namespace CDP4Common.DiagramData
         {
             var errorList = new List<string>(base.ValidatePocoCardinality());
 
+            if (string.IsNullOrWhiteSpace(this.Description))
+            {
+                errorList.Add("The property Description is null or empty.");
+            }
+
             return errorList;
         }
 
@@ -167,9 +225,12 @@ namespace CDP4Common.DiagramData
             this.Actor = (dto.Actor.HasValue) ? this.Cache.Get<Person>(dto.Actor.Value, dto.IterationContainerId) : null;
             this.Bounds.ResolveList(dto.Bounds, dto.IterationContainerId, this.Cache);
             this.CreatedOn = dto.CreatedOn;
+            this.Description = dto.Description;
             this.DiagramElement.ResolveList(dto.DiagramElement, dto.IterationContainerId, this.Cache);
             this.ExcludedDomain.ResolveList(dto.ExcludedDomain, dto.IterationContainerId, this.Cache);
             this.ExcludedPerson.ResolveList(dto.ExcludedPerson, dto.IterationContainerId, this.Cache);
+            this.IsHidden = dto.IsHidden;
+            this.LockedBy = (dto.LockedBy.HasValue) ? this.Cache.Get<Person>(dto.LockedBy.Value, dto.IterationContainerId) : null;
             this.ModifiedOn = dto.ModifiedOn;
             this.Name = dto.Name;
             this.RevisionNumber = dto.RevisionNumber;
@@ -188,9 +249,12 @@ namespace CDP4Common.DiagramData
             dto.Actor = this.Actor != null ? (Guid?)this.Actor.Iid : null;
             dto.Bounds.AddRange(this.Bounds.Select(x => x.Iid));
             dto.CreatedOn = this.CreatedOn;
+            dto.Description = this.Description;
             dto.DiagramElement.AddRange(this.DiagramElement.Select(x => x.Iid));
             dto.ExcludedDomain.AddRange(this.ExcludedDomain.Select(x => x.Iid));
             dto.ExcludedPerson.AddRange(this.ExcludedPerson.Select(x => x.Iid));
+            dto.IsHidden = this.IsHidden;
+            dto.LockedBy = this.LockedBy != null ? (Guid?)this.LockedBy.Iid : null;
             dto.ModifiedOn = this.ModifiedOn;
             dto.Name = this.Name;
             dto.RevisionNumber = this.RevisionNumber;

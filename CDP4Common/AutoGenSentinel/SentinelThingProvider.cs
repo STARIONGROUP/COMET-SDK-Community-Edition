@@ -2,17 +2,18 @@
 // <copyright file="SentinelThingProvider.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
-//    This file is part of COMET-SDK Community Edition
+//    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
 //
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
 //
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
@@ -56,7 +57,7 @@ namespace CDP4Common
             sentinelProvider.Add("Category", new Category(Guid.Empty, null, null));
             sentinelProvider.Add("ChangeProposal", new ChangeProposal(Guid.Empty, null, null));
             sentinelProvider.Add("ChangeRequest", new ChangeRequest(Guid.Empty, null, null));
-            sentinelProvider.Add("DiagramElementThing", new DiagramEdge(Guid.Empty, null, null));
+            sentinelProvider.Add("DiagramElementThing", new ArchitectureElement(Guid.Empty, null, null));
             sentinelProvider.Add("DomainOfExpertise", new DomainOfExpertise(Guid.Empty, null, null));
             sentinelProvider.Add("ElementDefinition", new ElementDefinition(Guid.Empty, null, null));
             sentinelProvider.Add("EngineeringModelSetup", new EngineeringModelSetup(Guid.Empty, null, null));

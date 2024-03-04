@@ -2,8 +2,8 @@
 // <copyright file="Payload.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft,
-//            Nathanael Smiechowski, Antoine Théate, Omar Elabiary
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -178,6 +178,13 @@
      | 144   | LogEntryChangelogItem               |  1.2.0  |
      | 145   | OrganizationalParticipant           |  1.2.0  |
      | 146   | SampledFunctionParameterType        |  1.2.0  |
+     | 147   | ArchitectureDiagram                 |  1.4.0  |
+     | 148   | ArchitectureElement                 |  1.4.0  |
+     | 149   | Attachment                          |  1.4.0  |
+     | 150   | Behavior                            |  1.4.0  |
+     | 151   | BehavioralParameter                 |  1.4.0  |
+     | 152   | DiagramFrame                        |  1.4.0  |
+     | 153   | DiagramPort                         |  1.4.0  |
      * ------------------------------------------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -186,8 +193,6 @@ namespace CDP4MessagePackSerializer
     using System.Collections.Generic;
 
     using CDP4Common.DTO;
-
-    using MessagePack;
 
     /// <summary>
     /// The <see cref="Payload"/> acts as envelope around the <see cref="CDP4Common.DTO"/> classes and is used as
@@ -929,6 +934,41 @@ namespace CDP4MessagePackSerializer
         /// Gets or sets the list of <see cref="SampledFunctionParameterType"/>.
         /// </summary>
         internal List<SampledFunctionParameterType> SampledFunctionParameterType { get; set; } = new List<SampledFunctionParameterType>();
+
+        /// <summary>
+        /// Gets or sets the list of <see cref="ArchitectureDiagram"/>.
+        /// </summary>
+        internal List<ArchitectureDiagram> ArchitectureDiagram { get; set; } = new List<ArchitectureDiagram>();
+
+        /// <summary>
+        /// Gets or sets the list of <see cref="ArchitectureElement"/>.
+        /// </summary>
+        internal List<ArchitectureElement> ArchitectureElement { get; set; } = new List<ArchitectureElement>();
+
+        /// <summary>
+        /// Gets or sets the list of <see cref="Attachment"/>.
+        /// </summary>
+        internal List<Attachment> Attachment { get; set; } = new List<Attachment>();
+
+        /// <summary>
+        /// Gets or sets the list of <see cref="Behavior"/>.
+        /// </summary>
+        internal List<Behavior> Behavior { get; set; } = new List<Behavior>();
+
+        /// <summary>
+        /// Gets or sets the list of <see cref="BehavioralParameter"/>.
+        /// </summary>
+        internal List<BehavioralParameter> BehavioralParameter { get; set; } = new List<BehavioralParameter>();
+
+        /// <summary>
+        /// Gets or sets the list of <see cref="DiagramFrame"/>.
+        /// </summary>
+        internal List<DiagramFrame> DiagramFrame { get; set; } = new List<DiagramFrame>();
+
+        /// <summary>
+        /// Gets or sets the list of <see cref="DiagramPort"/>.
+        /// </summary>
+        internal List<DiagramPort> DiagramPort { get; set; } = new List<DiagramPort>();
     }
 }
 

@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -50,6 +50,7 @@
  | 16    | modifiedOn                           | DateTime                     | 1..1        |  1.1.0  |
  | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 19    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -102,7 +103,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(specializedQuantityKind), "The SpecializedQuantityKind may not be null");
             }
 
-            writer.WriteArrayHeader(19);
+            writer.WriteArrayHeader(20);
 
             writer.Write(specializedQuantityKind.Iid.ToByteArray());
             writer.Write(specializedQuantityKind.RevisionNumber);
@@ -158,6 +159,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(specializedQuantityKind.Attachment.Count);
+            foreach (var identifier in specializedQuantityKind.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -286,6 +292,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             specializedQuantityKind.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 19:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            specializedQuantityKind.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

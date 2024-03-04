@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -85,6 +85,8 @@ namespace CDP4Common.SiteDirectoryData
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "allpossiblescale":
+                    return base.QueryValue(pd.Input);
+                case "attachment":
                     return base.QueryValue(pd.Input);
                 case "category":
                     return base.QueryValue(pd.Input);
@@ -252,6 +254,8 @@ namespace CDP4Common.SiteDirectoryData
                     return pd.Next == null ? (object) new List<Alias>() : new Alias(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
                 case "allpossiblescale":
                     return pd.Next == null ? (object) new List<IntervalScale>() : new IntervalScale(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
+                case "attachment":
+                    return pd.Next == null ? (object) new List<Attachment>() : new Attachment(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
                 case "category":
                     return pd.Next == null ? (object) new List<Category>() : new Category(Guid.Empty, null, null).QuerySentinelValue(pd.Next.Input, true);
                 case "defaultscale":

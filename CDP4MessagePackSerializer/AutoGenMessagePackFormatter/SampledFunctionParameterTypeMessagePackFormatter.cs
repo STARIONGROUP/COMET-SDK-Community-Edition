@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -50,6 +50,7 @@
  | 16    | symbol                               | string                       | 1..1        |  1.2.0  |
  | 17    | thingPreference                      | string                       | 0..1        |  1.2.0  |
  | 18    | actor                                | Guid                         | 0..1        |  1.3.0  |
+ | 19    | attachment                           | Guid                         | 0..*        |  1.4.0  |
  * -------------------------------------------- | ---------------------------- | ----------- | ------- */
 
 namespace CDP4MessagePackSerializer
@@ -102,7 +103,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(sampledFunctionParameterType), "The SampledFunctionParameterType may not be null");
             }
 
-            writer.WriteArrayHeader(19);
+            writer.WriteArrayHeader(20);
 
             writer.Write(sampledFunctionParameterType.Iid.ToByteArray());
             writer.Write(sampledFunctionParameterType.RevisionNumber);
@@ -177,6 +178,11 @@ namespace CDP4MessagePackSerializer
             else
             {
                 writer.WriteNil();
+            }
+            writer.WriteArrayHeader(sampledFunctionParameterType.Attachment.Count);
+            foreach (var identifier in sampledFunctionParameterType.Attachment.OrderBy(x => x, guidComparer))
+            {
+                writer.Write(identifier.ToByteArray());
             }
 
             writer.Flush();
@@ -330,6 +336,13 @@ namespace CDP4MessagePackSerializer
                         else
                         {
                             sampledFunctionParameterType.Actor = reader.ReadBytes().ToGuid();
+                        }
+                        break;
+                    case 19:
+                        valueLength = reader.ReadArrayHeader();
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            sampledFunctionParameterType.Attachment.Add(reader.ReadBytes().ToGuid());
                         }
                         break;
                     default:

@@ -77,14 +77,14 @@ namespace CDP4Common.DTO
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
-        public string Documentation { get; set; }
+        public virtual string Documentation { get; set; }
 
         /// <summary>
         /// Gets or sets the Resolution.
         /// </summary>
         [UmlInformation(aggregation: AggregationKind.None, isDerived: false, isOrdered: false, isNullable: false, isPersistent: true)]
         [DataMember]
-        public float Resolution { get; set; }
+        public virtual float Resolution { get; set; }
 
         /// <summary>
         /// Gets the route for the current <see ref="DiagramObject"/>.
