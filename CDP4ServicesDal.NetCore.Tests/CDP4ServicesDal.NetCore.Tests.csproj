@@ -34,6 +34,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="RichardSzalay.MockHttp" Version="7.0.0" />
       </ItemGroup>
 
     <ItemGroup>

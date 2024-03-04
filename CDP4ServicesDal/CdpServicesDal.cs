@@ -607,7 +607,7 @@ namespace CDP4ServicesDal
             {
                 var includeReferenData = thing is ReferenceDataLibrary;
 
-                attributes = this.GetIUriQueryAttribute(includeReferenData);
+                attributes = GetIUriQueryAttribute(includeReferenData);
             }
 
             var thingRoute = this.CleanUriFinalSlash(thing.Route);
@@ -1325,7 +1325,7 @@ namespace CDP4ServicesDal
             try
             {
                 var validUriAssertion = new Uri(uri);
-                UriExtensions.AssertUriIsHttpOrHttpsSchema(validUriAssertion);
+                validUriAssertion.AssertUriIsHttpOrHttpsSchema();
                 return true;
             }
             catch (Exception)
@@ -1343,7 +1343,7 @@ namespace CDP4ServicesDal
         /// <returns>
         /// the <see cref="QueryAttributes"/>
         /// </returns>
-        private IQueryAttributes GetIUriQueryAttribute(bool includeReferenceData = false)
+        private static IQueryAttributes GetIUriQueryAttribute(bool includeReferenceData = false)
         {
             return includeReferenceData
                 ? new QueryAttributes
@@ -1371,14 +1371,9 @@ namespace CDP4ServicesDal
                 var firstChar = (char)reader.Peek();
                 stream.Position = 0;
 
-                if (firstChar == '[')
-                {
-                    return new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize(stream));
-                }
-                else
-                {
-                    return new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize<CometTask>(stream));
-                }
+                return firstChar == '[' 
+                    ? new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize(stream)) 
+                    : new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize<CometTask>(stream));
             }
         }
     }
