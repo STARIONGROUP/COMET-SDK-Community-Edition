@@ -47,6 +47,8 @@ namespace CDP4Dal
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
 
+    using CDP4DalCommon.Tasks;
+
     using NLog;
 
     /// <summary>
@@ -79,6 +81,11 @@ namespace CDP4Dal
         /// Contains the open <see cref="Iteration"/> along with the active <see cref="DomainOfExpertise"/> and <see cref="Participant"/>
         /// </summary>
         private readonly Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>> openIterations;
+
+        /// <summary>
+        /// Contains all <see cref="CometTask" /> created or read during the session
+        /// </summary>
+        private readonly Dictionary<Guid, CometTask> cometTasks = new Dictionary<Guid, CometTask>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Session"/> class.
@@ -124,6 +131,11 @@ namespace CDP4Dal
         /// Gets the version of the data-model that is supported by the associated <see cref="Dal"/>
         /// </summary>
         public Version DalVersion => this.Dal.DalVersion;
+
+        /// <summary>
+        /// Gets the <see cref="IReadOnlyDictionary{TKey,TValue}"/> of available <see cref="CometTask" />
+        /// </summary>
+        public IReadOnlyDictionary<Guid, CometTask> CometTasks => this.cometTasks;
 
         /// <summary>
         /// Asserts whether the <see cref="Version"/> is supported by the connected <see cref="ISession.Dal"/>
@@ -318,6 +330,7 @@ namespace CDP4Dal
             var sw = new Stopwatch();
             sw.Start();
             logger.Info("Open request {0}", this.DataSourceUri);
+            this.cometTasks.Clear();
 
             // Create the token source
             var cancellationTokenSource = new CancellationTokenSource();
@@ -664,6 +677,80 @@ namespace CDP4Dal
         }
 
         /// <summary>
+        /// Reads a <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="Guid"/> identifier for the <see cref="CometTask" /></param>
+        /// <exception cref="InvalidOperationException">If the <see cref="ActivePerson"/> is null, meaning that the session is not opened</exception>
+        public async Task ReadCometTask(Guid id)
+        {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException("The CometTask cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
+            }
+
+            // Create the token source
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+
+            try
+            {
+                this.Dal.Session = this;
+                var cometTask = await this.Dal.ReadCometTask(id, cancellationTokenSource.Token);
+                this.cometTasks[cometTask.Id] = cometTask;
+                this.CDPMessageBus.SendMessage(new CometTaskEvent(this, cometTask));
+                cancellationTokenSource.Token.ThrowIfCancellationRequested();
+            }
+            catch (OperationCanceledException)
+            {
+                logger.Info("Session.Read for CometTask {0} cancelled", id);
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out _);
+            }
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="Person" />
+        /// </summary>
+        /// <exception cref="InvalidOperationException">If the <see cref="ActivePerson"/> is null, meaning that the session is not opened</exception>
+        public async Task ReadCometTasks()
+        {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException("CometTasks cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
+            }
+
+            // Create the token source
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+
+            try
+            {
+                this.Dal.Session = this;
+                var readCometTasks = (await this.Dal.ReadCometTasks(cancellationTokenSource.Token)).ToList();
+
+                foreach (var cometTask in readCometTasks)
+                {
+                    this.cometTasks[cometTask.Id] = cometTask;
+                }
+
+                this.CDPMessageBus.SendMessage(new CometTaskEvent(this, readCometTasks));
+                cancellationTokenSource.Token.ThrowIfCancellationRequested();
+            }
+            catch (OperationCanceledException)
+            {
+                logger.Info("Session.Read for all CometTask cancelled");
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out _);
+            }
+        }
+
+        /// <summary>
         /// Reads a physical file from a DataStore
         /// </summary>
         /// <param name="localFile">Download a localfile</param>
@@ -738,33 +825,7 @@ namespace CDP4Dal
         /// </returns>
         public async Task Write(OperationContainer operationContainer, IEnumerable<string> files)
         {
-            if (this.ActivePerson == null)
-            {
-                throw new InvalidOperationException("The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
-            }
-
-            var filesList = files?.ToList();
-
-            if (filesList != null && filesList.Any())
-            {
-                foreach (var file in filesList)
-                {
-                    if (!System.IO.File.Exists(file))
-                    {
-                        throw new FileNotFoundException($"File {file} was not found.");
-                    }
-                }
-            }
-
-            var eventArgs = new BeforeWriteEventArgs(operationContainer, filesList);
-            this.BeforeWrite?.Invoke(this, eventArgs);
-
-            if (eventArgs.Cancelled)
-            {
-                throw new OperationCanceledException("The Write operation was canceled.");
-            }
-
-            this.Dal.Session = this;
+            var filesList = this.BeforeDalWriteAndProcessFiles(operationContainer, files);
             var dtoThings = await this.Dal.Write(operationContainer, filesList);
 
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
@@ -781,9 +842,40 @@ namespace CDP4Dal
         /// <returns>
         /// an await-able <see cref="Task"/>
         /// </returns>
-        public async Task Write(OperationContainer operationContainer)
+        public Task Write(OperationContainer operationContainer)
         {
-            await this.Write(operationContainer, null);
+            return this.Write(operationContainer, null);
+        }
+
+        /// <summary>
+        /// Write all the <see cref="Operation" />s from an <see cref="OperationContainer" /> asynchronously for a possible long running task.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer" /> to write
+        /// </param>
+        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
+        /// than the provided <paramref name="waitTime" />, a <see cref="CometTask" /></param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files" /> is null, then no files are to be uploaded
+        /// </param>
+        /// <returns>
+        /// An await-able <see cref="Task" />
+        /// </returns>
+        public async Task Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
+        {
+            var filesList = this.BeforeDalWriteAndProcessFiles(operationContainer, files);
+            var longRunningTaskResult = await this.Dal.Write(operationContainer, waitTime, filesList);
+
+            if (longRunningTaskResult.IsWaitTimeReached)
+            {
+                this.cometTasks[longRunningTaskResult.Task.Id] = longRunningTaskResult.Task;
+                this.CDPMessageBus.SendMessage(new CometTaskEvent(this, longRunningTaskResult.Task));
+            }
+            else
+            {
+                var things = longRunningTaskResult.Things as IList<CDP4Common.DTO.Thing> ?? longRunningTaskResult.Things.ToList();
+                await this.AfterReadOrWriteOrUpdate(things);
+            }
         }
 
         /// <summary>
@@ -888,6 +980,7 @@ namespace CDP4Dal
         /// </summary>
         public async Task Close()
         {
+            this.cometTasks.Clear();
             this.Dal.Close();
             await this.Assembler.Clear();
 
@@ -1156,6 +1249,47 @@ namespace CDP4Dal
 
             var modelRdl = ((EngineeringModel) iteration.Container).EngineeringModelSetup.RequiredRdl.Single();
             this.AddRdlToOpenList(modelRdl);
+        }
+
+        /// <summary>
+        /// Verifies that a write operation can be performed an process the provided <paramref name="files"/>
+        /// </summary>
+        /// <param name="operationContainer"></param>
+        /// <param name="files">List of file paths for files to be sent to the datastore</param>
+        /// <returns>The provided <paramref name="files"/> if not null, an empty collection either</returns>
+        /// <exception cref="InvalidOperationException">If the <see cref="ActivePerson"/> is null, meaning that the session is not opened</exception>
+        /// <exception cref="FileNotFoundException">If one of the provided filepath inside the <paramref name="files"/> does not exists</exception>
+        /// <exception cref="OperationCanceledException">If the write operation has been canceled</exception>
+        private IEnumerable<string> BeforeDalWriteAndProcessFiles(OperationContainer operationContainer, IEnumerable<string> files = null)
+        {
+            if (this.ActivePerson == null)
+            {
+                throw new InvalidOperationException("The Write operation cannot be performed when the ActivePerson is null; The Open method must be called prior to performing a Write.");
+            }
+
+            var filesList = files?.ToList();
+
+            if (filesList != null && filesList.Any())
+            {
+                foreach (var file in filesList)
+                {
+                    if (!System.IO.File.Exists(file))
+                    {
+                        throw new FileNotFoundException($"File {file} was not found.");
+                    }
+                }
+            }
+
+            var eventArgs = new BeforeWriteEventArgs(operationContainer, filesList);
+            this.BeforeWrite?.Invoke(this, eventArgs);
+
+            if (eventArgs.Cancelled)
+            {
+                throw new OperationCanceledException("The Write operation was canceled.");
+            }
+
+            this.Dal.Session = this;
+            return filesList;
         }
     }
 }

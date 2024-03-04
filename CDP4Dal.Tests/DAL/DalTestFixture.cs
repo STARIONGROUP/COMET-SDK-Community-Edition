@@ -375,6 +375,27 @@ namespace CDP4Dal.Tests.DAL
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public override Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public override Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -470,6 +491,27 @@ namespace CDP4Dal.Tests.DAL
         }
 
         public override Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public override Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public override Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

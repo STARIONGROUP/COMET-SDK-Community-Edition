@@ -91,6 +91,22 @@ namespace CDP4Dal.DAL
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
         Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null);
+        
+        /// <summary>
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously for a possible long running task.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
+        /// than the provided <paramref name="waitTime"/>, a <see cref="CometTask"/></param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// </returns>
+        Task<LongRunningTaskResult> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null);
 
         /// <summary>
         /// Reads the data related to the provided <see cref="Thing"/> from the data-source
@@ -149,6 +165,21 @@ namespace CDP4Dal.DAL
         /// Only those <see cref="EngineeringModel"/>s are retunred that the <see cref="Person"/> is a <see cref="Participant"/> in
         /// </remarks>
         Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken);
 
         /// <summary>
         /// Reads a physical file from a DataStore
@@ -247,21 +278,5 @@ namespace CDP4Dal.DAL
         /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
         Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, 
             IEnumerable<Guid> categoriesId, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously for a possible long running task.
-        /// </summary>
-        /// <param name="operationContainer">
-        /// The provided <see cref="OperationContainer"/> to write
-        /// </param>
-        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
-        /// than the provided <paramref name="waitTime"/>, a <see cref="CometTask"/></param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
-        /// </returns>
-        Task<LongRunningTaskResult> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null);
     }
 }

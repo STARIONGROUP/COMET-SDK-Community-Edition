@@ -547,6 +547,27 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public override Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Read CometTask by id not supported");
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="CDP4Common.DTO.Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public override Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Read all available CometTask not supported");
+        }
+
+        /// <summary>
         /// Reads the data related to the provided <see cref="CDP4Common.EngineeringModelData.Iteration"/> from the data-source
         /// </summary>
         /// <param name="iteration">

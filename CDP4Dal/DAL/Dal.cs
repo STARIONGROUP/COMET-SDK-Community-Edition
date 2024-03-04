@@ -191,7 +191,22 @@ namespace CDP4Dal.DAL
         /// Only those <see cref="EngineeringModel"/>s are retunred that the <see cref="Person"/> is a <see cref="Participant"/> in
         /// </remarks>
         public abstract Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken);
-        
+
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public abstract Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public abstract Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken);
+
         /// <summary>
         /// Reads a physical file from a DataStore
         /// </summary>

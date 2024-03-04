@@ -37,6 +37,8 @@ namespace CDP4Dal
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
 
+    using CDP4DalCommon.Tasks;
+
     using Permission;
 
     /// <summary>
@@ -120,6 +122,11 @@ namespace CDP4Dal
         /// Gets the <see cref="ICDPMessageBus"/> that handles messaging for this session
         /// </summary>
         ICDPMessageBus CDPMessageBus { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IReadOnlyDictionary{TKey,TValue}"/> of available <see cref="CometTask" />
+        /// </summary>
+        IReadOnlyDictionary<Guid, CometTask> CometTasks { get; }
 
         /// <summary>
         /// Retrieves the <see cref="SiteDirectory"/> in the context of the current session
@@ -262,6 +269,19 @@ namespace CDP4Dal
         /// Only those <see cref="EngineeringModel"/>s are retunred that the <see cref="Person"/> is a <see cref="Participant"/> in
         /// </remarks>
         Task Read(IEnumerable<Guid> engineeringModels);
+        
+        /// <summary>
+        /// Reads a <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="Guid"/> identifier for the <see cref="CometTask" /></param>
+        /// <exception cref="InvalidOperationException">If the <see cref="Session.ActivePerson"/> is null, meaning that the session is not opened</exception>
+        Task ReadCometTask(Guid id);
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="Person" />
+        /// </summary>
+        /// <exception cref="InvalidOperationException">If the <see cref="Session.ActivePerson"/> is null, meaning that the session is not opened</exception>
+        Task ReadCometTasks();
 
         /// <summary>
         /// Reads a physical file from a DataStore
@@ -360,5 +380,21 @@ namespace CDP4Dal
         /// <param name="categoriesId">A collection of <see cref="Guid"/> of <see cref="Category"/> that <see cref="Thing"/> to retrieve should be categorized by</param>
         /// <returns>A <see cref="Task{T}"/> with retrieved <see cref="CDP4Common.DTO.Thing"/>s</returns>
         Task<IEnumerable<CDP4Common.DTO.Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId);
+
+        /// <summary>
+        /// Write all the <see cref="Operation" />s from an <see cref="OperationContainer" /> asynchronously for a possible long running task.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer" /> to write
+        /// </param>
+        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
+        /// than the provided <paramref name="waitTime" />, a <see cref="CometTask" /></param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files" /> is null, then no files are to be uploaded
+        /// </param>
+        /// <returns>
+        /// An await-able <see cref="Task" />
+        /// </returns>
+        Task Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null);
     }
 }

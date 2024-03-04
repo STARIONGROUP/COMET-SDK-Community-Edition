@@ -626,9 +626,19 @@ namespace CDP4JsonFileDal.Tests
 
             var element2 = readIteration.Element.FirstOrDefault(x => x.ShortName == "ED2");
             Assert.That(element2.OrganizationalParticipant.Count, Is.EqualTo(1));
+        }
 
+        [Test]
+        public void VerifyCometTaskOperationNotSupported()
+        {
+            var operationContainer = new OperationContainer($"/SiteDirectory/{Guid.NewGuid()}");
 
-
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => this.dal.ReadCometTask(Guid.NewGuid(), CancellationToken.None), Throws.Exception.TypeOf<NotSupportedException>());
+                Assert.That(() => this.dal.ReadCometTasks(CancellationToken.None), Throws.Exception.TypeOf<NotSupportedException>());
+                Assert.That(() => this.dal.Write(operationContainer, 1), Throws.Exception.TypeOf<NotSupportedException>());
+            });
         }
 
         /// <summary>

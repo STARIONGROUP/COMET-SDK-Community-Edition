@@ -43,6 +43,8 @@ namespace CDP4ServicesDal
 
     using CDP4Common.CommonData;
     using CDP4Common.DTO;
+    using CDP4Common.Extensions;
+    using CDP4DalCommon.Tasks;
 
     using CDP4Dal;
     using CDP4Dal.Composition;
@@ -61,14 +63,6 @@ namespace CDP4ServicesDal
     using Thing = CDP4Common.DTO.Thing;
     using UriExtensions = CDP4Dal.UriExtensions;
 
-    using System.Net.NetworkInformation;
-
-    using CDP4Common.Extensions;
-
-    using CDP4DalCommon.Tasks;
-
-    using Newtonsoft.Json;
-
     /// <summary>
     /// The purpose of the <see cref="CdpServicesDal"/> is to provide the Data Access Layer for CDP4 ECSS-E-TM-10-25
     /// Annex C, REST API
@@ -83,6 +77,11 @@ namespace CDP4ServicesDal
         /// The NLog Logger
         /// </summary>
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Gets the API route for the <see cref="CometTask" />
+        /// </summary>
+        private const string CometTaskRoute = "tasks";
 
         /// <summary>
         /// The <see cref="HttpClient"/> that is reused for each HTTP request by the current <see cref="Dal"/>.
@@ -319,8 +318,9 @@ namespace CDP4ServicesDal
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializationWatch = Stopwatch.StartNew();
+                    var contentTypeKind = this.QueryContentTypeKind(httpResponseMessage);
 
-                    switch (this.QueryContentTypeKind(httpResponseMessage))
+                    switch (contentTypeKind)
                     {
                         case ContentTypeKind.JSON:
                             Logger.Info("Deserializing JSON response");
@@ -329,13 +329,13 @@ namespace CDP4ServicesDal
                             break;
                         case ContentTypeKind.MESSAGEPACK:
                             throw new NotSupportedException("Long running task not supported with MESSAGEPACK");
+                        default:
+                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
                     }
 
                     deserializationWatch.Stop();
 
-                    Guid iterationId;
-
-                    if (!result.IsWaitTimeReached && this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
+                    if (!result.IsWaitTimeReached && this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(result.Things, iterationId);
                     }
@@ -665,6 +665,129 @@ namespace CDP4ServicesDal
                     {
                         this.SetIterationContainer(returned, iterationId);
                     }
+
+                    return returned;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public override async Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
+        {
+            var resourcePath = $"{CometTaskRoute}/{id}";
+
+            var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
+            Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, readToken);
+
+            var requestsw = Stopwatch.StartNew();
+
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+            {
+                Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+                requestsw.Stop();
+
+                if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                {
+                    var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                    Logger.Error(msg);
+                    throw new DalReadException(msg);
+                }
+
+                this.ProcessHeaders(httpResponseMessage);
+
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
+                {
+                    var deserializationWatch = Stopwatch.StartNew();
+
+                    CometTask returned;
+                    var contentTypeKind = this.QueryContentTypeKind(httpResponseMessage);
+
+                    switch (contentTypeKind)
+                    {
+                        case ContentTypeKind.JSON:
+                            Logger.Info("Deserializing JSON response");
+                            returned = this.Cdp4JsonSerializer.Deserialize<CometTask>(resultStream);
+                            Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
+                        case ContentTypeKind.MESSAGEPACK:
+                            throw new NotSupportedException("Read CometTask by id not supported with MESSAGEPACK");
+                        default:
+                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                    }
+
+                    deserializationWatch.Stop();
+
+                    return returned;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="CDP4Common.DTO.Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public override async Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
+        {
+            var resourcePath = CometTaskRoute;
+
+            var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
+            Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, readToken);
+
+            var requestsw = Stopwatch.StartNew();
+
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+            {
+                Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+                requestsw.Stop();
+
+                if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                {
+                    var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                    Logger.Error(msg);
+                    throw new DalReadException(msg);
+                }
+
+                this.ProcessHeaders(httpResponseMessage);
+
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
+                {
+                    var deserializationWatch = Stopwatch.StartNew();
+
+                    IEnumerable<CometTask> returned;
+                    var contentTypeKind = this.QueryContentTypeKind(httpResponseMessage);
+
+                    switch (contentTypeKind)
+                    {
+                        case ContentTypeKind.JSON:
+                            Logger.Info("Deserializing JSON response");
+                            returned = this.Cdp4JsonSerializer.Deserialize<IEnumerable<CometTask>>(resultStream);
+                            Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
+                        case ContentTypeKind.MESSAGEPACK:
+                            throw new NotSupportedException("Read all CometTask not supported with MESSAGEPACK");
+                        default:
+                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                    }
+
+                    deserializationWatch.Stop();
 
                     return returned;
                 }
