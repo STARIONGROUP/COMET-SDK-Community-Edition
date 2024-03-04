@@ -263,15 +263,8 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
 
-            if (operationContainer == null)
-            {
-                throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
-            }
-
-            if (waitTime < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(waitTime), $"The {nameof(waitTime)} may not be lower than 1");
-            }
+            VerifyOperationContainerNotNull(operationContainer);
+            VerifyWaitTimeNotLowerThanOne(waitTime);
 
             var watch = Stopwatch.StartNew();
 
@@ -1374,6 +1367,32 @@ namespace CDP4ServicesDal
                 return firstChar == '[' 
                     ? new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize(stream)) 
                     : new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize<CometTask>(stream));
+            }
+        }
+
+        /// <summary>
+        /// Verifies that the provided <paramref name="waitTime" /> is not lower than 1
+        /// </summary>
+        /// <param name="waitTime">The wait time value to verify</param>
+        /// <exception cref="ArgumentOutOfRangeException">If the <paramref name="waitTime" /> is lower than 1</exception>
+        private static void VerifyWaitTimeNotLowerThanOne(int waitTime)
+        {
+            if (waitTime < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(waitTime), $"The {nameof(waitTime)} may not be lower than 1");
+            }
+        }
+
+        /// <summary>
+        /// Verifies that the provided <paramref name="operationContainer" /> is not null
+        /// </summary>
+        /// <param name="operationContainer">The <see cref="OperationContainer" /> to verify</param>
+        /// <exception cref="ArgumentNullException">If the provided <paramref name="operationContainer" /> is null</exception>
+        private static void VerifyOperationContainerNotNull(OperationContainer operationContainer)
+        {
+            if (operationContainer == null)
+            {
+                throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
             }
         }
     }

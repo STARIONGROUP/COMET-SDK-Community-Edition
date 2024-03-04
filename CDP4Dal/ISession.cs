@@ -314,6 +314,22 @@ namespace CDP4Dal
         Task Write(OperationContainer operationContainer);
 
         /// <summary>
+        /// Write all the <see cref="Operation" />s from an <see cref="OperationContainer" /> asynchronously for a possible long running task.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer" /> to write
+        /// </param>
+        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
+        /// than the provided <paramref name="waitTime" />, a <see cref="CometTask" /></param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files" /> is null, then no files are to be uploaded
+        /// </param>
+        /// <returns>
+        /// An await-able <see cref="Task" />
+        /// </returns>
+        Task Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null);
+
+        /// <summary>
         /// Refreshes all the <see cref="TopContainer"/>s in the cache
         /// </summary>
         /// /// <returns>
@@ -380,21 +396,5 @@ namespace CDP4Dal
         /// <param name="categoriesId">A collection of <see cref="Guid"/> of <see cref="Category"/> that <see cref="Thing"/> to retrieve should be categorized by</param>
         /// <returns>A <see cref="Task{T}"/> with retrieved <see cref="CDP4Common.DTO.Thing"/>s</returns>
         Task<IEnumerable<CDP4Common.DTO.Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId);
-
-        /// <summary>
-        /// Write all the <see cref="Operation" />s from an <see cref="OperationContainer" /> asynchronously for a possible long running task.
-        /// </summary>
-        /// <param name="operationContainer">
-        /// The provided <see cref="OperationContainer" /> to write
-        /// </param>
-        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
-        /// than the provided <paramref name="waitTime" />, a <see cref="CometTask" /></param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files" /> is null, then no files are to be uploaded
-        /// </param>
-        /// <returns>
-        /// An await-able <see cref="Task" />
-        /// </returns>
-        Task Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null);
     }
 }

@@ -355,6 +355,23 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// </returns>
+        public override Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
+        {
+            throw new NotSupportedException("Writing OperationContainer to the data-source is not supported");
+        }
+
+        /// <summary>
         /// Find not supported things by model version
         /// </summary>
         /// <param name="allDtos">A list of <see cref="Thing"/>s where to find incompatible objects in</param>
@@ -439,23 +456,6 @@ namespace CDP4JsonFileDal
                     throw new ModelErrorException($"Removing unlinked references from {dto.ClassKind} was not successfull.\nErrors detected:\n {string.Join("\n", errors)}");
                 }
             }
-        }
-
-        /// <summary>
-        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
-        /// </summary>
-        /// <param name="operationContainer">
-        /// The provided <see cref="OperationContainer"/> to write
-        /// </param>
-        /// <param name="files">
-        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
-        /// </returns>
-        public override Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
-        {
-            throw new NotSupportedException("Writing OperationContainer to the data-source is not supported");
         }
 
         /// <summary>
@@ -547,27 +547,6 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
-        /// </summary>
-        /// <param name="id">The <see cref="CometTask" /> identifier</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
-        /// <returns>The read <see cref="CometTask" /></returns>
-        public override Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
-        {
-            throw new NotSupportedException("Read CometTask by id not supported");
-        }
-
-        /// <summary>
-        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="CDP4Common.DTO.Person" />
-        /// </summary>
-        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
-        /// <returns>All available <see cref="CometTask" /></returns>
-        public override Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
-        {
-            throw new NotSupportedException("Read all available CometTask not supported");
-        }
-
-        /// <summary>
         /// Reads the data related to the provided <see cref="CDP4Common.EngineeringModelData.Iteration"/> from the data-source
         /// </summary>
         /// <param name="iteration">
@@ -607,6 +586,27 @@ namespace CDP4JsonFileDal
         public override Task<IEnumerable<CDP4Common.DTO.EngineeringModel>> Read(IEnumerable<CDP4Common.DTO.EngineeringModel> engineeringModels, CancellationToken cancellationToken)
         {
             throw new NotSupportedException("The Read EngineeringModel operation is not supported");
+        }
+
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public override Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Read CometTask by id not supported");
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="CDP4Common.DTO.Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public override Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Read all available CometTask not supported");
         }
 
         /// <summary>
