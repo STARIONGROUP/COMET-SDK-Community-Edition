@@ -40,6 +40,9 @@ namespace CDP4Dal.Tests
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
+    using CDP4Dal.Exceptions;
+
+    using CDP4DalCommon.Tasks;
 
     using Moq;
 
@@ -48,9 +51,11 @@ namespace CDP4Dal.Tests
     using DomainOfExpertise = CDP4Common.SiteDirectoryData.DomainOfExpertise;
     using EngineeringModelSetup = CDP4Common.DTO.EngineeringModelSetup;
     using ModelReferenceDataLibrary = CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary;
+    using Person = CDP4Common.SiteDirectoryData.Person;
     using SiteDirectory = CDP4Common.DTO.SiteDirectory;
     using SiteReferenceDataLibrary = CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary;
     using TelephoneNumber = CDP4Common.SiteDirectoryData.TelephoneNumber;
+    using TextParameterType = CDP4Common.DTO.TextParameterType;
     using Thing = CDP4Common.DTO.Thing;
 
     /// <summary>
@@ -790,6 +795,140 @@ namespace CDP4Dal.Tests
                 Assert.That(readThings, Has.Count.EqualTo(2));
             });
         }
+
+        [Test]
+        public async Task VerifyCanReadCometTask()
+        {
+            var cometTaskId = Guid.NewGuid();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.session.ActivePerson, Is.Null);
+                Assert.That(() => this.session.ReadCometTask(cometTaskId), Throws.InvalidOperationException);
+            });
+
+            this.AssignActivePerson();
+
+            var returnedCometTask = new CometTask()
+            {
+                Id = cometTaskId
+            };
+
+            this.mockedDal.Setup(x => x.ReadCometTask(cometTaskId, It.IsAny<CancellationToken>())).ReturnsAsync(returnedCometTask);
+
+            var cometTask = await this.session.ReadCometTask(cometTaskId);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(cometTask, Is.Not.Null);
+                Assert.That(cometTask, Is.EqualTo(returnedCometTask));
+                Assert.That(this.session.CometTasks[cometTaskId], Is.EqualTo(returnedCometTask));
+            });
+
+            this.mockedDal.Setup(x => x.ReadCometTask(cometTaskId, It.IsAny<CancellationToken>())).Throws<OperationCanceledException>();
+            cometTask = await this.session.ReadCometTask(cometTaskId);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(cometTask, Is.EqualTo((CometTask)default));
+                Assert.That(this.session.CometTasks[cometTaskId], Is.EqualTo(returnedCometTask));
+            });
+
+            this.mockedDal.Setup(x => x.ReadCometTask(cometTaskId, It.IsAny<CancellationToken>())).Throws<DalReadException>();
+            Assert.That(() => this.session.ReadCometTask(cometTaskId), Throws.Exception.TypeOf<DalReadException>());
+        }
+
+        [Test]
+        public async Task VerifyCanReadCometTasks()
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.session.ActivePerson, Is.Null);
+                Assert.That(() => this.session.ReadCometTasks(), Throws.InvalidOperationException);
+            });
+
+            this.AssignActivePerson();
+
+            var returnedCometTasks = new List<CometTask>()
+            {
+                new CometTask()
+                {
+                    Id = Guid.NewGuid()
+                },
+                new CometTask()
+                {
+                    Id = Guid.NewGuid()
+                },
+            };
+
+            this.mockedDal.Setup(x => x.ReadCometTasks(It.IsAny<CancellationToken>())).ReturnsAsync(returnedCometTasks);
+
+            var cometTasks = await this.session.ReadCometTasks();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(cometTasks, Is.Not.Empty);
+                Assert.That(cometTasks, Is.EquivalentTo(returnedCometTasks));
+                Assert.That(this.session.CometTasks, Has.Count.EqualTo(returnedCometTasks.Count));
+            });
+
+            this.mockedDal.Setup(x => x.ReadCometTasks(It.IsAny<CancellationToken>())).Throws<OperationCanceledException>();
+            cometTasks = await this.session.ReadCometTasks();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(cometTasks, Is.Empty);
+                Assert.That(this.session.CometTasks, Has.Count.EqualTo(returnedCometTasks.Count));
+            });
+
+            this.mockedDal.Setup(x => x.ReadCometTasks(It.IsAny<CancellationToken>())).Throws<DalReadException>();
+            Assert.That(() => this.session.ReadCometTasks(), Throws.Exception.TypeOf<DalReadException>());
+        }
+
+        [Test]
+        public async Task VerifyWritePossibleLongRunningTask()
+        {
+            var context = $"/SiteDirectory/{Guid.NewGuid()}";
+            this.AssignActivePerson();
+
+            this.mockedDal.Setup(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<int>(), It.IsAny<IEnumerable<string>>()))
+                .ReturnsAsync(new LongRunningTaskResult(new CometTask() { Id = Guid.Empty }));
+            
+            var cometTask = await this.session.Write(new OperationContainer(context), 1);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(cometTask.HasValue, Is.True);
+                Assert.That(this.session.CometTasks, Is.Not.Empty);
+            });
+
+            this.mockedDal.Setup(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<int>(), It.IsAny<IEnumerable<string>>()))
+                .ReturnsAsync(new LongRunningTaskResult(new List<Thing>()
+                {
+                    new TextParameterType()
+                    {
+                        Iid = Guid.NewGuid()
+                    }
+                }));
+
+            cometTask = await this.session.Write(new OperationContainer(context), 1);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(cometTask.HasValue, Is.False);
+                Assert.That(this.session.CometTasks, Is.Not.Empty);
+            });
+
+            this.mockedDal.Setup(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<int>(), It.IsAny<IEnumerable<string>>()))
+                .ThrowsAsync(new DalReadException());
+
+            Assert.That(() =>this.session.Write(new OperationContainer(context), 1), Throws.Exception.TypeOf<DalReadException>());
+        }
+        private void AssignActivePerson()
+        {
+            var johnDoe = new Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+        }
     }
 
     [DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
@@ -838,6 +977,25 @@ namespace CDP4Dal.Tests
         public Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously for a possible long running task.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
+        /// than the provided <paramref name="waitTime"/>, a <see cref="CometTask"/></param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// </returns>
+        public Task<LongRunningTaskResult> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
+        {
+            return null;
         }
 
         /// <summary>
@@ -890,6 +1048,27 @@ namespace CDP4Dal.Tests
         }
 
         public Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="CDP4Common.DTO.Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

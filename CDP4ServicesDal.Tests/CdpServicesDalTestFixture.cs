@@ -29,6 +29,7 @@ namespace CDP4ServicesDal.Tests
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
@@ -46,7 +47,13 @@ namespace CDP4ServicesDal.Tests
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
+    using CDP4DalCommon.Tasks;
+
+    using Newtonsoft.Json;
+
     using NUnit.Framework;
+
+    using RichardSzalay.MockHttp;
 
     /// <summary>
     /// Suite of tests for the <see cref="CdpServicesDal"/> class
@@ -74,7 +81,7 @@ namespace CDP4ServicesDal.Tests
         public void Setup()
         {
             this.cancelationTokenSource = new CancellationTokenSource();
-
+            
             this.credentials = new Credentials("admin", "pass", this.uri);
             this.dal = new CdpServicesDal();
             this.messageBus = new CDPMessageBus();
@@ -84,7 +91,7 @@ namespace CDP4ServicesDal.Tests
             this.siteDirectory = new SiteDirectory(Guid.Parse("f13de6f8-b03a-46e7-a492-53b2f260f294"), this.session.Assembler.Cache, this.uri);
             var lazySiteDirectory = new Lazy<Thing>(() => this.siteDirectory);
             lazySiteDirectory.Value.Cache.TryAdd(new CacheKey(lazySiteDirectory.Value.Iid, null), lazySiteDirectory);
-
+            
             this.PopulateSiteDirectory();
         }
 
@@ -680,6 +687,183 @@ namespace CDP4ServicesDal.Tests
             Assert.NotNull(resultPerson);
         }
 
+                [Test]
+        public async Task VerifyReadCometTask()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            var httpClient = mockHttp.ToHttpClient();
+            httpClient.BaseAddress = this.uri;
+
+            this.dal = new CdpServicesDal(httpClient);
+            this.SetDalToBeOpen(this.dal);
+            
+            var cometTaskId = Guid.NewGuid();
+
+            var requestHandler = mockHttp.When($"{CdpServicesDal.CometTaskRoute}/{cometTaskId}");
+
+            var notFoundHttpResponse = new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.NotFound
+            };
+
+            requestHandler.Respond(_ => notFoundHttpResponse);
+            Assert.That(() => this.dal.ReadCometTask(cometTaskId, CancellationToken.None), Throws.Exception.TypeOf<DalReadException>());
+
+            var foundHttpResponse = new HttpResponseMessage();
+            requestHandler.Respond(_ => foundHttpResponse);
+
+            var cometTask = new CometTask()
+            {
+                Id = cometTaskId,
+                Actor = Guid.NewGuid(),
+                FinishedAt = DateTime.UtcNow,
+                StartedAt = DateTime.UtcNow - TimeSpan.FromSeconds(10),
+                TopContainer = "SiteDirectory",
+                StatusKind = StatusKind.SUCCEEDED
+            };
+
+            foundHttpResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTask));
+            SetHttpHeader(foundHttpResponse, "application/json");
+
+            var readCometTask = await this.dal.ReadCometTask(cometTaskId, CancellationToken.None);
+            Assert.That(readCometTask, Is.EqualTo(cometTask));
+
+            var messagePackHttpResponse = new HttpResponseMessage();
+            requestHandler.Respond(_ => messagePackHttpResponse);
+            messagePackHttpResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTask));
+            SetHttpHeader(messagePackHttpResponse, "application/msgpack");
+
+            Assert.That(() => this.dal.ReadCometTask(cometTaskId, CancellationToken.None), Throws.Exception.TypeOf<NotSupportedException>());
+        }
+
+        [Test]
+        public async Task VerifyReadCometTasks()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            var httpClient = mockHttp.ToHttpClient();
+            httpClient.BaseAddress = this.uri;
+
+            this.dal = new CdpServicesDal(httpClient);
+            this.SetDalToBeOpen(this.dal);
+            
+            var requestHandler = mockHttp.When($"{CdpServicesDal.CometTaskRoute}");
+
+            var notFoundHttpResponse = new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.NotFound
+            };
+
+            requestHandler.Respond(_ => notFoundHttpResponse);
+            Assert.That(() => this.dal.ReadCometTasks(CancellationToken.None), Throws.Exception.TypeOf<DalReadException>());
+
+            var foundHttpResponse = new HttpResponseMessage();
+            requestHandler.Respond(_ => foundHttpResponse);
+
+            var cometTasks = new List<CometTask>()
+            {
+                new CometTask()
+                {
+                    Id = Guid.NewGuid(),
+                    Actor = Guid.NewGuid(),
+                    FinishedAt = DateTime.UtcNow,
+                    StartedAt = DateTime.UtcNow - TimeSpan.FromSeconds(10),
+                    TopContainer = "SiteDirectory",
+                    StatusKind = StatusKind.SUCCEEDED
+                }
+            };
+
+            foundHttpResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTasks));
+            SetHttpHeader(foundHttpResponse, "application/json");
+
+            var readCometTasks = await this.dal.ReadCometTasks(CancellationToken.None);
+            Assert.That(readCometTasks, Is.EquivalentTo(cometTasks));
+
+            var messagePackHttpResponse = new HttpResponseMessage();
+            requestHandler.Respond(_ => messagePackHttpResponse);
+            messagePackHttpResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTasks));
+            SetHttpHeader(messagePackHttpResponse, "application/msgpack");
+
+            Assert.That(() => this.dal.ReadCometTasks(CancellationToken.None), Throws.Exception.TypeOf<NotSupportedException>());
+        }
+
+        [Test]
+        public async Task VerifyWriteLongRunningTask()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            var httpClient = mockHttp.ToHttpClient();
+            httpClient.BaseAddress = this.uri;
+            var operationContainer = new OperationContainer($"/SiteDirectory/{Guid.NewGuid()}");
+            this.dal = new CdpServicesDal(httpClient);
+
+            Assert.That(() => this.dal.Write(operationContainer, 1), Throws.InvalidOperationException);
+            this.SetDalToBeOpen(this.dal);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => this.dal.Write(null, 1), Throws.ArgumentNullException);
+                Assert.That(() => this.dal.Write(operationContainer, 0), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            });
+
+            var requestHandler = mockHttp.When(HttpMethod.Post, operationContainer.Context);
+
+            var notFoundHttpResponse = new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.NotFound
+            };
+
+            requestHandler.Respond(_ => notFoundHttpResponse);
+            notFoundHttpResponse.Content = new StringContent("Unable to proced the write operation");
+
+            Assert.That(() => this.dal.Write(operationContainer, 1), Throws.Exception.TypeOf<DalWriteException>());
+
+            var cometTask = new CometTask()
+            {
+                Id = Guid.NewGuid(),
+                Actor = Guid.NewGuid(),
+                StartedAt = DateTime.UtcNow - TimeSpan.FromSeconds(1)
+            };
+
+            var newCometTaskResponse = new HttpResponseMessage();
+            requestHandler.Respond(_ => newCometTaskResponse);
+
+            newCometTaskResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTask));
+            SetHttpHeader(newCometTaskResponse, "application/json");
+
+            var longRunningTaskResult = await this.dal.Write(operationContainer,1);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(longRunningTaskResult.IsWaitTimeReached, Is.True);
+                Assert.That(longRunningTaskResult.Things, Is.Null);
+                Assert.That(longRunningTaskResult.Task, Is.EqualTo(cometTask));
+            });
+
+            var thingsResponse = new HttpResponseMessage();
+            requestHandler.Respond(_ => thingsResponse);
+
+            var stream = new MemoryStream();
+            this.dal.Cdp4JsonSerializer.SerializeToStream(this.iteration, stream, true);
+            stream.Position = 0;
+            thingsResponse.Content = new StreamContent(stream);
+            SetHttpHeader(thingsResponse, "application/json");
+
+            longRunningTaskResult = await this.dal.Write(operationContainer,1);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(longRunningTaskResult.IsWaitTimeReached, Is.False);
+                Assert.That(longRunningTaskResult.Things, Is.Not.Null);
+                Assert.That(longRunningTaskResult.Task.Id, Is.EqualTo(Guid.Empty));
+            });
+
+            var messagePackResponse = new HttpResponseMessage();
+            requestHandler.Respond(_ => messagePackResponse);
+
+            messagePackResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTask));
+            SetHttpHeader(messagePackResponse, "application/msgpack");
+            Assert.That(() => this.dal.Write(operationContainer, 1), Throws.Exception.TypeOf<NotSupportedException>());
+        }
+
         /// <summary>
         /// Set the credentials property so DAL appears to be open
         /// </summary>
@@ -690,6 +874,19 @@ namespace CDP4ServicesDal.Tests
         {
             var credentialsProperty = typeof(CdpServicesDal).GetProperty("Credentials");
             credentialsProperty.SetValue(dal, this.credentials);
+        }
+
+        /// <summary>
+        /// Set correct headers to be validated by the <see cref="CdpServicesDal"/>
+        /// </summary>
+        /// <param name="response">The <see cref="HttpResponseMessage"/></param>
+        /// <param name="contentType">The content type to add to the http content header</param>
+        private static void SetHttpHeader(HttpResponseMessage response, string contentType)
+        {
+            response.Headers.Add(Headers.CDPServer, "1.0.0");
+            response.Headers.Add(Headers.CDPCommon, "1.3.0");
+            response.Content.Headers.Remove(Headers.ContentType);
+            response.Content.Headers.Add(Headers.ContentType, $"{contentType};ecss-e-tm-10-25;version=1.0.0");
         }
     }
 }

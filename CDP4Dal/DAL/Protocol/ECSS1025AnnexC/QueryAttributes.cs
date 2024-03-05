@@ -73,6 +73,11 @@ namespace CDP4Dal.DAL.ECSS1025AnnexC
         public bool? CherryPick { get; set; }
 
         /// <summary>
+        /// Gets or sets the amount of time a user waits before a CometTask is returned instead of the 10-25 Thing response 
+        /// </summary>
+        public int WaitTime { get; set; }
+
+        /// <summary>
         /// Converts all values of this <see cref="QueryAttributes"/> class to a uri attributes string
         /// </summary>
         /// <returns>
@@ -129,8 +134,14 @@ namespace CDP4Dal.DAL.ECSS1025AnnexC
                 attributeList.Add($"cherryPick={this.CherryPick.ToString().ToLower()}");
             }
 
+            if (this.WaitTime > 0)
+            {
+                attributeList.Add($"waitTime={this.WaitTime}");
+            }
+
             // include the base attributelist
             var baseJoinedAttributes = base.JoinAttributes();
+            
             if (!string.IsNullOrEmpty(baseJoinedAttributes))
             {
                 attributeList.Add(baseJoinedAttributes);

@@ -49,7 +49,9 @@ namespace CDP4WspDal
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
-    
+
+    using CDP4DalCommon.Tasks;
+
     using CDP4JsonSerializer;
     
     using NLog;
@@ -233,6 +235,25 @@ namespace CDP4WspDal
         }
 
         /// <summary>
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously for a possible long running task.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
+        /// than the provided <paramref name="waitTime"/>, a <see cref="CometTask"/></param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// </returns>
+        public override Task<LongRunningTaskResult> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
+        {
+            throw new NotSupportedException("Long Running Task not supported");
+        }
+
+        /// <summary>
         /// Reads the data related to the provided <see cref="Iteration"/> from the data-source
         /// </summary>
         /// <param name="iteration">
@@ -397,6 +418,27 @@ namespace CDP4WspDal
                     return returned;
                 }
             }
+        }
+        
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public override Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Read CometTask by id not supported");
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="CDP4Common.DTO.Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public override Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Read all available CometTask not supported");
         }
 
         /// <summary>

@@ -1,21 +1,21 @@
 // -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2023 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
-//
-//    This file is part of COMET-SDK Community Edition
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -43,6 +43,8 @@ namespace CDP4ServicesDal
 
     using CDP4Common.CommonData;
     using CDP4Common.DTO;
+    using CDP4Common.Extensions;
+    using CDP4DalCommon.Tasks;
 
     using CDP4Dal;
     using CDP4Dal.Composition;
@@ -50,7 +52,7 @@ namespace CDP4ServicesDal
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
-    
+
     using CDP4JsonSerializer;
 
     using CDP4MessagePackSerializer;
@@ -60,9 +62,6 @@ namespace CDP4ServicesDal
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
     using Thing = CDP4Common.DTO.Thing;
     using UriExtensions = CDP4Dal.UriExtensions;
-    using System.Net.NetworkInformation;
-
-    using CDP4Common.Extensions;
 
     /// <summary>
     /// The purpose of the <see cref="CdpServicesDal"/> is to provide the Data Access Layer for CDP4 ECSS-E-TM-10-25
@@ -74,6 +73,11 @@ namespace CDP4ServicesDal
 #endif
     public class CdpServicesDal : Dal
     {
+        /// <summary>
+        /// Gets the API route for the <see cref="CometTask" />
+        /// </summary>
+        public const string CometTaskRoute = "/tasks";
+
         /// <summary>
         /// The NLog Logger
         /// </summary>
@@ -151,7 +155,7 @@ namespace CDP4ServicesDal
                 throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
             }
 
-            if (operationContainer.Operations.Count() == 0)
+            if (!operationContainer.Operations.Any())
             {
                 Logger.Debug("The operationContainer is empty, no round trip to the datasource is made");
                 return Enumerable.Empty<Thing>();
@@ -165,7 +169,7 @@ namespace CDP4ServicesDal
             {
                 this.OperationContainerFileVerification(operationContainer, files);
             }
-            
+
             var attribute = new QueryAttributes
             {
                 RevisionNumber = operationContainer.TopContainerRevisionNumber
@@ -221,9 +225,112 @@ namespace CDP4ServicesDal
                     deserializationWatch.Stop();
 
                     Guid iterationId;
+
                     if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
                     {
                         this.SetIterationContainer(result, iterationId);
+                    }
+                }
+            }
+
+            watch.Stop();
+            Logger.Info("Write Operation completed in {0} [ms]", watch.ElapsedMilliseconds);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously for a possible long running task.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
+        /// than the provided <paramref name="waitTime"/>, a <see cref="CometTask"/></param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">If the CDP4 DAL is not open</exception>
+        /// <exception cref="ArgumentNullException">If the provided <paramref name="operationContainer"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If the provided <paramref name="waitTime"/> is lower than 1</exception>
+        public override async Task<LongRunningTaskResult> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
+        {
+            if (this.Credentials == null || this.Credentials.Uri == null)
+            {
+                throw new InvalidOperationException("The CDP4 DAL is not open.");
+            }
+
+            VerifyOperationContainerNotNull(operationContainer);
+            VerifyWaitTimeNotLowerThanOne(waitTime);
+
+            var watch = Stopwatch.StartNew();
+
+            LongRunningTaskResult result = default;
+
+            if (files != null && files.Any())
+            {
+                this.OperationContainerFileVerification(operationContainer, files);
+            }
+
+            var attribute = new QueryAttributes
+            {
+                RevisionNumber = operationContainer.TopContainerRevisionNumber,
+                WaitTime = waitTime
+            };
+
+            var postToken = operationContainer.Token;
+            var resourcePath = $"{operationContainer.Context}{attribute}";
+
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", postToken, resourcePath);
+            Logger.Debug("CDP4 Services POST: {0} - {1}", postToken, uriBuilder);
+
+            var requestContent = this.CreateHttpContent(postToken, operationContainer, files);
+
+            var requestsw = Stopwatch.StartNew();
+
+            using (var httpResponseMessage = await this.httpClient.PostAsync(resourcePath, requestContent))
+            {
+                Logger.Info("CDP4 Services responded in {0} [ms] to POST {1}", requestsw.ElapsedMilliseconds, postToken);
+                requestsw.Stop();
+
+                if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                {
+                    var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
+                    var msg = $"The CDP4 Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
+                    Logger.Error(msg);
+                    throw new DalWriteException(msg);
+                }
+
+                this.ProcessHeaders(httpResponseMessage);
+
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
+                {
+                    var deserializationWatch = Stopwatch.StartNew();
+                    var contentTypeKind = this.QueryContentTypeKind(httpResponseMessage);
+
+                    switch (contentTypeKind)
+                    {
+                        case ContentTypeKind.JSON:
+                            Logger.Info("Deserializing JSON response");
+                            result = this.ExtractResultFromStream(resultStream);
+                            Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
+                        case ContentTypeKind.MESSAGEPACK:
+                            throw new NotSupportedException("Long running task not supported with MESSAGEPACK");
+                        default:
+                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                    }
+
+                    deserializationWatch.Stop();
+
+                    if (!result.IsWaitTimeReached && this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
+                    {
+                        this.SetIterationContainer(result.Things, iterationId);
                     }
                 }
             }
@@ -280,6 +387,7 @@ namespace CDP4ServicesDal
             // Get the RequiredRdl to load
             var siteDirectory = this.Session.Assembler.RetrieveSiteDirectory();
             var iterationSetup = siteDirectory.Model.SelectMany(mod => mod.IterationSetup).SingleOrDefault(it => it.IterationIid == iteration.Iid);
+
             if (iterationSetup == null)
             {
                 throw new InvalidOperationException("The Iteration to open does not have any associated IterationSetup.");
@@ -385,7 +493,7 @@ namespace CDP4ServicesDal
 
                     deserializationWatch.Stop();
 
-                    return returned.OfType<EngineeringModel>() ;
+                    return returned.OfType<EngineeringModel>();
                 }
             }
         }
@@ -398,8 +506,8 @@ namespace CDP4ServicesDal
         /// The <see cref="CancellationToken"/>
         /// </param>
         /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
-        public override async Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken) 
-        { 
+        public override async Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
+        {
             if (this.Credentials == null || this.Credentials.Uri == null)
             {
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
@@ -487,12 +595,12 @@ namespace CDP4ServicesDal
             {
                 throw new ArgumentNullException(nameof(thing), $"The {nameof(thing)} may not be null");
             }
-            
+
             if (attributes == null)
             {
                 var includeReferenData = thing is ReferenceDataLibrary;
 
-                attributes = this.GetIUriQueryAttribute(includeReferenData);
+                attributes = GetIUriQueryAttribute(includeReferenData);
             }
 
             var thingRoute = this.CleanUriFinalSlash(thing.Route);
@@ -550,6 +658,129 @@ namespace CDP4ServicesDal
                     {
                         this.SetIterationContainer(returned, iterationId);
                     }
+
+                    return returned;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public override async Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
+        {
+            var resourcePath = $"{CometTaskRoute}/{id}";
+
+            var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
+            Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, readToken);
+
+            var requestsw = Stopwatch.StartNew();
+
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+            {
+                Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+                requestsw.Stop();
+
+                if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                {
+                    var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                    Logger.Error(msg);
+                    throw new DalReadException(msg);
+                }
+
+                this.ProcessHeaders(httpResponseMessage);
+
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
+                {
+                    var deserializationWatch = Stopwatch.StartNew();
+
+                    CometTask returned;
+                    var contentTypeKind = this.QueryContentTypeKind(httpResponseMessage);
+
+                    switch (contentTypeKind)
+                    {
+                        case ContentTypeKind.JSON:
+                            Logger.Info("Deserializing JSON response");
+                            returned = this.Cdp4JsonSerializer.Deserialize<CometTask>(resultStream);
+                            Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
+                        case ContentTypeKind.MESSAGEPACK:
+                            throw new NotSupportedException("Read CometTask by id not supported with MESSAGEPACK");
+                        default:
+                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                    }
+
+                    deserializationWatch.Stop();
+
+                    return returned;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="CDP4Common.DTO.Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public override async Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
+        {
+            var resourcePath = CometTaskRoute;
+
+            var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
+            Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, readToken);
+
+            var requestsw = Stopwatch.StartNew();
+
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+            {
+                Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+                requestsw.Stop();
+
+                if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                {
+                    var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                    Logger.Error(msg);
+                    throw new DalReadException(msg);
+                }
+
+                this.ProcessHeaders(httpResponseMessage);
+
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
+                {
+                    var deserializationWatch = Stopwatch.StartNew();
+
+                    IEnumerable<CometTask> returned;
+                    var contentTypeKind = this.QueryContentTypeKind(httpResponseMessage);
+
+                    switch (contentTypeKind)
+                    {
+                        case ContentTypeKind.JSON:
+                            Logger.Info("Deserializing JSON response");
+                            returned = this.Cdp4JsonSerializer.Deserialize<IEnumerable<CometTask>>(resultStream);
+                            Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            break;
+                        case ContentTypeKind.MESSAGEPACK:
+                            throw new NotSupportedException("Read all CometTask not supported with MESSAGEPACK");
+                        default:
+                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                    }
+
+                    deserializationWatch.Stop();
 
                     return returned;
                 }
@@ -638,7 +869,7 @@ namespace CDP4ServicesDal
                 Extent = ExtentQueryAttribute.deep,
                 IncludeReferenceData = false
             };
-            
+
             var resourcePath = $"SiteDirectory{queryAttributes}";
 
             var openToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
@@ -646,7 +877,7 @@ namespace CDP4ServicesDal
             this.httpClient = this.CreateHttpClient(credentials, this.httpClient);
 
             var watch = Stopwatch.StartNew();
-            
+
             var uriBuilder = this.GetUriBuilder(credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", openToken, resourcePath);
@@ -657,7 +888,7 @@ namespace CDP4ServicesDal
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
             requestMessage.Headers.Add(Headers.CDPToken, openToken);
 
-            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken))            
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken))
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
                 requestsw.Stop();
@@ -673,7 +904,7 @@ namespace CDP4ServicesDal
                 Logger.Info("CDP4Services Open {0}: {1} completed in {2} [ms]", openToken, uriBuilder, watch.ElapsedMilliseconds);
 
                 this.ProcessHeaders(httpResponseMessage);
-                
+
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializationWatch = Stopwatch.StartNew();
@@ -697,6 +928,7 @@ namespace CDP4ServicesDal
                     deserializationWatch.Stop();
 
                     var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
+
                     if (returnedPerson == null)
                     {
                         throw new InvalidOperationException("User not found.");
@@ -746,7 +978,7 @@ namespace CDP4ServicesDal
         /// <param name="categoriesId">A collection of <see cref="Category"/> <see cref="Guid"/>s</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
-        public override async Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, 
+        public override async Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds,
             IEnumerable<Guid> categoriesId, CancellationToken cancellationToken)
         {
             var attributes = new QueryAttributes()
@@ -800,7 +1032,7 @@ namespace CDP4ServicesDal
                 Logger.Debug("creating HttpClient with proxy: {0}", credentials.ProxySettings.Address);
 
                 var proxy = new WebProxy(credentials.ProxySettings.Address);
-                
+
                 if (!string.IsNullOrEmpty(credentials.ProxySettings.UserName))
                 {
                     var proxyCredential = new NetworkCredential(credentials.ProxySettings.UserName, credentials.ProxySettings.Password);
@@ -812,7 +1044,7 @@ namespace CDP4ServicesDal
                     Proxy = proxy,
                     UseProxy = true
                 };
-                
+
                 result = new HttpClient(httpClientHandler);
             }
 
@@ -912,6 +1144,7 @@ namespace CDP4ServicesDal
                 {
                     outputStream.CopyTo(memoryStream);
                     memoryStream.Position = 0;
+
                     using (var streamReader = new StreamReader(memoryStream))
                     {
                         var postBody = streamReader.ReadToEnd();
@@ -933,7 +1166,7 @@ namespace CDP4ServicesDal
         private void ProcessHeaders(HttpResponseMessage httpResponseMessage, bool allowMultiPart = false)
         {
             var responseHeaders = httpResponseMessage.Headers;
-            
+
             var cdpServerHeader = responseHeaders.SingleOrDefault(h => h.Key.ToLower(CultureInfo.InvariantCulture) == Headers.CDPServer.ToLower(CultureInfo.InvariantCulture));
 
             if (cdpServerHeader.Value == null)
@@ -1015,7 +1248,7 @@ namespace CDP4ServicesDal
         private ContentTypeKind QueryContentTypeKind(HttpResponseMessage httpResponseMessage)
         {
             var contentHeaders = httpResponseMessage.Content.Headers;
-            
+
             var mediaTypeHeader = contentHeaders.SingleOrDefault(h => h.Key.ToLower(CultureInfo.InvariantCulture) == Headers.ContentType.ToLower(CultureInfo.InvariantCulture));
 
             if (mediaTypeHeader.Value == null)
@@ -1063,7 +1296,7 @@ namespace CDP4ServicesDal
                 this.httpClient.Dispose();
                 this.httpClient = null;
             }
-            
+
             this.CloseSession();
         }
 
@@ -1085,7 +1318,7 @@ namespace CDP4ServicesDal
             try
             {
                 var validUriAssertion = new Uri(uri);
-                UriExtensions.AssertUriIsHttpOrHttpsSchema(validUriAssertion);
+                validUriAssertion.AssertUriIsHttpOrHttpsSchema();
                 return true;
             }
             catch (Exception)
@@ -1103,7 +1336,7 @@ namespace CDP4ServicesDal
         /// <returns>
         /// the <see cref="QueryAttributes"/>
         /// </returns>
-        private IQueryAttributes GetIUriQueryAttribute(bool includeReferenceData = false)
+        private static IQueryAttributes GetIUriQueryAttribute(bool includeReferenceData = false)
         {
             return includeReferenceData
                 ? new QueryAttributes
@@ -1117,6 +1350,50 @@ namespace CDP4ServicesDal
                     Extent = ExtentQueryAttribute.deep,
                     IncludeAllContainers = true
                 };
+        }
+
+        /// <summary>
+        /// Extracts the <see cref="LongRunningTaskResult"/> from the JSON payload contained in a <see cref="Stream" />
+        /// </summary>
+        /// <param name="stream">The <see cref="Stream"/> that contains the JSON payload</param>
+        /// <returns>The extracted <see cref="LongRunningTaskResult"/></returns>
+        private LongRunningTaskResult ExtractResultFromStream(Stream stream)
+        {
+            using (var reader = new StreamReader(stream))
+            {
+                var firstChar = (char)reader.Peek();
+                stream.Position = 0;
+
+                return firstChar == '[' 
+                    ? new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize(stream)) 
+                    : new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize<CometTask>(stream));
+            }
+        }
+
+        /// <summary>
+        /// Verifies that the provided <paramref name="waitTime" /> is not lower than 1
+        /// </summary>
+        /// <param name="waitTime">The wait time value to verify</param>
+        /// <exception cref="ArgumentOutOfRangeException">If the <paramref name="waitTime" /> is lower than 1</exception>
+        private static void VerifyWaitTimeNotLowerThanOne(int waitTime)
+        {
+            if (waitTime < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(waitTime), $"The {nameof(waitTime)} may not be lower than 1");
+            }
+        }
+
+        /// <summary>
+        /// Verifies that the provided <paramref name="operationContainer" /> is not null
+        /// </summary>
+        /// <param name="operationContainer">The <see cref="OperationContainer" /> to verify</param>
+        /// <exception cref="ArgumentNullException">If the provided <paramref name="operationContainer" /> is null</exception>
+        private static void VerifyOperationContainerNotNull(OperationContainer operationContainer)
+        {
+            if (operationContainer == null)
+            {
+                throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
+            }
         }
     }
 }

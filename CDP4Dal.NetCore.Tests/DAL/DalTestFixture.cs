@@ -40,6 +40,8 @@ namespace CDP4Dal.Tests.DAL
     using CDP4Dal.Operations;
     using CDP4Dal.DAL;
 
+    using CDP4DalCommon.Tasks;
+
     using NUnit.Framework;
 
     using Thing = CDP4Common.DTO.Thing;
@@ -339,6 +341,25 @@ namespace CDP4Dal.Tests.DAL
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously for a possible long running task.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
+        /// than the provided <paramref name="waitTime"/>, a <see cref="CometTask"/></param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// </returns>
+        public override Task<LongRunningTaskResult> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken token, IQueryAttributes attributes = null)
         {
             throw new System.NotImplementedException();
@@ -350,6 +371,27 @@ namespace CDP4Dal.Tests.DAL
         }
 
         public override Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="System.Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public override Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public override Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -419,6 +461,25 @@ namespace CDP4Dal.Tests.DAL
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously for a possible long running task.
+        /// </summary>
+        /// <param name="operationContainer">
+        /// The provided <see cref="OperationContainer"/> to write
+        /// </param>
+        /// <param name="waitTime">The maximum time that we allow the server before responding. If the write operation takes more time
+        /// than the provided <paramref name="waitTime"/>, a <see cref="CometTask"/></param>
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
+        /// </param>
+        /// <returns>
+        /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
+        /// </returns>
+        public override Task<LongRunningTaskResult> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken token, IQueryAttributes attributes = null)
         {
             throw new NotImplementedException();
@@ -430,6 +491,27 @@ namespace CDP4Dal.Tests.DAL
         }
 
         public override Task<IEnumerable<EngineeringModel>> Read(IEnumerable<EngineeringModel> engineeringModels, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Reads the <see cref="CometTask" /> identified by the provided <see cref="System.Guid" />
+        /// </summary>
+        /// <param name="id">The <see cref="CometTask" /> identifier</param>
+        /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken" /></param>
+        /// <returns>The read <see cref="CometTask" /></returns>
+        public override Task<CometTask> ReadCometTask(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Reads all <see cref="CometTask" /> available for the current logged <see cref="Person" />
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken" /></param>
+        /// <returns>All available <see cref="CometTask" /></returns>
+        public override Task<IEnumerable<CometTask>> ReadCometTasks(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
