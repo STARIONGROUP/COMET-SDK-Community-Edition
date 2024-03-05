@@ -4,7 +4,7 @@
     <TargetFrameworks>net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4JsonFileDal Community Edition</Title>
-    <VersionPrefix>26.3.0</VersionPrefix>
+    <VersionPrefix>26.4.0</VersionPrefix>
     <Description>CDP4 Json File Dal Plugin</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
@@ -20,7 +20,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-        [Update] to CDP4Common 26.3.0
+        [ADD] CometTask implementation - Not supported by CDP4JsonFileDal
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
