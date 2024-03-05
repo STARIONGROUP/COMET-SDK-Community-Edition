@@ -5,10 +5,10 @@
       <Company>RHEA System S.A.</Company>
       <Language>latest</Language>
       <Title>CDP4DalCommon Community Edition</Title>
-      <VersionPrefix>26.4.0</VersionPrefix>
+      <VersionPrefix>26.5.0</VersionPrefix>
       <Description>CDP4 Common Class Library that contains common types for any CDP4 server and the CDP4Dal</Description>
       <Copyright>Copyright © RHEA System S.A.</Copyright>
-      <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
+      <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
       <PackageId>CDP4DalCommon-CE</PackageId>
       <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
       <PackageProjectUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
@@ -21,7 +21,7 @@
       <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
       <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
       <PackageReleaseNotes>
-          [ADD] Support of CometTask
+          [BUMP] To CDP4Common 26.5.0
       </PackageReleaseNotes>
       <PackageReadmeFile>README.md</PackageReadmeFile>
       <GenerateDocumentationFile>true</GenerateDocumentationFile>
