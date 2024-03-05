@@ -49,25 +49,16 @@ namespace CDP4Common.Extensions
         /// A collection of <see cref="Thing" />s to be able to retrieve referenced
         /// <see cref="ParameterType" /> and the <see cref="MeasurementScale" />, if applicable
         /// </param>
-        /// <returns>The <see cref="ParameterType" /> and the <see cref="MeasurementScale" /> association</returns>
+        /// <returns>The <see cref="ParameterType" /> and the <see cref="Guid"/> of the assocaited <see cref="MeasurementScale" /></returns>
         /// <exception cref="InvalidDataException">
-        /// If the requested <see cref="ParameterType" /> or the
-        /// <see cref="MeasurementScale" /> is not present in the <paramref name="things" />
+        /// If the requested <see cref="ParameterType" /> is not present in the <paramref name="things" />
         /// </exception>
-        public static (ParameterType parameterType, MeasurementScale scale) QueryParameterTypeAndMeasurementScale(this ParameterTypeComponent component, IReadOnlyCollection<Thing> things)
+        public static (ParameterType parameterType, Guid? scaleId) QueryParameterTypeAndMeasurementScale(this ParameterTypeComponent component, IReadOnlyCollection<Thing> things)
         {
             var parameterType = things.OfType<ParameterType>().FirstOrDefault(x => x.Iid == component.ParameterType)
                                 ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the ParameterType {component.ParameterType}");
 
-            MeasurementScale scale = null;
-
-            if (component.Scale.HasValue)
-            {
-                scale = things.OfType<MeasurementScale>().FirstOrDefault(x => x.Iid == component.Scale.Value)
-                        ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the MeasurementScale {component.Scale.Value}");
-            }
-
-            return (parameterType, scale);
+            return (parameterType, component.Scale);
         }
 
         /// <summary>
@@ -82,25 +73,16 @@ namespace CDP4Common.Extensions
         /// A collection of <see cref="Thing" />s to be able to retrieve referenced
         /// <see cref="ParameterType" /> and the <see cref="MeasurementScale" />, if applicable
         /// </param>
-        /// <returns>The <see cref="ParameterType" /> and the <see cref="MeasurementScale" /> association</returns>
+        /// <returns>The <see cref="ParameterType" /> and the <see cref="Guid"/> of the associated <see cref="MeasurementScale" /></returns>
         /// <exception cref="InvalidDataException">
-        /// If the requested <see cref="ParameterType" /> or the
-        /// <see cref="MeasurementScale" /> is not present in the <paramref name="things" />
+        /// If the requested <see cref="ParameterType" /> is not present in the <paramref name="things" />
         /// </exception>
-        public static (ParameterType parameterType, MeasurementScale scale) QueryParameterTypeAndMeasurementScale(this IParameterTypeAssignment assignment, IReadOnlyCollection<Thing> things)
+        public static (ParameterType parameterType, Guid? scaleId) QueryParameterTypeAndMeasurementScale(this IParameterTypeAssignment assignment, IReadOnlyCollection<Thing> things)
         {
             var parameterType = things.OfType<ParameterType>().FirstOrDefault(x => x.Iid == assignment.ParameterType)
                                 ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the ParameterType {assignment.ParameterType}");
 
-            MeasurementScale scale = null;
-
-            if (assignment.MeasurementScale.HasValue)
-            {
-                scale = things.OfType<MeasurementScale>().FirstOrDefault(x => x.Iid == assignment.MeasurementScale.Value)
-                        ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the MeasurementScale {assignment.MeasurementScale.Value}");
-            }
-
-            return (parameterType, scale);
+            return (parameterType, assignment.MeasurementScale);
         }
 
         /// <summary>
@@ -115,18 +97,18 @@ namespace CDP4Common.Extensions
         /// A collection of <see cref="Thing" />s to be able to retrieve referenced
         /// <see cref="ParameterType" /> and the <see cref="MeasurementScale" />, if applicable
         /// </param>
-        /// <returns>The <see cref="ParameterType" /> and the <see cref="MeasurementScale" /> association</returns>
+        /// <returns>The <see cref="ParameterType" /> and the <see cref="Guid"/> of the associated <see cref="MeasurementScale" /> association</returns>
         /// <exception cref="InvalidDataException">
         /// If referenced <see cref="ParameterTypeComponent" /> can not be retrieved
         /// </exception>
-        public static IReadOnlyList<(ParameterType parameterType, MeasurementScale scale)> QueryParameterTypesAndMeasurementScale(this CompoundParameterType compoundParameterType, IReadOnlyCollection<Thing> things)
+        public static IReadOnlyList<(ParameterType parameterType, Guid? scaleId)> QueryParameterTypesAndMeasurementScale(this CompoundParameterType compoundParameterType, IReadOnlyCollection<Thing> things)
         {
             if (things == null)
             {
                 throw new ArgumentNullException(nameof(things), "The provided collection of referenced Thing cannot be null");
             }
 
-            var parameterTypesAndScale = new List<(ParameterType parameterType, MeasurementScale scale)>();
+            var parameterTypesAndScale = new List<(ParameterType parameterType, Guid? scaleId)>();
 
             foreach (var componentId in compoundParameterType.Component.Select(x => x.V).OfType<Guid>())
             {
@@ -158,18 +140,18 @@ namespace CDP4Common.Extensions
         /// A collection of <see cref="Thing" />s to be able to retrieve referenced
         /// <see cref="ParameterType" /> and the <see cref="MeasurementScale" />, if applicable
         /// </param>
-        /// <returns>The <see cref="ParameterType" /> and the <see cref="MeasurementScale" /> association</returns>
+        /// <returns>The <see cref="ParameterType" /> and the <see cref="Guid"/> of the associated <see cref="MeasurementScale" /> association</returns>
         /// <exception cref="InvalidDataException">
         /// If referenced <see cref="IParameterTypeAssignment" /> can not be retrieved
         /// </exception>
-        public static IReadOnlyList<(ParameterType parameterType, MeasurementScale scale)> QueryParameterTypesAndMeasurementScale(this SampledFunctionParameterType sampledFunctionParameterType, IReadOnlyCollection<Thing> things)
+        public static IReadOnlyList<(ParameterType parameterType, Guid? scaledId)> QueryParameterTypesAndMeasurementScale(this SampledFunctionParameterType sampledFunctionParameterType, IReadOnlyCollection<Thing> things)
         {
             if (things == null)
             {
                 throw new ArgumentNullException(nameof(things), "The provided collection of referenced Thing cannot be null");
             }
 
-            var parameterTypesAndScale = new List<(ParameterType parameterType, MeasurementScale scale)>();
+            var parameterTypesAndScale = new List<(ParameterType parameterType, Guid? scaleId)>();
 
             foreach (var independentId in sampledFunctionParameterType.IndependentParameterType.Select(x => x.V).OfType<Guid>())
             {

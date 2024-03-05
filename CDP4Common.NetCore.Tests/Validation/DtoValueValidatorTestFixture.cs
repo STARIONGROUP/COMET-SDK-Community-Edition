@@ -113,29 +113,15 @@ namespace CDP4Common.NetCore.Tests.Validation
         [Test]
         public void VerifyBooleanParameterTypeValidationAndCleanup()
         {
-            var result = this.booleanParameterType.ValidateAndCleanup(this.valueSet);
+            var result = this.booleanParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
-            this.valueSet.Computed = new ValueArray<string>(["false"]);
-            this.valueSet.Reference = new ValueArray<string>(["0"]);
-            this.valueSet.Manual = new ValueArray<string>(["1"]);
+            this.valueSet.Computed[0] = "false";
+            this.valueSet.Reference[0] = "0";
+            this.valueSet.Manual[0] = "1";
 
-            result = this.booleanParameterType.ValidateAndCleanup(this.valueSet);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Computed[0], Is.EqualTo("false"));
-                Assert.That(this.valueSet.Reference[0], Is.EqualTo("false"));
-                Assert.That(this.valueSet.Manual[0], Is.EqualTo("true"));
-            });
-
-            this.valueSet.Computed = new ValueArray<string>(["fAlSe"]);
-            this.valueSet.Reference = new ValueArray<string>(["FALSE"]);
-            this.valueSet.Manual = new ValueArray<string>(["tRUe"]);
-
-            result = this.booleanParameterType.ValidateAndCleanup(this.valueSet);
+            result = this.booleanParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.Multiple(() =>
             {
@@ -145,9 +131,23 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(this.valueSet.Manual[0], Is.EqualTo("true"));
             });
 
-            this.valueSet.Manual = new ValueArray<string>(["-1"]);
+            this.valueSet.Computed[0] = "fAlSe";
+            this.valueSet.Reference[0] = "FALSE";
+            this.valueSet.Manual[0] = "tRUe";
 
-            result = this.booleanParameterType.ValidateAndCleanup(this.valueSet);
+            result = this.booleanParameterType.ValidateAndCleanup(this.valueSet, null);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(this.valueSet.Computed[0], Is.EqualTo("false"));
+                Assert.That(this.valueSet.Reference[0], Is.EqualTo("false"));
+                Assert.That(this.valueSet.Manual[0], Is.EqualTo("true"));
+            });
+
+            this.valueSet.Manual[0] = "-1";
+
+            result = this.booleanParameterType.ValidateAndCleanup(this.valueSet, null);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
 
             result = this.booleanParameterType.Validate(true, out var cleanedValue);
@@ -195,13 +195,13 @@ namespace CDP4Common.NetCore.Tests.Validation
         [Test]
         public void VerifyDateParameterTypeValidationAndCleanup()
         {
-            var result = this.dateParameterType.ValidateAndCleanup(this.valueSet);
+            var result = this.dateParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
-            this.valueSet.Manual = new ValueArray<string>(["2024-02-26"]);
+            this.valueSet.Manual[0] = "2024-02-26";
 
-            result = this.dateParameterType.ValidateAndCleanup(this.valueSet);
+            result = this.dateParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.Multiple(() =>
             {
@@ -209,8 +209,8 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(this.valueSet.Manual[0], Is.EqualTo("2024-02-26"));
             });
 
-            this.valueSet.Manual = new ValueArray<string>(["2024-02-26Z"]);
-            result = this.dateParameterType.ValidateAndCleanup(this.valueSet);
+            this.valueSet.Manual[0] = "2024-02-26Z";
+            result = this.dateParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.Multiple(() =>
             {
@@ -245,13 +245,13 @@ namespace CDP4Common.NetCore.Tests.Validation
         [Test]
         public void VerifyDateTimeParameterTypeValidationAndCleanup()
         {
-            var result = this.dateTimeParameterType.ValidateAndCleanup(this.valueSet);
+            var result = this.dateTimeParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
-            this.valueSet.Manual = new ValueArray<string>(["2024-02-26"]);
+            this.valueSet.Manual[0] = "2024-02-26";
 
-            result = this.dateTimeParameterType.ValidateAndCleanup(this.valueSet);
+            result = this.dateTimeParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.Multiple(() =>
             {
@@ -259,8 +259,8 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(this.valueSet.Manual[0], Is.EqualTo("2024-02-26T00:00:00.0000000Z"));
             });
 
-            this.valueSet.Manual = new ValueArray<string>(["2024-02-26Z"]);
-            result = this.dateTimeParameterType.ValidateAndCleanup(this.valueSet);
+            this.valueSet.Manual[0] = "2024-02-26Z";
+            result = this.dateTimeParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.Multiple(() =>
             {
@@ -304,24 +304,24 @@ namespace CDP4Common.NetCore.Tests.Validation
         {
             Assert.Multiple(() =>
             {
-                Assert.That(() => this.enumerationParameterType.Validate("-", out _), Throws.Nothing);
-                Assert.That(() => this.enumerationParameterType.Validate("a", out _), Throws.ArgumentNullException);
+                Assert.That(() => this.enumerationParameterType.Validate("-", measurementScaleId: null, out _), Throws.Nothing);
+                Assert.That(() => this.enumerationParameterType.Validate("a", null, out _), Throws.ArgumentNullException);
             });
 
             var things = new List<Thing>();
 
-            Assert.That(() => this.enumerationParameterType.Validate("a", out _, things), Throws.Exception.TypeOf<ThingNotFoundException>());
+            Assert.That(() => this.enumerationParameterType.Validate("a", null, out _, things), Throws.Exception.TypeOf<ThingNotFoundException>());
 
             things.AddRange(this.valueDefinitions);
 
-            var result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, things);
+            var result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, null, things);
 
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
             this.valueSet.Manual[0] = "low";
             this.valueSet.Computed[0] = "medium";
 
-            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, things);
+            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, null, things);
 
             Assert.Multiple(() =>
             {
@@ -332,12 +332,12 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             this.valueSet.Manual[0] = "LOW";
 
-            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, things);
+            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, null, things);
 
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
 
             this.valueSet.Manual[0] = "low|medium";
-            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, things);
+            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, null, things);
 
             Assert.Multiple(() =>
             {
@@ -346,7 +346,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             });
 
             this.enumerationParameterType.AllowMultiSelect = true;
-            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, things);
+            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, null, things);
 
             Assert.Multiple(() =>
             {
@@ -355,7 +355,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             });
 
             this.valueSet.Manual[0] = "low|medium|low";
-            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, things);
+            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, null, things);
 
             Assert.Multiple(() =>
             {
@@ -363,14 +363,14 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(result.Message, Is.EqualTo("The provided 'low|medium|low' contains duplicate"));
             });
 
-            result = this.enumerationParameterType.Validate(42, out _, things);
+            result = this.enumerationParameterType.Validate(42, things, out _);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
         }
 
         [Test]
         public void VerifyTextParameterTypeValidationAndCleanup()
         {
-            var result = this.textParameterType.ValidateAndCleanup(this.valueSet);
+            var result = this.textParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
@@ -378,7 +378,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             this.valueSet.Computed[0] = "123456789";
             this.valueSet.Reference[0] = "true|false=>false";
 
-            result = this.textParameterType.ValidateAndCleanup(this.valueSet);
+            result = this.textParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.Multiple(() =>
             {
@@ -389,7 +389,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             });
 
             this.valueSet.Manual[0] = "";
-            result = this.textParameterType.ValidateAndCleanup(this.valueSet);
+            result = this.textParameterType.ValidateAndCleanup(this.valueSet, null);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
 
             result = this.textParameterType.Validate(42, out _);
@@ -399,14 +399,14 @@ namespace CDP4Common.NetCore.Tests.Validation
         [Test]
         public void VerifyTimeOfDayParameterTypeValidationAndCleanup()
         {
-            var result = this.timeOfDayParameterType.ValidateAndCleanup(this.valueSet);
+            var result = this.timeOfDayParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
             this.valueSet.Manual[0] = "14:00:12";
             this.valueSet.Computed[0] = "0001-01-01T14:00:12.0000000";
             this.valueSet.Reference[0] = "17:49:30.453Z";
-            result = this.timeOfDayParameterType.ValidateAndCleanup(this.valueSet);
+            result = this.timeOfDayParameterType.ValidateAndCleanup(this.valueSet, null);
 
             Assert.Multiple(() =>
             {
@@ -417,7 +417,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             });
 
             this.valueSet.Manual[0] = "0001-01-02T14:00:12.0000000";
-            result = this.timeOfDayParameterType.ValidateAndCleanup(this.valueSet);
+            result = this.timeOfDayParameterType.ValidateAndCleanup(this.valueSet, null);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
 
             result = this.timeOfDayParameterType.Validate(new DateTime(1, 1, 1, 12, 45, 35, DateTimeKind.Utc), out var cleanedValue);
@@ -438,16 +438,23 @@ namespace CDP4Common.NetCore.Tests.Validation
         [Test]
         public void VerifyQuantityKindWithNaturalValidationAndCleanup()
         {
-            Assert.That(() => this.simpleQuantityKind.Validate("1", out _), Throws.ArgumentNullException);
+            Assert.That(() => this.simpleQuantityKind.Validate("1", null, out _), Throws.ArgumentNullException);
 
-            var result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet);
+            var result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, null);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
             this.valueSet.Manual[0] = "1";
+            var things = new List<Thing>();
 
-            Assert.That(() => this.simpleQuantityKind.ValidateAndCleanup(this.valueSet), Throws.ArgumentNullException);
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid), Throws.ArgumentNullException);
+                Assert.That(() => this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid, things), Throws.Exception.TypeOf<ThingNotFoundException>());
+            });
 
-            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, measurementScale: this.ratioScale);
+            things.Add(this.ratioScale);
+
+            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid, things);
 
             Assert.Multiple(() =>
             {
@@ -457,7 +464,7 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             this.valueSet.Manual[0] = "-1";
 
-            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, measurementScale: this.ratioScale);
+            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid, things);
 
             Assert.Multiple(() =>
             {
@@ -465,7 +472,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
             });
 
-            result = this.simpleQuantityKind.Validate(1, measurementScale: this.ratioScale, out var cleanedValue);
+            result = this.simpleQuantityKind.Validate(1, this.ratioScale.Iid, out var cleanedValue, things);
 
             Assert.Multiple(() =>
             {
@@ -473,7 +480,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(cleanedValue, Is.EqualTo("1"));
             });
 
-            result = this.simpleQuantityKind.Validate(1.00, measurementScale: this.ratioScale, out cleanedValue);
+            result = this.simpleQuantityKind.Validate(1.00, this.ratioScale.Iid, out cleanedValue, things);
             
             Assert.Multiple(() =>
             {
@@ -481,7 +488,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(cleanedValue, Is.EqualTo("1"));
             });
 
-            result = this.simpleQuantityKind.Validate(1.001, measurementScale: this.ratioScale, out _);
+            result = this.simpleQuantityKind.Validate(1.001, this.ratioScale.Iid, out _, things);
 
             Assert.Multiple(() =>
             {
@@ -495,14 +502,21 @@ namespace CDP4Common.NetCore.Tests.Validation
         {
             this.ratioScale.NumberSet = NumberSetKind.INTEGER_NUMBER_SET;
 
-            var result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet);
+            var result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, null);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
             this.valueSet.Manual[0] = "1";
+            var things = new List<Thing>();
 
-            Assert.That(() => this.simpleQuantityKind.ValidateAndCleanup(this.valueSet), Throws.ArgumentNullException);
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid), Throws.ArgumentNullException);
+                Assert.That(() => this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid, things), Throws.Exception.TypeOf<ThingNotFoundException>());
+            });
 
-            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, measurementScale: this.ratioScale);
+            things.Add(this.ratioScale);
+
+            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid, things);
 
             Assert.Multiple(() =>
             {
@@ -512,10 +526,10 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             this.valueSet.Manual[0] = "-1";
 
-            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, measurementScale: this.ratioScale);
+            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid, things);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
-            result = this.simpleQuantityKind.Validate(1, measurementScale: this.ratioScale, out var cleanedValue);
+            result = this.simpleQuantityKind.Validate(1, this.ratioScale.Iid, out var cleanedValue, things);
 
             Assert.Multiple(() =>
             {
@@ -523,7 +537,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(cleanedValue, Is.EqualTo("1"));
             });
 
-            result = this.simpleQuantityKind.Validate(1.00, measurementScale: this.ratioScale, out cleanedValue);
+            result = this.simpleQuantityKind.Validate(1.00, this.ratioScale.Iid, out cleanedValue, things);
             
             Assert.Multiple(() =>
             {
@@ -531,7 +545,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(cleanedValue, Is.EqualTo("1"));
             });
 
-            result = this.simpleQuantityKind.Validate(1.001, measurementScale: this.ratioScale, out _);
+            result = this.simpleQuantityKind.Validate(1.001, this.ratioScale.Iid, out _, things); 
 
             Assert.Multiple(() =>
             {
@@ -545,14 +559,20 @@ namespace CDP4Common.NetCore.Tests.Validation
         {
             this.ratioScale.NumberSet = NumberSetKind.REAL_NUMBER_SET;
 
-            var result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet);
+            var result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, null);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
             this.valueSet.Manual[0] = "1";
+            var things = new List<Thing>();
 
-            Assert.That(() => this.simpleQuantityKind.ValidateAndCleanup(this.valueSet), Throws.ArgumentNullException);
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid), Throws.ArgumentNullException);
+                Assert.That(() => this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid, things), Throws.Exception.TypeOf<ThingNotFoundException>());
+            });
 
-            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, measurementScale: this.ratioScale);
+            things.Add(this.ratioScale);
+            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid, things);
 
             Assert.Multiple(() =>
             {
@@ -562,10 +582,10 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             this.valueSet.Manual[0] = "-1";
 
-            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, measurementScale: this.ratioScale);
+            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet,  this.ratioScale.Iid, things);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
-            result = this.simpleQuantityKind.Validate(1, measurementScale: this.ratioScale, out var cleanedValue);
+            result = this.simpleQuantityKind.Validate(1,  this.ratioScale.Iid, out var cleanedValue, things);
 
             Assert.Multiple(() =>
             {
@@ -573,7 +593,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(cleanedValue, Is.EqualTo("1"));
             });
 
-            result = this.simpleQuantityKind.Validate(1.00, measurementScale: this.ratioScale, out cleanedValue);
+            result = this.simpleQuantityKind.Validate(1.00, this.ratioScale.Iid, out cleanedValue, things);
             
             Assert.Multiple(() =>
             {
@@ -581,7 +601,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(cleanedValue, Is.EqualTo("1"));
             });
 
-            result = this.simpleQuantityKind.Validate(1.001, measurementScale: this.ratioScale, out cleanedValue);
+            result = this.simpleQuantityKind.Validate(1.001, this.ratioScale.Iid, out cleanedValue, things);
 
             Assert.Multiple(() =>
             {
@@ -589,7 +609,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(cleanedValue, Is.EqualTo("1.001"));
             });
             
-            result = this.simpleQuantityKind.Validate(false, measurementScale: this.ratioScale, out _);
+            result = this.simpleQuantityKind.Validate(false, this.ratioScale.Iid, out _, things);
 
             Assert.Multiple(() =>
             {
@@ -602,7 +622,13 @@ namespace CDP4Common.NetCore.Tests.Validation
         public void VerifyQuantityKindWithRationalValidationAndCleanup()
         {
             this.ratioScale.NumberSet = NumberSetKind.RATIONAL_NUMBER_SET;
-            var result = this.simpleQuantityKind.Validate(false, measurementScale: this.ratioScale, out _);
+
+            var things = new List<Thing>()
+            {
+                this.ratioScale
+            };
+
+            var result = this.simpleQuantityKind.Validate(false,  this.ratioScale.Iid, out _, things);
 
             Assert.Multiple(() =>
             {
@@ -615,7 +641,13 @@ namespace CDP4Common.NetCore.Tests.Validation
         public void VerifyQuantityKindWithInvalidNumberSetKindValidationAndCleanup()
         {
             this.ratioScale.NumberSet = (NumberSetKind)42;
-            Assert.That(() => this.simpleQuantityKind.Validate(false, measurementScale: this.ratioScale, out _), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+
+            var things = new List<Thing>()
+            {
+                this.ratioScale
+            };
+
+            Assert.That(() => this.simpleQuantityKind.Validate(false, this.ratioScale.Iid, out _, things), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -639,8 +671,8 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             Assert.Multiple(() =>
             {
-                Assert.That(() => sampledFunctionParameterType.Validate(this.valueSet, out _).Message, Is.EqualTo("Unsupported ParameterType SampledFunctionParameterType"));
-                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet), Throws.ArgumentNullException);
+                Assert.That(() => sampledFunctionParameterType.Validate(this.valueSet, null, out _).Message, Is.EqualTo("Unsupported ParameterType SampledFunctionParameterType"));
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, null), Throws.ArgumentNullException);
             });
 
             var things = new List<Thing>();
@@ -665,11 +697,6 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             things.Add(this.simpleQuantityKind);
 
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contains a reference to the MeasurementScale"));
-
-            things.Add(this.ratioScale);
-
             Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
                 .With.Message.Contain("The ValueArray MANUAL ({\"-\"}) does not have the required amount of values !"));
 
@@ -689,6 +716,11 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             this.valueSet.Manual[0] = "1";
             this.valueSet.Manual[1] = "2";
+
+            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of Things does not contains a reference to the MeasurementScale"));
+
+            things.Add(this.ratioScale);
 
             result = sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things);
 
@@ -723,8 +755,8 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             Assert.Multiple(() =>
             {
-                Assert.That(() => compoundParameterType.Validate(this.valueSet, out _).Message, Is.EqualTo("Unsupported ParameterType CompoundParameterType"));
-                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet), Throws.ArgumentNullException);
+                Assert.That(() => compoundParameterType.Validate(this.valueSet, null, out _).Message, Is.EqualTo("Unsupported ParameterType CompoundParameterType"));
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, null), Throws.ArgumentNullException);
             });
 
             var things = new List<Thing>();
@@ -780,6 +812,46 @@ namespace CDP4Common.NetCore.Tests.Validation
             this.valueSet.Manual[1] = " ";
 
             result = compoundParameterType.ValidateAndCleanup(this.valueSet, things);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+        }
+
+        [Test]
+        public void VerifyParameterBaseValidation()
+        {
+            var parameter = new Parameter(Guid.NewGuid(), 1)
+            {
+                ParameterType = this.booleanParameterType.Iid
+            };
+
+            parameter.ValueSet.Add(this.valueSet.Iid);
+
+            var things = new List<Thing>();
+
+            Assert.That(() => parameter.Validate(things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.Contain("The provided collection of Things does not contains a reference to the ParameterType"));
+
+            things.Add(this.booleanParameterType);
+
+            Assert.That(() => parameter.Validate(things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                .With.Message.EqualTo("Some of the referenced ParameterValueSetBase are not present in the collection of Things"));
+
+            things.Add(this.valueSet);
+
+            var result = parameter.Validate(things);
+
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+
+            this.valueSet.Manual[0] = "FALSE";
+            result = parameter.Validate(things);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That( this.valueSet.Manual[0], Is.EqualTo("false"));
+            });
+
+            this.valueSet.Manual[0] = "2";
+            result = parameter.Validate(things);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
         }
     }

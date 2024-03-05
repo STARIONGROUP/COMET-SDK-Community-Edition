@@ -46,6 +46,50 @@ namespace CDP4Common.Validation
     public static class DtoValueValidator
     {
         /// <summary>
+        /// Validates all <see cref="ParameterValueSetBase" /> of a <see cref="ParameterBase" />
+        /// </summary>
+        /// <param name="parameter">The <see cref="ParameterBase" /> to validate</param>
+        /// <param name="things">
+        /// A <see cref="IReadOnlyCollection{T}" /> of related <see cref="Thing" /> that will help to validate the value
+        /// </param>
+        /// <param name="provider">
+        /// The <see cref="IFormatProvider" /> used to validate, if set to null <see cref="CultureInfo.CurrentCulture" /> will be used.
+        /// </param>
+        /// <returns>
+        /// a <see cref="ValidationResult" /> that carries the <see cref="ValidationResultKind" /> and an optional message.
+        /// </returns>
+        /// <exception cref="ThingNotFoundException">
+        /// If the linked <see cref="ParameterType" /> or <see cref="ParameterValueSetBase" />
+        /// are not part of the <paramref name="things" />
+        /// </exception>
+        public static ValidationResult Validate(this ParameterBase parameter, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
+        {
+            var parameterType = things.OfType<ParameterType>()
+                                    .FirstOrDefault(x => x.Iid == parameter.ParameterType)
+                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the ParameterType {parameter.ParameterType}");
+
+            var valueSets = things.OfType<ParameterValueSetBase>()
+                .Where(x => parameter.ValueSets.Any(v => v == x.Iid)).ToList();
+
+            if (valueSets.Count != parameter.ValueSets.Count())
+            {
+                throw new ThingNotFoundException("Some of the referenced ParameterValueSetBase are not present in the collection of Things");
+            }
+
+            foreach (var parameterValueSetBase in valueSets)
+            {
+                var validationResult = parameterType.ValidateAndCleanup(parameterValueSetBase, parameter.Scale, things, provider);
+
+                if (validationResult.ResultKind != ValidationResultKind.Valid)
+                {
+                    return validationResult;
+                }
+            }
+
+            return ValidationResult.ValidResult();
+        }
+
+        /// <summary>
         /// Validate the <paramref name="value" /> to check whether the <paramref name="value" /> is valid with respect to the
         /// <paramref name="parameterType" />
         /// </summary>
@@ -55,12 +99,12 @@ namespace CDP4Common.Validation
         /// <param name="value">
         /// The value that is to be validated
         /// </param>
-        /// <param name="things">
-        /// A <see cref="IReadOnlyCollection{T}" /> of related <see cref="Thing" /> that will help to validate the value
+        /// <param name="measurementScaleId">
+        /// The <see cref="Guid" /> of the possible <see cref="MeasurementScale" /> to use to validate scalar values
         /// </param>
         /// <param name="cleanedValue">The cleaned value (- or compliant value for the <paramref name="parameterType" />)</param>
-        /// <param name="measurementScale">
-        /// The <see cref="MeasurementScale" /> to use to validate <see cref="MeasurementScale" />
+        /// <param name="things">
+        /// A <see cref="IReadOnlyCollection{T}" /> of related <see cref="Thing" /> that will help to validate the value
         /// </param>
         /// <param name="provider">
         /// The <see cref="IFormatProvider" /> used to validate, if set to null <see cref="CultureInfo.CurrentCulture" /> will be used.
@@ -69,7 +113,7 @@ namespace CDP4Common.Validation
         /// a <see cref="ValidationResult" /> that carries the <see cref="ValidationResultKind" /> and an optional message.
         /// </returns>
         public static ValidationResult Validate(this ParameterType parameterType, object value,
-            out string cleanedValue, IReadOnlyCollection<Thing> things = null, MeasurementScale measurementScale = null, IFormatProvider provider = null)
+            Guid? measurementScaleId, out string cleanedValue, IReadOnlyCollection<Thing> things = null, IFormatProvider provider = null)
         {
             if (value.IsDefaultString(out var parsedValue))
             {
@@ -92,7 +136,7 @@ namespace CDP4Common.Validation
                 case TimeOfDayParameterType timeOfDayParameter:
                     return timeOfDayParameter.Validate(value, out cleanedValue);
                 case QuantityKind quantity:
-                    return quantity.Validate(value, measurementScale, out cleanedValue, provider);
+                    return quantity.Validate(value, measurementScaleId, things, out cleanedValue, provider);
             }
 
             cleanedValue = null;
@@ -227,7 +271,10 @@ namespace CDP4Common.Validation
         /// <param name="value">
         /// The value that is to be validated for a numeric value.
         /// </param>
-        /// <param name="measurementScale">The <see cref="MeasurementScale" /> to use to validate the numeric value</param>
+        /// <param name="measurementScaleId">The <see cref="MeasurementScale" /> to use to validate the numeric value</param>
+        /// <param name="things">
+        /// A <see cref="IReadOnlyCollection{T}" /> of related <see cref="Thing" /> that will help to validate the value
+        /// </param>
         /// <param name="cleanedValue">The cleaned value (-/numeric value)</param>
         /// <param name="provider">
         /// The <see cref="IFormatProvider" /> used to validate, if set to null <see cref="CultureInfo.CurrentCulture" /> will be used.
@@ -235,12 +282,20 @@ namespace CDP4Common.Validation
         /// <returns>
         /// a <see cref="ValidationResult" /> that carries the <see cref="ValidationResultKind" /> and an optional message.
         /// </returns>
-        public static ValidationResult Validate(this QuantityKind _, object value, MeasurementScale measurementScale, out string cleanedValue, IFormatProvider provider = null)
+        public static ValidationResult Validate(this QuantityKind _, object value, Guid? measurementScaleId, IReadOnlyCollection<Thing> things, out string cleanedValue, IFormatProvider provider = null)
         {
-            if (measurementScale == null)
+            if (!measurementScaleId.HasValue)
             {
-                throw new ArgumentNullException(nameof(measurementScale), "The provided MeasurementScale cannot be null");
+                throw new ArgumentNullException(nameof(measurementScaleId), "The provided MeasurementScale cannot be null");
             }
+
+            if (things == null)
+            {
+                throw new ArgumentNullException(nameof(things), "The provided collection of Thing cannot be null");
+            }
+
+            var measurementScale = things.OfType<MeasurementScale>().FirstOrDefault(x => x.Iid == measurementScaleId.Value)
+                                   ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the MeasurementScale {measurementScaleId.Value}");
 
             return value.ValidateNumeric(measurementScale.NumberSet, out cleanedValue, provider);
         }
@@ -250,8 +305,8 @@ namespace CDP4Common.Validation
         /// </summary>
         /// <param name="parameterType">The <see cref="ParameterType" /> to use for the validation</param>
         /// <param name="valueSet">The <see cref="ParameterValueSetBase" /> to validate</param>
+        /// <param name="measurementScaleId">The <see cref="Guid" /> of the referenced <see cref="MeasurementScale" /></param>
         /// <param name="things">The collection of <see cref="Thing" /> to retrieve referenced <see cref="Thing" /></param>
-        /// <param name="measurementScale">The <see cref="MeasurementScale" /></param>
         /// <param name="provider">
         /// The <see cref="IFormatProvider" /> used to validate, if set to null
         /// <see cref="CultureInfo.CurrentCulture" /> will be used.
@@ -265,7 +320,7 @@ namespace CDP4Common.Validation
         /// If one of the <see cref="ValueArray{T}" /> of the <paramref name="valueSet" />
         /// do not have the correct number of values
         /// </exception>
-        public static ValidationResult ValidateAndCleanup(this ParameterType parameterType, ParameterValueSetBase valueSet, IReadOnlyCollection<Thing> things = null, MeasurementScale measurementScale = null, IFormatProvider provider = null)
+        public static ValidationResult ValidateAndCleanup(this ParameterType parameterType, ParameterValueSetBase valueSet, Guid? measurementScaleId, IReadOnlyCollection<Thing> things = null, IFormatProvider provider = null)
         {
             switch (parameterType)
             {
@@ -282,7 +337,7 @@ namespace CDP4Common.Validation
                     throw new InvalidDataException($"The ValueArray {valueArrayKind} ({valueArray}) should have one and only one value!");
                 }
 
-                var validationResult = parameterType.Validate(valueArray[0], out var cleanedValue, things, measurementScale, provider);
+                var validationResult = parameterType.Validate(valueArray[0], measurementScaleId, out var cleanedValue, things, provider);
 
                 if (validationResult.ResultKind != ValidationResultKind.Valid)
                 {
@@ -329,10 +384,10 @@ namespace CDP4Common.Validation
 
                 for (var valueIndex = 0; valueIndex < valueArray.Count; valueIndex++)
                 {
-                    var (parameterType, measurementScale) = parameterTypeComponents[valueIndex];
+                    var (parameterType, measurementScaleId) = parameterTypeComponents[valueIndex];
                     var valueToValidate = valueArray[valueIndex];
 
-                    var validationResult = parameterType.Validate(valueToValidate, out var cleanedValue, things, measurementScale, provider);
+                    var validationResult = parameterType.Validate(valueToValidate, measurementScaleId, out var cleanedValue, things, provider);
 
                     if (validationResult.ResultKind == ValidationResultKind.Valid)
                     {
@@ -349,7 +404,8 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
-        /// Validates all provides values of a <see cref="ParameterValueSetBase" /> for a <see cref="SampledFunctionParameterType" />.
+        /// Validates all provides values of a <see cref="ParameterValueSetBase" /> for a
+        /// <see cref="SampledFunctionParameterType" />.
         /// The number of provided values should be a multiple of the number of referenced <see cref="IParameterTypeAssignment" />
         /// and each one should be validated
         /// against the <see cref="ParameterType " /> and <see cref="MeasurementScale" /> (if applicable)
@@ -383,10 +439,10 @@ namespace CDP4Common.Validation
 
                 for (var valueIndex = 0; valueIndex < valueArray.Count; valueIndex++)
                 {
-                    var (parameterType, measurementScale) = parameterTypeAssignments[valueIndex % parameterTypeAssignments.Count];
+                    var (parameterType, measurementScaleId) = parameterTypeAssignments[valueIndex % parameterTypeAssignments.Count];
                     var valueToValidate = valueArray[valueIndex];
 
-                    var validationResult = parameterType.Validate(valueToValidate, out var cleanedValue, things, measurementScale, provider);
+                    var validationResult = parameterType.Validate(valueToValidate, measurementScaleId, out var cleanedValue, things, provider);
 
                     if (validationResult.ResultKind == ValidationResultKind.Valid)
                     {
