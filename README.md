@@ -11,6 +11,7 @@ The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with
   - CDP4MessagePackSerializer
   - CDP4Reporting
   - CDP4Dal
+  - CDP4DalCommon
   - CDP4JsonFileDal
   - CDP4ServicesDal
   - CDP4WspDal
@@ -30,6 +31,7 @@ CDP4JsonSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonSeria
 CDP4MessagePackSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4MessagePackSerializer-CE)](https://buildstats.info/nuget/CDP4MessagePackSerializer-CE)
 CDP4Reporting | [![NuGet Badge](https://buildstats.info/nuget/CDP4Reporting-CE)](https://buildstats.info/nuget/CDP4Reporting-CE)
 CDP4Dal | [![NuGet Badge](https://buildstats.info/nuget/CDP4Dal-CE)](https://buildstats.info/nuget/CDP4Dal-CE)
+CDP4DalCommon | [![NuGet Badge](https://buildstats.info/nuget/CDP4DalCommon-CE)](https://buildstats.info/nuget/CDP4DalCommon-CE)
 CDP4JsonFileDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonFileDal-CE)](https://buildstats.info/nuget/CDP4JsonFileDal-CE)
 CDP4ServicesDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4ServicesDal-CE)](https://buildstats.info/nuget/CDP4ServicesDal-CE)
 CDP4WspDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4WspDal-CE)](https://buildstats.info/nuget/CDP4WspDal-CE)
@@ -84,6 +86,10 @@ The CDP4MessagePackSerializer library is an optimized CDP4Common specific Messag
 ## CDP4Dal
 
 The CDP4Dal library is a library that provides the basis to implement ECSS-E-TM-10-25A Annex C. Annex C specifies both the JSON REST API and the exchange file format. The CDP4Dal library contains the Assembler that is used to create a fully dereferenced object graph, a message bus to send events for consumptions in applications that implement the MVVM design pattern as well as the Session class that manages a connection to a datasource.
+
+## CDP4DalCommon
+
+The CDP4DalCommon library provides common classes to support the ECSS-E-TM-10-25 and CDP4-COMET protocol.
 
 ## CDP4JsonFileDal
 
