@@ -66,7 +66,7 @@ namespace CDP4Common.Validation
         {
             var parameterType = things.OfType<ParameterType>()
                                     .FirstOrDefault(x => x.Iid == parameter.ParameterType)
-                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the ParameterType {parameter.ParameterType}");
+                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contain a reference to the ParameterType {parameter.ParameterType}");
 
             var valueSets = things.OfType<ParameterValueSetBase>()
                 .Where(x => parameter.ValueSets.Any(v => v == x.Iid)).ToList();
@@ -295,7 +295,7 @@ namespace CDP4Common.Validation
             }
 
             var measurementScale = things.OfType<MeasurementScale>().FirstOrDefault(x => x.Iid == measurementScaleId.Value)
-                                   ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the MeasurementScale {measurementScaleId.Value}");
+                                   ?? throw new ThingNotFoundException($"The provided collection of Things does not contain a reference to the MeasurementScale {measurementScaleId.Value}");
 
             return value.ValidateNumeric(measurementScale.NumberSet, out cleanedValue, provider);
         }

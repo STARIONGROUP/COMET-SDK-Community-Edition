@@ -49,14 +49,14 @@ namespace CDP4Common.Extensions
         /// A collection of <see cref="Thing" />s to be able to retrieve referenced
         /// <see cref="ParameterType" /> and the <see cref="MeasurementScale" />, if applicable
         /// </param>
-        /// <returns>The <see cref="ParameterType" /> and the <see cref="Guid"/> of the assocaited <see cref="MeasurementScale" /></returns>
+        /// <returns>The <see cref="ParameterType" /> and the <see cref="Guid"/> of the associated <see cref="MeasurementScale" /></returns>
         /// <exception cref="InvalidDataException">
         /// If the requested <see cref="ParameterType" /> is not present in the <paramref name="things" />
         /// </exception>
         public static (ParameterType parameterType, Guid? scaleId) QueryParameterTypeAndMeasurementScale(this ParameterTypeComponent component, IReadOnlyCollection<Thing> things)
         {
             var parameterType = things.OfType<ParameterType>().FirstOrDefault(x => x.Iid == component.ParameterType)
-                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the ParameterType {component.ParameterType}");
+                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contain a reference to the ParameterType {component.ParameterType}");
 
             return (parameterType, component.Scale);
         }
@@ -80,7 +80,7 @@ namespace CDP4Common.Extensions
         public static (ParameterType parameterType, Guid? scaleId) QueryParameterTypeAndMeasurementScale(this IParameterTypeAssignment assignment, IReadOnlyCollection<Thing> things)
         {
             var parameterType = things.OfType<ParameterType>().FirstOrDefault(x => x.Iid == assignment.ParameterType)
-                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contains a reference to the ParameterType {assignment.ParameterType}");
+                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contain a reference to the ParameterType {assignment.ParameterType}");
 
             return (parameterType, assignment.MeasurementScale);
         }

@@ -682,7 +682,7 @@ namespace CDP4Common.Tests.Validation
             things.Add(independentParameterAssignment);
             
             Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contains a reference to the ParameterType"));
+                .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
 
             things.Add(this.booleanParameterType);
 
@@ -692,7 +692,7 @@ namespace CDP4Common.Tests.Validation
             things.Add(dependentParameterAssignment);
             
             Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contains a reference to the ParameterType"));
+                .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
 
             things.Add(this.simpleQuantityKind);
 
@@ -717,7 +717,7 @@ namespace CDP4Common.Tests.Validation
             this.valueSet.Manual[1] = "2";
 
             Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contains a reference to the MeasurementScale"));
+                .With.Message.Contain("The provided collection of Things does not contain a reference to the MeasurementScale"));
 
             things.Add(this.ratioScale);
 
@@ -766,7 +766,7 @@ namespace CDP4Common.Tests.Validation
             things.Add(boolParameterTypeComponent);
             
             Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contains a reference to the ParameterType"));
+                .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
 
             things.Add(this.booleanParameterType);
 
@@ -776,7 +776,7 @@ namespace CDP4Common.Tests.Validation
             things.Add(textParameterTypeComponent);
             
             Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contains a reference to the ParameterType"));
+                .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
 
             things.Add(this.textParameterType);
 
@@ -827,7 +827,7 @@ namespace CDP4Common.Tests.Validation
             var things = new List<Thing>();
 
             Assert.That(() => parameter.Validate(things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contains a reference to the ParameterType"));
+                .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
 
             things.Add(this.booleanParameterType);
 
