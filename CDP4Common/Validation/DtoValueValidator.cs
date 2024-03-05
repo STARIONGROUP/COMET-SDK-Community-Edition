@@ -45,49 +45,6 @@ namespace CDP4Common.Validation
     /// </remarks>
     public static class DtoValueValidator
     {
-        /// <summary>
-        /// Validates all <see cref="ParameterValueSetBase" /> of a <see cref="ParameterBase" />
-        /// </summary>
-        /// <param name="parameter">The <see cref="ParameterBase" /> to validate</param>
-        /// <param name="things">
-        /// A <see cref="IReadOnlyCollection{T}" /> of related <see cref="Thing" /> that will help to validate the value
-        /// </param>
-        /// <param name="provider">
-        /// The <see cref="IFormatProvider" /> used to validate, if set to null <see cref="CultureInfo.CurrentCulture" /> will be used.
-        /// </param>
-        /// <returns>
-        /// a <see cref="ValidationResult" /> that carries the <see cref="ValidationResultKind" /> and an optional message.
-        /// </returns>
-        /// <exception cref="ThingNotFoundException">
-        /// If the linked <see cref="ParameterType" /> or <see cref="ParameterValueSetBase" />
-        /// are not part of the <paramref name="things" />
-        /// </exception>
-        public static ValidationResult Validate(this ParameterBase parameter, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
-        {
-            var parameterType = things.OfType<ParameterType>()
-                                    .FirstOrDefault(x => x.Iid == parameter.ParameterType)
-                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contain a reference to the ParameterType {parameter.ParameterType}");
-
-            var valueSets = things.OfType<ParameterValueSetBase>()
-                .Where(x => parameter.ValueSets.Any(v => v == x.Iid)).ToList();
-
-            if (valueSets.Count != parameter.ValueSets.Count())
-            {
-                throw new ThingNotFoundException("Some of the referenced ParameterValueSetBase are not present in the collection of Things");
-            }
-
-            foreach (var parameterValueSetBase in valueSets)
-            {
-                var validationResult = parameterType.ValidateAndCleanup(parameterValueSetBase, parameter.Scale, things, provider);
-
-                if (validationResult.ResultKind != ValidationResultKind.Valid)
-                {
-                    return validationResult;
-                }
-            }
-
-            return ValidationResult.ValidResult();
-        }
 
         /// <summary>
         /// Validate the <paramref name="value" /> to check whether the <paramref name="value" /> is valid with respect to the
@@ -369,7 +326,7 @@ namespace CDP4Common.Validation
         /// and an optional message.
         /// <exception cref="InvalidDataException">
         /// If one of the <see cref="ValueArray{T}" /> of the <paramref name="valueSet" />
-        /// do not have the correct number of values
+        /// does not have the correct number of values
         /// </exception>
         public static ValidationResult ValidateAndCleanup(this CompoundParameterType compoundParameterType, ParameterValueSetBase valueSet, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
         {
@@ -424,7 +381,7 @@ namespace CDP4Common.Validation
         /// and an optional message.
         /// <exception cref="InvalidDataException">
         /// If one of the <see cref="ValueArray{T}" /> of the <paramref name="valueSet" />
-        /// do not have the correct number of values
+        /// does not have the correct number of values
         /// </exception>
         public static ValidationResult ValidateAndCleanup(this SampledFunctionParameterType sampledFunctionParameterType, ParameterValueSetBase valueSet, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
         {
@@ -452,6 +409,181 @@ namespace CDP4Common.Validation
                     {
                         return validationResult;
                     }
+                }
+            }
+
+            return ValidationResult.ValidResult();
+        }
+
+        /// <summary>
+        /// Validates and cleanup the <see cref="ValueArray{T}" /> contained in a <see cref="ClasslessDTO" /> for a
+        /// <see cref="Parameter" />
+        /// </summary>
+        /// <param name="parameter">The <see cref="Parameter" /> to be validated</param>
+        /// <param name="classlessDto">The <see cref="ClasslessDTO" /> that contains <see cref="ValueArray{T}" /> to validate</param>
+        /// <param name="things">The collection of <see cref="Thing" /> to retrieve referenced <see cref="Thing" /></param>
+        /// <param name="provider">
+        /// The <see cref="IFormatProvider" /> used to validate, if set to null
+        /// <see cref="CultureInfo.CurrentCulture" /> will be used.
+        /// </param>
+        /// <returns>a <see cref="ValidationResult" /> that carries the <see cref="ValidationResultKind" /> and an optional message.</returns>
+        /// <exception cref="ThingNotFoundException">
+        /// If the <see cref="ParameterType" /> referenced by the <see cref="Parameter" />
+        /// is not contained inside the <paramref name="things" />
+        /// </exception>
+        public static ValidationResult ValidateAndCleanup(this Parameter parameter, ClasslessDTO classlessDto, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
+        {
+            var parameterType = things.OfType<ParameterType>()
+                                    .FirstOrDefault(x => x.Iid == parameter.ParameterType)
+                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contain a reference to the ParameterType {parameter.ParameterType}");
+
+            foreach (var kvp in classlessDto)
+            {
+                if (!(kvp.Value is ValueArray<string> valueArray))
+                {
+                    continue;
+                }
+
+                var validationResult = parameterType.ValidateAndCleanup(valueArray, kvp.Key, parameter.Scale, things, provider);
+
+                if (validationResult.ResultKind != ValidationResultKind.Valid)
+                {
+                    return validationResult;
+                }
+            }
+
+            return ValidationResult.ValidResult();
+        }
+
+        /// <summary>
+        /// Validates and cleanup the <see cref="ValueArray{T}" /> for a <see cref="ParameterType" />
+        /// </summary>
+        /// <param name="parameterType">The <see cref="ParameterType" /> to use for validation</param>
+        /// <param name="valueArray">The <see cref="ValueArray{T}" /> to validate and cleanup</param>
+        /// <param name="valueArrayKind">The kind of <see cref="ValueArray{T}" /></param>
+        /// <param name="measurementScaleId">The <see cref="Guid" /> of the possible <see cref="MeasurementScale" /> to use to validate scalar values</param>
+        /// <param name="things">A <see cref="IReadOnlyCollection{T}" /> of related <see cref="Thing" /> that will help to validate the value</param>
+        /// <param name="provider">
+        /// The <see cref="IFormatProvider" /> used to validate, if set to null
+        /// <see cref="CultureInfo.CurrentCulture" /> will be used.
+        /// </param>
+        /// <returns>a <see cref="ValidationResult" /> that carries the <see cref="ValidationResultKind" /> and an optional message.</returns>
+        /// <exception cref="InvalidDataException">If the <see cref="ValueArray{T}" /> does not have the correct amount of values</exception>
+        public static ValidationResult ValidateAndCleanup(this ParameterType parameterType, ValueArray<string> valueArray, string valueArrayKind, Guid? measurementScaleId, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
+        {
+            switch (parameterType)
+            {
+                case CompoundParameterType compoundParameterType:
+                    return compoundParameterType.ValidateAndCleanup(valueArray, valueArrayKind, things, provider);
+                case SampledFunctionParameterType sampledFunctionParameterType:
+                    return sampledFunctionParameterType.ValidateAndCleanup(valueArray, valueArrayKind, things, provider);
+            }
+
+            if (valueArray.Count != 1)
+            {
+                throw new InvalidDataException($"The ValueArray {valueArrayKind} ({valueArray}) should have one and only one value!");
+            }
+
+            var validationResult = parameterType.Validate(valueArray[0], measurementScaleId, out var cleanedValue, things, provider);
+
+            if (validationResult.ResultKind != ValidationResultKind.Valid)
+            {
+                return validationResult;
+            }
+
+            valueArray[0] = cleanedValue;
+
+            return ValidationResult.ValidResult();
+        }
+
+        /// <summary>
+        /// Validates all provides values of a <see cref="ValueArray{T}" /> for a <see cref="CompoundParameterType" />.
+        /// The number of provided values should be equal to the number of referenced <see cref="ParameterTypeComponent" /> and each one should be validated
+        /// against the <see cref="ParameterType " /> and <see cref="MeasurementScale" /> (if applicable)
+        /// </summary>
+        /// <param name="compoundParameterType">The <see cref="CompoundParameterType" /> to use for the validation</param>
+        /// <param name="valueArray">The <see cref="ValueArray{T}" /> to validate</param>
+        /// <param name="valueArrayKind">The kind of <see cref="ValueArray{T}" /></param>
+        /// <param name="things">The collection of <see cref="Thing" /> to retrieve referenced <see cref="Thing" /></param>
+        /// <param name="provider">
+        /// The <see cref="IFormatProvider" /> used to validate, if set to null
+        /// <see cref="CultureInfo.CurrentCulture" /> will be used.
+        /// </param>
+        /// <returns>a <see cref="ValidationResult" /> that carries the <see cref="ValidationResultKind" /> and an optional message.</returns>
+        /// <exception cref="InvalidDataException">
+        /// If the <see cref="ValueArray{T}" /> does not have the correct number of values
+        /// </exception>
+        public static ValidationResult ValidateAndCleanup(this CompoundParameterType compoundParameterType, ValueArray<string> valueArray, string valueArrayKind, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
+        {
+            var parameterTypeComponents = compoundParameterType.QueryParameterTypesAndMeasurementScale(things);
+
+            if (valueArray.Count != parameterTypeComponents.Count)
+            {
+                throw new InvalidDataException($"The ValueArray {valueArrayKind} ({valueArray}) does not have the required amount of values ! Expected: {parameterTypeComponents.Count} Received: {valueArray.Count}");
+            }
+
+            for (var valueIndex = 0; valueIndex < valueArray.Count; valueIndex++)
+            {
+                var (parameterType, measurementScaleId) = parameterTypeComponents[valueIndex];
+                var valueToValidate = valueArray[valueIndex];
+
+                var validationResult = parameterType.Validate(valueToValidate, measurementScaleId, out var cleanedValue, things, provider);
+
+                if (validationResult.ResultKind == ValidationResultKind.Valid)
+                {
+                    valueArray[valueIndex] = cleanedValue;
+                }
+                else
+                {
+                    return validationResult;
+                }
+            }
+
+            return ValidationResult.ValidResult();
+        }
+
+        /// <summary>
+        /// Validates all provides values of a <see cref="ValueArray{T}" /> for a
+        /// <see cref="SampledFunctionParameterType" />.
+        /// The number of provided values should be a multiple of the number of referenced <see cref="IParameterTypeAssignment" />
+        /// and each one should be validated
+        /// against the <see cref="ParameterType " /> and <see cref="MeasurementScale" /> (if applicable)
+        /// </summary>
+        /// <param name="sampledFunctionParameterType">The <see cref="SampledFunctionParameterType" /> to use for the validation</param>
+        /// <param name="valueArray">The <see cref="ValueArray{T}" /> to validate</param>
+        /// <param name="valueArrayKind">The kind of <see cref="ValueArray{T}" /></param>
+        /// <param name="things">The collection of <see cref="Thing" /> to retrieve referenced <see cref="Thing" /></param>
+        /// <param name="provider">
+        /// The <see cref="IFormatProvider" /> used to validate, if set to null
+        /// <see cref="CultureInfo.CurrentCulture" /> will be used.
+        /// </param>
+        /// <returns>a <see cref="ValidationResult" /> that carries the <see cref="ValidationResultKind" /> and an optional message.</returns>
+        /// <exception cref="InvalidDataException">
+        /// If the <see cref="ValueArray{T}" /> does not have the correct number of values
+        /// </exception>
+        public static ValidationResult ValidateAndCleanup(this SampledFunctionParameterType sampledFunctionParameterType, ValueArray<string> valueArray, string valueArrayKind, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
+        {
+            var parameterTypeAssignments = sampledFunctionParameterType.QueryParameterTypesAndMeasurementScale(things);
+
+            if (valueArray.Count % parameterTypeAssignments.Count != 0)
+            {
+                throw new InvalidDataException($"The ValueArray {valueArrayKind} ({valueArray}) does not have the required amount of values !");
+            }
+
+            for (var valueIndex = 0; valueIndex < valueArray.Count; valueIndex++)
+            {
+                var (parameterType, measurementScaleId) = parameterTypeAssignments[valueIndex % parameterTypeAssignments.Count];
+                var valueToValidate = valueArray[valueIndex];
+
+                var validationResult = parameterType.Validate(valueToValidate, measurementScaleId, out var cleanedValue, things, provider);
+
+                if (validationResult.ResultKind == ValidationResultKind.Valid)
+                {
+                    valueArray[valueIndex] = cleanedValue;
+                }
+                else
+                {
+                    return validationResult;
                 }
             }
 
