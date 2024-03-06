@@ -677,28 +677,58 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             var things = new List<Thing>();
 
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of referenced Things does not contain the IndependentParameterTypeAssignment"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of referenced Things does not contain the IndependentParameterTypeAssignment"));
+
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of referenced Things does not contain the IndependentParameterTypeAssignment"));
+            });
             
             things.Add(independentParameterAssignment);
-            
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+            });
 
             things.Add(this.booleanParameterType);
 
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of referenced Things does not contain the DependentParameterTypeAssignment"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of referenced Things does not contain the DependentParameterTypeAssignment"));
+
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of referenced Things does not contain the DependentParameterTypeAssignment"));
+            });
             
             things.Add(dependentParameterAssignment);
-            
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+            });
 
             things.Add(this.simpleQuantityKind);
 
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The ValueArray MANUAL ({\"-\"}) does not have the required amount of values !"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
+                    .With.Message.Contain("The ValueArray MANUAL ({\"-\"}) does not have the required amount of values !"));
+
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<InvalidDataException>()
+                    .With.Message.Contain("The ValueArray Manual ({\"-\"}) does not have the required amount of values !"));
+            });
 
             this.valueSet.Manual = new ValueArray<string>(["-","-"]);
             this.valueSet.Computed = new ValueArray<string>(["-","-","-","-"]);
@@ -714,11 +744,25 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(this.valueSet.Reference, Is.EquivalentTo(new ValueArray<string>(["-","-","-","-","-","-"])));
             });
 
+            result = sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["-","-"])));
+            });
+
             this.valueSet.Manual[0] = "1";
             this.valueSet.Manual[1] = "2";
 
-            Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contain a reference to the MeasurementScale"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of Things does not contain a reference to the MeasurementScale"));
+
+                Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of Things does not contain a reference to the MeasurementScale"));
+            });
 
             things.Add(this.ratioScale);
 
@@ -730,8 +774,21 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["true","2"])));
             });
 
+            this.valueSet.Manual[0] = "1";
+            this.valueSet.Manual[1] = "2";
+            result = sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["true","2"])));
+            });
+
             this.valueSet.Manual[1] = "-1";
             result = sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+
+            result = sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
         }
 
@@ -761,28 +818,58 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             var things = new List<Thing>();
 
-            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of referenced Things does not contain the ParameterTypeComponent"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of referenced Things does not contain the ParameterTypeComponent"));
+
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of referenced Things does not contain the ParameterTypeComponent"));
+            });
             
             things.Add(boolParameterTypeComponent);
-            
-            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet.Manual,"Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+            });
 
             things.Add(this.booleanParameterType);
 
-            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of referenced Things does not contain the ParameterTypeComponent"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of referenced Things does not contain the ParameterTypeComponent"));
+
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of referenced Things does not contain the ParameterTypeComponent"));
+            });
             
             things.Add(textParameterTypeComponent);
-            
-            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                    .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
+            });
 
             things.Add(this.textParameterType);
 
-            Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
-                .With.Message.Contain("The ValueArray MANUAL ({\"-\"}) does not have the required amount of values ! Expected: 2 Received: 1"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<InvalidDataException>()
+                    .With.Message.Contain("The ValueArray MANUAL ({\"-\"}) does not have the required amount of values ! Expected: 2 Received: 1"));
+
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<InvalidDataException>()
+                    .With.Message.Contain("The ValueArray Manual ({\"-\"}) does not have the required amount of values ! Expected: 2 Received: 1"));
+            });
 
             this.valueSet.Manual = new ValueArray<string>(["-","-"]);
             this.valueSet.Computed = new ValueArray<string>(["-","-"]);
@@ -798,6 +885,14 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(this.valueSet.Reference, Is.EquivalentTo(new ValueArray<string>(["-","-"])));
             });
 
+            result = compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["-","-"])));
+            });
+
             this.valueSet.Manual[0] = "1";
             this.valueSet.Manual[1] = "2";
 
@@ -809,49 +904,65 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["true","2"])));
             });
 
+            this.valueSet.Manual[0] = "1";
+            this.valueSet.Manual[1] = "2";
+
+            result = compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["true","2"])));
+            });
+
             this.valueSet.Manual[1] = " ";
 
             result = compoundParameterType.ValidateAndCleanup(this.valueSet, things);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+
+            result = compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things);
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
         }
 
         [Test]
-        public void VerifyParameterBaseValidation()
+        public void VerifyParameterValidation()
         {
             var parameter = new Parameter(Guid.NewGuid(), 1)
             {
                 ParameterType = this.booleanParameterType.Iid
             };
 
-            parameter.ValueSet.Add(this.valueSet.Iid);
+            var classlessDto = new ClasslessDTO()
+            {
+                {"Manual", this.valueSet.Manual},
+                {"Computed", this.valueSet.Computed},
+                {"Reference", this.valueSet.Reference},
+            };
 
             var things = new List<Thing>();
 
-            Assert.That(() => parameter.Validate(things), Throws.Exception.TypeOf<ThingNotFoundException>()
+            Assert.That(() => parameter.ValidateAndCleanup(classlessDto,things), Throws.Exception.TypeOf<ThingNotFoundException>()
                 .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
 
             things.Add(this.booleanParameterType);
 
-            Assert.That(() => parameter.Validate(things), Throws.Exception.TypeOf<ThingNotFoundException>()
-                .With.Message.EqualTo("Some of the referenced ParameterValueSetBase are not present in the collection of Things"));
-
-            things.Add(this.valueSet);
-
-            var result = parameter.Validate(things);
+            var result = parameter.ValidateAndCleanup(classlessDto, things);
 
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
-            this.valueSet.Manual[0] = "FALSE";
-            result = parameter.Validate(things);
+            ((ValueArray<string>)classlessDto["Manual"])[0] = "FALSE";
+
+            result =  parameter.ValidateAndCleanup(classlessDto, things);
 
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That( this.valueSet.Manual[0], Is.EqualTo("false"));
+                Assert.That( ((ValueArray<string>)classlessDto["Manual"])[0], Is.EqualTo("false"));
             });
 
-            this.valueSet.Manual[0] = "2";
-            result = parameter.Validate(things);
+            ((ValueArray<string>)classlessDto["Manual"])[0] = "2";
+
+            result = parameter.ValidateAndCleanup(classlessDto, things);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
         }
     }
