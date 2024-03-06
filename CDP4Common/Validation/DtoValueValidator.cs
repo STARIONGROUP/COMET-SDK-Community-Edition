@@ -330,30 +330,13 @@ namespace CDP4Common.Validation
         /// </exception>
         public static ValidationResult ValidateAndCleanup(this CompoundParameterType compoundParameterType, ParameterValueSetBase valueSet, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
         {
-            var parameterTypeComponents = compoundParameterType.QueryParameterTypesAndMeasurementScale(things);
-
             foreach (var (valueArray, valueArrayKind) in valueSet.QueryAllValueArrays())
             {
-                if (valueArray.Count != parameterTypeComponents.Count)
+                var result = compoundParameterType.ValidateAndCleanup(valueArray, valueArrayKind.ToString(), things, provider);
+
+                if (result.ResultKind != ValidationResultKind.Valid)
                 {
-                    throw new InvalidDataException($"The ValueArray {valueArrayKind} ({valueArray}) does not have the required amount of values ! Expected: {parameterTypeComponents.Count} Received: {valueArray.Count}");
-                }
-
-                for (var valueIndex = 0; valueIndex < valueArray.Count; valueIndex++)
-                {
-                    var (parameterType, measurementScaleId) = parameterTypeComponents[valueIndex];
-                    var valueToValidate = valueArray[valueIndex];
-
-                    var validationResult = parameterType.Validate(valueToValidate, measurementScaleId, out var cleanedValue, things, provider);
-
-                    if (validationResult.ResultKind == ValidationResultKind.Valid)
-                    {
-                        valueArray[valueIndex] = cleanedValue;
-                    }
-                    else
-                    {
-                        return validationResult;
-                    }
+                    return result;
                 }
             }
 
@@ -385,30 +368,13 @@ namespace CDP4Common.Validation
         /// </exception>
         public static ValidationResult ValidateAndCleanup(this SampledFunctionParameterType sampledFunctionParameterType, ParameterValueSetBase valueSet, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
         {
-            var parameterTypeAssignments = sampledFunctionParameterType.QueryParameterTypesAndMeasurementScale(things);
-
             foreach (var (valueArray, valueArrayKind) in valueSet.QueryAllValueArrays())
             {
-                if (valueArray.Count % parameterTypeAssignments.Count != 0)
+                var result = sampledFunctionParameterType.ValidateAndCleanup(valueArray, valueArrayKind.ToString(), things, provider);
+
+                if (result.ResultKind != ValidationResultKind.Valid)
                 {
-                    throw new InvalidDataException($"The ValueArray {valueArrayKind} ({valueArray}) does not have the required amount of values !");
-                }
-
-                for (var valueIndex = 0; valueIndex < valueArray.Count; valueIndex++)
-                {
-                    var (parameterType, measurementScaleId) = parameterTypeAssignments[valueIndex % parameterTypeAssignments.Count];
-                    var valueToValidate = valueArray[valueIndex];
-
-                    var validationResult = parameterType.Validate(valueToValidate, measurementScaleId, out var cleanedValue, things, provider);
-
-                    if (validationResult.ResultKind == ValidationResultKind.Valid)
-                    {
-                        valueArray[valueIndex] = cleanedValue;
-                    }
-                    else
-                    {
-                        return validationResult;
-                    }
+                    return result;
                 }
             }
 
