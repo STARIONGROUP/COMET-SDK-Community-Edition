@@ -45,7 +45,6 @@ namespace CDP4Common.Validation
     /// </remarks>
     public static class DtoValueValidator
     {
-
         /// <summary>
         /// Validate the <paramref name="value" /> to check whether the <paramref name="value" /> is valid with respect to the
         /// <paramref name="parameterType" />
