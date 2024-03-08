@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.CommonData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -328,6 +329,147 @@ namespace CDP4Common.CommonData
                 case "shortname":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.ShortName;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "alias":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Alias.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Alias aliasValue:
+                            this.Alias.Clear();
+                            this.Alias.Add(aliasValue);
+                            return;
+                        case IEnumerable<Alias> aliasValues:
+                            this.Alias.Clear();
+                            this.Alias.AddRange(aliasValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Alias or a collection of Alias" , nameof(value));
+                    }
+                case "definition":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Definition.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Definition definitionValue:
+                            this.Definition.Clear();
+                            this.Definition.Add(definitionValue);
+                            return;
+                        case IEnumerable<Definition> definitionValues:
+                            this.Definition.Clear();
+                            this.Definition.AddRange(definitionValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Definition or a collection of Definition" , nameof(value));
+                    }
+                case "hyperlink":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.HyperLink.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case HyperLink hyperLinkValue:
+                            this.HyperLink.Clear();
+                            this.HyperLink.Add(hyperLinkValue);
+                            return;
+                        case IEnumerable<HyperLink> hyperLinkValues:
+                            this.HyperLink.Clear();
+                            this.HyperLink.AddRange(hyperLinkValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a HyperLink or a collection of HyperLink" , nameof(value));
+                    }
+                case "name":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Name = null;
+                        return;
+                    }
+
+                    if(!(value is string nameValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Name = nameValue;
+                    return;
+                case "shortname":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.ShortName = null;
+                        return;
+                    }
+
+                    if(!(value is string shortNameValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.ShortName = shortNameValue;
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

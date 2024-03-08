@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.EngineeringModelData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -227,6 +228,149 @@ namespace CDP4Common.EngineeringModelData
                     }
 
                     return valueSetNextObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "group":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is ParameterGroup groupValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterGroup" , nameof(value));
+                    }
+
+                    this.Group = groupValue;
+                    return;
+                case "isoptiondependent":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool isOptionDependentValue || (value is string isOptionDependentString) && bool.TryParse(isOptionDependentString, out isOptionDependentValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.IsOptionDependent = isOptionDependentValue;
+                    return;
+                case "owner":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "parametertype":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is ParameterType parameterTypeValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterType" , nameof(value));
+                    }
+
+                    this.ParameterType = parameterTypeValue;
+                    return;
+                case "scale":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is MeasurementScale scaleValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementScale" , nameof(value));
+                    }
+
+                    this.Scale = scaleValue;
+                    return;
+                case "statedependence":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is ActualFiniteStateList stateDependenceValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ActualFiniteStateList" , nameof(value));
+                    }
+
+                    this.StateDependence = stateDependenceValue;
+                    return;
+                case "valueset":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ValueSet.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ParameterSubscriptionValueSet valueSetValue:
+                            this.ValueSet.Clear();
+                            this.ValueSet.Add(valueSetValue);
+                            return;
+                        case IEnumerable<ParameterSubscriptionValueSet> valueSetValues:
+                            this.ValueSet.Clear();
+                            this.ValueSet.AddRange(valueSetValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterSubscriptionValueSet or a collection of ParameterSubscriptionValueSet" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

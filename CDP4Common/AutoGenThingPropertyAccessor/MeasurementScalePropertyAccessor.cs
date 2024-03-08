@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -291,6 +292,247 @@ namespace CDP4Common.SiteDirectoryData
                     }
 
                     return valueDefinitionNextObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "alias":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "definition":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "hyperlink":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "isdeprecated":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool isDeprecatedValue || (value is string isDeprecatedString) && bool.TryParse(isDeprecatedString, out isDeprecatedValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.IsDeprecated = isDeprecatedValue;
+                    return;
+                case "ismaximuminclusive":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool isMaximumInclusiveValue || (value is string isMaximumInclusiveString) && bool.TryParse(isMaximumInclusiveString, out isMaximumInclusiveValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.IsMaximumInclusive = isMaximumInclusiveValue;
+                    return;
+                case "isminimuminclusive":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool isMinimumInclusiveValue || (value is string isMinimumInclusiveString) && bool.TryParse(isMinimumInclusiveString, out isMinimumInclusiveValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.IsMinimumInclusive = isMinimumInclusiveValue;
+                    return;
+                case "mappingtoreferencescale":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.MappingToReferenceScale.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case MappingToReferenceScale mappingToReferenceScaleValue:
+                            this.MappingToReferenceScale.Clear();
+                            this.MappingToReferenceScale.Add(mappingToReferenceScaleValue);
+                            return;
+                        case IEnumerable<MappingToReferenceScale> mappingToReferenceScaleValues:
+                            this.MappingToReferenceScale.Clear();
+                            this.MappingToReferenceScale.AddRange(mappingToReferenceScaleValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MappingToReferenceScale or a collection of MappingToReferenceScale" , nameof(value));
+                    }
+                case "maximumpermissiblevalue":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.MaximumPermissibleValue = null;
+                        return;
+                    }
+
+                    if(!(value is string maximumPermissibleValueValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.MaximumPermissibleValue = maximumPermissibleValueValue;
+                    return;
+                case "minimumpermissiblevalue":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.MinimumPermissibleValue = null;
+                        return;
+                    }
+
+                    if(!(value is string minimumPermissibleValueValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.MinimumPermissibleValue = minimumPermissibleValueValue;
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "negativevalueconnotation":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.NegativeValueConnotation = null;
+                        return;
+                    }
+
+                    if(!(value is string negativeValueConnotationValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.NegativeValueConnotation = negativeValueConnotationValue;
+                    return;
+                case "numberset":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is NumberSetKind numberSetValue || (value is string numberSetString) && NumberSetKind.TryParse(numberSetString, out numberSetValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a NumberSetKind" , nameof(value));
+                    }
+
+                    this.NumberSet = numberSetValue;
+                    return;
+                case "positivevalueconnotation":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.PositiveValueConnotation = null;
+                        return;
+                    }
+
+                    if(!(value is string positiveValueConnotationValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.PositiveValueConnotation = positiveValueConnotationValue;
+                    return;
+                case "shortname":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "unit":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is MeasurementUnit unitValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementUnit" , nameof(value));
+                    }
+
+                    this.Unit = unitValue;
+                    return;
+                case "valuedefinition":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ValueDefinition.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ScaleValueDefinition valueDefinitionValue:
+                            this.ValueDefinition.Clear();
+                            this.ValueDefinition.Add(valueDefinitionValue);
+                            return;
+                        case IEnumerable<ScaleValueDefinition> valueDefinitionValues:
+                            this.ValueDefinition.Clear();
+                            this.ValueDefinition.AddRange(valueDefinitionValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ScaleValueDefinition or a collection of ScaleValueDefinition" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

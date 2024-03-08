@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -229,6 +230,162 @@ namespace CDP4Common.SiteDirectoryData
                     }
 
                     return superCategoryNextObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "alias":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "definition":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "hyperlink":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "isabstract":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool isAbstractValue || (value is string isAbstractString) && bool.TryParse(isAbstractString, out isAbstractValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.IsAbstract = isAbstractValue;
+                    return;
+                case "isdeprecated":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool isDeprecatedValue || (value is string isDeprecatedString) && bool.TryParse(isDeprecatedString, out isDeprecatedValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.IsDeprecated = isDeprecatedValue;
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "permissibleclass":
+
+                    if(value == null)
+                    {
+                        this.PermissibleClass.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ClassKind permissibleClassValue:
+                            this.PermissibleClass.Clear();
+                            this.PermissibleClass.Add(permissibleClassValue);
+                            return;
+                        case IEnumerable<ClassKind> permissibleClassValues:
+                            this.PermissibleClass.Clear();
+                            this.PermissibleClass.AddRange(permissibleClassValues);
+                            return;
+                        case string permissibleClassStringValue:
+                            if(!(Enum.TryParse(permissibleClassStringValue, out ClassKind permissibleClassFromStringValue)))
+                            {
+                                throw new ArgumentException($"The provided value {value} cannot be parsed to a ClassKind" , nameof(value));
+                            }
+                            
+                            this.PermissibleClass.Clear();
+                            this.PermissibleClass.Add(permissibleClassFromStringValue);
+                            return;
+                        case IEnumerable<string> permissibleClassStringValues:
+                            var permissibleClassFromStringValues = new List<ClassKind>();
+
+                            foreach(var permissibleClassSingleStringValue in permissibleClassStringValues)
+                            {
+                                if(!(Enum.TryParse(permissibleClassSingleStringValue, out ClassKind permissibleClassFromSingleStringValue)))
+                                {
+                                    throw new ArgumentException($"The provided value { permissibleClassSingleStringValue } cannot be parsed to a ClassKind" , nameof(value));
+                                }
+
+                                permissibleClassFromStringValues.Add(permissibleClassFromSingleStringValue);
+                            }
+
+                            this.PermissibleClass.Clear();
+                            this.PermissibleClass.AddRange(permissibleClassFromStringValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ClassKind or a collection of ClassKind" , nameof(value));
+                    }
+                case "shortname":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "supercategory":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.SuperCategory.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Category superCategoryValue:
+                            this.SuperCategory.Clear();
+                            this.SuperCategory.Add(superCategoryValue);
+                            return;
+                        case IEnumerable<Category> superCategoryValues:
+                            this.SuperCategory.Clear();
+                            this.SuperCategory.AddRange(superCategoryValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

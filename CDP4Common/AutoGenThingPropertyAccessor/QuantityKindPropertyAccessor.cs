@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -320,6 +321,188 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryValue(pd.Input);
                 case "symbol":
                     return base.QueryValue(pd.Input);
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "alias":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "allpossiblescale":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.AllPossibleScale.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case MeasurementScale allPossibleScaleValue:
+                            this.AllPossibleScale.Clear();
+                            this.AllPossibleScale.Add(allPossibleScaleValue);
+                            return;
+                        case IEnumerable<MeasurementScale> allPossibleScaleValues:
+                            this.AllPossibleScale.Clear();
+                            this.AllPossibleScale.AddRange(allPossibleScaleValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementScale or a collection of MeasurementScale" , nameof(value));
+                    }
+                case "category":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "defaultscale":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is MeasurementScale defaultScaleValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementScale" , nameof(value));
+                    }
+
+                    this.DefaultScale = defaultScaleValue;
+                    return;
+                case "definition":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "hyperlink":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "isdeprecated":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "numberofvalues":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "possiblescale":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.PossibleScale.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case MeasurementScale possibleScaleValue:
+                            this.PossibleScale.Clear();
+                            this.PossibleScale.Add(possibleScaleValue);
+                            return;
+                        case IEnumerable<MeasurementScale> possibleScaleValues:
+                            this.PossibleScale.Clear();
+                            this.PossibleScale.AddRange(possibleScaleValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementScale or a collection of MeasurementScale" , nameof(value));
+                    }
+                case "quantitydimensionexponent":
+
+                    if(value == null)
+                    {
+                        this.QuantityDimensionExponent = null;
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case string quantityDimensionExponentValue:
+                            this.QuantityDimensionExponent.Clear();
+                            this.QuantityDimensionExponent.Add(quantityDimensionExponentValue);
+                            return;
+                        case IEnumerable<string> quantityDimensionExponentValues:
+                            this.QuantityDimensionExponent.Clear();
+                            this.QuantityDimensionExponent.AddRange(quantityDimensionExponentValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string or a collection of string" , nameof(value));
+                    }
+                case "quantitydimensionexpression":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.QuantityDimensionExpression = null;
+                        return;
+                    }
+
+                    if(!(value is string quantityDimensionExpressionValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.QuantityDimensionExpression = quantityDimensionExpressionValue;
+                    return;
+                case "quantitydimensionsymbol":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.QuantityDimensionSymbol = null;
+                        return;
+                    }
+
+                    if(!(value is string quantityDimensionSymbolValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.QuantityDimensionSymbol = quantityDimensionSymbolValue;
+                    return;
+                case "shortname":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "symbol":
+                    base.SetValue(pd.Input, value);
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -218,6 +219,181 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryValue(pd.Input);
                 case "valuedefinition":
                     return base.QueryValue(pd.Input);
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "alias":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "definition":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "exponent":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Exponent = null;
+                        return;
+                    }
+
+                    if(!(value is string exponentValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Exponent = exponentValue;
+                    return;
+                case "factor":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Factor = null;
+                        return;
+                    }
+
+                    if(!(value is string factorValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Factor = factorValue;
+                    return;
+                case "hyperlink":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "isdeprecated":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "ismaximuminclusive":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "isminimuminclusive":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "logarithmbase":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is LogarithmBaseKind logarithmBaseValue || (value is string logarithmBaseString) && LogarithmBaseKind.TryParse(logarithmBaseString, out logarithmBaseValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a LogarithmBaseKind" , nameof(value));
+                    }
+
+                    this.LogarithmBase = logarithmBaseValue;
+                    return;
+                case "mappingtoreferencescale":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "maximumpermissiblevalue":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "minimumpermissiblevalue":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "negativevalueconnotation":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "numberset":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "positivevalueconnotation":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "referencequantitykind":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is QuantityKind referenceQuantityKindValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a QuantityKind" , nameof(value));
+                    }
+
+                    this.ReferenceQuantityKind = referenceQuantityKindValue;
+                    return;
+                case "referencequantityvalue":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ReferenceQuantityValue.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ScaleReferenceQuantityValue referenceQuantityValueValue:
+                            this.ReferenceQuantityValue.Clear();
+                            this.ReferenceQuantityValue.Add(referenceQuantityValueValue);
+                            return;
+                        case IEnumerable<ScaleReferenceQuantityValue> referenceQuantityValueValues:
+                            this.ReferenceQuantityValue.Clear();
+                            this.ReferenceQuantityValue.AddRange(referenceQuantityValueValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ScaleReferenceQuantityValue or a collection of ScaleReferenceQuantityValue" , nameof(value));
+                    }
+                case "shortname":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "unit":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "valuedefinition":
+                    base.SetValue(pd.Input, value);
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.ReportingData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -278,6 +279,132 @@ namespace CDP4Common.ReportingData
                     }
 
                     return relatedThingNextObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "author":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is Person authorValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Person" , nameof(value));
+                    }
+
+                    this.Author = authorValue;
+                    return;
+                case "content":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "createdon":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "discussion":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Discussion.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case SiteDirectoryDataDiscussionItem discussionValue:
+                            this.Discussion.Clear();
+                            this.Discussion.Add(discussionValue);
+                            return;
+                        case IEnumerable<SiteDirectoryDataDiscussionItem> discussionValues:
+                            this.Discussion.Clear();
+                            this.Discussion.AddRange(discussionValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SiteDirectoryDataDiscussionItem or a collection of SiteDirectoryDataDiscussionItem" , nameof(value));
+                    }
+                case "languagecode":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "primaryannotatedthing":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is SiteDirectoryThingReference primaryAnnotatedThingValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SiteDirectoryThingReference" , nameof(value));
+                    }
+
+                    this.PrimaryAnnotatedThing = primaryAnnotatedThingValue;
+                    return;
+                case "relatedthing":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.RelatedThing.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case SiteDirectoryThingReference relatedThingValue:
+                            this.RelatedThing.Clear();
+                            this.RelatedThing.Add(relatedThingValue);
+                            return;
+                        case IEnumerable<SiteDirectoryThingReference> relatedThingValues:
+                            this.RelatedThing.Clear();
+                            this.RelatedThing.AddRange(relatedThingValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SiteDirectoryThingReference or a collection of SiteDirectoryThingReference" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

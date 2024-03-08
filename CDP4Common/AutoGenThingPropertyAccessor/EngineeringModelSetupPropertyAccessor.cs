@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -519,6 +520,250 @@ namespace CDP4Common.SiteDirectoryData
                 case "studyphase":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.StudyPhase;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "activedomain":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ActiveDomain.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case DomainOfExpertise activeDomainValue:
+                            this.ActiveDomain.Clear();
+                            this.ActiveDomain.Add(activeDomainValue);
+                            return;
+                        case IEnumerable<DomainOfExpertise> activeDomainValues:
+                            this.ActiveDomain.Clear();
+                            this.ActiveDomain.AddRange(activeDomainValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise or a collection of DomainOfExpertise" , nameof(value));
+                    }
+                case "alias":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "defaultorganizationalparticipant":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is OrganizationalParticipant defaultOrganizationalParticipantValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a OrganizationalParticipant" , nameof(value));
+                    }
+
+                    this.DefaultOrganizationalParticipant = defaultOrganizationalParticipantValue;
+                    return;
+                case "definition":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "engineeringmodeliid":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is Guid engineeringModelIidValue || (value is string engineeringModelIidString) && Guid.TryParse(engineeringModelIidString, out engineeringModelIidValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Guid" , nameof(value));
+                    }
+
+                    this.EngineeringModelIid = engineeringModelIidValue;
+                    return;
+                case "hyperlink":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "iterationsetup":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.IterationSetup.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case IterationSetup iterationSetupValue:
+                            this.IterationSetup.Clear();
+                            this.IterationSetup.Add(iterationSetupValue);
+                            return;
+                        case IEnumerable<IterationSetup> iterationSetupValues:
+                            this.IterationSetup.Clear();
+                            this.IterationSetup.AddRange(iterationSetupValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a IterationSetup or a collection of IterationSetup" , nameof(value));
+                    }
+                case "kind":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is EngineeringModelKind kindValue || (value is string kindString) && EngineeringModelKind.TryParse(kindString, out kindValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EngineeringModelKind" , nameof(value));
+                    }
+
+                    this.Kind = kindValue;
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "organizationalparticipant":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.OrganizationalParticipant.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case OrganizationalParticipant organizationalParticipantValue:
+                            this.OrganizationalParticipant.Clear();
+                            this.OrganizationalParticipant.Add(organizationalParticipantValue);
+                            return;
+                        case IEnumerable<OrganizationalParticipant> organizationalParticipantValues:
+                            this.OrganizationalParticipant.Clear();
+                            this.OrganizationalParticipant.AddRange(organizationalParticipantValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a OrganizationalParticipant or a collection of OrganizationalParticipant" , nameof(value));
+                    }
+                case "participant":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Participant.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Participant participantValue:
+                            this.Participant.Clear();
+                            this.Participant.Add(participantValue);
+                            return;
+                        case IEnumerable<Participant> participantValues:
+                            this.Participant.Clear();
+                            this.Participant.AddRange(participantValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Participant or a collection of Participant" , nameof(value));
+                    }
+                case "requiredrdl":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.RequiredRdl.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ModelReferenceDataLibrary requiredRdlValue:
+                            this.RequiredRdl.Clear();
+                            this.RequiredRdl.Add(requiredRdlValue);
+                            return;
+                        case IEnumerable<ModelReferenceDataLibrary> requiredRdlValues:
+                            this.RequiredRdl.Clear();
+                            this.RequiredRdl.AddRange(requiredRdlValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ModelReferenceDataLibrary or a collection of ModelReferenceDataLibrary" , nameof(value));
+                    }
+                case "shortname":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "sourceengineeringmodelsetupiid":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.SourceEngineeringModelSetupIid = null;
+                        return;
+                    }
+
+                    if(!(value is Guid sourceEngineeringModelSetupIidValue || (value is string sourceEngineeringModelSetupIidString) && Guid.TryParse(sourceEngineeringModelSetupIidString, out sourceEngineeringModelSetupIidValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Guid" , nameof(value));
+                    }
+
+                    this.SourceEngineeringModelSetupIid = sourceEngineeringModelSetupIidValue;
+                    return;
+                case "studyphase":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is StudyPhaseKind studyPhaseValue || (value is string studyPhaseString) && StudyPhaseKind.TryParse(studyPhaseString, out studyPhaseValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a StudyPhaseKind" , nameof(value));
+                    }
+
+                    this.StudyPhase = studyPhaseValue;
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

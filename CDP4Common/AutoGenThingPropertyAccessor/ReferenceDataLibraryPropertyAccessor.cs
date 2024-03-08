@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -1067,6 +1068,343 @@ namespace CDP4Common.SiteDirectoryData
                     }
 
                     return unitPrefixNextObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "alias":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "basequantitykind":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.BaseQuantityKind.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case QuantityKind baseQuantityKindValue:
+                            this.BaseQuantityKind.Clear();
+                            this.BaseQuantityKind.Add(baseQuantityKindValue);
+                            return;
+                        case IEnumerable<QuantityKind> baseQuantityKindValues:
+                            this.BaseQuantityKind.Clear();
+                            this.BaseQuantityKind.AddRange(baseQuantityKindValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a QuantityKind or a collection of QuantityKind" , nameof(value));
+                    }
+                case "baseunit":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.BaseUnit.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case MeasurementUnit baseUnitValue:
+                            this.BaseUnit.Clear();
+                            this.BaseUnit.Add(baseUnitValue);
+                            return;
+                        case IEnumerable<MeasurementUnit> baseUnitValues:
+                            this.BaseUnit.Clear();
+                            this.BaseUnit.AddRange(baseUnitValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementUnit or a collection of MeasurementUnit" , nameof(value));
+                    }
+                case "constant":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Constant.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Constant constantValue:
+                            this.Constant.Clear();
+                            this.Constant.Add(constantValue);
+                            return;
+                        case IEnumerable<Constant> constantValues:
+                            this.Constant.Clear();
+                            this.Constant.AddRange(constantValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Constant or a collection of Constant" , nameof(value));
+                    }
+                case "definedcategory":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.DefinedCategory.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Category definedCategoryValue:
+                            this.DefinedCategory.Clear();
+                            this.DefinedCategory.Add(definedCategoryValue);
+                            return;
+                        case IEnumerable<Category> definedCategoryValues:
+                            this.DefinedCategory.Clear();
+                            this.DefinedCategory.AddRange(definedCategoryValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
+                    }
+                case "definition":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "filetype":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.FileType.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case FileType fileTypeValue:
+                            this.FileType.Clear();
+                            this.FileType.Add(fileTypeValue);
+                            return;
+                        case IEnumerable<FileType> fileTypeValues:
+                            this.FileType.Clear();
+                            this.FileType.AddRange(fileTypeValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a FileType or a collection of FileType" , nameof(value));
+                    }
+                case "glossary":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Glossary.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Glossary glossaryValue:
+                            this.Glossary.Clear();
+                            this.Glossary.Add(glossaryValue);
+                            return;
+                        case IEnumerable<Glossary> glossaryValues:
+                            this.Glossary.Clear();
+                            this.Glossary.AddRange(glossaryValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Glossary or a collection of Glossary" , nameof(value));
+                    }
+                case "hyperlink":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "parametertype":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ParameterType.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ParameterType parameterTypeValue:
+                            this.ParameterType.Clear();
+                            this.ParameterType.Add(parameterTypeValue);
+                            return;
+                        case IEnumerable<ParameterType> parameterTypeValues:
+                            this.ParameterType.Clear();
+                            this.ParameterType.AddRange(parameterTypeValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterType or a collection of ParameterType" , nameof(value));
+                    }
+                case "referencesource":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ReferenceSource.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ReferenceSource referenceSourceValue:
+                            this.ReferenceSource.Clear();
+                            this.ReferenceSource.Add(referenceSourceValue);
+                            return;
+                        case IEnumerable<ReferenceSource> referenceSourceValues:
+                            this.ReferenceSource.Clear();
+                            this.ReferenceSource.AddRange(referenceSourceValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ReferenceSource or a collection of ReferenceSource" , nameof(value));
+                    }
+                case "requiredrdl":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is SiteReferenceDataLibrary requiredRdlValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SiteReferenceDataLibrary" , nameof(value));
+                    }
+
+                    this.RequiredRdl = requiredRdlValue;
+                    return;
+                case "rule":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Rule.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Rule ruleValue:
+                            this.Rule.Clear();
+                            this.Rule.Add(ruleValue);
+                            return;
+                        case IEnumerable<Rule> ruleValues:
+                            this.Rule.Clear();
+                            this.Rule.AddRange(ruleValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Rule or a collection of Rule" , nameof(value));
+                    }
+                case "scale":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Scale.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case MeasurementScale scaleValue:
+                            this.Scale.Clear();
+                            this.Scale.Add(scaleValue);
+                            return;
+                        case IEnumerable<MeasurementScale> scaleValues:
+                            this.Scale.Clear();
+                            this.Scale.AddRange(scaleValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementScale or a collection of MeasurementScale" , nameof(value));
+                    }
+                case "shortname":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "unit":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Unit.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case MeasurementUnit unitValue:
+                            this.Unit.Clear();
+                            this.Unit.Add(unitValue);
+                            return;
+                        case IEnumerable<MeasurementUnit> unitValues:
+                            this.Unit.Clear();
+                            this.Unit.AddRange(unitValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementUnit or a collection of MeasurementUnit" , nameof(value));
+                    }
+                case "unitprefix":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.UnitPrefix.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case UnitPrefix unitPrefixValue:
+                            this.UnitPrefix.Clear();
+                            this.UnitPrefix.Add(unitPrefixValue);
+                            return;
+                        case IEnumerable<UnitPrefix> unitPrefixValues:
+                            this.UnitPrefix.Clear();
+                            this.UnitPrefix.AddRange(unitPrefixValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a UnitPrefix or a collection of UnitPrefix" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

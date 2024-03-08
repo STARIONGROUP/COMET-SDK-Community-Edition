@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -136,6 +137,111 @@ namespace CDP4Common.SiteDirectoryData
                     }
 
                     return vcardTypeObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "value":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Value = null;
+                        return;
+                    }
+
+                    if(!(value is string valueValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Value = valueValue;
+                    return;
+                case "vcardtype":
+
+                    if(value == null)
+                    {
+                        this.VcardType.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case VcardTelephoneNumberKind vcardTypeValue:
+                            this.VcardType.Clear();
+                            this.VcardType.Add(vcardTypeValue);
+                            return;
+                        case IEnumerable<VcardTelephoneNumberKind> vcardTypeValues:
+                            this.VcardType.Clear();
+                            this.VcardType.AddRange(vcardTypeValues);
+                            return;
+                        case string vcardTypeStringValue:
+                            if(!(Enum.TryParse(vcardTypeStringValue, out VcardTelephoneNumberKind vcardTypeFromStringValue)))
+                            {
+                                throw new ArgumentException($"The provided value {value} cannot be parsed to a VcardTelephoneNumberKind" , nameof(value));
+                            }
+                            
+                            this.VcardType.Clear();
+                            this.VcardType.Add(vcardTypeFromStringValue);
+                            return;
+                        case IEnumerable<string> vcardTypeStringValues:
+                            var vcardTypeFromStringValues = new List<VcardTelephoneNumberKind>();
+
+                            foreach(var vcardTypeSingleStringValue in vcardTypeStringValues)
+                            {
+                                if(!(Enum.TryParse(vcardTypeSingleStringValue, out VcardTelephoneNumberKind vcardTypeFromSingleStringValue)))
+                                {
+                                    throw new ArgumentException($"The provided value { vcardTypeSingleStringValue } cannot be parsed to a VcardTelephoneNumberKind" , nameof(value));
+                                }
+
+                                vcardTypeFromStringValues.Add(vcardTypeFromSingleStringValue);
+                            }
+
+                            this.VcardType.Clear();
+                            this.VcardType.AddRange(vcardTypeFromStringValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a VcardTelephoneNumberKind or a collection of VcardTelephoneNumberKind" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

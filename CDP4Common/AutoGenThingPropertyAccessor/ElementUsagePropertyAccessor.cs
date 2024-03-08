@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.EngineeringModelData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -274,6 +275,144 @@ namespace CDP4Common.EngineeringModelData
                     return parameterOverrideNextObjects;
                 case "shortname":
                     return base.QueryValue(pd.Input);
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "alias":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "category":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "definition":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "elementdefinition":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is ElementDefinition elementDefinitionValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ElementDefinition" , nameof(value));
+                    }
+
+                    this.ElementDefinition = elementDefinitionValue;
+                    return;
+                case "excludeoption":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ExcludeOption.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Option excludeOptionValue:
+                            this.ExcludeOption.Clear();
+                            this.ExcludeOption.Add(excludeOptionValue);
+                            return;
+                        case IEnumerable<Option> excludeOptionValues:
+                            this.ExcludeOption.Clear();
+                            this.ExcludeOption.AddRange(excludeOptionValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Option or a collection of Option" , nameof(value));
+                    }
+                case "hyperlink":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "interfaceend":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is InterfaceEndKind interfaceEndValue || (value is string interfaceEndString) && InterfaceEndKind.TryParse(interfaceEndString, out interfaceEndValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a InterfaceEndKind" , nameof(value));
+                    }
+
+                    this.InterfaceEnd = interfaceEndValue;
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "owner":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "parameteroverride":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ParameterOverride.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ParameterOverride parameterOverrideValue:
+                            this.ParameterOverride.Clear();
+                            this.ParameterOverride.Add(parameterOverrideValue);
+                            return;
+                        case IEnumerable<ParameterOverride> parameterOverrideValues:
+                            this.ParameterOverride.Clear();
+                            this.ParameterOverride.AddRange(parameterOverrideValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterOverride or a collection of ParameterOverride" , nameof(value));
+                    }
+                case "shortname":
+                    base.SetValue(pd.Input, value);
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

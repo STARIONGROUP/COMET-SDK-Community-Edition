@@ -29,6 +29,7 @@ namespace CDP4Common.CommonData
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Globalization;
     using System.Linq;
     using System.Runtime.Serialization;
 
@@ -791,6 +792,15 @@ namespace CDP4Common.CommonData
         public abstract object QueryValue(string path);
 
         /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public abstract void SetValue(string path, object value);
+
+        /// <summary>
         /// Queries the value(s) of the specified property for the <see cref="Thing"/> class.
         /// </summary>
         /// <param name="path">
@@ -986,6 +996,152 @@ namespace CDP4Common.CommonData
                 case "actor":
                     pd.VerifyPropertyDescriptorForReferenceProperty();
                     return this.Actor;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on Thing");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property for the <see cref="Thing"/> class
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        protected internal void SetThingValue(string path, object value)
+        {
+            var pd = PropertyAccesor.PropertyDescriptor.QueryPropertyDescriptor(path);
+
+            switch (pd.Name.ToLower())
+            {
+                case "iid":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is Guid iid || (value is string iidString && Guid.TryParse(iidString, out iid))))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Guid", nameof(value));
+                    }
+
+                    this.Iid = iid;
+                    return;
+
+                case "revisionnumber":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is int revisionNumber || (value is string revisionNumberString && int.TryParse(revisionNumberString, out revisionNumber))))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected an Integer", nameof(value));
+                    }
+
+                    this.RevisionNumber = revisionNumber;
+                    return;
+
+                case "classkind":
+                    throw new InvalidOperationException("Unable to set the ClassKind of any Thing");
+                case "excludeddomain":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+                    
+                    if(value == null)
+                    {
+                        this.ExcludedDomain.Clear();
+                        return;
+                    }
+
+                    switch (value)
+                    {
+                        case DomainOfExpertise excludedDomain:
+                            this.ExcludedDomain.Clear();
+                            this.ExcludedDomain.Add(excludedDomain);
+                            return;
+                        case IEnumerable<DomainOfExpertise> excludedDomains:
+                            this.ExcludedDomain.Clear();
+                            this.ExcludedDomain.AddRange(excludedDomains);
+                            return;
+                        default:
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise or a collection of DomainOfExpertise" , nameof(value));
+                    }
+
+                case "excludedperson":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if (value == null)
+                    {
+                        this.ExcludedPerson.Clear();
+                        return;
+                    }
+
+                    switch (value)
+                    {
+                        case Person excludedPerson:
+                            this.ExcludedPerson.Clear();
+                            this.ExcludedPerson.Add(excludedPerson);
+                            return;
+                        case IEnumerable<Person> excludedPersons:
+                            this.ExcludedPerson.Clear();
+                            this.ExcludedPerson.AddRange(excludedPersons);
+                            return;
+                        default:
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Person or a collection of Person" , nameof(value));
+                    }
+
+                case "modifiedon":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is DateTime modifiedOn || (value is string modifiedOnString && DateTime.TryParse(modifiedOnString, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out modifiedOn))))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DateTime", nameof(value));
+                    }
+
+                    this.ModifiedOn = modifiedOn;
+                    return;
+
+                case "thingpreference":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if (value == null)
+                    {
+                        this.ThingPreference = null;
+                        return;
+                    }
+
+                    if (!(value is string thingPreference))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string", nameof(value));
+                    }
+
+                    this.ThingPreference = thingPreference;
+                    return;
+                case "actor":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if (value == null)
+                    {
+                        this.Actor = null;
+                        return;
+                    }
+
+                    if (!(value is Person actor))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Person", nameof(value));
+                    }
+
+                    this.Actor = actor;
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on Thing");
             }
