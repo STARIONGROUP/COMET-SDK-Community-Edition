@@ -23,7 +23,7 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.NetCore.Tests.PropertyAccessor
+namespace CDP4Common.Tests.PropertyAccessor
 {
     using System;
     using System.Collections.Generic;
@@ -249,7 +249,7 @@ namespace CDP4Common.NetCore.Tests.PropertyAccessor
         {
             var actionItem = new ActionItem();
             var domainOfExpertise = new DomainOfExpertise();
-            const string excludedDomainName = $"{nameof(ActionItem.ExcludedDomain)}[0..*]";
+            const string excludedDomainName = nameof(ActionItem.ExcludedDomain) + "[0..*]";
 
             Assert.That(actionItem.ExcludedDomain, Is.Empty);
             actionItem.SetValue(excludedDomainName, domainOfExpertise);
@@ -262,8 +262,8 @@ namespace CDP4Common.NetCore.Tests.PropertyAccessor
 
             var newExcludedDomains = new List<DomainOfExpertise>()
             {
-                new (),
-                new ()
+                new DomainOfExpertise(),
+                new DomainOfExpertise()
             };
 
             actionItem.SetValue(excludedDomainName, newExcludedDomains);

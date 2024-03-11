@@ -269,7 +269,7 @@ namespace CDP4Common.EngineeringModelData
 
                     if(value == null)
                     {
-                        this.Value = null;
+                        this.Value = new ValueArray<string>(this);
                         return;
                     }
 

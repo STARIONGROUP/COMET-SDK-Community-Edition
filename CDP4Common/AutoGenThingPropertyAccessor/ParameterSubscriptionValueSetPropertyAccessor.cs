@@ -419,7 +419,7 @@ namespace CDP4Common.EngineeringModelData
 
                     if(value == null)
                     {
-                        this.ActualValue = null;
+                        this.ActualValue = new ValueArray<string>(this);
                         return;
                     }
 
@@ -438,7 +438,7 @@ namespace CDP4Common.EngineeringModelData
 
                     if(value == null)
                     {
-                        this.Computed = null;
+                        this.Computed = new ValueArray<string>(this);
                         return;
                     }
 
@@ -457,7 +457,7 @@ namespace CDP4Common.EngineeringModelData
 
                     if(value == null)
                     {
-                        this.Manual = null;
+                        this.Manual = new ValueArray<string>(this);
                         return;
                     }
 
@@ -491,7 +491,7 @@ namespace CDP4Common.EngineeringModelData
 
                     if(value == null)
                     {
-                        this.Reference = null;
+                        this.Reference = new ValueArray<string>(this);
                         return;
                     }
 

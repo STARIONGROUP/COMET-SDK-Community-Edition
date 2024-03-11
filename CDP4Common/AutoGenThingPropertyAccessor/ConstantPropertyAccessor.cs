@@ -384,7 +384,7 @@ namespace CDP4Common.SiteDirectoryData
 
                     if(value == null)
                     {
-                        this.Value = null;
+                        this.Value = new ValueArray<string>(this);
                         return;
                     }
 

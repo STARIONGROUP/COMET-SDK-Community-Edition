@@ -432,7 +432,7 @@ namespace CDP4Common.SiteDirectoryData
 
                     if(value == null)
                     {
-                        this.InterpolationPeriod = null;
+                        this.InterpolationPeriod = new ValueArray<string>(this);
                         return;
                     }
 

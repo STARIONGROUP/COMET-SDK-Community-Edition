@@ -23,7 +23,7 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.NetCore.Tests.PropertyAccessor
+namespace CDP4Common.Tests.PropertyAccessor
 {
     using System;
     using System.Collections.Generic;
