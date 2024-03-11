@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.EngineeringModelData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -579,6 +580,199 @@ namespace CDP4Common.EngineeringModelData
                     }
 
                     return modellingAnnotationNextObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "book":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Book.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Book bookValue:
+                            this.Book.Clear();
+                            this.Book.Add(bookValue);
+                            return;
+                        case IEnumerable<Book> bookValues:
+                            this.Book.Clear();
+                            this.Book.AddRange(bookValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Book or a collection of Book" , nameof(value));
+                    }
+                case "commonfilestore":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.CommonFileStore.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case CommonFileStore commonFileStoreValue:
+                            this.CommonFileStore.Clear();
+                            this.CommonFileStore.Add(commonFileStoreValue);
+                            return;
+                        case IEnumerable<CommonFileStore> commonFileStoreValues:
+                            this.CommonFileStore.Clear();
+                            this.CommonFileStore.AddRange(commonFileStoreValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a CommonFileStore or a collection of CommonFileStore" , nameof(value));
+                    }
+                case "engineeringmodelsetup":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is EngineeringModelSetup engineeringModelSetupValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EngineeringModelSetup" , nameof(value));
+                    }
+
+                    this.EngineeringModelSetup = engineeringModelSetupValue;
+                    return;
+                case "genericnote":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.GenericNote.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case EngineeringModelDataNote genericNoteValue:
+                            this.GenericNote.Clear();
+                            this.GenericNote.Add(genericNoteValue);
+                            return;
+                        case IEnumerable<EngineeringModelDataNote> genericNoteValues:
+                            this.GenericNote.Clear();
+                            this.GenericNote.AddRange(genericNoteValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EngineeringModelDataNote or a collection of EngineeringModelDataNote" , nameof(value));
+                    }
+                case "iteration":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Iteration.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Iteration iterationValue:
+                            this.Iteration.Clear();
+                            this.Iteration.Add(iterationValue);
+                            return;
+                        case IEnumerable<Iteration> iterationValues:
+                            this.Iteration.Clear();
+                            this.Iteration.AddRange(iterationValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Iteration or a collection of Iteration" , nameof(value));
+                    }
+                case "lastmodifiedon":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "logentry":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.LogEntry.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ModelLogEntry logEntryValue:
+                            this.LogEntry.Clear();
+                            this.LogEntry.Add(logEntryValue);
+                            return;
+                        case IEnumerable<ModelLogEntry> logEntryValues:
+                            this.LogEntry.Clear();
+                            this.LogEntry.AddRange(logEntryValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ModelLogEntry or a collection of ModelLogEntry" , nameof(value));
+                    }
+                case "modellingannotation":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ModellingAnnotation.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ModellingAnnotationItem modellingAnnotationValue:
+                            this.ModellingAnnotation.Clear();
+                            this.ModellingAnnotation.Add(modellingAnnotationValue);
+                            return;
+                        case IEnumerable<ModellingAnnotationItem> modellingAnnotationValues:
+                            this.ModellingAnnotation.Clear();
+                            this.ModellingAnnotation.AddRange(modellingAnnotationValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ModellingAnnotationItem or a collection of ModellingAnnotationItem" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

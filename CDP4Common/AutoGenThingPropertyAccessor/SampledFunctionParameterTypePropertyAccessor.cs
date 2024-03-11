@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -312,6 +313,155 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryValue(pd.Input);
                 case "symbol":
                     return base.QueryValue(pd.Input);
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "alias":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "category":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "definition":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "degreeofinterpolation":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.DegreeOfInterpolation = null;
+                        return;
+                    }
+
+                    if(!(value is int degreeOfInterpolationValue || (value is string degreeOfInterpolationString) && int.TryParse(degreeOfInterpolationString, out degreeOfInterpolationValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a int" , nameof(value));
+                    }
+
+                    this.DegreeOfInterpolation = degreeOfInterpolationValue;
+                    return;
+                case "dependentparametertype":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.DependentParameterType.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case DependentParameterTypeAssignment dependentParameterTypeValue:
+                            this.DependentParameterType.Clear();
+                            this.DependentParameterType.Add(dependentParameterTypeValue);
+                            return;
+                        case IEnumerable<DependentParameterTypeAssignment> dependentParameterTypeValues:
+                            this.DependentParameterType.Clear();
+                            this.DependentParameterType.AddRange(dependentParameterTypeValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DependentParameterTypeAssignment or a collection of DependentParameterTypeAssignment" , nameof(value));
+                    }
+                case "hyperlink":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "independentparametertype":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.IndependentParameterType.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case IndependentParameterTypeAssignment independentParameterTypeValue:
+                            this.IndependentParameterType.Clear();
+                            this.IndependentParameterType.Add(independentParameterTypeValue);
+                            return;
+                        case IEnumerable<IndependentParameterTypeAssignment> independentParameterTypeValues:
+                            this.IndependentParameterType.Clear();
+                            this.IndependentParameterType.AddRange(independentParameterTypeValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a IndependentParameterTypeAssignment or a collection of IndependentParameterTypeAssignment" , nameof(value));
+                    }
+                case "interpolationperiod":
+
+                    if(value == null)
+                    {
+                        this.InterpolationPeriod = new ValueArray<string>(this);
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case string interpolationPeriodValue:
+                            this.InterpolationPeriod = new ValueArray<string>(new List<string>{ interpolationPeriodValue });
+                            return;
+                        case IEnumerable<string> interpolationPeriodValues:
+                            this.InterpolationPeriod = new ValueArray<string>(interpolationPeriodValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string or a collection of string" , nameof(value));
+                    }
+                case "isdeprecated":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "numberofvalues":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "shortname":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "symbol":
+                    base.SetValue(pd.Input, value);
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

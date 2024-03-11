@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.SiteDirectoryData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -421,6 +422,316 @@ namespace CDP4Common.SiteDirectoryData
                     }
 
                     return userPreferenceNextObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "defaultdomain":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is DomainOfExpertise defaultDomainValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise" , nameof(value));
+                    }
+
+                    this.DefaultDomain = defaultDomainValue;
+                    return;
+                case "defaultemailaddress":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is EmailAddress defaultEmailAddressValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EmailAddress" , nameof(value));
+                    }
+
+                    this.DefaultEmailAddress = defaultEmailAddressValue;
+                    return;
+                case "defaulttelephonenumber":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is TelephoneNumber defaultTelephoneNumberValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a TelephoneNumber" , nameof(value));
+                    }
+
+                    this.DefaultTelephoneNumber = defaultTelephoneNumberValue;
+                    return;
+                case "emailaddress":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.EmailAddress.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case EmailAddress emailAddressValue:
+                            this.EmailAddress.Clear();
+                            this.EmailAddress.Add(emailAddressValue);
+                            return;
+                        case IEnumerable<EmailAddress> emailAddressValues:
+                            this.EmailAddress.Clear();
+                            this.EmailAddress.AddRange(emailAddressValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EmailAddress or a collection of EmailAddress" , nameof(value));
+                    }
+                case "givenname":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.GivenName = null;
+                        return;
+                    }
+
+                    if(!(value is string givenNameValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.GivenName = givenNameValue;
+                    return;
+                case "isactive":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool isActiveValue || (value is string isActiveString) && bool.TryParse(isActiveString, out isActiveValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.IsActive = isActiveValue;
+                    return;
+                case "isdeprecated":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool isDeprecatedValue || (value is string isDeprecatedString) && bool.TryParse(isDeprecatedString, out isDeprecatedValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.IsDeprecated = isDeprecatedValue;
+                    return;
+                case "name":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Name = null;
+                        return;
+                    }
+
+                    if(!(value is string nameValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Name = nameValue;
+                    return;
+                case "organization":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is Organization organizationValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Organization" , nameof(value));
+                    }
+
+                    this.Organization = organizationValue;
+                    return;
+                case "organizationalunit":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.OrganizationalUnit = null;
+                        return;
+                    }
+
+                    if(!(value is string organizationalUnitValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.OrganizationalUnit = organizationalUnitValue;
+                    return;
+                case "password":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Password = null;
+                        return;
+                    }
+
+                    if(!(value is string passwordValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Password = passwordValue;
+                    return;
+                case "role":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is PersonRole roleValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a PersonRole" , nameof(value));
+                    }
+
+                    this.Role = roleValue;
+                    return;
+                case "shortname":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.ShortName = null;
+                        return;
+                    }
+
+                    if(!(value is string shortNameValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.ShortName = shortNameValue;
+                    return;
+                case "surname":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Surname = null;
+                        return;
+                    }
+
+                    if(!(value is string surnameValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Surname = surnameValue;
+                    return;
+                case "telephonenumber":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.TelephoneNumber.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case TelephoneNumber telephoneNumberValue:
+                            this.TelephoneNumber.Clear();
+                            this.TelephoneNumber.Add(telephoneNumberValue);
+                            return;
+                        case IEnumerable<TelephoneNumber> telephoneNumberValues:
+                            this.TelephoneNumber.Clear();
+                            this.TelephoneNumber.AddRange(telephoneNumberValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a TelephoneNumber or a collection of TelephoneNumber" , nameof(value));
+                    }
+                case "userpreference":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.UserPreference.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case UserPreference userPreferenceValue:
+                            this.UserPreference.Clear();
+                            this.UserPreference.Add(userPreferenceValue);
+                            return;
+                        case IEnumerable<UserPreference> userPreferenceValues:
+                            this.UserPreference.Clear();
+                            this.UserPreference.AddRange(userPreferenceValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a UserPreference or a collection of UserPreference" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

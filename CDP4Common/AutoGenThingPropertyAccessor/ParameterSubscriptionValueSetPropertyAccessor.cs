@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.EngineeringModelData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -341,6 +342,200 @@ namespace CDP4Common.EngineeringModelData
                 case "valueswitch":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.ValueSwitch;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actualoption":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is Option actualOptionValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Option" , nameof(value));
+                    }
+
+                    this.ActualOption = actualOptionValue;
+                    return;
+                case "actualstate":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is ActualFiniteState actualStateValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ActualFiniteState" , nameof(value));
+                    }
+
+                    this.ActualState = actualStateValue;
+                    return;
+                case "actualvalue":
+
+                    if(value == null)
+                    {
+                        this.ActualValue = new ValueArray<string>(this);
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case string actualValueValue:
+                            this.ActualValue = new ValueArray<string>(new List<string>{ actualValueValue });
+                            return;
+                        case IEnumerable<string> actualValueValues:
+                            this.ActualValue = new ValueArray<string>(actualValueValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string or a collection of string" , nameof(value));
+                    }
+                case "computed":
+
+                    if(value == null)
+                    {
+                        this.Computed = new ValueArray<string>(this);
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case string computedValue:
+                            this.Computed = new ValueArray<string>(new List<string>{ computedValue });
+                            return;
+                        case IEnumerable<string> computedValues:
+                            this.Computed = new ValueArray<string>(computedValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string or a collection of string" , nameof(value));
+                    }
+                case "manual":
+
+                    if(value == null)
+                    {
+                        this.Manual = new ValueArray<string>(this);
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case string manualValue:
+                            this.Manual = new ValueArray<string>(new List<string>{ manualValue });
+                            return;
+                        case IEnumerable<string> manualValues:
+                            this.Manual = new ValueArray<string>(manualValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string or a collection of string" , nameof(value));
+                    }
+                case "owner":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is DomainOfExpertise ownerValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise" , nameof(value));
+                    }
+
+                    this.Owner = ownerValue;
+                    return;
+                case "reference":
+
+                    if(value == null)
+                    {
+                        this.Reference = new ValueArray<string>(this);
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case string referenceValue:
+                            this.Reference = new ValueArray<string>(new List<string>{ referenceValue });
+                            return;
+                        case IEnumerable<string> referenceValues:
+                            this.Reference = new ValueArray<string>(referenceValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string or a collection of string" , nameof(value));
+                    }
+                case "subscribedvalueset":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is ParameterValueSetBase subscribedValueSetValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterValueSetBase" , nameof(value));
+                    }
+
+                    this.SubscribedValueSet = subscribedValueSetValue;
+                    return;
+                case "valueswitch":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is ParameterSwitchKind valueSwitchValue || (value is string valueSwitchString) && ParameterSwitchKind.TryParse(valueSwitchString, out valueSwitchValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterSwitchKind" , nameof(value));
+                    }
+
+                    this.ValueSwitch = valueSwitchValue;
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

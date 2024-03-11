@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.ReportingData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -363,6 +364,213 @@ namespace CDP4Common.ReportingData
                 case "title":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.Title;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "approvedby":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ApprovedBy.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Approval approvedByValue:
+                            this.ApprovedBy.Clear();
+                            this.ApprovedBy.Add(approvedByValue);
+                            return;
+                        case IEnumerable<Approval> approvedByValues:
+                            this.ApprovedBy.Clear();
+                            this.ApprovedBy.AddRange(approvedByValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Approval or a collection of Approval" , nameof(value));
+                    }
+                case "author":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "category":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Category.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Category categoryValue:
+                            this.Category.Clear();
+                            this.Category.Add(categoryValue);
+                            return;
+                        case IEnumerable<Category> categoryValues:
+                            this.Category.Clear();
+                            this.Category.AddRange(categoryValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
+                    }
+                case "classification":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is AnnotationClassificationKind classificationValue || (value is string classificationString) && AnnotationClassificationKind.TryParse(classificationString, out classificationValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a AnnotationClassificationKind" , nameof(value));
+                    }
+
+                    this.Classification = classificationValue;
+                    return;
+                case "content":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "createdon":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "discussion":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "languagecode":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "owner":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is DomainOfExpertise ownerValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise" , nameof(value));
+                    }
+
+                    this.Owner = ownerValue;
+                    return;
+                case "primaryannotatedthing":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "relatedthing":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "shortname":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.ShortName = null;
+                        return;
+                    }
+
+                    if(!(value is string shortNameValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.ShortName = shortNameValue;
+                    return;
+                case "sourceannotation":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.SourceAnnotation.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ModellingAnnotationItem sourceAnnotationValue:
+                            this.SourceAnnotation.Clear();
+                            this.SourceAnnotation.Add(sourceAnnotationValue);
+                            return;
+                        case IEnumerable<ModellingAnnotationItem> sourceAnnotationValues:
+                            this.SourceAnnotation.Clear();
+                            this.SourceAnnotation.AddRange(sourceAnnotationValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ModellingAnnotationItem or a collection of ModellingAnnotationItem" , nameof(value));
+                    }
+                case "status":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is AnnotationStatusKind statusValue || (value is string statusString) && AnnotationStatusKind.TryParse(statusString, out statusValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a AnnotationStatusKind" , nameof(value));
+                    }
+
+                    this.Status = statusValue;
+                    return;
+                case "title":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Title = null;
+                        return;
+                    }
+
+                    if(!(value is string titleValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Title = titleValue;
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

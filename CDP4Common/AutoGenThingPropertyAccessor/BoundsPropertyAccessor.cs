@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.DiagramData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -96,6 +97,112 @@ namespace CDP4Common.DiagramData
                 case "y":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.Y;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "height":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is float heightValue || (value is string heightString) && float.TryParse(heightString, out heightValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a float" , nameof(value));
+                    }
+
+                    this.Height = heightValue;
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "width":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is float widthValue || (value is string widthString) && float.TryParse(widthString, out widthValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a float" , nameof(value));
+                    }
+
+                    this.Width = widthValue;
+                    return;
+                case "x":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is float xValue || (value is string xString) && float.TryParse(xString, out xValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a float" , nameof(value));
+                    }
+
+                    this.X = xValue;
+                    return;
+                case "y":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is float yValue || (value is string yString) && float.TryParse(yString, out yValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a float" , nameof(value));
+                    }
+
+                    this.Y = yValue;
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

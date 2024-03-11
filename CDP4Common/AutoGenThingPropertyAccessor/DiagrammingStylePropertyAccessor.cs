@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.DiagramData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -236,6 +237,263 @@ namespace CDP4Common.DiagramData
                     }
 
                     return usedColorNextObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "fillcolor":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is Color fillColorValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Color" , nameof(value));
+                    }
+
+                    this.FillColor = fillColorValue;
+                    return;
+                case "fillopacity":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.FillOpacity = null;
+                        return;
+                    }
+
+                    if(!(value is float fillOpacityValue || (value is string fillOpacityString) && float.TryParse(fillOpacityString, out fillOpacityValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a float" , nameof(value));
+                    }
+
+                    this.FillOpacity = fillOpacityValue;
+                    return;
+                case "fontbold":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.FontBold = null;
+                        return;
+                    }
+
+                    if(!(value is bool fontBoldValue || (value is string fontBoldString) && bool.TryParse(fontBoldString, out fontBoldValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.FontBold = fontBoldValue;
+                    return;
+                case "fontcolor":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is Color fontColorValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Color" , nameof(value));
+                    }
+
+                    this.FontColor = fontColorValue;
+                    return;
+                case "fontitalic":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.FontItalic = null;
+                        return;
+                    }
+
+                    if(!(value is bool fontItalicValue || (value is string fontItalicString) && bool.TryParse(fontItalicString, out fontItalicValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.FontItalic = fontItalicValue;
+                    return;
+                case "fontname":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.FontName = null;
+                        return;
+                    }
+
+                    if(!(value is string fontNameValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.FontName = fontNameValue;
+                    return;
+                case "fontsize":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.FontSize = null;
+                        return;
+                    }
+
+                    if(!(value is float fontSizeValue || (value is string fontSizeString) && float.TryParse(fontSizeString, out fontSizeValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a float" , nameof(value));
+                    }
+
+                    this.FontSize = fontSizeValue;
+                    return;
+                case "fontstrokethrough":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.FontStrokeThrough = null;
+                        return;
+                    }
+
+                    if(!(value is bool fontStrokeThroughValue || (value is string fontStrokeThroughString) && bool.TryParse(fontStrokeThroughString, out fontStrokeThroughValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.FontStrokeThrough = fontStrokeThroughValue;
+                    return;
+                case "fontunderline":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.FontUnderline = null;
+                        return;
+                    }
+
+                    if(!(value is bool fontUnderlineValue || (value is string fontUnderlineString) && bool.TryParse(fontUnderlineString, out fontUnderlineValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.FontUnderline = fontUnderlineValue;
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "strokecolor":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is Color strokeColorValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Color" , nameof(value));
+                    }
+
+                    this.StrokeColor = strokeColorValue;
+                    return;
+                case "strokeopacity":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.StrokeOpacity = null;
+                        return;
+                    }
+
+                    if(!(value is float strokeOpacityValue || (value is string strokeOpacityString) && float.TryParse(strokeOpacityString, out strokeOpacityValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a float" , nameof(value));
+                    }
+
+                    this.StrokeOpacity = strokeOpacityValue;
+                    return;
+                case "strokewidth":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.StrokeWidth = null;
+                        return;
+                    }
+
+                    if(!(value is float strokeWidthValue || (value is string strokeWidthString) && float.TryParse(strokeWidthString, out strokeWidthValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a float" , nameof(value));
+                    }
+
+                    this.StrokeWidth = strokeWidthValue;
+                    return;
+                case "usedcolor":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.UsedColor.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Color usedColorValue:
+                            this.UsedColor.Clear();
+                            this.UsedColor.Add(usedColorValue);
+                            return;
+                        case IEnumerable<Color> usedColorValues:
+                            this.UsedColor.Clear();
+                            this.UsedColor.AddRange(usedColorValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Color or a collection of Color" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

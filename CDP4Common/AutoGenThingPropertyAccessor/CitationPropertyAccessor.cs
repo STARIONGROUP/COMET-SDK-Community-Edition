@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.CommonData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -109,6 +110,127 @@ namespace CDP4Common.CommonData
 
                     var sentinelsource = new ReferenceSource(Guid.Empty, null, null);
                     return sentinelsource.QuerySentinelValue(pd.Next.Input, false);
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "isadaptation":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool isAdaptationValue || (value is string isAdaptationString) && bool.TryParse(isAdaptationString, out isAdaptationValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.IsAdaptation = isAdaptationValue;
+                    return;
+                case "location":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Location = null;
+                        return;
+                    }
+
+                    if(!(value is string locationValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Location = locationValue;
+                    return;
+                case "remark":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Remark = null;
+                        return;
+                    }
+
+                    if(!(value is string remarkValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Remark = remarkValue;
+                    return;
+                case "shortname":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.ShortName = null;
+                        return;
+                    }
+
+                    if(!(value is string shortNameValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.ShortName = shortNameValue;
+                    return;
+                case "source":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is ReferenceSource sourceValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ReferenceSource" , nameof(value));
+                    }
+
+                    this.Source = sourceValue;
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

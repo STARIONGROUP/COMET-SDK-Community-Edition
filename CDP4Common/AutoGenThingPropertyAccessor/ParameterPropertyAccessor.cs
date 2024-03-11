@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.EngineeringModelData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -197,6 +198,137 @@ namespace CDP4Common.EngineeringModelData
                     }
 
                     return valueSetNextObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "allowdifferentownerofoverride":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool allowDifferentOwnerOfOverrideValue || (value is string allowDifferentOwnerOfOverrideString) && bool.TryParse(allowDifferentOwnerOfOverrideString, out allowDifferentOwnerOfOverrideValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.AllowDifferentOwnerOfOverride = allowDifferentOwnerOfOverrideValue;
+                    return;
+                case "expectsoverride":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is bool expectsOverrideValue || (value is string expectsOverrideString) && bool.TryParse(expectsOverrideString, out expectsOverrideValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a bool" , nameof(value));
+                    }
+
+                    this.ExpectsOverride = expectsOverrideValue;
+                    return;
+                case "group":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "isoptiondependent":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "owner":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "parametersubscription":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "parametertype":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "requestedby":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is DomainOfExpertise requestedByValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise" , nameof(value));
+                    }
+
+                    this.RequestedBy = requestedByValue;
+                    return;
+                case "scale":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "statedependence":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "valueset":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ValueSet.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ParameterValueSet valueSetValue:
+                            this.ValueSet.Clear();
+                            this.ValueSet.Add(valueSetValue);
+                            return;
+                        case IEnumerable<ParameterValueSet> valueSetValues:
+                            this.ValueSet.Clear();
+                            this.ValueSet.AddRange(valueSetValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterValueSet or a collection of ParameterValueSet" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.EngineeringModelData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -496,6 +497,180 @@ namespace CDP4Common.EngineeringModelData
                     return referencedElementNextObjects;
                 case "shortname":
                     return base.QueryValue(pd.Input);
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "alias":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "category":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "containedelement":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ContainedElement.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ElementUsage containedElementValue:
+                            this.ContainedElement.Clear();
+                            this.ContainedElement.Add(containedElementValue);
+                            return;
+                        case IEnumerable<ElementUsage> containedElementValues:
+                            this.ContainedElement.Clear();
+                            this.ContainedElement.AddRange(containedElementValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ElementUsage or a collection of ElementUsage" , nameof(value));
+                    }
+                case "definition":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "hyperlink":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "name":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "organizationalparticipant":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.OrganizationalParticipant.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case OrganizationalParticipant organizationalParticipantValue:
+                            this.OrganizationalParticipant.Clear();
+                            this.OrganizationalParticipant.Add(organizationalParticipantValue);
+                            return;
+                        case IEnumerable<OrganizationalParticipant> organizationalParticipantValues:
+                            this.OrganizationalParticipant.Clear();
+                            this.OrganizationalParticipant.AddRange(organizationalParticipantValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a OrganizationalParticipant or a collection of OrganizationalParticipant" , nameof(value));
+                    }
+                case "owner":
+                    base.SetValue(pd.Input, value);
+                    return;
+                case "parameter":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Parameter.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Parameter parameterValue:
+                            this.Parameter.Clear();
+                            this.Parameter.Add(parameterValue);
+                            return;
+                        case IEnumerable<Parameter> parameterValues:
+                            this.Parameter.Clear();
+                            this.Parameter.AddRange(parameterValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Parameter or a collection of Parameter" , nameof(value));
+                    }
+                case "parametergroup":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ParameterGroup.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case ParameterGroup parameterGroupValue:
+                            this.ParameterGroup.Clear();
+                            this.ParameterGroup.Add(parameterGroupValue);
+                            return;
+                        case IEnumerable<ParameterGroup> parameterGroupValues:
+                            this.ParameterGroup.Clear();
+                            this.ParameterGroup.AddRange(parameterGroupValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterGroup or a collection of ParameterGroup" , nameof(value));
+                    }
+                case "referencedelement":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.ReferencedElement.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case NestedElement referencedElementValue:
+                            this.ReferencedElement.Clear();
+                            this.ReferencedElement.Add(referencedElementValue);
+                            return;
+                        case IEnumerable<NestedElement> referencedElementValues:
+                            this.ReferencedElement.Clear();
+                            this.ReferencedElement.AddRange(referencedElementValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a NestedElement or a collection of NestedElement" , nameof(value));
+                    }
+                case "shortname":
+                    base.SetValue(pd.Input, value);
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

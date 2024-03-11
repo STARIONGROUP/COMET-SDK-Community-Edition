@@ -91,5 +91,39 @@ namespace CDP4Common.NetCore.Tests.PropertyAccessor
             var classkinds = (List<ClassKind>)siteReferenceDataLibrary.QueryValue("constant[0..*].category[0..*].permissibleClass[0..*]");
             Assert.That(classkinds, Is.Empty);
         }
+
+        // Case for ValueArray
+        [Test]
+        public void VerifyConstantPropertyAccessorSetValueForValue()
+        {
+            var constant = new Constant();
+            const string valueName = nameof(Constant.Value);
+
+            Assert.That(constant.Value, Is.Empty);
+
+            constant.SetValue(valueName, "abc");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(constant.Value, Has.Count.EqualTo(1));
+                Assert.That(constant.Value[0], Is.EqualTo("abc"));
+            });
+
+            constant.SetValue(valueName, new List<string>{"cde", "123"});
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(constant.Value, Has.Count.EqualTo(2));
+                Assert.That(constant.Value, Is.EquivalentTo(new List<string>{"cde", "123"}));
+            });
+
+            constant.SetValue(valueName, null);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(constant.Value, Is.Empty);
+                Assert.That(() => constant.SetValue(valueName, 45), Throws.ArgumentException);
+            });
+        }
     }
 }

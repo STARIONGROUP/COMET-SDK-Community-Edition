@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.CommonData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -130,6 +131,141 @@ namespace CDP4Common.CommonData
                 case "changelogkind":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.ChangelogKind;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "affecteditemiid":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is Guid affectedItemIidValue || (value is string affectedItemIidString) && Guid.TryParse(affectedItemIidString, out affectedItemIidValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Guid" , nameof(value));
+                    }
+
+                    this.AffectedItemIid = affectedItemIidValue;
+                    return;
+                case "affectedreferenceiid":
+
+                    if(value == null)
+                    {
+                        this.AffectedReferenceIid.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Guid affectedReferenceIidValue:
+                            this.AffectedReferenceIid.Clear();
+                            this.AffectedReferenceIid.Add(affectedReferenceIidValue);
+                            return;
+                        case IEnumerable<Guid> affectedReferenceIidValues:
+                            this.AffectedReferenceIid.Clear();
+                            this.AffectedReferenceIid.AddRange(affectedReferenceIidValues);
+                            return;
+                        case string affectedReferenceIidStringValue:
+                            if(!(Guid.TryParse(affectedReferenceIidStringValue, out var affectedReferenceIidFromStringValue)))
+                            {
+                                throw new ArgumentException($"The provided value {value} cannot be parsed to a Guid" , nameof(value));
+                            }
+                            
+                            this.AffectedReferenceIid.Clear();
+                            this.AffectedReferenceIid.Add(affectedReferenceIidFromStringValue);
+                            return;
+                        case IEnumerable<string> affectedReferenceIidStringValues:
+                            var affectedReferenceIidFromStringValues = new List<Guid>();
+
+                            foreach(var affectedReferenceIidSingleStringValue in affectedReferenceIidStringValues)
+                            {
+                                if(!(Guid.TryParse(affectedReferenceIidSingleStringValue, out var affectedReferenceIidFromSingleStringValue)))
+                                {
+                                    throw new ArgumentException($"The provided value { affectedReferenceIidSingleStringValue } cannot be parsed to a Guid" , nameof(value));
+                                }
+
+                                affectedReferenceIidFromStringValues.Add(affectedReferenceIidFromSingleStringValue);
+                            }
+
+                            this.AffectedReferenceIid.Clear();
+                            this.AffectedReferenceIid.AddRange(affectedReferenceIidFromStringValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Guid or a collection of Guid" , nameof(value));
+                    }
+                case "changedescription":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.ChangeDescription = null;
+                        return;
+                    }
+
+                    if(!(value is string changeDescriptionValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.ChangeDescription = changeDescriptionValue;
+                    return;
+                case "changelogkind":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is LogEntryChangelogItemKind changelogKindValue || (value is string changelogKindString) && LogEntryChangelogItemKind.TryParse(changelogKindString, out changelogKindValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a LogEntryChangelogItemKind" , nameof(value));
+                    }
+
+                    this.ChangelogKind = changelogKindValue;
+                    return;
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

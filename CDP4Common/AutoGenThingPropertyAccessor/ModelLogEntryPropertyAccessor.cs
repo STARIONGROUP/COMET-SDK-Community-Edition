@@ -3,7 +3,7 @@
 //    Copyright (c) 2015-2023 RHEA System S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elabiary, Jaime Bernar
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -39,6 +39,7 @@ namespace CDP4Common.EngineeringModelData
     using CDP4Common.PropertyAccesor;
     using CDP4Common.ReportingData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     /// <summary>
     /// Generated methods that support the QueryValue logic
@@ -347,6 +348,262 @@ namespace CDP4Common.EngineeringModelData
                     }
 
                     return logEntryChangelogItemNextObjects;
+                default:
+                    throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property
+        /// </summary>
+        /// <param name="path">The path of the property for which the value is to be set</param>
+        /// <param name="value">Any value to set</param>
+        /// <exception cref="ArgumentException">If the type of the <paramref name="value"/> do not match the type of the property to set</exception>
+        /// <remarks>This action override the currently set value, if any</remarks>
+        public override void SetValue(string path, object value)
+        {
+            var pd = PropertyDescriptor.QueryPropertyDescriptor(path);
+            var propertyName = pd.Name.ToLower();
+
+            switch (propertyName)
+            {
+                case "iid":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "revisionnumber":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "classkind":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludeddomain":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "excludedperson":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "modifiedon":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "thingpreference":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "actor":
+                    this.SetThingValue(pd.Input, value);
+                    return;
+                case "affecteddomainiid":
+
+                    if(value == null)
+                    {
+                        this.AffectedDomainIid.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Guid affectedDomainIidValue:
+                            this.AffectedDomainIid.Clear();
+                            this.AffectedDomainIid.Add(affectedDomainIidValue);
+                            return;
+                        case IEnumerable<Guid> affectedDomainIidValues:
+                            this.AffectedDomainIid.Clear();
+                            this.AffectedDomainIid.AddRange(affectedDomainIidValues);
+                            return;
+                        case string affectedDomainIidStringValue:
+                            if(!(Guid.TryParse(affectedDomainIidStringValue, out var affectedDomainIidFromStringValue)))
+                            {
+                                throw new ArgumentException($"The provided value {value} cannot be parsed to a Guid" , nameof(value));
+                            }
+                            
+                            this.AffectedDomainIid.Clear();
+                            this.AffectedDomainIid.Add(affectedDomainIidFromStringValue);
+                            return;
+                        case IEnumerable<string> affectedDomainIidStringValues:
+                            var affectedDomainIidFromStringValues = new List<Guid>();
+
+                            foreach(var affectedDomainIidSingleStringValue in affectedDomainIidStringValues)
+                            {
+                                if(!(Guid.TryParse(affectedDomainIidSingleStringValue, out var affectedDomainIidFromSingleStringValue)))
+                                {
+                                    throw new ArgumentException($"The provided value { affectedDomainIidSingleStringValue } cannot be parsed to a Guid" , nameof(value));
+                                }
+
+                                affectedDomainIidFromStringValues.Add(affectedDomainIidFromSingleStringValue);
+                            }
+
+                            this.AffectedDomainIid.Clear();
+                            this.AffectedDomainIid.AddRange(affectedDomainIidFromStringValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Guid or a collection of Guid" , nameof(value));
+                    }
+                case "affecteditemiid":
+
+                    if(value == null)
+                    {
+                        this.AffectedItemIid.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Guid affectedItemIidValue:
+                            this.AffectedItemIid.Clear();
+                            this.AffectedItemIid.Add(affectedItemIidValue);
+                            return;
+                        case IEnumerable<Guid> affectedItemIidValues:
+                            this.AffectedItemIid.Clear();
+                            this.AffectedItemIid.AddRange(affectedItemIidValues);
+                            return;
+                        case string affectedItemIidStringValue:
+                            if(!(Guid.TryParse(affectedItemIidStringValue, out var affectedItemIidFromStringValue)))
+                            {
+                                throw new ArgumentException($"The provided value {value} cannot be parsed to a Guid" , nameof(value));
+                            }
+                            
+                            this.AffectedItemIid.Clear();
+                            this.AffectedItemIid.Add(affectedItemIidFromStringValue);
+                            return;
+                        case IEnumerable<string> affectedItemIidStringValues:
+                            var affectedItemIidFromStringValues = new List<Guid>();
+
+                            foreach(var affectedItemIidSingleStringValue in affectedItemIidStringValues)
+                            {
+                                if(!(Guid.TryParse(affectedItemIidSingleStringValue, out var affectedItemIidFromSingleStringValue)))
+                                {
+                                    throw new ArgumentException($"The provided value { affectedItemIidSingleStringValue } cannot be parsed to a Guid" , nameof(value));
+                                }
+
+                                affectedItemIidFromStringValues.Add(affectedItemIidFromSingleStringValue);
+                            }
+
+                            this.AffectedItemIid.Clear();
+                            this.AffectedItemIid.AddRange(affectedItemIidFromStringValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Guid or a collection of Guid" , nameof(value));
+                    }
+                case "author":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is Person authorValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Person" , nameof(value));
+                    }
+
+                    this.Author = authorValue;
+                    return;
+                case "category":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.Category.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case Category categoryValue:
+                            this.Category.Clear();
+                            this.Category.Add(categoryValue);
+                            return;
+                        case IEnumerable<Category> categoryValues:
+                            this.Category.Clear();
+                            this.Category.AddRange(categoryValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
+                    }
+                case "content":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.Content = null;
+                        return;
+                    }
+
+                    if(!(value is string contentValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.Content = contentValue;
+                    return;
+                case "createdon":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is DateTime createdOnValue || (value is string createdOnString) && DateTime.TryParse(createdOnString, out createdOnValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DateTime" , nameof(value));
+                    }
+
+                    this.CreatedOn = createdOnValue;
+                    return;
+                case "languagecode":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        this.LanguageCode = null;
+                        return;
+                    }
+
+                    if(!(value is string languageCodeValue))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a string" , nameof(value));
+                    }
+
+                    this.LanguageCode = languageCodeValue;
+                    return;
+                case "level":
+                    pd.VerifyPropertyDescriptorForValueProperty();
+
+                    if(value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value), "The provided value cannot be null");
+                    }
+
+                    if(!(value is LogLevelKind levelValue || (value is string levelString) && LogLevelKind.TryParse(levelString, out levelValue)))
+                    {
+                        throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a LogLevelKind" , nameof(value));
+                    }
+
+                    this.Level = levelValue;
+                    return;
+                case "logentrychangelogitem":
+                    pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
+
+                    if(value == null)
+                    {
+                        this.LogEntryChangelogItem.Clear();
+                        return;
+                    }
+
+                    switch(value)
+                    {
+                        case LogEntryChangelogItem logEntryChangelogItemValue:
+                            this.LogEntryChangelogItem.Clear();
+                            this.LogEntryChangelogItem.Add(logEntryChangelogItemValue);
+                            return;
+                        case IEnumerable<LogEntryChangelogItem> logEntryChangelogItemValues:
+                            this.LogEntryChangelogItem.Clear();
+                            this.LogEntryChangelogItem.AddRange(logEntryChangelogItemValues);
+                            return;
+                        default: 
+                            throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a LogEntryChangelogItem or a collection of LogEntryChangelogItem" , nameof(value));
+                    }
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on {this.ClassKind}");
             }

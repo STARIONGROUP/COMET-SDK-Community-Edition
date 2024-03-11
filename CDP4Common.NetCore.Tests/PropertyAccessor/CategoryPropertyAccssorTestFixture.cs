@@ -66,5 +66,57 @@ namespace CDP4Common.NetCore.Tests.PropertyAccessor
             permissibleClasses = (List<ClassKind>)category.QueryValue("permissibleClass[0..*]");
             Assert.That(permissibleClasses, Is.EquivalentTo(new List<ClassKind> { ClassKind.ActualFiniteState, ClassKind.Definition }));
         }
+
+        // Case for collection of Enum
+        [Test]
+        public void VerifyCategoryPropertyAccessorSetValueForPermissibleClassKind()
+        {
+            var category = new Category();
+            const string permissibleClassName = nameof(Category.PermissibleClass);
+
+            Assert.That(category.PermissibleClass, Is.Empty);
+
+            category.SetValue(permissibleClassName, ClassKind.ActionItem);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(category.PermissibleClass, Has.Count.EqualTo(1));
+                Assert.That(category.PermissibleClass[0], Is.EqualTo(ClassKind.ActionItem));
+            });
+
+            category.SetValue(permissibleClassName, "ElementDefinition");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(category.PermissibleClass, Has.Count.EqualTo(1));
+                Assert.That(category.PermissibleClass[0], Is.EqualTo(ClassKind.ElementDefinition));
+            });
+
+            category.SetValue(permissibleClassName, new List<ClassKind> { ClassKind.Parameter , ClassKind.Alias});
+            
+            Assert.Multiple(() =>
+            {
+                Assert.That(category.PermissibleClass, Has.Count.EqualTo(2));
+                Assert.That(category.PermissibleClass, Is.EquivalentTo(new List<ClassKind> { ClassKind.Parameter , ClassKind.Alias}));
+            });
+
+            category.SetValue(permissibleClassName, new List<string> { "Iteration", "Option"});
+            
+            Assert.Multiple(() =>
+            {
+                Assert.That(category.PermissibleClass, Has.Count.EqualTo(2));
+                Assert.That(category.PermissibleClass, Is.EquivalentTo(new List<ClassKind> { ClassKind.Iteration , ClassKind.Option}));
+            });
+
+            category.SetValue(permissibleClassName, null);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(category.PermissibleClass, Is.Empty);
+                Assert.That(() => category.SetValue(permissibleClassName, "Iterationn"), Throws.ArgumentException);
+                Assert.That(() => category.SetValue(permissibleClassName, new List<string>{"Iterationn", "optionn"}), Throws.ArgumentException);
+                Assert.That(() => category.SetValue(permissibleClassName, true), Throws.ArgumentException);
+            });
+        }
     }
 }
