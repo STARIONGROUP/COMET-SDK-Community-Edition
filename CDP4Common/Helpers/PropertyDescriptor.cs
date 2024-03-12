@@ -79,6 +79,11 @@ namespace CDP4Common.PropertyAccesor
         public PropertyDescriptor Next { get; set; }
 
         /// <summary>
+        /// Gets or sets the depth of the current <see cref="Input"/>
+        /// </summary>
+        public int Depth => this.GetDepth();
+
+        /// <summary>
         /// Queries the <see cref="PropertyDescriptor"/> from the <paramref name="input"/>
         /// string. 
         /// </summary>
@@ -250,6 +255,24 @@ namespace CDP4Common.PropertyAccesor
             {
                 throw new ArgumentException($"Invalid Multiplicity for {this.Name} property, the lower and upper bound must be specified");
             }
+        }
+
+        /// <summary>
+        /// Gets the depth of this property descriptor
+        /// </summary>
+        /// <returns></returns>
+        private int GetDepth()
+        {
+            int depth = 0;
+            var current = this;
+
+            while (current != null)
+            {
+                depth++;
+                current = current.Next;
+            }
+
+            return depth;
         }
     }
 }

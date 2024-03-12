@@ -995,7 +995,11 @@ namespace CDP4Common.CommonData
                     return this.ThingPreference;
                 case "actor":
                     pd.VerifyPropertyDescriptorForReferenceProperty();
-                    return this.Actor;
+                    return pd.Next == null ? this.Actor : this.Actor?.QueryValue(pd.Next.Input);
+                case "container":
+                    pd.VerifyPropertyDescriptorForReferenceProperty();
+                    return pd.Next == null ? this.Container : this.Container?.QueryValue(pd.Next.Input);
+
                 default:
                     throw new ArgumentException($"The path:{path} does not exist on Thing");
             }

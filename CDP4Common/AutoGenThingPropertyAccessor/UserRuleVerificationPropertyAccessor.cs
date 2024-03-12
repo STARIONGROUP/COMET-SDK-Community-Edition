@@ -68,21 +68,23 @@ namespace CDP4Common.EngineeringModelData
             switch (propertyName)
             {
                 case "iid":
-                    return base.QueryThingValues(pd.Input);
+                    return this.QueryThingValues(pd.Input);
                 case "revisionnumber":
-                    return base.QueryThingValues(pd.Input);
+                    return this.QueryThingValues(pd.Input);
                 case "classkind":
-                    return base.QueryThingValues(pd.Input);
+                    return this.QueryThingValues(pd.Input);
                 case "excludeddomain":
-                    return base.QueryThingValues(pd.Input);
+                    return this.QueryThingValues(pd.Input);
                 case "excludedperson":
-                    return base.QueryThingValues(pd.Input);
+                    return this.QueryThingValues(pd.Input);
                 case "modifiedon":
-                    return base.QueryThingValues(pd.Input);
+                    return this.QueryThingValues(pd.Input);
                 case "thingpreference":
-                    return base.QueryThingValues(pd.Input);
+                    return this.QueryThingValues(pd.Input);
                 case "actor":
-                    return base.QueryThingValues(pd.Input);
+                    return this.QueryThingValues(pd.Input);
+                case "container":
+                    return this.QueryThingValues(pd.Input);
                 case "executedon":
                     return base.QueryValue(pd.Input);
                 case "isactive":
