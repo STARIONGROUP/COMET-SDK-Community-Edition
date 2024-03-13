@@ -380,9 +380,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ReferenceQuantityValue.Clear();
                             this.ReferenceQuantityValue.Add(referenceQuantityValueValue);
                             return;
-                        case IEnumerable<ScaleReferenceQuantityValue> referenceQuantityValueValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ReferenceQuantityValue.Clear();
-                            this.ReferenceQuantityValue.AddRange(referenceQuantityValueValues);
+                            this.ReferenceQuantityValue.AddRange(thingValues.OfType<ScaleReferenceQuantityValue>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ScaleReferenceQuantityValue or a collection of ScaleReferenceQuantityValue" , nameof(value));

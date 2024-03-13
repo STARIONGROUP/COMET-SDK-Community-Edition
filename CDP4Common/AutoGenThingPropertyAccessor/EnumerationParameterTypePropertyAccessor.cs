@@ -286,9 +286,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ValueDefinition.Clear();
                             this.ValueDefinition.Add(valueDefinitionValue);
                             return;
-                        case IEnumerable<EnumerationValueDefinition> valueDefinitionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ValueDefinition.Clear();
-                            this.ValueDefinition.AddRange(valueDefinitionValues);
+                            this.ValueDefinition.AddRange(thingValues.OfType<EnumerationValueDefinition>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EnumerationValueDefinition or a collection of EnumerationValueDefinition" , nameof(value));

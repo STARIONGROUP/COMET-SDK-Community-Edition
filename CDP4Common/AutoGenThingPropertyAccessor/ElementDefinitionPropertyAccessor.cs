@@ -563,9 +563,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ContainedElement.Clear();
                             this.ContainedElement.Add(containedElementValue);
                             return;
-                        case IEnumerable<ElementUsage> containedElementValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ContainedElement.Clear();
-                            this.ContainedElement.AddRange(containedElementValues);
+                            this.ContainedElement.AddRange(thingValues.OfType<ElementUsage>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ElementUsage or a collection of ElementUsage" , nameof(value));
@@ -594,9 +594,9 @@ namespace CDP4Common.EngineeringModelData
                             this.OrganizationalParticipant.Clear();
                             this.OrganizationalParticipant.Add(organizationalParticipantValue);
                             return;
-                        case IEnumerable<OrganizationalParticipant> organizationalParticipantValues:
+                        case IEnumerable<Thing> thingValues:
                             this.OrganizationalParticipant.Clear();
-                            this.OrganizationalParticipant.AddRange(organizationalParticipantValues);
+                            this.OrganizationalParticipant.AddRange(thingValues.OfType<OrganizationalParticipant>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a OrganizationalParticipant or a collection of OrganizationalParticipant" , nameof(value));
@@ -619,9 +619,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Parameter.Clear();
                             this.Parameter.Add(parameterValue);
                             return;
-                        case IEnumerable<Parameter> parameterValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Parameter.Clear();
-                            this.Parameter.AddRange(parameterValues);
+                            this.Parameter.AddRange(thingValues.OfType<Parameter>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Parameter or a collection of Parameter" , nameof(value));
@@ -641,9 +641,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ParameterGroup.Clear();
                             this.ParameterGroup.Add(parameterGroupValue);
                             return;
-                        case IEnumerable<ParameterGroup> parameterGroupValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParameterGroup.Clear();
-                            this.ParameterGroup.AddRange(parameterGroupValues);
+                            this.ParameterGroup.AddRange(thingValues.OfType<ParameterGroup>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterGroup or a collection of ParameterGroup" , nameof(value));
@@ -663,9 +663,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ReferencedElement.Clear();
                             this.ReferencedElement.Add(referencedElementValue);
                             return;
-                        case IEnumerable<NestedElement> referencedElementValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ReferencedElement.Clear();
-                            this.ReferencedElement.AddRange(referencedElementValues);
+                            this.ReferencedElement.AddRange(thingValues.OfType<NestedElement>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a NestedElement or a collection of NestedElement" , nameof(value));

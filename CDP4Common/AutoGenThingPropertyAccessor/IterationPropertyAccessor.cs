@@ -1551,9 +1551,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ActualFiniteStateList.Clear();
                             this.ActualFiniteStateList.Add(actualFiniteStateListValue);
                             return;
-                        case IEnumerable<ActualFiniteStateList> actualFiniteStateListValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ActualFiniteStateList.Clear();
-                            this.ActualFiniteStateList.AddRange(actualFiniteStateListValues);
+                            this.ActualFiniteStateList.AddRange(thingValues.OfType<ActualFiniteStateList>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ActualFiniteStateList or a collection of ActualFiniteStateList" , nameof(value));
@@ -1588,9 +1588,9 @@ namespace CDP4Common.EngineeringModelData
                             this.DiagramCanvas.Clear();
                             this.DiagramCanvas.Add(diagramCanvasValue);
                             return;
-                        case IEnumerable<DiagramCanvas> diagramCanvasValues:
+                        case IEnumerable<Thing> thingValues:
                             this.DiagramCanvas.Clear();
-                            this.DiagramCanvas.AddRange(diagramCanvasValues);
+                            this.DiagramCanvas.AddRange(thingValues.OfType<DiagramCanvas>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DiagramCanvas or a collection of DiagramCanvas" , nameof(value));
@@ -1610,9 +1610,9 @@ namespace CDP4Common.EngineeringModelData
                             this.DomainFileStore.Clear();
                             this.DomainFileStore.Add(domainFileStoreValue);
                             return;
-                        case IEnumerable<DomainFileStore> domainFileStoreValues:
+                        case IEnumerable<Thing> thingValues:
                             this.DomainFileStore.Clear();
-                            this.DomainFileStore.AddRange(domainFileStoreValues);
+                            this.DomainFileStore.AddRange(thingValues.OfType<DomainFileStore>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainFileStore or a collection of DomainFileStore" , nameof(value));
@@ -1632,9 +1632,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Element.Clear();
                             this.Element.Add(elementValue);
                             return;
-                        case IEnumerable<ElementDefinition> elementValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Element.Clear();
-                            this.Element.AddRange(elementValues);
+                            this.Element.AddRange(thingValues.OfType<ElementDefinition>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ElementDefinition or a collection of ElementDefinition" , nameof(value));
@@ -1654,9 +1654,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ExternalIdentifierMap.Clear();
                             this.ExternalIdentifierMap.Add(externalIdentifierMapValue);
                             return;
-                        case IEnumerable<ExternalIdentifierMap> externalIdentifierMapValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ExternalIdentifierMap.Clear();
-                            this.ExternalIdentifierMap.AddRange(externalIdentifierMapValues);
+                            this.ExternalIdentifierMap.AddRange(thingValues.OfType<ExternalIdentifierMap>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ExternalIdentifierMap or a collection of ExternalIdentifierMap" , nameof(value));
@@ -1676,9 +1676,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Goal.Clear();
                             this.Goal.Add(goalValue);
                             return;
-                        case IEnumerable<Goal> goalValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Goal.Clear();
-                            this.Goal.AddRange(goalValues);
+                            this.Goal.AddRange(thingValues.OfType<Goal>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Goal or a collection of Goal" , nameof(value));
@@ -1713,9 +1713,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Option.Clear();
                             this.Option.Add(optionValue);
                             return;
-                        case IEnumerable<Option> optionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Option.Clear();
-                            this.Option.AddRange(optionValues);
+                            this.Option.AddRange(thingValues.OfType<Option>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Option or a collection of Option" , nameof(value));
@@ -1735,9 +1735,9 @@ namespace CDP4Common.EngineeringModelData
                             this.PossibleFiniteStateList.Clear();
                             this.PossibleFiniteStateList.Add(possibleFiniteStateListValue);
                             return;
-                        case IEnumerable<PossibleFiniteStateList> possibleFiniteStateListValues:
+                        case IEnumerable<Thing> thingValues:
                             this.PossibleFiniteStateList.Clear();
-                            this.PossibleFiniteStateList.AddRange(possibleFiniteStateListValues);
+                            this.PossibleFiniteStateList.AddRange(thingValues.OfType<PossibleFiniteStateList>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a PossibleFiniteStateList or a collection of PossibleFiniteStateList" , nameof(value));
@@ -1757,9 +1757,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Publication.Clear();
                             this.Publication.Add(publicationValue);
                             return;
-                        case IEnumerable<Publication> publicationValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Publication.Clear();
-                            this.Publication.AddRange(publicationValues);
+                            this.Publication.AddRange(thingValues.OfType<Publication>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Publication or a collection of Publication" , nameof(value));
@@ -1779,9 +1779,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Relationship.Clear();
                             this.Relationship.Add(relationshipValue);
                             return;
-                        case IEnumerable<Relationship> relationshipValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Relationship.Clear();
-                            this.Relationship.AddRange(relationshipValues);
+                            this.Relationship.AddRange(thingValues.OfType<Relationship>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Relationship or a collection of Relationship" , nameof(value));
@@ -1801,9 +1801,9 @@ namespace CDP4Common.EngineeringModelData
                             this.RequirementsSpecification.Clear();
                             this.RequirementsSpecification.Add(requirementsSpecificationValue);
                             return;
-                        case IEnumerable<RequirementsSpecification> requirementsSpecificationValues:
+                        case IEnumerable<Thing> thingValues:
                             this.RequirementsSpecification.Clear();
-                            this.RequirementsSpecification.AddRange(requirementsSpecificationValues);
+                            this.RequirementsSpecification.AddRange(thingValues.OfType<RequirementsSpecification>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a RequirementsSpecification or a collection of RequirementsSpecification" , nameof(value));
@@ -1823,9 +1823,9 @@ namespace CDP4Common.EngineeringModelData
                             this.RuleVerificationList.Clear();
                             this.RuleVerificationList.Add(ruleVerificationListValue);
                             return;
-                        case IEnumerable<RuleVerificationList> ruleVerificationListValues:
+                        case IEnumerable<Thing> thingValues:
                             this.RuleVerificationList.Clear();
-                            this.RuleVerificationList.AddRange(ruleVerificationListValues);
+                            this.RuleVerificationList.AddRange(thingValues.OfType<RuleVerificationList>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a RuleVerificationList or a collection of RuleVerificationList" , nameof(value));
@@ -1845,9 +1845,9 @@ namespace CDP4Common.EngineeringModelData
                             this.SharedDiagramStyle.Clear();
                             this.SharedDiagramStyle.Add(sharedDiagramStyleValue);
                             return;
-                        case IEnumerable<SharedStyle> sharedDiagramStyleValues:
+                        case IEnumerable<Thing> thingValues:
                             this.SharedDiagramStyle.Clear();
-                            this.SharedDiagramStyle.AddRange(sharedDiagramStyleValues);
+                            this.SharedDiagramStyle.AddRange(thingValues.OfType<SharedStyle>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SharedStyle or a collection of SharedStyle" , nameof(value));
@@ -1883,9 +1883,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Stakeholder.Clear();
                             this.Stakeholder.Add(stakeholderValue);
                             return;
-                        case IEnumerable<Stakeholder> stakeholderValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Stakeholder.Clear();
-                            this.Stakeholder.AddRange(stakeholderValues);
+                            this.Stakeholder.AddRange(thingValues.OfType<Stakeholder>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Stakeholder or a collection of Stakeholder" , nameof(value));
@@ -1905,9 +1905,9 @@ namespace CDP4Common.EngineeringModelData
                             this.StakeholderValue.Clear();
                             this.StakeholderValue.Add(stakeholderValueValue);
                             return;
-                        case IEnumerable<StakeholderValue> stakeholderValueValues:
+                        case IEnumerable<Thing> thingValues:
                             this.StakeholderValue.Clear();
-                            this.StakeholderValue.AddRange(stakeholderValueValues);
+                            this.StakeholderValue.AddRange(thingValues.OfType<StakeholderValue>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a StakeholderValue or a collection of StakeholderValue" , nameof(value));
@@ -1927,9 +1927,9 @@ namespace CDP4Common.EngineeringModelData
                             this.StakeholderValueMap.Clear();
                             this.StakeholderValueMap.Add(stakeholderValueMapValue);
                             return;
-                        case IEnumerable<StakeHolderValueMap> stakeholderValueMapValues:
+                        case IEnumerable<Thing> thingValues:
                             this.StakeholderValueMap.Clear();
-                            this.StakeholderValueMap.AddRange(stakeholderValueMapValues);
+                            this.StakeholderValueMap.AddRange(thingValues.OfType<StakeHolderValueMap>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a StakeHolderValueMap or a collection of StakeHolderValueMap" , nameof(value));
@@ -1964,9 +1964,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ValueGroup.Clear();
                             this.ValueGroup.Add(valueGroupValue);
                             return;
-                        case IEnumerable<ValueGroup> valueGroupValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ValueGroup.Clear();
-                            this.ValueGroup.AddRange(valueGroupValues);
+                            this.ValueGroup.AddRange(thingValues.OfType<ValueGroup>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ValueGroup or a collection of ValueGroup" , nameof(value));

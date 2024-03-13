@@ -515,9 +515,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Category.Clear();
                             this.Category.Add(categoryValue);
                             return;
-                        case IEnumerable<Category> categoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Category.Clear();
-                            this.Category.AddRange(categoryValues);
+                            this.Category.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
@@ -599,9 +599,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.LogEntryChangelogItem.Clear();
                             this.LogEntryChangelogItem.Add(logEntryChangelogItemValue);
                             return;
-                        case IEnumerable<LogEntryChangelogItem> logEntryChangelogItemValues:
+                        case IEnumerable<Thing> thingValues:
                             this.LogEntryChangelogItem.Clear();
-                            this.LogEntryChangelogItem.AddRange(logEntryChangelogItemValues);
+                            this.LogEntryChangelogItem.AddRange(thingValues.OfType<LogEntryChangelogItem>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a LogEntryChangelogItem or a collection of LogEntryChangelogItem" , nameof(value));

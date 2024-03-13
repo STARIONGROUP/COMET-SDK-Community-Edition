@@ -307,9 +307,9 @@ namespace CDP4Common.CommonData
                             this.Citation.Clear();
                             this.Citation.Add(citationValue);
                             return;
-                        case IEnumerable<Citation> citationValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Citation.Clear();
-                            this.Citation.AddRange(citationValues);
+                            this.Citation.AddRange(thingValues.OfType<Citation>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Citation or a collection of Citation" , nameof(value));

@@ -321,9 +321,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Domain.Clear();
                             this.Domain.Add(domainValue);
                             return;
-                        case IEnumerable<DomainOfExpertise> domainValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Domain.Clear();
-                            this.Domain.AddRange(domainValues);
+                            this.Domain.AddRange(thingValues.OfType<DomainOfExpertise>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise or a collection of DomainOfExpertise" , nameof(value));
@@ -343,9 +343,9 @@ namespace CDP4Common.EngineeringModelData
                             this.PublishedParameter.Clear();
                             this.PublishedParameter.Add(publishedParameterValue);
                             return;
-                        case IEnumerable<ParameterOrOverrideBase> publishedParameterValues:
+                        case IEnumerable<Thing> thingValues:
                             this.PublishedParameter.Clear();
-                            this.PublishedParameter.AddRange(publishedParameterValues);
+                            this.PublishedParameter.AddRange(thingValues.OfType<ParameterOrOverrideBase>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterOrOverrideBase or a collection of ParameterOrOverrideBase" , nameof(value));

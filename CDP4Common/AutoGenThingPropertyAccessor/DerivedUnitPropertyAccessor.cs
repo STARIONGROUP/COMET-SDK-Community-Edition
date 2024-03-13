@@ -253,9 +253,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.UnitFactor.Clear();
                             this.UnitFactor.Add(unitFactorValue);
                             return;
-                        case IEnumerable<UnitFactor> unitFactorValues:
+                        case IEnumerable<Thing> thingValues:
                             this.UnitFactor.Clear();
-                            this.UnitFactor.AddRange(unitFactorValues);
+                            this.UnitFactor.AddRange(thingValues.OfType<UnitFactor>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a UnitFactor or a collection of UnitFactor" , nameof(value));

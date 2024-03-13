@@ -301,9 +301,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.RelatedCategory.Clear();
                             this.RelatedCategory.Add(relatedCategoryValue);
                             return;
-                        case IEnumerable<Category> relatedCategoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.RelatedCategory.Clear();
-                            this.RelatedCategory.AddRange(relatedCategoryValues);
+                            this.RelatedCategory.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));

@@ -360,9 +360,9 @@ namespace CDP4Common.ReportingData
                             this.Discussion.Clear();
                             this.Discussion.Add(discussionValue);
                             return;
-                        case IEnumerable<SiteDirectoryDataDiscussionItem> discussionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Discussion.Clear();
-                            this.Discussion.AddRange(discussionValues);
+                            this.Discussion.AddRange(thingValues.OfType<SiteDirectoryDataDiscussionItem>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SiteDirectoryDataDiscussionItem or a collection of SiteDirectoryDataDiscussionItem" , nameof(value));
@@ -400,9 +400,9 @@ namespace CDP4Common.ReportingData
                             this.RelatedThing.Clear();
                             this.RelatedThing.Add(relatedThingValue);
                             return;
-                        case IEnumerable<SiteDirectoryThingReference> relatedThingValues:
+                        case IEnumerable<Thing> thingValues:
                             this.RelatedThing.Clear();
-                            this.RelatedThing.AddRange(relatedThingValues);
+                            this.RelatedThing.AddRange(thingValues.OfType<SiteDirectoryThingReference>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SiteDirectoryThingReference or a collection of SiteDirectoryThingReference" , nameof(value));

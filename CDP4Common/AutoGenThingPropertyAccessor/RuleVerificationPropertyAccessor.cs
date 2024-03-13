@@ -327,9 +327,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Violation.Clear();
                             this.Violation.Add(violationValue);
                             return;
-                        case IEnumerable<RuleViolation> violationValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Violation.Clear();
-                            this.Violation.AddRange(violationValues);
+                            this.Violation.AddRange(thingValues.OfType<RuleViolation>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a RuleViolation or a collection of RuleViolation" , nameof(value));

@@ -580,9 +580,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ActiveDomain.Clear();
                             this.ActiveDomain.Add(activeDomainValue);
                             return;
-                        case IEnumerable<DomainOfExpertise> activeDomainValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ActiveDomain.Clear();
-                            this.ActiveDomain.AddRange(activeDomainValues);
+                            this.ActiveDomain.AddRange(thingValues.OfType<DomainOfExpertise>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise or a collection of DomainOfExpertise" , nameof(value));
@@ -641,9 +641,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.IterationSetup.Clear();
                             this.IterationSetup.Add(iterationSetupValue);
                             return;
-                        case IEnumerable<IterationSetup> iterationSetupValues:
+                        case IEnumerable<Thing> thingValues:
                             this.IterationSetup.Clear();
-                            this.IterationSetup.AddRange(iterationSetupValues);
+                            this.IterationSetup.AddRange(thingValues.OfType<IterationSetup>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a IterationSetup or a collection of IterationSetup" , nameof(value));
@@ -681,9 +681,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.OrganizationalParticipant.Clear();
                             this.OrganizationalParticipant.Add(organizationalParticipantValue);
                             return;
-                        case IEnumerable<OrganizationalParticipant> organizationalParticipantValues:
+                        case IEnumerable<Thing> thingValues:
                             this.OrganizationalParticipant.Clear();
-                            this.OrganizationalParticipant.AddRange(organizationalParticipantValues);
+                            this.OrganizationalParticipant.AddRange(thingValues.OfType<OrganizationalParticipant>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a OrganizationalParticipant or a collection of OrganizationalParticipant" , nameof(value));
@@ -703,9 +703,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Participant.Clear();
                             this.Participant.Add(participantValue);
                             return;
-                        case IEnumerable<Participant> participantValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Participant.Clear();
-                            this.Participant.AddRange(participantValues);
+                            this.Participant.AddRange(thingValues.OfType<Participant>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Participant or a collection of Participant" , nameof(value));
@@ -725,9 +725,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.RequiredRdl.Clear();
                             this.RequiredRdl.Add(requiredRdlValue);
                             return;
-                        case IEnumerable<ModelReferenceDataLibrary> requiredRdlValues:
+                        case IEnumerable<Thing> thingValues:
                             this.RequiredRdl.Clear();
-                            this.RequiredRdl.AddRange(requiredRdlValues);
+                            this.RequiredRdl.AddRange(thingValues.OfType<ModelReferenceDataLibrary>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ModelReferenceDataLibrary or a collection of ModelReferenceDataLibrary" , nameof(value));

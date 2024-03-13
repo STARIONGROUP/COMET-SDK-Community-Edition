@@ -1131,9 +1131,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.BaseQuantityKind.Clear();
                             this.BaseQuantityKind.Add(baseQuantityKindValue);
                             return;
-                        case IEnumerable<QuantityKind> baseQuantityKindValues:
+                        case IEnumerable<Thing> thingValues:
                             this.BaseQuantityKind.Clear();
-                            this.BaseQuantityKind.AddRange(baseQuantityKindValues);
+                            this.BaseQuantityKind.AddRange(thingValues.OfType<QuantityKind>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a QuantityKind or a collection of QuantityKind" , nameof(value));
@@ -1153,9 +1153,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.BaseUnit.Clear();
                             this.BaseUnit.Add(baseUnitValue);
                             return;
-                        case IEnumerable<MeasurementUnit> baseUnitValues:
+                        case IEnumerable<Thing> thingValues:
                             this.BaseUnit.Clear();
-                            this.BaseUnit.AddRange(baseUnitValues);
+                            this.BaseUnit.AddRange(thingValues.OfType<MeasurementUnit>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementUnit or a collection of MeasurementUnit" , nameof(value));
@@ -1175,9 +1175,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Constant.Clear();
                             this.Constant.Add(constantValue);
                             return;
-                        case IEnumerable<Constant> constantValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Constant.Clear();
-                            this.Constant.AddRange(constantValues);
+                            this.Constant.AddRange(thingValues.OfType<Constant>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Constant or a collection of Constant" , nameof(value));
@@ -1197,9 +1197,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.DefinedCategory.Clear();
                             this.DefinedCategory.Add(definedCategoryValue);
                             return;
-                        case IEnumerable<Category> definedCategoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.DefinedCategory.Clear();
-                            this.DefinedCategory.AddRange(definedCategoryValues);
+                            this.DefinedCategory.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
@@ -1222,9 +1222,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.FileType.Clear();
                             this.FileType.Add(fileTypeValue);
                             return;
-                        case IEnumerable<FileType> fileTypeValues:
+                        case IEnumerable<Thing> thingValues:
                             this.FileType.Clear();
-                            this.FileType.AddRange(fileTypeValues);
+                            this.FileType.AddRange(thingValues.OfType<FileType>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a FileType or a collection of FileType" , nameof(value));
@@ -1244,9 +1244,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Glossary.Clear();
                             this.Glossary.Add(glossaryValue);
                             return;
-                        case IEnumerable<Glossary> glossaryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Glossary.Clear();
-                            this.Glossary.AddRange(glossaryValues);
+                            this.Glossary.AddRange(thingValues.OfType<Glossary>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Glossary or a collection of Glossary" , nameof(value));
@@ -1272,9 +1272,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ParameterType.Clear();
                             this.ParameterType.Add(parameterTypeValue);
                             return;
-                        case IEnumerable<ParameterType> parameterTypeValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParameterType.Clear();
-                            this.ParameterType.AddRange(parameterTypeValues);
+                            this.ParameterType.AddRange(thingValues.OfType<ParameterType>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterType or a collection of ParameterType" , nameof(value));
@@ -1294,9 +1294,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ReferenceSource.Clear();
                             this.ReferenceSource.Add(referenceSourceValue);
                             return;
-                        case IEnumerable<ReferenceSource> referenceSourceValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ReferenceSource.Clear();
-                            this.ReferenceSource.AddRange(referenceSourceValues);
+                            this.ReferenceSource.AddRange(thingValues.OfType<ReferenceSource>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ReferenceSource or a collection of ReferenceSource" , nameof(value));
@@ -1331,9 +1331,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Rule.Clear();
                             this.Rule.Add(ruleValue);
                             return;
-                        case IEnumerable<Rule> ruleValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Rule.Clear();
-                            this.Rule.AddRange(ruleValues);
+                            this.Rule.AddRange(thingValues.OfType<Rule>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Rule or a collection of Rule" , nameof(value));
@@ -1353,9 +1353,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Scale.Clear();
                             this.Scale.Add(scaleValue);
                             return;
-                        case IEnumerable<MeasurementScale> scaleValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Scale.Clear();
-                            this.Scale.AddRange(scaleValues);
+                            this.Scale.AddRange(thingValues.OfType<MeasurementScale>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementScale or a collection of MeasurementScale" , nameof(value));
@@ -1378,9 +1378,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Unit.Clear();
                             this.Unit.Add(unitValue);
                             return;
-                        case IEnumerable<MeasurementUnit> unitValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Unit.Clear();
-                            this.Unit.AddRange(unitValues);
+                            this.Unit.AddRange(thingValues.OfType<MeasurementUnit>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementUnit or a collection of MeasurementUnit" , nameof(value));
@@ -1400,9 +1400,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.UnitPrefix.Clear();
                             this.UnitPrefix.Add(unitPrefixValue);
                             return;
-                        case IEnumerable<UnitPrefix> unitPrefixValues:
+                        case IEnumerable<Thing> thingValues:
                             this.UnitPrefix.Clear();
-                            this.UnitPrefix.AddRange(unitPrefixValues);
+                            this.UnitPrefix.AddRange(thingValues.OfType<UnitPrefix>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a UnitPrefix or a collection of UnitPrefix" , nameof(value));

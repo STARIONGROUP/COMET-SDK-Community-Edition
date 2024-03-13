@@ -324,9 +324,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ValueSet.Clear();
                             this.ValueSet.Add(valueSetValue);
                             return;
-                        case IEnumerable<ParameterValueSet> valueSetValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ValueSet.Clear();
-                            this.ValueSet.AddRange(valueSetValues);
+                            this.ValueSet.AddRange(thingValues.OfType<ParameterValueSet>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterValueSet or a collection of ParameterValueSet" , nameof(value));

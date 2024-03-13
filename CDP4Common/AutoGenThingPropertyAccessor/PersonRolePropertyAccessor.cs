@@ -263,9 +263,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.PersonPermission.Clear();
                             this.PersonPermission.Add(personPermissionValue);
                             return;
-                        case IEnumerable<PersonPermission> personPermissionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.PersonPermission.Clear();
-                            this.PersonPermission.AddRange(personPermissionValues);
+                            this.PersonPermission.AddRange(thingValues.OfType<PersonPermission>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a PersonPermission or a collection of PersonPermission" , nameof(value));

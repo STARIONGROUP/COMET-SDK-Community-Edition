@@ -424,9 +424,9 @@ namespace CDP4Common.ReportingData
                             this.ApprovedBy.Clear();
                             this.ApprovedBy.Add(approvedByValue);
                             return;
-                        case IEnumerable<Approval> approvedByValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ApprovedBy.Clear();
-                            this.ApprovedBy.AddRange(approvedByValues);
+                            this.ApprovedBy.AddRange(thingValues.OfType<Approval>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Approval or a collection of Approval" , nameof(value));
@@ -449,9 +449,9 @@ namespace CDP4Common.ReportingData
                             this.Category.Clear();
                             this.Category.Add(categoryValue);
                             return;
-                        case IEnumerable<Category> categoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Category.Clear();
-                            this.Category.AddRange(categoryValues);
+                            this.Category.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
@@ -535,9 +535,9 @@ namespace CDP4Common.ReportingData
                             this.SourceAnnotation.Clear();
                             this.SourceAnnotation.Add(sourceAnnotationValue);
                             return;
-                        case IEnumerable<ModellingAnnotationItem> sourceAnnotationValues:
+                        case IEnumerable<Thing> thingValues:
                             this.SourceAnnotation.Clear();
-                            this.SourceAnnotation.AddRange(sourceAnnotationValues);
+                            this.SourceAnnotation.AddRange(thingValues.OfType<ModellingAnnotationItem>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ModellingAnnotationItem or a collection of ModellingAnnotationItem" , nameof(value));

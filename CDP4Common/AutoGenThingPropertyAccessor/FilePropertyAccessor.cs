@@ -333,9 +333,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Category.Clear();
                             this.Category.Add(categoryValue);
                             return;
-                        case IEnumerable<Category> categoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Category.Clear();
-                            this.Category.AddRange(categoryValues);
+                            this.Category.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
@@ -355,9 +355,9 @@ namespace CDP4Common.EngineeringModelData
                             this.FileRevision.Clear();
                             this.FileRevision.Add(fileRevisionValue);
                             return;
-                        case IEnumerable<FileRevision> fileRevisionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.FileRevision.Clear();
-                            this.FileRevision.AddRange(fileRevisionValues);
+                            this.FileRevision.AddRange(thingValues.OfType<FileRevision>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a FileRevision or a collection of FileRevision" , nameof(value));

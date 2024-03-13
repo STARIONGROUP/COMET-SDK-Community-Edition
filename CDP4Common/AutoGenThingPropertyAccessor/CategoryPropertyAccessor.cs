@@ -381,9 +381,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.SuperCategory.Clear();
                             this.SuperCategory.Add(superCategoryValue);
                             return;
-                        case IEnumerable<Category> superCategoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.SuperCategory.Clear();
-                            this.SuperCategory.AddRange(superCategoryValues);
+                            this.SuperCategory.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));

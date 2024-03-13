@@ -253,9 +253,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Expression.Clear();
                             this.Expression.Add(expressionValue);
                             return;
-                        case IEnumerable<BooleanExpression> expressionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Expression.Clear();
-                            this.Expression.AddRange(expressionValues);
+                            this.Expression.AddRange(thingValues.OfType<BooleanExpression>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a BooleanExpression or a collection of BooleanExpression" , nameof(value));

@@ -359,9 +359,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ExcludeOption.Clear();
                             this.ExcludeOption.Add(excludeOptionValue);
                             return;
-                        case IEnumerable<Option> excludeOptionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ExcludeOption.Clear();
-                            this.ExcludeOption.AddRange(excludeOptionValues);
+                            this.ExcludeOption.AddRange(thingValues.OfType<Option>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Option or a collection of Option" , nameof(value));
@@ -405,9 +405,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ParameterOverride.Clear();
                             this.ParameterOverride.Add(parameterOverrideValue);
                             return;
-                        case IEnumerable<ParameterOverride> parameterOverrideValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParameterOverride.Clear();
-                            this.ParameterOverride.AddRange(parameterOverrideValues);
+                            this.ParameterOverride.AddRange(thingValues.OfType<ParameterOverride>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterOverride or a collection of ParameterOverride" , nameof(value));

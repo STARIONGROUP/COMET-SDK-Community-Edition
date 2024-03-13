@@ -1067,9 +1067,9 @@ namespace CDP4Common.CommonData
                             this.ExcludedDomain.Clear();
                             this.ExcludedDomain.Add(excludedDomain);
                             return;
-                        case IEnumerable<DomainOfExpertise> excludedDomains:
+                        case IEnumerable<Thing> thingValues:
                             this.ExcludedDomain.Clear();
-                            this.ExcludedDomain.AddRange(excludedDomains);
+                            this.ExcludedDomain.AddRange(thingValues.OfType<DomainOfExpertise>());
                             return;
                         default:
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise or a collection of DomainOfExpertise" , nameof(value));
@@ -1090,9 +1090,9 @@ namespace CDP4Common.CommonData
                             this.ExcludedPerson.Clear();
                             this.ExcludedPerson.Add(excludedPerson);
                             return;
-                        case IEnumerable<Person> excludedPersons:
+                        case IEnumerable<Thing> thingValues:
                             this.ExcludedPerson.Clear();
-                            this.ExcludedPerson.AddRange(excludedPersons);
+                            this.ExcludedPerson.AddRange(thingValues.OfType<Person>());
                             return;
                         default:
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Person or a collection of Person" , nameof(value));

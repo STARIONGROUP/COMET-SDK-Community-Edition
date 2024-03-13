@@ -283,9 +283,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Requirement.Clear();
                             this.Requirement.Add(requirementValue);
                             return;
-                        case IEnumerable<Requirement> requirementValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Requirement.Clear();
-                            this.Requirement.AddRange(requirementValues);
+                            this.Requirement.AddRange(thingValues.OfType<Requirement>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Requirement or a collection of Requirement" , nameof(value));

@@ -243,9 +243,9 @@ namespace CDP4Common.EngineeringModelData
                             this.RelatedThing.Clear();
                             this.RelatedThing.Add(relatedThingValue);
                             return;
-                        case IEnumerable<Thing> relatedThingValues:
+                        case IEnumerable<Thing> thingValues:
                             this.RelatedThing.Clear();
-                            this.RelatedThing.AddRange(relatedThingValues);
+                            this.RelatedThing.AddRange(thingValues.OfType<Thing>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Thing or a collection of Thing" , nameof(value));

@@ -280,9 +280,9 @@ namespace CDP4Common.DiagramData
                             this.LocalStyle.Clear();
                             this.LocalStyle.Add(localStyleValue);
                             return;
-                        case IEnumerable<OwnedStyle> localStyleValues:
+                        case IEnumerable<Thing> thingValues:
                             this.LocalStyle.Clear();
-                            this.LocalStyle.AddRange(localStyleValues);
+                            this.LocalStyle.AddRange(thingValues.OfType<OwnedStyle>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a OwnedStyle or a collection of OwnedStyle" , nameof(value));

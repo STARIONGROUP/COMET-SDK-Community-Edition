@@ -360,9 +360,9 @@ namespace CDP4Common.ReportingData
                             this.Discussion.Clear();
                             this.Discussion.Add(discussionValue);
                             return;
-                        case IEnumerable<EngineeringModelDataDiscussionItem> discussionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Discussion.Clear();
-                            this.Discussion.AddRange(discussionValues);
+                            this.Discussion.AddRange(thingValues.OfType<EngineeringModelDataDiscussionItem>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EngineeringModelDataDiscussionItem or a collection of EngineeringModelDataDiscussionItem" , nameof(value));
@@ -400,9 +400,9 @@ namespace CDP4Common.ReportingData
                             this.RelatedThing.Clear();
                             this.RelatedThing.Add(relatedThingValue);
                             return;
-                        case IEnumerable<ModellingThingReference> relatedThingValues:
+                        case IEnumerable<Thing> thingValues:
                             this.RelatedThing.Clear();
-                            this.RelatedThing.AddRange(relatedThingValues);
+                            this.RelatedThing.AddRange(thingValues.OfType<ModellingThingReference>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ModellingThingReference or a collection of ModellingThingReference" , nameof(value));

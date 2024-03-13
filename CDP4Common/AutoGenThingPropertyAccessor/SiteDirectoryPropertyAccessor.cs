@@ -1064,9 +1064,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Annotation.Clear();
                             this.Annotation.Add(annotationValue);
                             return;
-                        case IEnumerable<SiteDirectoryDataAnnotation> annotationValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Annotation.Clear();
-                            this.Annotation.AddRange(annotationValues);
+                            this.Annotation.AddRange(thingValues.OfType<SiteDirectoryDataAnnotation>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SiteDirectoryDataAnnotation or a collection of SiteDirectoryDataAnnotation" , nameof(value));
@@ -1131,9 +1131,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Domain.Clear();
                             this.Domain.Add(domainValue);
                             return;
-                        case IEnumerable<DomainOfExpertise> domainValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Domain.Clear();
-                            this.Domain.AddRange(domainValues);
+                            this.Domain.AddRange(thingValues.OfType<DomainOfExpertise>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise or a collection of DomainOfExpertise" , nameof(value));
@@ -1153,9 +1153,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.DomainGroup.Clear();
                             this.DomainGroup.Add(domainGroupValue);
                             return;
-                        case IEnumerable<DomainOfExpertiseGroup> domainGroupValues:
+                        case IEnumerable<Thing> thingValues:
                             this.DomainGroup.Clear();
-                            this.DomainGroup.AddRange(domainGroupValues);
+                            this.DomainGroup.AddRange(thingValues.OfType<DomainOfExpertiseGroup>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertiseGroup or a collection of DomainOfExpertiseGroup" , nameof(value));
@@ -1178,9 +1178,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.LogEntry.Clear();
                             this.LogEntry.Add(logEntryValue);
                             return;
-                        case IEnumerable<SiteLogEntry> logEntryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.LogEntry.Clear();
-                            this.LogEntry.AddRange(logEntryValues);
+                            this.LogEntry.AddRange(thingValues.OfType<SiteLogEntry>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SiteLogEntry or a collection of SiteLogEntry" , nameof(value));
@@ -1200,9 +1200,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Model.Clear();
                             this.Model.Add(modelValue);
                             return;
-                        case IEnumerable<EngineeringModelSetup> modelValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Model.Clear();
-                            this.Model.AddRange(modelValues);
+                            this.Model.AddRange(thingValues.OfType<EngineeringModelSetup>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EngineeringModelSetup or a collection of EngineeringModelSetup" , nameof(value));
@@ -1238,9 +1238,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.NaturalLanguage.Clear();
                             this.NaturalLanguage.Add(naturalLanguageValue);
                             return;
-                        case IEnumerable<NaturalLanguage> naturalLanguageValues:
+                        case IEnumerable<Thing> thingValues:
                             this.NaturalLanguage.Clear();
-                            this.NaturalLanguage.AddRange(naturalLanguageValues);
+                            this.NaturalLanguage.AddRange(thingValues.OfType<NaturalLanguage>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a NaturalLanguage or a collection of NaturalLanguage" , nameof(value));
@@ -1260,9 +1260,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Organization.Clear();
                             this.Organization.Add(organizationValue);
                             return;
-                        case IEnumerable<Organization> organizationValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Organization.Clear();
-                            this.Organization.AddRange(organizationValues);
+                            this.Organization.AddRange(thingValues.OfType<Organization>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Organization or a collection of Organization" , nameof(value));
@@ -1282,9 +1282,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ParticipantRole.Clear();
                             this.ParticipantRole.Add(participantRoleValue);
                             return;
-                        case IEnumerable<ParticipantRole> participantRoleValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParticipantRole.Clear();
-                            this.ParticipantRole.AddRange(participantRoleValues);
+                            this.ParticipantRole.AddRange(thingValues.OfType<ParticipantRole>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParticipantRole or a collection of ParticipantRole" , nameof(value));
@@ -1304,9 +1304,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Person.Clear();
                             this.Person.Add(personValue);
                             return;
-                        case IEnumerable<Person> personValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Person.Clear();
-                            this.Person.AddRange(personValues);
+                            this.Person.AddRange(thingValues.OfType<Person>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Person or a collection of Person" , nameof(value));
@@ -1326,9 +1326,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.PersonRole.Clear();
                             this.PersonRole.Add(personRoleValue);
                             return;
-                        case IEnumerable<PersonRole> personRoleValues:
+                        case IEnumerable<Thing> thingValues:
                             this.PersonRole.Clear();
-                            this.PersonRole.AddRange(personRoleValues);
+                            this.PersonRole.AddRange(thingValues.OfType<PersonRole>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a PersonRole or a collection of PersonRole" , nameof(value));
@@ -1364,9 +1364,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.SiteReferenceDataLibrary.Clear();
                             this.SiteReferenceDataLibrary.Add(siteReferenceDataLibraryValue);
                             return;
-                        case IEnumerable<SiteReferenceDataLibrary> siteReferenceDataLibraryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.SiteReferenceDataLibrary.Clear();
-                            this.SiteReferenceDataLibrary.AddRange(siteReferenceDataLibraryValues);
+                            this.SiteReferenceDataLibrary.AddRange(thingValues.OfType<SiteReferenceDataLibrary>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SiteReferenceDataLibrary or a collection of SiteReferenceDataLibrary" , nameof(value));
