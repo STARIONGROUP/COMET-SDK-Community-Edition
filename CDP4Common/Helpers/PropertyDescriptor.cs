@@ -321,7 +321,7 @@ namespace CDP4Common.PropertyAccesor
         /// <summary>
         /// Gets the depth of this property descriptor
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The computed depth</returns>
         private int GetDepth()
         {
             var depth = 0;
