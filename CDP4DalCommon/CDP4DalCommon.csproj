@@ -5,7 +5,7 @@
       <Company>RHEA System S.A.</Company>
       <Language>latest</Language>
       <Title>CDP4DalCommon Community Edition</Title>
-      <VersionPrefix>26.5.1</VersionPrefix>
+      <VersionPrefix>26.6.0</VersionPrefix>
       <Description>CDP4 Common Class Library that contains common types for any CDP4 server and the CDP4Dal</Description>
       <Copyright>Copyright © RHEA System S.A.</Copyright>
       <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
@@ -21,7 +21,7 @@
       <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
       <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
       <PackageReleaseNotes>
-          [BUMP] To CDP4Common 26.5.1
+          [BUMP] To CDP4Common 26.6.0
       </PackageReleaseNotes>
       <PackageReadmeFile>README.md</PackageReadmeFile>
       <GenerateDocumentationFile>true</GenerateDocumentationFile>
