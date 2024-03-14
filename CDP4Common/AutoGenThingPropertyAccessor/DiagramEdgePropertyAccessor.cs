@@ -83,6 +83,8 @@ namespace CDP4Common.DiagramData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "bounds":
                     return base.QueryValue(pd.Input);
                 case "depictedthing":
@@ -278,9 +280,9 @@ namespace CDP4Common.DiagramData
                             this.Point.Clear();
                             this.Point.Add(pointValue);
                             return;
-                        case IEnumerable<Point> pointValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Point.Clear();
-                            this.Point.AddRange(pointValues);
+                            this.Point.AddRange(thingValues.OfType<Point>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Point or a collection of Point" , nameof(value));

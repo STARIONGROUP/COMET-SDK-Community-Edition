@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "allpossiblescale":
@@ -290,9 +292,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.QuantityKindFactor.Clear();
                             this.QuantityKindFactor.Add(quantityKindFactorValue);
                             return;
-                        case IEnumerable<QuantityKindFactor> quantityKindFactorValues:
+                        case IEnumerable<Thing> thingValues:
                             this.QuantityKindFactor.Clear();
-                            this.QuantityKindFactor.AddRange(quantityKindFactorValues);
+                            this.QuantityKindFactor.AddRange(thingValues.OfType<QuantityKindFactor>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a QuantityKindFactor or a collection of QuantityKindFactor" , nameof(value));

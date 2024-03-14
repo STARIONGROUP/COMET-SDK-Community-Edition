@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "actualstate":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 
@@ -402,9 +404,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ActualState.Clear();
                             this.ActualState.Add(actualStateValue);
                             return;
-                        case IEnumerable<ActualFiniteState> actualStateValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ActualState.Clear();
-                            this.ActualState.AddRange(actualStateValues);
+                            this.ActualState.AddRange(thingValues.OfType<ActualFiniteState>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ActualFiniteState or a collection of ActualFiniteState" , nameof(value));
@@ -424,9 +426,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ExcludeOption.Clear();
                             this.ExcludeOption.Add(excludeOptionValue);
                             return;
-                        case IEnumerable<Option> excludeOptionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ExcludeOption.Clear();
-                            this.ExcludeOption.AddRange(excludeOptionValues);
+                            this.ExcludeOption.AddRange(thingValues.OfType<Option>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Option or a collection of Option" , nameof(value));
@@ -477,9 +479,9 @@ namespace CDP4Common.EngineeringModelData
                             this.PossibleFiniteStateList.Clear();
                             this.PossibleFiniteStateList.Add(possibleFiniteStateListValue);
                             return;
-                        case IEnumerable<PossibleFiniteStateList> possibleFiniteStateListValues:
+                        case IEnumerable<Thing> thingValues:
                             this.PossibleFiniteStateList.Clear();
-                            this.PossibleFiniteStateList.AddRange(possibleFiniteStateListValues);
+                            this.PossibleFiniteStateList.AddRange(thingValues.OfType<PossibleFiniteStateList>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a PossibleFiniteStateList or a collection of PossibleFiniteStateList" , nameof(value));

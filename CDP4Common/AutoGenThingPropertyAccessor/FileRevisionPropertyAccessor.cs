@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "containingfolder":
                     pd.VerifyPropertyDescriptorForReferenceProperty();
 
@@ -324,9 +326,9 @@ namespace CDP4Common.EngineeringModelData
                             this.FileType.Clear();
                             this.FileType.Add(fileTypeValue);
                             return;
-                        case IEnumerable<FileType> fileTypeValues:
+                        case IEnumerable<Thing> thingValues:
                             this.FileType.Clear();
-                            this.FileType.AddRange(fileTypeValues);
+                            this.FileType.AddRange(thingValues.OfType<FileType>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a FileType or a collection of FileType" , nameof(value));

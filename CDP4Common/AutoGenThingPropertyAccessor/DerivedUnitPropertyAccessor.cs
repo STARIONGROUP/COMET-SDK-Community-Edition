@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "definition":
@@ -251,9 +253,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.UnitFactor.Clear();
                             this.UnitFactor.Add(unitFactorValue);
                             return;
-                        case IEnumerable<UnitFactor> unitFactorValues:
+                        case IEnumerable<Thing> thingValues:
                             this.UnitFactor.Clear();
-                            this.UnitFactor.AddRange(unitFactorValues);
+                            this.UnitFactor.AddRange(thingValues.OfType<UnitFactor>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a UnitFactor or a collection of UnitFactor" , nameof(value));

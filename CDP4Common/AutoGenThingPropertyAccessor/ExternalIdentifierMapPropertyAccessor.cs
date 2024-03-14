@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "correspondence":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 
@@ -263,9 +265,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Correspondence.Clear();
                             this.Correspondence.Add(correspondenceValue);
                             return;
-                        case IEnumerable<IdCorrespondence> correspondenceValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Correspondence.Clear();
-                            this.Correspondence.AddRange(correspondenceValues);
+                            this.Correspondence.AddRange(thingValues.OfType<IdCorrespondence>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a IdCorrespondence or a collection of IdCorrespondence" , nameof(value));

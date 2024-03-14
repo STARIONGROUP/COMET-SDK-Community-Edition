@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "category":
@@ -409,9 +411,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Category.Clear();
                             this.Category.Add(categoryValue);
                             return;
-                        case IEnumerable<Category> categoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Category.Clear();
-                            this.Category.AddRange(categoryValues);
+                            this.Category.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
@@ -434,9 +436,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Group.Clear();
                             this.Group.Add(groupValue);
                             return;
-                        case IEnumerable<RequirementsGroup> groupValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Group.Clear();
-                            this.Group.AddRange(groupValues);
+                            this.Group.AddRange(thingValues.OfType<RequirementsGroup>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a RequirementsGroup or a collection of RequirementsGroup" , nameof(value));
@@ -477,9 +479,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ParameterValue.Clear();
                             this.ParameterValue.Add(parameterValueValue);
                             return;
-                        case IEnumerable<RequirementsContainerParameterValue> parameterValueValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParameterValue.Clear();
-                            this.ParameterValue.AddRange(parameterValueValues);
+                            this.ParameterValue.AddRange(thingValues.OfType<RequirementsContainerParameterValue>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a RequirementsContainerParameterValue or a collection of RequirementsContainerParameterValue" , nameof(value));

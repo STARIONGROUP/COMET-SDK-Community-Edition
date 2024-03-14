@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "defaultdomain":
                     pd.VerifyPropertyDescriptorForReferenceProperty();
 
@@ -525,9 +527,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.EmailAddress.Clear();
                             this.EmailAddress.Add(emailAddressValue);
                             return;
-                        case IEnumerable<EmailAddress> emailAddressValues:
+                        case IEnumerable<Thing> thingValues:
                             this.EmailAddress.Clear();
-                            this.EmailAddress.AddRange(emailAddressValues);
+                            this.EmailAddress.AddRange(thingValues.OfType<EmailAddress>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EmailAddress or a collection of EmailAddress" , nameof(value));
@@ -703,9 +705,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.TelephoneNumber.Clear();
                             this.TelephoneNumber.Add(telephoneNumberValue);
                             return;
-                        case IEnumerable<TelephoneNumber> telephoneNumberValues:
+                        case IEnumerable<Thing> thingValues:
                             this.TelephoneNumber.Clear();
-                            this.TelephoneNumber.AddRange(telephoneNumberValues);
+                            this.TelephoneNumber.AddRange(thingValues.OfType<TelephoneNumber>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a TelephoneNumber or a collection of TelephoneNumber" , nameof(value));
@@ -725,9 +727,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.UserPreference.Clear();
                             this.UserPreference.Add(userPreferenceValue);
                             return;
-                        case IEnumerable<UserPreference> userPreferenceValues:
+                        case IEnumerable<Thing> thingValues:
                             this.UserPreference.Clear();
-                            this.UserPreference.AddRange(userPreferenceValues);
+                            this.UserPreference.AddRange(thingValues.OfType<UserPreference>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a UserPreference or a collection of UserPreference" , nameof(value));

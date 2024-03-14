@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "category":
                     return base.QueryValue(pd.Input);
                 case "name":
@@ -241,9 +243,9 @@ namespace CDP4Common.EngineeringModelData
                             this.RelatedThing.Clear();
                             this.RelatedThing.Add(relatedThingValue);
                             return;
-                        case IEnumerable<Thing> relatedThingValues:
+                        case IEnumerable<Thing> thingValues:
                             this.RelatedThing.Clear();
-                            this.RelatedThing.AddRange(relatedThingValues);
+                            this.RelatedThing.AddRange(thingValues.OfType<Thing>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Thing or a collection of Thing" , nameof(value));

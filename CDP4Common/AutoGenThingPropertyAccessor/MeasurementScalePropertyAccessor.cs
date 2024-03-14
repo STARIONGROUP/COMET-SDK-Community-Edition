@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "definition":
@@ -404,9 +406,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.MappingToReferenceScale.Clear();
                             this.MappingToReferenceScale.Add(mappingToReferenceScaleValue);
                             return;
-                        case IEnumerable<MappingToReferenceScale> mappingToReferenceScaleValues:
+                        case IEnumerable<Thing> thingValues:
                             this.MappingToReferenceScale.Clear();
-                            this.MappingToReferenceScale.AddRange(mappingToReferenceScaleValues);
+                            this.MappingToReferenceScale.AddRange(thingValues.OfType<MappingToReferenceScale>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MappingToReferenceScale or a collection of MappingToReferenceScale" , nameof(value));
@@ -526,9 +528,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ValueDefinition.Clear();
                             this.ValueDefinition.Add(valueDefinitionValue);
                             return;
-                        case IEnumerable<ScaleValueDefinition> valueDefinitionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ValueDefinition.Clear();
-                            this.ValueDefinition.AddRange(valueDefinitionValues);
+                            this.ValueDefinition.AddRange(thingValues.OfType<ScaleValueDefinition>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ScaleValueDefinition or a collection of ScaleValueDefinition" , nameof(value));

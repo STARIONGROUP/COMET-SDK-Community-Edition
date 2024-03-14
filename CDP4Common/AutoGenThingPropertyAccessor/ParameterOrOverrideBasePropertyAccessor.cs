@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "group":
                     return base.QueryValue(pd.Input);
                 case "isoptiondependent":
@@ -242,9 +244,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ParameterSubscription.Clear();
                             this.ParameterSubscription.Add(parameterSubscriptionValue);
                             return;
-                        case IEnumerable<ParameterSubscription> parameterSubscriptionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParameterSubscription.Clear();
-                            this.ParameterSubscription.AddRange(parameterSubscriptionValues);
+                            this.ParameterSubscription.AddRange(thingValues.OfType<ParameterSubscription>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterSubscription or a collection of ParameterSubscription" , nameof(value));

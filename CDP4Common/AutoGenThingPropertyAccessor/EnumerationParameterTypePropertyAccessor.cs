@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "allowmultiselect":
@@ -284,9 +286,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ValueDefinition.Clear();
                             this.ValueDefinition.Add(valueDefinitionValue);
                             return;
-                        case IEnumerable<EnumerationValueDefinition> valueDefinitionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ValueDefinition.Clear();
-                            this.ValueDefinition.AddRange(valueDefinitionValues);
+                            this.ValueDefinition.AddRange(thingValues.OfType<EnumerationValueDefinition>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EnumerationValueDefinition or a collection of EnumerationValueDefinition" , nameof(value));

@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "elementusage":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 
@@ -340,9 +342,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ElementUsage.Clear();
                             this.ElementUsage.Add(elementUsageValue);
                             return;
-                        case IEnumerable<ElementUsage> elementUsageValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ElementUsage.Clear();
-                            this.ElementUsage.AddRange(elementUsageValues);
+                            this.ElementUsage.AddRange(thingValues.OfType<ElementUsage>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ElementUsage or a collection of ElementUsage" , nameof(value));
@@ -393,9 +395,9 @@ namespace CDP4Common.EngineeringModelData
                             this.NestedParameter.Clear();
                             this.NestedParameter.Add(nestedParameterValue);
                             return;
-                        case IEnumerable<NestedParameter> nestedParameterValues:
+                        case IEnumerable<Thing> thingValues:
                             this.NestedParameter.Clear();
-                            this.NestedParameter.AddRange(nestedParameterValues);
+                            this.NestedParameter.AddRange(thingValues.OfType<NestedParameter>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a NestedParameter or a collection of NestedParameter" , nameof(value));

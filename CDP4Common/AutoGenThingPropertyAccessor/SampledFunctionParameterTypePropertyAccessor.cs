@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "category":
@@ -396,9 +398,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.DependentParameterType.Clear();
                             this.DependentParameterType.Add(dependentParameterTypeValue);
                             return;
-                        case IEnumerable<DependentParameterTypeAssignment> dependentParameterTypeValues:
+                        case IEnumerable<Thing> thingValues:
                             this.DependentParameterType.Clear();
-                            this.DependentParameterType.AddRange(dependentParameterTypeValues);
+                            this.DependentParameterType.AddRange(thingValues.OfType<DependentParameterTypeAssignment>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DependentParameterTypeAssignment or a collection of DependentParameterTypeAssignment" , nameof(value));
@@ -421,9 +423,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.IndependentParameterType.Clear();
                             this.IndependentParameterType.Add(independentParameterTypeValue);
                             return;
-                        case IEnumerable<IndependentParameterTypeAssignment> independentParameterTypeValues:
+                        case IEnumerable<Thing> thingValues:
                             this.IndependentParameterType.Clear();
-                            this.IndependentParameterType.AddRange(independentParameterTypeValues);
+                            this.IndependentParameterType.AddRange(thingValues.OfType<IndependentParameterTypeAssignment>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a IndependentParameterTypeAssignment or a collection of IndependentParameterTypeAssignment" , nameof(value));

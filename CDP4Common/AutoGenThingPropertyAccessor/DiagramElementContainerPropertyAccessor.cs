@@ -83,6 +83,8 @@ namespace CDP4Common.DiagramData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "bounds":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 
@@ -303,9 +305,9 @@ namespace CDP4Common.DiagramData
                             this.Bounds.Clear();
                             this.Bounds.Add(boundsValue);
                             return;
-                        case IEnumerable<Bounds> boundsValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Bounds.Clear();
-                            this.Bounds.AddRange(boundsValues);
+                            this.Bounds.AddRange(thingValues.OfType<Bounds>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Bounds or a collection of Bounds" , nameof(value));
@@ -325,9 +327,9 @@ namespace CDP4Common.DiagramData
                             this.DiagramElement.Clear();
                             this.DiagramElement.Add(diagramElementValue);
                             return;
-                        case IEnumerable<DiagramElementThing> diagramElementValues:
+                        case IEnumerable<Thing> thingValues:
                             this.DiagramElement.Clear();
-                            this.DiagramElement.AddRange(diagramElementValues);
+                            this.DiagramElement.AddRange(thingValues.OfType<DiagramElementThing>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DiagramElementThing or a collection of DiagramElementThing" , nameof(value));

@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "kind":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.Kind;
@@ -291,9 +293,9 @@ namespace CDP4Common.EngineeringModelData
                             this.PossibleState.Clear();
                             this.PossibleState.Add(possibleStateValue);
                             return;
-                        case IEnumerable<PossibleFiniteState> possibleStateValues:
+                        case IEnumerable<Thing> thingValues:
                             this.PossibleState.Clear();
-                            this.PossibleState.AddRange(possibleStateValues);
+                            this.PossibleState.AddRange(thingValues.OfType<PossibleFiniteState>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a PossibleFiniteState or a collection of PossibleFiniteState" , nameof(value));

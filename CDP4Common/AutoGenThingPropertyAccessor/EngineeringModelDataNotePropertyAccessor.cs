@@ -83,6 +83,8 @@ namespace CDP4Common.ReportingData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "author":
                     return base.QueryValue(pd.Input);
                 case "content":

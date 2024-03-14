@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "definition":
@@ -240,9 +242,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.Domain.Clear();
                             this.Domain.Add(domainValue);
                             return;
-                        case IEnumerable<DomainOfExpertise> domainValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Domain.Clear();
-                            this.Domain.AddRange(domainValues);
+                            this.Domain.AddRange(thingValues.OfType<DomainOfExpertise>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a DomainOfExpertise or a collection of DomainOfExpertise" , nameof(value));

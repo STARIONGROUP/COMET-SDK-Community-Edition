@@ -65,6 +65,65 @@ namespace CDP4Common.Tests.PropertyAccessor
             permissibleClasses = (List<ClassKind>)category.QueryValue("permissibleClass[0..*]");
             Assert.That(permissibleClasses, Is.EquivalentTo(new List<ClassKind> { ClassKind.ActualFiniteState, ClassKind.Definition }));
         }
+        
+        [Test]
+        public void VerifyThatTheContainerCanBeQueried()
+        {
+            var category = new Category();
+            const string containerName = nameof(Category.Container);
+
+            var containerValue = category.QueryValue(containerName);
+            Assert.That(containerValue, Is.Null);
+
+            var rdl = new SiteReferenceDataLibrary()
+            {
+                Iid = Guid.NewGuid(),
+                Name = "RDL"
+            };
+
+            rdl.DefinedCategory.Add(category);
+            containerValue = category.QueryValue(containerName);
+            Assert.That(containerValue, Is.EqualTo(rdl));
+
+            const string nameOfRdlName = containerName + "." + nameof(SiteReferenceDataLibrary.Name);
+
+            var nameOfContainerValue = category.QueryValue(nameOfRdlName);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(nameOfContainerValue, Is.EqualTo(rdl.Name));
+                Assert.That(() => category.QueryValue($"{containerName}[0..*]"), Throws.ArgumentException);
+            });
+        }
+
+        [Test]
+        public void VerifyThatTheActorCanBeQueried()
+        {
+            var category = new Category();
+            const string actorName = nameof(Category.Actor);
+
+            var actorValue = category.QueryValue(actorName);
+            Assert.That(actorValue, Is.Null);
+
+            var actor = new Person()
+            {
+                ShortName = "person"
+            };
+
+            category.Actor = actor;
+            actorValue = category.QueryValue(actorName);
+            Assert.That(actorValue, Is.EqualTo(actor));
+
+            const string shortNameOfActorName = actorName + "." + nameof(Person.ShortName);
+
+            var nameOfActorValue = category.QueryValue(shortNameOfActorName);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(nameOfActorValue, Is.EqualTo(actor.ShortName));
+                Assert.That(() => category.QueryValue($"{actorName}[0..*]"), Throws.ArgumentException);
+            });
+        }
 
         // Case for collection of Enum
         [Test]

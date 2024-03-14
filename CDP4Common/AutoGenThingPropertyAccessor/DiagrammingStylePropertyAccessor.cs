@@ -83,6 +83,8 @@ namespace CDP4Common.DiagramData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "fillcolor":
                     pd.VerifyPropertyDescriptorForReferenceProperty();
 
@@ -487,9 +489,9 @@ namespace CDP4Common.DiagramData
                             this.UsedColor.Clear();
                             this.UsedColor.Add(usedColorValue);
                             return;
-                        case IEnumerable<Color> usedColorValues:
+                        case IEnumerable<Thing> thingValues:
                             this.UsedColor.Clear();
-                            this.UsedColor.AddRange(usedColorValues);
+                            this.UsedColor.AddRange(thingValues.OfType<Color>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Color or a collection of Color" , nameof(value));

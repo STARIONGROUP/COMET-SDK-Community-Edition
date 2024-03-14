@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "term":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 
@@ -221,9 +223,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Term.Clear();
                             this.Term.Add(termValue);
                             return;
-                        case IEnumerable<BooleanExpression> termValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Term.Clear();
-                            this.Term.AddRange(termValues);
+                            this.Term.AddRange(thingValues.OfType<BooleanExpression>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a BooleanExpression or a collection of BooleanExpression" , nameof(value));

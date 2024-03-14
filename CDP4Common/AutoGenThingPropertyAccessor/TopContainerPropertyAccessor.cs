@@ -83,6 +83,8 @@ namespace CDP4Common.CommonData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "lastmodifiedon":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.LastModifiedOn;

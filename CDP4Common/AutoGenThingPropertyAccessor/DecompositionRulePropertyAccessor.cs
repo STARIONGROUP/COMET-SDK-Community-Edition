@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "containedcategory":
@@ -257,9 +259,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ContainedCategory.Clear();
                             this.ContainedCategory.Add(containedCategoryValue);
                             return;
-                        case IEnumerable<Category> containedCategoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ContainedCategory.Clear();
-                            this.ContainedCategory.AddRange(containedCategoryValues);
+                            this.ContainedCategory.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));

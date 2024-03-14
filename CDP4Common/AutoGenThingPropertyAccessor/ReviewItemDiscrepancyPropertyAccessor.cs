@@ -83,6 +83,8 @@ namespace CDP4Common.ReportingData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "approvedby":
                     return base.QueryValue(pd.Input);
                 case "author":
@@ -287,9 +289,9 @@ namespace CDP4Common.ReportingData
                             this.Solution.Clear();
                             this.Solution.Add(solutionValue);
                             return;
-                        case IEnumerable<Solution> solutionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Solution.Clear();
-                            this.Solution.AddRange(solutionValues);
+                            this.Solution.AddRange(thingValues.OfType<Solution>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Solution or a collection of Solution" , nameof(value));

@@ -83,6 +83,8 @@ namespace CDP4Common.CommonData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 
@@ -387,9 +389,9 @@ namespace CDP4Common.CommonData
                             this.Alias.Clear();
                             this.Alias.Add(aliasValue);
                             return;
-                        case IEnumerable<Alias> aliasValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Alias.Clear();
-                            this.Alias.AddRange(aliasValues);
+                            this.Alias.AddRange(thingValues.OfType<Alias>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Alias or a collection of Alias" , nameof(value));
@@ -409,9 +411,9 @@ namespace CDP4Common.CommonData
                             this.Definition.Clear();
                             this.Definition.Add(definitionValue);
                             return;
-                        case IEnumerable<Definition> definitionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Definition.Clear();
-                            this.Definition.AddRange(definitionValues);
+                            this.Definition.AddRange(thingValues.OfType<Definition>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Definition or a collection of Definition" , nameof(value));
@@ -431,9 +433,9 @@ namespace CDP4Common.CommonData
                             this.HyperLink.Clear();
                             this.HyperLink.Add(hyperLinkValue);
                             return;
-                        case IEnumerable<HyperLink> hyperLinkValues:
+                        case IEnumerable<Thing> thingValues:
                             this.HyperLink.Clear();
-                            this.HyperLink.AddRange(hyperLinkValues);
+                            this.HyperLink.AddRange(thingValues.OfType<HyperLink>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a HyperLink or a collection of HyperLink" , nameof(value));

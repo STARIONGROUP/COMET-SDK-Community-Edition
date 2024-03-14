@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "definition":
@@ -273,9 +275,9 @@ namespace CDP4Common.EngineeringModelData
                             this.RuleVerification.Clear();
                             this.RuleVerification.Add(ruleVerificationValue);
                             return;
-                        case IEnumerable<RuleVerification> ruleVerificationValues:
+                        case IEnumerable<Thing> thingValues:
                             this.RuleVerification.Clear();
-                            this.RuleVerification.AddRange(ruleVerificationValues);
+                            this.RuleVerification.AddRange(thingValues.OfType<RuleVerification>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a RuleVerification or a collection of RuleVerification" , nameof(value));

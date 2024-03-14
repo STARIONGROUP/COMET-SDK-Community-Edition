@@ -83,6 +83,8 @@ namespace CDP4Common.DiagramData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "name":
                     pd.VerifyPropertyDescriptorForValueProperty();
                     return this.Name;

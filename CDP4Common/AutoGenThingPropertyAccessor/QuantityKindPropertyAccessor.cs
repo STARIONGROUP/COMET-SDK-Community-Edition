@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "allpossiblescale":
@@ -382,9 +384,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.AllPossibleScale.Clear();
                             this.AllPossibleScale.Add(allPossibleScaleValue);
                             return;
-                        case IEnumerable<MeasurementScale> allPossibleScaleValues:
+                        case IEnumerable<Thing> thingValues:
                             this.AllPossibleScale.Clear();
-                            this.AllPossibleScale.AddRange(allPossibleScaleValues);
+                            this.AllPossibleScale.AddRange(thingValues.OfType<MeasurementScale>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementScale or a collection of MeasurementScale" , nameof(value));
@@ -437,9 +439,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.PossibleScale.Clear();
                             this.PossibleScale.Add(possibleScaleValue);
                             return;
-                        case IEnumerable<MeasurementScale> possibleScaleValues:
+                        case IEnumerable<Thing> thingValues:
                             this.PossibleScale.Clear();
-                            this.PossibleScale.AddRange(possibleScaleValues);
+                            this.PossibleScale.AddRange(thingValues.OfType<MeasurementScale>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a MeasurementScale or a collection of MeasurementScale" , nameof(value));

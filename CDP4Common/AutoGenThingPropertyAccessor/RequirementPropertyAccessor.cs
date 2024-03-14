@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "category":
@@ -336,9 +338,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Category.Clear();
                             this.Category.Add(categoryValue);
                             return;
-                        case IEnumerable<Category> categoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Category.Clear();
-                            this.Category.AddRange(categoryValues);
+                            this.Category.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
@@ -403,9 +405,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ParametricConstraint.Clear();
                             this.ParametricConstraint.Add(parametricConstraintValue);
                             return;
-                        case IEnumerable<ParametricConstraint> parametricConstraintValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParametricConstraint.Clear();
-                            this.ParametricConstraint.AddRange(parametricConstraintValues);
+                            this.ParametricConstraint.AddRange(thingValues.OfType<ParametricConstraint>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParametricConstraint or a collection of ParametricConstraint" , nameof(value));

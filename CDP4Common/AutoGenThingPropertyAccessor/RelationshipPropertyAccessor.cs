@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "category":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 
@@ -319,9 +321,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Category.Clear();
                             this.Category.Add(categoryValue);
                             return;
-                        case IEnumerable<Category> categoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Category.Clear();
-                            this.Category.AddRange(categoryValues);
+                            this.Category.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
@@ -372,9 +374,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ParameterValue.Clear();
                             this.ParameterValue.Add(parameterValueValue);
                             return;
-                        case IEnumerable<RelationshipParameterValue> parameterValueValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParameterValue.Clear();
-                            this.ParameterValue.AddRange(parameterValueValues);
+                            this.ParameterValue.AddRange(thingValues.OfType<RelationshipParameterValue>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a RelationshipParameterValue or a collection of RelationshipParameterValue" , nameof(value));

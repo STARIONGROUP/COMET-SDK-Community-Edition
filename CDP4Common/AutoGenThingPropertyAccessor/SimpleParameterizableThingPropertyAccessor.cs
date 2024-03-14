@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "definition":
@@ -273,9 +275,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ParameterValue.Clear();
                             this.ParameterValue.Add(parameterValueValue);
                             return;
-                        case IEnumerable<SimpleParameterValue> parameterValueValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParameterValue.Clear();
-                            this.ParameterValue.AddRange(parameterValueValues);
+                            this.ParameterValue.AddRange(thingValues.OfType<SimpleParameterValue>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a SimpleParameterValue or a collection of SimpleParameterValue" , nameof(value));

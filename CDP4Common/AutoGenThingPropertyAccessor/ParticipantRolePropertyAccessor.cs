@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "definition":
@@ -261,9 +263,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ParticipantPermission.Clear();
                             this.ParticipantPermission.Add(participantPermissionValue);
                             return;
-                        case IEnumerable<ParticipantPermission> participantPermissionValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParticipantPermission.Clear();
-                            this.ParticipantPermission.AddRange(participantPermissionValues);
+                            this.ParticipantPermission.AddRange(thingValues.OfType<ParticipantPermission>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParticipantPermission or a collection of ParticipantPermission" , nameof(value));

@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "book":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 
@@ -638,9 +640,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Book.Clear();
                             this.Book.Add(bookValue);
                             return;
-                        case IEnumerable<Book> bookValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Book.Clear();
-                            this.Book.AddRange(bookValues);
+                            this.Book.AddRange(thingValues.OfType<Book>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Book or a collection of Book" , nameof(value));
@@ -660,9 +662,9 @@ namespace CDP4Common.EngineeringModelData
                             this.CommonFileStore.Clear();
                             this.CommonFileStore.Add(commonFileStoreValue);
                             return;
-                        case IEnumerable<CommonFileStore> commonFileStoreValues:
+                        case IEnumerable<Thing> thingValues:
                             this.CommonFileStore.Clear();
-                            this.CommonFileStore.AddRange(commonFileStoreValues);
+                            this.CommonFileStore.AddRange(thingValues.OfType<CommonFileStore>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a CommonFileStore or a collection of CommonFileStore" , nameof(value));
@@ -697,9 +699,9 @@ namespace CDP4Common.EngineeringModelData
                             this.GenericNote.Clear();
                             this.GenericNote.Add(genericNoteValue);
                             return;
-                        case IEnumerable<EngineeringModelDataNote> genericNoteValues:
+                        case IEnumerable<Thing> thingValues:
                             this.GenericNote.Clear();
-                            this.GenericNote.AddRange(genericNoteValues);
+                            this.GenericNote.AddRange(thingValues.OfType<EngineeringModelDataNote>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a EngineeringModelDataNote or a collection of EngineeringModelDataNote" , nameof(value));
@@ -719,9 +721,9 @@ namespace CDP4Common.EngineeringModelData
                             this.Iteration.Clear();
                             this.Iteration.Add(iterationValue);
                             return;
-                        case IEnumerable<Iteration> iterationValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Iteration.Clear();
-                            this.Iteration.AddRange(iterationValues);
+                            this.Iteration.AddRange(thingValues.OfType<Iteration>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Iteration or a collection of Iteration" , nameof(value));
@@ -744,9 +746,9 @@ namespace CDP4Common.EngineeringModelData
                             this.LogEntry.Clear();
                             this.LogEntry.Add(logEntryValue);
                             return;
-                        case IEnumerable<ModelLogEntry> logEntryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.LogEntry.Clear();
-                            this.LogEntry.AddRange(logEntryValues);
+                            this.LogEntry.AddRange(thingValues.OfType<ModelLogEntry>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ModelLogEntry or a collection of ModelLogEntry" , nameof(value));
@@ -766,9 +768,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ModellingAnnotation.Clear();
                             this.ModellingAnnotation.Add(modellingAnnotationValue);
                             return;
-                        case IEnumerable<ModellingAnnotationItem> modellingAnnotationValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ModellingAnnotation.Clear();
-                            this.ModellingAnnotation.AddRange(modellingAnnotationValues);
+                            this.ModellingAnnotation.AddRange(thingValues.OfType<ModellingAnnotationItem>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ModellingAnnotationItem or a collection of ModellingAnnotationItem" , nameof(value));

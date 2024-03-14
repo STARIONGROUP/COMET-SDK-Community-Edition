@@ -83,6 +83,8 @@ namespace CDP4Common.EngineeringModelData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "group":
                     pd.VerifyPropertyDescriptorForReferenceProperty();
 
@@ -364,9 +366,9 @@ namespace CDP4Common.EngineeringModelData
                             this.ValueSet.Clear();
                             this.ValueSet.Add(valueSetValue);
                             return;
-                        case IEnumerable<ParameterSubscriptionValueSet> valueSetValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ValueSet.Clear();
-                            this.ValueSet.AddRange(valueSetValues);
+                            this.ValueSet.AddRange(thingValues.OfType<ParameterSubscriptionValueSet>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterSubscriptionValueSet or a collection of ParameterSubscriptionValueSet" , nameof(value));

@@ -83,6 +83,8 @@ namespace CDP4Common.SiteDirectoryData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "alias":
                     return base.QueryValue(pd.Input);
                 case "category":
@@ -278,9 +280,9 @@ namespace CDP4Common.SiteDirectoryData
                             this.ParameterType.Clear();
                             this.ParameterType.Add(parameterTypeValue);
                             return;
-                        case IEnumerable<ParameterType> parameterTypeValues:
+                        case IEnumerable<Thing> thingValues:
                             this.ParameterType.Clear();
-                            this.ParameterType.AddRange(parameterTypeValues);
+                            this.ParameterType.AddRange(thingValues.OfType<ParameterType>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a ParameterType or a collection of ParameterType" , nameof(value));

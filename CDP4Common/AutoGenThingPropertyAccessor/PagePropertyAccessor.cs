@@ -83,6 +83,8 @@ namespace CDP4Common.ReportingData
                     return base.QueryThingValues(pd.Input);
                 case "actor":
                     return base.QueryThingValues(pd.Input);
+                case "container":
+                    return base.QueryThingValues(pd.Input);
                 case "category":
                     pd.VerifyPropertyDescriptorForEnumerableReferenceProperty();
 
@@ -325,9 +327,9 @@ namespace CDP4Common.ReportingData
                             this.Category.Clear();
                             this.Category.Add(categoryValue);
                             return;
-                        case IEnumerable<Category> categoryValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Category.Clear();
-                            this.Category.AddRange(categoryValues);
+                            this.Category.AddRange(thingValues.OfType<Category>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Category or a collection of Category" , nameof(value));
@@ -378,9 +380,9 @@ namespace CDP4Common.ReportingData
                             this.Note.Clear();
                             this.Note.Add(noteValue);
                             return;
-                        case IEnumerable<Note> noteValues:
+                        case IEnumerable<Thing> thingValues:
                             this.Note.Clear();
-                            this.Note.AddRange(noteValues);
+                            this.Note.AddRange(thingValues.OfType<Note>());
                             return;
                         default: 
                             throw new ArgumentException($"The provided value is a {value.GetType().Name}, expected a Note or a collection of Note" , nameof(value));
