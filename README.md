@@ -12,6 +12,7 @@ The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with
   - CDP4Reporting
   - CDP4Dal
   - CDP4DalCommon
+  - CDP4DalJsonSerializer
   - CDP4JsonFileDal
   - CDP4ServicesDal
   - CDP4WspDal
@@ -32,6 +33,7 @@ CDP4MessagePackSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4Me
 CDP4Reporting | [![NuGet Badge](https://buildstats.info/nuget/CDP4Reporting-CE)](https://buildstats.info/nuget/CDP4Reporting-CE)
 CDP4Dal | [![NuGet Badge](https://buildstats.info/nuget/CDP4Dal-CE)](https://buildstats.info/nuget/CDP4Dal-CE)
 CDP4DalCommon | [![NuGet Badge](https://buildstats.info/nuget/CDP4DalCommon-CE)](https://buildstats.info/nuget/CDP4DalCommon-CE)
+CDP4DalJsonSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4DalJsonSerializer-CE)](https://buildstats.info/nuget/CDP4DalJsonSerializer-CE)
 CDP4JsonFileDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonFileDal-CE)](https://buildstats.info/nuget/CDP4JsonFileDal-CE)
 CDP4ServicesDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4ServicesDal-CE)](https://buildstats.info/nuget/CDP4ServicesDal-CE)
 CDP4WspDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4WspDal-CE)](https://buildstats.info/nuget/CDP4WspDal-CE)
@@ -90,6 +92,10 @@ The CDP4Dal library is a library that provides the basis to implement ECSS-E-TM-
 ## CDP4DalCommon
 
 The CDP4DalCommon library provides common classes to support the ECSS-E-TM-10-25 and CDP4-COMET protocol.
+
+## CDP4DalJsonSerializer
+
+The CDP4DalJsonSerializer library provides JsonSerializer converter for common classes contained in CDP4DalCommon library.
 
 ## CDP4JsonFileDal
 
