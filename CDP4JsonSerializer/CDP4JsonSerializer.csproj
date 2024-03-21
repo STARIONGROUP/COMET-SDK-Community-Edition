@@ -21,7 +21,7 @@
     <PackageReleaseNotes>
         [BUMP] To CDP4Common 26.6.0
     </PackageReleaseNotes>
-	<LangVersion>11.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
