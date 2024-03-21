@@ -108,5 +108,19 @@ namespace CDP4JsonSerializer
         /// The the deserialized collection of <see cref="CDP4Common.DTO.Thing"/>.
         /// </returns>
         IEnumerable<Thing> Deserialize(Stream contentStream);
+
+        /// <summary>
+        /// Convenience method that deserializes the passed in JSON content stream
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type info for which deserialization will be performed
+        /// </typeparam>
+        /// <param name="contentStream">
+        /// The content Stream.
+        /// </param>
+        /// <returns>
+        /// The the deserialized instance of the specified Type
+        /// </returns>
+        T Deserialize<T>(Stream contentStream);
     }
 }
