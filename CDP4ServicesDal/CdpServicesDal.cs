@@ -2,7 +2,7 @@
 // <copyright file="CdpServicesDal.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -27,7 +27,6 @@ namespace CDP4ServicesDal
 #if NETFRAMEWORK
     using System.ComponentModel.Composition;
 #endif
-
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -44,7 +43,6 @@ namespace CDP4ServicesDal
     using CDP4Common.CommonData;
     using CDP4Common.DTO;
     using CDP4Common.Extensions;
-    using CDP4DalCommon.Tasks;
 
     using CDP4Dal;
     using CDP4Dal.Composition;
@@ -53,7 +51,10 @@ namespace CDP4ServicesDal
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
-    using CDP4JsonSerializer;
+    using CDP4DalCommon.Protocol.Operations;
+    using CDP4DalCommon.Protocol.Tasks;
+
+    using CDP4DalJsonSerializer;
 
     using CDP4MessagePackSerializer;
 
@@ -89,12 +90,20 @@ namespace CDP4ServicesDal
         private HttpClient httpClient;
 
         /// <summary>
+        /// Asserts that the MessagePack deserialization should be used or not
+        /// </summary>
+        private readonly bool isMessagePackSupported;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CdpServicesDal"/> class.
         /// </summary>
-        public CdpServicesDal()
+        /// <param name="isMessagePackSupported">Asserts that the MessagePack deserialization should be used or not. Supported by default</param>
+        public CdpServicesDal(bool isMessagePackSupported = true)
         {
-            this.Cdp4JsonSerializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Cdp4JsonSerializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion);
             this.MessagePackSerializer = new MessagePackSerializer();
+
+            this.isMessagePackSupported = isMessagePackSupported;
         }
 
         /// <summary>
@@ -103,7 +112,8 @@ namespace CDP4ServicesDal
         /// <param name="httpClient">
         /// The (injected) <see cref="HttpClient"/>
         /// </param>
-        public CdpServicesDal(HttpClient httpClient) : this()
+        /// <param name="isMessagePackSupported">Asserts that the MessagePack deserialization should be used or not. Supported by default</param>
+        public CdpServicesDal(HttpClient httpClient, bool isMessagePackSupported = true) : this(isMessagePackSupported)
         {
             if (httpClient == null)
             {
@@ -114,9 +124,9 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
-        /// Gets the <see cref="Cdp4JsonSerializer"/>
+        /// Gets the <see cref="Cdp4DalJsonSerializer"/>
         /// </summary>
-        public Cdp4JsonSerializer Cdp4JsonSerializer { get; private set; }
+        public Cdp4DalJsonSerializer Cdp4JsonSerializer { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="MessagePackSerializer"/>
@@ -323,7 +333,7 @@ namespace CDP4ServicesDal
                         case ContentTypeKind.MESSAGEPACK:
                             throw new NotSupportedException("Long running task not supported with MESSAGEPACK");
                         default:
-                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                            throw new InvalidOperationException($"ContentTypeKind {contentTypeKind} not supported");
                     }
 
                     deserializationWatch.Stop();
@@ -716,7 +726,7 @@ namespace CDP4ServicesDal
                         case ContentTypeKind.MESSAGEPACK:
                             throw new NotSupportedException("Read CometTask by id not supported with MESSAGEPACK");
                         default:
-                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                            throw new InvalidOperationException($"ContentTypeKind {contentTypeKind} not supported");
                     }
 
                     deserializationWatch.Stop();
@@ -777,7 +787,7 @@ namespace CDP4ServicesDal
                         case ContentTypeKind.MESSAGEPACK:
                             throw new NotSupportedException("Read all CometTask not supported with MESSAGEPACK");
                         default:
-                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                            throw new InvalidOperationException($"ContentTypeKind {contentTypeKind} not supported");
                     }
 
                     deserializationWatch.Stop();
@@ -1051,7 +1061,12 @@ namespace CDP4ServicesDal
             result.BaseAddress = credentials.Uri;
             result.DefaultRequestHeaders.Accept.Clear();
             result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/msgpack"));
+
+            if (this.isMessagePackSupported)
+            {
+                result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/msgpack"));
+            }
+
             result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
             result.DefaultRequestHeaders.Add(Headers.AcceptCdpVersion, Headers.AcceptCdpVersionValue);
             result.DefaultRequestHeaders.Add("User-Agent", "CDP4 (ECSS-E-TM-10-25 Annex C.2) CDPServicesDal");
@@ -1364,8 +1379,8 @@ namespace CDP4ServicesDal
                 var firstChar = (char)reader.Peek();
                 stream.Position = 0;
 
-                return firstChar == '[' 
-                    ? new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize(stream)) 
+                return firstChar == '['
+                    ? new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize(stream))
                     : new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize<CometTask>(stream));
             }
         }

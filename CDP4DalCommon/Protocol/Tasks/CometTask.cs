@@ -2,7 +2,7 @@
 // <copyright file="CometTask.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
 // 
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -22,7 +22,7 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4DalCommon.Tasks
+namespace CDP4DalCommon.Protocol.Tasks
 {
     using System;
 
@@ -71,7 +71,7 @@ namespace CDP4DalCommon.Tasks
         /// <remarks>
         /// A value of -1 is returned when the task is still running or not completed with success
         /// </remarks>
-        public readonly int Duration => this.ComputeDuration();
+        public readonly int Duration => ComputeDuration();
 
         /// <summary>
         /// Gets or sets the <see cref="DateTime" /> at which the <see cref="CometTask" /> was started
@@ -107,12 +107,12 @@ namespace CDP4DalCommon.Tasks
         /// <returns>The computated duration</returns>
         private readonly int ComputeDuration()
         {
-            if (!this.FinishedAt.HasValue || !this.StartedAt.HasValue)
+            if (!FinishedAt.HasValue || !StartedAt.HasValue)
             {
                 return -1;
             }
 
-            var timeSpan = this.FinishedAt.Value - this.StartedAt.Value;
+            var timeSpan = FinishedAt.Value - StartedAt.Value;
             return (int)timeSpan.TotalSeconds;
         }
     }

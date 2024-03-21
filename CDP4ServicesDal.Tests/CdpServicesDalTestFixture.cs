@@ -1,8 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDalTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
-//
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -20,7 +20,7 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4ServicesDal.Tests
 {
@@ -38,6 +38,7 @@ namespace CDP4ServicesDal.Tests
 
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
@@ -47,9 +48,10 @@ namespace CDP4ServicesDal.Tests
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
-    using CDP4DalCommon.Tasks;
+    using CDP4DalCommon.Protocol.Operations;
+    using CDP4DalCommon.Protocol.Tasks;
 
-    using Newtonsoft.Json;
+    using CDP4JsonSerializer;
 
     using NUnit.Framework;
 
@@ -76,12 +78,13 @@ namespace CDP4ServicesDal.Tests
         private SiteReferenceDataLibrary siteReferenceDataLibrary;
         private ModelReferenceDataLibrary modelReferenceDataLibrary;
         private CDPMessageBus messageBus;
+        private Cdp4JsonSerializer jsonSerializer;
 
         [SetUp]
         public void Setup()
         {
             this.cancelationTokenSource = new CancellationTokenSource();
-            
+
             this.credentials = new Credentials("admin", "pass", this.uri);
             this.dal = new CdpServicesDal();
             this.messageBus = new CDPMessageBus();
@@ -91,7 +94,8 @@ namespace CDP4ServicesDal.Tests
             this.siteDirectory = new SiteDirectory(Guid.Parse("f13de6f8-b03a-46e7-a492-53b2f260f294"), this.session.Assembler.Cache, this.uri);
             var lazySiteDirectory = new Lazy<Thing>(() => this.siteDirectory);
             lazySiteDirectory.Value.Cache.TryAdd(new CacheKey(lazySiteDirectory.Value.Iid, null), lazySiteDirectory);
-            
+            var metaDataProvider = new MetaDataProvider();
+            this.jsonSerializer = new Cdp4JsonSerializer(metaDataProvider, metaDataProvider.GetMaxSupportedModelVersion());
             this.PopulateSiteDirectory();
         }
 
@@ -228,17 +232,18 @@ namespace CDP4ServicesDal.Tests
             Assert.Throws<InvalidOperationException>(() => this.dal.Close());
         }
 
-        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
         [Category("WebServicesDependent")]
-        public async Task VerifyThatReadReturnsCorrectDTO()
+        public async Task VerifyThatReadReturnsCorrectDTO(bool isMessagePackSupported)
         {
-            this.dal = new CdpServicesDal();
+            this.dal = new CdpServicesDal(isMessagePackSupported);
 
             var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();
             Assert.NotNull(returned);
             Assert.IsNotEmpty(returned);
 
-            var sd = returned.First();
+            var sd = returned.First(x => x.ClassKind == ClassKind.SiteDirectory);
 
             var attributes = new QueryAttributes();
             var readResult = await this.dal.Read(sd, this.cancelationTokenSource.Token, attributes);
@@ -687,7 +692,7 @@ namespace CDP4ServicesDal.Tests
             Assert.NotNull(resultPerson);
         }
 
-                [Test]
+        [Test]
         public async Task VerifyReadCometTask()
         {
             var mockHttp = new MockHttpMessageHandler();
@@ -696,7 +701,7 @@ namespace CDP4ServicesDal.Tests
 
             this.dal = new CdpServicesDal(httpClient);
             this.SetDalToBeOpen(this.dal);
-            
+
             var cometTaskId = Guid.NewGuid();
 
             var requestHandler = mockHttp.When($"{CdpServicesDal.CometTaskRoute}/{cometTaskId}");
@@ -722,7 +727,7 @@ namespace CDP4ServicesDal.Tests
                 StatusKind = StatusKind.SUCCEEDED
             };
 
-            foundHttpResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTask));
+            foundHttpResponse.Content = new StringContent(this.jsonSerializer.SerializeToString(cometTask));
             SetHttpHeader(foundHttpResponse, "application/json");
 
             var readCometTask = await this.dal.ReadCometTask(cometTaskId, CancellationToken.None);
@@ -730,7 +735,7 @@ namespace CDP4ServicesDal.Tests
 
             var messagePackHttpResponse = new HttpResponseMessage();
             requestHandler.Respond(_ => messagePackHttpResponse);
-            messagePackHttpResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTask));
+            messagePackHttpResponse.Content = new StringContent(this.jsonSerializer.SerializeToString(cometTask));
             SetHttpHeader(messagePackHttpResponse, "application/msgpack");
 
             Assert.That(() => this.dal.ReadCometTask(cometTaskId, CancellationToken.None), Throws.Exception.TypeOf<NotSupportedException>());
@@ -745,7 +750,7 @@ namespace CDP4ServicesDal.Tests
 
             this.dal = new CdpServicesDal(httpClient);
             this.SetDalToBeOpen(this.dal);
-            
+
             var requestHandler = mockHttp.When($"{CdpServicesDal.CometTaskRoute}");
 
             var notFoundHttpResponse = new HttpResponseMessage()
@@ -772,7 +777,7 @@ namespace CDP4ServicesDal.Tests
                 }
             };
 
-            foundHttpResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTasks));
+            foundHttpResponse.Content = new StringContent(this.jsonSerializer.SerializeToString(cometTasks));
             SetHttpHeader(foundHttpResponse, "application/json");
 
             var readCometTasks = await this.dal.ReadCometTasks(CancellationToken.None);
@@ -780,7 +785,7 @@ namespace CDP4ServicesDal.Tests
 
             var messagePackHttpResponse = new HttpResponseMessage();
             requestHandler.Respond(_ => messagePackHttpResponse);
-            messagePackHttpResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTasks));
+            messagePackHttpResponse.Content = new StringContent(this.jsonSerializer.SerializeToString(cometTasks));
             SetHttpHeader(messagePackHttpResponse, "application/msgpack");
 
             Assert.That(() => this.dal.ReadCometTasks(CancellationToken.None), Throws.Exception.TypeOf<NotSupportedException>());
@@ -826,10 +831,10 @@ namespace CDP4ServicesDal.Tests
             var newCometTaskResponse = new HttpResponseMessage();
             requestHandler.Respond(_ => newCometTaskResponse);
 
-            newCometTaskResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTask));
+            newCometTaskResponse.Content = new StringContent(this.jsonSerializer.SerializeToString(cometTask));
             SetHttpHeader(newCometTaskResponse, "application/json");
 
-            var longRunningTaskResult = await this.dal.Write(operationContainer,1);
+            var longRunningTaskResult = await this.dal.Write(operationContainer, 1);
 
             Assert.Multiple(() =>
             {
@@ -847,7 +852,7 @@ namespace CDP4ServicesDal.Tests
             thingsResponse.Content = new StreamContent(stream);
             SetHttpHeader(thingsResponse, "application/json");
 
-            longRunningTaskResult = await this.dal.Write(operationContainer,1);
+            longRunningTaskResult = await this.dal.Write(operationContainer, 1);
 
             Assert.Multiple(() =>
             {
@@ -859,7 +864,7 @@ namespace CDP4ServicesDal.Tests
             var messagePackResponse = new HttpResponseMessage();
             requestHandler.Respond(_ => messagePackResponse);
 
-            messagePackResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTask));
+            messagePackResponse.Content = new StringContent(this.jsonSerializer.SerializeToString(cometTask));
             SetHttpHeader(messagePackResponse, "application/msgpack");
             Assert.That(() => this.dal.Write(operationContainer, 1), Throws.Exception.TypeOf<NotSupportedException>());
         }

@@ -1,37 +1,41 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="OperationModifier.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4WspDal
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
-    using CDP4Common.EngineeringModelData;    
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.Types;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
+
+    using CDP4DalCommon.Protocol.Operations;
 
     using ActualFiniteState = CDP4Common.DTO.ActualFiniteState;
     using ElementUsage = CDP4Common.DTO.ElementUsage;
@@ -72,6 +76,7 @@ namespace CDP4WspDal
                 if (operation.OperationKind == OperationKind.Create)
                 {
                     var parameterOverride = operation.ModifiedThing as ParameterOverride;
+
                     if (parameterOverride != null)
                     {
                         operationsToAdd.AddRange(this.AddParameterSubscriptionCreateOperation(operationContainer, parameterOverride));
@@ -80,6 +85,7 @@ namespace CDP4WspDal
                 else if (operation.OperationKind == OperationKind.Update)
                 {
                     var possibleStateList = operation.ModifiedThing as PossibleFiniteStateList;
+
                     if (possibleStateList != null)
                     {
                         operationsToAdd.AddRange(this.ModifyActualStateKindOnDefaultPossibleStateUpdate(possibleStateList));
@@ -90,7 +96,7 @@ namespace CDP4WspDal
             foreach (var operation in operationsToAdd)
             {
                 operationContainer.AddOperation(operation);
-            }            
+            }
         }
 
         /// <summary>
@@ -104,12 +110,14 @@ namespace CDP4WspDal
             var parameterId = parameterOverride.Parameter;
             Lazy<Thing> lazyParameter;
             var operations = new List<Operation>();
+
             if (!this.session.Assembler.Cache.TryGetValue(new CacheKey(parameterId, parameterOverride.IterationContainerId), out lazyParameter))
             {
                 return operations;
             }
-            
+
             var parameter = (Parameter)lazyParameter.Value;
+
             foreach (var subscription in parameter.ParameterSubscription.Where(x => x.Owner.Iid != parameterOverride.Owner))
             {
                 var parameterSubscription = new ParameterSubscription
@@ -123,13 +131,14 @@ namespace CDP4WspDal
                     operationContainer.Operations.Select(x => x.ModifiedThing)
                         .OfType<ElementUsage>()
                         .SingleOrDefault(x => x.ParameterOverride.Contains(parameterOverride.Iid));
-                
+
                 if (elementUsageContainer == null)
                 {
                     continue;
                 }
 
                 Lazy<Thing> lazyElementUsageContainer;
+
                 if (!this.session.Assembler.Cache.TryGetValue(new CacheKey(elementUsageContainer.Iid, elementUsageContainer.IterationContainerId), out lazyElementUsageContainer))
                 {
                     continue;
@@ -166,6 +175,7 @@ namespace CDP4WspDal
         {
             var operations = new List<Operation>();
             var defaultStateId = possibleFiniteStateList.DefaultState;
+
             if (!defaultStateId.HasValue)
             {
                 return operations;
@@ -173,14 +183,15 @@ namespace CDP4WspDal
 
             // gets the actualList that uses the updated possible list
             var actualLists = this.session.Assembler.Cache.Select(x => x.Value)
-                            .Select(x => x.Value)
-                            .OfType<ActualFiniteStateList>()
-                            .Where(x => x.PossibleFiniteStateList.Select(pl => pl.Iid).Contains(possibleFiniteStateList.Iid))
-                            .ToList();
+                .Select(x => x.Value)
+                .OfType<ActualFiniteStateList>()
+                .Where(x => x.PossibleFiniteStateList.Select(pl => pl.Iid).Contains(possibleFiniteStateList.Iid))
+                .ToList();
 
             foreach (var actualFiniteStateList in actualLists)
             {
                 var possibleLists = actualFiniteStateList.PossibleFiniteStateList.Where(x => x.Iid != possibleFiniteStateList.Iid).ToList();
+
                 if (possibleLists.Any(x => x.DefaultState == null))
                 {
                     // one of the possible list has no default state

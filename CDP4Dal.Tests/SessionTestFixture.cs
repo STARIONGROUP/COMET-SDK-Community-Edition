@@ -1,8 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
-//
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -20,7 +20,7 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal.Tests
 {
@@ -37,12 +37,12 @@ namespace CDP4Dal.Tests
     using CDP4Common.Types;
 
     using CDP4Dal.Composition;
-    using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
     using CDP4Dal.Exceptions;
+    using CDP4Dal.Operations;
 
-    using CDP4DalCommon.Tasks;
+    using CDP4DalCommon.Protocol.Tasks;
 
     using Moq;
 
@@ -130,10 +130,7 @@ namespace CDP4Dal.Tests
         public async Task VerifythatOpenCallAssemblerSynchronizeWithDtos()
         {
             var eventReceived = false;
-            this.messageBus.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x =>
-            {
-                eventReceived = true;
-            });
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x => { eventReceived = true; });
 
             await this.session.Open();
 
@@ -178,10 +175,7 @@ namespace CDP4Dal.Tests
                 }));
             }
 
-            Assert.DoesNotThrowAsync(async () =>
-            {
-                await Task.WhenAll(tasks.ToArray());
-            });
+            Assert.DoesNotThrowAsync(async () => { await Task.WhenAll(tasks.ToArray()); });
         }
 
         [Test]
@@ -196,18 +190,18 @@ namespace CDP4Dal.Tests
 
             this.messageBus.Listen<SessionEvent>()
                 .Subscribe(x =>
-            {
-                if (x.Status == SessionStatus.BeginUpdate)
                 {
-                    beginUpdateReceived = true;
-                    return;
-                }
+                    if (x.Status == SessionStatus.BeginUpdate)
+                    {
+                        beginUpdateReceived = true;
+                        return;
+                    }
 
-                if (x.Status == SessionStatus.EndUpdate)
-                {
-                    endUpdateReceived = true;
-                }
-            });
+                    if (x.Status == SessionStatus.EndUpdate)
+                    {
+                        endUpdateReceived = true;
+                    }
+                });
 
             var context = $"/SiteDirectory/{Guid.NewGuid()}";
 
@@ -234,10 +228,7 @@ namespace CDP4Dal.Tests
 
             await this.session.Open();
 
-            this.messageBus.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x =>
-            {
-                eventReceived = true;
-            });
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x => { eventReceived = true; });
 
             // refresh shouldnt do anything
             await this.session.Refresh();
@@ -267,10 +258,7 @@ namespace CDP4Dal.Tests
 
             await this.session.Open();
 
-            this.messageBus.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x =>
-            {
-                eventReceived = true;
-            });
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(TelephoneNumber)).Subscribe(x => { eventReceived = true; });
 
             await this.session.Reload();
 
@@ -364,7 +352,7 @@ namespace CDP4Dal.Tests
             session.Assembler.Cache.TryGetValue(new CacheKey(rdlPoco.Iid, null), out rdlPocoToClose);
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)rdlPocoToClose.Value);
             Assert.AreEqual(1, session.OpenReferenceDataLibraries.ToList().Count);
-                
+
             await session.Read(rdlPoco);
             Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count);
 
@@ -467,14 +455,15 @@ namespace CDP4Dal.Tests
 
             var participant = new CDP4Common.DTO.Participant(Guid.NewGuid(), 0) { Person = this.person.Iid };
             modelsetup.Participant.Add(participant.Iid);
-            var modelPoco = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null){EngineeringModelSetup = modelsetuppoco};
+            var modelPoco = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null) { EngineeringModelSetup = modelsetuppoco };
             var iterationPoco = new CDP4Common.EngineeringModelData.Iteration(iteration.Iid, null, null);
             modelPoco.Iteration.Add(iterationPoco);
 
             var readTaskCompletionSource = new TaskCompletionSource<IEnumerable<Thing>>();
             readTaskCompletionSource.SetResult(readReturn);
+
             this.mockedDal.Setup(
-                x => x.Read(It.IsAny<Iteration>(), It.IsAny<CancellationToken>(), null))
+                    x => x.Read(It.IsAny<Iteration>(), It.IsAny<CancellationToken>(), null))
                 .Returns(readTaskCompletionSource.Task);
 
             var thingsToAdd = new List<Thing>() { siteDirDto, requiredRdlDto, rdlDto, this.person, participant, modelsetup };
@@ -568,6 +557,7 @@ namespace CDP4Dal.Tests
         {
             var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
             var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+
             this.session.Assembler.Cache.TryAdd(new CacheKey(siteDir.Iid, null),
                 new Lazy<CDP4Common.CommonData.Thing>(() => siteDir));
 
@@ -599,7 +589,7 @@ namespace CDP4Dal.Tests
         public async Task VerifyThatReadIterationWorks()
         {
             var siteDir = new CDP4Common.SiteDirectoryData.SiteDirectory(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
-            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) {ShortName = "John"};
+            var JohnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
             var modelSetup = new CDP4Common.SiteDirectoryData.EngineeringModelSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
             var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), this.session.Assembler.Cache, this.uri) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
             var mrdl = new ModelReferenceDataLibrary(Guid.NewGuid(), this.session.Assembler.Cache, this.uri);
@@ -738,10 +728,7 @@ namespace CDP4Dal.Tests
             var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
             this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
 
-            this.session.BeforeWrite += (o, args) =>
-            {
-                args.Cancelled = false;
-            };
+            this.session.BeforeWrite += (o, args) => { args.Cancelled = false; };
 
             await this.session.Write(new OperationContainer(context));
 
@@ -755,10 +742,7 @@ namespace CDP4Dal.Tests
             var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
             this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
 
-            this.session.BeforeWrite += (o, args) =>
-            {
-                args.Cancelled = true;
-            };
+            this.session.BeforeWrite += (o, args) => { args.Cancelled = true; };
 
             Assert.ThrowsAsync<OperationCanceledException>(async () => await this.session.Write(new OperationContainer(context)));
 
@@ -784,11 +768,11 @@ namespace CDP4Dal.Tests
             categoriesId.Add(Guid.NewGuid());
 
             var elementDefinitionId = Guid.NewGuid();
-            cherryPickedThings.Add(new Iteration(){Iid = engineeringModelId, Element = new List<Guid>{elementDefinitionId}});
-            cherryPickedThings.Add(new ElementDefinition(){Iid = elementDefinitionId, Category = new List<Guid> { categoriesId[0] }});
+            cherryPickedThings.Add(new Iteration() { Iid = engineeringModelId, Element = new List<Guid> { elementDefinitionId } });
+            cherryPickedThings.Add(new ElementDefinition() { Iid = elementDefinitionId, Category = new List<Guid> { categoriesId[0] } });
 
             readThings = (await this.session.CherryPick(engineeringModelId, iterationId, classKinds, categoriesId)).ToList();
-           
+
             Assert.Multiple(() =>
             {
                 Assert.That(readThings, Is.Not.Empty);
@@ -893,7 +877,7 @@ namespace CDP4Dal.Tests
 
             this.mockedDal.Setup(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<int>(), It.IsAny<IEnumerable<string>>()))
                 .ReturnsAsync(new LongRunningTaskResult(new CometTask() { Id = Guid.Empty }));
-            
+
             var cometTask = await this.session.Write(new OperationContainer(context), 1);
 
             Assert.Multiple(() =>
@@ -922,8 +906,9 @@ namespace CDP4Dal.Tests
             this.mockedDal.Setup(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<int>(), It.IsAny<IEnumerable<string>>()))
                 .ThrowsAsync(new DalReadException());
 
-            Assert.That(() =>this.session.Write(new OperationContainer(context), 1), Throws.Exception.TypeOf<DalReadException>());
+            Assert.That(() => this.session.Write(new OperationContainer(context), 1), Throws.Exception.TypeOf<DalReadException>());
         }
+
         private void AssignActivePerson()
         {
             var johnDoe = new Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
@@ -934,16 +919,30 @@ namespace CDP4Dal.Tests
     [DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
     internal class TestDal : IDal
     {
-        public Version SupportedVersion { get {return new Version(1, 0, 0);} }
-        public Version DalVersion { get {return new Version("1.1.0");} }
-        public IMetaDataProvider MetaDataProvider { get {return new MetaDataProvider();} }
+        public Version SupportedVersion
+        {
+            get { return new Version(1, 0, 0); }
+        }
+
+        public Version DalVersion
+        {
+            get { return new Version("1.1.0"); }
+        }
+
+        public IMetaDataProvider MetaDataProvider
+        {
+            get { return new MetaDataProvider(); }
+        }
 
         /// <summary>
         /// Gets or sets the <see cref="ISession"/> that uses this <see cref="IDal"/>
         /// </summary>
         public ISession Session { get; set; }
 
-        public bool IsReadOnly { get { return false; } }
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
 
         /// <summary>
         /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s asynchronously.

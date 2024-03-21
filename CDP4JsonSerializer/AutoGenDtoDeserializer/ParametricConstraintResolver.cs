@@ -1,26 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ParametricConstraintResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
-//
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -28,66 +28,99 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="ParametricConstraintResolver"/> is to deserialize a JSON object to a <see cref="ParametricConstraint"/>
+    /// The purpose of the <see cref="ParametricConstraintResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.ParametricConstraint"/>
     /// </summary>
     public static class ParametricConstraintResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="ParametricConstraint"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="ParametricConstraint"/> to instantiate</returns>
-        public static CDP4Common.DTO.ParametricConstraint FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.ParametricConstraint"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.ParametricConstraint"/> to instantiate</returns>
+        public static CDP4Common.DTO.ParametricConstraint FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var parametricConstraint = new CDP4Common.DTO.ParametricConstraint(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                parametricConstraint.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the ParametricConstraintResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            var parametricConstraint = new CDP4Common.DTO.ParametricConstraint(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                parametricConstraint.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    parametricConstraint.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                parametricConstraint.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    parametricConstraint.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["expression"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("expression"u8, out var expressionProperty) && expressionProperty.ValueKind != JsonValueKind.Null)
             {
-                parametricConstraint.Expression.AddRange(jObject["expression"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in expressionProperty.EnumerateArray())
+                {
+                    parametricConstraint.Expression.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                parametricConstraint.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the parametricConstraint {id} is null", parametricConstraint.Iid);
+                }
+                else
+                {
+                    parametricConstraint.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                parametricConstraint.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the parametricConstraint {id} is null", parametricConstraint.Iid);
+                }
+                else
+                {
+                    parametricConstraint.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (!jObject["topExpression"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("topExpression"u8, out var topExpressionProperty))
             {
-                parametricConstraint.TopExpression = jObject["topExpression"].ToObject<Guid?>();
+                if(topExpressionProperty.ValueKind == JsonValueKind.Null)
+                {
+                    parametricConstraint.TopExpression = null;
+                }
+                else
+                {
+                    parametricConstraint.TopExpression = topExpressionProperty.GetGuid();
+                }
             }
 
             return parametricConstraint;

@@ -1,26 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ICdp4JsonSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer
 {
@@ -99,17 +99,14 @@ namespace CDP4JsonSerializer
         IEnumerable<Thing> Deserialize(Stream contentStream);
 
         /// <summary>
-        /// Convenience method that deserializes the passed in JSON content stream
+        /// Serialize an object into a string
         /// </summary>
-        /// <typeparam name="T">
-        /// The type info for which deserialization will be performed
-        /// </typeparam>
-        /// <param name="contentStream">
-        /// The content Stream.
-        /// </param>
-        /// <returns>
-        /// The the deserialized instance of the specified Type
-        /// </returns>
-        T Deserialize<T>(Stream contentStream);
+        /// <param name="toSerialize">The object to serialize</param>
+        /// <returns>The serialized string</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If the <see cref="Cdp4JsonSerializer.RequestDataModelVersion" /> or
+        /// <see cref="Cdp4JsonSerializer.MetaInfoProvider" /> has not been initialized
+        /// </exception>
+        string SerializeToString(object toSerialize);
     }
 }

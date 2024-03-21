@@ -1,21 +1,21 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="WspDal.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
-//
-//    This file is part of COMET-SDK Community Edition
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+// <copyright file="WSPDal.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -27,7 +27,6 @@ namespace CDP4WspDal
 #if NETFRAMEWORK
     using System.ComponentModel.Composition;
 #endif
-
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -50,10 +49,11 @@ namespace CDP4WspDal
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
-    using CDP4DalCommon.Tasks;
+    using CDP4DalCommon.Protocol.Operations;
+    using CDP4DalCommon.Protocol.Tasks;
 
-    using CDP4JsonSerializer;
-    
+    using CDP4DalJsonSerializer;
+
     using NLog;
 
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
@@ -83,13 +83,13 @@ namespace CDP4WspDal
         /// </summary>
         public WspDal()
         {
-            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Serializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion, true);
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Cdp4JsonSerializer"/>
+        /// Gets or sets the <see cref="Cdp4DalJsonSerializer"/>
         /// </summary>
-        public Cdp4JsonSerializer Serializer { get; private set; }
+        public Cdp4DalJsonSerializer Serializer { get; private set; }
 
         /// <summary>
         /// Gets the value indicating whether this <see cref="IDal"/> is read only
@@ -140,18 +140,19 @@ namespace CDP4WspDal
             modifier.ModifyOperationContainer(operationContainer);
 
             var invalidOperationKind = operationContainer.Operations.Any(operation => operation.OperationKind == OperationKind.Move || OperationKindExtensions.IsCopyOperation(operation.OperationKind));
+
             if (invalidOperationKind)
             {
                 throw new InvalidOperationKindException("The WSP DAL does not support Copy or Move operations");
             }
-            
+
             var result = new List<Thing>();
 
             if (files != null && files.Any())
             {
                 this.OperationContainerFileVerification(operationContainer, files);
             }
-            
+
             var attribute = new QueryAttributes
             {
                 RevisionNumber = operationContainer.TopContainerRevisionNumber
@@ -180,12 +181,13 @@ namespace CDP4WspDal
                     Logger.Error(msg);
                     throw new DalWriteException(msg);
                 }
-                
+
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     result.AddRange(this.Serializer.Deserialize(resultStream));
 
                     Guid iterationId;
+
                     if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
                     {
                         this.SetIterationContainer(result, iterationId);
@@ -204,6 +206,7 @@ namespace CDP4WspDal
                 foreach (var valueSetDto in valueSetResult)
                 {
                     var index = result.FindIndex(x => x.Iid == valueSetDto.Iid);
+
                     if (index >= 0)
                     {
                         result[index] = valueSetDto;
@@ -282,6 +285,7 @@ namespace CDP4WspDal
             // Get the RequiredRdl to load
             var siteDirectory = this.Session.Assembler.RetrieveSiteDirectory();
             var iterationSetup = siteDirectory.Model.SelectMany(mod => mod.IterationSetup).SingleOrDefault(it => it.IterationIid == iteration.Iid);
+
             if (iterationSetup == null)
             {
                 throw new InvalidOperationException("The Iteration to open does not have any associated IterationSetup.");
@@ -401,12 +405,13 @@ namespace CDP4WspDal
                     Logger.Error(msg);
                     throw new DalReadException(msg);
                 }
-                
+
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var returned = this.Serializer.Deserialize(resultStream);
 
                     Guid iterationId;
+
                     if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
                     {
                         this.SetIterationContainer(returned, iterationId);
@@ -419,7 +424,7 @@ namespace CDP4WspDal
                 }
             }
         }
-        
+
         /// <summary>
         /// Reads the <see cref="CometTask" /> identified by the provided <see cref="Guid" />
         /// </summary>
@@ -529,9 +534,9 @@ namespace CDP4WspDal
             var openToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
 
             this.httpClient = this.CreateHttpClient(credentials);
-            
+
             var watch = Stopwatch.StartNew();
-            
+
             var uriBuilder = this.GetUriBuilder(credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", openToken, resourcePath);
@@ -543,7 +548,7 @@ namespace CDP4WspDal
             {
                 Logger.Info("The ECSS-E-TM-10-25A Annex C Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
                 requestsw.Stop();
-                
+
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
@@ -553,7 +558,7 @@ namespace CDP4WspDal
 
                 watch.Stop();
                 Logger.Info("WSP DAL Open {0} completed in {1} [ms]", openToken, watch.ElapsedMilliseconds);
-                
+
                 watch = Stopwatch.StartNew();
 
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
@@ -564,6 +569,7 @@ namespace CDP4WspDal
                     Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
 
                     var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
+
                     if (returnedPerson == null)
                     {
                         throw new InvalidOperationException("User not found.");
@@ -709,6 +715,7 @@ namespace CDP4WspDal
                 {
                     outputStream.CopyTo(memoryStream);
                     memoryStream.Position = 0;
+
                     using (var streamReader = new StreamReader(memoryStream))
                     {
                         var postBody = streamReader.ReadToEnd();
@@ -763,6 +770,7 @@ namespace CDP4WspDal
             try
             {
                 var validUriAssertion = new Uri(uri);
+
                 if (!(validUriAssertion.Scheme == Uri.UriSchemeHttp || validUriAssertion.Scheme == Uri.UriSchemeHttps))
                 {
                     return false;
@@ -814,6 +822,6 @@ namespace CDP4WspDal
                     Extent = ExtentQueryAttribute.deep,
                     IncludeAllContainers = true
                 };
-        }     
+        }
     }
 }

@@ -1,8 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="CopyOperationHandlerTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
-//
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -20,7 +20,7 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4ServicesDal.Tests
 {
@@ -35,6 +35,8 @@ namespace CDP4ServicesDal.Tests
     using CDP4Dal;
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
+
+    using CDP4DalCommon.Protocol.Operations;
 
     using Moq;
 

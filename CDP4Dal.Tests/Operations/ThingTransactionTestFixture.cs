@@ -1,26 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTransactionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal.Tests
 {
@@ -31,11 +31,13 @@ namespace CDP4Dal.Tests
     using System.Text;
 
     using CDP4Common.CommonData;
-    using CDP4Common.EngineeringModelData;    
+    using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    
+
     using CDP4Dal.Operations;
+
+    using CDP4DalCommon.Protocol.Operations;
 
     using NUnit.Framework;
 
@@ -51,7 +53,7 @@ namespace CDP4Dal.Tests
 
         private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache;
         private Uri uri = new Uri("http://www.rheagroup.com");
-        
+
         [SetUp]
         public void Setup()
         {
@@ -65,7 +67,7 @@ namespace CDP4Dal.Tests
             iterationSetup.IterationIid = this.iteration.Iid;
 
             this.engineeringModel.Iteration.Add(this.iteration);
-            
+
             this.cache.TryAdd(new CacheKey(this.siteDirectory.Iid, null), new Lazy<Thing>(() => this.siteDirectory));
             this.cache.TryAdd(new CacheKey(this.engineeringModel.Iid, null), new Lazy<Thing>(() => this.engineeringModel));
             this.cache.TryAdd(new CacheKey(this.iteration.Iid, null), new Lazy<Thing>(() => this.iteration));
@@ -85,7 +87,7 @@ namespace CDP4Dal.Tests
             var transaction = new ThingTransaction(transactionContext, fileRevision1);
             transaction.CreateOrUpdate(fileRevision2);
 
-            CollectionAssert.AreEqual(transaction.GetFiles(), new [] { filePath });
+            CollectionAssert.AreEqual(transaction.GetFiles(), new[] { filePath });
         }
 
         [Test]
@@ -95,7 +97,7 @@ namespace CDP4Dal.Tests
 
             var person = new Person(Guid.NewGuid(), this.cache, this.uri) { Container = this.siteDirectory };
             var transaction = new ThingTransaction(transactionContext, person);
-            
+
             var duplicateSiteDirectory = new SiteDirectory(this.siteDirectory.Iid, this.cache, this.uri);
             var anotherPerson = new Person(Guid.NewGuid(), this.cache, this.uri) { Container = duplicateSiteDirectory };
             transaction.CreateOrUpdate(anotherPerson);
@@ -109,7 +111,7 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatCreateThingWorks()
         {
-            var person = new Person(Guid.NewGuid(), this.cache, this.uri) {Container = this.siteDirectory};
+            var person = new Person(Guid.NewGuid(), this.cache, this.uri) { Container = this.siteDirectory };
             this.cache.TryAdd(new CacheKey(person.Iid, null), new Lazy<Thing>(() => person));
 
             var clonePerson = person.Clone(false);
@@ -131,6 +133,7 @@ namespace CDP4Dal.Tests
             {
                 Container = this.siteDirectory
             };
+
             this.cache.TryAdd(new CacheKey(siteRdl.Iid, null), new Lazy<Thing>(() => siteRdl));
 
             var cloneRdl = siteRdl.Clone(false);
@@ -152,7 +155,7 @@ namespace CDP4Dal.Tests
             var newModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
 
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
-            
+
             Assert.Throws<InvalidOperationException>(() => new ThingTransaction(transactionContext, newModel));
         }
 
@@ -162,7 +165,7 @@ namespace CDP4Dal.Tests
             var newSiteDirectory = new SiteDirectory(Guid.NewGuid(), this.cache, this.uri);
 
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
-            
+
             Assert.Throws<InvalidOperationException>(() => new ThingTransaction(transactionContext, newSiteDirectory));
         }
 
@@ -195,7 +198,7 @@ namespace CDP4Dal.Tests
         {
             var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);
             this.cache.TryAdd(new CacheKey(phone.Iid, null), new Lazy<Thing>(() => phone));
-            
+
             var clone = phone.Clone(false);
 
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
@@ -208,9 +211,9 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatUpdateThingThrowsExceptionUponUpdatingExistingCloneWithAnotherClone()
         {
-            var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);            
+            var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);
             this.cache.TryAdd(new CacheKey(phone.Iid, null), new Lazy<Thing>(() => phone));
-            
+
             var clone1 = phone.Clone(false);
             var clone2 = phone.Clone(false);
 
@@ -246,10 +249,9 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatUpdateContainerWorks()
         {
-
             var iterationClone = this.iteration.Clone(false);
             var option1 = new Option(Guid.NewGuid(), this.cache, this.uri);
-            
+
             var transactionContext = TransactionContextResolver.ResolveContext(this.iteration);
             var transaction = new ThingTransaction(transactionContext, iterationClone);
             transaction.CreateOrUpdate(iterationClone);
@@ -272,7 +274,7 @@ namespace CDP4Dal.Tests
             Assert.AreEqual(0, this.iteration.Option.Count);
             Assert.AreEqual(2, clone.Option.Count);
         }
-        
+
         /// <summary>
         /// Create a containment tree under site directory and update 
         /// </summary>
@@ -328,6 +330,7 @@ namespace CDP4Dal.Tests
             emailTrans.Create(email);
 
             emailTrans.FinalizeSubTransaction(email, person1_1);
+
             // end add email, verify that email is added to person1_1, (the clone of person1)
 
             Assert.AreEqual(2, person1_1Tr.AddedThing.Count());
@@ -339,6 +342,7 @@ namespace CDP4Dal.Tests
             var phone_1Trans = new ThingTransaction(phone_1, person1_1Tr, person1_1);
             phone_1Trans.CreateOrUpdate(phone_1);
             phone_1Trans.FinalizeSubTransaction(phone_1, person1_1);
+
             // end update phone
 
             // verify that the new reference is used
@@ -353,7 +357,7 @@ namespace CDP4Dal.Tests
             Assert.IsTrue(cloneSiteDir.Person.Contains(person1_1));
             Assert.IsTrue(rootTransaction.AddedThing.Contains(phone_1));
             Assert.AreEqual(1, cloneSiteDir.Person.Count);
-            
+
             // Create new person
             var person2 = new Person();
             var person2Trans = new ThingTransaction(person2, rootTransaction, cloneSiteDir);
@@ -495,7 +499,6 @@ namespace CDP4Dal.Tests
             Assert.IsTrue(siteDirClone.SiteReferenceDataLibrary.Contains(srdl2));
             Assert.IsTrue(srdl2.Unit.Contains(unit2));
 
-
             // update site rdl1
             var srdlC2 = siterdlC1.Clone(false);
             var srdlC2TRans = new ThingTransaction(srdlC2, rootTransaction, siteDirClone);
@@ -578,7 +581,7 @@ namespace CDP4Dal.Tests
             enumValue.Definition.Add(enumValueDef);
 
             enumPt.ValueDefinition.Add(enumValue);
-            
+
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
             var transaction = new ThingTransaction(transactionContext);
             transaction.CreateDeep(enumPt);
@@ -828,6 +831,7 @@ namespace CDP4Dal.Tests
             transaction.Delete(person.Clone(false));
 
             var operationContainer = transaction.FinalizeTransaction();
+
             // Update sitedir
             Assert.AreEqual(1, operationContainer.Operations.Count());
         }
@@ -853,8 +857,8 @@ namespace CDP4Dal.Tests
 
             var elementDefinitionClone = elementDefinition.Clone(false);
             var targetIterationClone = targetIteration.Clone(false);
-            
-            var transactionContext = TransactionContextResolver.ResolveContext(targetIteration);            
+
+            var transactionContext = TransactionContextResolver.ResolveContext(targetIteration);
             var transaction = new ThingTransaction(transactionContext);
             transaction.Copy(elementDefinitionClone, targetIterationClone, OperationKind.CopyDefaultValuesChangeOwner);
 
@@ -887,7 +891,7 @@ namespace CDP4Dal.Tests
 
             var elementDefinitionClone = elementDefinition.Clone(false);
             var targetIterationClone = targetIteration.Clone(false);
-            
+
             var transactionContext = TransactionContextResolver.ResolveContext(targetIteration);
             var transaction = new ThingTransaction(transactionContext);
             transaction.Copy(elementDefinitionClone, targetIterationClone, OperationKind.CopyKeepValuesChangeOwner);
@@ -995,7 +999,7 @@ namespace CDP4Dal.Tests
             Assert.Throws<ArgumentException>(() => transaction.Copy(elementDefinitionClone, targetIterationClone, OperationKind.Create));
         }
 
-        [Test]        
+        [Test]
         public void VerifyThatCopyThrowsExcpetionCloneThatIsToBeCopiedIsNull()
         {
             var sourceModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
@@ -1020,7 +1024,7 @@ namespace CDP4Dal.Tests
             Assert.Throws<ArgumentNullException>(() => transaction.Copy(null, OperationKind.Copy));
         }
 
-        [Test]        
+        [Test]
         public void VerifyThatCopyThrowsExceptionWhenDestinationIsNull()
         {
             var sourceModel = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
@@ -1051,9 +1055,9 @@ namespace CDP4Dal.Tests
         {
             var model = new EngineeringModel(Guid.NewGuid(), this.cache, this.uri);
             var iteration = new Iteration(Guid.NewGuid(), this.cache, this.uri);
-            
+
             model.Iteration.Add(iteration);
-            
+
             var transactionContext = TransactionContextResolver.ResolveContext(iteration);
             var transaction = new ThingTransaction(transactionContext);
 
@@ -1067,9 +1071,9 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatArgumentNullExceptionIsThrownWhenContextIsNull()
         {
-             Assert.Throws<ArgumentNullException>(() => new ThingTransaction(null));
+            Assert.Throws<ArgumentNullException>(() => new ThingTransaction(null));
         }
-        
+
         [Test]
         public void VerifyThatArgumentNullExceptionIsThrownWhenCloneIsNull()
         {
@@ -1085,7 +1089,7 @@ namespace CDP4Dal.Tests
             var iterationClone = iteration.Clone(false);
             var elementDefinitionClone = elementDefinition.Clone(false);
 
-            Assert.Throws<ArgumentNullException>(() => new ThingTransaction(null, null, iterationClone));            
+            Assert.Throws<ArgumentNullException>(() => new ThingTransaction(null, null, iterationClone));
         }
     }
 }

@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
+        <Company>RHEA System S.A.</Company>
+        <Language>latest</Language>
+        <Title>CDP4DalJsonSerializer Community Edition</Title>
+        <VersionPrefix>26.6.0</VersionPrefix>
+        <Description>JsonSerializer for the CDP4DalCommon types</Description>
+        <Copyright>Copyright © RHEA System S.A.</Copyright>
+        <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
+        <PackageId>CDP4DalJsonSerializer-CE</PackageId>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageProjectUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageIcon>cdp4-icon.png</PackageIcon>
+        <IncludeSource>true</IncludeSource>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
+        <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
+        <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+        <PackageReleaseNotes>
+            [BUMP] To CDP4Common 26.6.0
+        </PackageReleaseNotes>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png">
+            <PackagePath>\</PackagePath>
+            <Pack>true</Pack>
+        </None>
+        <None Include="..\README.md" Link="README.md">
+            <PackagePath>\</PackagePath>
+            <Pack>true</Pack>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\CDP4DalCommon\CDP4DalCommon.csproj" />
+      <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+    </ItemGroup>
+</Project>

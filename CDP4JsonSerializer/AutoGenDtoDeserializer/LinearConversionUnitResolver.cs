@@ -1,26 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="LinearConversionUnitResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
-//
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -28,96 +28,163 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="LinearConversionUnitResolver"/> is to deserialize a JSON object to a <see cref="LinearConversionUnit"/>
+    /// The purpose of the <see cref="LinearConversionUnitResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.LinearConversionUnit"/>
     /// </summary>
     public static class LinearConversionUnitResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="LinearConversionUnit"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="LinearConversionUnit"/> to instantiate</returns>
-        public static CDP4Common.DTO.LinearConversionUnit FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.LinearConversionUnit"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.LinearConversionUnit"/> to instantiate</returns>
+        public static CDP4Common.DTO.LinearConversionUnit FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var linearConversionUnit = new CDP4Common.DTO.LinearConversionUnit(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                linearConversionUnit.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the LinearConversionUnitResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["alias"].IsNullOrEmpty())
+            var linearConversionUnit = new CDP4Common.DTO.LinearConversionUnit(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                linearConversionUnit.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    linearConversionUnit.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["conversionFactor"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("conversionFactor"u8, out var conversionFactorProperty))
             {
-                linearConversionUnit.ConversionFactor = jObject["conversionFactor"].ToObject<string>();
+                if(conversionFactorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale conversionFactor property of the linearConversionUnit {id} is null", linearConversionUnit.Iid);
+                }
+                else
+                {
+                    linearConversionUnit.ConversionFactor = conversionFactorProperty.GetString();
+                }
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                linearConversionUnit.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    linearConversionUnit.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                linearConversionUnit.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    linearConversionUnit.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                linearConversionUnit.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    linearConversionUnit.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                linearConversionUnit.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    linearConversionUnit.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["isDeprecated"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                linearConversionUnit.IsDeprecated = jObject["isDeprecated"].ToObject<bool>();
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the linearConversionUnit {id} is null", linearConversionUnit.Iid);
+                }
+                else
+                {
+                    linearConversionUnit.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                linearConversionUnit.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the linearConversionUnit {id} is null", linearConversionUnit.Iid);
+                }
+                else
+                {
+                    linearConversionUnit.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                linearConversionUnit.Name = jObject["name"].ToObject<string>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the linearConversionUnit {id} is null", linearConversionUnit.Iid);
+                }
+                else
+                {
+                    linearConversionUnit.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["referenceUnit"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("referenceUnit"u8, out var referenceUnitProperty))
             {
-                linearConversionUnit.ReferenceUnit = jObject["referenceUnit"].ToObject<Guid>();
+                if(referenceUnitProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale referenceUnit property of the linearConversionUnit {id} is null", linearConversionUnit.Iid);
+                }
+                else
+                {
+                    linearConversionUnit.ReferenceUnit = referenceUnitProperty.GetGuid();
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                linearConversionUnit.ShortName = jObject["shortName"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the linearConversionUnit {id} is null", linearConversionUnit.Iid);
+                }
+                else
+                {
+                    linearConversionUnit.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                linearConversionUnit.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the linearConversionUnit {id} is null", linearConversionUnit.Iid);
+                }
+                else
+                {
+                    linearConversionUnit.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return linearConversionUnit;

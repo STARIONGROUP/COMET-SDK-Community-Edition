@@ -1,28 +1,26 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="WSPPostOperation.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-#endregion
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4WspDal
 {
@@ -30,15 +28,16 @@ namespace CDP4WspDal
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.Dto;
     using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    using CDP4Dal.Operations;
-    using Newtonsoft.Json;
-    using DomainOfExpertise = CDP4Common.DTO.DomainOfExpertise;
+
+    using CDP4DalCommon.Protocol.Operations;
+
     using Thing = CDP4Common.DTO.Thing;
 
     /// <summary>
@@ -63,25 +62,21 @@ namespace CDP4WspDal
         /// <summary>
         /// Gets or sets the collection of DTOs to delete.
         /// </summary>
-        [JsonProperty("_delete")]
         public override List<ClasslessDTO> Delete { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of DTOs to create.
         /// </summary>
-        [JsonProperty("_create")]
         public override List<Thing> Create { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of DTOs to update.
         /// </summary>
-        [JsonProperty("_update")]
         public override List<ClasslessDTO> Update { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of DTOs to copy.
         /// </summary>
-        [JsonIgnore]
         public override List<CopyInfo> Copy { get; set; }
 
         /// <summary>
@@ -139,6 +134,7 @@ namespace CDP4WspDal
             foreach (var key in original.Keys)
             {
                 var originalIenumerable = original[key] as IEnumerable;
+
                 if (originalIenumerable != null && originalIenumerable.GetType().IsGenericType)
                 {
                     var modifiedIenumerable = (IEnumerable)modifiedFull[key];
@@ -162,6 +158,7 @@ namespace CDP4WspDal
                         List<object> modifiedProperty;
 
                         var genericTypeArgument = original[key].GetType().GenericTypeArguments[0];
+
                         if (genericTypeArgument == typeof(Guid) || genericTypeArgument == typeof(ClassKind) || genericTypeArgument == typeof(VcardTelephoneNumberKind))
                         {
                             originalProperty = originalIenumerable.Cast<object>().ToList();
@@ -206,6 +203,7 @@ namespace CDP4WspDal
                         }
 
                         var possibleDeletions = originalProperty.Except(modifiedProperty).ToList();
+
                         if (possibleDeletions.Count > 0)
                         {
                             // this part will be added to the delete
@@ -236,7 +234,7 @@ namespace CDP4WspDal
                     {
                         if (original[key].Equals(modifiedFull[key]))
                         {
-                            modified.Remove(key); 
+                            modified.Remove(key);
                         }
                     }
                 }
@@ -260,6 +258,7 @@ namespace CDP4WspDal
             if (listsToAdd.Count > 0)
             {
                 var updateDto = modified;
+
                 foreach (var kvp in listsToAdd)
                 {
                     updateDto.Add(kvp.Key, kvp.Value);
@@ -271,6 +270,6 @@ namespace CDP4WspDal
             {
                 this.Update.Add(modified);
             }
-        }        
+        }
     }
 }

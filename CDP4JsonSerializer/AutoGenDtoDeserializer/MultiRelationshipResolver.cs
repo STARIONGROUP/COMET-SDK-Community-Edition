@@ -1,26 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="MultiRelationshipResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
-//
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -28,81 +28,127 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="MultiRelationshipResolver"/> is to deserialize a JSON object to a <see cref="MultiRelationship"/>
+    /// The purpose of the <see cref="MultiRelationshipResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.MultiRelationship"/>
     /// </summary>
     public static class MultiRelationshipResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="MultiRelationship"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="MultiRelationship"/> to instantiate</returns>
-        public static CDP4Common.DTO.MultiRelationship FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.MultiRelationship"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.MultiRelationship"/> to instantiate</returns>
+        public static CDP4Common.DTO.MultiRelationship FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var multiRelationship = new CDP4Common.DTO.MultiRelationship(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                multiRelationship.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the MultiRelationshipResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            var multiRelationship = new CDP4Common.DTO.MultiRelationship(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty) && categoryProperty.ValueKind != JsonValueKind.Null)
             {
-                multiRelationship.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    multiRelationship.Category.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                multiRelationship.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    multiRelationship.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                multiRelationship.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    multiRelationship.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                multiRelationship.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the multiRelationship {id} is null", multiRelationship.Iid);
+                }
+                else
+                {
+                    multiRelationship.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                multiRelationship.Name = jObject["name"].ToObject<string>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the multiRelationship {id} is null", multiRelationship.Iid);
+                }
+                else
+                {
+                    multiRelationship.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                multiRelationship.Owner = jObject["owner"].ToObject<Guid>();
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the multiRelationship {id} is null", multiRelationship.Iid);
+                }
+                else
+                {
+                    multiRelationship.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (!jObject["parameterValue"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("parameterValue"u8, out var parameterValueProperty) && parameterValueProperty.ValueKind != JsonValueKind.Null)
             {
-                multiRelationship.ParameterValue.AddRange(jObject["parameterValue"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in parameterValueProperty.EnumerateArray())
+                {
+                    multiRelationship.ParameterValue.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["relatedThing"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("relatedThing"u8, out var relatedThingProperty) && relatedThingProperty.ValueKind != JsonValueKind.Null)
             {
-                multiRelationship.RelatedThing.AddRange(jObject["relatedThing"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in relatedThingProperty.EnumerateArray())
+                {
+                    multiRelationship.RelatedThing.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                multiRelationship.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the multiRelationship {id} is null", multiRelationship.Iid);
+                }
+                else
+                {
+                    multiRelationship.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return multiRelationship;

@@ -27,6 +27,7 @@
 
   <ItemGroup>
 	<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+	<PackageReference Include="System.Net.Http.Formatting.Extension" Version="5.2.3" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -40,12 +41,8 @@
   </ItemGroup>
 
   <ItemGroup>
-      <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+    <ProjectReference Include="..\CDP4DalJsonSerializer\CDP4DalJsonSerializer.csproj" />
     <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
     <ProjectReference Include="..\CDP4MessagePackSerializer\CDP4MessagePackSerializer.csproj" />
   </ItemGroup>

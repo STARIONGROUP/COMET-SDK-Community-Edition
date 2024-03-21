@@ -1,26 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelReferenceDataLibraryResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
-//
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -28,146 +28,232 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="ModelReferenceDataLibraryResolver"/> is to deserialize a JSON object to a <see cref="ModelReferenceDataLibrary"/>
+    /// The purpose of the <see cref="ModelReferenceDataLibraryResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.ModelReferenceDataLibrary"/>
     /// </summary>
     public static class ModelReferenceDataLibraryResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="ModelReferenceDataLibrary"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="ModelReferenceDataLibrary"/> to instantiate</returns>
-        public static CDP4Common.DTO.ModelReferenceDataLibrary FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.ModelReferenceDataLibrary"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.ModelReferenceDataLibrary"/> to instantiate</returns>
+        public static CDP4Common.DTO.ModelReferenceDataLibrary FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var modelReferenceDataLibrary = new CDP4Common.DTO.ModelReferenceDataLibrary(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                modelReferenceDataLibrary.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the ModelReferenceDataLibraryResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["alias"].IsNullOrEmpty())
+            var modelReferenceDataLibrary = new CDP4Common.DTO.ModelReferenceDataLibrary(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["baseQuantityKind"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("baseQuantityKind"u8, out var baseQuantityKindProperty))
             {
-                modelReferenceDataLibrary.BaseQuantityKind.AddRange(jObject["baseQuantityKind"].ToOrderedItemCollection());
+                modelReferenceDataLibrary.BaseQuantityKind.AddRange(baseQuantityKindProperty.ToOrderedItemCollection());
             }
 
-            if (!jObject["baseUnit"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("baseUnit"u8, out var baseUnitProperty) && baseUnitProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.BaseUnit.AddRange(jObject["baseUnit"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in baseUnitProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.BaseUnit.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["constant"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("constant"u8, out var constantProperty) && constantProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.Constant.AddRange(jObject["constant"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in constantProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Constant.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["definedCategory"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definedCategory"u8, out var definedCategoryProperty) && definedCategoryProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.DefinedCategory.AddRange(jObject["definedCategory"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definedCategoryProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.DefinedCategory.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["fileType"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("fileType"u8, out var fileTypeProperty) && fileTypeProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.FileType.AddRange(jObject["fileType"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in fileTypeProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.FileType.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["glossary"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("glossary"u8, out var glossaryProperty) && glossaryProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.Glossary.AddRange(jObject["glossary"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in glossaryProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Glossary.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                modelReferenceDataLibrary.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the modelReferenceDataLibrary {id} is null", modelReferenceDataLibrary.Iid);
+                }
+                else
+                {
+                    modelReferenceDataLibrary.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                modelReferenceDataLibrary.Name = jObject["name"].ToObject<string>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the modelReferenceDataLibrary {id} is null", modelReferenceDataLibrary.Iid);
+                }
+                else
+                {
+                    modelReferenceDataLibrary.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["parameterType"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("parameterType"u8, out var parameterTypeProperty) && parameterTypeProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.ParameterType.AddRange(jObject["parameterType"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in parameterTypeProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.ParameterType.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["referenceSource"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("referenceSource"u8, out var referenceSourceProperty) && referenceSourceProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.ReferenceSource.AddRange(jObject["referenceSource"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in referenceSourceProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.ReferenceSource.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["requiredRdl"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("requiredRdl"u8, out var requiredRdlProperty))
             {
-                modelReferenceDataLibrary.RequiredRdl = jObject["requiredRdl"].ToObject<Guid?>();
+                if(requiredRdlProperty.ValueKind == JsonValueKind.Null)
+                {
+                    modelReferenceDataLibrary.RequiredRdl = null;
+                }
+                else
+                {
+                    modelReferenceDataLibrary.RequiredRdl = requiredRdlProperty.GetGuid();
+                }
             }
 
-            if (!jObject["rule"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("rule"u8, out var ruleProperty) && ruleProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.Rule.AddRange(jObject["rule"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in ruleProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Rule.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["scale"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("scale"u8, out var scaleProperty) && scaleProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.Scale.AddRange(jObject["scale"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in scaleProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Scale.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                modelReferenceDataLibrary.ShortName = jObject["shortName"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the modelReferenceDataLibrary {id} is null", modelReferenceDataLibrary.Iid);
+                }
+                else
+                {
+                    modelReferenceDataLibrary.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                modelReferenceDataLibrary.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the modelReferenceDataLibrary {id} is null", modelReferenceDataLibrary.Iid);
+                }
+                else
+                {
+                    modelReferenceDataLibrary.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (!jObject["unit"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("unit"u8, out var unitProperty) && unitProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.Unit.AddRange(jObject["unit"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in unitProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.Unit.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["unitPrefix"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("unitPrefix"u8, out var unitPrefixProperty) && unitPrefixProperty.ValueKind != JsonValueKind.Null)
             {
-                modelReferenceDataLibrary.UnitPrefix.AddRange(jObject["unitPrefix"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in unitPrefixProperty.EnumerateArray())
+                {
+                    modelReferenceDataLibrary.UnitPrefix.Add(element.GetGuid());
+                }
             }
 
             return modelReferenceDataLibrary;

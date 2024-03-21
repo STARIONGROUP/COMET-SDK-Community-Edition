@@ -1,26 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="DomainOfExpertiseGroupResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
-//
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -28,91 +28,147 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="DomainOfExpertiseGroupResolver"/> is to deserialize a JSON object to a <see cref="DomainOfExpertiseGroup"/>
+    /// The purpose of the <see cref="DomainOfExpertiseGroupResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.DomainOfExpertiseGroup"/>
     /// </summary>
     public static class DomainOfExpertiseGroupResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="DomainOfExpertiseGroup"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="DomainOfExpertiseGroup"/> to instantiate</returns>
-        public static CDP4Common.DTO.DomainOfExpertiseGroup FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.DomainOfExpertiseGroup"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.DomainOfExpertiseGroup"/> to instantiate</returns>
+        public static CDP4Common.DTO.DomainOfExpertiseGroup FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var domainOfExpertiseGroup = new CDP4Common.DTO.DomainOfExpertiseGroup(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                domainOfExpertiseGroup.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the DomainOfExpertiseGroupResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["alias"].IsNullOrEmpty())
+            var domainOfExpertiseGroup = new CDP4Common.DTO.DomainOfExpertiseGroup(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                domainOfExpertiseGroup.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    domainOfExpertiseGroup.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                domainOfExpertiseGroup.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    domainOfExpertiseGroup.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["domain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("domain"u8, out var domainProperty) && domainProperty.ValueKind != JsonValueKind.Null)
             {
-                domainOfExpertiseGroup.Domain.AddRange(jObject["domain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in domainProperty.EnumerateArray())
+                {
+                    domainOfExpertiseGroup.Domain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                domainOfExpertiseGroup.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    domainOfExpertiseGroup.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                domainOfExpertiseGroup.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    domainOfExpertiseGroup.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                domainOfExpertiseGroup.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    domainOfExpertiseGroup.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["isDeprecated"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                domainOfExpertiseGroup.IsDeprecated = jObject["isDeprecated"].ToObject<bool>();
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the domainOfExpertiseGroup {id} is null", domainOfExpertiseGroup.Iid);
+                }
+                else
+                {
+                    domainOfExpertiseGroup.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                domainOfExpertiseGroup.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the domainOfExpertiseGroup {id} is null", domainOfExpertiseGroup.Iid);
+                }
+                else
+                {
+                    domainOfExpertiseGroup.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                domainOfExpertiseGroup.Name = jObject["name"].ToObject<string>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the domainOfExpertiseGroup {id} is null", domainOfExpertiseGroup.Iid);
+                }
+                else
+                {
+                    domainOfExpertiseGroup.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                domainOfExpertiseGroup.ShortName = jObject["shortName"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the domainOfExpertiseGroup {id} is null", domainOfExpertiseGroup.Iid);
+                }
+                else
+                {
+                    domainOfExpertiseGroup.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                domainOfExpertiseGroup.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the domainOfExpertiseGroup {id} is null", domainOfExpertiseGroup.Iid);
+                }
+                else
+                {
+                    domainOfExpertiseGroup.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return domainOfExpertiseGroup;

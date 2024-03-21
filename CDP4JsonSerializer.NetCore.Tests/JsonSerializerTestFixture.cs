@@ -1,26 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonSerializerTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
 //    This file is part of CDP4-COMET SDK Community Edition
-//
+// 
 //    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
+// 
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer.Tests
 {
@@ -40,8 +40,6 @@ namespace CDP4JsonSerializer.Tests
     using CDP4Common.Types;
 
     using CDP4JsonSerializer.Tests.Helper;
-
-    using Newtonsoft.Json;
 
     using NUnit.Framework;
 
@@ -117,7 +115,7 @@ namespace CDP4JsonSerializer.Tests
             using var reader = new StreamReader(memoryStream);
 
             var txt = reader.ReadToEnd();
-                    
+
             Assert.That(txt, Does.Not.Contain("2222-02-02T22:22:22.222222"));
             Assert.That(txt, Does.Contain("2222-02-02T22:22:22.222Z"));
         }
@@ -407,7 +405,7 @@ namespace CDP4JsonSerializer.Tests
                 result.Update.Single(x => x["Iid"].ToString() == subscriptionValueset.Iid.ToString());
 
             var valueArray = (ValueArray<string>)subscriptionValueSetClasslessDto["Manual"];
-                
+
             Assert.That(subscriptionValueSetClasslessDto["Iid"] is Guid, Is.True);
             Assert.That(subscriptionValueSetClasslessDto["ClassKind"] is ClassKind, Is.True);
 
@@ -457,7 +455,7 @@ namespace CDP4JsonSerializer.Tests
                 using var reader = new StreamReader(stream);
 
                 var serializerResult = reader.ReadToEnd().Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-                    
+
                 Assert.That(response.Length, Is.EqualTo(serializerResult.Length));
             }
         }
@@ -498,7 +496,7 @@ namespace CDP4JsonSerializer.Tests
                 using var reader = new StreamReader(stream);
 
                 var serializerResult = reader.ReadToEnd().Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-                    
+
                 Assert.That(serializedParameterValueSet.Length, Is.EqualTo(serializerResult.Length));
             }
         }
@@ -611,19 +609,16 @@ namespace CDP4JsonSerializer.Tests
             /// <summary>
             /// Gets or sets the collection of DTOs to delete.
             /// </summary>
-            [JsonProperty("_delete")]
             public List<ClasslessDTO> Delete { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to create.
             /// </summary>
-            [JsonProperty("_create")]
             public List<Dto.Thing> Create { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to update.
             /// </summary>
-            [JsonProperty("_update")]
             public List<ClasslessDTO> Update { get; set; }
 
             /// <summary>

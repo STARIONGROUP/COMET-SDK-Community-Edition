@@ -1,26 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file "SampledFunctionParameterTypeSerializer.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
-//
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+// -------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="SampledFunctionParameterTypeSerializer.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -29,14 +29,20 @@
 namespace CDP4JsonSerializer
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json;
 
-    using CDP4Common.DTO;
+    using CDP4Common.CommonData;
+    using CDP4Common.EngineeringModelData;
+    using CDP4Common.ReportingData;
+    using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
+    using NLog;
+
+    using Thing = CDP4Common.DTO.Thing;
+    using SampledFunctionParameterType = CDP4Common.DTO.SampledFunctionParameterType;
 
     /// <summary>
     /// The purpose of the <see cref="SampledFunctionParameterTypeSerializer"/> class is to provide a <see cref="SampledFunctionParameterType"/> specific serializer
@@ -44,89 +50,730 @@ namespace CDP4JsonSerializer
     public class SampledFunctionParameterTypeSerializer : BaseThingSerializer, IThingSerializer
     {
         /// <summary>
-        /// The map containing the serialization methods
+        /// Serialize a value for a <see cref="SampledFunctionParameterType"/> property into a <see cref="Utf8JsonWriter" />
         /// </summary>
-        private readonly Dictionary<string, Func<object, JToken>> propertySerializerMap = new Dictionary<string, Func<object, JToken>>
+        /// <param name="propertyName">The name of the property to serialize</param>
+        /// <param name="value">The object value to serialize</param>
+        /// <param name="writer">The <see cref="Utf8JsonWriter" /></param>
+        /// <param name="requestedDataModelVersion">The <see cref="Version" /> that has been requested for the serialization</param>
+        public void SerializeProperty(string propertyName, object value, Utf8JsonWriter writer, Version requestedDataModelVersion)
         {
-            { "actor", actor => new JValue(actor) },
-            { "alias", alias => new JArray(alias) },
-            { "category", category => new JArray(category) },
-            { "classKind", classKind => new JValue(classKind.ToString()) },
-            { "definition", definition => new JArray(definition) },
-            { "degreeOfInterpolation", degreeOfInterpolation => new JValue(degreeOfInterpolation) },
-            { "dependentParameterType", dependentParameterType => new JArray(((IEnumerable)dependentParameterType).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            { "excludedDomain", excludedDomain => new JArray(excludedDomain) },
-            { "excludedPerson", excludedPerson => new JArray(excludedPerson) },
-            { "hyperLink", hyperLink => new JArray(hyperLink) },
-            { "iid", iid => new JValue(iid) },
-            { "independentParameterType", independentParameterType => new JArray(((IEnumerable)independentParameterType).Cast<OrderedItem>().Select(x => x.ToJsonObject())) },
-            { "interpolationPeriod", interpolationPeriod => new JValue(((ValueArray<string>)interpolationPeriod).ToJsonString()) },
-            { "isDeprecated", isDeprecated => new JValue(isDeprecated) },
-            { "modifiedOn", modifiedOn => new JValue(((DateTime)modifiedOn).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")) },
-            { "name", name => new JValue(name) },
-            { "revisionNumber", revisionNumber => new JValue(revisionNumber) },
-            { "shortName", shortName => new JValue(shortName) },
-            { "symbol", symbol => new JValue(symbol) },
-            { "thingPreference", thingPreference => new JValue(thingPreference) },
-        };
+            var requestedVersion = requestedDataModelVersion.ToString(3);
 
-        /// <summary>
-        /// Serialize the <see cref="SampledFunctionParameterType"/>
-        /// </summary>
-        /// <param name="sampledFunctionParameterType">The <see cref="SampledFunctionParameterType"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        private JObject Serialize(SampledFunctionParameterType sampledFunctionParameterType)
-        {
-            var jsonObject = new JObject();
-            jsonObject.Add("alias", this.PropertySerializerMap["alias"](sampledFunctionParameterType.Alias.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("category", this.PropertySerializerMap["category"](sampledFunctionParameterType.Category.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("classKind", this.PropertySerializerMap["classKind"](Enum.GetName(typeof(CDP4Common.CommonData.ClassKind), sampledFunctionParameterType.ClassKind)));
-            jsonObject.Add("definition", this.PropertySerializerMap["definition"](sampledFunctionParameterType.Definition.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("degreeOfInterpolation", this.PropertySerializerMap["degreeOfInterpolation"](sampledFunctionParameterType.DegreeOfInterpolation));
-            jsonObject.Add("dependentParameterType", this.PropertySerializerMap["dependentParameterType"](sampledFunctionParameterType.DependentParameterType.OrderBy(x => x, this.orderedItemComparer)));
-            jsonObject.Add("excludedDomain", this.PropertySerializerMap["excludedDomain"](sampledFunctionParameterType.ExcludedDomain.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("excludedPerson", this.PropertySerializerMap["excludedPerson"](sampledFunctionParameterType.ExcludedPerson.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("hyperLink", this.PropertySerializerMap["hyperLink"](sampledFunctionParameterType.HyperLink.OrderBy(x => x, this.guidComparer)));
-            jsonObject.Add("iid", this.PropertySerializerMap["iid"](sampledFunctionParameterType.Iid));
-            jsonObject.Add("independentParameterType", this.PropertySerializerMap["independentParameterType"](sampledFunctionParameterType.IndependentParameterType.OrderBy(x => x, this.orderedItemComparer)));
-            jsonObject.Add("interpolationPeriod", this.PropertySerializerMap["interpolationPeriod"](sampledFunctionParameterType.InterpolationPeriod));
-            jsonObject.Add("isDeprecated", this.PropertySerializerMap["isDeprecated"](sampledFunctionParameterType.IsDeprecated));
-            jsonObject.Add("modifiedOn", this.PropertySerializerMap["modifiedOn"](sampledFunctionParameterType.ModifiedOn));
-            jsonObject.Add("name", this.PropertySerializerMap["name"](sampledFunctionParameterType.Name));
-            jsonObject.Add("revisionNumber", this.PropertySerializerMap["revisionNumber"](sampledFunctionParameterType.RevisionNumber));
-            jsonObject.Add("shortName", this.PropertySerializerMap["shortName"](sampledFunctionParameterType.ShortName));
-            jsonObject.Add("symbol", this.PropertySerializerMap["symbol"](sampledFunctionParameterType.Symbol));
-            jsonObject.Add("thingPreference", this.PropertySerializerMap["thingPreference"](sampledFunctionParameterType.ThingPreference));
-            return jsonObject;
+            switch(propertyName.ToLower())
+            {
+                case "actor":
+                    var allowedVersionsForActor = new List<string>
+                    {
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForActor.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("actor"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((Guid)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "alias":
+                    var allowedVersionsForAlias = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForAlias.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("alias"u8);
+
+                    if(value is IEnumerable<object> objectListAlias)
+                    {
+                        foreach(var aliasItem in objectListAlias.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(aliasItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "category":
+                    var allowedVersionsForCategory = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForCategory.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("category"u8);
+
+                    if(value is IEnumerable<object> objectListCategory)
+                    {
+                        foreach(var categoryItem in objectListCategory.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(categoryItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "classkind":
+                    var allowedVersionsForClassKind = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForClassKind.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("classKind"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue(((ClassKind)value).ToString());
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "definition":
+                    var allowedVersionsForDefinition = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForDefinition.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("definition"u8);
+
+                    if(value is IEnumerable<object> objectListDefinition)
+                    {
+                        foreach(var definitionItem in objectListDefinition.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(definitionItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "degreeofinterpolation":
+                    var allowedVersionsForDegreeOfInterpolation = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForDegreeOfInterpolation.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("degreeOfInterpolation"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteNumberValue((int)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "dependentparametertype":
+                    var allowedVersionsForDependentParameterType = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForDependentParameterType.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("dependentParameterType"u8);
+
+                    if(value is IEnumerable<object> objectListDependentParameterType)
+                    {
+                        foreach(var dependentParameterTypeItem in objectListDependentParameterType.OfType<OrderedItem>().OrderBy(x => x, this.OrderedItemComparer))
+                        {
+                            writer.WriteOrderedItem(dependentParameterTypeItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "excludeddomain":
+                    var allowedVersionsForExcludedDomain = new List<string>
+                    {
+                        "1.1.0",
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForExcludedDomain.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("excludedDomain"u8);
+
+                    if(value is IEnumerable<object> objectListExcludedDomain)
+                    {
+                        foreach(var excludedDomainItem in objectListExcludedDomain.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(excludedDomainItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "excludedperson":
+                    var allowedVersionsForExcludedPerson = new List<string>
+                    {
+                        "1.1.0",
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForExcludedPerson.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("excludedPerson"u8);
+
+                    if(value is IEnumerable<object> objectListExcludedPerson)
+                    {
+                        foreach(var excludedPersonItem in objectListExcludedPerson.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(excludedPersonItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "hyperlink":
+                    var allowedVersionsForHyperLink = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForHyperLink.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("hyperLink"u8);
+
+                    if(value is IEnumerable<object> objectListHyperLink)
+                    {
+                        foreach(var hyperLinkItem in objectListHyperLink.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(hyperLinkItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "iid":
+                    var allowedVersionsForIid = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForIid.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("iid"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((Guid)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "independentparametertype":
+                    var allowedVersionsForIndependentParameterType = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForIndependentParameterType.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("independentParameterType"u8);
+
+                    if(value is IEnumerable<object> objectListIndependentParameterType)
+                    {
+                        foreach(var independentParameterTypeItem in objectListIndependentParameterType.OfType<OrderedItem>().OrderBy(x => x, this.OrderedItemComparer))
+                        {
+                            writer.WriteOrderedItem(independentParameterTypeItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "interpolationperiod":
+                    var allowedVersionsForInterpolationPeriod = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForInterpolationPeriod.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteString("interpolationPeriod"u8, ((ValueArray<string>)value).ToJsonString());
+                    break;
+                case "isdeprecated":
+                    var allowedVersionsForIsDeprecated = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForIsDeprecated.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("isDeprecated"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteBooleanValue((bool)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "modifiedon":
+                    var allowedVersionsForModifiedOn = new List<string>
+                    {
+                        "1.1.0",
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForModifiedOn.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("modifiedOn"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue(((DateTime)value).ToString(SerializerHelper.DateTimeFormat));
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "name":
+                    var allowedVersionsForName = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForName.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("name"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((string)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "revisionnumber":
+                    var allowedVersionsForRevisionNumber = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForRevisionNumber.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("revisionNumber"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteNumberValue((int)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "shortname":
+                    var allowedVersionsForShortName = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForShortName.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("shortName"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((string)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "symbol":
+                    var allowedVersionsForSymbol = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForSymbol.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("symbol"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((string)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "thingpreference":
+                    var allowedVersionsForThingPreference = new List<string>
+                    {
+                        "1.2.0",
+                        "1.3.0",
+                    };
+
+                    if(!allowedVersionsForThingPreference.Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("thingPreference"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((string)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentException($"The requested property {propertyName} does not exist on the SampledFunctionParameterType");
+            }
         }
 
         /// <summary>
-        /// Gets the map containing the serialization method for each property of the <see cref="SampledFunctionParameterType"/> class.
+        /// Serializes a <see cref="Thing" /> into an <see cref="Utf8JsonWriter" />
         /// </summary>
-        public IReadOnlyDictionary<string, Func<object, JToken>> PropertySerializerMap 
+        /// <param name="thing">The <see cref="Thing" /> that have to be serialized</param>
+        /// <param name="writer">The <see cref="Utf8JsonWriter" /></param>
+        /// <param name="requestedDataModelVersion">The <see cref="Version" /> that has been requested for the serialization</param>
+        /// <exception cref="ArgumentException">If the provided <paramref name="thing" /> is not an <see cref="SampledFunctionParameterType" /></exception>
+        /// <exception cref="NotSupportedException">If the provided <paramref name="requestedDataModelVersion" /> is not supported</exception>
+        public void Serialize(Thing thing, Utf8JsonWriter writer, Version requestedDataModelVersion)
         {
-            get { return this.propertySerializerMap; }
-        }
-
-        /// <summary>
-        /// Serialize the <see cref="Thing"/> to JObject
-        /// </summary>
-        /// <param name="thing">The <see cref="Thing"/> to serialize</param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public JObject Serialize(Thing thing)
-        {
-            if (thing == null)
+            if (thing is not SampledFunctionParameterType sampledFunctionParameterType)
             {
-                throw new ArgumentNullException($"The {nameof(thing)} may not be null.", nameof(thing));
+                throw new ArgumentException("The thing shall be a SampledFunctionParameterType", nameof(thing));
             }
 
-            var sampledFunctionParameterType = thing as SampledFunctionParameterType;
-            if (sampledFunctionParameterType == null)
+            if (requestedDataModelVersion < Version.Parse("1.2.0"))
             {
-                throw new InvalidOperationException("The thing is not a SampledFunctionParameterType.");
+                Logger.Log(LogLevel.Info, "Skipping serialization of SampledFunctionParameterType since Version is below 1.2.0");
+                return;
             }
 
-            return this.Serialize(sampledFunctionParameterType);
+            writer.WriteStartObject();
+
+            switch(requestedDataModelVersion.ToString(3))
+            {
+                case "1.2.0":
+                    Logger.Log(LogLevel.Debug, "Serializing SampledFunctionParameterType for Version 1.2.0");
+                    writer.WriteStartArray("alias"u8);
+
+                    foreach(var aliasItem in sampledFunctionParameterType.Alias.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(aliasItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteStartArray("category"u8);
+
+                    foreach(var categoryItem in sampledFunctionParameterType.Category.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(categoryItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WritePropertyName("classKind"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.ClassKind.ToString());
+                    writer.WriteStartArray("definition"u8);
+
+                    foreach(var definitionItem in sampledFunctionParameterType.Definition.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(definitionItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WritePropertyName("degreeOfInterpolation"u8);
+
+                    if(sampledFunctionParameterType.DegreeOfInterpolation.HasValue)
+                    {
+                        writer.WriteNumberValue(sampledFunctionParameterType.DegreeOfInterpolation.Value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    writer.WriteStartArray("dependentParameterType"u8);
+
+                    foreach(var dependentParameterTypeItem in sampledFunctionParameterType.DependentParameterType.OrderBy(x => x, this.OrderedItemComparer))
+                    {
+                        writer.WriteOrderedItem(dependentParameterTypeItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteStartArray("excludedDomain"u8);
+
+                    foreach(var excludedDomainItem in sampledFunctionParameterType.ExcludedDomain.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(excludedDomainItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteStartArray("excludedPerson"u8);
+
+                    foreach(var excludedPersonItem in sampledFunctionParameterType.ExcludedPerson.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(excludedPersonItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteStartArray("hyperLink"u8);
+
+                    foreach(var hyperLinkItem in sampledFunctionParameterType.HyperLink.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(hyperLinkItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WritePropertyName("iid"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.Iid);
+                    writer.WriteStartArray("independentParameterType"u8);
+
+                    foreach(var independentParameterTypeItem in sampledFunctionParameterType.IndependentParameterType.OrderBy(x => x, this.OrderedItemComparer))
+                    {
+                        writer.WriteOrderedItem(independentParameterTypeItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteString("interpolationPeriod"u8, sampledFunctionParameterType.InterpolationPeriod.ToJsonString());
+                    writer.WritePropertyName("isDeprecated"u8);
+                    writer.WriteBooleanValue(sampledFunctionParameterType.IsDeprecated);
+                    writer.WritePropertyName("modifiedOn"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
+                    writer.WritePropertyName("name"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.Name);
+                    writer.WritePropertyName("revisionNumber"u8);
+                    writer.WriteNumberValue(sampledFunctionParameterType.RevisionNumber);
+                    writer.WritePropertyName("shortName"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.ShortName);
+                    writer.WritePropertyName("symbol"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.Symbol);
+                    writer.WritePropertyName("thingPreference"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.ThingPreference);
+                    break;
+                case "1.3.0":
+                    Logger.Log(LogLevel.Debug, "Serializing SampledFunctionParameterType for Version 1.3.0");
+                    writer.WritePropertyName("actor"u8);
+
+                    if(sampledFunctionParameterType.Actor.HasValue)
+                    {
+                        writer.WriteStringValue(sampledFunctionParameterType.Actor.Value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    writer.WriteStartArray("alias"u8);
+
+                    foreach(var aliasItem in sampledFunctionParameterType.Alias.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(aliasItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteStartArray("category"u8);
+
+                    foreach(var categoryItem in sampledFunctionParameterType.Category.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(categoryItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WritePropertyName("classKind"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.ClassKind.ToString());
+                    writer.WriteStartArray("definition"u8);
+
+                    foreach(var definitionItem in sampledFunctionParameterType.Definition.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(definitionItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WritePropertyName("degreeOfInterpolation"u8);
+
+                    if(sampledFunctionParameterType.DegreeOfInterpolation.HasValue)
+                    {
+                        writer.WriteNumberValue(sampledFunctionParameterType.DegreeOfInterpolation.Value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    writer.WriteStartArray("dependentParameterType"u8);
+
+                    foreach(var dependentParameterTypeItem in sampledFunctionParameterType.DependentParameterType.OrderBy(x => x, this.OrderedItemComparer))
+                    {
+                        writer.WriteOrderedItem(dependentParameterTypeItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteStartArray("excludedDomain"u8);
+
+                    foreach(var excludedDomainItem in sampledFunctionParameterType.ExcludedDomain.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(excludedDomainItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteStartArray("excludedPerson"u8);
+
+                    foreach(var excludedPersonItem in sampledFunctionParameterType.ExcludedPerson.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(excludedPersonItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteStartArray("hyperLink"u8);
+
+                    foreach(var hyperLinkItem in sampledFunctionParameterType.HyperLink.OrderBy(x => x, this.GuidComparer))
+                    {
+                        writer.WriteStringValue(hyperLinkItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WritePropertyName("iid"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.Iid);
+                    writer.WriteStartArray("independentParameterType"u8);
+
+                    foreach(var independentParameterTypeItem in sampledFunctionParameterType.IndependentParameterType.OrderBy(x => x, this.OrderedItemComparer))
+                    {
+                        writer.WriteOrderedItem(independentParameterTypeItem);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteString("interpolationPeriod"u8, sampledFunctionParameterType.InterpolationPeriod.ToJsonString());
+                    writer.WritePropertyName("isDeprecated"u8);
+                    writer.WriteBooleanValue(sampledFunctionParameterType.IsDeprecated);
+                    writer.WritePropertyName("modifiedOn"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
+                    writer.WritePropertyName("name"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.Name);
+                    writer.WritePropertyName("revisionNumber"u8);
+                    writer.WriteNumberValue(sampledFunctionParameterType.RevisionNumber);
+                    writer.WritePropertyName("shortName"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.ShortName);
+                    writer.WritePropertyName("symbol"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.Symbol);
+                    writer.WritePropertyName("thingPreference"u8);
+                    writer.WriteStringValue(sampledFunctionParameterType.ThingPreference);
+                    break;
+                default:
+                    throw new NotSupportedException($"The provided version {requestedDataModelVersion.ToString(3)} is not supported");
+            }
+
+            writer.WriteEndObject();
         }
     }
 }

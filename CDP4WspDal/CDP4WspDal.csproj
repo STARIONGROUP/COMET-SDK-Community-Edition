@@ -41,7 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+    <ProjectReference Include="..\CDP4DalJsonSerializer\CDP4DalJsonSerializer.csproj" />
     <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
   </ItemGroup>
 

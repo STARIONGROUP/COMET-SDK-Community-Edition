@@ -1,8 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDalTestFixture.cs" company="RHEA System S.A.">
 //    Copyright (c) 2015-2024 RHEA System S.A.
-//
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -20,7 +20,7 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonFileDal.NetCore.Tests
 {
@@ -32,6 +32,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
     using System.Threading;
     using System.Threading.Tasks;
 
+    using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.DTO;
     using CDP4Common.Types;
@@ -41,7 +42,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
-    using CDP4JsonFileDal;
+    using CDP4DalCommon.Protocol.Operations;
 
     using Moq;
 
@@ -69,9 +70,6 @@ namespace CDP4JsonFileDal.NetCore.Tests
     using SampledFunctionParameterType = CDP4Common.SiteDirectoryData.SampledFunctionParameterType;
     using ElementDefinition = CDP4Common.EngineeringModelData.ElementDefinition;
     using Parameter = CDP4Common.EngineeringModelData.Parameter;
-
-    using CDP4Common;
-
     using OrganizationalParticipant = CDP4Common.SiteDirectoryData.OrganizationalParticipant;
 
     [TestFixture]
@@ -530,7 +528,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             var domain = siteDirectory.Domain.First();
 
             var model = new CDP4Common.EngineeringModelData.EngineeringModel(modelSetup.EngineeringModelIid, newSession.Assembler.Cache, newDal.Credentials.Uri)
-            { EngineeringModelSetup = modelSetup };
+                { EngineeringModelSetup = modelSetup };
 
             var iteration = new CDP4Common.EngineeringModelData.Iteration(this.iterationIid, newSession.Assembler.Cache, newDal.Credentials.Uri);
 
@@ -590,7 +588,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             var domain = siteDirectory.Domain.First();
 
             var model = new CDP4Common.EngineeringModelData.EngineeringModel(modelSetup.EngineeringModelIid, newSession.Assembler.Cache, newDal.Credentials.Uri)
-            { EngineeringModelSetup = modelSetup };
+                { EngineeringModelSetup = modelSetup };
 
             var iteration = new CDP4Common.EngineeringModelData.Iteration(this.iterationIid, newSession.Assembler.Cache, newDal.Credentials.Uri);
 
@@ -690,6 +688,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
 
             iterationSetup.IterationIid = this.iterationIid;
             iterationSetupPoco.IterationIid = this.iterationIid;
+
             // EngineeringModel
             this.model = new EngineeringModel(Guid.NewGuid(), this.cache, this.credentials.Uri);
             this.modelSetupId = Guid.NewGuid();

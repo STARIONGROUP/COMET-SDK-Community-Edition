@@ -1,61 +1,70 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="PostOperationTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4WspDal.Tests
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
+
     using CDP4Common;
+    using CDP4Common.CommonData;
     using CDP4Common.Dto;
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
-    using CDP4JsonSerializer;
-    using CDP4Dal.Operations;
-    using CDP4WspDal.Tests.Helper;
-    using Newtonsoft.Json;
-    using NUnit.Framework;
     using CDP4Common.Types;
+
+    using CDP4Dal.Operations;
+
+    using CDP4DalCommon.Protocol.Operations;
+
+    using CDP4DalJsonSerializer;
+
+    using CDP4WspDal.Tests.Helper;
+
+    using NUnit.Framework;
+
     using File = System.IO.File;
-    using CDP4Common.CommonData;
+    using Thing = CDP4Common.DTO.Thing;
 
     [TestFixture]
     public class PostOperationTestFixture
     {
-        private Cdp4JsonSerializer serializer;
+        private Cdp4DalJsonSerializer serializer;
 
         [SetUp]
         public void Setup()
         {
             var metamodel = new MetaDataProvider();
-            this.serializer = new Cdp4JsonSerializer(metamodel, new Version(1, 1, 0));
+            this.serializer = new Cdp4DalJsonSerializer(metamodel, new Version(1, 1, 0), true);
         }
 
         [Test]
         public void Verify_that_deserialization_of_Post_Operation_does_not_throw_an_exception()
         {
             var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/PostOperation.json"));
+
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
                 Assert.DoesNotThrow(() => this.serializer.Deserialize<TestPostOperation>(stream));
@@ -93,7 +102,7 @@ namespace CDP4WspDal.Tests
             var fileRevision = new FileRevision(fileRevisionIid, 0);
             fileRevision.Name = "testfile";
             fileRevision.ContentHash = "F73747371CFD9473C19A0A7F99BCAB008474C4CA";
-            fileRevision.FileType.Add(new OrderedItem() { K = 1, V = fileTypeIid });
+            fileRevision.FileType.Add(new OrderedItem { K = 1, V = fileTypeIid });
             fileRevision.Creator = participantIid;
             fileRevision.AddContainer(ClassKind.File, fileIid);
             fileRevision.AddContainer(ClassKind.DomainFileStore, domainFileStoreIid);
@@ -101,7 +110,7 @@ namespace CDP4WspDal.Tests
             fileRevision.AddContainer(ClassKind.EngineeringModel, engineeringModelIid);
 
             var context = $"/EngineeringModel/{engineeringModelIid}/iteration/{iterationIid}";
-            var operationContainer = new OperationContainer(context, null);
+            var operationContainer = new OperationContainer(context);
 
             var updateCommonFileStoreOperation = new Operation(originalDomainFileStore, modifiedDomainFileStore, OperationKind.Update);
             operationContainer.AddOperation(updateCommonFileStoreOperation);
@@ -128,36 +137,33 @@ namespace CDP4WspDal.Tests
                 Assert.AreEqual(expected, streamReader.ReadToEnd());
             }
         }
+
         private class TestPostOperation : PostOperation
         {
-            public override void ConstructFromOperation(Operation operation)
-            {
-                throw new NotImplementedException();
-            }
-
             /// <summary>
             /// Gets or sets the collection of DTOs to delete.
             /// </summary>
-            [JsonProperty("_delete")]
             public override List<ClasslessDTO> Delete { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to create.
             /// </summary>
-            [JsonProperty("_create")]
-            public override List<CDP4Common.DTO.Thing> Create { get; set; }
+            public override List<Thing> Create { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to update.
             /// </summary>
-            [JsonProperty("_update")]
             public override List<ClasslessDTO> Update { get; set; }
 
             /// <summary>
             /// Gets or sets the collection of DTOs to update.
             /// </summary>
-            [JsonProperty("_copy")]
             public override List<CopyInfo> Copy { get; set; }
+
+            public override void ConstructFromOperation(Operation operation)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

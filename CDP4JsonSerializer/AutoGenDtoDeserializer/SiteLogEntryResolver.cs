@@ -1,26 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="SiteLogEntryResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
-//
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -28,101 +28,171 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="SiteLogEntryResolver"/> is to deserialize a JSON object to a <see cref="SiteLogEntry"/>
+    /// The purpose of the <see cref="SiteLogEntryResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.SiteLogEntry"/>
     /// </summary>
     public static class SiteLogEntryResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="SiteLogEntry"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="SiteLogEntry"/> to instantiate</returns>
-        public static CDP4Common.DTO.SiteLogEntry FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.SiteLogEntry"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.SiteLogEntry"/> to instantiate</returns>
+        public static CDP4Common.DTO.SiteLogEntry FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var siteLogEntry = new CDP4Common.DTO.SiteLogEntry(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                siteLogEntry.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the SiteLogEntryResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["affectedDomainIid"].IsNullOrEmpty())
+            var siteLogEntry = new CDP4Common.DTO.SiteLogEntry(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("affectedDomainIid"u8, out var affectedDomainIidProperty) && affectedDomainIidProperty.ValueKind != JsonValueKind.Null)
             {
-                siteLogEntry.AffectedDomainIid.AddRange(jObject["affectedDomainIid"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in affectedDomainIidProperty.EnumerateArray())
+                {
+                    siteLogEntry.AffectedDomainIid.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["affectedItemIid"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("affectedItemIid"u8, out var affectedItemIidProperty) && affectedItemIidProperty.ValueKind != JsonValueKind.Null)
             {
-                siteLogEntry.AffectedItemIid.AddRange(jObject["affectedItemIid"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in affectedItemIidProperty.EnumerateArray())
+                {
+                    siteLogEntry.AffectedItemIid.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["author"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                siteLogEntry.Author = jObject["author"].ToObject<Guid?>();
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    siteLogEntry.Author = null;
+                }
+                else
+                {
+                    siteLogEntry.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty) && categoryProperty.ValueKind != JsonValueKind.Null)
             {
-                siteLogEntry.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    siteLogEntry.Category.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["content"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                siteLogEntry.Content = jObject["content"].ToObject<string>();
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                }
+                else
+                {
+                    siteLogEntry.Content = contentProperty.GetString();
+                }
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                siteLogEntry.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                }
+                else
+                {
+                    siteLogEntry.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                siteLogEntry.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    siteLogEntry.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                siteLogEntry.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    siteLogEntry.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["languageCode"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                siteLogEntry.LanguageCode = jObject["languageCode"].ToObject<string>();
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                }
+                else
+                {
+                    siteLogEntry.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (!jObject["level"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("level"u8, out var levelProperty))
             {
-                siteLogEntry.Level = jObject["level"].ToObject<LogLevelKind>();
+                if(levelProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale level property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                }
+                else
+                {
+                    siteLogEntry.Level = LogLevelKindDeserializer.Deserialize(levelProperty);
+                }
             }
 
-            if (!jObject["logEntryChangelogItem"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("logEntryChangelogItem"u8, out var logEntryChangelogItemProperty) && logEntryChangelogItemProperty.ValueKind != JsonValueKind.Null)
             {
-                siteLogEntry.LogEntryChangelogItem.AddRange(jObject["logEntryChangelogItem"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in logEntryChangelogItemProperty.EnumerateArray())
+                {
+                    siteLogEntry.LogEntryChangelogItem.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                siteLogEntry.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                }
+                else
+                {
+                    siteLogEntry.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                siteLogEntry.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                }
+                else
+                {
+                    siteLogEntry.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return siteLogEntry;

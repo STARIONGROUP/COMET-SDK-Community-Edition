@@ -246,7 +246,7 @@
 &lt;copyright file="${File.FileName}" company="RHEA System S.A."&gt;&#xD;
    Copyright (c) 2015-${CurrentDate.Year} RHEA System S.A.&#xD;
 &#xD;
-   Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar&#xD;
+   Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar&#xD;
 &#xD;
    This file is part of CDP4-COMET SDK Community Edition&#xD;
 &#xD;

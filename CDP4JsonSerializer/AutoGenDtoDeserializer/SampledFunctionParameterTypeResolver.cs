@@ -1,26 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="SampledFunctionParameterTypeResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
-//
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -28,116 +28,185 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="SampledFunctionParameterTypeResolver"/> is to deserialize a JSON object to a <see cref="SampledFunctionParameterType"/>
+    /// The purpose of the <see cref="SampledFunctionParameterTypeResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.SampledFunctionParameterType"/>
     /// </summary>
     public static class SampledFunctionParameterTypeResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="SampledFunctionParameterType"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="SampledFunctionParameterType"/> to instantiate</returns>
-        public static CDP4Common.DTO.SampledFunctionParameterType FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.SampledFunctionParameterType"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.SampledFunctionParameterType"/> to instantiate</returns>
+        public static CDP4Common.DTO.SampledFunctionParameterType FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var sampledFunctionParameterType = new CDP4Common.DTO.SampledFunctionParameterType(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                sampledFunctionParameterType.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the SampledFunctionParameterTypeResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["alias"].IsNullOrEmpty())
+            var sampledFunctionParameterType = new CDP4Common.DTO.SampledFunctionParameterType(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                sampledFunctionParameterType.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    sampledFunctionParameterType.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty) && categoryProperty.ValueKind != JsonValueKind.Null)
             {
-                sampledFunctionParameterType.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    sampledFunctionParameterType.Category.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                sampledFunctionParameterType.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    sampledFunctionParameterType.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["degreeOfInterpolation"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("degreeOfInterpolation"u8, out var degreeOfInterpolationProperty))
             {
-                sampledFunctionParameterType.DegreeOfInterpolation = jObject["degreeOfInterpolation"].ToObject<int?>();
+                if(degreeOfInterpolationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    sampledFunctionParameterType.DegreeOfInterpolation = null;
+                }
+                else
+                {
+                    sampledFunctionParameterType.DegreeOfInterpolation = degreeOfInterpolationProperty.GetInt32();
+                }
             }
 
-            if (!jObject["dependentParameterType"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("dependentParameterType"u8, out var dependentParameterTypeProperty))
             {
-                sampledFunctionParameterType.DependentParameterType.AddRange(jObject["dependentParameterType"].ToOrderedItemCollection());
+                sampledFunctionParameterType.DependentParameterType.AddRange(dependentParameterTypeProperty.ToOrderedItemCollection());
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                sampledFunctionParameterType.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    sampledFunctionParameterType.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                sampledFunctionParameterType.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    sampledFunctionParameterType.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                sampledFunctionParameterType.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    sampledFunctionParameterType.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["independentParameterType"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("independentParameterType"u8, out var independentParameterTypeProperty))
             {
-                sampledFunctionParameterType.IndependentParameterType.AddRange(jObject["independentParameterType"].ToOrderedItemCollection());
+                sampledFunctionParameterType.IndependentParameterType.AddRange(independentParameterTypeProperty.ToOrderedItemCollection());
+            }
+            if (jsonElement.TryGetProperty("interpolationPeriod"u8, out var interpolationPeriodProperty))
+            {
+                sampledFunctionParameterType.InterpolationPeriod = SerializerHelper.ToValueArray<string>(interpolationPeriodProperty.GetString());
             }
 
-            if (!jObject["interpolationPeriod"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                sampledFunctionParameterType.InterpolationPeriod = SerializerHelper.ToValueArray<string>(jObject["interpolationPeriod"].ToString());
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale isDeprecated property of the sampledFunctionParameterType {id} is null", sampledFunctionParameterType.Iid);
+                }
+                else
+                {
+                    sampledFunctionParameterType.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["isDeprecated"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                sampledFunctionParameterType.IsDeprecated = jObject["isDeprecated"].ToObject<bool>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the sampledFunctionParameterType {id} is null", sampledFunctionParameterType.Iid);
+                }
+                else
+                {
+                    sampledFunctionParameterType.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                sampledFunctionParameterType.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale name property of the sampledFunctionParameterType {id} is null", sampledFunctionParameterType.Iid);
+                }
+                else
+                {
+                    sampledFunctionParameterType.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                sampledFunctionParameterType.Name = jObject["name"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the sampledFunctionParameterType {id} is null", sampledFunctionParameterType.Iid);
+                }
+                else
+                {
+                    sampledFunctionParameterType.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("symbol"u8, out var symbolProperty))
             {
-                sampledFunctionParameterType.ShortName = jObject["shortName"].ToObject<string>();
+                if(symbolProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale symbol property of the sampledFunctionParameterType {id} is null", sampledFunctionParameterType.Iid);
+                }
+                else
+                {
+                    sampledFunctionParameterType.Symbol = symbolProperty.GetString();
+                }
             }
 
-            if (!jObject["symbol"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                sampledFunctionParameterType.Symbol = jObject["symbol"].ToObject<string>();
-            }
-
-            if (!jObject["thingPreference"].IsNullOrEmpty())
-            {
-                sampledFunctionParameterType.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the sampledFunctionParameterType {id} is null", sampledFunctionParameterType.Iid);
+                }
+                else
+                {
+                    sampledFunctionParameterType.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return sampledFunctionParameterType;

@@ -1,26 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ActionItemResolver.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2022 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Nathanael Smiechowski
-//
-//    This file is part of COMET-SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -28,151 +28,287 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
-
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="ActionItemResolver"/> is to deserialize a JSON object to a <see cref="ActionItem"/>
+    /// The purpose of the <see cref="ActionItemResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.ActionItem"/>
     /// </summary>
     public static class ActionItemResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="ActionItem"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="ActionItem"/> to instantiate</returns>
-        public static CDP4Common.DTO.ActionItem FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.ActionItem"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.ActionItem"/> to instantiate</returns>
+        public static CDP4Common.DTO.ActionItem FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var actionItem = new CDP4Common.DTO.ActionItem(iid, revisionNumber);
-
-            if (!jObject["actionee"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                actionItem.Actionee = jObject["actionee"].ToObject<Guid>();
+                throw new DeSerializationException("the mandatory iid property is not available, the ActionItemResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["actor"].IsNullOrEmpty())
+            var actionItem = new CDP4Common.DTO.ActionItem(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("actionee"u8, out var actioneeProperty))
             {
-                actionItem.Actor = jObject["actor"].ToObject<Guid?>();
+                if(actioneeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale actionee property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.Actionee = actioneeProperty.GetGuid();
+                }
             }
 
-            if (!jObject["approvedBy"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("approvedBy"u8, out var approvedByProperty) && approvedByProperty.ValueKind != JsonValueKind.Null)
             {
-                actionItem.ApprovedBy.AddRange(jObject["approvedBy"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in approvedByProperty.EnumerateArray())
+                {
+                    actionItem.ApprovedBy.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["author"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                actionItem.Author = jObject["author"].ToObject<Guid>();
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale author property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty) && categoryProperty.ValueKind != JsonValueKind.Null)
             {
-                actionItem.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    actionItem.Category.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["classification"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("classification"u8, out var classificationProperty))
             {
-                actionItem.Classification = jObject["classification"].ToObject<AnnotationClassificationKind>();
+                if(classificationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale classification property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.Classification = AnnotationClassificationKindDeserializer.Deserialize(classificationProperty);
+                }
             }
 
-            if (!jObject["closeOutDate"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("closeOutDate"u8, out var closeOutDateProperty))
             {
-                actionItem.CloseOutDate = jObject["closeOutDate"].ToObject<DateTime?>();
+                if(closeOutDateProperty.ValueKind == JsonValueKind.Null)
+                {
+                    actionItem.CloseOutDate = null;
+                }
+                else
+                {
+                    actionItem.CloseOutDate = closeOutDateProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["closeOutStatement"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("closeOutStatement"u8, out var closeOutStatementProperty))
             {
-                actionItem.CloseOutStatement = jObject["closeOutStatement"].ToObject<string>();
+                if(closeOutStatementProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale closeOutStatement property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.CloseOutStatement = closeOutStatementProperty.GetString();
+                }
             }
 
-            if (!jObject["content"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                actionItem.Content = jObject["content"].ToObject<string>();
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale content property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.Content = contentProperty.GetString();
+                }
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                actionItem.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale createdOn property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["discussion"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("discussion"u8, out var discussionProperty) && discussionProperty.ValueKind != JsonValueKind.Null)
             {
-                actionItem.Discussion.AddRange(jObject["discussion"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in discussionProperty.EnumerateArray())
+                {
+                    actionItem.Discussion.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["dueDate"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("dueDate"u8, out var dueDateProperty))
             {
-                actionItem.DueDate = jObject["dueDate"].ToObject<DateTime>();
+                if(dueDateProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale dueDate property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.DueDate = dueDateProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                actionItem.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    actionItem.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                actionItem.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    actionItem.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["languageCode"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                actionItem.LanguageCode = jObject["languageCode"].ToObject<string>();
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale languageCode property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                actionItem.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale modifiedOn property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                actionItem.Owner = jObject["owner"].ToObject<Guid>();
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale owner property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (!jObject["primaryAnnotatedThing"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("primaryAnnotatedThing"u8, out var primaryAnnotatedThingProperty))
             {
-                actionItem.PrimaryAnnotatedThing = jObject["primaryAnnotatedThing"].ToObject<Guid?>();
+                if(primaryAnnotatedThingProperty.ValueKind == JsonValueKind.Null)
+                {
+                    actionItem.PrimaryAnnotatedThing = null;
+                }
+                else
+                {
+                    actionItem.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.GetGuid();
+                }
             }
 
-            if (!jObject["relatedThing"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("relatedThing"u8, out var relatedThingProperty) && relatedThingProperty.ValueKind != JsonValueKind.Null)
             {
-                actionItem.RelatedThing.AddRange(jObject["relatedThing"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in relatedThingProperty.EnumerateArray())
+                {
+                    actionItem.RelatedThing.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                actionItem.ShortName = jObject["shortName"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale shortName property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["sourceAnnotation"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("sourceAnnotation"u8, out var sourceAnnotationProperty) && sourceAnnotationProperty.ValueKind != JsonValueKind.Null)
             {
-                actionItem.SourceAnnotation.AddRange(jObject["sourceAnnotation"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in sourceAnnotationProperty.EnumerateArray())
+                {
+                    actionItem.SourceAnnotation.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["status"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("status"u8, out var statusProperty))
             {
-                actionItem.Status = jObject["status"].ToObject<AnnotationStatusKind>();
+                if(statusProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale status property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.Status = AnnotationStatusKindDeserializer.Deserialize(statusProperty);
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                actionItem.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale thingPreference property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (!jObject["title"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("title"u8, out var titleProperty))
             {
-                actionItem.Title = jObject["title"].ToObject<string>();
+                if(titleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Debug("The non-nullabale title property of the actionItem {id} is null", actionItem.Iid);
+                }
+                else
+                {
+                    actionItem.Title = titleProperty.GetString();
+                }
             }
 
             return actionItem;

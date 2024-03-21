@@ -1,38 +1,41 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValueSetOperationCreator.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-#endregion
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4ServicesDal
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
+
+    using CDP4DalCommon.Protocol.Operations;
+
     using Dto = CDP4Common.DTO;
 
     /// <summary>
@@ -44,7 +47,7 @@ namespace CDP4ServicesDal
         /// The <see cref="ISession"/> associated
         /// </summary>
         private readonly ISession session;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ValueSetOperationCreator"/> class
         /// </summary>
@@ -70,6 +73,7 @@ namespace CDP4ServicesDal
             var dtolist = dtos.ToList();
 
             var topContainer = dtolist.SingleOrDefault(x => x is Dto.TopContainer);
+
             if (topContainer == null)
             {
                 throw new InvalidOperationException("No Top container were found in the returned list of dtos.");
@@ -78,9 +82,10 @@ namespace CDP4ServicesDal
             // Gets the parameter base which value set shall be updated
             var copyParameterBases = dtolist.OfType<Dto.ParameterBase>().ToList();
             var copyParameterBasesIds = copyParameterBases.Select(p => p.Iid).ToList();
+
             var valuesets = dtolist.Where(dto => dto.ClassKind == ClassKind.ParameterValueSet ||
-                                                dto.ClassKind == ClassKind.ParameterSubscriptionValueSet ||
-                                                dto.ClassKind == ClassKind.ParameterOverrideValueSet).ToList();
+                                                 dto.ClassKind == ClassKind.ParameterSubscriptionValueSet ||
+                                                 dto.ClassKind == ClassKind.ParameterOverrideValueSet).ToList();
 
             this.ComputeRoutes(valuesets, dtolist);
             var valueSetsClones = valuesets.Select(dto => dto.DeepClone<Dto.Thing>()).ToList();
@@ -98,6 +103,7 @@ namespace CDP4ServicesDal
                 // value sets to update
                 var copyValueSets = valueSetsClones.Where(x => copyDto.ValueSets.Contains(x.Iid)).ToList();
                 var defaultValueSet = this.GetDefaultValueSet(originalParameter);
+
                 if (defaultValueSet == null)
                 {
                     continue;
@@ -107,6 +113,7 @@ namespace CDP4ServicesDal
             }
 
             var operationContainer = new OperationContainer(context, topContainer.RevisionNumber);
+
             foreach (var valueSetsClone in valueSetsClones)
             {
                 var valuesetToUpdate = valuesets.Single(x => x.Iid == valueSetsClone.Iid);
