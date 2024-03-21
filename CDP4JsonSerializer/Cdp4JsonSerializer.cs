@@ -90,15 +90,11 @@ namespace CDP4JsonSerializer
         /// </summary>
         /// <param name="metaInfoProvider">The <see cref="IMetaDataProvider" /></param>
         /// <param name="supportedVersion">The supported <see cref="Version" /></param>
-        public virtual void Initialize(IMetaDataProvider metaInfoProvider, Version supportedVersion)
+        public void Initialize(IMetaDataProvider metaInfoProvider, Version supportedVersion)
         {
             this.MetaInfoProvider = metaInfoProvider;
             this.RequestDataModelVersion = supportedVersion;
-
-            this.JsonSerializerOptions = SerializerOptions.Copy();
-            this.JsonSerializerOptions.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
-            this.JsonSerializerOptions.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
-            this.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(null, false));
+            this.InitializeJsonSerializerOptions();
         }
 
         /// <summary>
@@ -216,6 +212,44 @@ namespace CDP4JsonSerializer
             return jsonString;
         }
 
+        
+        /// <summary>
+        /// Serialize an object into a string
+        /// </summary>
+        /// <param name="toSerialize">The object to serialize</param>
+        /// <returns>The serialized string</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If the <see cref="RequestDataModelVersion" /> or
+        /// <see cref="MetaInfoProvider" /> has not been initialized
+        /// </exception>
+        public string SerializeToString(object toSerialize)
+        {
+            if (this.RequestDataModelVersion == null || this.MetaInfoProvider == null)
+            {
+                throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
+            }
+
+            Logger.Trace("initializing MemoryStream");
+
+            using var stream = new MemoryStream();
+
+            this.SerializeToStream(toSerialize, stream);
+
+            Logger.Trace("rewind MemoryStream");
+            stream.Position = 0;
+
+            Logger.Trace("initializing StreamReader");
+            using var reader = new StreamReader(stream);
+
+            var sw = new Stopwatch();
+            sw.Start();
+            var jsonString = reader.ReadToEnd();
+            sw.Stop();
+            Logger.Trace("write json stream to json string in {0} [ms]", sw.ElapsedMilliseconds);
+
+            return jsonString;
+        }
+
         /// <summary>
         /// Convenience method that deserializes the passed in JSON content stream
         /// </summary>
@@ -257,40 +291,14 @@ namespace CDP4JsonSerializer
         }
 
         /// <summary>
-        /// Serialize an object into a string
+        /// Initialize the <see cref="JsonSerializerOptions" /> property
         /// </summary>
-        /// <param name="toSerialize">The object to serialize</param>
-        /// <returns>The serialized string</returns>
-        /// <exception cref="InvalidOperationException">
-        /// If the <see cref="RequestDataModelVersion" /> or
-        /// <see cref="MetaInfoProvider" /> has not been initialized
-        /// </exception>
-        public string SerializeToString(object toSerialize)
+        public virtual void InitializeJsonSerializerOptions()
         {
-            if (this.RequestDataModelVersion == null || this.MetaInfoProvider == null)
-            {
-                throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
-            }
-
-            Logger.Trace("initializing MemoryStream");
-
-            using var stream = new MemoryStream();
-
-            this.SerializeToStream(toSerialize, stream);
-
-            Logger.Trace("rewind MemoryStream");
-            stream.Position = 0;
-
-            Logger.Trace("initializing StreamReader");
-            using var reader = new StreamReader(stream);
-
-            var sw = new Stopwatch();
-            sw.Start();
-            var jsonString = reader.ReadToEnd();
-            sw.Stop();
-            Logger.Trace("write json stream to json string in {0} [ms]", sw.ElapsedMilliseconds);
-
-            return jsonString;
+            this.JsonSerializerOptions = SerializerOptions.Copy();
+            this.JsonSerializerOptions.Converters.Add(new ThingSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
+            this.JsonSerializerOptions.Converters.Add(new ClasslessDtoSerializer(this.MetaInfoProvider, this.RequestDataModelVersion));
+            this.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(null, false));
         }
     }
 }

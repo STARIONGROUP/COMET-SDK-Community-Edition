@@ -25,6 +25,7 @@
 namespace CDP4JsonSerializer.JsonConverter
 {
     using System;
+    using System.IO;
     using System.Text.Json;
     using System.Text.Json.Serialization;
 
@@ -84,15 +85,15 @@ namespace CDP4JsonSerializer.JsonConverter
         /// <summary>
         /// Override of the can convert type check.
         /// </summary>
-        /// <param name="objectType">
+        /// <param name="typeToConvert">
         /// The object type.
         /// </param>
         /// <returns>
         /// true if this converter is to be used.
         /// </returns>
-        public override bool CanConvert(Type objectType)
+        public override bool CanConvert(Type typeToConvert)
         {
-            return typeof(Thing).QueryIsAssignableFrom(objectType);
+            return typeof(Thing).QueryIsAssignableFrom(typeToConvert);
         }
 
         /// <summary>
@@ -108,10 +109,10 @@ namespace CDP4JsonSerializer.JsonConverter
             if (!JsonElement.TryParseValue(ref reader, out var jsonElement))
             {
                 Logger.Error("The data object in the JSON array could not be cast to a JsonElement type.");
-                throw new NullReferenceException("The data object in the JSON array could not be cast to a JsonElement type.");
+                throw new InvalidDataException("The data object in the JSON array could not be cast to a JsonElement type.");
             }
 
-            var newThing = jsonElement?.ToDto();
+            var newThing = jsonElement.Value.ToDto();
 
             return newThing;
         }

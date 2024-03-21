@@ -25,6 +25,7 @@
 namespace CDP4JsonSerializer.JsonConverter
 {
     using System;
+    using System.IO;
     using System.Text.Json;
     using System.Text.Json.Nodes;
     using System.Text.Json.Serialization;
@@ -98,10 +99,10 @@ namespace CDP4JsonSerializer.JsonConverter
             if (!JsonElement.TryParseValue(ref reader, out var jsonElement))
             {
                 Logger.Error("The data object in the JSON array could not be cast to a JsonElement type.");
-                throw new NullReferenceException("The data object in the JSON array could not be cast to a JsonElement type.");
+                throw new InvalidDataException("The data object in the JSON array could not be cast to a JsonElement type.");
             }
 
-            var dto = jsonElement?.ToDto();
+            var dto = jsonElement.Value.ToDto();
             var classlessDto = this.GenerateClasslessDto(jsonElement.Value, dto);
 
             return classlessDto;

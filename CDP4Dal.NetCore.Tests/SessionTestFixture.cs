@@ -818,20 +818,11 @@ namespace CDP4Dal.NetCore.Tests
     [DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
     internal class TestDal : IDal
     {
-        public Version SupportedVersion
-        {
-            get { return new Version(1, 0, 0); }
-        }
+        public static Version SupportedVersion => new (1, 0, 0);
 
-        public Version DalVersion
-        {
-            get { return new Version("1.1.0"); }
-        }
-
-        public IMetaDataProvider MetaDataProvider
-        {
-            get { return new MetaDataProvider(); }
-        }
+        public Version DalVersion => new(1, 1, 0);
+        
+        public IMetaDataProvider MetaDataProvider => new MetaDataProvider();
 
         /// <summary>
         /// Gets or sets the <see cref="ISession"/> that uses this <see cref="IDal"/>

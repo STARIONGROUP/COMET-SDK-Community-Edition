@@ -75,7 +75,7 @@ namespace CDP4DalJsonSerializer.JsonConverter
             return typeof(PostOperation).QueryIsAssignableFrom(typeToConvert);
         }
 
-        /// <summary>Reads and converts the JSON to type <typeparamref name="T" />.</summary>
+        /// <summary>Reads and converts the JSON to type <see cref="PostOperation"/>.</summary>
         /// <param name="reader">The reader.</param>
         /// <param name="typeToConvert">The type to convert.</param>
         /// <param name="options">An object that specifies serialization options to use.</param>
@@ -96,7 +96,7 @@ namespace CDP4DalJsonSerializer.JsonConverter
                 throw new InvalidDataException($"The request Type {typeToConvert.Name} is not a PostOperation");
             }
 
-            jsonElement?.DeserializePostOperation(postOperation, options);
+            jsonElement.Value.DeserializePostOperation(postOperation, options);
             return postOperation;
         }
 
