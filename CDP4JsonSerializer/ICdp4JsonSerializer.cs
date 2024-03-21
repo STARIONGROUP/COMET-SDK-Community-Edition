@@ -86,6 +86,17 @@ namespace CDP4JsonSerializer
         /// <param name="isExtentDeep">A value indicating whether the contained <see cref="CDP4Common.CommonData.Thing"/> shall be processed</param>
         /// <returns>The JSON string</returns>
         string SerializeToString(CDP4Common.CommonData.Thing source, bool isExtentDeep);
+        
+        /// <summary>
+        /// Serialize an object into a string
+        /// </summary>
+        /// <param name="toSerialize">The object to serialize</param>
+        /// <returns>The serialized string</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If the <see cref="Cdp4JsonSerializer.RequestDataModelVersion" /> or
+        /// <see cref="Cdp4JsonSerializer.MetaInfoProvider" /> has not been initialized
+        /// </exception>
+        string SerializeToString(object toSerialize);
 
         /// <summary>
         /// Convenience method that deserializes the passed in JSON content stream
@@ -97,16 +108,5 @@ namespace CDP4JsonSerializer
         /// The the deserialized collection of <see cref="CDP4Common.DTO.Thing"/>.
         /// </returns>
         IEnumerable<Thing> Deserialize(Stream contentStream);
-
-        /// <summary>
-        /// Serialize an object into a string
-        /// </summary>
-        /// <param name="toSerialize">The object to serialize</param>
-        /// <returns>The serialized string</returns>
-        /// <exception cref="InvalidOperationException">
-        /// If the <see cref="Cdp4JsonSerializer.RequestDataModelVersion" /> or
-        /// <see cref="Cdp4JsonSerializer.MetaInfoProvider" /> has not been initialized
-        /// </exception>
-        string SerializeToString(object toSerialize);
     }
 }
