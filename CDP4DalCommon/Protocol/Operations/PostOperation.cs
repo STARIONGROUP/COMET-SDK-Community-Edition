@@ -24,6 +24,7 @@
 
 namespace CDP4DalCommon.Protocol.Operations
 {
+    using System;
     using System.Collections.Generic;
 
     using CDP4Common;
@@ -33,38 +34,38 @@ namespace CDP4DalCommon.Protocol.Operations
     /// <summary>
     /// The abstract super class from which all POST operations derive.
     /// </summary>
-    public abstract class PostOperation
+    public class PostOperation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PostOperation"/> class
         /// </summary>
-        protected PostOperation()
+        public PostOperation()
         {
-            this.Delete = new List<ClasslessDTO>();
-            this.Create = new List<Thing>();
-            this.Update = new List<ClasslessDTO>();
-            this.Copy = new List<CopyInfo>();
+            this.Delete = [];
+            this.Create = [];
+            this.Update = [];
+            this.Copy = [];
         }
 
         /// <summary>
         /// Gets or sets the collection of DTOs to delete.
         /// </summary>
-        public abstract List<ClasslessDTO> Delete { get; set; }
+        public List<ClasslessDTO> Delete { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of DTOs to create.
         /// </summary>
-        public abstract List<Thing> Create { get; set; }
+        public List<Thing> Create { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of DTOs to update.
         /// </summary>
-        public abstract List<ClasslessDTO> Update { get; set; }
+        public List<ClasslessDTO> Update { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of DTOs to copy.
         /// </summary>
-        public abstract List<CopyInfo> Copy { get; set; }
+        public List<CopyInfo> Copy { get; set; }
 
         /// <summary>
         /// Populate the current <see cref="PostOperation"/> with the content based on the 
@@ -74,6 +75,9 @@ namespace CDP4DalCommon.Protocol.Operations
         ///     The <see cref="Operation"/> that contains all the <see cref="Thing"/>s that need to be
         ///     updated to the data-source
         /// </param>
-        public abstract void ConstructFromOperation(Operation operation);
+        public virtual void ConstructFromOperation(Operation operation)
+        {
+            throw new NotSupportedException("Cannot construct a PostOperation based on Operation");
+        }
     }
 }

@@ -50,17 +50,5 @@ namespace CDP4Dal.Tests
 
     internal class TestPostOperation : PostOperation
     {
-        public override List<ClasslessDTO> Delete { get; set; }
-
-        public override List<Thing> Create { get; set; }
-
-        public override List<ClasslessDTO> Update { get; set; }
-
-        public override List<CopyInfo> Copy { get; set; }
-
-        public override void ConstructFromOperation(Operation operation)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

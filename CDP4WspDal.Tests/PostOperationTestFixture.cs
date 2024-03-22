@@ -140,30 +140,6 @@ namespace CDP4WspDal.Tests
 
         private class TestPostOperation : PostOperation
         {
-            /// <summary>
-            /// Gets or sets the collection of DTOs to delete.
-            /// </summary>
-            public override List<ClasslessDTO> Delete { get; set; }
-
-            /// <summary>
-            /// Gets or sets the collection of DTOs to create.
-            /// </summary>
-            public override List<Thing> Create { get; set; }
-
-            /// <summary>
-            /// Gets or sets the collection of DTOs to update.
-            /// </summary>
-            public override List<ClasslessDTO> Update { get; set; }
-
-            /// <summary>
-            /// Gets or sets the collection of DTOs to update.
-            /// </summary>
-            public override List<CopyInfo> Copy { get; set; }
-
-            public override void ConstructFromOperation(Operation operation)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

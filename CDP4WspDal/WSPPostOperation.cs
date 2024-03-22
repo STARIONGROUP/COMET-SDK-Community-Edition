@@ -60,26 +60,6 @@ namespace CDP4WspDal
         }
 
         /// <summary>
-        /// Gets or sets the collection of DTOs to delete.
-        /// </summary>
-        public override List<ClasslessDTO> Delete { get; set; }
-
-        /// <summary>
-        /// Gets or sets the collection of DTOs to create.
-        /// </summary>
-        public override List<Thing> Create { get; set; }
-
-        /// <summary>
-        /// Gets or sets the collection of DTOs to update.
-        /// </summary>
-        public override List<ClasslessDTO> Update { get; set; }
-
-        /// <summary>
-        /// Gets or sets the collection of DTOs to copy.
-        /// </summary>
-        public override List<CopyInfo> Copy { get; set; }
-
-        /// <summary>
         /// Populate this <see cref="WspPostOperation"/> with the correct setup for the OCDT protocol
         /// </summary>
         /// <param name="operation">
@@ -89,7 +69,7 @@ namespace CDP4WspDal
         {
             if (operation.ModifiedThing == null)
             {
-                throw new ArgumentNullException("operation");
+                throw new ArgumentNullException(nameof(operation));
             }
 
             if (operation.OperationKind == OperationKind.Update && operation.OriginalThing == null)
