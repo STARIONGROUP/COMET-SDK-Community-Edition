@@ -118,7 +118,7 @@ namespace CDP4JsonFileDal
         /// </summary>
         public JsonFileDal()
         {
-            this.Serializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Serializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion, false);
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace CDP4JsonFileDal
                 this.DalVersion = dalVersion;
             }
 
-            this.Serializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Serializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion, false);
         }
 
         /// <summary>

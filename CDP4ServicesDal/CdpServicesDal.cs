@@ -100,7 +100,7 @@ namespace CDP4ServicesDal
         /// <param name="isMessagePackSupported">Asserts that the MessagePack deserialization should be used or not. Supported by default</param>
         public CdpServicesDal(bool isMessagePackSupported = true)
         {
-            this.Cdp4JsonSerializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Cdp4JsonSerializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion, false);
             this.MessagePackSerializer = new MessagePackSerializer();
 
             this.isMessagePackSupported = isMessagePackSupported;

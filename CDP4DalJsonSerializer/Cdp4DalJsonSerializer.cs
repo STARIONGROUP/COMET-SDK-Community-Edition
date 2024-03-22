@@ -55,7 +55,7 @@ namespace CDP4DalJsonSerializer
         /// The supported version of the data-model
         /// </param>
         /// <param name="ignorePostOperationCopyProperty">Asserts that the <see cref="PostOperation.Copy"/> have to be ignored</param>
-        public Cdp4DalJsonSerializer(IMetaDataProvider metaInfoProvider, Version supportedVersion, bool ignorePostOperationCopyProperty = false)
+        public Cdp4DalJsonSerializer(IMetaDataProvider metaInfoProvider, Version supportedVersion, bool ignorePostOperationCopyProperty)
         {
             this.ignorePostOperationCopyProperty = ignorePostOperationCopyProperty;
             this.Initialize(metaInfoProvider, supportedVersion);
@@ -65,7 +65,7 @@ namespace CDP4DalJsonSerializer
         /// Initializes a new instance of the <see cref="Cdp4JsonSerializer" /> class.
         /// </summary>
         /// <param name="ignorePostOperationCopyProperty">Asserts that the <see cref="PostOperation.Copy"/> have to be ignored</param>
-        public Cdp4DalJsonSerializer(bool ignorePostOperationCopyProperty = false)
+        public Cdp4DalJsonSerializer(bool ignorePostOperationCopyProperty)
         {
             this.ignorePostOperationCopyProperty = ignorePostOperationCopyProperty;
         }

@@ -57,7 +57,7 @@ namespace CDP4DalJsonSerializer.JsonConverter
         /// Initializes a new <see cref="PostOperationJsonConverter" /> instance.
         /// </summary>
         /// <param name="ignoreCopyProperty">Asserts that the <see cref="PostOperation.Copy"/> have to be ignored</param>
-        public PostOperationJsonConverter(bool ignoreCopyProperty = false)
+        public PostOperationJsonConverter(bool ignoreCopyProperty)
         {
             this.ignoreCopyProperty = ignoreCopyProperty;
         }

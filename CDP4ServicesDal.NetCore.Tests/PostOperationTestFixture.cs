@@ -56,7 +56,7 @@ namespace CDP4ServicesDal.Tests
         public void Setup()
         {
             var metamodel = new MetaDataProvider();
-            this.serializer = new Cdp4DalJsonSerializer(metamodel, new Version(1, 1, 0));
+            this.serializer = new Cdp4DalJsonSerializer(metamodel, new Version(1, 1, 0), false);
         }
 
         [Test]
