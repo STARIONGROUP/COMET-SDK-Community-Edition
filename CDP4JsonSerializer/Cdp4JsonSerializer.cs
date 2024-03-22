@@ -211,7 +211,6 @@ namespace CDP4JsonSerializer
 
             return jsonString;
         }
-
         
         /// <summary>
         /// Serialize an object into a string
@@ -286,6 +285,32 @@ namespace CDP4JsonSerializer
             var sw = new Stopwatch();
             sw.Start();
             var data = JsonSerializer.Deserialize<T>(contentStream, this.JsonSerializerOptions);
+            Logger.Trace("Deserialize from stream in {0} [ms]", sw.ElapsedMilliseconds);
+            return data;
+        }
+
+        /// <summary>
+        /// Convenience method that deserializes the passed in JSON content stream
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type info for which deserialization will be performed
+        /// </typeparam>
+        /// <param name="contentString">
+        /// The content string.
+        /// </param>
+        /// <returns>
+        /// The the deserialized instance of the specified Type
+        /// </returns>
+        public T Deserialize<T>(string contentString)
+        {
+            if (this.RequestDataModelVersion == null || this.MetaInfoProvider == null)
+            {
+                throw new InvalidOperationException("The supported version or the metainfo provider has not been set. Call the Initialize method to set them.");
+            }
+
+            var sw = new Stopwatch();
+            sw.Start();
+            var data = JsonSerializer.Deserialize<T>(contentString, this.JsonSerializerOptions);
             Logger.Trace("Deserialize from stream in {0} [ms]", sw.ElapsedMilliseconds);
             return data;
         }

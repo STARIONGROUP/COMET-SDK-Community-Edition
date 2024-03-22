@@ -122,5 +122,19 @@ namespace CDP4JsonSerializer
         /// The the deserialized instance of the specified Type
         /// </returns>
         T Deserialize<T>(Stream contentStream);
+
+        /// <summary>
+        /// Convenience method that deserializes the passed in JSON content stream
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type info for which deserialization will be performed
+        /// </typeparam>
+        /// <param name="contentString">
+        /// The content string.
+        /// </param>
+        /// <returns>
+        /// The the deserialized instance of the specified Type
+        /// </returns>
+        T Deserialize<T>(string contentString);
     }
 }
