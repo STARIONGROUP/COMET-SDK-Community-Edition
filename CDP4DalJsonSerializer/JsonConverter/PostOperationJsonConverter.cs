@@ -108,7 +108,7 @@ namespace CDP4DalJsonSerializer.JsonConverter
         public override void Write(Utf8JsonWriter writer, PostOperation value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
-            writer.WriteStartArray("_delete");
+            writer.WriteStartArray("_delete"u8);
 
             foreach (var toDelete in value.Delete)
             {
@@ -116,7 +116,7 @@ namespace CDP4DalJsonSerializer.JsonConverter
             }
 
             writer.WriteEndArray();
-            writer.WriteStartArray("_create");
+            writer.WriteStartArray("_create"u8);
 
             foreach (var toCreate in value.Create)
             {
@@ -124,7 +124,7 @@ namespace CDP4DalJsonSerializer.JsonConverter
             }
 
             writer.WriteEndArray();
-            writer.WriteStartArray("_update");
+            writer.WriteStartArray("_update"u8);
 
             foreach (var toUpdate in value.Update)
             {
@@ -135,7 +135,7 @@ namespace CDP4DalJsonSerializer.JsonConverter
 
             if (!this.ignoreCopyProperty)
             {
-                writer.WriteStartArray("_copy");
+                writer.WriteStartArray("_copy"u8);
                 
                 foreach (var toCopy in value.Copy)
                 {

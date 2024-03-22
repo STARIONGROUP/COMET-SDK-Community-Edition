@@ -67,7 +67,7 @@ namespace CDP4JsonSerializer
             {
                 if(contentProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale content property of the hyperLink {id} is null", hyperLink.Iid);
+                    Logger.Trace("The non-nullabale content property of the hyperLink {id} is null", hyperLink.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(languageCodeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale languageCode property of the hyperLink {id} is null", hyperLink.Iid);
+                    Logger.Trace("The non-nullabale languageCode property of the hyperLink {id} is null", hyperLink.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the hyperLink {id} is null", hyperLink.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the hyperLink {id} is null", hyperLink.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the hyperLink {id} is null", hyperLink.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the hyperLink {id} is null", hyperLink.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(uriProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale uri property of the hyperLink {id} is null", hyperLink.Iid);
+                    Logger.Trace("The non-nullabale uri property of the hyperLink {id} is null", hyperLink.Iid);
                 }
                 else
                 {

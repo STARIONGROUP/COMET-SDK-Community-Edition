@@ -103,7 +103,7 @@ namespace CDP4JsonSerializer
             {
                 if(contentProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale content property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                    Logger.Trace("The non-nullabale content property of the siteLogEntry {id} is null", siteLogEntry.Iid);
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace CDP4JsonSerializer
             {
                 if(createdOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale createdOn property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                    Logger.Trace("The non-nullabale createdOn property of the siteLogEntry {id} is null", siteLogEntry.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(languageCodeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale languageCode property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                    Logger.Trace("The non-nullabale languageCode property of the siteLogEntry {id} is null", siteLogEntry.Iid);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace CDP4JsonSerializer
             {
                 if(levelProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale level property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                    Logger.Trace("The non-nullabale level property of the siteLogEntry {id} is null", siteLogEntry.Iid);
                 }
                 else
                 {
@@ -175,7 +175,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the siteLogEntry {id} is null", siteLogEntry.Iid);
                 }
                 else
                 {
@@ -187,7 +187,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the siteLogEntry {id} is null", siteLogEntry.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the siteLogEntry {id} is null", siteLogEntry.Iid);
                 }
                 else
                 {

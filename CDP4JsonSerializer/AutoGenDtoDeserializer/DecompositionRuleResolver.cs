@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(containingCategoryProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale containingCategory property of the decompositionRule {id} is null", decompositionRule.Iid);
+                    Logger.Trace("The non-nullabale containingCategory property of the decompositionRule {id} is null", decompositionRule.Iid);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the decompositionRule {id} is null", decompositionRule.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the decompositionRule {id} is null", decompositionRule.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(minContainedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale minContained property of the decompositionRule {id} is null", decompositionRule.Iid);
+                    Logger.Trace("The non-nullabale minContained property of the decompositionRule {id} is null", decompositionRule.Iid);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the decompositionRule {id} is null", decompositionRule.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the decompositionRule {id} is null", decompositionRule.Iid);
                 }
                 else
                 {
@@ -175,7 +175,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the decompositionRule {id} is null", decompositionRule.Iid);
+                    Logger.Trace("The non-nullabale name property of the decompositionRule {id} is null", decompositionRule.Iid);
                 }
                 else
                 {
@@ -187,7 +187,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the decompositionRule {id} is null", decompositionRule.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the decompositionRule {id} is null", decompositionRule.Iid);
                 }
                 else
                 {
@@ -199,7 +199,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the decompositionRule {id} is null", decompositionRule.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the decompositionRule {id} is null", decompositionRule.Iid);
                 }
                 else
                 {

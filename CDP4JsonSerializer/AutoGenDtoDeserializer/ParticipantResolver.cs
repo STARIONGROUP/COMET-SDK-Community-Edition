@@ -91,7 +91,7 @@ namespace CDP4JsonSerializer
             {
                 if(isActiveProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isActive property of the participant {id} is null", participant.Iid);
+                    Logger.Trace("The non-nullabale isActive property of the participant {id} is null", participant.Iid);
                 }
                 else
                 {
@@ -103,7 +103,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the participant {id} is null", participant.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the participant {id} is null", participant.Iid);
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace CDP4JsonSerializer
             {
                 if(personProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale person property of the participant {id} is null", participant.Iid);
+                    Logger.Trace("The non-nullabale person property of the participant {id} is null", participant.Iid);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace CDP4JsonSerializer
             {
                 if(roleProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale role property of the participant {id} is null", participant.Iid);
+                    Logger.Trace("The non-nullabale role property of the participant {id} is null", participant.Iid);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace CDP4JsonSerializer
             {
                 if(selectedDomainProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale selectedDomain property of the participant {id} is null", participant.Iid);
+                    Logger.Trace("The non-nullabale selectedDomain property of the participant {id} is null", participant.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the participant {id} is null", participant.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the participant {id} is null", participant.Iid);
                 }
                 else
                 {

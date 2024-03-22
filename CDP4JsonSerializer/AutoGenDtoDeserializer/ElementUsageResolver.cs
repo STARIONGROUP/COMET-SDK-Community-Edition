@@ -91,7 +91,7 @@ namespace CDP4JsonSerializer
             {
                 if(elementDefinitionProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale elementDefinition property of the elementUsage {id} is null", elementUsage.Iid);
+                    Logger.Trace("The non-nullabale elementDefinition property of the elementUsage {id} is null", elementUsage.Iid);
                 }
                 else
                 {
@@ -135,7 +135,7 @@ namespace CDP4JsonSerializer
             {
                 if(interfaceEndProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale interfaceEnd property of the elementUsage {id} is null", elementUsage.Iid);
+                    Logger.Trace("The non-nullabale interfaceEnd property of the elementUsage {id} is null", elementUsage.Iid);
                 }
                 else
                 {
@@ -147,7 +147,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the elementUsage {id} is null", elementUsage.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the elementUsage {id} is null", elementUsage.Iid);
                 }
                 else
                 {
@@ -159,7 +159,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the elementUsage {id} is null", elementUsage.Iid);
+                    Logger.Trace("The non-nullabale name property of the elementUsage {id} is null", elementUsage.Iid);
                 }
                 else
                 {
@@ -171,7 +171,7 @@ namespace CDP4JsonSerializer
             {
                 if(ownerProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale owner property of the elementUsage {id} is null", elementUsage.Iid);
+                    Logger.Trace("The non-nullabale owner property of the elementUsage {id} is null", elementUsage.Iid);
                 }
                 else
                 {
@@ -191,7 +191,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the elementUsage {id} is null", elementUsage.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the elementUsage {id} is null", elementUsage.Iid);
                 }
                 else
                 {
@@ -203,7 +203,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the elementUsage {id} is null", elementUsage.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the elementUsage {id} is null", elementUsage.Iid);
                 }
                 else
                 {

@@ -79,7 +79,7 @@ namespace CDP4JsonSerializer
             {
                 if(contentHashProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale contentHash property of the fileRevision {id} is null", fileRevision.Iid);
+                    Logger.Trace("The non-nullabale contentHash property of the fileRevision {id} is null", fileRevision.Iid);
                 }
                 else
                 {
@@ -91,7 +91,7 @@ namespace CDP4JsonSerializer
             {
                 if(createdOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale createdOn property of the fileRevision {id} is null", fileRevision.Iid);
+                    Logger.Trace("The non-nullabale createdOn property of the fileRevision {id} is null", fileRevision.Iid);
                 }
                 else
                 {
@@ -103,7 +103,7 @@ namespace CDP4JsonSerializer
             {
                 if(creatorProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale creator property of the fileRevision {id} is null", fileRevision.Iid);
+                    Logger.Trace("The non-nullabale creator property of the fileRevision {id} is null", fileRevision.Iid);
                 }
                 else
                 {
@@ -136,7 +136,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the fileRevision {id} is null", fileRevision.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the fileRevision {id} is null", fileRevision.Iid);
                 }
                 else
                 {
@@ -148,7 +148,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the fileRevision {id} is null", fileRevision.Iid);
+                    Logger.Trace("The non-nullabale name property of the fileRevision {id} is null", fileRevision.Iid);
                 }
                 else
                 {
@@ -160,7 +160,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the fileRevision {id} is null", fileRevision.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the fileRevision {id} is null", fileRevision.Iid);
                 }
                 else
                 {

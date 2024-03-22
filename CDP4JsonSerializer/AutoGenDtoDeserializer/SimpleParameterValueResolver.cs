@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the simpleParameterValue {id} is null", simpleParameterValue.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the simpleParameterValue {id} is null", simpleParameterValue.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(parameterTypeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale parameterType property of the simpleParameterValue {id} is null", simpleParameterValue.Iid);
+                    Logger.Trace("The non-nullabale parameterType property of the simpleParameterValue {id} is null", simpleParameterValue.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the simpleParameterValue {id} is null", simpleParameterValue.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the simpleParameterValue {id} is null", simpleParameterValue.Iid);
                 }
                 else
                 {

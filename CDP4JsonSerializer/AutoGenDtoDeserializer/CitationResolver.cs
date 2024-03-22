@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(isAdaptationProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isAdaptation property of the citation {id} is null", citation.Iid);
+                    Logger.Trace("The non-nullabale isAdaptation property of the citation {id} is null", citation.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(locationProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale location property of the citation {id} is null", citation.Iid);
+                    Logger.Trace("The non-nullabale location property of the citation {id} is null", citation.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the citation {id} is null", citation.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the citation {id} is null", citation.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(remarkProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale remark property of the citation {id} is null", citation.Iid);
+                    Logger.Trace("The non-nullabale remark property of the citation {id} is null", citation.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the citation {id} is null", citation.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the citation {id} is null", citation.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(sourceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale source property of the citation {id} is null", citation.Iid);
+                    Logger.Trace("The non-nullabale source property of the citation {id} is null", citation.Iid);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the citation {id} is null", citation.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the citation {id} is null", citation.Iid);
                 }
                 else
                 {

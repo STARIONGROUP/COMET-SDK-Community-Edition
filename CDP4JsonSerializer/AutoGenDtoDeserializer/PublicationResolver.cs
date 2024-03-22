@@ -67,7 +67,7 @@ namespace CDP4JsonSerializer
             {
                 if(createdOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale createdOn property of the publication {id} is null", publication.Iid);
+                    Logger.Trace("The non-nullabale createdOn property of the publication {id} is null", publication.Iid);
                 }
                 else
                 {
@@ -103,7 +103,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the publication {id} is null", publication.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the publication {id} is null", publication.Iid);
                 }
                 else
                 {
@@ -123,7 +123,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the publication {id} is null", publication.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the publication {id} is null", publication.Iid);
                 }
                 else
                 {

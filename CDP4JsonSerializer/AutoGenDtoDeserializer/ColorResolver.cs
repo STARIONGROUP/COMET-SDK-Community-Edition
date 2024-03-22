@@ -67,7 +67,7 @@ namespace CDP4JsonSerializer
             {
                 if(blueProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale blue property of the color {id} is null", color.Iid);
+                    Logger.Trace("The non-nullabale blue property of the color {id} is null", color.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(greenProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale green property of the color {id} is null", color.Iid);
+                    Logger.Trace("The non-nullabale green property of the color {id} is null", color.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the color {id} is null", color.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the color {id} is null", color.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the color {id} is null", color.Iid);
+                    Logger.Trace("The non-nullabale name property of the color {id} is null", color.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(redProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale red property of the color {id} is null", color.Iid);
+                    Logger.Trace("The non-nullabale red property of the color {id} is null", color.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the color {id} is null", color.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the color {id} is null", color.Iid);
                 }
                 else
                 {

@@ -75,7 +75,7 @@ namespace CDP4JsonSerializer
             {
                 if(contentProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale content property of the textualNote {id} is null", textualNote.Iid);
+                    Logger.Trace("The non-nullabale content property of the textualNote {id} is null", textualNote.Iid);
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace CDP4JsonSerializer
             {
                 if(createdOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale createdOn property of the textualNote {id} is null", textualNote.Iid);
+                    Logger.Trace("The non-nullabale createdOn property of the textualNote {id} is null", textualNote.Iid);
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace CDP4JsonSerializer
             {
                 if(languageCodeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale languageCode property of the textualNote {id} is null", textualNote.Iid);
+                    Logger.Trace("The non-nullabale languageCode property of the textualNote {id} is null", textualNote.Iid);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the textualNote {id} is null", textualNote.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the textualNote {id} is null", textualNote.Iid);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the textualNote {id} is null", textualNote.Iid);
+                    Logger.Trace("The non-nullabale name property of the textualNote {id} is null", textualNote.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(ownerProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale owner property of the textualNote {id} is null", textualNote.Iid);
+                    Logger.Trace("The non-nullabale owner property of the textualNote {id} is null", textualNote.Iid);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the textualNote {id} is null", textualNote.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the textualNote {id} is null", textualNote.Iid);
                 }
                 else
                 {
@@ -175,7 +175,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the textualNote {id} is null", textualNote.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the textualNote {id} is null", textualNote.Iid);
                 }
                 else
                 {

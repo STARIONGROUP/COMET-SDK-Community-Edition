@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(isActiveProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isActive property of the userRuleVerification {id} is null", userRuleVerification.Iid);
+                    Logger.Trace("The non-nullabale isActive property of the userRuleVerification {id} is null", userRuleVerification.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the userRuleVerification {id} is null", userRuleVerification.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the userRuleVerification {id} is null", userRuleVerification.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(ruleProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale rule property of the userRuleVerification {id} is null", userRuleVerification.Iid);
+                    Logger.Trace("The non-nullabale rule property of the userRuleVerification {id} is null", userRuleVerification.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(statusProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale status property of the userRuleVerification {id} is null", userRuleVerification.Iid);
+                    Logger.Trace("The non-nullabale status property of the userRuleVerification {id} is null", userRuleVerification.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the userRuleVerification {id} is null", userRuleVerification.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the userRuleVerification {id} is null", userRuleVerification.Iid);
                 }
                 else
                 {

@@ -80,7 +80,7 @@ namespace CDP4JsonSerializer
             {
                 if(engineeringModelSetupProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale engineeringModelSetup property of the engineeringModel {id} is null", engineeringModel.Iid);
+                    Logger.Trace("The non-nullabale engineeringModelSetup property of the engineeringModel {id} is null", engineeringModel.Iid);
                 }
                 else
                 {
@@ -124,7 +124,7 @@ namespace CDP4JsonSerializer
             {
                 if(lastModifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale lastModifiedOn property of the engineeringModel {id} is null", engineeringModel.Iid);
+                    Logger.Trace("The non-nullabale lastModifiedOn property of the engineeringModel {id} is null", engineeringModel.Iid);
                 }
                 else
                 {
@@ -152,7 +152,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the engineeringModel {id} is null", engineeringModel.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the engineeringModel {id} is null", engineeringModel.Iid);
                 }
                 else
                 {
@@ -164,7 +164,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the engineeringModel {id} is null", engineeringModel.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the engineeringModel {id} is null", engineeringModel.Iid);
                 }
                 else
                 {

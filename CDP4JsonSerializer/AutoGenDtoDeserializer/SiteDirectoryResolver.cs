@@ -75,7 +75,7 @@ namespace CDP4JsonSerializer
             {
                 if(createdOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale createdOn property of the siteDirectory {id} is null", siteDirectory.Iid);
+                    Logger.Trace("The non-nullabale createdOn property of the siteDirectory {id} is null", siteDirectory.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(lastModifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale lastModifiedOn property of the siteDirectory {id} is null", siteDirectory.Iid);
+                    Logger.Trace("The non-nullabale lastModifiedOn property of the siteDirectory {id} is null", siteDirectory.Iid);
                 }
                 else
                 {
@@ -171,7 +171,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the siteDirectory {id} is null", siteDirectory.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the siteDirectory {id} is null", siteDirectory.Iid);
                 }
                 else
                 {
@@ -183,7 +183,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the siteDirectory {id} is null", siteDirectory.Iid);
+                    Logger.Trace("The non-nullabale name property of the siteDirectory {id} is null", siteDirectory.Iid);
                 }
                 else
                 {
@@ -235,7 +235,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the siteDirectory {id} is null", siteDirectory.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the siteDirectory {id} is null", siteDirectory.Iid);
                 }
                 else
                 {
@@ -255,7 +255,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the siteDirectory {id} is null", siteDirectory.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the siteDirectory {id} is null", siteDirectory.Iid);
                 }
                 else
                 {

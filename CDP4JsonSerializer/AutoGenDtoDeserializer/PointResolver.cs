@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the point {id} is null", point.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the point {id} is null", point.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the point {id} is null", point.Iid);
+                    Logger.Trace("The non-nullabale name property of the point {id} is null", point.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the point {id} is null", point.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the point {id} is null", point.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(xProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale x property of the point {id} is null", point.Iid);
+                    Logger.Trace("The non-nullabale x property of the point {id} is null", point.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(yProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale y property of the point {id} is null", point.Iid);
+                    Logger.Trace("The non-nullabale y property of the point {id} is null", point.Iid);
                 }
                 else
                 {

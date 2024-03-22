@@ -125,7 +125,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the arrayParameterType {id} is null", arrayParameterType.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the arrayParameterType {id} is null", arrayParameterType.Iid);
                 }
                 else
                 {
@@ -137,7 +137,7 @@ namespace CDP4JsonSerializer
             {
                 if(isFinalizedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isFinalized property of the arrayParameterType {id} is null", arrayParameterType.Iid);
+                    Logger.Trace("The non-nullabale isFinalized property of the arrayParameterType {id} is null", arrayParameterType.Iid);
                 }
                 else
                 {
@@ -149,7 +149,7 @@ namespace CDP4JsonSerializer
             {
                 if(isTensorProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isTensor property of the arrayParameterType {id} is null", arrayParameterType.Iid);
+                    Logger.Trace("The non-nullabale isTensor property of the arrayParameterType {id} is null", arrayParameterType.Iid);
                 }
                 else
                 {
@@ -161,7 +161,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the arrayParameterType {id} is null", arrayParameterType.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the arrayParameterType {id} is null", arrayParameterType.Iid);
                 }
                 else
                 {
@@ -173,7 +173,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the arrayParameterType {id} is null", arrayParameterType.Iid);
+                    Logger.Trace("The non-nullabale name property of the arrayParameterType {id} is null", arrayParameterType.Iid);
                 }
                 else
                 {
@@ -185,7 +185,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the arrayParameterType {id} is null", arrayParameterType.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the arrayParameterType {id} is null", arrayParameterType.Iid);
                 }
                 else
                 {
@@ -197,7 +197,7 @@ namespace CDP4JsonSerializer
             {
                 if(symbolProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale symbol property of the arrayParameterType {id} is null", arrayParameterType.Iid);
+                    Logger.Trace("The non-nullabale symbol property of the arrayParameterType {id} is null", arrayParameterType.Iid);
                 }
                 else
                 {
@@ -209,7 +209,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the arrayParameterType {id} is null", arrayParameterType.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the arrayParameterType {id} is null", arrayParameterType.Iid);
                 }
                 else
                 {

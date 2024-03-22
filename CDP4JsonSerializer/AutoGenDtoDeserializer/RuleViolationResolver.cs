@@ -67,7 +67,7 @@ namespace CDP4JsonSerializer
             {
                 if(descriptionProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale description property of the ruleViolation {id} is null", ruleViolation.Iid);
+                    Logger.Trace("The non-nullabale description property of the ruleViolation {id} is null", ruleViolation.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the ruleViolation {id} is null", ruleViolation.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the ruleViolation {id} is null", ruleViolation.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the ruleViolation {id} is null", ruleViolation.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the ruleViolation {id} is null", ruleViolation.Iid);
                 }
                 else
                 {

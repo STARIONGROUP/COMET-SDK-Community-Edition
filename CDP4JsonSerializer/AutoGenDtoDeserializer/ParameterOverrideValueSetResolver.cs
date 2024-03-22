@@ -96,7 +96,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the parameterOverrideValueSet {id} is null", parameterOverrideValueSet.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the parameterOverrideValueSet {id} is null", parameterOverrideValueSet.Iid);
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace CDP4JsonSerializer
             {
                 if(parameterValueSetProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale parameterValueSet property of the parameterOverrideValueSet {id} is null", parameterOverrideValueSet.Iid);
+                    Logger.Trace("The non-nullabale parameterValueSet property of the parameterOverrideValueSet {id} is null", parameterOverrideValueSet.Iid);
                 }
                 else
                 {
@@ -128,7 +128,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the parameterOverrideValueSet {id} is null", parameterOverrideValueSet.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the parameterOverrideValueSet {id} is null", parameterOverrideValueSet.Iid);
                 }
                 else
                 {
@@ -140,7 +140,7 @@ namespace CDP4JsonSerializer
             {
                 if(valueSwitchProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale valueSwitch property of the parameterOverrideValueSet {id} is null", parameterOverrideValueSet.Iid);
+                    Logger.Trace("The non-nullabale valueSwitch property of the parameterOverrideValueSet {id} is null", parameterOverrideValueSet.Iid);
                 }
                 else
                 {

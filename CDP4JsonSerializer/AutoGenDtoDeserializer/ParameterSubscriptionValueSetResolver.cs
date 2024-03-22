@@ -87,7 +87,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the parameterSubscriptionValueSet {id} is null", parameterSubscriptionValueSet.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the parameterSubscriptionValueSet {id} is null", parameterSubscriptionValueSet.Iid);
                 }
                 else
                 {
@@ -99,7 +99,7 @@ namespace CDP4JsonSerializer
             {
                 if(subscribedValueSetProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale subscribedValueSet property of the parameterSubscriptionValueSet {id} is null", parameterSubscriptionValueSet.Iid);
+                    Logger.Trace("The non-nullabale subscribedValueSet property of the parameterSubscriptionValueSet {id} is null", parameterSubscriptionValueSet.Iid);
                 }
                 else
                 {
@@ -111,7 +111,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the parameterSubscriptionValueSet {id} is null", parameterSubscriptionValueSet.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the parameterSubscriptionValueSet {id} is null", parameterSubscriptionValueSet.Iid);
                 }
                 else
                 {
@@ -123,7 +123,7 @@ namespace CDP4JsonSerializer
             {
                 if(valueSwitchProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale valueSwitch property of the parameterSubscriptionValueSet {id} is null", parameterSubscriptionValueSet.Iid);
+                    Logger.Trace("The non-nullabale valueSwitch property of the parameterSubscriptionValueSet {id} is null", parameterSubscriptionValueSet.Iid);
                 }
                 else
                 {

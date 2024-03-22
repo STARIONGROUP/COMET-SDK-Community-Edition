@@ -67,7 +67,7 @@ namespace CDP4JsonSerializer
             {
                 if(affectedItemIidProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale affectedItemIid property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
+                    Logger.Trace("The non-nullabale affectedItemIid property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace CDP4JsonSerializer
             {
                 if(changeDescriptionProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale changeDescription property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
+                    Logger.Trace("The non-nullabale changeDescription property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
                 }
                 else
                 {
@@ -99,7 +99,7 @@ namespace CDP4JsonSerializer
             {
                 if(changelogKindProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale changelogKind property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
+                    Logger.Trace("The non-nullabale changelogKind property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the logEntryChangelogItem {id} is null", logEntryChangelogItem.Iid);
                 }
                 else
                 {

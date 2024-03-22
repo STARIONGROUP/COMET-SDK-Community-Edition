@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the stakeHolderValueMapSettings {id} is null", stakeHolderValueMapSettings.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the stakeHolderValueMapSettings {id} is null", stakeHolderValueMapSettings.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the stakeHolderValueMapSettings {id} is null", stakeHolderValueMapSettings.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the stakeHolderValueMapSettings {id} is null", stakeHolderValueMapSettings.Iid);
                 }
                 else
                 {

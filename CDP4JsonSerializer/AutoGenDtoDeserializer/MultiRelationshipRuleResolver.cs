@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(maxRelatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale maxRelated property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale maxRelated property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(minRelatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale minRelated property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale minRelated property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale name property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
                 }
                 else
                 {
@@ -175,7 +175,7 @@ namespace CDP4JsonSerializer
             {
                 if(relationshipCategoryProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale relationshipCategory property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale relationshipCategory property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
                 }
                 else
                 {
@@ -187,7 +187,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
                 }
                 else
                 {
@@ -199,7 +199,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the multiRelationshipRule {id} is null", multiRelationshipRule.Iid);
                 }
                 else
                 {

@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the relationalExpression {id} is null", relationalExpression.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the relationalExpression {id} is null", relationalExpression.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(parameterTypeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale parameterType property of the relationalExpression {id} is null", relationalExpression.Iid);
+                    Logger.Trace("The non-nullabale parameterType property of the relationalExpression {id} is null", relationalExpression.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(relationalOperatorProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale relationalOperator property of the relationalExpression {id} is null", relationalExpression.Iid);
+                    Logger.Trace("The non-nullabale relationalOperator property of the relationalExpression {id} is null", relationalExpression.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the relationalExpression {id} is null", relationalExpression.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the relationalExpression {id} is null", relationalExpression.Iid);
                 }
                 else
                 {

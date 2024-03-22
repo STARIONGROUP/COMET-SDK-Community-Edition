@@ -75,7 +75,7 @@ namespace CDP4JsonSerializer
             {
                 if(authorProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale author property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale author property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(classificationProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale classification property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale classification property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(contentProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale content property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale content property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(createdOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale createdOn property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale createdOn property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace CDP4JsonSerializer
             {
                 if(languageCodeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale languageCode property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale languageCode property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {
@@ -167,7 +167,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {
@@ -179,7 +179,7 @@ namespace CDP4JsonSerializer
             {
                 if(ownerProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale owner property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale owner property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {
@@ -211,7 +211,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {
@@ -231,7 +231,7 @@ namespace CDP4JsonSerializer
             {
                 if(statusProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale status property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale status property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {
@@ -243,7 +243,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {
@@ -255,7 +255,7 @@ namespace CDP4JsonSerializer
             {
                 if(titleProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale title property of the requestForWaiver {id} is null", requestForWaiver.Iid);
+                    Logger.Trace("The non-nullabale title property of the requestForWaiver {id} is null", requestForWaiver.Iid);
                 }
                 else
                 {

@@ -22,6 +22,7 @@
     <PackageReleaseNotes>
         [BUMP] To CDP4Common 26.6.0
     </PackageReleaseNotes>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
     <LangVersion>11.0</LangVersion>
   </PropertyGroup>
 

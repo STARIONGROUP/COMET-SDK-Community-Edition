@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(documentationProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale documentation property of the diagramObject {id} is null", diagramObject.Iid);
+                    Logger.Trace("The non-nullabale documentation property of the diagramObject {id} is null", diagramObject.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the diagramObject {id} is null", diagramObject.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the diagramObject {id} is null", diagramObject.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the diagramObject {id} is null", diagramObject.Iid);
+                    Logger.Trace("The non-nullabale name property of the diagramObject {id} is null", diagramObject.Iid);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace CDP4JsonSerializer
             {
                 if(resolutionProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale resolution property of the diagramObject {id} is null", diagramObject.Iid);
+                    Logger.Trace("The non-nullabale resolution property of the diagramObject {id} is null", diagramObject.Iid);
                 }
                 else
                 {
@@ -179,7 +179,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the diagramObject {id} is null", diagramObject.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the diagramObject {id} is null", diagramObject.Iid);
                 }
                 else
                 {

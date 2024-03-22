@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(isAbstractProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isAbstract property of the category {id} is null", category.Iid);
+                    Logger.Trace("The non-nullabale isAbstract property of the category {id} is null", category.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the category {id} is null", category.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the category {id} is null", category.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the category {id} is null", category.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the category {id} is null", category.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the category {id} is null", category.Iid);
+                    Logger.Trace("The non-nullabale name property of the category {id} is null", category.Iid);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the category {id} is null", category.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the category {id} is null", category.Iid);
                 }
                 else
                 {
@@ -183,7 +183,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the category {id} is null", category.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the category {id} is null", category.Iid);
                 }
                 else
                 {

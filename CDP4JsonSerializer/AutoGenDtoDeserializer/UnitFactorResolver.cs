@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(exponentProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale exponent property of the unitFactor {id} is null", unitFactor.Iid);
+                    Logger.Trace("The non-nullabale exponent property of the unitFactor {id} is null", unitFactor.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the unitFactor {id} is null", unitFactor.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the unitFactor {id} is null", unitFactor.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the unitFactor {id} is null", unitFactor.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the unitFactor {id} is null", unitFactor.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(unitProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale unit property of the unitFactor {id} is null", unitFactor.Iid);
+                    Logger.Trace("The non-nullabale unit property of the unitFactor {id} is null", unitFactor.Iid);
                 }
                 else
                 {

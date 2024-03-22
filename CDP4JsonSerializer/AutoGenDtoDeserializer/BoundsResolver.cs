@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(heightProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale height property of the bounds {id} is null", bounds.Iid);
+                    Logger.Trace("The non-nullabale height property of the bounds {id} is null", bounds.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the bounds {id} is null", bounds.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the bounds {id} is null", bounds.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the bounds {id} is null", bounds.Iid);
+                    Logger.Trace("The non-nullabale name property of the bounds {id} is null", bounds.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the bounds {id} is null", bounds.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the bounds {id} is null", bounds.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(widthProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale width property of the bounds {id} is null", bounds.Iid);
+                    Logger.Trace("The non-nullabale width property of the bounds {id} is null", bounds.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(xProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale x property of the bounds {id} is null", bounds.Iid);
+                    Logger.Trace("The non-nullabale x property of the bounds {id} is null", bounds.Iid);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace CDP4JsonSerializer
             {
                 if(yProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale y property of the bounds {id} is null", bounds.Iid);
+                    Logger.Trace("The non-nullabale y property of the bounds {id} is null", bounds.Iid);
                 }
                 else
                 {

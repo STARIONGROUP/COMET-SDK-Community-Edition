@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the organization {id} is null", organization.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the organization {id} is null", organization.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the organization {id} is null", organization.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the organization {id} is null", organization.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the organization {id} is null", organization.Iid);
+                    Logger.Trace("The non-nullabale name property of the organization {id} is null", organization.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the organization {id} is null", organization.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the organization {id} is null", organization.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the organization {id} is null", organization.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the organization {id} is null", organization.Iid);
                 }
                 else
                 {

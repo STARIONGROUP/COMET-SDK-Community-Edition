@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the referencerRule {id} is null", referencerRule.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the referencerRule {id} is null", referencerRule.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(maxReferencedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale maxReferenced property of the referencerRule {id} is null", referencerRule.Iid);
+                    Logger.Trace("The non-nullabale maxReferenced property of the referencerRule {id} is null", referencerRule.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(minReferencedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale minReferenced property of the referencerRule {id} is null", referencerRule.Iid);
+                    Logger.Trace("The non-nullabale minReferenced property of the referencerRule {id} is null", referencerRule.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the referencerRule {id} is null", referencerRule.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the referencerRule {id} is null", referencerRule.Iid);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the referencerRule {id} is null", referencerRule.Iid);
+                    Logger.Trace("The non-nullabale name property of the referencerRule {id} is null", referencerRule.Iid);
                 }
                 else
                 {
@@ -175,7 +175,7 @@ namespace CDP4JsonSerializer
             {
                 if(referencingCategoryProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale referencingCategory property of the referencerRule {id} is null", referencerRule.Iid);
+                    Logger.Trace("The non-nullabale referencingCategory property of the referencerRule {id} is null", referencerRule.Iid);
                 }
                 else
                 {
@@ -187,7 +187,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the referencerRule {id} is null", referencerRule.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the referencerRule {id} is null", referencerRule.Iid);
                 }
                 else
                 {
@@ -199,7 +199,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the referencerRule {id} is null", referencerRule.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the referencerRule {id} is null", referencerRule.Iid);
                 }
                 else
                 {

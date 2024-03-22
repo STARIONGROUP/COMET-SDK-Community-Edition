@@ -67,7 +67,7 @@ namespace CDP4JsonSerializer
             {
                 if(accessRightProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale accessRight property of the personPermission {id} is null", personPermission.Iid);
+                    Logger.Trace("The non-nullabale accessRight property of the personPermission {id} is null", personPermission.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the personPermission {id} is null", personPermission.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the personPermission {id} is null", personPermission.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the personPermission {id} is null", personPermission.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the personPermission {id} is null", personPermission.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(objectClassProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale objectClass property of the personPermission {id} is null", personPermission.Iid);
+                    Logger.Trace("The non-nullabale objectClass property of the personPermission {id} is null", personPermission.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the personPermission {id} is null", personPermission.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the personPermission {id} is null", personPermission.Iid);
                 }
                 else
                 {

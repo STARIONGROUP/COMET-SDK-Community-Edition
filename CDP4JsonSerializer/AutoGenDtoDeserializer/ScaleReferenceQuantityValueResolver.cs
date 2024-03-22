@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the scaleReferenceQuantityValue {id} is null", scaleReferenceQuantityValue.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the scaleReferenceQuantityValue {id} is null", scaleReferenceQuantityValue.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(scaleProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale scale property of the scaleReferenceQuantityValue {id} is null", scaleReferenceQuantityValue.Iid);
+                    Logger.Trace("The non-nullabale scale property of the scaleReferenceQuantityValue {id} is null", scaleReferenceQuantityValue.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the scaleReferenceQuantityValue {id} is null", scaleReferenceQuantityValue.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the scaleReferenceQuantityValue {id} is null", scaleReferenceQuantityValue.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(valueProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale value property of the scaleReferenceQuantityValue {id} is null", scaleReferenceQuantityValue.Iid);
+                    Logger.Trace("The non-nullabale value property of the scaleReferenceQuantityValue {id} is null", scaleReferenceQuantityValue.Iid);
                 }
                 else
                 {

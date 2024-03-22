@@ -75,7 +75,7 @@ namespace CDP4JsonSerializer
             {
                 if(createdOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale createdOn property of the diagramCanvas {id} is null", diagramCanvas.Iid);
+                    Logger.Trace("The non-nullabale createdOn property of the diagramCanvas {id} is null", diagramCanvas.Iid);
                 }
                 else
                 {
@@ -111,7 +111,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the diagramCanvas {id} is null", diagramCanvas.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the diagramCanvas {id} is null", diagramCanvas.Iid);
                 }
                 else
                 {
@@ -123,7 +123,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the diagramCanvas {id} is null", diagramCanvas.Iid);
+                    Logger.Trace("The non-nullabale name property of the diagramCanvas {id} is null", diagramCanvas.Iid);
                 }
                 else
                 {
@@ -135,7 +135,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the diagramCanvas {id} is null", diagramCanvas.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the diagramCanvas {id} is null", diagramCanvas.Iid);
                 }
                 else
                 {

@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(iterationSetupProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale iterationSetup property of the iteration {id} is null", iteration.Iid);
+                    Logger.Trace("The non-nullabale iterationSetup property of the iteration {id} is null", iteration.Iid);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the iteration {id} is null", iteration.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the iteration {id} is null", iteration.Iid);
                 }
                 else
                 {
@@ -256,7 +256,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the iteration {id} is null", iteration.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the iteration {id} is null", iteration.Iid);
                 }
                 else
                 {

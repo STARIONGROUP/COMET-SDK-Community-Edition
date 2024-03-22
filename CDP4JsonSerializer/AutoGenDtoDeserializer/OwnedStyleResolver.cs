@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(fontNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale fontName property of the ownedStyle {id} is null", ownedStyle.Iid);
+                    Logger.Trace("The non-nullabale fontName property of the ownedStyle {id} is null", ownedStyle.Iid);
                 }
                 else
                 {
@@ -191,7 +191,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the ownedStyle {id} is null", ownedStyle.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the ownedStyle {id} is null", ownedStyle.Iid);
                 }
                 else
                 {
@@ -203,7 +203,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the ownedStyle {id} is null", ownedStyle.Iid);
+                    Logger.Trace("The non-nullabale name property of the ownedStyle {id} is null", ownedStyle.Iid);
                 }
                 else
                 {
@@ -251,7 +251,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the ownedStyle {id} is null", ownedStyle.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the ownedStyle {id} is null", ownedStyle.Iid);
                 }
                 else
                 {

@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(languageCodeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale languageCode property of the naturalLanguage {id} is null", naturalLanguage.Iid);
+                    Logger.Trace("The non-nullabale languageCode property of the naturalLanguage {id} is null", naturalLanguage.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the naturalLanguage {id} is null", naturalLanguage.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the naturalLanguage {id} is null", naturalLanguage.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the naturalLanguage {id} is null", naturalLanguage.Iid);
+                    Logger.Trace("The non-nullabale name property of the naturalLanguage {id} is null", naturalLanguage.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(nativeNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale nativeName property of the naturalLanguage {id} is null", naturalLanguage.Iid);
+                    Logger.Trace("The non-nullabale nativeName property of the naturalLanguage {id} is null", naturalLanguage.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the naturalLanguage {id} is null", naturalLanguage.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the naturalLanguage {id} is null", naturalLanguage.Iid);
                 }
                 else
                 {

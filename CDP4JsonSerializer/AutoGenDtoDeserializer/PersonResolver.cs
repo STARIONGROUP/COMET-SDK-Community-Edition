@@ -127,7 +127,7 @@ namespace CDP4JsonSerializer
             {
                 if(givenNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale givenName property of the person {id} is null", person.Iid);
+                    Logger.Trace("The non-nullabale givenName property of the person {id} is null", person.Iid);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace CDP4JsonSerializer
             {
                 if(isActiveProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isActive property of the person {id} is null", person.Iid);
+                    Logger.Trace("The non-nullabale isActive property of the person {id} is null", person.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the person {id} is null", person.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the person {id} is null", person.Iid);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the person {id} is null", person.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the person {id} is null", person.Iid);
                 }
                 else
                 {
@@ -187,7 +187,7 @@ namespace CDP4JsonSerializer
             {
                 if(organizationalUnitProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale organizationalUnit property of the person {id} is null", person.Iid);
+                    Logger.Trace("The non-nullabale organizationalUnit property of the person {id} is null", person.Iid);
                 }
                 else
                 {
@@ -199,7 +199,7 @@ namespace CDP4JsonSerializer
             {
                 if(passwordProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale password property of the person {id} is null", person.Iid);
+                    Logger.Trace("The non-nullabale password property of the person {id} is null", person.Iid);
                 }
                 else
                 {
@@ -223,7 +223,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the person {id} is null", person.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the person {id} is null", person.Iid);
                 }
                 else
                 {
@@ -235,7 +235,7 @@ namespace CDP4JsonSerializer
             {
                 if(surnameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale surname property of the person {id} is null", person.Iid);
+                    Logger.Trace("The non-nullabale surname property of the person {id} is null", person.Iid);
                 }
                 else
                 {
@@ -255,7 +255,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the person {id} is null", person.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the person {id} is null", person.Iid);
                 }
                 else
                 {

@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the telephoneNumber {id} is null", telephoneNumber.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the telephoneNumber {id} is null", telephoneNumber.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the telephoneNumber {id} is null", telephoneNumber.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the telephoneNumber {id} is null", telephoneNumber.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(valueProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale value property of the telephoneNumber {id} is null", telephoneNumber.Iid);
+                    Logger.Trace("The non-nullabale value property of the telephoneNumber {id} is null", telephoneNumber.Iid);
                 }
                 else
                 {

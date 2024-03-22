@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the parameterValueSet {id} is null", parameterValueSet.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the parameterValueSet {id} is null", parameterValueSet.Iid);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the parameterValueSet {id} is null", parameterValueSet.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the parameterValueSet {id} is null", parameterValueSet.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(valueSwitchProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale valueSwitch property of the parameterValueSet {id} is null", parameterValueSet.Iid);
+                    Logger.Trace("The non-nullabale valueSwitch property of the parameterValueSet {id} is null", parameterValueSet.Iid);
                 }
                 else
                 {

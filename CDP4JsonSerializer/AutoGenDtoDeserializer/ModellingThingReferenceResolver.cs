@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the modellingThingReference {id} is null", modellingThingReference.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the modellingThingReference {id} is null", modellingThingReference.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(referencedRevisionNumberProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale referencedRevisionNumber property of the modellingThingReference {id} is null", modellingThingReference.Iid);
+                    Logger.Trace("The non-nullabale referencedRevisionNumber property of the modellingThingReference {id} is null", modellingThingReference.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(referencedThingProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale referencedThing property of the modellingThingReference {id} is null", modellingThingReference.Iid);
+                    Logger.Trace("The non-nullabale referencedThing property of the modellingThingReference {id} is null", modellingThingReference.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the modellingThingReference {id} is null", modellingThingReference.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the modellingThingReference {id} is null", modellingThingReference.Iid);
                 }
                 else
                 {

@@ -103,7 +103,7 @@ namespace CDP4JsonSerializer
             {
                 if(externalModelNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale externalModelName property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                    Logger.Trace("The non-nullabale externalModelName property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace CDP4JsonSerializer
             {
                 if(externalToolNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale externalToolName property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                    Logger.Trace("The non-nullabale externalToolName property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace CDP4JsonSerializer
             {
                 if(externalToolVersionProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale externalToolVersion property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                    Logger.Trace("The non-nullabale externalToolVersion property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                    Logger.Trace("The non-nullabale name property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace CDP4JsonSerializer
             {
                 if(ownerProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale owner property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                    Logger.Trace("The non-nullabale owner property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
                 }
                 else
                 {
@@ -175,7 +175,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the externalIdentifierMap {id} is null", externalIdentifierMap.Iid);
                 }
                 else
                 {

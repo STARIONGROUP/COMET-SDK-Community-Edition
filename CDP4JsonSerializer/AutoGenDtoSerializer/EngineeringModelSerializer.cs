@@ -33,6 +33,7 @@ namespace CDP4JsonSerializer
     using System.Linq;
     using System.Text.Json;
 
+    using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
@@ -49,429 +50,6 @@ namespace CDP4JsonSerializer
     /// </summary>
     public class EngineeringModelSerializer : BaseThingSerializer, IThingSerializer
     {
-        /// <summary>
-        /// Serialize a value for a <see cref="EngineeringModel"/> property into a <see cref="Utf8JsonWriter" />
-        /// </summary>
-        /// <param name="propertyName">The name of the property to serialize</param>
-        /// <param name="value">The object value to serialize</param>
-        /// <param name="writer">The <see cref="Utf8JsonWriter" /></param>
-        /// <param name="requestedDataModelVersion">The <see cref="Version" /> that has been requested for the serialization</param>
-        public void SerializeProperty(string propertyName, object value, Utf8JsonWriter writer, Version requestedDataModelVersion)
-        {
-            var requestedVersion = requestedDataModelVersion.ToString(3);
-
-            switch(propertyName.ToLower())
-            {
-                case "actor":
-                    var allowedVersionsForActor = new List<string>
-                    {
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForActor.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("actor"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((Guid)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "book":
-                    var allowedVersionsForBook = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForBook.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("book"u8);
-
-                    if(value is IEnumerable<object> objectListBook)
-                    {
-                        foreach(var bookItem in objectListBook.OfType<OrderedItem>().OrderBy(x => x, this.OrderedItemComparer))
-                        {
-                            writer.WriteOrderedItem(bookItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "classkind":
-                    var allowedVersionsForClassKind = new List<string>
-                    {
-                        "1.0.0",
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForClassKind.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("classKind"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue(((ClassKind)value).ToString());
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "commonfilestore":
-                    var allowedVersionsForCommonFileStore = new List<string>
-                    {
-                        "1.0.0",
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForCommonFileStore.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("commonFileStore"u8);
-
-                    if(value is IEnumerable<object> objectListCommonFileStore)
-                    {
-                        foreach(var commonFileStoreItem in objectListCommonFileStore.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
-                        {
-                            writer.WriteStringValue(commonFileStoreItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "engineeringmodelsetup":
-                    var allowedVersionsForEngineeringModelSetup = new List<string>
-                    {
-                        "1.0.0",
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForEngineeringModelSetup.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("engineeringModelSetup"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((Guid)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "excludeddomain":
-                    var allowedVersionsForExcludedDomain = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForExcludedDomain.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("excludedDomain"u8);
-
-                    if(value is IEnumerable<object> objectListExcludedDomain)
-                    {
-                        foreach(var excludedDomainItem in objectListExcludedDomain.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
-                        {
-                            writer.WriteStringValue(excludedDomainItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "excludedperson":
-                    var allowedVersionsForExcludedPerson = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForExcludedPerson.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("excludedPerson"u8);
-
-                    if(value is IEnumerable<object> objectListExcludedPerson)
-                    {
-                        foreach(var excludedPersonItem in objectListExcludedPerson.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
-                        {
-                            writer.WriteStringValue(excludedPersonItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "genericnote":
-                    var allowedVersionsForGenericNote = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForGenericNote.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("genericNote"u8);
-
-                    if(value is IEnumerable<object> objectListGenericNote)
-                    {
-                        foreach(var genericNoteItem in objectListGenericNote.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
-                        {
-                            writer.WriteStringValue(genericNoteItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "iid":
-                    var allowedVersionsForIid = new List<string>
-                    {
-                        "1.0.0",
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForIid.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("iid"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((Guid)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "iteration":
-                    var allowedVersionsForIteration = new List<string>
-                    {
-                        "1.0.0",
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForIteration.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("iteration"u8);
-
-                    if(value is IEnumerable<object> objectListIteration)
-                    {
-                        foreach(var iterationItem in objectListIteration.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
-                        {
-                            writer.WriteStringValue(iterationItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "lastmodifiedon":
-                    var allowedVersionsForLastModifiedOn = new List<string>
-                    {
-                        "1.0.0",
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForLastModifiedOn.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("lastModifiedOn"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue(((DateTime)value).ToString(SerializerHelper.DateTimeFormat));
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "logentry":
-                    var allowedVersionsForLogEntry = new List<string>
-                    {
-                        "1.0.0",
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForLogEntry.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("logEntry"u8);
-
-                    if(value is IEnumerable<object> objectListLogEntry)
-                    {
-                        foreach(var logEntryItem in objectListLogEntry.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
-                        {
-                            writer.WriteStringValue(logEntryItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "modellingannotation":
-                    var allowedVersionsForModellingAnnotation = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForModellingAnnotation.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("modellingAnnotation"u8);
-
-                    if(value is IEnumerable<object> objectListModellingAnnotation)
-                    {
-                        foreach(var modellingAnnotationItem in objectListModellingAnnotation.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
-                        {
-                            writer.WriteStringValue(modellingAnnotationItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "modifiedon":
-                    var allowedVersionsForModifiedOn = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForModifiedOn.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("modifiedOn"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue(((DateTime)value).ToString(SerializerHelper.DateTimeFormat));
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "revisionnumber":
-                    var allowedVersionsForRevisionNumber = new List<string>
-                    {
-                        "1.0.0",
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForRevisionNumber.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("revisionNumber"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteNumberValue((int)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "thingpreference":
-                    var allowedVersionsForThingPreference = new List<string>
-                    {
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForThingPreference.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("thingPreference"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((string)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                default:
-                    throw new ArgumentException($"The requested property {propertyName} does not exist on the EngineeringModel");
-            }
-        }
-
         /// <summary>
         /// Serializes a <see cref="Thing" /> into an <see cref="Utf8JsonWriter" />
         /// </summary>
@@ -498,7 +76,7 @@ namespace CDP4JsonSerializer
             switch(requestedDataModelVersion.ToString(3))
             {
                 case "1.0.0":
-                    Logger.Log(LogLevel.Debug, "Serializing EngineeringModel for Version 1.0.0");
+                    Logger.Log(LogLevel.Trace, "Serializing EngineeringModel for Version 1.0.0");
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(engineeringModel.ClassKind.ToString());
                     writer.WriteStartArray("commonFileStore"u8);
@@ -509,6 +87,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("engineeringModelSetup"u8);
                     writer.WriteStringValue(engineeringModel.EngineeringModelSetup);
                     writer.WritePropertyName("iid"u8);
@@ -521,6 +100,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("lastModifiedOn"u8);
                     writer.WriteStringValue(engineeringModel.LastModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WriteStartArray("logEntry"u8);
@@ -531,11 +111,12 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("revisionNumber"u8);
                     writer.WriteNumberValue(engineeringModel.RevisionNumber);
                     break;
                 case "1.1.0":
-                    Logger.Log(LogLevel.Debug, "Serializing EngineeringModel for Version 1.1.0");
+                    Logger.Log(LogLevel.Trace, "Serializing EngineeringModel for Version 1.1.0");
                     writer.WriteStartArray("book"u8);
 
                     foreach(var bookItem in engineeringModel.Book.OrderBy(x => x, this.OrderedItemComparer))
@@ -544,6 +125,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(engineeringModel.ClassKind.ToString());
                     writer.WriteStartArray("commonFileStore"u8);
@@ -554,6 +136,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("engineeringModelSetup"u8);
                     writer.WriteStringValue(engineeringModel.EngineeringModelSetup);
                     writer.WriteStartArray("excludedDomain"u8);
@@ -564,6 +147,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("excludedPerson"u8);
 
                     foreach(var excludedPersonItem in engineeringModel.ExcludedPerson.OrderBy(x => x, this.GuidComparer))
@@ -572,6 +156,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("genericNote"u8);
 
                     foreach(var genericNoteItem in engineeringModel.GenericNote.OrderBy(x => x, this.GuidComparer))
@@ -580,6 +165,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(engineeringModel.Iid);
                     writer.WriteStartArray("iteration"u8);
@@ -590,6 +176,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("lastModifiedOn"u8);
                     writer.WriteStringValue(engineeringModel.LastModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WriteStartArray("logEntry"u8);
@@ -600,6 +187,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("modellingAnnotation"u8);
 
                     foreach(var modellingAnnotationItem in engineeringModel.ModellingAnnotation.OrderBy(x => x, this.GuidComparer))
@@ -608,13 +196,14 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("modifiedOn"u8);
                     writer.WriteStringValue(engineeringModel.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WritePropertyName("revisionNumber"u8);
                     writer.WriteNumberValue(engineeringModel.RevisionNumber);
                     break;
                 case "1.2.0":
-                    Logger.Log(LogLevel.Debug, "Serializing EngineeringModel for Version 1.2.0");
+                    Logger.Log(LogLevel.Trace, "Serializing EngineeringModel for Version 1.2.0");
                     writer.WriteStartArray("book"u8);
 
                     foreach(var bookItem in engineeringModel.Book.OrderBy(x => x, this.OrderedItemComparer))
@@ -623,6 +212,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(engineeringModel.ClassKind.ToString());
                     writer.WriteStartArray("commonFileStore"u8);
@@ -633,6 +223,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("engineeringModelSetup"u8);
                     writer.WriteStringValue(engineeringModel.EngineeringModelSetup);
                     writer.WriteStartArray("excludedDomain"u8);
@@ -643,6 +234,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("excludedPerson"u8);
 
                     foreach(var excludedPersonItem in engineeringModel.ExcludedPerson.OrderBy(x => x, this.GuidComparer))
@@ -651,6 +243,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("genericNote"u8);
 
                     foreach(var genericNoteItem in engineeringModel.GenericNote.OrderBy(x => x, this.GuidComparer))
@@ -659,6 +252,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(engineeringModel.Iid);
                     writer.WriteStartArray("iteration"u8);
@@ -669,6 +263,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("lastModifiedOn"u8);
                     writer.WriteStringValue(engineeringModel.LastModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WriteStartArray("logEntry"u8);
@@ -679,6 +274,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("modellingAnnotation"u8);
 
                     foreach(var modellingAnnotationItem in engineeringModel.ModellingAnnotation.OrderBy(x => x, this.GuidComparer))
@@ -687,6 +283,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("modifiedOn"u8);
                     writer.WriteStringValue(engineeringModel.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WritePropertyName("revisionNumber"u8);
@@ -695,7 +292,7 @@ namespace CDP4JsonSerializer
                     writer.WriteStringValue(engineeringModel.ThingPreference);
                     break;
                 case "1.3.0":
-                    Logger.Log(LogLevel.Debug, "Serializing EngineeringModel for Version 1.3.0");
+                    Logger.Log(LogLevel.Trace, "Serializing EngineeringModel for Version 1.3.0");
                     writer.WritePropertyName("actor"u8);
 
                     if(engineeringModel.Actor.HasValue)
@@ -715,6 +312,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(engineeringModel.ClassKind.ToString());
                     writer.WriteStartArray("commonFileStore"u8);
@@ -725,6 +323,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("engineeringModelSetup"u8);
                     writer.WriteStringValue(engineeringModel.EngineeringModelSetup);
                     writer.WriteStartArray("excludedDomain"u8);
@@ -735,6 +334,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("excludedPerson"u8);
 
                     foreach(var excludedPersonItem in engineeringModel.ExcludedPerson.OrderBy(x => x, this.GuidComparer))
@@ -743,6 +343,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("genericNote"u8);
 
                     foreach(var genericNoteItem in engineeringModel.GenericNote.OrderBy(x => x, this.GuidComparer))
@@ -751,6 +352,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(engineeringModel.Iid);
                     writer.WriteStartArray("iteration"u8);
@@ -761,6 +363,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("lastModifiedOn"u8);
                     writer.WriteStringValue(engineeringModel.LastModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WriteStartArray("logEntry"u8);
@@ -771,6 +374,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("modellingAnnotation"u8);
 
                     foreach(var modellingAnnotationItem in engineeringModel.ModellingAnnotation.OrderBy(x => x, this.GuidComparer))
@@ -779,6 +383,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("modifiedOn"u8);
                     writer.WriteStringValue(engineeringModel.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WritePropertyName("revisionNumber"u8);
@@ -792,6 +397,336 @@ namespace CDP4JsonSerializer
 
             writer.WriteEndObject();
         }
+
+        /// <summary>
+        /// Serialize a value for a <see cref="EngineeringModel"/> property into a <see cref="Utf8JsonWriter" />
+        /// </summary>
+        /// <param name="propertyName">The name of the property to serialize</param>
+        /// <param name="value">The object value to serialize</param>
+        /// <param name="writer">The <see cref="Utf8JsonWriter" /></param>
+        /// <param name="requestedDataModelVersion">The <see cref="Version" /> that has been requested for the serialization</param>
+        /// <remarks>This method should only be used in the scope of serializing a <see cref="ClasslessDTO" /></remarks>
+        public void SerializeProperty(string propertyName, object value, Utf8JsonWriter writer, Version requestedDataModelVersion)
+        {
+            var requestedVersion = requestedDataModelVersion.ToString(3);
+
+            switch(propertyName.ToLower())
+            {
+                case "actor":
+                    if(!AllowedVersionsPerProperty["actor"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("actor"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((Guid)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "book":
+                    if(!AllowedVersionsPerProperty["book"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("book"u8);
+
+                    if(value is IEnumerable<object> objectListBook)
+                    {
+                        foreach(var bookItem in objectListBook.OfType<OrderedItem>().OrderBy(x => x, this.OrderedItemComparer))
+                        {
+                            writer.WriteOrderedItem(bookItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "classkind":
+                    if(!AllowedVersionsPerProperty["classKind"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("classKind"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue(((ClassKind)value).ToString());
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "commonfilestore":
+                    if(!AllowedVersionsPerProperty["commonFileStore"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("commonFileStore"u8);
+
+                    if(value is IEnumerable<object> objectListCommonFileStore)
+                    {
+                        foreach(var commonFileStoreItem in objectListCommonFileStore.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(commonFileStoreItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "engineeringmodelsetup":
+                    if(!AllowedVersionsPerProperty["engineeringModelSetup"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("engineeringModelSetup"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((Guid)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "excludeddomain":
+                    if(!AllowedVersionsPerProperty["excludedDomain"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("excludedDomain"u8);
+
+                    if(value is IEnumerable<object> objectListExcludedDomain)
+                    {
+                        foreach(var excludedDomainItem in objectListExcludedDomain.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(excludedDomainItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "excludedperson":
+                    if(!AllowedVersionsPerProperty["excludedPerson"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("excludedPerson"u8);
+
+                    if(value is IEnumerable<object> objectListExcludedPerson)
+                    {
+                        foreach(var excludedPersonItem in objectListExcludedPerson.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(excludedPersonItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "genericnote":
+                    if(!AllowedVersionsPerProperty["genericNote"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("genericNote"u8);
+
+                    if(value is IEnumerable<object> objectListGenericNote)
+                    {
+                        foreach(var genericNoteItem in objectListGenericNote.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(genericNoteItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "iid":
+                    if(!AllowedVersionsPerProperty["iid"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("iid"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((Guid)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "iteration":
+                    if(!AllowedVersionsPerProperty["iteration"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("iteration"u8);
+
+                    if(value is IEnumerable<object> objectListIteration)
+                    {
+                        foreach(var iterationItem in objectListIteration.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(iterationItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "lastmodifiedon":
+                    if(!AllowedVersionsPerProperty["lastModifiedOn"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("lastModifiedOn"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue(((DateTime)value).ToString(SerializerHelper.DateTimeFormat));
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "logentry":
+                    if(!AllowedVersionsPerProperty["logEntry"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("logEntry"u8);
+
+                    if(value is IEnumerable<object> objectListLogEntry)
+                    {
+                        foreach(var logEntryItem in objectListLogEntry.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(logEntryItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "modellingannotation":
+                    if(!AllowedVersionsPerProperty["modellingAnnotation"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("modellingAnnotation"u8);
+
+                    if(value is IEnumerable<object> objectListModellingAnnotation)
+                    {
+                        foreach(var modellingAnnotationItem in objectListModellingAnnotation.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(modellingAnnotationItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "modifiedon":
+                    if(!AllowedVersionsPerProperty["modifiedOn"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("modifiedOn"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue(((DateTime)value).ToString(SerializerHelper.DateTimeFormat));
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "revisionnumber":
+                    if(!AllowedVersionsPerProperty["revisionNumber"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("revisionNumber"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteNumberValue((int)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "thingpreference":
+                    if(!AllowedVersionsPerProperty["thingPreference"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("thingPreference"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((string)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentException($"The requested property {propertyName} does not exist on the EngineeringModel");
+            }
+        }
+
+        /// <summary>
+        /// Gets the association between a name of a property and all versions where that property is defined
+        /// </summary>
+        private static readonly IReadOnlyDictionary<string, IReadOnlyCollection<string>> AllowedVersionsPerProperty = new Dictionary<string, IReadOnlyCollection<string>>()
+        {
+            { "actor", new []{ "1.3.0" }},
+            { "book", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "classKind", new []{ "1.0.0", "1.1.0", "1.2.0", "1.3.0" }},
+            { "commonFileStore", new []{ "1.0.0", "1.1.0", "1.2.0", "1.3.0" }},
+            { "engineeringModelSetup", new []{ "1.0.0", "1.1.0", "1.2.0", "1.3.0" }},
+            { "excludedDomain", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "excludedPerson", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "genericNote", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "iid", new []{ "1.0.0", "1.1.0", "1.2.0", "1.3.0" }},
+            { "iteration", new []{ "1.0.0", "1.1.0", "1.2.0", "1.3.0" }},
+            { "lastModifiedOn", new []{ "1.0.0", "1.1.0", "1.2.0", "1.3.0" }},
+            { "logEntry", new []{ "1.0.0", "1.1.0", "1.2.0", "1.3.0" }},
+            { "modellingAnnotation", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "modifiedOn", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "revisionNumber", new []{ "1.0.0", "1.1.0", "1.2.0", "1.3.0" }},
+            { "thingPreference", new []{ "1.2.0", "1.3.0" }},
+        };
     }
 }
 

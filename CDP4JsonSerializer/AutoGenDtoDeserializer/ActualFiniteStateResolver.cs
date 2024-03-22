@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(kindProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale kind property of the actualFiniteState {id} is null", actualFiniteState.Iid);
+                    Logger.Trace("The non-nullabale kind property of the actualFiniteState {id} is null", actualFiniteState.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the actualFiniteState {id} is null", actualFiniteState.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the actualFiniteState {id} is null", actualFiniteState.Iid);
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the actualFiniteState {id} is null", actualFiniteState.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the actualFiniteState {id} is null", actualFiniteState.Iid);
                 }
                 else
                 {

@@ -115,7 +115,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the goal {id} is null", goal.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the goal {id} is null", goal.Iid);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the goal {id} is null", goal.Iid);
+                    Logger.Trace("The non-nullabale name property of the goal {id} is null", goal.Iid);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the goal {id} is null", goal.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the goal {id} is null", goal.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the goal {id} is null", goal.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the goal {id} is null", goal.Iid);
                 }
                 else
                 {

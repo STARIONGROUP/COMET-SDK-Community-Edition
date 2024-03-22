@@ -67,7 +67,7 @@ namespace CDP4JsonSerializer
             {
                 if(allowDifferentOwnerOfOverrideProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale allowDifferentOwnerOfOverride property of the parameter {id} is null", parameter.Iid);
+                    Logger.Trace("The non-nullabale allowDifferentOwnerOfOverride property of the parameter {id} is null", parameter.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(expectsOverrideProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale expectsOverride property of the parameter {id} is null", parameter.Iid);
+                    Logger.Trace("The non-nullabale expectsOverride property of the parameter {id} is null", parameter.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(isOptionDependentProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isOptionDependent property of the parameter {id} is null", parameter.Iid);
+                    Logger.Trace("The non-nullabale isOptionDependent property of the parameter {id} is null", parameter.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the parameter {id} is null", parameter.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the parameter {id} is null", parameter.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(ownerProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale owner property of the parameter {id} is null", parameter.Iid);
+                    Logger.Trace("The non-nullabale owner property of the parameter {id} is null", parameter.Iid);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace CDP4JsonSerializer
             {
                 if(parameterTypeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale parameterType property of the parameter {id} is null", parameter.Iid);
+                    Logger.Trace("The non-nullabale parameterType property of the parameter {id} is null", parameter.Iid);
                 }
                 else
                 {
@@ -211,7 +211,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the parameter {id} is null", parameter.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the parameter {id} is null", parameter.Iid);
                 }
                 else
                 {

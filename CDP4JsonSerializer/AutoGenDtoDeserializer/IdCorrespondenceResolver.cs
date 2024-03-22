@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(externalIdProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale externalId property of the idCorrespondence {id} is null", idCorrespondence.Iid);
+                    Logger.Trace("The non-nullabale externalId property of the idCorrespondence {id} is null", idCorrespondence.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(internalThingProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale internalThing property of the idCorrespondence {id} is null", idCorrespondence.Iid);
+                    Logger.Trace("The non-nullabale internalThing property of the idCorrespondence {id} is null", idCorrespondence.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the idCorrespondence {id} is null", idCorrespondence.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the idCorrespondence {id} is null", idCorrespondence.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the idCorrespondence {id} is null", idCorrespondence.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the idCorrespondence {id} is null", idCorrespondence.Iid);
                 }
                 else
                 {

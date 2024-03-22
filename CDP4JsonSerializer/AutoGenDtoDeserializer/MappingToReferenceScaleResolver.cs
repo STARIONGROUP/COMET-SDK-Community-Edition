@@ -67,7 +67,7 @@ namespace CDP4JsonSerializer
             {
                 if(dependentScaleValueProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale dependentScaleValue property of the mappingToReferenceScale {id} is null", mappingToReferenceScale.Iid);
+                    Logger.Trace("The non-nullabale dependentScaleValue property of the mappingToReferenceScale {id} is null", mappingToReferenceScale.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the mappingToReferenceScale {id} is null", mappingToReferenceScale.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the mappingToReferenceScale {id} is null", mappingToReferenceScale.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(referenceScaleValueProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale referenceScaleValue property of the mappingToReferenceScale {id} is null", mappingToReferenceScale.Iid);
+                    Logger.Trace("The non-nullabale referenceScaleValue property of the mappingToReferenceScale {id} is null", mappingToReferenceScale.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the mappingToReferenceScale {id} is null", mappingToReferenceScale.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the mappingToReferenceScale {id} is null", mappingToReferenceScale.Iid);
                 }
                 else
                 {

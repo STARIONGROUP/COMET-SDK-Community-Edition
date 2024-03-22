@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(isMaximumInclusiveProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isMaximumInclusive property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale isMaximumInclusive property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(isMinimumInclusiveProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isMinimumInclusive property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale isMinimumInclusive property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(maximumPermissibleValueProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale maximumPermissibleValue property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale maximumPermissibleValue property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace CDP4JsonSerializer
             {
                 if(minimumPermissibleValueProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale minimumPermissibleValue property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale minimumPermissibleValue property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -175,7 +175,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -187,7 +187,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale name property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -199,7 +199,7 @@ namespace CDP4JsonSerializer
             {
                 if(negativeValueConnotationProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale negativeValueConnotation property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale negativeValueConnotation property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -211,7 +211,7 @@ namespace CDP4JsonSerializer
             {
                 if(numberSetProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale numberSet property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale numberSet property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -223,7 +223,7 @@ namespace CDP4JsonSerializer
             {
                 if(positiveValueConnotationProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale positiveValueConnotation property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale positiveValueConnotation property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -235,7 +235,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -247,7 +247,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -259,7 +259,7 @@ namespace CDP4JsonSerializer
             {
                 if(unitProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale unit property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale unit property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {
@@ -271,7 +271,7 @@ namespace CDP4JsonSerializer
             {
                 if(useShortNameValuesProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale useShortNameValues property of the ordinalScale {id} is null", ordinalScale.Iid);
+                    Logger.Trace("The non-nullabale useShortNameValues property of the ordinalScale {id} is null", ordinalScale.Iid);
                 }
                 else
                 {

@@ -88,7 +88,7 @@ namespace CDP4JsonSerializer
             {
                 if(isVolatileProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isVolatile property of the nestedElement {id} is null", nestedElement.Iid);
+                    Logger.Trace("The non-nullabale isVolatile property of the nestedElement {id} is null", nestedElement.Iid);
                 }
                 else
                 {
@@ -100,7 +100,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the nestedElement {id} is null", nestedElement.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the nestedElement {id} is null", nestedElement.Iid);
                 }
                 else
                 {
@@ -120,7 +120,7 @@ namespace CDP4JsonSerializer
             {
                 if(rootElementProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale rootElement property of the nestedElement {id} is null", nestedElement.Iid);
+                    Logger.Trace("The non-nullabale rootElement property of the nestedElement {id} is null", nestedElement.Iid);
                 }
                 else
                 {
@@ -132,7 +132,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the nestedElement {id} is null", nestedElement.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the nestedElement {id} is null", nestedElement.Iid);
                 }
                 else
                 {

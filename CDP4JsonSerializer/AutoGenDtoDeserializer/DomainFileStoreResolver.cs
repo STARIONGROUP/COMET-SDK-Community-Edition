@@ -67,7 +67,7 @@ namespace CDP4JsonSerializer
             {
                 if(createdOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale createdOn property of the domainFileStore {id} is null", domainFileStore.Iid);
+                    Logger.Trace("The non-nullabale createdOn property of the domainFileStore {id} is null", domainFileStore.Iid);
                 }
                 else
                 {
@@ -111,7 +111,7 @@ namespace CDP4JsonSerializer
             {
                 if(isHiddenProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isHidden property of the domainFileStore {id} is null", domainFileStore.Iid);
+                    Logger.Trace("The non-nullabale isHidden property of the domainFileStore {id} is null", domainFileStore.Iid);
                 }
                 else
                 {
@@ -123,7 +123,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the domainFileStore {id} is null", domainFileStore.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the domainFileStore {id} is null", domainFileStore.Iid);
                 }
                 else
                 {
@@ -135,7 +135,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the domainFileStore {id} is null", domainFileStore.Iid);
+                    Logger.Trace("The non-nullabale name property of the domainFileStore {id} is null", domainFileStore.Iid);
                 }
                 else
                 {
@@ -147,7 +147,7 @@ namespace CDP4JsonSerializer
             {
                 if(ownerProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale owner property of the domainFileStore {id} is null", domainFileStore.Iid);
+                    Logger.Trace("The non-nullabale owner property of the domainFileStore {id} is null", domainFileStore.Iid);
                 }
                 else
                 {
@@ -159,7 +159,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the domainFileStore {id} is null", domainFileStore.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the domainFileStore {id} is null", domainFileStore.Iid);
                 }
                 else
                 {

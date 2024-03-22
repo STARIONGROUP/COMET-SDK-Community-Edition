@@ -33,6 +33,7 @@ namespace CDP4JsonSerializer
     using System.Linq;
     using System.Text.Json;
 
+    using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.ReportingData;
@@ -49,396 +50,6 @@ namespace CDP4JsonSerializer
     /// </summary>
     public class TextualNoteSerializer : BaseThingSerializer, IThingSerializer
     {
-        /// <summary>
-        /// Serialize a value for a <see cref="TextualNote"/> property into a <see cref="Utf8JsonWriter" />
-        /// </summary>
-        /// <param name="propertyName">The name of the property to serialize</param>
-        /// <param name="value">The object value to serialize</param>
-        /// <param name="writer">The <see cref="Utf8JsonWriter" /></param>
-        /// <param name="requestedDataModelVersion">The <see cref="Version" /> that has been requested for the serialization</param>
-        public void SerializeProperty(string propertyName, object value, Utf8JsonWriter writer, Version requestedDataModelVersion)
-        {
-            var requestedVersion = requestedDataModelVersion.ToString(3);
-
-            switch(propertyName.ToLower())
-            {
-                case "actor":
-                    var allowedVersionsForActor = new List<string>
-                    {
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForActor.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("actor"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((Guid)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "category":
-                    var allowedVersionsForCategory = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForCategory.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("category"u8);
-
-                    if(value is IEnumerable<object> objectListCategory)
-                    {
-                        foreach(var categoryItem in objectListCategory.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
-                        {
-                            writer.WriteStringValue(categoryItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "classkind":
-                    var allowedVersionsForClassKind = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForClassKind.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("classKind"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue(((ClassKind)value).ToString());
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "content":
-                    var allowedVersionsForContent = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForContent.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("content"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((string)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "createdon":
-                    var allowedVersionsForCreatedOn = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForCreatedOn.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("createdOn"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue(((DateTime)value).ToString(SerializerHelper.DateTimeFormat));
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "excludeddomain":
-                    var allowedVersionsForExcludedDomain = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForExcludedDomain.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("excludedDomain"u8);
-
-                    if(value is IEnumerable<object> objectListExcludedDomain)
-                    {
-                        foreach(var excludedDomainItem in objectListExcludedDomain.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
-                        {
-                            writer.WriteStringValue(excludedDomainItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "excludedperson":
-                    var allowedVersionsForExcludedPerson = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForExcludedPerson.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WriteStartArray("excludedPerson"u8);
-
-                    if(value is IEnumerable<object> objectListExcludedPerson)
-                    {
-                        foreach(var excludedPersonItem in objectListExcludedPerson.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
-                        {
-                            writer.WriteStringValue(excludedPersonItem);
-                        }
-                    }
-                    
-                    writer.WriteEndArray();
-                    break;
-                case "iid":
-                    var allowedVersionsForIid = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForIid.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("iid"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((Guid)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "languagecode":
-                    var allowedVersionsForLanguageCode = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForLanguageCode.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("languageCode"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((string)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "modifiedon":
-                    var allowedVersionsForModifiedOn = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForModifiedOn.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("modifiedOn"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue(((DateTime)value).ToString(SerializerHelper.DateTimeFormat));
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "name":
-                    var allowedVersionsForName = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForName.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("name"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((string)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "owner":
-                    var allowedVersionsForOwner = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForOwner.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("owner"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((Guid)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "revisionnumber":
-                    var allowedVersionsForRevisionNumber = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForRevisionNumber.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("revisionNumber"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteNumberValue((int)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "shortname":
-                    var allowedVersionsForShortName = new List<string>
-                    {
-                        "1.1.0",
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForShortName.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("shortName"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((string)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                case "thingpreference":
-                    var allowedVersionsForThingPreference = new List<string>
-                    {
-                        "1.2.0",
-                        "1.3.0",
-                    };
-
-                    if(!allowedVersionsForThingPreference.Contains(requestedVersion))
-                    {
-                        return;
-                    }
-
-                    writer.WritePropertyName("thingPreference"u8);
-                    
-                    if(value != null)
-                    {
-                        writer.WriteStringValue((string)value);
-                    }
-                    else
-                    {
-                        writer.WriteNullValue();
-                    }
-
-                    break;
-                default:
-                    throw new ArgumentException($"The requested property {propertyName} does not exist on the TextualNote");
-            }
-        }
-
         /// <summary>
         /// Serializes a <see cref="Thing" /> into an <see cref="Utf8JsonWriter" />
         /// </summary>
@@ -465,7 +76,7 @@ namespace CDP4JsonSerializer
             switch(requestedDataModelVersion.ToString(3))
             {
                 case "1.1.0":
-                    Logger.Log(LogLevel.Debug, "Serializing TextualNote for Version 1.1.0");
+                    Logger.Log(LogLevel.Trace, "Serializing TextualNote for Version 1.1.0");
                     writer.WriteStartArray("category"u8);
 
                     foreach(var categoryItem in textualNote.Category.OrderBy(x => x, this.GuidComparer))
@@ -474,6 +85,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(textualNote.ClassKind.ToString());
                     writer.WritePropertyName("content"u8);
@@ -488,6 +100,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("excludedPerson"u8);
 
                     foreach(var excludedPersonItem in textualNote.ExcludedPerson.OrderBy(x => x, this.GuidComparer))
@@ -496,6 +109,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(textualNote.Iid);
                     writer.WritePropertyName("languageCode"u8);
@@ -512,7 +126,7 @@ namespace CDP4JsonSerializer
                     writer.WriteStringValue(textualNote.ShortName);
                     break;
                 case "1.2.0":
-                    Logger.Log(LogLevel.Debug, "Serializing TextualNote for Version 1.2.0");
+                    Logger.Log(LogLevel.Trace, "Serializing TextualNote for Version 1.2.0");
                     writer.WriteStartArray("category"u8);
 
                     foreach(var categoryItem in textualNote.Category.OrderBy(x => x, this.GuidComparer))
@@ -521,6 +135,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(textualNote.ClassKind.ToString());
                     writer.WritePropertyName("content"u8);
@@ -535,6 +150,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("excludedPerson"u8);
 
                     foreach(var excludedPersonItem in textualNote.ExcludedPerson.OrderBy(x => x, this.GuidComparer))
@@ -543,6 +159,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(textualNote.Iid);
                     writer.WritePropertyName("languageCode"u8);
@@ -561,7 +178,7 @@ namespace CDP4JsonSerializer
                     writer.WriteStringValue(textualNote.ThingPreference);
                     break;
                 case "1.3.0":
-                    Logger.Log(LogLevel.Debug, "Serializing TextualNote for Version 1.3.0");
+                    Logger.Log(LogLevel.Trace, "Serializing TextualNote for Version 1.3.0");
                     writer.WritePropertyName("actor"u8);
 
                     if(textualNote.Actor.HasValue)
@@ -581,6 +198,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(textualNote.ClassKind.ToString());
                     writer.WritePropertyName("content"u8);
@@ -595,6 +213,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WriteStartArray("excludedPerson"u8);
 
                     foreach(var excludedPersonItem in textualNote.ExcludedPerson.OrderBy(x => x, this.GuidComparer))
@@ -603,6 +222,7 @@ namespace CDP4JsonSerializer
                     }
 
                     writer.WriteEndArray();
+                    
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(textualNote.Iid);
                     writer.WritePropertyName("languageCode"u8);
@@ -626,6 +246,317 @@ namespace CDP4JsonSerializer
 
             writer.WriteEndObject();
         }
+
+        /// <summary>
+        /// Serialize a value for a <see cref="TextualNote"/> property into a <see cref="Utf8JsonWriter" />
+        /// </summary>
+        /// <param name="propertyName">The name of the property to serialize</param>
+        /// <param name="value">The object value to serialize</param>
+        /// <param name="writer">The <see cref="Utf8JsonWriter" /></param>
+        /// <param name="requestedDataModelVersion">The <see cref="Version" /> that has been requested for the serialization</param>
+        /// <remarks>This method should only be used in the scope of serializing a <see cref="ClasslessDTO" /></remarks>
+        public void SerializeProperty(string propertyName, object value, Utf8JsonWriter writer, Version requestedDataModelVersion)
+        {
+            var requestedVersion = requestedDataModelVersion.ToString(3);
+
+            switch(propertyName.ToLower())
+            {
+                case "actor":
+                    if(!AllowedVersionsPerProperty["actor"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("actor"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((Guid)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "category":
+                    if(!AllowedVersionsPerProperty["category"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("category"u8);
+
+                    if(value is IEnumerable<object> objectListCategory)
+                    {
+                        foreach(var categoryItem in objectListCategory.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(categoryItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "classkind":
+                    if(!AllowedVersionsPerProperty["classKind"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("classKind"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue(((ClassKind)value).ToString());
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "content":
+                    if(!AllowedVersionsPerProperty["content"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("content"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((string)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "createdon":
+                    if(!AllowedVersionsPerProperty["createdOn"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("createdOn"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue(((DateTime)value).ToString(SerializerHelper.DateTimeFormat));
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "excludeddomain":
+                    if(!AllowedVersionsPerProperty["excludedDomain"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("excludedDomain"u8);
+
+                    if(value is IEnumerable<object> objectListExcludedDomain)
+                    {
+                        foreach(var excludedDomainItem in objectListExcludedDomain.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(excludedDomainItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "excludedperson":
+                    if(!AllowedVersionsPerProperty["excludedPerson"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WriteStartArray("excludedPerson"u8);
+
+                    if(value is IEnumerable<object> objectListExcludedPerson)
+                    {
+                        foreach(var excludedPersonItem in objectListExcludedPerson.OfType<Guid>().OrderBy(x => x, this.GuidComparer))
+                        {
+                            writer.WriteStringValue(excludedPersonItem);
+                        }
+                    }
+                    
+                    writer.WriteEndArray();
+                    break;
+                case "iid":
+                    if(!AllowedVersionsPerProperty["iid"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("iid"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((Guid)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "languagecode":
+                    if(!AllowedVersionsPerProperty["languageCode"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("languageCode"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((string)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "modifiedon":
+                    if(!AllowedVersionsPerProperty["modifiedOn"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("modifiedOn"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue(((DateTime)value).ToString(SerializerHelper.DateTimeFormat));
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "name":
+                    if(!AllowedVersionsPerProperty["name"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("name"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((string)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "owner":
+                    if(!AllowedVersionsPerProperty["owner"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("owner"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((Guid)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "revisionnumber":
+                    if(!AllowedVersionsPerProperty["revisionNumber"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("revisionNumber"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteNumberValue((int)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "shortname":
+                    if(!AllowedVersionsPerProperty["shortName"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("shortName"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((string)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                case "thingpreference":
+                    if(!AllowedVersionsPerProperty["thingPreference"].Contains(requestedVersion))
+                    {
+                        return;
+                    }
+
+                    writer.WritePropertyName("thingPreference"u8);
+                    
+                    if(value != null)
+                    {
+                        writer.WriteStringValue((string)value);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentException($"The requested property {propertyName} does not exist on the TextualNote");
+            }
+        }
+
+        /// <summary>
+        /// Gets the association between a name of a property and all versions where that property is defined
+        /// </summary>
+        private static readonly IReadOnlyDictionary<string, IReadOnlyCollection<string>> AllowedVersionsPerProperty = new Dictionary<string, IReadOnlyCollection<string>>()
+        {
+            { "actor", new []{ "1.3.0" }},
+            { "category", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "classKind", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "content", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "createdOn", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "excludedDomain", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "excludedPerson", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "iid", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "languageCode", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "modifiedOn", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "name", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "owner", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "revisionNumber", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "shortName", new []{ "1.1.0", "1.2.0", "1.3.0" }},
+            { "thingPreference", new []{ "1.2.0", "1.3.0" }},
+        };
     }
 }
 

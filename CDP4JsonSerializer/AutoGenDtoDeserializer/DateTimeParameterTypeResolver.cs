@@ -115,7 +115,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
+                    Logger.Trace("The non-nullabale name property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace CDP4JsonSerializer
             {
                 if(symbolProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale symbol property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
+                    Logger.Trace("The non-nullabale symbol property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
                 }
                 else
                 {
@@ -175,7 +175,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the dateTimeParameterType {id} is null", dateTimeParameterType.Iid);
                 }
                 else
                 {

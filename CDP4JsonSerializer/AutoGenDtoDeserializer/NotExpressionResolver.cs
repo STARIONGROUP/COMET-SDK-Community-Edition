@@ -83,7 +83,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the notExpression {id} is null", notExpression.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the notExpression {id} is null", notExpression.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(termProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale term property of the notExpression {id} is null", notExpression.Iid);
+                    Logger.Trace("The non-nullabale term property of the notExpression {id} is null", notExpression.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the notExpression {id} is null", notExpression.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the notExpression {id} is null", notExpression.Iid);
                 }
                 else
                 {

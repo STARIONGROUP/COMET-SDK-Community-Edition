@@ -75,7 +75,7 @@ namespace CDP4JsonSerializer
             {
                 if(authorProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale author property of the referenceSource {id} is null", referenceSource.Iid);
+                    Logger.Trace("The non-nullabale author property of the referenceSource {id} is null", referenceSource.Iid);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the referenceSource {id} is null", referenceSource.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the referenceSource {id} is null", referenceSource.Iid);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace CDP4JsonSerializer
             {
                 if(languageProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale language property of the referenceSource {id} is null", referenceSource.Iid);
+                    Logger.Trace("The non-nullabale language property of the referenceSource {id} is null", referenceSource.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the referenceSource {id} is null", referenceSource.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the referenceSource {id} is null", referenceSource.Iid);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the referenceSource {id} is null", referenceSource.Iid);
+                    Logger.Trace("The non-nullabale name property of the referenceSource {id} is null", referenceSource.Iid);
                 }
                 else
                 {
@@ -211,7 +211,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the referenceSource {id} is null", referenceSource.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the referenceSource {id} is null", referenceSource.Iid);
                 }
                 else
                 {
@@ -223,7 +223,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the referenceSource {id} is null", referenceSource.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the referenceSource {id} is null", referenceSource.Iid);
                 }
                 else
                 {
@@ -247,7 +247,7 @@ namespace CDP4JsonSerializer
             {
                 if(versionIdentifierProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale versionIdentifier property of the referenceSource {id} is null", referenceSource.Iid);
+                    Logger.Trace("The non-nullabale versionIdentifier property of the referenceSource {id} is null", referenceSource.Iid);
                 }
                 else
                 {

@@ -127,7 +127,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
+                    Logger.Trace("The non-nullabale name property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace CDP4JsonSerializer
             {
                 if(ownerProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale owner property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
+                    Logger.Trace("The non-nullabale owner property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
                 }
                 else
                 {
@@ -168,7 +168,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
                 }
                 else
                 {
@@ -180,7 +180,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the possibleFiniteStateList {id} is null", possibleFiniteStateList.Iid);
                 }
                 else
                 {

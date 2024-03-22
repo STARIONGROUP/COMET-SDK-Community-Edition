@@ -99,7 +99,7 @@ namespace CDP4JsonSerializer
             {
                 if(forwardRelationshipNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale forwardRelationshipName property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale forwardRelationshipName property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(inverseRelationshipNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale inverseRelationshipName property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale inverseRelationshipName property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isDeprecated property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale isDeprecated property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace CDP4JsonSerializer
             {
                 if(nameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale name property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale name property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
                 }
                 else
                 {
@@ -167,7 +167,7 @@ namespace CDP4JsonSerializer
             {
                 if(relationshipCategoryProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale relationshipCategory property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale relationshipCategory property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
                 }
                 else
                 {
@@ -179,7 +179,7 @@ namespace CDP4JsonSerializer
             {
                 if(shortNameProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale shortName property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale shortName property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
                 }
                 else
                 {
@@ -191,7 +191,7 @@ namespace CDP4JsonSerializer
             {
                 if(sourceCategoryProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale sourceCategory property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale sourceCategory property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
                 }
                 else
                 {
@@ -203,7 +203,7 @@ namespace CDP4JsonSerializer
             {
                 if(targetCategoryProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale targetCategory property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale targetCategory property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
                 }
                 else
                 {
@@ -215,7 +215,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the binaryRelationshipRule {id} is null", binaryRelationshipRule.Iid);
                 }
                 else
                 {

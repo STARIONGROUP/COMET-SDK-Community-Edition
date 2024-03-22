@@ -67,7 +67,7 @@ namespace CDP4JsonSerializer
             {
                 if(contentProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale content property of the alias {id} is null", alias.Iid);
+                    Logger.Trace("The non-nullabale content property of the alias {id} is null", alias.Iid);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace CDP4JsonSerializer
             {
                 if(isSynonymProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale isSynonym property of the alias {id} is null", alias.Iid);
+                    Logger.Trace("The non-nullabale isSynonym property of the alias {id} is null", alias.Iid);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace CDP4JsonSerializer
             {
                 if(languageCodeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale languageCode property of the alias {id} is null", alias.Iid);
+                    Logger.Trace("The non-nullabale languageCode property of the alias {id} is null", alias.Iid);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CDP4JsonSerializer
             {
                 if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale modifiedOn property of the alias {id} is null", alias.Iid);
+                    Logger.Trace("The non-nullabale modifiedOn property of the alias {id} is null", alias.Iid);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace CDP4JsonSerializer
             {
                 if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
                 {
-                    Logger.Debug("The non-nullabale thingPreference property of the alias {id} is null", alias.Iid);
+                    Logger.Trace("The non-nullabale thingPreference property of the alias {id} is null", alias.Iid);
                 }
                 else
                 {
