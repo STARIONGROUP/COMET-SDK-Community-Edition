@@ -26,6 +26,7 @@ namespace CDP4DalJsonSerializer.JsonConverter
 {
     using System;
     using System.IO;
+    using System.Runtime.Serialization;
     using System.Text.Json;
     using System.Text.Json.Serialization;
 
@@ -88,13 +89,13 @@ namespace CDP4DalJsonSerializer.JsonConverter
                 throw new InvalidDataException("The data object in the JSON array could not be cast to a JObject type.");
             }
 
-            var initializedPostOperation = Activator.CreateInstance(typeToConvert);
-
-            if (initializedPostOperation is not PostOperation postOperation)
+            if (!typeof(PostOperation).IsAssignableFrom(typeToConvert))         
             {
                 Logger.Error($"The request Type {typeToConvert.Name} is not a PostOperation");
                 throw new InvalidDataException($"The request Type {typeToConvert.Name} is not a PostOperation");
             }
+
+            var postOperation = (PostOperation)FormatterServices.GetUninitializedObject(typeToConvert);
 
             jsonElement.Value.DeserializePostOperation(postOperation, options);
             return postOperation;
