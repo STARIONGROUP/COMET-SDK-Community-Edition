@@ -135,23 +135,30 @@ namespace CDP4JsonSerializer
 
             foreach (var prop in jsonToken.EnumerateArray())
             {
-                var keyProp = prop.GetProperty("k");
-                var valueKind = keyProp.ValueKind;
-                var key = long.MinValue;
+                var valueProp = prop.GetProperty("v");
+                var valueKind = valueProp.ValueKind;
 
-                if (valueKind == JsonValueKind.String)
+                object valueToAssign = valueKind switch
                 {
-                    key = Convert.ToInt64(keyProp.GetString());
-                }
-                else if (valueKind == JsonValueKind.Number)
+                    JsonValueKind.String => valueProp.GetString(),
+                    JsonValueKind.Number => valueProp.GetInt64(),
+                    _ => null
+                };
+
+                var keyProp = prop.GetProperty("k");
+                valueKind = keyProp.ValueKind;
+
+                var keyValue = valueKind switch
                 {
-                    key = keyProp.GetInt64();
-                }
+                    JsonValueKind.String => long.Parse(keyProp.GetString()!),
+                    JsonValueKind.Number => keyProp.GetInt64(),
+                    _ => long.MinValue
+                };
 
                 var orderedItem = new OrderedItem
                 {
-                    K = key,
-                    V = prop.GetProperty("v").GetString(),
+                    K = keyValue,
+                    V = valueToAssign
                 };
 
                 if (prop.TryGetProperty("m", out var value) && value.ValueKind != JsonValueKind.Null)
