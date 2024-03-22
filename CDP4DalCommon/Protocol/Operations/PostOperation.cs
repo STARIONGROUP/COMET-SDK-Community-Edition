@@ -37,35 +37,24 @@ namespace CDP4DalCommon.Protocol.Operations
     public class PostOperation
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PostOperation"/> class
-        /// </summary>
-        public PostOperation()
-        {
-            this.Delete = [];
-            this.Create = [];
-            this.Update = [];
-            this.Copy = [];
-        }
-
-        /// <summary>
         /// Gets or sets the collection of DTOs to delete.
         /// </summary>
-        public List<ClasslessDTO> Delete { get; set; }
+        public List<ClasslessDTO> Delete { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the collection of DTOs to create.
         /// </summary>
-        public List<Thing> Create { get; set; }
+        public List<Thing> Create { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the collection of DTOs to update.
         /// </summary>
-        public List<ClasslessDTO> Update { get; set; }
+        public List<ClasslessDTO> Update { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the collection of DTOs to copy.
         /// </summary>
-        public List<CopyInfo> Copy { get; set; }
+        public List<CopyInfo> Copy { get; set; } = [];
 
         /// <summary>
         /// Populate the current <see cref="PostOperation"/> with the content based on the 
