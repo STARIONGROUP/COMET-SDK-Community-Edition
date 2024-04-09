@@ -258,7 +258,7 @@ namespace CDP4Common.Validation
 
             for (var valueIndex = 0; valueIndex < values.Length; valueIndex++)
             {
-                values[valueIndex] =  Regex.Replace(values[valueIndex], @"^\s*|\s*$", "");
+                values[valueIndex] = values[valueIndex].Trim();
             }
 
             if (!isMultiSelectAllowed && values.Length > 1)
