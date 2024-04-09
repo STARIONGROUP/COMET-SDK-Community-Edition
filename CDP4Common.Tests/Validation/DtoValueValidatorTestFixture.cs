@@ -365,6 +365,24 @@ namespace CDP4Common.Tests.Validation
 
             result = this.enumerationParameterType.Validate(42, things, out _);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
+            
+            this.valueSet.Manual[0] = "low | medium";
+            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, null, things);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(this.valueSet.Manual[0], Is.EqualTo("low|medium"));
+            });
+
+            this.valueSet.Manual[0] = "low  |  medium";
+            result = this.enumerationParameterType.ValidateAndCleanup(this.valueSet, null, things);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(this.valueSet.Manual[0], Is.EqualTo("low|medium"));
+            });
         }
 
         [Test]

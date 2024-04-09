@@ -28,6 +28,7 @@ namespace CDP4Common.Validation
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
@@ -254,7 +255,12 @@ namespace CDP4Common.Validation
             }
 
             var values = castedString.Split(Constants.MultiValueEnumSeparator);
-            
+
+            for (var valueIndex = 0; valueIndex < values.Length; valueIndex++)
+            {
+                values[valueIndex] = values[valueIndex].Trim();
+            }
+
             if (!isMultiSelectAllowed && values.Length > 1)
             {
                 cleanedValue = null;
@@ -281,7 +287,7 @@ namespace CDP4Common.Validation
 
             if (Array.Exists(values, enumerationValue => allowedValues.Any(x => x.Trim() == enumerationValue)))
             {
-                cleanedValue = castedString;
+                cleanedValue = string.Join($"{Constants.MultiValueEnumSeparator}", values);
                 Logger.Debug("Enumeration {0} validated", castedString);
                 return ValidationResult.ValidResult();
             }
