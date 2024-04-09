@@ -4,7 +4,7 @@
     <TargetFrameworks>net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>RHEA System S.A.</Company>
     <Title>CDP4JsonSerializer Community Edition</Title>
-    <VersionPrefix>26.6.1</VersionPrefix>
+    <VersionPrefix>26.6.2</VersionPrefix>
     <Description>CDP4 JSON Serialization Library</Description>
     <Copyright>Copyright © RHEA System S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
@@ -20,7 +20,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25 JSON</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-        [BUMP] To CDP4Common 26.6.1
+        [BUMP] To CDP4Common 26.6.2
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
