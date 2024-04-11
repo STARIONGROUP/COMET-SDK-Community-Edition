@@ -476,11 +476,11 @@ namespace CDP4Common.Validation
                 // date of the dateTime variable is not 1-1-1 the user provided an invalid date. The loophole here is that when a user provides a
                 // value that includes 1-1-1, it will be validated as being valid.
 
-                var isDateTime = DateTime.TryParse(parsedString, CultureInfo.InvariantCulture,  DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AssumeUniversal, out var dateTime);
+                var isDateTime = DateTime.TryParse(parsedString, CultureInfo.InvariantCulture,  DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.RoundtripKind, out var dateTime);
 
                 if (isDateTime && dateTime.IsDefaultDateTime())
                 {
-                    cleanedValue = dateTime.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
+                    cleanedValue = ToTimeOfDay(dateTime);
                     Logger.Debug("TimeOfDay {0} validated", parsedString);
                     return ValidationResult.ValidResult();
                 }
@@ -492,7 +492,8 @@ namespace CDP4Common.Validation
 
                 if (timeOfDayValue.IsDefaultDateTime())
                 {
-                    cleanedValue = timeOfDayValue.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
+                    cleanedValue = ToTimeOfDay(timeOfDayValue);
+
                     Logger.Debug("TimeOfDay {0} validated", value);
                     return ValidationResult.ValidResult();
                 }
@@ -509,6 +510,41 @@ namespace CDP4Common.Validation
                 ResultKind = ValidationResultKind.Invalid,
                 Message = $"'{value}' is not a valid Time of Day, for valid Time Of Day formats see http://www.w3.org/TR/xmlschema-2/#time."
             };
+        }
+
+        /// <summary>
+        /// Converts a <see cref="DateTime"/> object to a CDP compliant TimeOfDay string representation
+        /// </summary>
+        /// <param name="dateTime">The <see cref="DateTime"/></param>
+        /// <returns>The correct string format</returns>
+        private static string ToTimeOfDay(DateTime dateTime)
+        {
+            string cleanedValue;
+
+            if (dateTime.Kind == DateTimeKind.Utc)
+            {
+                if (dateTime.Millisecond > 0)
+                {
+                    cleanedValue = dateTime.ToString("HH:mm:ss.fffZ");
+                }
+                else
+                {
+                    cleanedValue = dateTime.ToString("HH:mm:ssZ");
+                }
+            }
+            else
+            {
+                if (dateTime.Millisecond > 0)
+                {
+                    cleanedValue = dateTime.ToString("HH:mm:ss.fff");
+                }
+                else
+                {
+                    cleanedValue = dateTime.ToString("HH:mm:ss");
+                }
+            }
+
+            return cleanedValue;
         }
     }
 }
