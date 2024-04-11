@@ -28,7 +28,6 @@ namespace CDP4Common.Validation
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
@@ -480,7 +479,7 @@ namespace CDP4Common.Validation
 
                 if (isDateTime && dateTime.IsDefaultDateTime())
                 {
-                    cleanedValue = ToTimeOfDay(dateTime);
+                    cleanedValue = dateTime.ToString("HH:mm:ss");
                     Logger.Debug("TimeOfDay {0} validated", parsedString);
                     return ValidationResult.ValidResult();
                 }
@@ -492,7 +491,7 @@ namespace CDP4Common.Validation
 
                 if (timeOfDayValue.IsDefaultDateTime())
                 {
-                    cleanedValue = ToTimeOfDay(timeOfDayValue);
+                    cleanedValue = timeOfDayValue.ToString("HH:mm:ss");
 
                     Logger.Debug("TimeOfDay {0} validated", value);
                     return ValidationResult.ValidResult();
@@ -510,41 +509,6 @@ namespace CDP4Common.Validation
                 ResultKind = ValidationResultKind.Invalid,
                 Message = $"'{value}' is not a valid Time of Day, for valid Time Of Day formats see http://www.w3.org/TR/xmlschema-2/#time."
             };
-        }
-
-        /// <summary>
-        /// Converts a <see cref="DateTime"/> object to a CDP compliant TimeOfDay string representation
-        /// </summary>
-        /// <param name="dateTime">The <see cref="DateTime"/></param>
-        /// <returns>The correct string format</returns>
-        private static string ToTimeOfDay(DateTime dateTime)
-        {
-            string cleanedValue;
-
-            if (dateTime.Kind == DateTimeKind.Utc)
-            {
-                if (dateTime.Millisecond > 0)
-                {
-                    cleanedValue = dateTime.ToString("HH:mm:ss.fffZ");
-                }
-                else
-                {
-                    cleanedValue = dateTime.ToString("HH:mm:ssZ");
-                }
-            }
-            else
-            {
-                if (dateTime.Millisecond > 0)
-                {
-                    cleanedValue = dateTime.ToString("HH:mm:ss.fff");
-                }
-                else
-                {
-                    cleanedValue = dateTime.ToString("HH:mm:ss");
-                }
-            }
-
-            return cleanedValue;
         }
     }
 }
