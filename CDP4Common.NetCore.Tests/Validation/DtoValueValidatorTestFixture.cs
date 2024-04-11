@@ -431,8 +431,8 @@ namespace CDP4Common.NetCore.Tests.Validation
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
                 Assert.That(this.valueSet.Manual[0], Is.EqualTo("14:00:12"));
-                Assert.That(this.valueSet.Computed[0], Is.EqualTo("14:00:12Z"));
-                Assert.That(this.valueSet.Reference[0], Is.EqualTo("17:49:30.453Z"));
+                Assert.That(this.valueSet.Computed[0], Is.EqualTo("14:00:12"));
+                Assert.That(this.valueSet.Reference[0], Is.EqualTo("17:49:30"));
             });
 
             this.valueSet.Computed[0] = "0001-01-01T14:00:12.0000000";
@@ -453,7 +453,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(cleanedValue, Is.EqualTo("12:45:35Z"));
+                Assert.That(cleanedValue, Is.EqualTo("12:45:35"));
             });
 
             result = this.timeOfDayParameterType.Validate(new DateTime(2001, 1, 1, 12, 45, 35, DateTimeKind.Utc), out _);
