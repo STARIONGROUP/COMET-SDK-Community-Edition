@@ -469,7 +469,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(cleanedValue3, Is.EqualTo("0001-01-01T12:45:35.0000000"));
+                Assert.That(cleanedValue3, Is.EqualTo("0001-01-01T12:45:35.0000000+01:00"));
             });
 
             result = this.timeOfDayParameterType.Validate(new DateTime(2001, 1, 1, 12, 45, 35, DateTimeKind.Utc), out _);

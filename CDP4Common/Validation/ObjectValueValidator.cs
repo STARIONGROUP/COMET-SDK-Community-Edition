@@ -500,11 +500,6 @@ namespace CDP4Common.Validation
 
                     if (value is DateTime dtValue)
                     {
-                        if (dtValue.Kind == DateTimeKind.Local)
-                        {
-                            dtValue = DateTime.SpecifyKind(dtValue, DateTimeKind.Unspecified);
-                        }
-
                         cleanedValue = dtValue.ToString("o");
                         Logger.Debug("TimeOfDay {0} validated", cleanedValue);
                         return ValidationResult.ValidResult();
