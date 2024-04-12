@@ -62,7 +62,7 @@ namespace CDP4Common.Validation
         /// </summary>
         /// <param name="dateTime">The <see cref="DateTime" /> to check</param>
         /// <returns>True if the provided <see cref="DateTime" /> is a defualt <see cref="DateTime" /></returns>
-        public static bool IsDefaultDateTime(this DateTime dateTime)
+        public static bool IsDefaultDate(this DateTime dateTime)
         {
             return dateTime.Year == 1 && dateTime.Month == 1 && dateTime.Day == 1;
         }
@@ -477,9 +477,9 @@ namespace CDP4Common.Validation
 
                 var isDateTime = DateTime.TryParse(parsedString, CultureInfo.InvariantCulture,  DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.RoundtripKind, out var dateTime);
 
-                if (isDateTime && dateTime.IsDefaultDateTime())
+                if (isDateTime && dateTime.IsDefaultDate())
                 {
-                    cleanedValue = dateTime.ToString("HH:mm:ss");
+                    cleanedValue = parsedString;
                     Logger.Debug("TimeOfDay {0} validated", parsedString);
                     return ValidationResult.ValidResult();
                 }
@@ -489,12 +489,26 @@ namespace CDP4Common.Validation
             {
                 var timeOfDayValue = Convert.ToDateTime(value, CultureInfo.InvariantCulture);
 
-                if (timeOfDayValue.IsDefaultDateTime())
+                if (timeOfDayValue.IsDefaultDate())
                 {
-                    cleanedValue = timeOfDayValue.ToString("HH:mm:ss");
+                    if (value is string stringValue)
+                    {
+                        cleanedValue = stringValue;
+                        Logger.Debug("TimeOfDay {0} validated", cleanedValue);
+                        return ValidationResult.ValidResult();
+                    }
 
-                    Logger.Debug("TimeOfDay {0} validated", value);
-                    return ValidationResult.ValidResult();
+                    if (value is DateTime dtValue)
+                    {
+                        if (dtValue.Kind == DateTimeKind.Local)
+                        {
+                            dtValue = DateTime.SpecifyKind(dtValue, DateTimeKind.Unspecified);
+                        }
+
+                        cleanedValue = dtValue.ToString("o");
+                        Logger.Debug("TimeOfDay {0} validated", cleanedValue);
+                        return ValidationResult.ValidResult();
+                    }
                 }
             }
             catch (Exception ex)
