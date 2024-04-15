@@ -414,7 +414,6 @@ namespace CDP4Common.Tests.Validation
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
         }
 
-
         [Test]
         public void VerifyTimeOfDayParameterTypeValidationAndCleanup()
         {
@@ -432,7 +431,7 @@ namespace CDP4Common.Tests.Validation
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
                 Assert.That(this.valueSet.Manual[0], Is.EqualTo("14:00:12"));
-                Assert.That(this.valueSet.Computed[0], Is.EqualTo("14:00:12Z"));
+                Assert.That(this.valueSet.Computed[0], Is.EqualTo("0001-01-01T14:00:12.0000000Z"));
                 Assert.That(this.valueSet.Reference[0], Is.EqualTo("17:49:30.453Z"));
             });
 
@@ -442,19 +441,35 @@ namespace CDP4Common.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Computed[0], Is.EqualTo("14:00:12"));
+                Assert.That(this.valueSet.Computed[0], Is.EqualTo("0001-01-01T14:00:12.0000000"));
             });
 
             this.valueSet.Manual[0] = "0001-01-02T14:00:12.0000000";
             result = this.timeOfDayParameterType.ValidateAndCleanup(this.valueSet, null);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
 
-            result = this.timeOfDayParameterType.Validate(new DateTime(1, 1, 1, 12, 45, 35, DateTimeKind.Utc), out var cleanedValue);
+            result = this.timeOfDayParameterType.Validate(new DateTime(1, 1, 1, 12, 45, 35, DateTimeKind.Utc), out var cleanedValue1);
 
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(cleanedValue, Is.EqualTo("12:45:35Z"));
+                Assert.That(cleanedValue1, Is.EqualTo("0001-01-01T12:45:35.0000000Z"));
+            });
+
+            result = this.timeOfDayParameterType.Validate(new DateTime(1, 1, 1, 12, 45, 35, DateTimeKind.Unspecified), out var cleanedValue2);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(cleanedValue2, Is.EqualTo("0001-01-01T12:45:35.0000000"));
+            });
+
+            result = this.timeOfDayParameterType.Validate(new DateTime(1, 1, 1, 12, 45, 35, DateTimeKind.Local), out var cleanedValue3);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(cleanedValue3, Is.EqualTo("0001-01-01T12:45:35.0000000+01:00"));
             });
 
             result = this.timeOfDayParameterType.Validate(new DateTime(2001, 1, 1, 12, 45, 35, DateTimeKind.Utc), out _);

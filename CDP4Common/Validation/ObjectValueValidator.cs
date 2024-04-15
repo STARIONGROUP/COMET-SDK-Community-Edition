@@ -28,7 +28,6 @@ namespace CDP4Common.Validation
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
@@ -63,7 +62,7 @@ namespace CDP4Common.Validation
         /// </summary>
         /// <param name="dateTime">The <see cref="DateTime" /> to check</param>
         /// <returns>True if the provided <see cref="DateTime" /> is a defualt <see cref="DateTime" /></returns>
-        public static bool IsDefaultDateTime(this DateTime dateTime)
+        public static bool IsDefaultDate(this DateTime dateTime)
         {
             return dateTime.Year == 1 && dateTime.Month == 1 && dateTime.Day == 1;
         }
@@ -478,9 +477,9 @@ namespace CDP4Common.Validation
 
                 var isDateTime = DateTime.TryParse(parsedString, CultureInfo.InvariantCulture,  DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.RoundtripKind, out var dateTime);
 
-                if (isDateTime && dateTime.IsDefaultDateTime())
+                if (isDateTime && dateTime.IsDefaultDate())
                 {
-                    cleanedValue = ToTimeOfDay(dateTime);
+                    cleanedValue = parsedString;
                     Logger.Debug("TimeOfDay {0} validated", parsedString);
                     return ValidationResult.ValidResult();
                 }
@@ -490,12 +489,21 @@ namespace CDP4Common.Validation
             {
                 var timeOfDayValue = Convert.ToDateTime(value, CultureInfo.InvariantCulture);
 
-                if (timeOfDayValue.IsDefaultDateTime())
+                if (timeOfDayValue.IsDefaultDate())
                 {
-                    cleanedValue = ToTimeOfDay(timeOfDayValue);
+                    if (value is string stringValue)
+                    {
+                        cleanedValue = stringValue;
+                        Logger.Debug("TimeOfDay {0} validated", cleanedValue);
+                        return ValidationResult.ValidResult();
+                    }
 
-                    Logger.Debug("TimeOfDay {0} validated", value);
-                    return ValidationResult.ValidResult();
+                    if (value is DateTime dtValue)
+                    {
+                        cleanedValue = dtValue.ToString("o");
+                        Logger.Debug("TimeOfDay {0} validated", cleanedValue);
+                        return ValidationResult.ValidResult();
+                    }
                 }
             }
             catch (Exception ex)
@@ -510,41 +518,6 @@ namespace CDP4Common.Validation
                 ResultKind = ValidationResultKind.Invalid,
                 Message = $"'{value}' is not a valid Time of Day, for valid Time Of Day formats see http://www.w3.org/TR/xmlschema-2/#time."
             };
-        }
-
-        /// <summary>
-        /// Converts a <see cref="DateTime"/> object to a CDP compliant TimeOfDay string representation
-        /// </summary>
-        /// <param name="dateTime">The <see cref="DateTime"/></param>
-        /// <returns>The correct string format</returns>
-        private static string ToTimeOfDay(DateTime dateTime)
-        {
-            string cleanedValue;
-
-            if (dateTime.Kind == DateTimeKind.Utc)
-            {
-                if (dateTime.Millisecond > 0)
-                {
-                    cleanedValue = dateTime.ToString("HH:mm:ss.fffZ");
-                }
-                else
-                {
-                    cleanedValue = dateTime.ToString("HH:mm:ssZ");
-                }
-            }
-            else
-            {
-                if (dateTime.Millisecond > 0)
-                {
-                    cleanedValue = dateTime.ToString("HH:mm:ss.fff");
-                }
-                else
-                {
-                    cleanedValue = dateTime.ToString("HH:mm:ss");
-                }
-            }
-
-            return cleanedValue;
         }
     }
 }
