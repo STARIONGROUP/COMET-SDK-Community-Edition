@@ -5,6 +5,7 @@
 The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the CDP4-COMET to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/STARIONGROUP/COMET-WebServices-Community-Edition) and the [Desktop Application](https://github.com/STARIONGROUP/COMET-IME-Community-Edition). The following libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
 
   - CDP4Common
+  - CDP4DalCommon
   - CDP4Rules
   - CDP4RequirementsVerification
   - CDP4JsonSerializer
