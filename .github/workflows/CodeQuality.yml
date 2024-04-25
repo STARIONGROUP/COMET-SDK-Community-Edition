@@ -33,7 +33,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"RHEAGROUP_CDP4-SDK-Community-Edition" /o:"rheagroup" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
+          dotnet sonarscanner begin /k:"STARIONGROUP_CDP4-SDK-Community-Edition" /o:"stariongroup" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
 
       - name: Run Tests and Compute Coverage
         run: dotnet test CDP4-SDK.sln --verbosity normal --filter="(TestCategory!~WebServicesDependent) & (TestCategory!~CICDExclusion)" /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
