@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExchangeType.cs" company="RHEA System S.A.">
-//    Copyright (c) 2024 RHEA System S.A.
+// <copyright file="ExchangeType.cs" company="Starion Group S.A.">
+//    Copyright (c) 2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Antoine Théate, Nathanael Smiechowski
 //

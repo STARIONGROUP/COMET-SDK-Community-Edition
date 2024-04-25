@@ -47,4 +47,5 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: |
           dotnet pack CDP4-SDK.sln --version-suffix "${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-PR-${{ github.event.pull_request.number }}" -o .
-          dotnet nuget push *.nupkg --skip-duplicate --source https://nuget.pkg.github.com/RHEAGROUP/index.json -k ${{ secrets.GITHUB_TOKEN }}
+          dotnet nuget push *.nupkg --skip-duplicate --source https://nuget.pkg.github.com/STARIONGROUP/index.json -k ${{ secrets.GITHUB_TOKEN }}
+          dotnet nuget push *.nupkg --skip-duplicate --source https://nuget.pkg.github.com/STARIONGROUP/index.json -k ${{ secrets.GITHUB_TOKEN }}

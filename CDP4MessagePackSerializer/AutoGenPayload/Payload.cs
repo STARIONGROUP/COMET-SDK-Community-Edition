@@ -1,9 +1,9 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Payload.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2023 RHEA System S.A.
+// <copyright file="Payload.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft,
-//            Nathanael Smiechowski, Antoine Théate, Omar Elabiary
+//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
+//            Antoine Théate, Omar Elebiary, Jaime Bernar
 //
 //    This file is part of CDP4-COMET SDK Community Edition
 //    This is an auto-generated class. Any manual changes to this file will be overwritten!
@@ -186,8 +186,6 @@ namespace CDP4MessagePackSerializer
     using System.Collections.Generic;
 
     using CDP4Common.DTO;
-
-    using MessagePack;
 
     /// <summary>
     /// The <see cref="Payload"/> acts as envelope around the <see cref="CDP4Common.DTO"/> classes and is used as

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TransactionContextResolverTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+// <copyright file="TransactionContextResolverTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2019 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -54,7 +54,7 @@ namespace CDP4Dal.Tests
         [SetUp]
         public void SetUp()
         {
-            this.uri = new Uri("http://www.rheagroup.com");
+            this.uri = new Uri("http://www.stariongroup.eu");
             this.cache = new ConcurrentDictionary<CacheKey, Lazy<CDP4Common.CommonData.Thing>>();
 
             this.siteDirectory = new SiteDirectory(Guid.NewGuid(), this.cache, this.uri);

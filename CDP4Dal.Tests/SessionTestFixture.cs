@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2024 RHEA System S.A.
+// <copyright file="SessionTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
@@ -105,7 +105,7 @@ namespace CDP4Dal.Tests
             this.dalOutputs.Add(phone2);
             this.dalOutputs.Add(phone3);
 
-            this.uri = new Uri("http://www.rheagroup.com/");
+            this.uri = new Uri("http://www.stariongroup.eu/");
             var credentials = new Credentials("John", "Doe", this.uri);
 
             this.mockedDal = new Mock<IDal>();
@@ -319,7 +319,7 @@ namespace CDP4Dal.Tests
             var requiredPocoRdl = new CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary(requiredPocoDto.Iid, null, null);
             rdlDto.RequiredRdl = requiredPocoDto.Iid;
 
-            var credentials = new Credentials("admin", "pass", new Uri("http://www.rheagroup.com"));
+            var credentials = new Credentials("admin", "pass", new Uri("http://www.stariongroup.eu"));
             var session2 = new Session(this.mockedDal.Object, credentials, this.messageBus);
             var rdlPoco = new CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary { Iid = rdlDto.Iid, Name = rdlDto.Name, ShortName = rdlDto.ShortName, Container = siteDir, RequiredRdl = requiredPocoRdl };
             var thingsToAdd = new List<Thing>() { siteDirDto, requiredPocoDto, rdlDto };
@@ -426,7 +426,7 @@ namespace CDP4Dal.Tests
 
             this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
 
-            Assert.AreEqual("http://www.rheagroup.com/ - John Doe", this.session.Name);
+            Assert.AreEqual("http://www.stariongroup.eu/ - John Doe", this.session.Name);
         }
 
         [Test]
@@ -509,7 +509,7 @@ namespace CDP4Dal.Tests
             modelRdlDto.RequiredRdl = requiredPocoDto.Iid;
             siteDir.Person.Add(JohnDoe);
 
-            var credentials = new Credentials("admin", "pass", new Uri("http://www.rheagroup.com"));
+            var credentials = new Credentials("admin", "pass", new Uri("http://www.stariongroup.eu"));
             var session2 = new Session(this.mockedDal.Object, credentials, this.messageBus);
             session2.GetType().GetProperty("ActivePerson").SetValue(session2, JohnDoe, null);
 
@@ -546,7 +546,7 @@ namespace CDP4Dal.Tests
             siteDir.Model.Add(containerEngModelSetup);
             modelRdlDto.RequiredRdl = requiredPocoDto.Iid;
 
-            var credentials = new Credentials("admin", "pass", new Uri("http://www.rheagroup.com"));
+            var credentials = new Credentials("admin", "pass", new Uri("http://www.stariongroup.eu"));
             var session2 = new Session(this.mockedDal.Object, credentials, this.messageBus);
 
             var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup { Iid = iterationSetupDto.Iid, Container = containerEngModelSetup, IterationIid = iteration.Iid };

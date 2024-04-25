@@ -1,5 +1,5 @@
-﻿// <copyright file="ReferenceSourceRuleCheckerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+﻿// <copyright file="ReferenceSourceRuleCheckerTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2019 Starion Group S.A.
 //
 //    Author: Sam Gerené
 //
@@ -103,7 +103,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var organization = new Organization
             {
                 Iid = Guid.Parse("9f4daf6a-09e2-4ed5-a8be-79a0765654ca"),
-                ShortName = "RHEA",
+                ShortName = "Starion",
                 IsDeprecated = true
             };
 
@@ -121,7 +121,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
 
             var first = results.First();
             Assert.That(first.Id, Is.EqualTo("MA-0500"));
-            Assert.That(first.Description, Is.EqualTo("The referenced Organization 9f4daf6a-09e2-4ed5-a8be-79a0765654ca:RHEA of ReferenceSource.Publisher is deprecated"));
+            Assert.That(first.Description, Is.EqualTo("The referenced Organization 9f4daf6a-09e2-4ed5-a8be-79a0765654ca:Starion of ReferenceSource.Publisher is deprecated"));
             Assert.That(first.Thing, Is.EqualTo(this.referenceSource));
             Assert.That(first.Severity, Is.EqualTo(SeverityKind.Warning));
 
@@ -138,7 +138,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var organization = new Organization
             {
                 Iid = Guid.Parse("9f4daf6a-09e2-4ed5-a8be-79a0765654ca"),
-                ShortName = "RHEA",
+                ShortName = "Starion",
                 IsDeprecated = false
             };
 
@@ -163,7 +163,7 @@ namespace CDP4Rules.NetCore.Tests.RuleCheckers
             var organization = new Organization
             {
                 Iid = Guid.Parse("9f4daf6a-09e2-4ed5-a8be-79a0765654ca"),
-                ShortName = "RHEA",
+                ShortName = "Starion",
                 IsDeprecated = true
             };
 

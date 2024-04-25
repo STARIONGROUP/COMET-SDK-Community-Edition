@@ -43,7 +43,7 @@
 		"model": [
 			"c6766dd0-d0c2-4990-95a1-8ce958eba129"
 		],
-		"name": "RHEA Docker Site Directory",
+		"name": "Starion Docker Site Directory",
 		"naturalLanguage": [],
 		"organization": [
 			"1f57e78a-1ecf-4fdc-ad92-0da32ad3f2e8",
@@ -75,7 +75,7 @@
 			"e3b2f0f5-3e29-4ba3-94ba-05738e5b3307"
 		],
 		"revisionNumber": 1,
-		"shortName": "RHEA-Docker-SiteDirectory",
+		"shortName": "Starion-Docker-SiteDirectory",
 		"siteReferenceDataLibrary": [
 			"bff9f871-3b7f-4e57-ac82-5ab499f9baf5"
 		]
