@@ -1,5 +1,5 @@
-﻿// <copyright file="Header.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2019 RHEA System S.A.
+﻿// <copyright file="Header.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2019 Starion Group S.A.
 //
 //    Author: Sam Gerené
 //

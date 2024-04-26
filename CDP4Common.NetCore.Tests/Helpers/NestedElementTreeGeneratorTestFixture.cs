@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NestedElementTreeGeneratorTestFixtre.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2024 RHEA System S.A.
+// <copyright file="NestedElementTreeGeneratorTestFixtre.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -66,7 +66,7 @@ namespace CDP4Common.Tests.Helpers
         {
             this.nestedElementTreeGenerator = new NestedElementTreeGenerator();
 
-            this.uri = new Uri("http://www.rheagroup.com");
+            this.uri = new Uri("http://www.stariongroup.eu");
             this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
             this.domainOfExpertise = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.uri)

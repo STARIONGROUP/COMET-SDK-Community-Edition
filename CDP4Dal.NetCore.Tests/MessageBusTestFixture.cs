@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageBusTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2024 RHEA System S.A.
+// <copyright file="MessageBusTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
@@ -66,7 +66,7 @@ namespace CDP4Dal.Tests
         [SetUp]
         public void SetUp()
         {
-            this.uri = new Uri("http://www.rheagroup.com");
+            this.uri = new Uri("http://www.stariongroup.eu");
             this.cache = new List<Thing>();
             this.testInput = new List<CDP4Common.DTO.Thing>();
             this.messageBus = new CDPMessageBus();

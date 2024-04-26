@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PermissionServiceTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2024 RHEA System S.A.
+// <copyright file="PermissionServiceTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
 //
@@ -57,7 +57,7 @@ namespace CDP4Dal.Tests.Permission
         private ParticipantRole participantRole;
         private EngineeringModel model;
         private Iteration iteration;
-        private Uri uri = new Uri("http://www.rheagroup.com");
+        private Uri uri = new Uri("http://www.stariongroup.eu");
         private Definition definition;
         private SiteReferenceDataLibrary srdl;
         private BooleanParameterType booleanpt;

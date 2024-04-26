@@ -15,7 +15,7 @@
 	"logEntry": [],
 	"model": ["11f2fd98-6409-403f-a07c-773e9d1e2921"],
 	"modifiedOn": "0001-01-01T00:00:00.000Z",
-	"name": "RHEA Docker Site Directory",
+	"name": "Starion Docker Site Directory",
 	"naturalLanguage": [],
 	"organization": ["44d1ff16-8195-47d0-abfa-163bbba9bf39",
 	"1f57e78a-1ecf-4fdc-ad92-0da32ad3f2e8",
@@ -41,7 +41,7 @@
 	"c3c37dc2-bebc-43eb-a60e-4ef7f521d2c0",
 	"71b8187c-8918-4c5c-9f84-a352cf2a4147"],
 	"revisionNumber": 65,
-	"shortName": "RHEA-Docker-SiteDirectory",
+	"shortName": "Starion-Docker-SiteDirectory",
 	"siteReferenceDataLibrary": ["bff9f871-3b7f-4e57-ac82-5ab499f9baf5"]
 },
 {

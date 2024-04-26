@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessagePackSerializerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2023 RHEA System S.A.
+// <copyright file="MessagePackSerializerTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2023 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elabiary
 //
@@ -631,13 +631,13 @@ namespace CDP4MessagePackSerializer.Tests
                 LastModifiedOn = new DateTime(1976, 08, 20),
                 LogEntry = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
                 Model = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
-                Name = "RHEA",
+                Name = "Starion",
                 NaturalLanguage = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
                 Organization = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
                 ParticipantRole = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
                 Person = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
                 PersonRole = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
-                ShortName = "RHEA",
+                ShortName = "Starion",
                 SiteReferenceDataLibrary = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
                 Annotation = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },
                 ExcludedDomain = new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() },

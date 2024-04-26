@@ -2,21 +2,21 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <Company>RHEA System S.A.</Company>
+    <Company>Starion Group S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
     <VersionPrefix>26.6.2</VersionPrefix>
     <Description>CDP4 Services Messaging is a Class Library that contains clients and messages class that can be used for inter services communication</Description>
-    <Copyright>Copyright © RHEA System S.A.</Copyright>
+    <Copyright>Copyright © Starion Group S.A.</Copyright>
     <Authors>Sam, Alex, Alexander, Nathanael, Antoine</Authors>
     <PackageId>CDP4ServicesMessaging-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageProjectUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageIcon>cdp4-icon.png</PackageIcon>
     <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <RepositoryUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>

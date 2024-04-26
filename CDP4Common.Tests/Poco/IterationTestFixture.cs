@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IterationTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2023 RHEA System S.A.
+// <copyright file="IterationTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2023 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -57,7 +57,7 @@ namespace CDP4Common.Tests.Poco
         [SetUp]
         public void SetUp()
         {
-            this.uri = new Uri("http://www.rheagroup.com");
+            this.uri = new Uri("http://www.stariongroup.eu");
             this.cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
             var person = new Person(Guid.NewGuid(), this.cache, this.uri);
 

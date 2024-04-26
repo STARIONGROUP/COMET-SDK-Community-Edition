@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="JsonFileDalTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2024 RHEA System S.A.
+// <copyright file="JsonFileDalTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
@@ -430,7 +430,7 @@ namespace CDP4JsonFileDal.Tests
         public void VerifyCtorWithVersionAndCopyright()
         {
             this.dal = new JsonFileDal(new Version("1.0.0"));
-            const string COPYRIGHT = "Copyright 2020 © RHEA Group.";
+            const string COPYRIGHT = "Copyright 2024 © Starion Group.";
             const string REMARK = "This is custom ECSS-E-TM-10-25 exchange file";
 
             Assert.That(this.dal.Serializer.RequestDataModelVersion.Major, Is.EqualTo(1));

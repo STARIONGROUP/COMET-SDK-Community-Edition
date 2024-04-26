@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CopyOperationHandlerTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2024 RHEA System S.A.
+// <copyright file="CopyOperationHandlerTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
@@ -47,7 +47,7 @@ namespace CDP4WspDal.Tests
     {
         private Mock<ISession> session;
         private Mock<IPermissionService> permissionService;
-        private Uri uri = new Uri("http://www.rheagroup.com");
+        private Uri uri = new Uri("http://www.stariongroup.eu");
         private Assembler assembler;
 
         private SiteDirectory siteDir;

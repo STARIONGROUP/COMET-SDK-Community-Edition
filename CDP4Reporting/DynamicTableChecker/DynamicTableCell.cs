@@ -1,8 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DynamicTableCell.cs" company="RHEA System S.A.">
+// <copyright file="DynamicTableCell.cs" company="Starion Group S.A.">
 //  © Copyright European Space Agency, 2017-2023
 //  <author>
-//   Software developed by RHEA System S.A.
+//   Software developed by Starion Group S.A.
 //  </author>
 //  This file is subject to the terms and conditions defined in file 'LICENSE.txt', which is part of this source code package.
 //  No part of the package, including this file, may be copied, modified, propagated, or distributed

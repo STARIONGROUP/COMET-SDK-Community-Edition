@@ -2,21 +2,21 @@
 
   <PropertyGroup>
     <TargetFrameworks>net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Company>RHEA System S.A.</Company>
+    <Company>Starion Group S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
     <VersionPrefix>26.6.2</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
-    <Copyright>Copyright © RHEA System S.A.</Copyright>
+    <Copyright>Copyright © Starion Group S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
     <PackageId>CDP4Common-CE</PackageId>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageProjectUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageIcon>cdp4-icon.png</PackageIcon>
     <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <RepositoryUrl>https://github.com/RHEAGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>

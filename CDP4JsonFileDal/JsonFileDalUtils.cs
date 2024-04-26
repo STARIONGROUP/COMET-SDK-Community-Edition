@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="JsonFileDalUtils.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2021 RHEA System S.A.
+// <copyright file="JsonFileDalUtils.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2021 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -47,7 +47,7 @@ namespace CDP4JsonFileDal
         /// <summary>
         /// The default copyright text to be included in the exchange header file.
         /// </summary>
-        private const string ExchangeHeaderCopyright = "Copyright 2016 © RHEA.";
+        private const string ExchangeHeaderCopyright = "Copyright 2024 © Starion.";
 
         /// <summary>
         /// Adds the <paramref name="referenceDataLibraries"/> to the target <paramref name="siteReferenceDataLibraries"/> or <paramref name="modelReferenceDataLibraries"/>

@@ -1,10 +1,11 @@
-![CDP4-COMET](https://github.com/RHEAGROUP/COMET-SDK-Community-Edition/raw/master/Comet_Logo.jpg)
+![CDP4-COMET](https://github.com/STARIONGROUP/COMET-SDK-Community-Edition/raw/master/Comet_Logo.jpg)
 
 > CDP4-COMET is the new name for what was previously called the CDP4. We are transitioning the applications and software libraries. The code and documentation will still refer to CDP4 in a number of places while we are updating.
 
-The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the CDP4-COMET to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/RHEAGROUP/COMET-WebServices-Community-Edition) and the [Desktop Application](https://github.com/RHEAGROUP/COMET-IME-Community-Edition). The following libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
+The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the CDP4-COMET to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/STARIONGROUP/COMET-WebServices-Community-Edition) and the [Desktop Application](https://github.com/STARIONGROUP/COMET-IME-Community-Edition). The following libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
 
   - CDP4Common
+  - CDP4DalCommon
   - CDP4Rules
   - CDP4RequirementsVerification
   - CDP4JsonSerializer
@@ -44,8 +45,8 @@ GitHub actions are used to build and test the libraries
 
 Branch | Build Status
 ------- | :------------
-Master | ![Build Status](https://github.com/RHEAGROUP/COMET-SDK-Community-Edition/actions/workflows/CodeQuality.yml/badge.svg?branch=master)
-Development | ![Build Status](https://github.com/RHEAGROUP/COMET-SDK-Community-Edition/actions/workflows/CodeQuality.yml/badge.svg?branch=development)
+Master | ![Build Status](https://github.com/STARIONGROUP/COMET-SDK-Community-Edition/actions/workflows/CodeQuality.yml/badge.svg?branch=master)
+Development | ![Build Status](https://github.com/STARIONGROUP/COMET-SDK-Community-Edition/actions/workflows/CodeQuality.yml/badge.svg?branch=development)
 
 ## SonarQube Status:
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=alert_status)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
