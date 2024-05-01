@@ -75,7 +75,7 @@ namespace CDP4Dal.Tests
         public void VerifyThatFilePathsAreReturned()
         {
             var filePath = "myPath\\file.txt";
-            var byteArray = Encoding.ASCII.GetBytes("FileContents");
+            var byteArray = Encoding.UTF8.GetBytes("FileContents");
             var stream = new MemoryStream(byteArray);
             var contentHash = StreamToHashComputer.CalculateSha1HashFromStream(stream);
             var fileRevision1 = new FileRevision(Guid.NewGuid(), this.cache, this.uri) { ContentHash = contentHash, LocalPath = filePath };

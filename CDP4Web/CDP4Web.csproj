@@ -5,7 +5,7 @@
         <LangVersion>latest</LangVersion>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Web Community Edition</Title>
-        <VersionPrefix>26.6.2</VersionPrefix>
+        <VersionPrefix>26.7.0</VersionPrefix>
         <Description>CDP4Web Dedicated Sdk for CDPServicesDal</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
@@ -21,7 +21,8 @@
         <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
         <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
         <PackageReleaseNotes>
-            [BUMP] To CDP4Common 26.6.2
+          [REFACTOR] RHEA => Starion
+          [BUMP] Microsoft.Extensions.Logging.Abstractions to 8.0.1
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
@@ -39,7 +40,7 @@
 
     <ItemGroup>
         <PackageReference Include="FluentResults" Version="3.15.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     </ItemGroup>
 
     <ItemGroup>

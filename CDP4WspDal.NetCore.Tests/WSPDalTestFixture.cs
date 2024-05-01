@@ -131,7 +131,7 @@ namespace CDP4WspDal.Tests
         {
             var uriBuilder = new UriBuilder(this.credentials.Uri) { Path = "/Data/Restore" };
             var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{this.credentials.UserName}:{this.credentials.Password}")));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{this.credentials.UserName}:{this.credentials.Password}")));
             await httpClient.PostAsync(uriBuilder.Uri, null);
 
             var dal = new WspDal();

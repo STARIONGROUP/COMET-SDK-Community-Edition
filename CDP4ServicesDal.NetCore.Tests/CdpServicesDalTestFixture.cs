@@ -148,7 +148,7 @@ namespace CDP4ServicesDal.Tests
         {
             var uriBuilder = new UriBuilder(this.credentials.Uri) { Path = "/Data/Restore" };
             var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.UserName}:{credentials.Password}")));
             await httpClient.PostAsync(uriBuilder.Uri, null);
 
             var dal = new CdpServicesDal();
@@ -165,7 +165,7 @@ namespace CDP4ServicesDal.Tests
         {
             var uriBuilder = new UriBuilder(this.credentials.Uri) { Path = "/Data/Restore" };
             var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.UserName}:{credentials.Password}")));
             await httpClient.PostAsync(uriBuilder.Uri, null);
 
             httpClient = new HttpClient();

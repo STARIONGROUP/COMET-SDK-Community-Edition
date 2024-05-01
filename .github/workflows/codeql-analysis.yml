@@ -42,3 +42,10 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
+
+    - name: PR Based Nuget
+      if: ${{ github.event_name == 'pull_request' }}
+      run: |
+        dotnet pack CDP4-SDK.sln --version-suffix "${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-PR-${{ github.event.pull_request.number }}" -o .
+        dotnet nuget push *.nupkg --skip-duplicate --source https://nuget.pkg.github.com/STARIONGROUP/index.json -k ${{ secrets.GITHUB_TOKEN }}
+        dotnet nuget push *.nupkg --skip-duplicate --source https://nuget.pkg.github.com/STARIONGROUP/index.json -k ${{ secrets.GITHUB_TOKEN }}
