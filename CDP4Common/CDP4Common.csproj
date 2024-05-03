@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>Starion Group S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
     <VersionPrefix>26.7.0</VersionPrefix>
@@ -22,6 +22,7 @@
     <PackageReleaseNotes>
         [REFACTOR] RHEA => Starion
         [BUMP] NLog to 5.3.1
+        [REMOVE] reference to net47*
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
@@ -40,7 +41,7 @@
     <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net472' Or '$(TargetFramework)' == 'net48'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
 

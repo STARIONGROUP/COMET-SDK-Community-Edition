@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net47;net471;net472;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>Starion Group S.A.</Company>
     <Title>CDP4Rules Community Edition</Title>
     <VersionPrefix>26.7.0</VersionPrefix>
@@ -21,6 +21,7 @@
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
       [REFACTOR] RHEA => Starion
+      [REMOVE] reference to net47*
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
