@@ -623,7 +623,7 @@ namespace CDP4ServicesDal.Tests
             var proxySettings = new ProxySettings(new Uri("http://tinyproxy:8888"));
             
             var uri = new Uri("https://cdp4services-test.cdp4.org");
-            this.credentials = new Credentials("admin", "pass", uri, proxySettings);
+            this.credentials = new Credentials("admin", "pass", uri, false, proxySettings);
 
             var dal = new CdpServicesDal();
             var result = await dal.Open(this.credentials, new CancellationToken());

@@ -614,12 +614,48 @@ namespace CDP4ServicesDal.Tests
         [Test]
         [Category("WebServicesDependent")]
         [Category("CICDExclusion")]
+        public async Task Verify_that_opens_and_close_removes_items_from_cache_with_full_truest()
+        {
+            this.dal = new CdpServicesDal { Session = this.session };
+            this.credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"), true);
+
+            this.session = new Session(this.dal, this.credentials, this.messageBus);
+            await this.session.Open();
+
+            this.siteDirectory = this.session.Assembler.RetrieveSiteDirectory();
+            this.engineeringModelSetup = this.siteDirectory.Model.Single(x => x.ShortName == "LOFT");
+            this.iterationSetup = this.engineeringModelSetup.IterationSetup.First();
+            var domainOfExpertise = this.engineeringModelSetup.ActiveDomain.First(x => x.ShortName == "SYS");
+
+            var openCount = this.session.Assembler.Cache.Count;
+
+            var cache = this.session.Assembler.Cache;
+
+            var model = new EngineeringModel(this.engineeringModelSetup.EngineeringModelIid, null, null);
+            this.iteration = new Iteration(this.iterationSetup.IterationIid, null, null);
+            this.iteration.Container = model;
+
+            await this.session.Read(this.iteration, domainOfExpertise);
+
+            var readCount = this.session.Assembler.Cache.Count;
+            Assert.IsTrue(readCount > openCount);
+
+            await this.session.CloseIterationSetup(this.iterationSetup);
+
+            var closeCount = this.session.Assembler.Cache.Count;
+
+            Assert.IsTrue(closeCount < readCount);
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
+        [Category("CICDExclusion")]
         public async Task Verify_that_open_with_proxy_returns_expected_result()
         {
             var proxySettings = new ProxySettings(new Uri("http://tinyproxy:8888"));
 
             var uri = new Uri("https://cdp4services-test.cdp4.org");
-            this.credentials = new Credentials("admin", "pass", uri, proxySettings);
+            this.credentials = new Credentials("admin", "pass", uri, false, proxySettings);
 
             var dal = new CdpServicesDal();
             var result = await dal.Open(this.credentials, new CancellationToken());

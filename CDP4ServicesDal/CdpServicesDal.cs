@@ -62,6 +62,7 @@ namespace CDP4ServicesDal
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
     using Thing = CDP4Common.DTO.Thing;
     using UriExtensions = CDP4Dal.UriExtensions;
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// The purpose of the <see cref="CdpServicesDal"/> is to provide the Data Access Layer for CDP4 ECSS-E-TM-10-25
@@ -1002,11 +1003,20 @@ namespace CDP4ServicesDal
         /// <param name="injectedClient">
         /// The injected <see cref="HttpClient"/> that will be used to created the returned <see cref="HttpClient"/>
         /// </param>
+        /// <param name="trustAllSSL">
+        /// The value that indicates whether all SSL certificates are trusted or not. If false, then only properly signed
+        /// SSL certs are accepted
+        /// </param>
         /// <returns>
         /// An instance of <see cref="HttpClient"/> with the DefaultRequestHeaders set
         /// </returns>
         private HttpClient CreateHttpClient(Credentials credentials, HttpClient injectedClient)
         {
+            if (injectedClient != null && credentials.FullTrust)
+            {
+                throw new ArgumentException("When the fullTrust is true and an injectedClient clients is used this is not supported. The trus all SSL settings need to be configured on the injected HttpClient");
+            }
+
             HttpClient result;
 
             if (credentials.ProxySettings != null && injectedClient != null)
@@ -1020,7 +1030,16 @@ namespace CDP4ServicesDal
 
                 if (injectedClient == null)
                 {
-                    result = new HttpClient();
+                    if (credentials.FullTrust)
+                    {
+                        var httpClientHandler = new HttpClientHandler();
+                        httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                        result = new HttpClient(httpClientHandler);
+                    }
+                    else
+                    {
+                        result = new HttpClient();
+                    }
                 }
                 else
                 {
@@ -1044,6 +1063,11 @@ namespace CDP4ServicesDal
                     Proxy = proxy,
                     UseProxy = true
                 };
+
+                if (credentials.FullTrust)
+                {
+                    httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                }
 
                 result = new HttpClient(httpClientHandler);
             }

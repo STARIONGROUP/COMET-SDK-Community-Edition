@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Credentials.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2020 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -49,10 +49,14 @@ namespace CDP4Dal.DAL
         /// <param name="uri">
         /// the <see cref="Uri"/> of the data-store
         /// </param>
+        /// <param name="fullTrust">
+        /// A value indicating whether the connection shall be fully trusted or not (in case of HttpClient connections
+        /// this includes trusing self signed SSL certificates)
+        /// </param>
         /// <param name="proxySettings">
         /// The <see cref="ProxySettings"/> used to encapsulate proxy server settings
         /// </param>
-        public Credentials(string username, string password, Uri uri, ProxySettings proxySettings = null)
+        public Credentials(string username, string password, Uri uri, bool fullTrust = false, ProxySettings proxySettings = null)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -72,6 +76,7 @@ namespace CDP4Dal.DAL
             this.UserName = username;
             this.password = password;
             this.Uri = uri;
+            this.FullTrust = fullTrust;
             this.ProxySettings = proxySettings;
         }
 
@@ -95,6 +100,12 @@ namespace CDP4Dal.DAL
         /// Gets the <see cref="Uri"/> of the data-store 
         /// </summary>
         public Uri Uri { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the connection shall be fully trusted or not (in case of HttpClient connections
+        /// this includes trusing self signed SSL certificates).
+        /// </summary>
+        public bool FullTrust { get; private set; }
 
         /// <summary>
         /// Gets the settings used to connect to a Proxy server
