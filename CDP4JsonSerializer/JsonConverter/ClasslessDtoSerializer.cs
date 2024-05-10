@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ClasslessDtoSerializer.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2019 Starion Group S.A.
 //
@@ -22,18 +21,21 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4JsonSerializer.JsonConverter
 {
     using System;
     using System.Collections.Generic;
+
     using CDP4Common;
     using CDP4Common.MetaInfo;
     using CDP4Common.Polyfills;
+
     using CDP4JsonSerializer.Helper;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+
     using NLog;
 
     using Dto = CDP4Common.DTO;

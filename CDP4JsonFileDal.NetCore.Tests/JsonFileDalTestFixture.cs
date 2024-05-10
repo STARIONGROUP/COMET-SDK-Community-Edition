@@ -227,15 +227,15 @@ namespace CDP4JsonFileDal.NetCore.Tests
         {
             var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();
 
-            Assert.NotNull(returned);
-            Assert.IsNotEmpty(returned);
+            Assert.That(returned, Is.Not.Null);
+            Assert.That(returned, Is.Not.Empty);
 
             // read info from the open call
             var engineeringModelSetupDto = returned.Single(d => d.ClassKind == ClassKind.EngineeringModelSetup) as EngineeringModelSetup;
             var iterationSetupDto = returned.First(d => d.ClassKind == ClassKind.IterationSetup) as IterationSetup;
 
-            Assert.NotNull(engineeringModelSetupDto);
-            Assert.NotNull(iterationSetupDto);
+            Assert.That(engineeringModelSetupDto, Is.Not.Null);
+            Assert.That(iterationSetupDto, Is.Not.Null);
 
             // setup expected SiteDirectory instance
             var iterationSetupData = new CDP4Common.SiteDirectoryData.IterationSetup { IterationIid = iterationSetupDto.IterationIid };

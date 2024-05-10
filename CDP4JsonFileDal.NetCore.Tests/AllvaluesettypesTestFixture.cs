@@ -80,7 +80,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             var siteDirectory = this.session.RetrieveSiteDirectory();
             var system = siteDirectory.Domain.Single(x => x.Iid == Guid.Parse("8790fe92-d1fa-42ea-9520-e0ddac52f1ad"));
 
-            Assert.IsNotNull(siteDirectory);
+            Assert.That(siteDirectory, Is.Not.Null);
 
             var engineeringModelSetup = siteDirectory.Model.Single();
             var iterationSetup = engineeringModelSetup.IterationSetup.Single();
@@ -95,17 +95,17 @@ namespace CDP4JsonFileDal.NetCore.Tests
             this.session.Assembler.Cache.TryGetValue(new CacheKey(iteration.Iid, null), out lazyIteration);
 
             iteration = (Iteration)lazyIteration.Value;
-            Assert.IsNotNull(iteration);
+            Assert.That(iteration, Is.Not.Null);
 
             var option_1 = iteration.Option.Single(x => x.Iid == Guid.Parse("7476595f-e1f7-4a40-ba6f-720ce40fc0b2"));
-            Assert.AreEqual("Option 1", option_1.Name);
+            Assert.That(option_1.Name, Is.EqualTo("Option 1"));
 
             var option_2 = iteration.Option.Single(x => x.Iid == Guid.Parse("635e84b2-64c4-4905-a71d-0d8e83757570"));
-            Assert.AreEqual("Option 2", option_2.Name);
+            Assert.That(option_2.Name, Is.EqualTo("Option 2"));
 
             var nestedElements = this.nestedElementTreeGenerator.Generate(option_1, system, false);
 
-            Assert.AreEqual(10, nestedElements.Count());
+            Assert.That(nestedElements.Count(), Is.EqualTo(10));
 
             var nestedParameters = new List<NestedParameter>();
 
@@ -120,7 +120,7 @@ namespace CDP4JsonFileDal.NetCore.Tests
             }
 
             var DT_ATO = nestedElements.Single(x => x.ShortName == "DT.ATO");
-            Assert.AreEqual(12, DT_ATO.NestedParameter.Count);
+            Assert.That(DT_ATO.NestedParameter.Count, Is.EqualTo(12));
         }
     }
 }

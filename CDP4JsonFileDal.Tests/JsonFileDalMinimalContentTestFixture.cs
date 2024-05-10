@@ -72,7 +72,7 @@ namespace CDP4JsonFileDal.Tests
         public async Task VerifyThatSiteDirectoryCanBeOpened()
         {
             await this.session.Open();
-            Assert.AreEqual(62, this.session.Assembler.Cache.Count);
+            Assert.That(this.session.Assembler.Cache.Count, Is.EqualTo(62));
 
             var iterationSetups =
                 this.session.Assembler.Cache.Select(x => x.Value)
@@ -101,21 +101,21 @@ namespace CDP4JsonFileDal.Tests
 
             await this.session.Read(iteration, domainOfExpertise);
 
-            Assert.AreEqual(93, this.session.Assembler.Cache.Count);
+            Assert.That(this.session.Assembler.Cache.Count, Is.EqualTo(93));
 
             var siteReferenceDataLibrary = this.session.Assembler.Cache.Select(x => x.Value)
                 .Where(lazy => lazy.Value.ClassKind == ClassKind.SiteReferenceDataLibrary)
                 .Select(lazy => lazy.Value)
                 .Cast<CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary>().Single(x => x.Iid == Guid.Parse("bff9f871-3b7f-4e57-ac82-5ab499f9baf5"));
 
-            Assert.IsNotNull(siteReferenceDataLibrary);
+            Assert.That(siteReferenceDataLibrary, Is.Not.Null);
 
-            Assert.IsNotEmpty(siteReferenceDataLibrary.ParameterType);
+            Assert.That(siteReferenceDataLibrary.ParameterType, Is.Not.Empty);
 
             var simpleQuantityKind = siteReferenceDataLibrary.ParameterType.Single(x => x.Iid == Guid.Parse("66766f44-0a0b-4e0a-9bc7-8ae027c2da5c"));
 
-            Assert.AreEqual("length", simpleQuantityKind.Name);
-            Assert.AreEqual("l", simpleQuantityKind.ShortName);
+            Assert.That(simpleQuantityKind.Name, Is.EqualTo("length"));
+            Assert.That(simpleQuantityKind.ShortName, Is.EqualTo("l"));
         }
     }
 }
