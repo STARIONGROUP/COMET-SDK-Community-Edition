@@ -66,7 +66,7 @@ namespace CDP4ServicesDal.Tests
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
                 var test = this.serializer.Deserialize<TestPostOperation>(stream);
-                Assert.AreEqual(1, test.Copy.Count);
+                Assert.That(test.Copy.Count, Is.EqualTo(1));
             }
         }
 
@@ -132,7 +132,7 @@ namespace CDP4ServicesDal.Tests
                 this.serializer.SerializeToStream(postOperation, stream);
 
                 stream.Position = 0;
-                Assert.AreEqual(expected, streamReader.ReadToEnd());
+                Assert.That(streamReader.ReadToEnd(), Is.EqualTo(expected));
             }
         }
 

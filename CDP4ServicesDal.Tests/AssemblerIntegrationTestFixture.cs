@@ -94,7 +94,7 @@ namespace CDP4ServicesDal.Tests
 
             foreach (var thing in things)
             {
-                Assert.AreEqual(1, thing.Revisions.Count);
+                Assert.That(thing.Revisions.Count, Is.EqualTo(1));
             }
 
             sw.Restart();

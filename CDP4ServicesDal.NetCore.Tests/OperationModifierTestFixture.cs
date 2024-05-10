@@ -111,7 +111,7 @@ namespace CDP4ServicesDal.Tests
             var modifier = new OperationModifier(this.session.Object);
             modifier.ModifyOperationContainer(operationContainer);
 
-            Assert.AreEqual(1, operationContainer.Operations.Count());
+            Assert.That(operationContainer.Operations.Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -226,19 +226,19 @@ namespace CDP4ServicesDal.Tests
 
             operationContainer.AddOperation(new Operation(original, modify, OperationKind.Update));
 
-            Assert.AreEqual(1, operationContainer.Operations.Count());
+            Assert.That(operationContainer.Operations.Count(), Is.EqualTo(1));
 
             var modifier = new OperationModifier(this.session.Object);
             modifier.ModifyOperationContainer(operationContainer);
 
-            Assert.AreEqual(2, operationContainer.Operations.Count());
+            Assert.That(operationContainer.Operations.Count(), Is.EqualTo(2));
             var addedOperation = operationContainer.Operations.Last();
             var originalActualState = (CDP4Common.DTO.ActualFiniteState)addedOperation.OriginalThing;
             var modifiedActualState = (CDP4Common.DTO.ActualFiniteState)addedOperation.ModifiedThing;
 
-            Assert.AreEqual(as11.Iid, originalActualState.Iid);
-            Assert.AreEqual(ActualFiniteStateKind.MANDATORY, modifiedActualState.Kind);
-            Assert.AreEqual(ActualFiniteStateKind.FORBIDDEN, originalActualState.Kind);
+            Assert.That(originalActualState.Iid, Is.EqualTo(as11.Iid));
+            Assert.That(modifiedActualState.Kind, Is.EqualTo(ActualFiniteStateKind.MANDATORY));
+            Assert.That(originalActualState.Kind, Is.EqualTo(ActualFiniteStateKind.FORBIDDEN));
         }
     }
 }

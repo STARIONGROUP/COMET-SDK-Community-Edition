@@ -263,12 +263,12 @@ namespace CDP4ServicesDal.Tests
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();
-            Assert.IsNotEmpty(operationContainer.Context);
-            Assert.AreEqual(14, operations.Count);
+            Assert.That(operationContainer.Context, Is.Not.Empty);
+            Assert.That(operations.Count, Is.EqualTo(14));
 
             var operation = operations.Single(x => x.OperationKind == OperationKind.Update);
             var iteration = (CDP4Common.DTO.Iteration)operation.ModifiedThing;
-            Assert.AreEqual(3, iteration.Element.Count);
+            Assert.That(iteration.Element.Count, Is.EqualTo(3));
         }
 
         [Test]
@@ -300,8 +300,8 @@ namespace CDP4ServicesDal.Tests
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();
-            Assert.AreEqual(13, operations.Count);
-            Assert.IsNotEmpty(operationContainer.Context);
+            Assert.That(operations.Count, Is.EqualTo(13));
+            Assert.That(operationContainer.Context, Is.Not.Empty);
         }
 
         [Test]
@@ -332,8 +332,8 @@ namespace CDP4ServicesDal.Tests
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();
-            Assert.AreEqual(14, operations.Count);
-            Assert.IsNotEmpty(operationContainer.Context); // check that operation container is correctly built
+            Assert.That(operations.Count, Is.EqualTo(14));
+            Assert.That(operationContainer.Context, Is.Not.Empty); // check that operation container is correctly built
 
             var ownedThings =
                 operationContainer.Operations.Select(x => x.ModifiedThing)
@@ -342,13 +342,13 @@ namespace CDP4ServicesDal.Tests
                     .ToList();
 
             var dtoOwner = ownedThings.Select(x => x.Owner).Distinct().Single();
-            Assert.AreEqual(dtoOwner, this.domain3.Iid);
+            Assert.That(this.domain3.Iid, Is.EqualTo(dtoOwner));
 
             var sub =
                 operationContainer.Operations.Select(x => x.ModifiedThing)
                     .OfType<Dto.ParameterSubscription>().Single();
 
-            Assert.AreEqual(sub.Owner, this.subscription1.Owner.Iid);
+            Assert.That(this.subscription1.Owner.Iid, Is.EqualTo(sub.Owner));
         }
 
         [Test]
@@ -379,8 +379,8 @@ namespace CDP4ServicesDal.Tests
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();
-            Assert.AreEqual(13, operations.Count);
-            Assert.IsNotEmpty(operationContainer.Context); // check that operation container is correctly built
+            Assert.That(operations.Count, Is.EqualTo(13));
+            Assert.That(operationContainer.Context, Is.Not.Empty); // check that operation container is correctly built
 
             var ownedThings =
                 operationContainer.Operations.Select(x => x.ModifiedThing)
@@ -389,13 +389,13 @@ namespace CDP4ServicesDal.Tests
                     .ToList();
 
             var dtoOwner = ownedThings.Select(x => x.Owner).Distinct().Single();
-            Assert.AreEqual(dtoOwner, this.domain1.Iid);
+            Assert.That(this.domain1.Iid, Is.EqualTo(dtoOwner));
 
             var subCount =
                 operationContainer.Operations.Select(x => x.ModifiedThing)
                     .OfType<Dto.ParameterSubscription>().Count();
 
-            Assert.AreEqual(0, subCount);
+            Assert.That(subCount, Is.EqualTo(0));
         }
 
         [Test]
@@ -428,8 +428,8 @@ namespace CDP4ServicesDal.Tests
             copyHandler.ModifiedCopyOperation(operationContainer);
 
             var operations = operationContainer.Operations.ToList();
-            Assert.AreEqual(13, operations.Count);
-            Assert.IsNotEmpty(operationContainer.Context); // check that operation container is correctly built
+            Assert.That(operations.Count, Is.EqualTo(13));
+            Assert.That(operationContainer.Context, Is.Not.Empty); // check that operation container is correctly built
 
             var ownedThings =
                 operationContainer.Operations.Select(x => x.ModifiedThing)
@@ -438,13 +438,13 @@ namespace CDP4ServicesDal.Tests
                     .ToList();
 
             var dtoOwner = ownedThings.Select(x => x.Owner).Distinct().Single();
-            Assert.AreEqual(dtoOwner, this.domain1.Iid);
+            Assert.That(this.domain1.Iid, Is.EqualTo(dtoOwner));
 
             var subCount =
                 operationContainer.Operations.Select(x => x.ModifiedThing)
                     .OfType<Dto.ParameterSubscription>().Count();
 
-            Assert.AreEqual(0, subCount);
+            Assert.That(subCount, Is.EqualTo(0));
         }
     }
 }

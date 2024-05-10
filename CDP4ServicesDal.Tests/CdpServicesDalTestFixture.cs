@@ -82,7 +82,7 @@ namespace CDP4ServicesDal.Tests
         {
             this.cancelationTokenSource = new CancellationTokenSource();
             
-            this.credentials = new Credentials("admin", "pass", this.uri);
+            this.credentials = new Credentials("admin", "pass", this.uri, true);
             this.dal = new CdpServicesDal();
             this.messageBus = new CDPMessageBus();
             this.session = new Session(this.dal, this.credentials, this.messageBus);
@@ -518,7 +518,7 @@ namespace CDP4ServicesDal.Tests
 
             Assert.That(dal.IsValidUri("http://cdp4services-test.cdp4.org"), Is.True);
             Assert.That(dal.IsValidUri("https://cdp4services-test.cdp4.org"), Is.True);
-            Assert.That(dal.IsValidUri("file://some file"), Is.True);
+            Assert.That(dal.IsValidUri("file://some file"), Is.False);
         }
 
         [Test]
