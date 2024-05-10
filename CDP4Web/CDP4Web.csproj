@@ -21,8 +21,8 @@
         <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
         <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
         <PackageReleaseNotes>
-          [REFACTOR] RHEA => Starion
-          [BUMP] Microsoft.Extensions.Logging.Abstractions to 8.0.1
+            [Update] to Starion Group
+            [BUMP] Microsoft.Extensions.Logging.Abstractions to 8.0.1
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
