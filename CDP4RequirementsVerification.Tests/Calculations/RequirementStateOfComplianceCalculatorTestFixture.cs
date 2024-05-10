@@ -63,7 +63,7 @@ namespace CDP4RequirementsVerification.Tests.Calculations
                 .WithValue(value2)
                 .Build();
 
-            Assert.AreEqual(expectedResult, this.requirementStateOfComplianceCalculator.Calculate(parameter.ValueSet[0], relationalExpression));
+            Assert.That(this.requirementStateOfComplianceCalculator.Calculate(parameter.ValueSet[0], relationalExpression), Is.EqualTo(expectedResult));
         }
 
         public static object[] TestCases =

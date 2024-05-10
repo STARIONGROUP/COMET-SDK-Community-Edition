@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DataSourceTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2023 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft
 //
@@ -472,7 +472,7 @@ namespace CDP4Reporting.Tests.DataCollection
 
             // tabular representation built, category hierarchy considered, unneeded subtrees pruned
             var rows = dataSource.GetTable(hierarchy, nestedElementTree).Rows;
-            Assert.AreEqual(2, rows.Count);
+            Assert.That(rows.Count, Is.EqualTo(2));
 
             ValidateRow(rows[0], this.eu12p1, this.eu2p31);
             ValidateRow(rows[1], this.eu4, this.eu7);
@@ -491,7 +491,7 @@ namespace CDP4Reporting.Tests.DataCollection
 
             // tabular representation built, category hierarchy considered, unneeded subtrees pruned, don't return rows that have no parameters set
             var rows = dataSource.GetTable(hierarchy, nestedElementTree, true).Rows;
-            Assert.AreEqual(0, rows.Count);
+            Assert.That(rows.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -510,8 +510,8 @@ namespace CDP4Reporting.Tests.DataCollection
             // tabular representation built, category hierarchy considered, unneeded subtrees pruned, don't return rows that have no parameters set
             var rows = dataSource.GetTable(hierarchy, nestedElementTree, true).Rows;
 
-            Assert.AreEqual(1, rows.Count);
-            Assert.AreEqual(this.parameter1.ValueSet.First().Published.First(), rows[0]["par"].ToString());
+            Assert.That(rows.Count, Is.EqualTo(1));
+            Assert.That(this.parameter1.ValueSet.First().Published.First(), Is.EqualTo(rows[0]["par"].ToString()));
         }
 
         private void VerifyStructure(ElementUsage row2Result)
@@ -527,7 +527,7 @@ namespace CDP4Reporting.Tests.DataCollection
 
             // tabular representation built, category hierarchy considered, unneeded subtrees pruned
             var rows = dataSource.GetTable(hierarchy, nestedElementTree).Rows;
-            Assert.AreEqual(2, rows.Count);
+            Assert.That(rows.Count, Is.EqualTo(2));
 
             ValidateRow(rows[0], this.ed1, this.eu12p1, this.eu2p31);
             ValidateRow(rows[1], this.ed1, row2Result, this.eu7);
@@ -547,7 +547,7 @@ namespace CDP4Reporting.Tests.DataCollection
             // tabular representation built, category hierarchy considered, unneeded subtrees pruned
             var rows = dataSource.GetTable(hierarchy, nestedElementTree).Rows;
 
-            Assert.AreEqual(1, rows.Count);
+            Assert.That(rows.Count, Is.EqualTo(1));
             ValidateRow(rows[0], this.ed1, this.eu12p1, this.eu2p31);
         }
 
@@ -564,7 +564,7 @@ namespace CDP4Reporting.Tests.DataCollection
 
             // tabular representation built, category hierarchy considered, unneeded subtrees pruned
             var rows = dataSource.GetTable(hierarchy, nestedElementTree).Rows;
-            Assert.AreEqual(2, rows.Count);
+            Assert.That(rows.Count, Is.EqualTo(2));
 
             if (levels.Length == 2)
             {
@@ -591,7 +591,7 @@ namespace CDP4Reporting.Tests.DataCollection
             // tabular representation built, category hierarchy considered, unneeded subtrees pruned
             var rows = dataSource.GetTable(hierarchy, nestedElementTree).Rows;
 
-            Assert.AreEqual(shouldBeFound ? 2 : 1, rows.Count);
+            Assert.That(rows.Count, Is.EqualTo(shouldBeFound ? 2 : 1));
         }
 
         private static void ValidateRow(
@@ -602,22 +602,22 @@ namespace CDP4Reporting.Tests.DataCollection
             ElementBase level3 = null,
             ElementBase level4 = null)
         {
-            Assert.AreEqual(level0?.Name, row.Field<string>(0));
-            Assert.AreEqual(level1?.Name, row.Field<string>(1));
+            Assert.That(row.Field<string>(0), Is.EqualTo(level0?.Name));
+            Assert.That(row.Field<string>(1), Is.EqualTo(level1?.Name));
 
             if (row.ItemArray.Length > 2)
             {
-                Assert.AreEqual(level2?.Name, row.Field<string>(2));
+                Assert.That(row.Field<string>(2), Is.EqualTo(level2?.Name));
             }
 
             if (row.ItemArray.Length > 3)
             {
-                Assert.AreEqual(level3?.Name, row.Field<string>(3));
+                Assert.That(row.Field<string>(3), Is.EqualTo(level3?.Name));
             }
 
             if (row.ItemArray.Length > 4)
             {
-                Assert.AreEqual(level4?.Name, row.Field<string>(4));
+                Assert.That(row.Field<string>(4), Is.EqualTo(level4?.Name));
             }
         }
     }

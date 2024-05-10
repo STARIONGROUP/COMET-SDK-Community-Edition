@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DataSourceParameterTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2023 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft
 //
@@ -487,10 +487,10 @@ namespace CDP4Reporting.Tests.DataCollection
                 hierarchy,
                 nestedElementTree).First();
 
-            Assert.AreEqual(1, node.GetColumns<TestParameter1>().Count());
-            Assert.AreEqual(1, node.GetColumns<TestParameter2>().Count());
-            Assert.AreEqual(0, node.GetColumns<TestParameter3>().Count());
-            Assert.AreEqual(1, node.GetColumns<ComputedTestParameter>().Count());
+            Assert.That(node.GetColumns<TestParameter1>().Count(), Is.EqualTo(1));
+            Assert.That(node.GetColumns<TestParameter2>().Count(), Is.EqualTo(1));
+            Assert.That(node.GetColumns<TestParameter3>().Count(), Is.EqualTo(0));
+            Assert.That(node.GetColumns<ComputedTestParameter>().Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -507,11 +507,11 @@ namespace CDP4Reporting.Tests.DataCollection
                 hierarchy,
                 nestedElementTree);
 
-            Assert.IsTrue(dataTable.Columns.Contains($"{nameof(CollectParentValuesRow.parameter1)}"));
-            Assert.IsTrue(dataTable.Columns.Contains($"{nameof(CollectParentValuesRow.parameter2)}"));
-            Assert.IsTrue(dataTable.Columns.Contains($"{nameof(CollectParentValuesRow.ComputedParameter)}"));
-            Assert.IsTrue(dataTable.Columns.Contains($"{nameof(CollectParentValuesRow.parameter1)}_{this.cat1.ShortName}"));
-            Assert.IsTrue(dataTable.Columns.Contains($"{nameof(CollectParentValuesRow.ComputedParameter)}_{this.cat1.ShortName}"));
+            Assert.That(dataTable.Columns.Contains($"{nameof(CollectParentValuesRow.parameter1)}"), Is.True);
+            Assert.That(dataTable.Columns.Contains($"{nameof(CollectParentValuesRow.parameter2)}"), Is.True);
+            Assert.That(dataTable.Columns.Contains($"{nameof(CollectParentValuesRow.ComputedParameter)}"), Is.True);
+            Assert.That(dataTable.Columns.Contains($"{nameof(CollectParentValuesRow.parameter1)}_{this.cat1.ShortName}"), Is.True);
+            Assert.That(dataTable.Columns.Contains($"{nameof(CollectParentValuesRow.ComputedParameter)}_{this.cat1.ShortName}"), Is.True);
         }
 
         [Test]
@@ -529,13 +529,13 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var parameter1 = node.GetColumns<TestParameter1>().Single();
-            Assert.AreEqual("type1", parameter1.FieldName);
+            Assert.That(parameter1.FieldName, Is.EqualTo("type1"));
 
             var parameter2 = node.GetColumns<TestParameter2>().Single();
-            Assert.AreEqual("type2", parameter2.FieldName);
+            Assert.That(parameter2.FieldName, Is.EqualTo("type2"));
 
             var computedParameter = node.GetColumns<ComputedTestParameter>().Single();
-            Assert.IsNull(computedParameter.FieldName);
+            Assert.That(computedParameter.FieldName, Is.Null);
         }
 
         [Test]
@@ -553,8 +553,8 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var computedParameter = node.GetColumns<ComputedTestParameter>().Single();
-            Assert.AreEqual(null, computedParameter.ValueSets);
-            Assert.AreEqual(null, computedParameter.Owner);
+            Assert.That(computedParameter.ValueSets, Is.EqualTo(null));
+            Assert.That(computedParameter.Owner, Is.EqualTo(null));
         }
 
         [Test]
@@ -572,12 +572,12 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var parameter1 = node.GetColumns<TestParameter1>().Single();
-            Assert.AreEqual("11", parameter1.ValueSets.FirstOrDefault()?.ActualValue.First());
-            Assert.AreEqual(this.parameterOwner, parameter1.Owner);
+            Assert.That(parameter1.ValueSets.FirstOrDefault()?.ActualValue.First(), Is.EqualTo("11"));
+            Assert.That(parameter1.Owner, Is.EqualTo(this.parameterOwner));
 
             var parameter2 = node.GetColumns<TestParameter2>().Single();
-            Assert.AreEqual("12", parameter2.ValueSets.FirstOrDefault()?.ActualValue.First());
-            Assert.AreEqual(this.parameterOwner, parameter2.Owner);
+            Assert.That(parameter2.ValueSets.FirstOrDefault()?.ActualValue.First(), Is.EqualTo("12"));
+            Assert.That(parameter2.Owner, Is.EqualTo(this.parameterOwner));
         }
 
         [Test]
@@ -595,12 +595,12 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var parameter1 = node.GetColumns<TestParameter1>().Single();
-            Assert.AreEqual("121", parameter1.ValueSets.FirstOrDefault()?.ActualValue.First());
-            Assert.AreEqual(this.parameterOverrideOwner, parameter1.Owner);
+            Assert.That(parameter1.ValueSets.FirstOrDefault()?.ActualValue.First(), Is.EqualTo("121"));
+            Assert.That(parameter1.Owner, Is.EqualTo(this.parameterOverrideOwner));
 
             var parameter2 = node.GetColumns<TestParameter2>().Single();
-            Assert.AreEqual("122", parameter2.ValueSets.FirstOrDefault()?.ActualValue.First());
-            Assert.AreEqual(this.parameterOverrideOwner, parameter2.Owner);
+            Assert.That(parameter2.ValueSets.FirstOrDefault()?.ActualValue.First(), Is.EqualTo("122"));
+            Assert.That(parameter2.Owner, Is.EqualTo(this.parameterOverrideOwner));
         }
 
         [Test]
@@ -618,12 +618,12 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First(x => x.ElementBase.Iid == this.eu2.Iid);
 
             var parameter1 = node.GetColumns<TestParameter1>().Single();
-            Assert.AreEqual("-21", parameter1.ValueSets.FirstOrDefault()?.ActualValue.First());
-            Assert.AreEqual(this.elementOwner, parameter1.Owner);
+            Assert.That(parameter1.ValueSets.FirstOrDefault()?.ActualValue.First(), Is.EqualTo("-21"));
+            Assert.That(parameter1.Owner, Is.EqualTo(this.elementOwner));
 
             var parameter2 = node.GetColumns<TestParameter2>().Single();
-            Assert.AreEqual("-22", parameter2.ValueSets.FirstOrDefault()?.ActualValue.First());
-            Assert.AreEqual(this.elementOwner, parameter2.Owner);
+            Assert.That(parameter2.ValueSets.FirstOrDefault()?.ActualValue.First(), Is.EqualTo("-22"));
+            Assert.That(parameter2.Owner, Is.EqualTo(this.elementOwner));
         }
     }
 }

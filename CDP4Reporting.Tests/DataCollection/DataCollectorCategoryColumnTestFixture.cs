@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DataCollectorCategoryColumnTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2023 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft
 //
@@ -244,7 +244,7 @@ namespace CDP4Reporting.Tests.DataCollection
                 hierarchy,
                 nestedElementTree).First();
             
-            Assert.AreEqual(2, node.GetColumns<DataCollectorCategory<Row>>().Count());
+            Assert.That(node.GetColumns<DataCollectorCategory<Row>>().Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -262,8 +262,8 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var categories = node.GetColumns<DataCollectorCategory<Row>>().ToList();
-            Assert.AreEqual("cat1", categories.Single(x => x.ShortName == "cat1").ShortName);
-            Assert.AreEqual("cat2", categories.Single(x => x.ShortName == "cat2").ShortName);
+            Assert.That(categories.Single(x => x.ShortName == "cat1").ShortName, Is.EqualTo("cat1"));
+            Assert.That(categories.Single(x => x.ShortName == "cat2").ShortName, Is.EqualTo("cat2"));
         }
 
         [Test]
@@ -281,8 +281,8 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var categories = node.GetColumns<DataCollectorCategory<Row>>().ToList();
-            Assert.AreEqual(true, categories.Single(x => x.ShortName == "cat1").Value);
-            Assert.AreEqual(false, categories.Single(x => x.ShortName == "cat2").Value);
+            Assert.That(categories.Single(x => x.ShortName == "cat1").Value, Is.EqualTo(true));
+            Assert.That(categories.Single(x => x.ShortName == "cat2").Value, Is.EqualTo(false));
         }
 
         [Test]
@@ -300,8 +300,8 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var categories = node.GetColumns<DataCollectorCategory<Row>>().ToList();
-            Assert.AreEqual(false, categories.Single(x => x.ShortName == "cat1").Value);
-            Assert.AreEqual(true, categories.Single(x => x.ShortName == "cat2").Value);
+            Assert.That(categories.Single(x => x.ShortName == "cat1").Value, Is.EqualTo(false));
+            Assert.That(categories.Single(x => x.ShortName == "cat2").Value, Is.EqualTo(true));
         }
 
         [Test]
@@ -320,8 +320,8 @@ namespace CDP4Reporting.Tests.DataCollection
                 hierarchy,
                 nestedElementTree).First();
 
-            Assert.AreEqual(true, node.GetTable().Columns.Contains(this.superCat.ShortName));
-            Assert.AreEqual(false, node.GetTable().Columns.Contains(this.subCat.ShortName));
+            Assert.That(node.GetTable().Columns.Contains(this.superCat.ShortName), Is.True);
+            Assert.That(node.GetTable().Columns.Contains(this.subCat.ShortName), Is.False);
         }
 
         [Test]
@@ -340,8 +340,8 @@ namespace CDP4Reporting.Tests.DataCollection
                 hierarchy,
                 nestedElementTree).First();
 
-            Assert.AreEqual(false, node.GetTable().Columns.Contains(this.superCat.ShortName));
-            Assert.AreEqual(true, node.GetTable().Columns.Contains(this.subCat.ShortName));
+            Assert.That(node.GetTable().Columns.Contains(this.superCat.ShortName), Is.EqualTo(false));
+            Assert.That(node.GetTable().Columns.Contains(this.subCat.ShortName), Is.EqualTo(true));
         }
 
         [Test]
@@ -361,11 +361,11 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var categoryColumns = node.GetColumns<DataCollectorCategory<Row2>>().ToList();
-            Assert.AreEqual(true, categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).Value);
-            Assert.AreEqual(this.superCat, categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).MainCategory);
+            Assert.That(categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).Value, Is.EqualTo(true));
+            Assert.That(categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).MainCategory, Is.EqualTo(this.superCat));
 
-            Assert.AreEqual(true, categoryColumns.Single(x => x.ShortName == this.subCat.ShortName).Value);
-            Assert.AreEqual(this.subCat, categoryColumns.Single(x => x.ShortName == this.subCat.ShortName).MainCategory);
+            Assert.That(categoryColumns.Single(x => x.ShortName == this.subCat.ShortName).Value, Is.EqualTo(true));
+            Assert.That(categoryColumns.Single(x => x.ShortName == this.subCat.ShortName).MainCategory, Is.EqualTo(this.subCat));
         }
 
         [Test]
@@ -385,10 +385,10 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var categoryColumns = node.GetColumns<DataCollectorCategory<Row2>>().ToList();
-            Assert.AreEqual(true, categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).Value);
-            Assert.AreEqual(this.superCat, categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).MainCategory);
+            Assert.That(categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).Value, Is.EqualTo(true));
+            Assert.That(categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).MainCategory, Is.EqualTo(this.superCat));
 
-            Assert.AreEqual(false, categoryColumns.Single(x => x.ShortName == this.subCat.ShortName).Value);
+            Assert.That(categoryColumns.Single(x => x.ShortName == this.subCat.ShortName).Value, Is.EqualTo(false));
         }
 
         [Test]
@@ -408,7 +408,7 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var categoryColumns = node.GetColumns<DataCollectorCategory<Row3>>().ToList();
-            Assert.AreEqual(this.superCat, categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).ActualCategory);
+            Assert.That(categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).ActualCategory, Is.EqualTo(this.superCat));
         }
 
         [Test]
@@ -428,7 +428,7 @@ namespace CDP4Reporting.Tests.DataCollection
                 nestedElementTree).First();
 
             var categoryColumns = node.GetColumns<DataCollectorCategory<Row3>>().ToList();
-            Assert.AreEqual(this.subCat, categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).ActualCategory);
+            Assert.That(categoryColumns.Single(x => x.ShortName == this.superCat.ShortName).ActualCategory, Is.EqualTo(this.subCat));
         }
     }
 }

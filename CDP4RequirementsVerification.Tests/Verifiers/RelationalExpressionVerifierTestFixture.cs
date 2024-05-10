@@ -121,9 +121,9 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.relationalExpressionVerifier.VerifyRequirementStateOfCompliance(new Dictionary<BooleanExpression, IBooleanExpressionVerifier>(), this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.relationalExpressionVerifier.RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, requirementStateOfCompliance);
-            Assert.IsTrue(messageBusWasCalled);
+            Assert.That(this.relationalExpressionVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(requirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(messageBusWasCalled, Is.True);
         }
 
         [Test]
@@ -142,9 +142,9 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.relationalExpressionVerifier.VerifyRequirementStateOfCompliance(binaryRelationships, this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Unknown, requirementStateOfCompliance);
-            Assert.IsFalse(messageBusWasCalled);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.relationalExpressionVerifier.RequirementStateOfCompliance);
+            Assert.That(requirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Unknown));
+            Assert.That(messageBusWasCalled, Is.False);
+            Assert.That(this.relationalExpressionVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
         }
     }
 }

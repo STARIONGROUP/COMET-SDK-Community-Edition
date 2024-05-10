@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CategoryHierarchyTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2023 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft
 //
@@ -114,7 +114,7 @@ namespace CDP4Reporting.Tests.DataCollection
                 .Builder(this.iteration, this.cat1.ShortName)
                 .Build();
 
-            Assert.IsInstanceOf<CategoryDecompositionHierarchy>(hierarchy);
+            Assert.That(hierarchy, Is.InstanceOf<CategoryDecompositionHierarchy>());
         }
 
         [Test]
@@ -136,18 +136,18 @@ namespace CDP4Reporting.Tests.DataCollection
                 .AddLevel(this.cat4.ShortName, "cat4FieldName")
                 .Build();
 
-            Assert.AreEqual(this.cat1, hierarchy.Category);
+            Assert.That(hierarchy.Category, Is.EqualTo(this.cat1));
 
             hierarchy = hierarchy.Child;
-            Assert.AreEqual(this.cat2, hierarchy.Category);
+            Assert.That(hierarchy.Category, Is.EqualTo(this.cat2));
 
             hierarchy = hierarchy.Child;
-            Assert.AreEqual(this.cat3, hierarchy.Category);
+            Assert.That(hierarchy.Category, Is.EqualTo(this.cat3));
 
             hierarchy = hierarchy.Child;
-            Assert.AreEqual(this.cat4, hierarchy.Category);
+            Assert.That(hierarchy.Category, Is.EqualTo(this.cat4));
 
-            Assert.IsNull(hierarchy.Child);
+            Assert.That(hierarchy.Child, Is.Null);
         }
     }
 }

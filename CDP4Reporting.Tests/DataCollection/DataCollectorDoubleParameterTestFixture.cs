@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DataCollectorDoubleParameterTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2023 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft
 //
@@ -66,8 +66,8 @@ namespace CDP4Reporting.Tests.DataCollection
                 hierarchy,
                 nestedElementTree).First();
 
-            Assert.AreEqual(1, node.GetColumns<DataCollectorDoubleParameter<Row>>().Count());
-            Assert.IsTrue(node.GetTable().Columns.Contains("TypeOne"));
+            Assert.That(node.GetColumns<DataCollectorDoubleParameter<Row>>().Count(), Is.EqualTo(1));
+            Assert.That(node.GetTable().Columns.Contains("TypeOne"), Is.True);
         }
 
         [Test]
@@ -98,14 +98,14 @@ namespace CDP4Reporting.Tests.DataCollection
 
             System.Threading.Thread.CurrentThread.CurrentCulture = culture;
 
-            Assert.AreEqual(1, node.GetColumns<DataCollectorDoubleParameter<Row>>().Count());
+            Assert.That(node.GetColumns<DataCollectorDoubleParameter<Row>>().Count(), Is.EqualTo(1));
 
-            Assert.AreEqual(expectedValue1, (double)node.GetTable().Rows[0]["TypeOne"]);
+            Assert.That((double)node.GetTable().Rows[0]["TypeOne"], Is.EqualTo(expectedValue1));
 
             culture.NumberFormat.NumberDecimalSeparator = ".";
             culture.NumberFormat.NumberGroupSeparator = ",";
 
-            Assert.AreEqual(expectedValue2, (double)node.GetTable().Rows[0]["TypeOne"]);
+            Assert.That((double)node.GetTable().Rows[0]["TypeOne"], Is.EqualTo(expectedValue2));
         }
 
         static object[] TestCases =

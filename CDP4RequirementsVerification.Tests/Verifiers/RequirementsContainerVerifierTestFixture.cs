@@ -134,21 +134,21 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
         public async Task Verify_that_state_of_compliances_are_properly_calculated()
         {
             await this.requirementsContainerVerifier.VerifyRequirements(this.iteration);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementsContainerVerifier.RequirementStateOfCompliance);
+            Assert.That(this.requirementsContainerVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
 
             await this.requirementsGroupVerifier1.VerifyRequirements(this.iteration);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementsGroupVerifier1.RequirementStateOfCompliance);
+            Assert.That(this.requirementsGroupVerifier1.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
 
             await this.requirementsGroupVerifier2.VerifyRequirements(this.iteration);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementsGroupVerifier2.RequirementStateOfCompliance);
+            Assert.That(this.requirementsGroupVerifier2.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
 
             this.requirementsGroup1.Group.Clear(); // no more inconclusive sub groups.
 
             await this.requirementsContainerVerifier.VerifyRequirements(this.iteration);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.requirementsContainerVerifier.RequirementStateOfCompliance);
+            Assert.That(this.requirementsContainerVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
             await this.requirementsGroupVerifier1.VerifyRequirements(this.iteration);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.requirementsGroupVerifier1.RequirementStateOfCompliance);
+            Assert.That(this.requirementsGroupVerifier1.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
         }
 
         [Test]
@@ -157,7 +157,7 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
             this.requirement1.IsDeprecated = true;
             await this.requirementsContainerVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementsContainerVerifier.RequirementStateOfCompliance);
+            Assert.That(this.requirementsContainerVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
         }
 
         [Test]
@@ -166,7 +166,7 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
             this.requirementsSpecification.Requirement.Clear();
             await this.requirementsContainerVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementsContainerVerifier.RequirementStateOfCompliance);
+            Assert.That(this.requirementsContainerVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
         }
     }
 }

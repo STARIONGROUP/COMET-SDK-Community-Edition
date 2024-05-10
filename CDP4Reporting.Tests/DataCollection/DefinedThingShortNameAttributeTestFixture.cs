@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DefinedThingShortNameAttributeTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2023 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft
 //
@@ -35,7 +35,7 @@ namespace CDP4Reporting.Tests.DataCollection
         public void TestParameterTypeShortNameAttribute()
         {
             var attribute = new DefinedThingShortNameAttribute("shortName");
-            Assert.AreEqual("shortName", attribute.ShortName);
+            Assert.That(attribute.ShortName, Is.EqualTo("shortName"));
         }
     }
 }

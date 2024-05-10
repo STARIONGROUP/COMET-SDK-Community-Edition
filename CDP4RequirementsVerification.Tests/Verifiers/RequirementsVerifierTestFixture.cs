@@ -115,7 +115,7 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
         {
             await this.requirementVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.requirementVerifier.RequirementStateOfCompliance);
+            Assert.That(this.requirementVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.requirementVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.requirementVerifier.RequirementStateOfCompliance);
+            Assert.That(this.requirementVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
         }
     }
 }

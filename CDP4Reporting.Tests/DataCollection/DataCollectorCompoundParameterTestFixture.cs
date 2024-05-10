@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DataCollectorCompoundParameterTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2023 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft
 //
@@ -65,11 +65,11 @@ namespace CDP4Reporting.Tests.DataCollection
                 hierarchy,
                 nestedElementTree).First();
 
-            Assert.AreEqual(1, node.GetColumns<DataCollectorCompoundParameter<Row>>().Count());
-            Assert.IsTrue(node.GetTable().Columns.Contains("TypeFive_Param1"));
-            Assert.IsTrue(node.GetTable().Columns.Contains("TypeFive_Param2"));
+            Assert.That(node.GetColumns<DataCollectorCompoundParameter<Row>>().Count(), Is.EqualTo(1));
+            Assert.That(node.GetTable().Columns.Contains("TypeFive_Param1"), Is.True);
+            Assert.That(node.GetTable().Columns.Contains("TypeFive_Param2"), Is.True);
 
-            Assert.AreEqual(1, node.GetTable().Rows.Count);
+            Assert.That(node.GetTable().Rows.Count, Is.EqualTo(1));
         }
     }
 }

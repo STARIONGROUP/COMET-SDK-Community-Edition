@@ -194,17 +194,17 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
         {
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
         }
 
         [Test]
@@ -215,17 +215,17 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
         }
 
         [Test]
@@ -234,17 +234,17 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
             this.notExpression.Term = this.orExpression;
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
         }
 
         [Test]
@@ -256,17 +256,17 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
         }
 
         [Test]
@@ -276,17 +276,17 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
         }
 
         [Test]
@@ -313,25 +313,25 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
 
             this.notExpression.Term = this.exclusiveOrExpression;
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
         }
 
         [Test]
@@ -358,24 +358,24 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
             this.notExpression.Term = this.exclusiveOrExpression;
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
         }
 
         [Test]
@@ -402,24 +402,24 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
             this.notExpression.Term = this.exclusiveOrExpression;
             await this.nullConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.nullConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
         }
 
         [Test]
@@ -446,24 +446,24 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.option1ConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option1ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
             this.notExpression.Term = this.exclusiveOrExpression;
             await this.option1ConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.option1ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.option1ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
         }
 
         [Test]
@@ -490,24 +490,24 @@ namespace CDP4RequirementsVerification.Tests.Verifiers
 
             await this.option2ConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.option2ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance);
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression1].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression2].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.orExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance);
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression3].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.relationalExpression4].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Pass, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.andExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.exclusiveOrExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Pass));
 
             this.notExpression.Term = this.exclusiveOrExpression;
             await this.option2ConfigurationParametricConstraintVerifier.VerifyRequirements(this.iteration);
 
-            Assert.AreEqual(RequirementStateOfCompliance.Inconclusive, this.option2ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance);
-            Assert.AreEqual(RequirementStateOfCompliance.Failed, this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance);
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Inconclusive));
+            Assert.That(this.option2ConfigurationParametricConstraintVerifier.BooleanExpressionVerifiers[this.notExpression].RequirementStateOfCompliance, Is.EqualTo(RequirementStateOfCompliance.Failed));
         }
     }
 }
