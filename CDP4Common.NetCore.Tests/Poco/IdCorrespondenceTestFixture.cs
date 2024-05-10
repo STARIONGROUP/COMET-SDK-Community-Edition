@@ -44,7 +44,7 @@ namespace CDP4Common.Tests.Poco
 
             thing.Container = externalIdentifierMap;
 
-            Assert.IsTrue(ReferenceEquals(thing.Owner, externalIdentifierMap.Owner));
+            Assert.That(ReferenceEquals(thing.Owner, externalIdentifierMap.Owner), Is.True);
         }
 
         [Test]        

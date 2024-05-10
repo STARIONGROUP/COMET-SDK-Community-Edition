@@ -47,7 +47,7 @@ namespace CDP4Common.Tests.Comparers
 
             var result = ids.OrderBy(x => x, new GuidComparer());
 
-            CollectionAssert.AreEqual(ordered, result);
+            Assert.That(ordered, Is.EqualTo(result));
         }
     }
 }

@@ -52,7 +52,7 @@ namespace CDP4Common.Tests.MetaInfo
 
             var versions = new MetaDataProvider().QuerySupportedModelVersions();
 
-            CollectionAssert.AreEquivalent(expected.Select(x => x.ToString()), versions.Select(x => x.ToString()));
+            Assert.That(expected.Select(x => x.ToString()), Is.EquivalentTo(versions.Select(x => x.ToString())));
         }
 
         [Test]

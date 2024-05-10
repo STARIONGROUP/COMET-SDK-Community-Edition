@@ -117,7 +117,7 @@ namespace CDP4Common.Tests.Poco
             };
             var violations = rule.Verify(this.iteration);
 
-            Assert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace CDP4Common.Tests.Poco
 
             var violations = rule.Verify(this.iteration);
 
-            Assert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]
@@ -161,12 +161,12 @@ namespace CDP4Common.Tests.Poco
 
             var violations = rule.Verify(this.iteration);
 
-            Assert.IsNotEmpty(violations);
+            Assert.That(violations, Is.Not.Empty);
 
             var violation = violations.Single();
             violation.ViolatingThing.Contains(elementDefinition.Iid);
 
-            Assert.IsTrue(violation.Description.Contains("does not contain parameters that reference the following parameter types"));
+            Assert.That(violation.Description.Contains("does not contain parameters that reference the following parameter types"), Is.True);
         }
 
         [Test]
@@ -198,7 +198,7 @@ namespace CDP4Common.Tests.Poco
 
             var violations = rule.Verify(this.iteration);
 
-            Assert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
     }
 }

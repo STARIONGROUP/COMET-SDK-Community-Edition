@@ -101,11 +101,11 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGets()
         {
-            Assert.IsTrue(ReferenceEquals(this.parameter.ParameterType, this.parameterSubscription.ParameterType));
+            Assert.That(ReferenceEquals(this.parameter.ParameterType, this.parameterSubscription.ParameterType), Is.True);
             Assert.That(this.parameterSubscription.IsOptionDependent, Is.EqualTo(this.parameter.IsOptionDependent));
-            Assert.IsTrue(ReferenceEquals(this.parameter.Scale, this.parameterSubscription.Scale));
-            Assert.IsTrue(ReferenceEquals(this.parameter.StateDependence, this.parameterSubscription.StateDependence));
-            Assert.IsTrue(ReferenceEquals(this.parameter.Group, this.parameterSubscription.Group));
+            Assert.That(ReferenceEquals(this.parameter.Scale, this.parameterSubscription.Scale), Is.True);
+            Assert.That(ReferenceEquals(this.parameter.StateDependence, this.parameterSubscription.StateDependence), Is.True);
+            Assert.That(ReferenceEquals(this.parameter.Group, this.parameterSubscription.Group), Is.True);
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace CDP4Common.Tests.Poco
 
             parameterOverride.ParameterSubscription.Add(this.parameterSubscription);
 
-            Assert.IsTrue(ReferenceEquals(this.parameter.ParameterType, this.parameterSubscription.ParameterType));
+            Assert.That(ReferenceEquals(this.parameter.ParameterType, this.parameterSubscription.ParameterType), Is.True);
         }
 
         [Test]        
@@ -144,7 +144,7 @@ namespace CDP4Common.Tests.Poco
             this.parameter.IsOptionDependent = false;
             this.parameter.StateDependence = null;
             this.parameterSubscription.ValidatePoco();
-            Assert.IsNotEmpty(this.parameterSubscription.ValidationErrors);
+            Assert.That(this.parameterSubscription.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -155,7 +155,7 @@ namespace CDP4Common.Tests.Poco
             this.parameter.StateDependence = this.actualList;
 
             this.parameterSubscription.ValidatePoco();
-            Assert.IsNotEmpty(this.parameterSubscription.ValidationErrors);
+            Assert.That(this.parameterSubscription.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -166,7 +166,7 @@ namespace CDP4Common.Tests.Poco
             this.parameter.StateDependence = null;
 
             this.parameterSubscription.ValidatePoco();
-            Assert.IsNotEmpty(this.parameterSubscription.ValidationErrors);
+            Assert.That(this.parameterSubscription.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -177,7 +177,7 @@ namespace CDP4Common.Tests.Poco
             this.parameter.StateDependence = this.actualList;
 
             this.parameterSubscription.ValidatePoco();
-            Assert.IsNotEmpty(this.parameterSubscription.ValidationErrors);
+            Assert.That(this.parameterSubscription.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -192,7 +192,7 @@ namespace CDP4Common.Tests.Poco
             valueset.ValidatePoco();
             this.parameterSubscription.ValidatePoco();
 
-            Assert.IsNotEmpty(this.parameterSubscription.ValidationErrors);
+            Assert.That(this.parameterSubscription.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -214,7 +214,7 @@ namespace CDP4Common.Tests.Poco
             valueset.ValidatePoco();
             this.parameterSubscription.ValidatePoco();
 
-            Assert.IsEmpty(this.parameterSubscription.ValidationErrors);
+            Assert.That(this.parameterSubscription.ValidationErrors, Is.Empty);
         }
     }
 }

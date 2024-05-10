@@ -41,7 +41,7 @@ namespace CDP4Common.Tests.Poco
             list.Owner = new DomainOfExpertise();
             list.PossibleState.Add(thing);
 
-            Assert.IsTrue(ReferenceEquals(list.Owner, thing.Owner));
+            Assert.That(ReferenceEquals(list.Owner, thing.Owner), Is.True);
         }
 
         [Test]
@@ -61,10 +61,10 @@ namespace CDP4Common.Tests.Poco
             var list = new PossibleFiniteStateList();
             
             list.PossibleState.Add(thing);
-            Assert.IsFalse(thing.IsDefault);
+            Assert.That(thing.IsDefault, Is.False);
 
             list.DefaultState = thing;
-            Assert.IsTrue(thing.IsDefault);
+            Assert.That(thing.IsDefault, Is.True);
         }
     }
 }

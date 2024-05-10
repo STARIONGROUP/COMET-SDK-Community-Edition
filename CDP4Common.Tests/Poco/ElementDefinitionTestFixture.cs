@@ -72,8 +72,8 @@ namespace CDP4Common.Tests.Poco
             elementDefinition.ParameterGroup.Add(parameterGroup_1_2);
             parameterGroup_1_2.ContainingGroup = parameterGroup_1;
 
-            CollectionAssert.Contains(elementDefinition.ContainedGroup(), parameterGroup_1);
-            CollectionAssert.Contains(elementDefinition.ContainedGroup(), parameterGroup_2);
+            Assert.That(elementDefinition.ContainedGroup(), Does.Contain(parameterGroup_1));
+            Assert.That(elementDefinition.ContainedGroup(), Does.Contain(parameterGroup_2));
         }
 
         [Test]
@@ -95,9 +95,9 @@ namespace CDP4Common.Tests.Poco
             elementDefinition.Parameter.Add(parameter_1_2);
             parameter_1_2.Group = parameterGroup_1;
 
-            CollectionAssert.DoesNotContain(elementDefinition.ContainedParameter(), parameter_1_1);
-            CollectionAssert.DoesNotContain(elementDefinition.ContainedParameter(), parameter_1_2);
-            CollectionAssert.Contains(elementDefinition.ContainedParameter(), parameter_0);
+            Assert.That(elementDefinition.ContainedParameter(),Does.Not.Contain(parameter_1_1));
+            Assert.That(elementDefinition.ContainedParameter(), Does.Not.Contain(parameter_1_2));
+            Assert.That(elementDefinition.ContainedParameter(), Does.Contain(parameter_0));
         }
 
         [Test]
@@ -118,19 +118,19 @@ namespace CDP4Common.Tests.Poco
 
             def12.ContainedElement.Add(new ElementUsage { ElementDefinition = def121 });
 
-            Assert.IsTrue(def1.HasUsageOf(def1));
-            Assert.IsTrue(def1.HasUsageOf(def11));
-            Assert.IsTrue(def1.HasUsageOf(def111));
-            Assert.IsTrue(def1.HasUsageOf(def1111));
-            Assert.IsTrue(def1.HasUsageOf(def12));
-            Assert.IsTrue(def1.HasUsageOf(def121));
+            Assert.That(def1.HasUsageOf(def1), Is.True);
+            Assert.That(def1.HasUsageOf(def11), Is.True);
+            Assert.That(def1.HasUsageOf(def111), Is.True);
+            Assert.That(def1.HasUsageOf(def1111), Is.True);
+            Assert.That(def1.HasUsageOf(def12), Is.True);
+            Assert.That(def1.HasUsageOf(def121), Is.True);
 
-            Assert.IsTrue(def11.HasUsageOf(def11));
-            Assert.IsTrue(def11.HasUsageOf(def111));
-            Assert.IsTrue(def11.HasUsageOf(def1111));
-            Assert.IsFalse(def11.HasUsageOf(def1));
-            Assert.IsFalse(def11.HasUsageOf(def12));
-            Assert.IsFalse(def11.HasUsageOf(def121));
+            Assert.That(def11.HasUsageOf(def11), Is.True);
+            Assert.That(def11.HasUsageOf(def111), Is.True);
+            Assert.That(def11.HasUsageOf(def1111), Is.True);
+            Assert.That(def11.HasUsageOf(def1), Is.False);
+            Assert.That(def11.HasUsageOf(def12), Is.False);
+            Assert.That(def11.HasUsageOf(def121), Is.False);
         }
 
         [Test]
@@ -180,9 +180,9 @@ namespace CDP4Common.Tests.Poco
             def.Category.Add(cat2);
 
             Assert.That(def.RequiredRdls.Count(), Is.EqualTo(2));
-            Assert.IsTrue(def.RequiredRdls.Contains(srdl1));
-            Assert.IsTrue(def.RequiredRdls.Contains(mrdl));
-            Assert.IsFalse(def.RequiredRdls.Contains(srdl2));
+            Assert.That(def.RequiredRdls.Contains(srdl1), Is.True);
+            Assert.That(def.RequiredRdls.Contains(mrdl), Is.True);
+            Assert.That(def.RequiredRdls.Contains(srdl2), Is.False);
         }
 
         [Test]
@@ -221,8 +221,8 @@ namespace CDP4Common.Tests.Poco
             def2.ContainedElement.Add(usage1_2);
             
             Assert.That(def1.ReferencingElementUsages().Count(), Is.EqualTo(2));
-            Assert.Contains(usage1_1, def1.ReferencingElementUsages().ToList());
-            Assert.Contains(usage1_2, def1.ReferencingElementUsages().ToList());
+            Assert.That(def1.ReferencingElementUsages().ToList(), Does.Contain(usage1_1));
+            Assert.That(def1.ReferencingElementUsages().ToList(), Does.Contain(usage1_2));
         }
 
         [Test]
@@ -245,13 +245,13 @@ namespace CDP4Common.Tests.Poco
 
             var referencedThings = elementDefinition.QueryReferencedThings();
 
-            CollectionAssert.Contains(referencedThings, category);
-            CollectionAssert.DoesNotContain(referencedThings, superCategory);
+            Assert.That(referencedThings, Does.Contain(category));
+            Assert.That(referencedThings, Does.Not.Contain(superCategory));
 
             var referencedThingsDeep = elementDefinition.QueryReferencedThingsDeep();
 
-            CollectionAssert.Contains(referencedThingsDeep, category);
-            CollectionAssert.Contains(referencedThingsDeep, superCategory);
+            Assert.That(referencedThingsDeep, Does.Contain(category));
+            Assert.That(referencedThingsDeep, Does.Contain(superCategory));
         }
     }
 }

@@ -42,7 +42,7 @@ namespace CDP4Common.Tests.Poco
             this.derivedQuantityKind = new DerivedQuantityKind();
             this.derivedQuantityKind.ValidatePoco();
 
-            CollectionAssert.Contains(this.derivedQuantityKind.ValidationErrors, "The PossibleScale property is empty.");
+            Assert.That(this.derivedQuantityKind.ValidationErrors, Does.Contain("The PossibleScale property is empty."));
         }
     }
 }

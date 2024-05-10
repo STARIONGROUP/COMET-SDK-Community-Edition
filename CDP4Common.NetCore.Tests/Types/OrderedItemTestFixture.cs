@@ -90,7 +90,7 @@ namespace CDP4Common.Tests.Types
             var key = 1;
             var value1 = new OrderedItem { K = key, V = "one" };
             var value2 = value1;
-            Assert.IsTrue(value1.Equals(value2));
+            Assert.That(value1.Equals(value2), Is.True);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace CDP4Common.Tests.Types
         {
             var key = 1;
             var value1 = new OrderedItem { K = key, V = "one" };
-            Assert.IsFalse(value1.Equals(null));
+            Assert.That(value1.Equals(null), Is.False);
         }
 
         [Test]

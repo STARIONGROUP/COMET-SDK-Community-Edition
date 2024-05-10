@@ -103,11 +103,11 @@ namespace CDP4Common.Tests.Types
             this.person.EmailAddress.Add(email);
             
             var clone = this.person.Clone(false);
-            Assert.AreSame(this.person, email.Container);
+            Assert.That(this.person, Is.SameAs(email.Container));
 
             clone.EmailAddress.Clear();
             clone.EmailAddress.Add(email);
-            Assert.AreSame(clone, email.Container);
+            Assert.That(clone, Is.SameAs(email.Container));
         }
 
         [Test]

@@ -36,7 +36,7 @@ namespace CDP4Common.Tests.MetaInfo
         {
             var modelRdlMetaInfo = new ModelReferenceDataLibraryMetaInfo();
             var properties = modelRdlMetaInfo.Properties;
-            Assert.IsNotEmpty(properties);
+            Assert.That(properties, Is.Not.Empty);
         }
     }
 }

@@ -45,7 +45,7 @@ namespace CDP4Common.Tests.Types
         public void VerifyThatStringToValueArrayIntWorks()
         {
             var stringArray = "{1;2;3}";
-            Assert.IsTrue(stringArray.TryParseToIntValueArray(out result, out error));
+            Assert.That(stringArray.TryParseToIntValueArray(out result, out error), Is.True);
 
             Assert.That(this.result[0], Is.EqualTo(1));
             Assert.That(this.result[1], Is.EqualTo(2));
@@ -56,7 +56,7 @@ namespace CDP4Common.Tests.Types
         public void VerifyThatStringToValueArrayIntWorks2()
         {
             var stringArray = "{1}";
-            Assert.IsTrue(stringArray.TryParseToIntValueArray(out result, out error));
+            Assert.That(stringArray.TryParseToIntValueArray(out result, out error), Is.True);
 
             Assert.That(this.result[0], Is.EqualTo(1));
         }
@@ -65,27 +65,27 @@ namespace CDP4Common.Tests.Types
         public void VerifyThatExceptionThrown1()
         {
             var stringArray = "";
-            Assert.IsFalse(stringArray.TryParseToIntValueArray(out result, out error));
-            Assert.IsNotEmpty(error);
-            Assert.IsNull(result);
+            Assert.That(stringArray.TryParseToIntValueArray(out result, out error), Is.False);
+            Assert.That(error, Is.Not.Empty);
+            Assert.That(result, Is.Null);
         }
 
         [Test]
         public void VerifyThatExceptionThrown2()
         {
             var stringArray = "1";
-            Assert.IsFalse(stringArray.TryParseToIntValueArray(out result, out error));
-            Assert.IsNotEmpty(error);
-            Assert.IsNull(result);
+            Assert.That(stringArray.TryParseToIntValueArray(out result, out error), Is.False);
+            Assert.That(error, Is.Not.Empty);
+            Assert.That(result, Is.Null);
         }
 
         [Test]
         public void VerifyThatExceptionThrown3()
         {
             var stringArray = "{1,2}";
-            Assert.IsFalse(stringArray.TryParseToIntValueArray(out result, out error));
-            Assert.IsNotEmpty(error);
-            Assert.IsNull(result);
+            Assert.That(stringArray.TryParseToIntValueArray(out result, out error), Is.False);
+            Assert.That(error, Is.Not.Empty);
+            Assert.That(result, Is.Null);
         }
     }
 }

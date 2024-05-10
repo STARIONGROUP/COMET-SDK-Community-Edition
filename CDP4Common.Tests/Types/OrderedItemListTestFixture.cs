@@ -64,12 +64,12 @@ namespace CDP4Common.Tests.Types
             list.ActualState.Add(state);
 
             var clone = list.Clone(false);
-            Assert.AreSame(list, state.Container);
+            Assert.That(list, Is.SameAs(state.Container));
 
             clone.ActualState.Clear();
             clone.ActualState.Add(state);
 
-            Assert.AreSame(clone, state.Container);
+            Assert.That(clone, Is.SameAs(state.Container));
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace CDP4Common.Tests.Types
             this.testList = new OrderedItemList<Thing>(this.person) { new EmailAddress(Guid.NewGuid(), null, null) };
 
             Assert.That(this.testList.Count, Is.EqualTo(1));
-            Assert.IsNull(this.testList[0].Container);
+            Assert.That(this.testList[0].Container, Is.Null);
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace CDP4Common.Tests.Types
             Assert.That(this.testList.Count, Is.EqualTo(1));
             Assert.That(this.testList[0].Container, Is.EqualTo(this.person));
 
-            Assert.IsTrue((-20000000L < this.testList.SortedItems.First().Key) && (20000000L > this.testList.SortedItems.First().Key));
+            Assert.That((-20000000L < this.testList.SortedItems.First().Key) && (20000000L > this.testList.SortedItems.First().Key), Is.True);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace CDP4Common.Tests.Types
             this.testList = new OrderedItemList<Thing>(this.person, true) { new EmailAddress(Guid.NewGuid(), null, null) };
             foreach (var item in this.testList)
             {
-                Assert.IsNotNull(item);
+                Assert.That(item, Is.Not.Null);
             }
         }
 
@@ -166,7 +166,7 @@ namespace CDP4Common.Tests.Types
             this.testList.Insert(1, inserted);
 
             Assert.That(this.testList[1], Is.EqualTo(inserted));
-            Assert.IsTrue(this.testList.SortedItems.Keys[1] > this.testList.SortedItems.Keys[0] && this.testList.SortedItems.Keys[2] > this.testList.SortedItems.Keys[1]);
+            Assert.That(this.testList.SortedItems.Keys[1] > this.testList.SortedItems.Keys[0] && this.testList.SortedItems.Keys[2] > this.testList.SortedItems.Keys[1], Is.True);
         }
 
         [Test]
@@ -177,7 +177,7 @@ namespace CDP4Common.Tests.Types
 
             testList.Add(inserted);
 
-            Assert.IsTrue(this.testList.Contains(inserted));
+            Assert.That(this.testList.Contains(inserted), Is.True);
         }
 
         [Test]
@@ -191,7 +191,7 @@ namespace CDP4Common.Tests.Types
             var array = new Thing[1];
             this.testList.CopyTo(array, 0);
 
-            Assert.IsNotNull(array[0]);
+            Assert.That(array[0], Is.Not.Null);
         }
 
         [Test]
@@ -324,8 +324,8 @@ namespace CDP4Common.Tests.Types
             var email2 = new EmailAddress(Guid.NewGuid(), null, null);
             list.Insert(index, email2);
 
-            Assert.AreSame(email1, list[0]);
-            Assert.AreSame(email2, list[1]);
+            Assert.That(email1, Is.SameAs(list[0]));
+            Assert.That(email2, Is.SameAs(list[1]));
         }
 
         [Test]
@@ -357,35 +357,35 @@ namespace CDP4Common.Tests.Types
             testlist.Add(email3);
             testlist.Add(email4);
 
-            Assert.AreSame(email0, testlist[0]);
-            Assert.AreSame(email1, testlist[1]);
-            Assert.AreSame(email2, testlist[2]);
-            Assert.AreSame(email3, testlist[3]);
-            Assert.AreSame(email4, testlist[4]);
+            Assert.That(email0, Is.SameAs(testlist[0]));
+            Assert.That(email1, Is.SameAs(testlist[1]));
+            Assert.That(email2, Is.SameAs(testlist[2]));
+            Assert.That(email3, Is.SameAs(testlist[3]));
+            Assert.That(email4, Is.SameAs(testlist[4]));
 
             // move 1st to last
             testlist.Move(0, 4);
-            Assert.AreSame(email1, testlist[0]);
-            Assert.AreSame(email2, testlist[1]);
-            Assert.AreSame(email3, testlist[2]);
-            Assert.AreSame(email4, testlist[3]);
-            Assert.AreSame(email0, testlist[4]);
+            Assert.That(email1, Is.SameAs(testlist[0]));
+            Assert.That(email2, Is.SameAs(testlist[1]));
+            Assert.That(email3, Is.SameAs(testlist[2]));
+            Assert.That(email4, Is.SameAs(testlist[3]));
+            Assert.That(email0, Is.SameAs(testlist[4]));
 
             // move last to first
             testlist.Move(4, 0);
-            Assert.AreSame(email0, testlist[0]);
-            Assert.AreSame(email1, testlist[1]);
-            Assert.AreSame(email2, testlist[2]);
-            Assert.AreSame(email3, testlist[3]);
-            Assert.AreSame(email4, testlist[4]);
+            Assert.That(email0, Is.SameAs(testlist[0]));
+            Assert.That(email1, Is.SameAs(testlist[1]));
+            Assert.That(email2, Is.SameAs(testlist[2]));
+            Assert.That(email3, Is.SameAs(testlist[3]));
+            Assert.That(email4, Is.SameAs(testlist[4]));
 
             // does not do anything
             testlist.Move(0, 0);
-            Assert.AreSame(email0, testlist[0]);
-            Assert.AreSame(email1, testlist[1]);
-            Assert.AreSame(email2, testlist[2]);
-            Assert.AreSame(email3, testlist[3]);
-            Assert.AreSame(email4, testlist[4]);
+            Assert.That(email0, Is.SameAs(testlist[0]));
+            Assert.That(email1, Is.SameAs(testlist[1]));
+            Assert.That(email2, Is.SameAs(testlist[2]));
+            Assert.That(email3, Is.SameAs(testlist[3]));
+            Assert.That(email4, Is.SameAs(testlist[4]));
         }
 
         [Test]

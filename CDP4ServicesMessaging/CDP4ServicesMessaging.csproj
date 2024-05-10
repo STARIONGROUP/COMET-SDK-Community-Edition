@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Company>Starion Group S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>26.7.0</VersionPrefix>
+    <VersionPrefix>27.0.0</VersionPrefix>
     <Description>CDP4 Services Messaging is a Class Library that contains clients and messages class that can be used for inter services communication</Description>
     <Copyright>Copyright © Starion Group S.A.</Copyright>
     <Authors>Sam, Alex, Alexander, Nathanael, Antoine</Authors>

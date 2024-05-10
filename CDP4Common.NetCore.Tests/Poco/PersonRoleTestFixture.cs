@@ -39,7 +39,7 @@ namespace CDP4Common.Tests.Poco
         {
             var personRole = new PersonRole();
             Assert.That(personRole.PersonPermission.Count, Is.EqualTo(17));
-            Assert.IsTrue(personRole.PersonPermission.All(x => x.AccessRight == PersonAccessRightKind.NONE));
+            Assert.That(personRole.PersonPermission.All(x => x.AccessRight == PersonAccessRightKind.NONE), Is.True);
         }
     }
 }

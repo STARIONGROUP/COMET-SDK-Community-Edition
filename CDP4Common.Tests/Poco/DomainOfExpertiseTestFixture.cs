@@ -64,7 +64,7 @@ namespace CDP4Common.Tests.Poco
 
 
             var ownedParameters = this.domainOfExpertise.OwnedParameters(this.iteration);
-            CollectionAssert.Contains(ownedParameters, parameter);
+            Assert.That(ownedParameters, Does.Contain(parameter));
         }
     }
 }

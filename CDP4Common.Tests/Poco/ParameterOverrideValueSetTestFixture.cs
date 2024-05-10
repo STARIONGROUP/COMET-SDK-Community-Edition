@@ -76,8 +76,8 @@ namespace CDP4Common.Tests.Poco
             parameterValueSet.ActualState = new ActualFiniteState(Guid.NewGuid(), null, null);
             thing.ParameterValueSet = parameterValueSet;
 
-            Assert.IsTrue(ReferenceEquals(parameterValueSet.ActualState, thing.ActualState));
-            Assert.IsTrue(ReferenceEquals(parameterValueSet.ActualOption, thing.ActualOption));
+            Assert.That(ReferenceEquals(parameterValueSet.ActualState, thing.ActualState), Is.True);
+            Assert.That(ReferenceEquals(parameterValueSet.ActualOption, thing.ActualOption), Is.True);
         }
 
         [Test]

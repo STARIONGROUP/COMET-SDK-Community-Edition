@@ -93,18 +93,18 @@ namespace CDP4Common.Tests.Poco
             iteration.Relationship.Add(relationship);
 
             // test
-            Assert.IsEmpty(relationship.QueryAppliedBinaryRelationshipRules());
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules(), Is.Empty);
 
             relationship.Category.Add(cat3);
-            Assert.IsTrue(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule3));
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule3), Is.True);
 
             relationship.Category.Add(cat1);
-            Assert.IsTrue(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule3));
-            Assert.IsTrue(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule1));
-            Assert.IsTrue(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule11));
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule3), Is.True);
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule1), Is.True);
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules().Contains(rule11), Is.True);
 
             relationship.Category = null;
-            Assert.IsEmpty(relationship.QueryAppliedBinaryRelationshipRules());
+            Assert.That(relationship.QueryAppliedBinaryRelationshipRules(), Is.Empty);
         }
     }
 }

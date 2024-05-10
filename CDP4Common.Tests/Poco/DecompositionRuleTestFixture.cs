@@ -126,7 +126,7 @@ namespace CDP4Common.Tests.Poco
             this.iteration.Relationship.Add(multiRelationship);
 
             var violations = rule.Verify(this.iteration);
-            CollectionAssert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]
@@ -134,11 +134,11 @@ namespace CDP4Common.Tests.Poco
         {
             var rule = new DecompositionRule(Guid.NewGuid(), this.cache, this.uri);
 
-            CollectionAssert.IsEmpty(this.iteration.Element);
+            Assert.That(this.iteration.Element, Is.Empty);
 
             var violations = rule.Verify(this.iteration);
 
-            CollectionAssert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]
@@ -178,12 +178,12 @@ namespace CDP4Common.Tests.Poco
 
             var violation = violations.SingleOrDefault();
 
-            Assert.IsNotNull(violation);
+            Assert.That(violation, Is.Not.Null);
 
-            Assert.IsTrue(violation.Description.Contains("of an incorrect type"));
+            Assert.That(violation.Description.Contains("of an incorrect type"), Is.True);
 
-            CollectionAssert.Contains(violation.ViolatingThing, spaceMissionElementDefinition.Iid);
-            CollectionAssert.Contains(violation.ViolatingThing, satelliteElementUsage.Iid);
+            Assert.That(violation.ViolatingThing, Does.Contain(spaceMissionElementDefinition.Iid));
+            Assert.That(violation.ViolatingThing, Does.Contain(satelliteElementUsage.Iid));
         }
 
         [Test]
@@ -220,7 +220,7 @@ namespace CDP4Common.Tests.Poco
 
             var violation = violations.Single();
 
-            Assert.IsTrue(violation.Description.Contains("does not contain the minimum of 2"));
+            Assert.That(violation.Description.Contains("does not contain the minimum of 2"), Is.True);
         }
 
         [Test]
@@ -265,7 +265,7 @@ namespace CDP4Common.Tests.Poco
 
             var violation = violations.Single();
 
-            Assert.IsTrue(violation.Description.Contains("contains more Element Usages than the maximum of 2"));
+            Assert.That(violation.Description.Contains("contains more Element Usages than the maximum of 2"), Is.True);
         }
 
         [Test]
@@ -291,7 +291,7 @@ namespace CDP4Common.Tests.Poco
 
             var violations = rule.Verify(this.iteration);
 
-            Assert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
     }
 }

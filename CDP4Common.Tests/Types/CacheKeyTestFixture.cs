@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CacheKeyTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2018 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -54,27 +54,27 @@ namespace CDP4Common.Tests.Types
         {
             this.cachekey_1 = new CacheKey(this.guid_1, null);
             this.cachekey_2 = new CacheKey(this.guid_1, null);
-            Assert.IsTrue(cachekey_1.Equals(cachekey_2));
+            Assert.That(cachekey_1.Equals(cachekey_2), Is.True);
 
             this.cachekey_1 = new CacheKey(this.guid_1, null);
             this.cachekey_2 = new CacheKey(this.guid_2, null);
-            Assert.IsFalse(cachekey_1.Equals(cachekey_2));
+            Assert.That(cachekey_1.Equals(cachekey_2), Is.False);
 
             this.cachekey_1 = new CacheKey(this.guid_1, this.guid_2);
             this.cachekey_2 = new CacheKey(this.guid_1, this.guid_2);
-            Assert.IsTrue(cachekey_1.Equals(cachekey_2));
+            Assert.That(cachekey_1.Equals(cachekey_2), Is.True);
 
             this.cachekey_1 = new CacheKey(this.guid_1, this.guid_2);
             this.cachekey_2 = new CacheKey(this.guid_2, this.guid_1);
-            Assert.IsFalse(cachekey_1.Equals(cachekey_2));
+            Assert.That(cachekey_1.Equals(cachekey_2), Is.False);
 
             this.cachekey_1 = new CacheKey(this.guid_1, this.guid_2);
             this.cachekey_2 = new CacheKey(this.guid_1, null);
-            Assert.IsFalse(cachekey_1.Equals(cachekey_2));
+            Assert.That(cachekey_1.Equals(cachekey_2), Is.False);
 
             this.cachekey_1 = new CacheKey(this.guid_1, null);
             this.cachekey_2 = new CacheKey(this.guid_1, this.guid_2);
-            Assert.IsFalse(cachekey_1.Equals(cachekey_2));
+            Assert.That(cachekey_1.Equals(cachekey_2), Is.False);
         }
 
         [Test]
@@ -83,34 +83,34 @@ namespace CDP4Common.Tests.Types
             this.cachekey_1 = new CacheKey(this.guid_1, null);
             this.cachekey_2 = new CacheKey(this.guid_1, null);
             
-            Assert.IsTrue(cachekey_1 == cachekey_2);
-            Assert.IsFalse(cachekey_1 != cachekey_2);
+            Assert.That(cachekey_1 == cachekey_2, Is.True);
+            Assert.That(cachekey_1 != cachekey_2, Is.False);
 
 
             this.cachekey_1 = new CacheKey(this.guid_1, null);
             this.cachekey_2 = new CacheKey(this.guid_2, null);
-            Assert.IsFalse(cachekey_1 == cachekey_2);
-            Assert.IsTrue(cachekey_1 != cachekey_2);
+            Assert.That(cachekey_1 == cachekey_2, Is.False);
+            Assert.That(cachekey_1 != cachekey_2, Is.True);
 
             this.cachekey_1 = new CacheKey(this.guid_1, this.guid_2);
             this.cachekey_2 = new CacheKey(this.guid_1, this.guid_2);
-            Assert.IsTrue(cachekey_1 == cachekey_2);
-            Assert.IsFalse(cachekey_1 != cachekey_2);
+            Assert.That(cachekey_1 == cachekey_2, Is.True);
+            Assert.That(cachekey_1 != cachekey_2, Is.False);
 
             this.cachekey_1 = new CacheKey(this.guid_1, this.guid_2);
             this.cachekey_2 = new CacheKey(this.guid_2, this.guid_1);
-            Assert.IsFalse(cachekey_1 == cachekey_2);
-            Assert.IsTrue(cachekey_1 != cachekey_2);
+            Assert.That(cachekey_1 == cachekey_2, Is.False);
+            Assert.That(cachekey_1 != cachekey_2, Is.True);
 
             this.cachekey_1 = new CacheKey(this.guid_1, this.guid_2);
             this.cachekey_2 = new CacheKey(this.guid_1, null);
-            Assert.IsFalse(cachekey_1 == cachekey_2);
-            Assert.IsTrue(cachekey_1 != cachekey_2);
+            Assert.That(cachekey_1 == cachekey_2, Is.False);
+            Assert.That(cachekey_1 != cachekey_2, Is.True);
 
             this.cachekey_1 = new CacheKey(this.guid_1, null);
             this.cachekey_2 = new CacheKey(this.guid_1, this.guid_2);
-            Assert.IsFalse(cachekey_1 == cachekey_2);
-            Assert.IsTrue(cachekey_1 != cachekey_2);
+            Assert.That(cachekey_1 == cachekey_2, Is.False);
+            Assert.That(cachekey_1 != cachekey_2, Is.True);
         }
         
         [Test]

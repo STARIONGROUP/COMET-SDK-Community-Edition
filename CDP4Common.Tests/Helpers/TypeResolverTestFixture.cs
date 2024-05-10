@@ -59,7 +59,7 @@ namespace CDP4Common.Tests.Helpers
 
             var expectedTypes = new List<Type>() { typeof(Category), typeof(DefinedThing), typeof(Thing) };
 
-            CollectionAssert.AreEquivalent(expectedTypes, superTypes);
+            Assert.That(expectedTypes, Is.EquivalentTo(superTypes));
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace CDP4Common.Tests.Helpers
             var expectedTypesAndInterfaces = new List<Type>()
                 { typeof(IDisposable), typeof(TopContainer), typeof(Thing), typeof(ITimeStampedThing), typeof(INamedThing), typeof(IShortNamedThing) };
 
-            CollectionAssert.AreEquivalent(expectedTypesAndInterfaces, typesandinterfaces);
+            Assert.That(expectedTypesAndInterfaces, Is.EquivalentTo(typesandinterfaces));
         }
     }
 }

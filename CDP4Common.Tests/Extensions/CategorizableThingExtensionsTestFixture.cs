@@ -92,8 +92,8 @@ namespace CDP4Common.Tests.Extensions
 
             var categories = this.elementDefinition.GetAllCategories();
 
-            CollectionAssert.Contains(categories, this.productCategory);
-            CollectionAssert.Contains(categories, this.equipmentCategory);
+            Assert.That(categories, Does.Contain(this.productCategory));
+            Assert.That(categories, Does.Contain(this.equipmentCategory));
         }
 
         [Test]
@@ -106,8 +106,8 @@ namespace CDP4Common.Tests.Extensions
 
             var categories = elementUsage.GetAllCategories();
 
-            CollectionAssert.Contains(categories, this.productCategory);
-            CollectionAssert.Contains(categories, this.equipmentCategory);
+            Assert.That(categories, Does.Contain(this.productCategory));
+            Assert.That(categories, Does.Contain(this.equipmentCategory));
         }
 
         [Test]
@@ -124,9 +124,9 @@ namespace CDP4Common.Tests.Extensions
             var battery = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
             battery.Category.Add(this.batteryCategory);
 
-            Assert.IsTrue(battery.IsMemberOfCategory(this.batteryCategory));
-            Assert.IsTrue(battery.IsMemberOfCategory(this.equipmentCategory));
-            Assert.IsTrue(battery.IsMemberOfCategory(this.productCategory));
+            Assert.That(battery.IsMemberOfCategory(this.batteryCategory), Is.True);
+            Assert.That(battery.IsMemberOfCategory(this.equipmentCategory), Is.True);
+            Assert.That(battery.IsMemberOfCategory(this.productCategory), Is.True);
         }
 
         [Test]
@@ -135,8 +135,8 @@ namespace CDP4Common.Tests.Extensions
             var battery = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
             battery.Category.Add(this.batteryCategory);
 
-            Assert.IsFalse(battery.IsMemberOfCategory(this.lithiumBatteryCategory));
-            Assert.IsFalse(battery.IsMemberOfCategory(this.transmitterCategory));
+            Assert.That(battery.IsMemberOfCategory(this.lithiumBatteryCategory), Is.False);
+            Assert.That(battery.IsMemberOfCategory(this.transmitterCategory), Is.False);
         }
     }
 }

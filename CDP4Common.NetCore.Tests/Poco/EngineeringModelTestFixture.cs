@@ -56,7 +56,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatGetParticipantWorks()
         {
-            Assert.IsNotNull(this.model.GetActiveParticipant(this.person));
+            Assert.That(this.model.GetActiveParticipant(this.person), Is.Not.Null);
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace CDP4Common.Tests.Poco
             expectedRdls.Add(familyOfRdl);
             expectedRdls.Add(modelRdl);
 
-            CollectionAssert.AreEquivalent(expectedRdls, this.model.RequiredRdls);
+            Assert.That(this.model.RequiredRdls, Is.EquivalentTo(expectedRdls));
         }
     }
 }

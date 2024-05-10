@@ -81,9 +81,9 @@ namespace CDP4Common.Tests.Poco
             parameter.ParameterType = type;
             mrdl.ParameterType.Add(type);
 
-            Assert.IsTrue(parameter.RequiredRdls.Contains(srdl1));
-            Assert.IsTrue(parameter.RequiredRdls.Contains(mrdl));
-            Assert.IsFalse(parameter.RequiredRdls.Contains(srdl2));
+            Assert.That(parameter.RequiredRdls.Contains(srdl1), Is.True);
+            Assert.That(parameter.RequiredRdls.Contains(mrdl), Is.True);
+            Assert.That(parameter.RequiredRdls.Contains(srdl2), Is.False);
         }
 
         [Test]
@@ -101,9 +101,9 @@ namespace CDP4Common.Tests.Poco
             poverride.ValueSet.Add(overrideValueset);
             subscription.ValueSet.Add(subscriptionValueset);
 
-            Assert.AreSame(parameter.ValueSet, parameter.ValueSets);
-            Assert.AreSame(poverride.ValueSet, poverride.ValueSets);
-            Assert.AreSame(subscription.ValueSet, subscription.ValueSets);
+            Assert.That(parameter.ValueSet, Is.SameAs(parameter.ValueSets));
+            Assert.That(poverride.ValueSet, Is.SameAs(poverride.ValueSets));
+            Assert.That(subscription.ValueSet, Is.SameAs(subscription.ValueSets));
         }
     }
 }

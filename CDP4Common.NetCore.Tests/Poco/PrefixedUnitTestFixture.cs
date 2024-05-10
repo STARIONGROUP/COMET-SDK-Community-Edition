@@ -60,7 +60,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetConversionEmpty()
         {
-            Assert.IsEmpty(this.prefixedUnit.ConversionFactor);
+            Assert.That(this.prefixedUnit.ConversionFactor, Is.Empty);
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetNameEmpty()
         {
-            Assert.IsEmpty(this.prefixedUnit.Name);
+            Assert.That(this.prefixedUnit.Name, Is.Empty);
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetShortNameEmpty()
         {
-            Assert.IsEmpty(this.prefixedUnit.ShortName);
+            Assert.That(this.prefixedUnit.ShortName, Is.Empty);
         }
     }
 }

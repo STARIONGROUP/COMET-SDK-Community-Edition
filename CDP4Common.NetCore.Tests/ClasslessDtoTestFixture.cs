@@ -125,7 +125,7 @@ namespace CDP4Common.Tests
             object containingGroup;
             classlessDTO.TryGetValue("ContainingGroup", out containingGroup);
             
-            Assert.IsNull(containingGroup);
+            Assert.That(containingGroup, Is.Null);
             
             object name;
             classlessDTO.TryGetValue("Name", out name);

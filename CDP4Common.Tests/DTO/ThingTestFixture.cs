@@ -126,8 +126,8 @@ namespace CDP4Common.Tests.DTO
             iteration = new Iteration(iterationId, 1);
             iteration.Element.Add(elementDefinitionId);
 
-            Assert.IsTrue(iteration.Contains(elementDefinition));
-            Assert.IsFalse(iteration.Contains(elementDefinition2));
+            Assert.That(iteration.Contains(elementDefinition), Is.True);
+            Assert.That(iteration.Contains(elementDefinition2), Is.False);
 
             // check ordered items
             var state1 = new PossibleFiniteState(Guid.NewGuid(), 1);

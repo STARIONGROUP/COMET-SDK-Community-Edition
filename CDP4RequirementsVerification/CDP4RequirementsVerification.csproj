@@ -4,7 +4,7 @@
     <TargetFrameworks>net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Company>Starion Group S.A.</Company>
     <Title>CDP4RequirementsVerification Community Edition</Title>
-    <VersionPrefix>26.7.0</VersionPrefix>
+    <VersionPrefix>27.0.0</VersionPrefix>
     <Description>CDP4 Class Library that provides requirement verification</Description>
     <Copyright>Copyright © Starion Group S.A.</Copyright>
     <Authors>Sam, Alex, Alexander, Yevhen, Nathanael</Authors>
@@ -20,7 +20,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [REFACTOR] RHEA => Starion
+      [REFACTOR] RHEA =&gt; Starion
       [REMOVE] reference to net47*
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>

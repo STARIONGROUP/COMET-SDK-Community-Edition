@@ -46,8 +46,8 @@ namespace CDP4Common.Tests.Poco
             iteration.Option.Add(option2);
             iteration.DefaultOption = option1;
 
-            Assert.IsTrue(option1.IsDefault);
-            Assert.IsFalse(option2.IsDefault);
+            Assert.That(option1.IsDefault, Is.True);
+            Assert.That(option2.IsDefault, Is.False);
         }
 
         [Test]

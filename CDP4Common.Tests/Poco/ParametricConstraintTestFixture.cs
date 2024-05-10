@@ -43,7 +43,7 @@ namespace CDP4Common.Tests.Poco
             req.Owner = new DomainOfExpertise();
             req.ParametricConstraint.Add(thing);
 
-            Assert.IsTrue(ReferenceEquals(req.Owner, thing.Owner));
+            Assert.That(ReferenceEquals(req.Owner, thing.Owner), Is.True);
         }
 
         [Test]        

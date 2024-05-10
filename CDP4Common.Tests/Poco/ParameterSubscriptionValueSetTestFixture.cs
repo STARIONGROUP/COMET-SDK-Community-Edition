@@ -86,7 +86,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetComputed()
         {
-            Assert.IsTrue(ReferenceEquals(this.parameterValueSetBase.Published, this.parameterSubscriptionValueSet.Computed));
+            Assert.That(ReferenceEquals(this.parameterValueSetBase.Published, this.parameterSubscriptionValueSet.Computed), Is.True);
         }
 
         [Test]
@@ -111,19 +111,19 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGetActualState()
         {
-            Assert.IsTrue(ReferenceEquals(this.parameterValueSetBase.ActualState, this.parameterSubscriptionValueSet.ActualState));
+            Assert.That(ReferenceEquals(this.parameterValueSetBase.ActualState, this.parameterSubscriptionValueSet.ActualState), Is.True);
         }
 
         [Test]
         public void TestGetActualOption()
         {
-            Assert.IsTrue(ReferenceEquals(this.parameterValueSetBase.ActualOption, this.parameterSubscriptionValueSet.ActualOption));
+            Assert.That(ReferenceEquals(this.parameterValueSetBase.ActualOption, this.parameterSubscriptionValueSet.ActualOption), Is.True);
         }
 
         [Test]
         public void TestGetOwner()
         {
-            Assert.IsTrue(ReferenceEquals(this.parameterSubscription.Owner, this.parameterSubscriptionValueSet.Owner));
+            Assert.That(ReferenceEquals(this.parameterSubscription.Owner, this.parameterSubscriptionValueSet.Owner), Is.True);
         }
 
         [Test]        

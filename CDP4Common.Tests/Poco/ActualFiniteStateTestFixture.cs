@@ -81,24 +81,24 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatGetNameWorks()
         {
-            Assert.IsNotNull(this.actualFiniteState.Name);
-            Assert.IsNotEmpty(this.actualFiniteState.Name);
+            Assert.That(this.actualFiniteState.Name, Is.Not.Null);
+            Assert.That(this.actualFiniteState.Name, Is.Not.Empty);
             Assert.That(this.actualFiniteState.Name, Is.EqualTo("possiblestate1 → possiblestate2"));
         }
 
         [Test]
         public void VerifyThatGetShortNameNameWorks()
         {
-            Assert.IsNotNull(this.actualFiniteState.ShortName);
-            Assert.IsNotEmpty(this.actualFiniteState.ShortName);
+            Assert.That(this.actualFiniteState.ShortName, Is.Not.Null);
+            Assert.That(this.actualFiniteState.ShortName, Is.Not.Empty);
             Assert.That(this.actualFiniteState.ShortName, Is.EqualTo("1.2"));
         }
 
         [Test]
         public void VerifyThatGetOwnerWorks()
         {
-            Assert.IsNotNull(this.actualFiniteState.Owner);
-            Assert.IsTrue(Object.ReferenceEquals(this.actualList.Owner, this.actualFiniteState.Owner));
+            Assert.That(this.actualFiniteState.Owner, Is.Not.Null);
+            Assert.That(Object.ReferenceEquals(this.actualList.Owner, this.actualFiniteState.Owner), Is.True);
         }
 
         [Test]        
@@ -136,12 +136,12 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyIsDefaultWorks()
         {
-            Assert.IsFalse(this.actualFiniteState.IsDefault);
+            Assert.That(this.actualFiniteState.IsDefault, Is.False);
             this.possibleList1.DefaultState = this.possibleState1;
 
-            Assert.IsFalse(this.actualFiniteState.IsDefault);
+            Assert.That(this.actualFiniteState.IsDefault, Is.False);
             this.possibleList2.DefaultState = this.possibleState2;
-            Assert.IsTrue(this.actualFiniteState.IsDefault);
+            Assert.That(this.actualFiniteState.IsDefault, Is.True);
         }
     }
 }

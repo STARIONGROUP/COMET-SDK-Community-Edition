@@ -43,7 +43,7 @@ namespace CDP4Common.Tests.Poco
             list.Owner = new DomainOfExpertise();
             list.RuleVerification.Add(thing);
 
-            Assert.IsTrue(ReferenceEquals(list.Owner, thing.Owner));
+            Assert.That(ReferenceEquals(list.Owner, thing.Owner), Is.True);
         }
 
         [Test]        

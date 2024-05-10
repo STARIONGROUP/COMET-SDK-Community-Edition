@@ -62,9 +62,9 @@ namespace CDP4Common.Tests.Poco
 
             var requiredRdls = iteration.RequiredRdls;
 
-            CollectionAssert.Contains(requiredRdls, genericRdl);
-            CollectionAssert.Contains(requiredRdls, familyofRdl);
-            CollectionAssert.Contains(requiredRdls, modelrdl);
+            Assert.That(requiredRdls, Does.Contain(genericRdl));
+            Assert.That(requiredRdls, Does.Contain(familyofRdl));
+            Assert.That(requiredRdls, Does.Contain(modelrdl));
 
             Assert.That(requiredRdls.Count(), Is.EqualTo(3));
         }

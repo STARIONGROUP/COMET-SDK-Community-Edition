@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingNotFoundException.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2021 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Alex Vorobiev, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmen
 //

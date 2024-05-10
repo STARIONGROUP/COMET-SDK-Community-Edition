@@ -164,10 +164,10 @@ namespace CDP4Common.Tests
             var cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
 
             var siteDirectory = new SiteDirectory(iid: iid, iDalUri: uri, cache: cache);
-            Assert.IsNotNull(siteDirectory.Cache);
+            Assert.That(siteDirectory.Cache, Is.Not.Null);
             siteDirectory.Dispose();
 
-            Assert.IsNull(siteDirectory.Cache);
+            Assert.That(siteDirectory.Cache, Is.Null);
         }
 
         [Test]
@@ -182,7 +182,7 @@ namespace CDP4Common.Tests
 
             var clone = testThing.Clone(false);
 
-            Assert.AreNotSame(testThing.TelephoneNumber, clone.TelephoneNumber);
+            Assert.That(testThing.TelephoneNumber, Is.Not.SameAs(clone.TelephoneNumber));
             Assert.That(clone.TelephoneNumber.Count, Is.EqualTo(testThing.TelephoneNumber.Count));
         }
 
@@ -195,7 +195,7 @@ namespace CDP4Common.Tests
             testThing.Requirement.Add(req);
 
             var clone = testThing.Clone(false);
-            Assert.AreNotSame(testThing.Group, clone.Group);
+            Assert.That(testThing.Group, Is.Not.SameAs(clone.Group));
             Assert.That(clone.Group.Count, Is.EqualTo(testThing.Group.Count));
         }
 
@@ -207,7 +207,7 @@ namespace CDP4Common.Tests
             iteration.Option.Add(option);
 
             var clone = iteration.Clone(false);
-            Assert.AreNotSame(iteration.Option, clone.Option);
+            Assert.That(iteration.Option, Is.Not.SameAs(clone.Option));
             Assert.That(clone.Option.Count, Is.EqualTo(iteration.Option.Count));
         }
 
@@ -215,12 +215,12 @@ namespace CDP4Common.Tests
         public void VerifyThatClonedThingHasReferenceToOriginal()
         {
             var iteration = new Iteration(Guid.NewGuid(), null, null);
-            Assert.IsNull(iteration.Original);
+            Assert.That(iteration.Original, Is.Null);
 
             var clone = iteration.Clone(false);
             
-            Assert.AreNotSame(iteration, clone);
-            Assert.AreSame(iteration, clone.Original);            
+            Assert.That(iteration, Is.Not.SameAs(clone));
+            Assert.That(iteration, Is.SameAs(clone.Original));
         }
 
         [Test]
@@ -237,12 +237,12 @@ namespace CDP4Common.Tests
             rdl.Unit.Add(unit);
             unit.UnitFactor.Add(factor);
 
-            Assert.IsTrue(factor.IsContainedBy(x => x.Iid == sitedir.Iid));
-            Assert.IsTrue(factor.IsContainedBy(x => x.Iid == rdl.Iid));
-            Assert.IsTrue(factor.IsContainedBy(x => x.Iid == unit.Iid));
-            Assert.IsFalse(factor.IsContainedBy(x => x.Iid == model.Iid));
+            Assert.That(factor.IsContainedBy(x => x.Iid == sitedir.Iid), Is.True);
+            Assert.That(factor.IsContainedBy(x => x.Iid == rdl.Iid), Is.True);
+            Assert.That(factor.IsContainedBy(x => x.Iid == unit.Iid), Is.True);
+            Assert.That(factor.IsContainedBy(x => x.Iid == model.Iid), Is.False);
 
-            Assert.IsFalse(sitedir.IsContainedBy(x => x.Iid == sitedir.Iid));
+            Assert.That(sitedir.IsContainedBy(x => x.Iid == sitedir.Iid), Is.False);
 
             Assert.That(() => factor.IsContainedBy(matchPredicate: null), Throws.ArgumentNullException);
         }
@@ -270,12 +270,12 @@ namespace CDP4Common.Tests
             rdl.Unit.Add(unit);
             unit.UnitFactor.Add(factor);
 
-            Assert.IsTrue(factor.IsContainedBy(sitedir.Iid));
-            Assert.IsTrue(factor.IsContainedBy(rdl.Iid));
-            Assert.IsTrue(factor.IsContainedBy(unit.Iid));
-            Assert.IsFalse(factor.IsContainedBy(model.Iid));
+            Assert.That(factor.IsContainedBy(sitedir.Iid), Is.True);
+            Assert.That(factor.IsContainedBy(rdl.Iid), Is.True);
+            Assert.That(factor.IsContainedBy(unit.Iid), Is.True);
+            Assert.That(factor.IsContainedBy(model.Iid), Is.False);
 
-            Assert.IsFalse(sitedir.IsContainedBy(sitedir.Iid));
+            Assert.That(sitedir.IsContainedBy(sitedir.Iid), Is.False);
 
             Assert.That(() => factor.IsContainedBy(iid: Guid.Empty), Throws.ArgumentNullException);
         }
@@ -289,11 +289,11 @@ namespace CDP4Common.Tests
 
             var clone = person.Clone(false);
 
-            Assert.AreSame(phone.Container, person);
-            Assert.AreNotSame(phone.Container, clone);
+            Assert.That(phone.Container, Is.SameAs(person));
+            Assert.That(phone.Container, Is.Not.SameAs(clone));
 
-            Assert.IsTrue(person.TelephoneNumber.Contains(phone));
-            Assert.IsTrue(clone.TelephoneNumber.Contains(phone));
+            Assert.That(person.TelephoneNumber.Contains(phone), Is.True);
+            Assert.That(clone.TelephoneNumber.Contains(phone), Is.True);
         }
 
         [Test]
@@ -306,22 +306,22 @@ namespace CDP4Common.Tests
             sitedir.SiteReferenceDataLibrary.Add(siterdl);
             siterdl.Unit.Add(unit);
 
-            Assert.AreSame(siterdl, unit.GetContainerOfType(typeof(ReferenceDataLibrary)));
-            Assert.AreSame(siterdl, unit.GetContainerOfType(typeof(SiteReferenceDataLibrary)));
-            Assert.AreSame(siterdl, unit.GetContainerOfType(typeof(ModelReferenceDataLibrary)));
-            Assert.AreSame(sitedir, unit.GetContainerOfType(typeof(SiteDirectory)));
-            Assert.IsNull(unit.GetContainerOfType(typeof(Iteration)));
+            Assert.That(siterdl, Is.SameAs(unit.GetContainerOfType(typeof(ReferenceDataLibrary))));
+            Assert.That(siterdl, Is.SameAs(unit.GetContainerOfType(typeof(SiteReferenceDataLibrary))));
+            Assert.That(siterdl, Is.SameAs(unit.GetContainerOfType(typeof(ModelReferenceDataLibrary))));
+            Assert.That(sitedir, Is.SameAs(unit.GetContainerOfType(typeof(SiteDirectory))));
+            Assert.That(unit.GetContainerOfType(typeof(Iteration)), Is.Null);
 
-            Assert.AreSame(siterdl, unit.GetContainerOfType<SiteReferenceDataLibrary>());
-            Assert.AreSame(sitedir, unit.GetContainerOfType<SiteDirectory>());
-            Assert.IsNull(unit.GetContainerOfType<ModelReferenceDataLibrary>());
-            Assert.AreSame(siterdl, unit.GetContainerOfType<ReferenceDataLibrary>());
+            Assert.That(siterdl, Is.SameAs(unit.GetContainerOfType<SiteReferenceDataLibrary>()));
+            Assert.That(sitedir, Is.SameAs(unit.GetContainerOfType<SiteDirectory>()));
+            Assert.That(unit.GetContainerOfType<ModelReferenceDataLibrary>(), Is.Null);
+            Assert.That(siterdl, Is.SameAs(unit.GetContainerOfType<ReferenceDataLibrary>()));
 
             var requirementsgroup1 = new RequirementsGroup(Guid.NewGuid(), null, null);
             var requirementsgroup2 = new RequirementsGroup(Guid.NewGuid(), null, null);
             requirementsgroup1.Group.Add(requirementsgroup2);
 
-            Assert.AreSame(requirementsgroup1, requirementsgroup2.GetContainerOfType<RequirementsGroup>());
+            Assert.That(requirementsgroup1, Is.SameAs(requirementsgroup2.GetContainerOfType<RequirementsGroup>()));
         }
 
         [Test]
@@ -335,7 +335,7 @@ namespace CDP4Common.Tests
         public void VerifyThatTopContainerOfNotThingIsNull()
         {
             var nothing = new NotThing("nothing");
-            Assert.IsNull(nothing.TopContainer);
+            Assert.That(nothing.TopContainer, Is.Null);
         }
 
         [Test]
@@ -372,18 +372,18 @@ namespace CDP4Common.Tests
 
             Assert.That(things.Count(), Is.EqualTo(11));
 
-            CollectionAssert.Contains(things, iteration);
-            CollectionAssert.Contains(things, elementDefinition1);
-            CollectionAssert.Contains(things, elementDefinition2);
-            CollectionAssert.Contains(things, alias1);
-            CollectionAssert.Contains(things, alias2);
+            Assert.That(things, Does.Contain(iteration));
+            Assert.That(things, Does.Contain(elementDefinition1));
+            Assert.That(things, Does.Contain(elementDefinition2));
+            Assert.That(things, Does.Contain(alias1));
+            Assert.That(things, Does.Contain(alias2));
 
-            CollectionAssert.Contains(things, possibleFiniteStateList1);
-            CollectionAssert.Contains(things, possibleFiniteStateList2);
-            CollectionAssert.Contains(things, possibleFiniteState1_1);
-            CollectionAssert.Contains(things, possibleFiniteState1_2);
-            CollectionAssert.Contains(things, possibleFiniteState2_1);
-            CollectionAssert.Contains(things, possibleFiniteState2_2);
+            Assert.That(things, Does.Contain(possibleFiniteStateList1));
+            Assert.That(things, Does.Contain(possibleFiniteStateList2));
+            Assert.That(things, Does.Contain(possibleFiniteState1_1));
+            Assert.That(things, Does.Contain(possibleFiniteState1_2));
+            Assert.That(things, Does.Contain(possibleFiniteState2_1));
+            Assert.That(things, Does.Contain(possibleFiniteState2_2));
         }
     }
 }

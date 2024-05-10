@@ -50,8 +50,8 @@ namespace CDP4Common.Tests.Poco
 
             var availableReferenceDataLibraries = siteDirectory.AvailableReferenceDataLibraries();
 
-            CollectionAssert.Contains(availableReferenceDataLibraries, siterefenceDataLibrary);
-            CollectionAssert.Contains(availableReferenceDataLibraries, modelReferenceDataLibrary);
+            Assert.That(availableReferenceDataLibraries, Does.Contain(siterefenceDataLibrary)); 
+            Assert.That(availableReferenceDataLibraries, Does.Contain(modelReferenceDataLibrary));
         }
     }
 }

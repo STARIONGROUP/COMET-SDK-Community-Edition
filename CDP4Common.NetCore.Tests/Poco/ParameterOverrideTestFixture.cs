@@ -111,11 +111,11 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void TestGets()
         {
-            Assert.IsTrue(ReferenceEquals(this.parameter.ParameterType, this.parameterOverride.ParameterType));
+            Assert.That(ReferenceEquals(this.parameter.ParameterType, this.parameterOverride.ParameterType), Is.True);
             Assert.That(this.parameterOverride.IsOptionDependent, Is.EqualTo(this.parameter.IsOptionDependent));
-            Assert.IsTrue(ReferenceEquals(this.parameter.Scale, this.parameterOverride.Scale));
-            Assert.IsTrue(ReferenceEquals(this.parameter.StateDependence, this.parameterOverride.StateDependence));
-            Assert.IsTrue(ReferenceEquals(this.parameter.Group, this.parameterOverride.Group));
+            Assert.That(ReferenceEquals(this.parameter.Scale, this.parameterOverride.Scale), Is.True);
+            Assert.That(ReferenceEquals(this.parameter.StateDependence, this.parameterOverride.StateDependence), Is.True);
+            Assert.That(ReferenceEquals(this.parameter.Group, this.parameterOverride.Group), Is.True);
         }
 
         [Test]
@@ -188,7 +188,7 @@ namespace CDP4Common.Tests.Poco
         {
             // no option, no state
             this.parameterOverride.ValidatePoco();
-            Assert.IsNotEmpty(this.parameterOverride.ValidationErrors);
+            Assert.That(this.parameterOverride.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -199,7 +199,7 @@ namespace CDP4Common.Tests.Poco
             this.parameter.StateDependence = this.actualList;
 
             this.parameterOverride.ValidatePoco();
-            Assert.IsNotEmpty(this.parameterOverride.ValidationErrors);
+            Assert.That(this.parameterOverride.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -209,7 +209,7 @@ namespace CDP4Common.Tests.Poco
             this.parameter.IsOptionDependent = true;
 
             this.parameterOverride.ValidatePoco();
-            Assert.IsNotEmpty(this.parameterOverride.ValidationErrors);
+            Assert.That(this.parameterOverride.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -219,7 +219,7 @@ namespace CDP4Common.Tests.Poco
             this.parameter.StateDependence = this.actualList;
 
             this.parameterOverride.ValidatePoco();
-            Assert.IsNotEmpty(this.parameterOverride.ValidationErrors);
+            Assert.That(this.parameterOverride.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -234,7 +234,7 @@ namespace CDP4Common.Tests.Poco
             valueset.ValidatePoco();
             this.parameterOverride.ValidatePoco();
 
-            Assert.IsNotEmpty(this.parameterOverride.ValidationErrors);
+            Assert.That(this.parameterOverride.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -256,7 +256,7 @@ namespace CDP4Common.Tests.Poco
             valueset.ValidatePoco();
             this.parameterOverride.ValidatePoco();
 
-            Assert.IsEmpty(this.parameterOverride.ValidationErrors);
+            Assert.That(this.parameterOverride.ValidationErrors, Is.Empty);
         }
 
         [Test]
@@ -274,12 +274,12 @@ namespace CDP4Common.Tests.Poco
 
             this.parameterOverride.ValueSet.Add(valueset);
 
-            Assert.IsFalse(this.parameterOverride.CanBePublished);
+            Assert.That(this.parameterOverride.CanBePublished, Is.False);
 
             var updatedData = new List<string> { "1" };
             valueset.Manual = new ValueArray<string>(updatedData);
 
-            Assert.IsTrue(this.parameterOverride.CanBePublished);
+            Assert.That(this.parameterOverride.CanBePublished, Is.True);
         }
 
         [Test]
@@ -297,16 +297,16 @@ namespace CDP4Common.Tests.Poco
 
             this.parameterOverride.ValueSet.Add(valueset);
 
-            Assert.IsFalse(this.parameterOverride.ToBePublished);
+            Assert.That(this.parameterOverride.ToBePublished, Is.False);
 
             this.parameterOverride.ToBePublished = true;
 
-            Assert.IsFalse(this.parameterOverride.ToBePublished);
+            Assert.That(this.parameterOverride.ToBePublished, Is.False);
 
             var updatedData = new List<string> { "1" };
             valueset.Manual = new ValueArray<string>(updatedData);
 
-            Assert.IsTrue(this.parameterOverride.ToBePublished);
+            Assert.That(this.parameterOverride.ToBePublished, Is.True);
         }
 
         [Test]

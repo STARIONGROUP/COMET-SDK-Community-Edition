@@ -55,7 +55,7 @@ namespace CDP4Common.Tests.Poco
             var simpleQuantityKind = new SimpleQuantityKind(Guid.NewGuid(), this.cache, this.uri);
             simpleQuantityKind.ValidatePoco();
 
-            CollectionAssert.Contains(simpleQuantityKind.ValidationErrors, "The PossibleScale property is empty.");
+            Assert.That(simpleQuantityKind.ValidationErrors, Does.Contain("The PossibleScale property is empty."));
         }
 
         [Test]
@@ -76,11 +76,11 @@ namespace CDP4Common.Tests.Poco
 
             var requiredRdls = simpleQuantityKind.RequiredRdls.ToList();
 
-            Assert.IsTrue(requiredRdls.Contains(mrdl));
-            Assert.IsTrue(requiredRdls.Contains(srdl1_1));
-            Assert.IsTrue(requiredRdls.Contains(srdl1));
+            Assert.That(requiredRdls.Contains(mrdl), Is.True);
+            Assert.That(requiredRdls.Contains(srdl1_1), Is.True);
+            Assert.That(requiredRdls.Contains(srdl1), Is.True);
 
-            Assert.IsFalse(requiredRdls.Contains(srdl2));
+            Assert.That(requiredRdls.Contains(srdl2), Is.False);
         }
     }
 }

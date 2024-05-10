@@ -125,7 +125,7 @@ namespace CDP4Common.Tests.Helpers
         {
             Assert.DoesNotThrow(() => this.possibleFiniteStateList.PossibleState.ResolveList(this.orderedItems, this.iteration.Iid, this.cache));
             Assert.That(this.possibleFiniteStateList.PossibleState.Count, Is.EqualTo(3));
-            CollectionAssert.AreEqual(this.possibleFiniteStateList.PossibleState.Select(x => x.Iid), this.orderedItems.OrderBy(x => x.K).Select(x => x.V));
+            Assert.That(this.possibleFiniteStateList.PossibleState.Select(x => x.Iid), Is.EqualTo(this.orderedItems.OrderBy(x => x.K).Select(x => x.V)));
         }
 
         [Test]

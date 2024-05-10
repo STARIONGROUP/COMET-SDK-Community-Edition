@@ -126,7 +126,7 @@ namespace CDP4Common.Tests.Poco
             this.iteration.Relationship.Add(multiRelationship);
 
             var violations = rule.Verify(this.iteration);
-            CollectionAssert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]
@@ -134,11 +134,11 @@ namespace CDP4Common.Tests.Poco
         {
             var rule = new DecompositionRule(Guid.NewGuid(), this.cache, this.uri);
 
-            CollectionAssert.IsEmpty(this.iteration.Element);
+            Assert.That(this.iteration.Element, Is.Empty);
 
             var violations = rule.Verify(this.iteration);
 
-            CollectionAssert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]

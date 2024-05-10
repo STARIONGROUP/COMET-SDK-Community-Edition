@@ -100,7 +100,7 @@ namespace CDP4Common.Tests.Poco
             var rule = new MultiRelationshipRule(Guid.NewGuid(), this.cache, this.uri);
             var violations = rule.Verify(this.iteration);
 
-            Assert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace CDP4Common.Tests.Poco
 
             var violations = rule.Verify(this.iteration);
 
-            Assert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]
@@ -128,7 +128,7 @@ namespace CDP4Common.Tests.Poco
 
             var violations = rule.Verify(this.iteration);
 
-            Assert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
 
         [Test]
@@ -165,7 +165,7 @@ namespace CDP4Common.Tests.Poco
             var violations = rule.Verify(this.iteration);
             var violation = violations.Single();
 
-            CollectionAssert.Contains(violation.ViolatingThing, multiRelationship.Iid);
+            Assert.That(violation.ViolatingThing, Does.Contain(multiRelationship.Iid));
         }
 
         [Test]
@@ -192,10 +192,10 @@ namespace CDP4Common.Tests.Poco
             Assert.That(violations.Count(), Is.EqualTo(2));
 
             var aliasViolation = violations.Single(v => v.ViolatingThing.Contains(alias.Iid));
-            Assert.IsTrue(aliasViolation.Description.Contains("is not a CategorizableThing"));
+            Assert.That(aliasViolation.Description.Contains("is not a CategorizableThing"), Is.True);
 
             var definitionViolation = violations.Single(v => v.ViolatingThing.Contains(definition.Iid));
-            Assert.IsTrue(definitionViolation.Description.Contains("is not a CategorizableThing"));
+            Assert.That(definitionViolation.Description.Contains("is not a CategorizableThing"), Is.True);
         }
 
         [Test]
@@ -233,7 +233,7 @@ namespace CDP4Common.Tests.Poco
 
             var violations = rule.Verify(this.iteration);
 
-            CollectionAssert.IsEmpty(violations);
+            Assert.That(violations, Is.Empty);
         }
     }
 }

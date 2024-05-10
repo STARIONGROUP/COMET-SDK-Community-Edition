@@ -149,11 +149,11 @@ namespace CDP4Common.Tests.Poco
             Assert.That(violations, Is.Not.Empty);
 
             var sourceViolation = violations.Single(x => x.ViolatingThing.Contains(binaryRelationship.Iid) && x.Description.Contains("The Source"));
-            Assert.IsNotNull(sourceViolation);
+            Assert.That(sourceViolation, Is.Not.Null);
             Console.WriteLine(sourceViolation.Description);
 
             var targetViolation = violations.Single(x => x.ViolatingThing.Contains(binaryRelationship.Iid) && x.Description.Contains("The Target"));
-            Assert.IsNotNull(targetViolation);
+            Assert.That(targetViolation, Is.Not.Null);
             Console.WriteLine(targetViolation.Description);
         }
 
@@ -193,16 +193,16 @@ namespace CDP4Common.Tests.Poco
 
             var violations = rule.Verify(this.iteration);
 
-            Assert.IsNotEmpty(violations);
+            Assert.That(violations, Is.Not.Empty);
 
             var sourceViolation = violations.Single(x => x.ViolatingThing.Contains(binaryRelationship.Iid) && x.Description.Contains("The Source"));
-            Assert.IsNotNull(sourceViolation);
-            Assert.IsTrue(sourceViolation.ViolatingThing.Contains(elementDefinitionBattery1.Iid));
+            Assert.That(sourceViolation, Is.Not.Null);
+            Assert.That(sourceViolation.ViolatingThing.Contains(elementDefinitionBattery1.Iid), Is.True);
             Console.WriteLine(sourceViolation.Description);
 
             var targetViolation = violations.Single(x => x.ViolatingThing.Contains(binaryRelationship.Iid) && x.Description.Contains("The Target"));
-            Assert.IsNotNull(targetViolation);
-            Assert.IsTrue(targetViolation.ViolatingThing.Contains(elementDefinitionBattery2.Iid));
+            Assert.That(targetViolation, Is.Not.Null);
+            Assert.That(targetViolation.ViolatingThing.Contains(elementDefinitionBattery2.Iid), Is.True);
             Console.WriteLine(targetViolation.Description);
         }
 
@@ -224,11 +224,11 @@ namespace CDP4Common.Tests.Poco
 
             var requiredRdls = rule.RequiredRdls.ToList();
 
-            Assert.IsTrue(requiredRdls.Contains(mrdl));
-            Assert.IsTrue(requiredRdls.Contains(srdl1_1));
-            Assert.IsTrue(requiredRdls.Contains(srdl1));
+            Assert.That(requiredRdls.Contains(mrdl), Is.True);
+            Assert.That(requiredRdls.Contains(srdl1_1), Is.True);
+            Assert.That(requiredRdls.Contains(srdl1), Is.True);
 
-            Assert.IsFalse(requiredRdls.Contains(srdl2));
+            Assert.That(requiredRdls.Contains(srdl2), Is.False);
         }
     }
 }

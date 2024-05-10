@@ -40,7 +40,7 @@ namespace CDP4Common.Tests.Poco
         public void VerifyThatIfContainerIsNullReturnsEmptyGroupIEnumerable()
         {
             var parameterGroup = new ParameterGroup(Guid.NewGuid(), null, null);
-            Assert.IsEmpty(parameterGroup.ContainedGroup());
+            Assert.That(parameterGroup.ContainedGroup(), Is.Empty);
         }
 
         [Test]
@@ -65,16 +65,16 @@ namespace CDP4Common.Tests.Poco
             elementDefinition.ParameterGroup.Add(parameterGroup_1_1_1);
             parameterGroup_1_1_1.ContainingGroup = parameterGroup_1_1;
 
-            Assert.IsEmpty(parameterGroup_2.ContainedGroup(elementDefinition.ParameterGroup));
+            Assert.That(parameterGroup_2.ContainedGroup(elementDefinition.ParameterGroup), Is.Empty);
 
-            CollectionAssert.Contains(parameterGroup_1.ContainedGroup(elementDefinition.ParameterGroup), parameterGroup_1_1);
-            CollectionAssert.Contains(parameterGroup_1.ContainedGroup(), parameterGroup_1_1);
+            Assert.That(parameterGroup_1.ContainedGroup(elementDefinition.ParameterGroup), Does.Contain(parameterGroup_1_1));
+            Assert.That(parameterGroup_1.ContainedGroup(), Does.Contain(parameterGroup_1_1));
 
-            CollectionAssert.Contains(parameterGroup_1.ContainedGroup(elementDefinition.ParameterGroup), parameterGroup_1_2);            
-            CollectionAssert.Contains(parameterGroup_1.ContainedGroup(), parameterGroup_1_2);
+            Assert.That(parameterGroup_1.ContainedGroup(elementDefinition.ParameterGroup), Does.Contain(parameterGroup_1_2));            
+            Assert.That(parameterGroup_1.ContainedGroup(), Does.Contain(parameterGroup_1_2));
 
-            CollectionAssert.DoesNotContain(parameterGroup_1.ContainedGroup(elementDefinition.ParameterGroup), parameterGroup_1_1_1);
-            CollectionAssert.DoesNotContain(parameterGroup_1.ContainedGroup(), parameterGroup_1_1_1);
+            Assert.That(parameterGroup_1.ContainedGroup(elementDefinition.ParameterGroup), Does.Not.Contain(parameterGroup_1_1_1));
+            Assert.That(parameterGroup_1.ContainedGroup(), Does.Not.Contain(parameterGroup_1_1_1));
         }
 
         [Test]
@@ -99,25 +99,25 @@ namespace CDP4Common.Tests.Poco
             elementDefinition.ParameterGroup.Add(parameterGroup_1_1_1);
             parameterGroup_1_1_1.ContainingGroup = parameterGroup_1_1;
 
-            Assert.IsEmpty(parameterGroup_2.ContainedGroup(true));
+            Assert.That(parameterGroup_2.ContainedGroup(true), Is.Empty);
 
-            Assert.IsFalse(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1));
-            Assert.IsTrue(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1_1));
-            Assert.IsTrue(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1_2));
-            Assert.IsTrue(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1_1_1));
+            Assert.That(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1), Is.False);
+            Assert.That(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1_1), Is.True);
+            Assert.That(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1_2), Is.True);
+            Assert.That(parameterGroup_1.ContainedGroup(true).Contains(parameterGroup_1_1_1), Is.True);
             Assert.That(parameterGroup_1.ContainedGroup(true).Count(), Is.EqualTo(3));
 
-            Assert.IsTrue(parameterGroup_1_1.ContainedGroup(true).Contains(parameterGroup_1_1_1));
+            Assert.That(parameterGroup_1_1.ContainedGroup(true).Contains(parameterGroup_1_1_1), Is.True);
             Assert.That(parameterGroup_1_1.ContainedGroup(true).Count(), Is.EqualTo(1));
 
-            Assert.IsEmpty(parameterGroup_1_2.ContainedGroup(true));
+            Assert.That(parameterGroup_1_2.ContainedGroup(true), Is.Empty);
         }
 
         [Test]
         public void VerifyThatIfContainerIsNullReturnsEmptyParameterIEnumerable()
         {
             var parameterGroup = new ParameterGroup(Guid.NewGuid(), null, null);
-            Assert.IsEmpty(parameterGroup.ContainedParameter());
+            Assert.That(parameterGroup.ContainedParameter(), Is.Empty);
         }
 
         [Test]
@@ -146,15 +146,15 @@ namespace CDP4Common.Tests.Poco
             elementDefinition.Parameter.Add(parameter_2_1);
             parameter_2_1.Group = parameterGroup_2;
 
-            CollectionAssert.Contains(parameterGroup_1.ContainedParameter(), parameter_1_1);
-            CollectionAssert.Contains(parameterGroup_1.ContainedParameter(), parameter_1_2);
-            CollectionAssert.DoesNotContain(parameterGroup_1.ContainedParameter(), parameter_0);
-            CollectionAssert.DoesNotContain(parameterGroup_1.ContainedParameter(), parameter_2_1);
+            Assert.That(parameterGroup_1.ContainedParameter(), Does.Contain(parameter_1_1));
+            Assert.That(parameterGroup_1.ContainedParameter(), Does.Contain(parameter_1_2));
+            Assert.That(parameterGroup_1.ContainedParameter(), Does.Not.Contain(parameter_0));
+            Assert.That(parameterGroup_1.ContainedParameter(), Does.Not.Contain(parameter_2_1));
 
-            CollectionAssert.Contains(parameterGroup_2.ContainedParameter(), parameter_2_1);
-            CollectionAssert.DoesNotContain(parameterGroup_2.ContainedParameter(), parameter_1_1);
-            CollectionAssert.DoesNotContain(parameterGroup_2.ContainedParameter(), parameter_1_2);
-            CollectionAssert.DoesNotContain(parameterGroup_2.ContainedParameter(), parameter_0);
+            Assert.That(parameterGroup_2.ContainedParameter(), Does.Contain(parameter_2_1));
+            Assert.That(parameterGroup_2.ContainedParameter(), Does.Not.Contain(parameter_1_1));
+            Assert.That(parameterGroup_2.ContainedParameter(), Does.Not.Contain(parameter_1_2));
+            Assert.That(parameterGroup_2.ContainedParameter(), Does.Not.Contain(parameter_0));
         }
 
         [Test]

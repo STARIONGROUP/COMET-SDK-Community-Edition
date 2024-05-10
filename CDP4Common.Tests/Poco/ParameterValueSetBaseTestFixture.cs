@@ -64,7 +64,7 @@ namespace CDP4Common.Tests.Poco
 
             container.ValueSet.Add(this.parameterValueSetBase as ParameterValueSet);
 
-            Assert.IsTrue(ReferenceEquals(container.Owner, this.parameterValueSetBase.Owner));
+            Assert.That(ReferenceEquals(container.Owner, this.parameterValueSetBase.Owner), Is.True);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace CDP4Common.Tests.Poco
 
             container.ValueSet.Add(this.parameterValueSetBase as ParameterOverrideValueSet);
 
-            Assert.IsTrue(ReferenceEquals(container.Owner, this.parameterValueSetBase.Owner));
+            Assert.That(ReferenceEquals(container.Owner, this.parameterValueSetBase.Owner), Is.True);
         }
 
         [Test]

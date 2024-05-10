@@ -144,20 +144,20 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyGetOwner()
         {
-            Assert.IsTrue(ReferenceEquals(this.domain2, this.nestedElement.Owner));
+            Assert.That(ReferenceEquals(this.domain2, this.nestedElement.Owner), Is.True);
         }
 
         [Test]
         public void VerifyGetOwnerWhenNoElementUsages()
         {
             this.nestedElement.ElementUsage.Clear();
-            Assert.IsTrue(ReferenceEquals(this.domain, this.nestedElement.Owner));
+            Assert.That(ReferenceEquals(this.domain, this.nestedElement.Owner), Is.True);
         }
 
         [Test]
         public void VerifyGetElementBase()
         {
-            Assert.IsTrue(ReferenceEquals(this.elementUsage2, this.nestedElement.GetElementBase()));
+            Assert.That(ReferenceEquals(this.elementUsage2, this.nestedElement.GetElementBase()), Is.True);
         }
 
         [Test]
@@ -165,13 +165,13 @@ namespace CDP4Common.Tests.Poco
         {
             this.nestedElement.ElementUsage.Clear();
             this.nestedElement.IsRootElement = true;
-            Assert.IsTrue(ReferenceEquals(this.rootElementDef, this.nestedElement.GetElementBase()));
+            Assert.That(ReferenceEquals(this.rootElementDef, this.nestedElement.GetElementBase()), Is.True);
         }
 
         [Test]
         public void VerifyGetElementDefinition()
         {
-            Assert.IsTrue(ReferenceEquals(this.elementDef2, this.nestedElement.GetElementDefinition()));
+            Assert.That(ReferenceEquals(this.elementDef2, this.nestedElement.GetElementDefinition()), Is.True);
         }
 
         [Test]
@@ -179,13 +179,13 @@ namespace CDP4Common.Tests.Poco
         {
             this.nestedElement.ElementUsage.Clear();
             this.nestedElement.IsRootElement = true;
-            Assert.IsTrue(ReferenceEquals(this.rootElementDef, this.nestedElement.GetElementDefinition()));
+            Assert.That(ReferenceEquals(this.rootElementDef, this.nestedElement.GetElementDefinition()), Is.True);
         }
 
         [Test]
         public void VerifyGetElementUsage()
         {
-            Assert.IsTrue(ReferenceEquals(this.elementUsage2, this.nestedElement.GetElementUsage()));
+            Assert.That(ReferenceEquals(this.elementUsage2, this.nestedElement.GetElementUsage()), Is.True);
         }
 
         [Test]
@@ -193,27 +193,27 @@ namespace CDP4Common.Tests.Poco
         {
             this.nestedElement.ElementUsage.Clear();
             this.nestedElement.IsRootElement = true;
-            Assert.IsNull(this.nestedElement.GetElementUsage());
+            Assert.That(this.nestedElement.GetElementUsage(), Is.Null);
         }
 
         [Test]
         public void VerifyHasCategory()
         {
-            Assert.IsFalse(this.nestedElement.IsMemberOfCategory(this.category));
+            Assert.That(this.nestedElement.IsMemberOfCategory(this.category), Is.False);
         }
 
         [Test]
         public void VerifyHasCategoryWorksForElementDefinition()
         {
             this.elementDef2.Category.Add(this.category);
-            Assert.IsTrue(this.nestedElement.IsMemberOfCategory(this.category));
+            Assert.That(this.nestedElement.IsMemberOfCategory(this.category), Is.True);
         }
 
         [Test]
         public void VerifyHasCategoryWorksForElementUsage()
         {
             this.elementUsage2.Category.Add(this.category);
-            Assert.IsTrue(this.nestedElement.IsMemberOfCategory(this.category));
+            Assert.That(this.nestedElement.IsMemberOfCategory(this.category), Is.True);
         }
 
         [Test]
@@ -222,7 +222,7 @@ namespace CDP4Common.Tests.Poco
             this.nestedElement.ElementUsage.Clear();
             this.nestedElement.IsRootElement = true;
             this.rootElementDef.Category.Add(this.category);
-            Assert.IsTrue(this.nestedElement.IsMemberOfCategory(this.category));
+            Assert.That(this.nestedElement.IsMemberOfCategory(this.category), Is.True);
         }
 
         [Test]

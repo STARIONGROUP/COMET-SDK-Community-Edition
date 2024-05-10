@@ -342,7 +342,7 @@ namespace CDP4Common.Tests.Helpers
             var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");
             var flatNestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise).ToList();
 
-            Assert.IsNotEmpty(flatNestedParameters);
+            Assert.That(flatNestedParameters, Is.Not.Empty);
         }
 
         [Test]
@@ -387,7 +387,7 @@ namespace CDP4Common.Tests.Helpers
 
             foreach (var nestedParameter in NestedParameters)
             {
-                Assert.IsNotNull(nestedParameter.ValueSet);
+                Assert.That(nestedParameter.ValueSet, Is.Not.Null);
             }
         }
 

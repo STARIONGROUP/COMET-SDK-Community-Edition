@@ -65,9 +65,9 @@ namespace CDP4Common.Tests.Poco
             var citation = new Citation(Guid.NewGuid(), this.cache, this.uri);
             citation.Source = source;
 
-            Assert.IsTrue(citation.RequiredRdls.Contains(srdl1));
-            Assert.IsTrue(citation.RequiredRdls.Contains(mrdl));
-            Assert.IsFalse(citation.RequiredRdls.Contains(srdl2));
+            Assert.That(citation.RequiredRdls.Contains(srdl1), Is.True);
+            Assert.That(citation.RequiredRdls.Contains(mrdl), Is.True);
+            Assert.That(citation.RequiredRdls.Contains(srdl2), Is.False);
         }
     }
 }

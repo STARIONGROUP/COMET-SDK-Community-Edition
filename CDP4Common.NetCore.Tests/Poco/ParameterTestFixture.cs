@@ -186,7 +186,7 @@ namespace CDP4Common.Tests.Poco
         {
             // no option, no state
             this.scalarParameter.ValidatePoco();
-            Assert.IsNotEmpty(this.scalarParameter.ValidationErrors);
+            Assert.That(this.scalarParameter.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -197,7 +197,7 @@ namespace CDP4Common.Tests.Poco
             this.scalarParameter.StateDependence = this.actualList;
 
             this.scalarParameter.ValidatePoco();
-            Assert.IsNotEmpty(this.scalarParameter.ValidationErrors);
+            Assert.That(this.scalarParameter.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -207,7 +207,7 @@ namespace CDP4Common.Tests.Poco
             this.scalarParameter.IsOptionDependent = true;
 
             this.scalarParameter.ValidatePoco();
-            Assert.IsNotEmpty(this.scalarParameter.ValidationErrors);
+            Assert.That(this.scalarParameter.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -217,7 +217,7 @@ namespace CDP4Common.Tests.Poco
             this.scalarParameter.StateDependence = this.actualList;
 
             this.scalarParameter.ValidatePoco();
-            Assert.IsNotEmpty(this.scalarParameter.ValidationErrors);
+            Assert.That(this.scalarParameter.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -228,7 +228,7 @@ namespace CDP4Common.Tests.Poco
             valueset.ValidatePoco();
             this.scalarParameter.ValidatePoco();
 
-            Assert.IsNotEmpty(this.scalarParameter.ValidationErrors);
+            Assert.That(this.scalarParameter.ValidationErrors, Is.Not.Empty);
         }
 
         [Test]
@@ -246,7 +246,7 @@ namespace CDP4Common.Tests.Poco
             valueset.ValidatePoco();
             this.scalarParameter.ValidatePoco();
 
-            Assert.IsEmpty(this.scalarParameter.ValidationErrors);
+            Assert.That(this.scalarParameter.ValidationErrors, Is.Empty);
         }
 
         [Test]
@@ -263,12 +263,12 @@ namespace CDP4Common.Tests.Poco
 
             this.scalarParameter.ValueSet.Add(valueset);
             
-            Assert.IsFalse(this.scalarParameter.CanBePublished);
+            Assert.That(this.scalarParameter.CanBePublished, Is.False);
 
             var updatedData = new List<string> { "1" };
             valueset.Manual = new ValueArray<string>(updatedData);
 
-            Assert.IsTrue(this.scalarParameter.CanBePublished);
+            Assert.That(this.scalarParameter.CanBePublished, Is.True);
         }
 
         [Test]
@@ -287,7 +287,7 @@ namespace CDP4Common.Tests.Poco
 
             this.scalarParameter.ToBePublished = true;
 
-            Assert.IsFalse(this.scalarParameter.ToBePublished);
+            Assert.That(this.scalarParameter.ToBePublished, Is.False);
         }
 
         [Test]
@@ -305,11 +305,11 @@ namespace CDP4Common.Tests.Poco
 
             this.scalarParameter.ValueSet.Add(valueset);
 
-            Assert.IsFalse(this.scalarParameter.ToBePublished);
+            Assert.That(this.scalarParameter.ToBePublished, Is.False);
 
             this.scalarParameter.ToBePublished = true;
 
-            Assert.IsTrue(this.scalarParameter.ToBePublished);
+            Assert.That(this.scalarParameter.ToBePublished, Is.True);
         }
     }
 }

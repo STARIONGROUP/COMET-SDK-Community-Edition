@@ -67,7 +67,7 @@ namespace CDP4Common.Tests
         {
             var aliasDto = this.alias.ToDto() as CDP4Common.DTO.Alias;
 
-            Assert.IsNotNull(aliasDto);
+            Assert.That(aliasDto, Is.Not.Null);
             Assert.That(aliasDto.Iid, Is.EqualTo(this.alias.Iid));
             Assert.That(aliasDto.IsSynonym, Is.EqualTo(this.alias.IsSynonym));
             Assert.That(aliasDto.Content, Is.EqualTo(this.alias.Content));
@@ -94,7 +94,7 @@ namespace CDP4Common.Tests
 
             var dto = dateParameterType.ToDto() as CDP4Common.DTO.DateParameterType;
 
-            Assert.IsNotNull(dto);
+            Assert.That(dto, Is.Not.Null);
             Assert.That(dto.HyperLink.Count, Is.EqualTo(2));
             Assert.That(dto.HyperLink[1], Is.EqualTo(dateParameterType.HyperLink[1].Iid));
             Assert.That(dto.HyperLink[0], Is.EqualTo(dateParameterType.HyperLink[0].Iid));
@@ -116,7 +116,7 @@ namespace CDP4Common.Tests
 
             var dto = person.ToDto() as CDP4Common.DTO.Person;
 
-            Assert.IsNotNull(dto);
+            Assert.That(dto, Is.Not.Null);
             Assert.That(organization.Iid, Is.EqualTo(dto.Organization));
             Assert.That(dto.Route, Is.EqualTo(person.Route));
 
@@ -135,7 +135,7 @@ namespace CDP4Common.Tests
 
             var dto = compoundParameterType.ToDto() as CDP4Common.DTO.CompoundParameterType;
 
-            Assert.IsNotNull(dto);
+            Assert.That(dto, Is.Not.Null);
             Assert.That(compoundParameterType.Component.SortedItems.Keys.First(), Is.EqualTo(dto.Component.First().K));
             Assert.That(compoundParameterType.Component.SortedItems.Values.First().Iid, Is.EqualTo(dto.Component.First().V));
 
@@ -187,7 +187,7 @@ namespace CDP4Common.Tests
 
             var dto = siteDirectory.ToDto() as CDP4Common.DTO.SiteDirectory;
 
-            Assert.IsTrue(dto.DefaultPersonRole.HasValue);
+            Assert.That(dto.DefaultPersonRole.HasValue, Is.True);
             Assert.That(dto.DefaultPersonRole.Value, Is.EqualTo(role.Iid));
 
             Assert.That(dto.QuerySourceThing(), Is.EqualTo(siteDirectory));
@@ -206,7 +206,7 @@ namespace CDP4Common.Tests
             var iterationDto = iteratio.ToDto();
             var defDto = elementdef.ToDto();
 
-            Assert.IsNull(iterationDto.IterationContainerId);
+            Assert.That(iterationDto.IterationContainerId, Is.Null);
             Assert.That(defDto.IterationContainerId, Is.EqualTo(iteratio.Iid));
         }
     }

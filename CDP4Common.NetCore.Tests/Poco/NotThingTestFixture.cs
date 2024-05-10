@@ -44,7 +44,7 @@ namespace CDP4Common.Tests
             var nothing = new NotThing(name);
 
             Assert.That(nothing.Name, Is.EqualTo(name));
-            Assert.IsNull(nothing.Container);
+            Assert.That(nothing.Container, Is.Null);
             Assert.That(nothing.ClassKind, Is.EqualTo(ClassKind.NotThing));
         }
 

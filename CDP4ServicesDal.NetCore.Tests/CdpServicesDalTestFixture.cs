@@ -139,7 +139,7 @@ namespace CDP4ServicesDal.Tests
         public void VerifyThatCdpServicesDalCanBeConstructed()
         {
             var dal = new CdpServicesDal();
-            Assert.IsNotNull(dal);
+            Assert.That(dal, Is.Not.Null);
         }
 
         [Test]
@@ -250,7 +250,7 @@ namespace CDP4ServicesDal.Tests
         [Test]
         public void VerifyThatDalThatIsNotOpenCannotBeClosed()
         {
-            Assert.IsNull(this.dal.Credentials);
+            Assert.That(this.dal.Credentials, Is.Null);
             Assert.Throws<InvalidOperationException>(() => this.dal.Close());
         }
 
@@ -261,8 +261,8 @@ namespace CDP4ServicesDal.Tests
             this.dal = new CdpServicesDal();
 
             var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();
-            Assert.NotNull(returned);
-            Assert.IsNotEmpty(returned);
+            Assert.That(returned, Is.Not.Null);
+            Assert.That(returned, Is.Not.Empty);
 
             var sd = returned.First();
 
@@ -270,22 +270,22 @@ namespace CDP4ServicesDal.Tests
             var readResult = await dal.Read(sd, this.cancelationTokenSource.Token, attributes);
 
             // General assertions for any kind of Thing we read
-            Assert.NotNull(readResult);
-            Assert.IsTrue(readResult.Count() == 1);
+            Assert.That(readResult, Is.Not.Null);
+            Assert.That(readResult.Count() == 1, Is.True);
             var sd1 = readResult.Single();
-            Assert.IsTrue(sd.ClassKind == sd1.ClassKind);
-            Assert.IsTrue(sd.Iid == sd1.Iid);
-            Assert.IsTrue(sd.Route == sd1.Route);
+            Assert.That(sd.ClassKind == sd1.ClassKind, Is.True);
+            Assert.That(sd.Iid == sd1.Iid, Is.True);
+            Assert.That(sd.Route == sd1.Route, Is.True);
 
             // Specific assertions for Sitedirectory ClassKind
             var castedSd = sd as CDP4Common.DTO.SiteDirectory;
             var castedSd1 = sd as CDP4Common.DTO.SiteDirectory;
-            Assert.NotNull(castedSd);
-            Assert.NotNull(castedSd1);
-            Assert.IsTrue(castedSd.Name == castedSd1.Name);
-            Assert.IsTrue(castedSd.Domain.Count == castedSd1.Domain.Count);
-            Assert.IsTrue(castedSd.SiteReferenceDataLibrary == castedSd1.SiteReferenceDataLibrary);
-            Assert.IsTrue(castedSd.Model == castedSd1.Model);
+            Assert.That(castedSd, Is.Not.Null);
+            Assert.That(castedSd1, Is.Not.Null);
+            Assert.That(castedSd.Name == castedSd1.Name, Is.True);
+            Assert.That(castedSd.Domain.Count == castedSd1.Domain.Count, Is.True);
+            Assert.That(castedSd.SiteReferenceDataLibrary == castedSd1.SiteReferenceDataLibrary, Is.True);
+            Assert.That(castedSd.Model == castedSd1.Model, Is.True);
         }
 
         [Test]
@@ -403,7 +403,7 @@ namespace CDP4ServicesDal.Tests
             var stream = new MemoryStream();
             this.dal.ConstructPostRequestBodyStream(string.Empty, operationContainer, stream);
 
-            Assert.AreNotEqual(0, stream.Length);
+            Assert.That(stream.Length, Is.Not.EqualTo(0));
         }
 
         [Test]
@@ -432,7 +432,7 @@ namespace CDP4ServicesDal.Tests
             await session.Assembler.Synchronize(modelDtos);
 
             var readCount = session.Assembler.Cache.Count;
-            Assert.IsTrue(readCount > openCount);
+            Assert.That(readCount > openCount, Is.True);
         }
 
         [Test]
@@ -556,9 +556,9 @@ namespace CDP4ServicesDal.Tests
         {
             var dal = new CdpServicesDal();
 
-            Assert.IsTrue(dal.IsValidUri("http://cdp4services-test.cdp4.org"));
-            Assert.IsTrue(dal.IsValidUri("https://cdp4services-test.cdp4.org"));
-            Assert.IsFalse(dal.IsValidUri("file://some file"));
+            Assert.That(dal.IsValidUri("http://cdp4services-test.cdp4.org"), Is.True);
+            Assert.That(dal.IsValidUri("https://cdp4services-test.cdp4.org"), Is.True);
+            Assert.That(dal.IsValidUri("file://some file"), Is.False);
         }
 
         [Test]
@@ -612,7 +612,7 @@ namespace CDP4ServicesDal.Tests
             var dal = new CdpServicesDal();
             var result = await dal.Open(this.credentials, new CancellationToken());
 
-            Assert.NotNull(result);
+            Assert.That(result, Is.Not.Null);
         }
 
         [Test]
@@ -628,7 +628,7 @@ namespace CDP4ServicesDal.Tests
             var dal = new CdpServicesDal();
             var result = await dal.Open(this.credentials, new CancellationToken());
             
-            Assert.NotNull(result);
+            Assert.That(result, Is.Not.Null);
         }
         
         [Test]
@@ -687,7 +687,7 @@ namespace CDP4ServicesDal.Tests
 
             var resultPerson = (CDP4Common.DTO.Person)result.Single(x => x.Iid == person.Iid);
 
-            Assert.NotNull(resultPerson);
+            Assert.That(resultPerson, Is.Not.Null);
         }
 
         [Test]

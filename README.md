@@ -49,18 +49,18 @@ Master | ![Build Status](https://github.com/STARIONGROUP/COMET-SDK-Community-Edi
 Development | ![Build Status](https://github.com/STARIONGROUP/COMET-SDK-Community-Edition/actions/workflows/CodeQuality.yml/badge.svg?branch=development)
 
 ## SonarQube Status:
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=alert_status)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=security_rating)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_CDP4-SDK-Community-Edition&metric=alert_status)](https://sonarcloud.io/dashboard?id=STARIONGROUP_CDP4-SDK-Community-Edition)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_CDP4-SDK-Community-Edition&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=STARIONGROUP_CDP4-SDK-Community-Edition)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_CDP4-SDK-Community-Edition&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=STARIONGROUP_CDP4-SDK-Community-Edition)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_CDP4-SDK-Community-Edition&metric=security_rating)](https://sonarcloud.io/dashboard?id=STARIONGROUP_CDP4-SDK-Community-Edition)
 
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=coverage)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_CDP4-SDK-Community-Edition&metric=coverage)](https://sonarcloud.io/dashboard?id=STARIONGROUP_CDP4-SDK-Community-Edition)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_CDP4-SDK-Community-Edition&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=STARIONGROUP_CDP4-SDK-Community-Edition)
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=bugs)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=ncloc)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=sqale_index)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_CDP4-SDK-Community-Edition&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=RHEAGROUP_CDP4-SDK-Community-Edition)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_CDP4-SDK-Community-Edition&metric=bugs)](https://sonarcloud.io/dashboard?id=STARIONGROUP_CDP4-SDK-Community-Edition)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_CDP4-SDK-Community-Edition&metric=ncloc)](https://sonarcloud.io/dashboard?id=STARIONGROUP_CDP4-SDK-Community-Edition)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_CDP4-SDK-Community-Edition&metric=sqale_index)](https://sonarcloud.io/dashboard?id=STARIONGROUP_CDP4-SDK-Community-Edition)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_CDP4-SDK-Community-Edition&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=STARIONGROUP_CDP4-SDK-Community-Edition)
 
 ## CDP4Common
 
@@ -118,4 +118,4 @@ The libraries contained in the COMET-SDK Community Edition are provided to the c
 
 # Contributions
 
-Contributions to the code-base are welcome. However, before we can accept your contributions we ask any contributor to sign the Contributor License Agreement (CLA) and send this digitaly signed to s.gerene@rheagroup.com. You can find the CLA's in the CLA folder.
+Contributions to the code-base are welcome. However, before we can accept your contributions we ask any contributor to sign the Contributor License Agreement (CLA) and send this digitaly signed to s.gerene@stariongroup.eu. You can find the CLA's in the CLA folder.

@@ -45,7 +45,7 @@ namespace CDP4Dal.Tests.DAL
 
             var credentials = new Credentials("John", password, new Uri("file://someuri"));
 
-            Assert.AreEqual(password, credentials.Password);
+            Assert.That(credentials.Password, Is.EqualTo(password));
         }
 
         [Test]

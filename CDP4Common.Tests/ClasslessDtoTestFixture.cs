@@ -55,7 +55,7 @@ namespace CDP4Common.Tests
 
             Assert.That(returned.Count, Is.EqualTo(3));
             object guid;
-            Assert.IsTrue(returned.TryGetValue("DefaultPersonRole", out guid));
+            Assert.That(returned.TryGetValue("DefaultPersonRole", out guid), Is.True);
             Assert.That((guid as Guid?).Value, Is.EqualTo(siteDir.DefaultPersonRole));
         }
 
@@ -67,35 +67,35 @@ namespace CDP4Common.Tests
 
             var returned = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, siteDir);
 
-            Assert.IsTrue(returned.ContainsKey("ClassKind"));
-            Assert.IsTrue(returned.ContainsKey("Iid"));
-            Assert.IsTrue(returned.ContainsKey("Organization"));
-            Assert.IsTrue(returned.ContainsKey("Person"));
-            Assert.IsTrue(returned.ContainsKey("ParticipantRole"));
-            Assert.IsTrue(returned.ContainsKey("DefaultParticipantRole"));
-            Assert.IsTrue(returned.ContainsKey("SiteReferenceDataLibrary"));
-            Assert.IsTrue(returned.ContainsKey("Model"));
-            Assert.IsTrue(returned.ContainsKey("PersonRole"));
-            Assert.IsTrue(returned.ContainsKey("DefaultPersonRole"));
-            Assert.IsTrue(returned.ContainsKey("LogEntry"));
-            Assert.IsTrue(returned.ContainsKey("DomainGroup"));
-            Assert.IsTrue(returned.ContainsKey("Domain"));
-            Assert.IsTrue(returned.ContainsKey("NaturalLanguage"));
-            Assert.IsTrue(returned.ContainsKey("CreatedOn"));
-            Assert.IsTrue(returned.ContainsKey("Name"));
-            Assert.IsTrue(returned.ContainsKey("ShortName"));
-            Assert.IsTrue(returned.ContainsKey("LastModifiedOn"));
-            Assert.IsTrue(returned.ContainsKey("ModifiedOn"));
-            Assert.IsTrue(returned.ContainsKey("RevisionNumber"));
-            Assert.IsTrue(returned.ContainsKey("ExcludedDomain"));
-            Assert.IsTrue(returned.ContainsKey("ExcludedPerson"));
-            Assert.IsTrue(returned.ContainsKey("Annotation"));
-            Assert.IsTrue(returned.ContainsKey("ThingPreference"));
+            Assert.That(returned.ContainsKey("ClassKind"), Is.True);
+            Assert.That(returned.ContainsKey("Iid"), Is.True);
+            Assert.That(returned.ContainsKey("Organization"), Is.True);
+            Assert.That(returned.ContainsKey("Person"), Is.True);
+            Assert.That(returned.ContainsKey("ParticipantRole"), Is.True);
+            Assert.That(returned.ContainsKey("DefaultParticipantRole"), Is.True);
+            Assert.That(returned.ContainsKey("SiteReferenceDataLibrary"), Is.True);
+            Assert.That(returned.ContainsKey("Model"), Is.True);
+            Assert.That(returned.ContainsKey("PersonRole"), Is.True);
+            Assert.That(returned.ContainsKey("DefaultPersonRole"), Is.True);
+            Assert.That(returned.ContainsKey("LogEntry"), Is.True);
+            Assert.That(returned.ContainsKey("DomainGroup"), Is.True);
+            Assert.That(returned.ContainsKey("Domain"), Is.True);
+            Assert.That(returned.ContainsKey("NaturalLanguage"), Is.True);
+            Assert.That(returned.ContainsKey("CreatedOn"), Is.True);
+            Assert.That(returned.ContainsKey("Name"), Is.True);
+            Assert.That(returned.ContainsKey("ShortName"), Is.True);
+            Assert.That(returned.ContainsKey("LastModifiedOn"), Is.True);
+            Assert.That(returned.ContainsKey("ModifiedOn"), Is.True);
+            Assert.That(returned.ContainsKey("RevisionNumber"), Is.True);
+            Assert.That(returned.ContainsKey("ExcludedDomain"), Is.True);
+            Assert.That(returned.ContainsKey("ExcludedPerson"), Is.True);
+            Assert.That(returned.ContainsKey("Annotation"), Is.True);
+            Assert.That(returned.ContainsKey("ThingPreference"), Is.True);
 
             Assert.That(returned.Count, Is.EqualTo(24));
 
             object guid;
-            Assert.IsTrue(returned.TryGetValue("DefaultPersonRole", out guid));
+            Assert.That(returned.TryGetValue("DefaultPersonRole", out guid), Is.True);
             Assert.That((guid as Guid?).Value, Is.EqualTo(siteDir.DefaultPersonRole));
         }
 
@@ -120,10 +120,10 @@ namespace CDP4Common.Tests
             var classlessDTO = ClasslessDtoFactory.FullFromThing(this.metaDataProvider, thing);
             object containingGroup;
             classlessDTO.TryGetValue("ContainingGroup", out containingGroup);
-            Assert.IsNull(containingGroup);
+            Assert.That(containingGroup, Is.Null);
             object name;
             classlessDTO.TryGetValue("Name", out name);
-            Assert.IsNotNull(name);
+            Assert.That(name, Is.Not.Null);
             Assert.That(name, Is.EqualTo(string.Empty));
         }
     }
