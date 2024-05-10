@@ -154,24 +154,24 @@ namespace CDP4Dal.Tests.Permission
         [Test]
         public void TestCanWriteFalseWithDefaultPermission()
         {
-            Assert.IsFalse(this.permissionService.CanWrite(this.sitedir));
-            Assert.IsFalse(this.permissionService.CanWrite(this.modelsetup));
-            Assert.IsFalse(this.permissionService.CanWrite(this.iterationSetup));
-            Assert.IsFalse(this.permissionService.CanWrite(this.person));
-            Assert.IsFalse(this.permissionService.CanWrite(this.participant));
-            Assert.IsFalse(this.permissionService.CanWrite(ClassKind.Person, this.sitedir));
+            Assert.That(this.permissionService.CanWrite(this.sitedir), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.modelsetup), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.iterationSetup), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.person), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.participant), Is.False);
+            Assert.That(this.permissionService.CanWrite(ClassKind.Person, this.sitedir), Is.False);
 
-            Assert.IsFalse(this.permissionService.CanWrite(this.model));
-            Assert.IsFalse(this.permissionService.CanWrite(this.iteration));
+            Assert.That(this.permissionService.CanWrite(this.model), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.iteration), Is.False);
 
-            Assert.IsFalse(this.permissionService.CanRead(this.sitedir));
-            Assert.IsFalse(this.permissionService.CanRead(this.modelsetup));
-            Assert.IsFalse(this.permissionService.CanRead(this.iterationSetup));
-            Assert.IsFalse(this.permissionService.CanRead(this.person));
-            Assert.IsFalse(this.permissionService.CanRead(this.participant));
+            Assert.That(this.permissionService.CanRead(this.sitedir), Is.False);
+            Assert.That(this.permissionService.CanRead(this.modelsetup), Is.False);
+            Assert.That(this.permissionService.CanRead(this.iterationSetup), Is.False);
+            Assert.That(this.permissionService.CanRead(this.person), Is.False);
+            Assert.That(this.permissionService.CanRead(this.participant), Is.False);
 
-            Assert.IsFalse(this.permissionService.CanRead(this.model));
-            Assert.IsFalse(this.permissionService.CanRead(this.iteration));
+            Assert.That(this.permissionService.CanRead(this.model), Is.False);
+            Assert.That(this.permissionService.CanRead(this.iteration), Is.False);
         }
 
         [Test]
@@ -180,24 +180,24 @@ namespace CDP4Dal.Tests.Permission
             var sdPermission = this.personRole.PersonPermission.Single(x => x.ObjectClass == ClassKind.SiteDirectory);
             sdPermission.AccessRight = PersonAccessRightKind.READ;
 
-            Assert.IsFalse(this.permissionService.CanWrite(this.sitedir));
-            Assert.IsFalse(this.permissionService.CanWrite(this.modelsetup));
-            Assert.IsFalse(this.permissionService.CanWrite(this.iterationSetup));
-            Assert.IsFalse(this.permissionService.CanWrite(this.person));
-            Assert.IsFalse(this.permissionService.CanWrite(this.definition));
+            Assert.That(this.permissionService.CanWrite(this.sitedir), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.modelsetup), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.iterationSetup), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.person), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.definition), Is.False);
 
-            Assert.IsTrue(this.permissionService.CanRead(this.sitedir));
-            Assert.IsFalse(this.permissionService.CanRead(this.person));
-            Assert.IsFalse(this.permissionService.CanRead(this.definition));
+            Assert.That(this.permissionService.CanRead(this.sitedir), Is.True);
+            Assert.That(this.permissionService.CanRead(this.person), Is.False);
+            Assert.That(this.permissionService.CanRead(this.definition), Is.False);
 
             sdPermission.AccessRight = PersonAccessRightKind.MODIFY;
-            Assert.IsTrue(this.permissionService.CanWrite(this.sitedir));
-            Assert.IsFalse(this.permissionService.CanWrite(this.modelsetup));
-            Assert.IsTrue(this.permissionService.CanRead(this.sitedir));
-            Assert.IsFalse(this.permissionService.CanRead(this.person));
-            Assert.IsFalse(this.permissionService.CanWrite(ClassKind.EngineeringModelSetup, this.sitedir));
-            Assert.IsFalse(this.permissionService.CanWrite(this.definition));
-            Assert.IsFalse(this.permissionService.CanRead(this.definition));
+            Assert.That(this.permissionService.CanWrite(this.sitedir), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.modelsetup), Is.False);
+            Assert.That(this.permissionService.CanRead(this.sitedir), Is.True);
+            Assert.That(this.permissionService.CanRead(this.person), Is.False);
+            Assert.That(this.permissionService.CanWrite(ClassKind.EngineeringModelSetup, this.sitedir), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.definition), Is.False);
+            Assert.That(this.permissionService.CanRead(this.definition), Is.False);
         }
 
         [Test]
@@ -206,57 +206,57 @@ namespace CDP4Dal.Tests.Permission
             var sdPermission = this.personRole.PersonPermission.Single(x => x.ObjectClass == ClassKind.EngineeringModelSetup);
             sdPermission.AccessRight = PersonAccessRightKind.READ;
 
-            Assert.IsTrue(this.permissionService.CanRead(this.modelsetup));
-            Assert.IsTrue(this.permissionService.CanRead(this.definition));
-            Assert.IsFalse(this.permissionService.CanWrite(this.definition));
+            Assert.That(this.permissionService.CanRead(this.modelsetup), Is.True);
+            Assert.That(this.permissionService.CanRead(this.definition), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.definition), Is.False);
 
             sdPermission.AccessRight = PersonAccessRightKind.MODIFY;
-            Assert.IsTrue(this.permissionService.CanWrite(this.definition));
-            Assert.IsTrue(this.permissionService.CanWrite(this.definition));
+            Assert.That(this.permissionService.CanWrite(this.definition), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.definition), Is.True);
         }
 
         [Test]
         public void VerifyThatSameAsSuperclassPermissionWorks()
         {
-            Assert.IsFalse(this.permissionService.CanRead(this.booleanpt));
-            Assert.IsFalse(this.permissionService.CanWrite(this.booleanpt));
+            Assert.That(this.permissionService.CanRead(this.booleanpt), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.booleanpt), Is.False);
 
             var permission = this.personRole.PersonPermission.Single(x => x.ObjectClass == ClassKind.SiteReferenceDataLibrary);
             permission.AccessRight = PersonAccessRightKind.READ;
-            Assert.IsTrue(this.permissionService.CanRead(this.booleanpt));
-            Assert.IsFalse(this.permissionService.CanWrite(this.booleanpt));
-            Assert.IsFalse(this.permissionService.CanWrite(ClassKind.BooleanParameterType, this.srdl));
+            Assert.That(this.permissionService.CanRead(this.booleanpt), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.booleanpt), Is.False);
+            Assert.That(this.permissionService.CanWrite(ClassKind.BooleanParameterType, this.srdl), Is.False);
 
             permission.AccessRight = PersonAccessRightKind.MODIFY;
-            Assert.IsTrue(this.permissionService.CanRead(this.booleanpt));
-            Assert.IsTrue(this.permissionService.CanWrite(this.booleanpt));
-            Assert.IsTrue(this.permissionService.CanWrite(ClassKind.BooleanParameterType, this.srdl));
+            Assert.That(this.permissionService.CanRead(this.booleanpt), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.booleanpt), Is.True);
+            Assert.That(this.permissionService.CanWrite(ClassKind.BooleanParameterType, this.srdl), Is.True);
         }
 
         [Test]
         public void VerifyThatModifyIfOwnPersonPermissionWork()
         {
-            Assert.IsFalse(this.permissionService.CanRead(this.person));
-            Assert.IsFalse(this.permissionService.CanWrite(this.person));
-            Assert.IsFalse(this.permissionService.CanRead(this.person2));
-            Assert.IsFalse(this.permissionService.CanWrite(this.person2));
+            Assert.That(this.permissionService.CanRead(this.person), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.person), Is.False);
+            Assert.That(this.permissionService.CanRead(this.person2), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.person2), Is.False);
 
             var permission = this.personRole.PersonPermission.Single(x => x.ObjectClass == ClassKind.Person);
             permission.AccessRight = PersonAccessRightKind.MODIFY_OWN_PERSON;
 
-            Assert.IsTrue(this.permissionService.CanRead(this.person));
-            Assert.IsTrue(this.permissionService.CanWrite(this.person));
+            Assert.That(this.permissionService.CanRead(this.person), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.person), Is.True);
 
-            Assert.IsFalse(this.permissionService.CanRead(this.person2));
-            Assert.IsFalse(this.permissionService.CanWrite(this.person2));
+            Assert.That(this.permissionService.CanRead(this.person2), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.person2), Is.False);
 
             var sdpermission = this.personRole.PersonPermission.Single(x => x.ObjectClass == ClassKind.SiteDirectory);
             sdpermission.AccessRight = PersonAccessRightKind.MODIFY_OWN_PERSON;
-            Assert.IsFalse(this.permissionService.CanRead(this.sitedir));
-            Assert.IsFalse(this.permissionService.CanWrite(this.sitedir));
+            Assert.That(this.permissionService.CanRead(this.sitedir), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.sitedir), Is.False);
 
-            Assert.IsTrue(this.permissionService.CanRead(this.person));
-            Assert.IsTrue(this.permissionService.CanWrite(this.person));
+            Assert.That(this.permissionService.CanRead(this.person), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.person), Is.True);
         }
 
         [Test]
@@ -270,41 +270,41 @@ namespace CDP4Dal.Tests.Permission
             var permission = this.personRole.PersonPermission.Single(x => x.ObjectClass == ClassKind.EngineeringModelSetup);
             permission.AccessRight = PersonAccessRightKind.READ_IF_PARTICIPANT;
 
-            Assert.IsFalse(this.permissionService.CanRead(this.sitedir));
-            Assert.IsFalse(this.permissionService.CanWrite(this.sitedir));
+            Assert.That(this.permissionService.CanRead(this.sitedir), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.sitedir), Is.False);
 
-            Assert.IsTrue(this.permissionService.CanRead(this.modelsetup));
-            Assert.IsFalse(this.permissionService.CanWrite(this.modelsetup));
+            Assert.That(this.permissionService.CanRead(this.modelsetup), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.modelsetup), Is.False);
 
             sdpermission.AccessRight = PersonAccessRightKind.MODIFY_IF_PARTICIPANT;
             permission.AccessRight = PersonAccessRightKind.MODIFY_IF_PARTICIPANT;
-            Assert.IsFalse(this.permissionService.CanRead(this.sitedir));
-            Assert.IsFalse(this.permissionService.CanWrite(this.sitedir));
+            Assert.That(this.permissionService.CanRead(this.sitedir), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.sitedir), Is.False);
 
-            Assert.IsTrue(this.permissionService.CanRead(this.modelsetup));
-            Assert.IsTrue(this.permissionService.CanWrite(this.modelsetup));
+            Assert.That(this.permissionService.CanRead(this.modelsetup), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.modelsetup), Is.True);
         }
 
         [Test]
         public void VerifyReadWriteParticipantPermission()
         {
             this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
-            Assert.IsFalse(this.permissionService.CanWrite(this.model));
-            Assert.IsFalse(this.permissionService.CanRead(this.model));
+            Assert.That(this.permissionService.CanWrite(this.model), Is.False);
+            Assert.That(this.permissionService.CanRead(this.model), Is.False);
 
             var permission = this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.EngineeringModel);
 
             permission.AccessRight = ParticipantAccessRightKind.MODIFY;
-            Assert.IsTrue(this.permissionService.CanRead(this.model));
-            Assert.IsTrue(this.permissionService.CanWrite(this.model));
+            Assert.That(this.permissionService.CanRead(this.model), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.model), Is.True);
         }
 
         [Test]
         public void VerifyModifyIfOwnerForIterationsWithoutDomainOfExpertiseAndParticipant()
         {
             this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
-            Assert.IsFalse(this.permissionService.CanWrite(this.model));
-            Assert.IsFalse(this.permissionService.CanRead(this.model));
+            Assert.That(this.permissionService.CanWrite(this.model), Is.False);
+            Assert.That(this.permissionService.CanRead(this.model), Is.False);
 
             var permission =
                 this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.EngineeringModel);
@@ -315,27 +315,27 @@ namespace CDP4Dal.Tests.Permission
             permission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
             defpermission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
 
-            Assert.IsTrue(this.permissionService.CanRead(this.model));
-            Assert.IsFalse(this.permissionService.CanWrite(this.model));
+            Assert.That(this.permissionService.CanRead(this.model), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.model), Is.False);
 
-            Assert.IsTrue(this.permissionService.CanWrite(this.elementDef));
-            Assert.IsTrue(this.permissionService.CanRead(this.elementDef));
+            Assert.That(this.permissionService.CanWrite(this.elementDef), Is.True);
+            Assert.That(this.permissionService.CanRead(this.elementDef), Is.True);
 
             this.session.Setup(x => x.OpenIterations).Returns(new Dictionary<Iteration, Tuple<DomainOfExpertise, Participant>>
             {
                 { this.iteration, new Tuple<DomainOfExpertise, Participant>(null, null) }
             });
 
-            Assert.IsFalse(this.permissionService.CanWrite(this.elementDef));
-            Assert.IsTrue(this.permissionService.CanRead(this.elementDef));
+            Assert.That(this.permissionService.CanWrite(this.elementDef), Is.False);
+            Assert.That(this.permissionService.CanRead(this.elementDef), Is.True);
         }
 
         [Test]
         public void VerifyModifyIfOwnerForRequirement()
         {
             this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
-            Assert.IsFalse(this.permissionService.CanWrite(this.model));
-            Assert.IsFalse(this.permissionService.CanRead(this.model));
+            Assert.That(this.permissionService.CanWrite(this.model), Is.False);
+            Assert.That(this.permissionService.CanRead(this.model), Is.False);
 
             var permission =
                 this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.Requirement);
@@ -356,32 +356,32 @@ namespace CDP4Dal.Tests.Permission
 
             //Requirement has same owner than user's domain of expertise
             this.requirement.Owner = this.domain1;
-            Assert.IsTrue(this.permissionService.CanWrite(this.requirement));
-            Assert.IsTrue(this.permissionService.CanRead(this.requirement));
+            Assert.That(this.permissionService.CanWrite(this.requirement), Is.True);
+            Assert.That(this.permissionService.CanRead(this.requirement), Is.True);
 
             //Requirement has other owner than user's domain of expertise
             this.requirement.Owner = this.domain2;
-            Assert.IsFalse(this.permissionService.CanWrite(this.requirement));
-            Assert.IsTrue(this.permissionService.CanRead(this.requirement));
+            Assert.That(this.permissionService.CanWrite(this.requirement), Is.False);
+            Assert.That(this.permissionService.CanRead(this.requirement), Is.True);
 
             //RequirementsSepcification has same owner than user's domain of expertise
             this.requirementsSpecification.Owner = this.domain1;
             specPermission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
-            Assert.IsTrue(this.permissionService.CanWrite(this.requirementsSpecification));
-            Assert.IsTrue(this.permissionService.CanRead(this.requirementsSpecification));
+            Assert.That(this.permissionService.CanWrite(this.requirementsSpecification), Is.True);
+            Assert.That(this.permissionService.CanRead(this.requirementsSpecification), Is.True);
 
             //RequirementsSepcification has other owner than user's domain of expertise
             this.requirementsSpecification.Owner = this.domain2;
-            Assert.IsFalse(this.permissionService.CanWrite(this.requirementsSpecification));
-            Assert.IsTrue(this.permissionService.CanRead(this.requirementsSpecification));
+            Assert.That(this.permissionService.CanWrite(this.requirementsSpecification), Is.False);
+            Assert.That(this.permissionService.CanRead(this.requirementsSpecification), Is.True);
         }
 
         [Test]
         public void VerifyModifyIfOwnerForThingsThatAreDirectlyUnderEngineeringModel()
         {
             this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
-            Assert.IsFalse(this.permissionService.CanWrite(this.model));
-            Assert.IsFalse(this.permissionService.CanRead(this.model));
+            Assert.That(this.permissionService.CanWrite(this.model), Is.False);
+            Assert.That(this.permissionService.CanRead(this.model), Is.False);
 
             var permission =
                 this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.CommonFileStore);
@@ -394,41 +394,41 @@ namespace CDP4Dal.Tests.Permission
 
             //Thing has same owner as User's participant
             this.commonFileStore.Owner = this.domain1;
-            Assert.IsTrue(this.permissionService.CanWrite(this.commonFileStore));
-            Assert.IsTrue(this.permissionService.CanRead(this.commonFileStore));
+            Assert.That(this.permissionService.CanWrite(this.commonFileStore), Is.True);
+            Assert.That(this.permissionService.CanRead(this.commonFileStore), Is.True);
 
             //Thing has other owner as User's participant
             this.commonFileStore.Owner = this.domain2;
-            Assert.IsTrue(this.permissionService.CanWrite(this.commonFileStore));
-            Assert.IsTrue(this.permissionService.CanRead(this.commonFileStore));
+            Assert.That(this.permissionService.CanWrite(this.commonFileStore), Is.True);
+            Assert.That(this.permissionService.CanRead(this.commonFileStore), Is.True);
         }
 
         [Test]
         public void VerifySameAsSuperclassParticipantPermission()
         {
             this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
-            Assert.IsFalse(this.permissionService.CanWrite(this.relationship));
-            Assert.IsFalse(this.permissionService.CanRead(this.relationship));
+            Assert.That(this.permissionService.CanWrite(this.relationship), Is.False);
+            Assert.That(this.permissionService.CanRead(this.relationship), Is.False);
 
             var permission = this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.Relationship);
             permission.AccessRight = ParticipantAccessRightKind.MODIFY;
 
-            Assert.IsTrue(this.permissionService.CanWrite(this.relationship));
-            Assert.IsTrue(this.permissionService.CanRead(this.relationship));
+            Assert.That(this.permissionService.CanWrite(this.relationship), Is.True);
+            Assert.That(this.permissionService.CanRead(this.relationship), Is.True);
         }
 
         [Test]
         public void VerifySameAsContainerParticipantPermission()
         {
             this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
-            Assert.IsFalse(this.permissionService.CanWrite(this.valueset));
-            Assert.IsFalse(this.permissionService.CanRead(this.valueset));
+            Assert.That(this.permissionService.CanWrite(this.valueset), Is.False);
+            Assert.That(this.permissionService.CanRead(this.valueset), Is.False);
 
             var permission = this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.Parameter);
 
             permission.AccessRight = ParticipantAccessRightKind.MODIFY;
-            Assert.IsTrue(this.permissionService.CanWrite(this.valueset));
-            Assert.IsTrue(this.permissionService.CanRead(this.valueset));
+            Assert.That(this.permissionService.CanWrite(this.valueset), Is.True);
+            Assert.That(this.permissionService.CanRead(this.valueset), Is.True);
         }
 
         [Test]
@@ -440,16 +440,16 @@ namespace CDP4Dal.Tests.Permission
             permission = this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.Iteration);
             permission.AccessRight = ParticipantAccessRightKind.MODIFY;
 
-            Assert.IsNull(this.iterationSetup.FrozenOn);
-            Assert.IsTrue(this.permissionService.CanWrite(this.elementDef));
-            Assert.IsTrue(this.permissionService.CanWrite(this.iteration));
-            Assert.IsTrue(this.permissionService.CanWrite(ClassKind.ElementDefinition, this.iteration));
+            Assert.That(this.iterationSetup.FrozenOn, Is.Null);
+            Assert.That(this.permissionService.CanWrite(this.elementDef), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.iteration), Is.True);
+            Assert.That(this.permissionService.CanWrite(ClassKind.ElementDefinition, this.iteration), Is.True);
 
             this.iterationSetup.FrozenOn = new DateTime();
-            Assert.IsNotNull(this.iterationSetup.FrozenOn);
-            Assert.IsFalse(this.permissionService.CanWrite(this.elementDef));
-            Assert.IsFalse(this.permissionService.CanWrite(this.iteration));
-            Assert.IsFalse(this.permissionService.CanWrite(ClassKind.ElementDefinition, this.iteration));
+            Assert.That(this.iterationSetup.FrozenOn, Is.Not.Null);
+            Assert.That(this.permissionService.CanWrite(this.elementDef), Is.False);
+            Assert.That(this.permissionService.CanWrite(this.iteration), Is.False);
+            Assert.That(this.permissionService.CanWrite(ClassKind.ElementDefinition, this.iteration), Is.False);
         }
 
         [Test]

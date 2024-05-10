@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DtoRouteResolverTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -88,7 +88,7 @@ namespace CDP4Dal.Tests.Helpers
 
             this.state.ResolveRoute(list, this.session.Object);
             var route = this.state.Route;
-            Assert.AreEqual($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", route);
+            Assert.That($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", Is.EqualTo(route));
         }
 
         [Test]
@@ -104,7 +104,7 @@ namespace CDP4Dal.Tests.Helpers
 
             this.model.ResolveRoute(list, this.session.Object);
             var route = this.model.Route;
-            Assert.AreEqual($@"/EngineeringModel/{this.model.Iid}", route);
+            Assert.That($@"/EngineeringModel/{this.model.Iid}", Is.EqualTo(route));
         }
 
         [Test]
@@ -122,7 +122,7 @@ namespace CDP4Dal.Tests.Helpers
 
             this.state.ResolveRoute(list, this.session.Object);
             var route = this.state.Route;
-            Assert.AreEqual($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", route);
+            Assert.That($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", Is.EqualTo(route));
         }
 
         [Test]
@@ -140,7 +140,7 @@ namespace CDP4Dal.Tests.Helpers
 
             this.state.ResolveRoute(list, this.session.Object);
             var route = this.state.Route;
-            Assert.AreEqual($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", route);
+            Assert.That($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", Is.EqualTo(route));
         }
 
         [Test]

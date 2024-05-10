@@ -136,7 +136,7 @@ namespace CDP4Dal.NetCore.Tests
 
             await this.session.Open();
 
-            Assert.IsTrue(eventReceived);
+            Assert.That(eventReceived, Is.True);
         }
 
         [Test]
@@ -170,8 +170,8 @@ namespace CDP4Dal.NetCore.Tests
             this.session.GetType().GetProperty("ActivePerson").SetValue(session, johnDoe, null);
             await this.session.Write(new OperationContainer(context));
 
-            Assert.IsTrue(beginUpdateReceived);
-            Assert.IsTrue(endUpdateReceived);
+            Assert.That(beginUpdateReceived, Is.True);
+            Assert.That(endUpdateReceived, Is.True);
         }
 
         [Test]
@@ -197,7 +197,7 @@ namespace CDP4Dal.NetCore.Tests
             // refresh shouldnt do anything
             await this.session.Refresh();
 
-            Assert.IsFalse(eventReceived);
+            Assert.That(eventReceived, Is.False);
         }
 
         [Test]
@@ -223,7 +223,7 @@ namespace CDP4Dal.NetCore.Tests
 
             await this.session.Reload();
 
-            Assert.IsTrue(eventReceived);
+            Assert.That(eventReceived, Is.True);
         }
 
         /// <summary>
@@ -235,8 +235,8 @@ namespace CDP4Dal.NetCore.Tests
             await this.session.Open();
 
             var activePerson = this.session.ActivePerson;
-            Assert.IsNotNull(activePerson);
-            Assert.AreEqual("John", activePerson.ShortName);
+            Assert.That(activePerson, Is.Not.Null);
+            Assert.That("John", Is.EqualTo(activePerson.ShortName));
         }
 
         [Test]
@@ -258,14 +258,14 @@ namespace CDP4Dal.NetCore.Tests
             session2.GetType().GetProperty("ActivePerson").SetValue(session2, JohnDoe, null);
             await session2.Assembler.Synchronize(thingsToAdd);
 
-            Assert.IsEmpty(session2.OpenReferenceDataLibraries);
+            Assert.That(session2.OpenReferenceDataLibraries, Is.Empty);
 
             await session2.Read(rdlPoco);
 
-            Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count);
+            Assert.That(2, Is.EqualTo(session2.OpenReferenceDataLibraries.ToList().Count));
 
             await session2.Close();
-            Assert.IsEmpty(session2.OpenReferenceDataLibraries);
+            Assert.That(session2.OpenReferenceDataLibraries, Is.Empty);
         }
 
         [Test]
@@ -289,25 +289,25 @@ namespace CDP4Dal.NetCore.Tests
             session.GetType().GetProperty("ActivePerson").SetValue(session, JohnDoe, null);
             await session.Assembler.Synchronize(thingsToAdd);
             await session.Read(rdlPoco);
-            Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count);
+            Assert.That(2, Is.EqualTo(session.OpenReferenceDataLibraries.ToList().Count));
 
             Lazy<CDP4Common.CommonData.Thing> rdlPocoToClose;
             session.Assembler.Cache.TryGetValue(new CacheKey(rdlPoco.Iid, null), out rdlPocoToClose);
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)rdlPocoToClose.Value);
-            Assert.AreEqual(1, session.OpenReferenceDataLibraries.ToList().Count);
+            Assert.That(1, Is.EqualTo(session.OpenReferenceDataLibraries.ToList().Count));
 
             await session.Read(rdlPoco);
-            Assert.AreEqual(2, session.OpenReferenceDataLibraries.ToList().Count);
+            Assert.That(2, Is.EqualTo(session.OpenReferenceDataLibraries.ToList().Count));
 
             session.Assembler.Cache.TryGetValue(new CacheKey(rdlPoco.Iid, null), out rdlPocoToClose);
             Lazy<CDP4Common.CommonData.Thing> requiredRdlToClose;
             session.Assembler.Cache.TryGetValue(new CacheKey(requiredSiteReferenceDataLibraryPoco.Iid, null), out requiredRdlToClose);
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)requiredRdlToClose.Value);
             
-            Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count);
+            Assert.That(0, Is.EqualTo(session.OpenReferenceDataLibraries.ToList().Count));
 
             await session.CloseRdl((CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary)rdlPocoToClose.Value);
-            Assert.AreEqual(0, session.OpenReferenceDataLibraries.ToList().Count);
+            Assert.That(0, Is.EqualTo(session.OpenReferenceDataLibraries.ToList().Count));
         }
 
         [Test]
@@ -366,13 +366,13 @@ namespace CDP4Dal.NetCore.Tests
 
             await this.session.Read(iterationPoco, null);
             
-            Assert.AreEqual(2, this.session.OpenReferenceDataLibraries.Count());
+            Assert.That(2, Is.EqualTo(this.session.OpenReferenceDataLibraries.Count()));
 
             Lazy<CDP4Common.CommonData.Thing> requiredRdlToClose;
             this.session.Assembler.Cache.TryGetValue(new CacheKey(requiredRdlDto.Iid, null), out requiredRdlToClose);
 
             await this.session.CloseRdl((SiteReferenceDataLibrary)requiredRdlToClose.Value);
-            Assert.AreEqual(2, this.session.OpenReferenceDataLibraries.Count());
+            Assert.That(2, Is.EqualTo(this.session.OpenReferenceDataLibraries.Count()));
         }
 
         [Test]
@@ -399,16 +399,16 @@ namespace CDP4Dal.NetCore.Tests
 
             await session2.Assembler.Synchronize(thingsToAdd);
             await session2.Read(modelRdlPoco);
-            Assert.AreEqual(2, session2.OpenReferenceDataLibraries.ToList().Count);
+            Assert.That(2, Is.EqualTo(session2.OpenReferenceDataLibraries.ToList().Count));
 
             Lazy<CDP4Common.CommonData.Thing> rdlPocoToClose;
             session2.Assembler.Cache.TryGetValue(new CacheKey(modelRdlPoco.Iid, null), out rdlPocoToClose);
-            Assert.NotNull(rdlPocoToClose);
+            Assert.That(rdlPocoToClose, Is.Not.Null);
             await session2.CloseModelRdl((ModelReferenceDataLibrary)rdlPocoToClose.Value);
 
             // Checkt that closing a modelRDL doesn't close it's required SiteRDL
-            Assert.AreEqual(1, session2.OpenReferenceDataLibraries.ToList().Count);
-            Assert.AreEqual(ClassKind.SiteReferenceDataLibrary, session2.OpenReferenceDataLibraries.First().ClassKind);
+            Assert.That(1, Is.EqualTo(session2.OpenReferenceDataLibraries.ToList().Count));
+            Assert.That(ClassKind.SiteReferenceDataLibrary, Is.EqualTo(session2.OpenReferenceDataLibraries.First().ClassKind));
         }
 
         [Test]
@@ -441,7 +441,7 @@ namespace CDP4Dal.NetCore.Tests
             CDP4Common.CommonData.Thing changedObject = null;
             this.messageBus.Listen<ObjectChangedEvent>(typeof(CDP4Common.EngineeringModelData.Iteration)).Subscribe(x => changedObject = x.ChangedThing);
             await session2.CloseIterationSetup(iterationSetup);
-            Assert.NotNull(changedObject);
+            Assert.That(changedObject, Is.Not.Null);
         }
 
         [Test]
@@ -472,8 +472,8 @@ namespace CDP4Dal.NetCore.Tests
             this.session.GetType().GetProperty("ActivePerson").SetValue(this.session, JohnDoe, null);
             await this.session.Read(srdl);
 
-            Assert.AreEqual(1, this.session.OpenReferenceDataLibraries.Count());
-            Assert.IsTrue(siteDir.SiteReferenceDataLibrary.Any());
+            Assert.That(1, Is.EqualTo(this.session.OpenReferenceDataLibraries.Count()));
+            Assert.That(siteDir.SiteReferenceDataLibrary.Any(), Is.True);
         }
 
         [Test]
@@ -575,16 +575,16 @@ namespace CDP4Dal.NetCore.Tests
             this.mockedDal.Verify(x => x.Read(It.Is<Iteration>(i => i.Iid == iterationToOpen.Iid), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>()), Times.Once);
 
             var pair = this.session.OpenIterations.Single();
-            Assert.AreEqual(pair.Value.Item1, activeDomain);
+            Assert.That(pair.Value.Item1, Is.EqualTo(activeDomain));
 
             await this.session.Read(iterationToOpen, activeDomain);
             this.mockedDal.Verify(x => x.Read(It.Is<Iteration>(i => i.Iid == iterationToOpen.Iid), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>()), Times.Exactly(2));
 
             pair = this.session.OpenIterations.Single();
-            Assert.AreEqual(pair.Value.Item1, activeDomain);
+            Assert.That(pair.Value.Item1, Is.EqualTo(activeDomain));
 
             var selectedDomain = this.session.QuerySelectedDomainOfExpertise(iterationToOpen);
-            Assert.AreEqual(activeDomain.Iid, selectedDomain.Iid);
+            Assert.That(activeDomain.Iid, Is.EqualTo(selectedDomain.Iid));
 
             this.mockedDal.Setup(x => x.Read(It.IsAny<Thing>(), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>())).Returns<Thing, CancellationToken, IQueryAttributes>(
                 (x, y, z) =>
@@ -624,9 +624,9 @@ namespace CDP4Dal.NetCore.Tests
             this.session = new Session(testDal, credentials, this.messageBus);
             var version = new Version("1.1.0");
             
-            Assert.AreEqual(version.Major, this.session.DalVersion.Major);
-            Assert.AreEqual(version.Minor, this.session.DalVersion.Minor);
-            Assert.AreEqual(version.Build, this.session.DalVersion.Build);
+            Assert.That(version.Major, Is.EqualTo(this.session.DalVersion.Major));
+            Assert.That(version.Minor, Is.EqualTo(this.session.DalVersion.Minor));
+            Assert.That(version.Build, Is.EqualTo(this.session.DalVersion.Build));
         }
 
         [Test]
@@ -637,13 +637,13 @@ namespace CDP4Dal.NetCore.Tests
             this.session = new Session(testDal, credentials, this.messageBus);
 
             var supportedVersion = new Version("1.0.0");
-            Assert.IsTrue(this.session.IsVersionSupported(supportedVersion));
+            Assert.That(this.session.IsVersionSupported(supportedVersion), Is.True);
 
             supportedVersion = new Version("1.1.0");
-            Assert.IsTrue(this.session.IsVersionSupported(supportedVersion));
+            Assert.That(this.session.IsVersionSupported(supportedVersion), Is.True);
 
             var notSupportedVersion = new Version("2.0.0");
-            Assert.IsFalse(this.session.IsVersionSupported(notSupportedVersion));
+            Assert.That(this.session.IsVersionSupported(notSupportedVersion), Is.False);
         }
 
         [Test]

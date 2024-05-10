@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTransactionTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2022 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -85,7 +85,7 @@ namespace CDP4Dal.Tests
             var transaction = new ThingTransaction(transactionContext, fileRevision1);
             transaction.CreateOrUpdate(fileRevision2);
 
-            CollectionAssert.AreEqual(transaction.GetFiles(), new[] { filePath });
+            Assert.That(transaction.GetFiles(), Is.EqualTo(new[] { filePath }));
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace CDP4Dal.Tests
             var operationContainer = transaction.FinalizeTransaction();
 
             var count = operationContainer.Operations.Count();
-            Assert.AreEqual(2, count);
+            Assert.That(2, Is.EqualTo(count));
         }
 
         [Test]
@@ -120,8 +120,8 @@ namespace CDP4Dal.Tests
             var phone = new TelephoneNumber();
             transaction.Create(phone, clonePerson);
 
-            Assert.AreEqual(1, transaction.AddedThing.Count());
-            Assert.AreEqual(1, transaction.UpdatedThing.Count);
+            Assert.That(transaction.AddedThing.Count(), Is.EqualTo(1));
+            Assert.That(transaction.UpdatedThing.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -142,8 +142,8 @@ namespace CDP4Dal.Tests
 
             transaction.Create(binaryRelationshipRule, cloneRdl);
 
-            Assert.AreEqual(1, transaction.AddedThing.Count());
-            Assert.AreEqual(1, transaction.UpdatedThing.Count);
+            Assert.That(transaction.AddedThing.Count(), Is.EqualTo(1));
+            Assert.That(1, Is.EqualTo(transaction.UpdatedThing.Count));
         }
 
         [Test]
@@ -202,7 +202,7 @@ namespace CDP4Dal.Tests
             var transaction = new ThingTransaction(transactionContext, clone);
 
             transaction.CreateOrUpdate(clone);
-            Assert.AreEqual(1, transaction.UpdatedThing.Count);
+            Assert.That(1, Is.EqualTo(transaction.UpdatedThing.Count));
         }
 
         [Test]
@@ -220,8 +220,8 @@ namespace CDP4Dal.Tests
             transaction.CreateOrUpdate(clone1);
             transaction.CreateOrUpdate(clone2);
 
-            Assert.IsTrue(transaction.UpdatedThing.Select(x => x.Value).Contains(clone1));
-            Assert.IsFalse(transaction.UpdatedThing.Select(x => x.Value).Contains(clone2));
+            Assert.That(transaction.UpdatedThing.Select(x => x.Value).Contains(clone1), Is.True);
+            Assert.That(transaction.UpdatedThing.Select(x => x.Value).Contains(clone2), Is.False);
         }
 
         [Test]
@@ -240,7 +240,7 @@ namespace CDP4Dal.Tests
             transaction.Delete(email.Clone(false));
             transaction.Delete(email.Clone(false));
 
-            Assert.AreEqual(1, transaction.DeletedThing.Count());
+            Assert.That(1, Is.EqualTo(transaction.DeletedThing.Count()));
         }
 
         [Test]
@@ -260,8 +260,8 @@ namespace CDP4Dal.Tests
             optionTransaction.FinalizeSubTransaction(option1, iterationClone);
 
             var clone = (Iteration)transaction.GetClone(this.iteration);
-            Assert.AreEqual(1, clone.Option.Count);
-            Assert.AreEqual(0, iteration.Option.Count);
+            Assert.That(1, Is.EqualTo(clone.Option.Count));
+            Assert.That(0, Is.EqualTo(iteration.Option.Count));
 
             // insert an option
             var option2 = new Option(Guid.NewGuid(), this.cache, this.uri);
@@ -269,8 +269,8 @@ namespace CDP4Dal.Tests
             optionTransaction = new ThingTransaction(option2, transaction, iterationClone);
             optionTransaction.Create(option2);
             optionTransaction.FinalizeSubTransaction(option2, iterationClone, option1);
-            Assert.AreEqual(0, this.iteration.Option.Count);
-            Assert.AreEqual(2, clone.Option.Count);
+            Assert.That(0, Is.EqualTo(this.iteration.Option.Count));
+            Assert.That(2, Is.EqualTo(clone.Option.Count));
         }
 
         /// <summary>
@@ -290,37 +290,37 @@ namespace CDP4Dal.Tests
             var personTransaction = new ThingTransaction(person1, rootTransaction, cloneSiteDir);
             personTransaction.Create(person1);
 
-            Assert.AreEqual(1, personTransaction.AddedThing.Count());
-            Assert.AreEqual(1, personTransaction.UpdatedThing.Count);
+            Assert.That(1, Is.EqualTo(personTransaction.AddedThing.Count()));
+            Assert.That(1, Is.EqualTo(personTransaction.UpdatedThing.Count));
 
             // phone dialog
             var phoneTransaction = new ThingTransaction(phone, personTransaction, person1);
             phoneTransaction.Create(phone);
-            Assert.AreEqual(2, phoneTransaction.AddedThing.Count());
-            Assert.AreEqual(0, phoneTransaction.UpdatedThing.Count);
+            Assert.That(2, Is.EqualTo(phoneTransaction.AddedThing.Count()));
+            Assert.That(0, Is.EqualTo(phoneTransaction.UpdatedThing.Count));
 
             // ok phone, verify that phone is added to the person and to the transaction
             phoneTransaction.FinalizeSubTransaction(phone, person1);
 
-            Assert.AreEqual(2, personTransaction.AddedThing.Count());
-            Assert.IsTrue(personTransaction.AddedThing.Any(x => x == person1));
-            Assert.IsTrue(personTransaction.AddedThing.Any(x => x == phone));
+            Assert.That(2, Is.EqualTo(personTransaction.AddedThing.Count()));
+            Assert.That(personTransaction.AddedThing.Any(x => x == person1), Is.True);
+            Assert.That(personTransaction.AddedThing.Any(x => x == phone), Is.True);
 
             // ok person1, verify that SiteDir contains the person
             personTransaction.FinalizeSubTransaction(person1, cloneSiteDir);
 
-            Assert.IsTrue(cloneSiteDir.Person.Contains(person1));
+            Assert.That(cloneSiteDir.Person.Contains(person1), Is.True);
 
-            Assert.AreEqual(2, rootTransaction.AddedThing.Count());
-            Assert.AreEqual(1, rootTransaction.UpdatedThing.Count);
+            Assert.That(2, Is.EqualTo(rootTransaction.AddedThing.Count()));
+            Assert.That(1, Is.EqualTo(rootTransaction.UpdatedThing.Count));
 
             // update person1
             var person1_1 = person1.Clone(false);
             var person1_1Tr = new ThingTransaction(person1_1, rootTransaction, cloneSiteDir);
             person1_1Tr.CreateOrUpdate(person1_1);
 
-            Assert.AreEqual(1, person1_1Tr.AddedThing.Count());
-            Assert.AreEqual(1, person1_1Tr.UpdatedThing.Count);
+            Assert.That(1, Is.EqualTo(person1_1Tr.AddedThing.Count()));
+            Assert.That(1, Is.EqualTo(person1_1Tr.UpdatedThing.Count));
 
             // add email
             var email = new EmailAddress();
@@ -330,9 +330,9 @@ namespace CDP4Dal.Tests
             emailTrans.FinalizeSubTransaction(email, person1_1);
             // end add email, verify that email is added to person1_1, (the clone of person1)
 
-            Assert.AreEqual(2, person1_1Tr.AddedThing.Count());
-            Assert.AreEqual(1, person1_1Tr.UpdatedThing.Count);
-            Assert.IsTrue(person1_1.EmailAddress.Contains(email));
+            Assert.That(2, Is.EqualTo(person1_1Tr.AddedThing.Count()));
+            Assert.That(1, Is.EqualTo(person1_1Tr.UpdatedThing.Count));
+            Assert.That(person1_1.EmailAddress.Contains(email), Is.True);
 
             // update phone
             var phone_1 = phone.Clone(false);
@@ -342,17 +342,17 @@ namespace CDP4Dal.Tests
             // end update phone
 
             // verify that the new reference is used
-            Assert.IsFalse(person1_1.TelephoneNumber.Contains(phone));
-            Assert.IsTrue(person1_1.TelephoneNumber.Contains(phone_1));
+            Assert.That(person1_1.TelephoneNumber.Contains(phone), Is.False);
+            Assert.That(person1_1.TelephoneNumber.Contains(phone_1), Is.True);
 
             person1_1Tr.FinalizeSubTransaction(person1_1, cloneSiteDir);
 
-            Assert.AreEqual(3, rootTransaction.AddedThing.Count());
-            Assert.AreEqual(1, rootTransaction.UpdatedThing.Count);
-            Assert.IsTrue(rootTransaction.AddedThing.Any(x => x == person1_1));
-            Assert.IsTrue(cloneSiteDir.Person.Contains(person1_1));
-            Assert.IsTrue(rootTransaction.AddedThing.Contains(phone_1));
-            Assert.AreEqual(1, cloneSiteDir.Person.Count);
+            Assert.That(3, Is.EqualTo(rootTransaction.AddedThing.Count()));
+            Assert.That(1, Is.EqualTo(rootTransaction.UpdatedThing.Count));
+            Assert.That(rootTransaction.AddedThing.Any(x => x == person1_1), Is.True);
+            Assert.That(cloneSiteDir.Person.Contains(person1_1), Is.True);
+            Assert.That(rootTransaction.AddedThing.Contains(phone_1), Is.True);
+            Assert.That(1, Is.EqualTo(cloneSiteDir.Person.Count));
 
 
             // Create new person
@@ -361,8 +361,8 @@ namespace CDP4Dal.Tests
             person2Trans.Create(person2);
             person2Trans.FinalizeSubTransaction(person2, cloneSiteDir);
 
-            Assert.AreEqual(4, rootTransaction.AddedThing.Count());
-            Assert.AreEqual(2, cloneSiteDir.Person.Count);
+            Assert.That(4, Is.EqualTo(rootTransaction.AddedThing.Count()));
+            Assert.That(2, Is.EqualTo(cloneSiteDir.Person.Count));
 
             // update person1
             var person1_2 = person1_1.Clone(false);
@@ -376,9 +376,9 @@ namespace CDP4Dal.Tests
 
             // verify that current Person is in the transaction
             var persons = email2Trans.AddedThing.OfType<Person>().ToList();
-            Assert.AreEqual(1, persons.Count);
-            Assert.IsTrue(persons.Contains(person1_2));
-            Assert.IsFalse(persons.Any(x => x.Iid == person2.Iid));
+            Assert.That(1, Is.EqualTo(persons.Count));
+            Assert.That(persons.Contains(person1_2), Is.True);
+            Assert.That(persons.Any(x => x.Iid == person2.Iid), Is.False);
 
             email2Trans.FinalizeSubTransaction(email2, person1_2);
 
@@ -387,40 +387,40 @@ namespace CDP4Dal.Tests
             var phone_2Trans = new ThingTransaction(phone_2, person1_2Trans, person1_2);
             phone_2Trans.CreateOrUpdate(phone_2);
 
-            Assert.IsNull(phone_2Trans.GetClone(person2));
+            Assert.That(phone_2Trans.GetClone(person2), Is.Null);
 
             var person2clone = person2.Clone(false);
             phone_2Trans.FinalizeSubTransaction(phone_2, person2clone);
-            Assert.IsTrue(phone_2Trans.AddedThing.Contains(person2clone));
-            Assert.AreEqual(0, phone_2Trans.UpdatedThing.Count);
-            Assert.IsTrue(person2clone.TelephoneNumber.Contains(phone_2));
-            Assert.IsFalse(person1_2.TelephoneNumber.Contains(phone_2));
+            Assert.That(phone_2Trans.AddedThing.Contains(person2clone), Is.True);
+            Assert.That(0, Is.EqualTo(phone_2Trans.UpdatedThing.Count));
+            Assert.That(person2clone.TelephoneNumber.Contains(phone_2), Is.True);
+            Assert.That(person1_2.TelephoneNumber.Contains(phone_2), Is.False);
 
             person1_2Trans.FinalizeSubTransaction(person1_2, cloneSiteDir);
 
-            Assert.IsTrue(cloneSiteDir.Person.Contains(person2clone));
-            Assert.IsTrue(cloneSiteDir.Person.Contains(person1_2));
-            Assert.AreEqual(2, cloneSiteDir.Person.Count);
-            Assert.AreEqual(2, person1_2.EmailAddress.Count);
+            Assert.That(cloneSiteDir.Person.Contains(person2clone), Is.True);
+            Assert.That(cloneSiteDir.Person.Contains(person1_2), Is.True);
+            Assert.That(2, Is.EqualTo(cloneSiteDir.Person.Count));
+            Assert.That(2, Is.EqualTo(person1_2.EmailAddress.Count));
 
-            Assert.AreEqual(5, rootTransaction.AddedThing.Count());
-            Assert.AreEqual(1, rootTransaction.UpdatedThing.Count);
+            Assert.That(5, Is.EqualTo(rootTransaction.AddedThing.Count()));
+            Assert.That(1, Is.EqualTo(rootTransaction.UpdatedThing.Count));
             var per1 = (Person)rootTransaction.AddedThing.Single(x => x.Iid == person1.Iid);
             var per2 = (Person)rootTransaction.AddedThing.Single(x => x.Iid == person2.Iid);
             var emailad1 = rootTransaction.AddedThing.Single(x => x.Iid == email.Iid);
             var emailad2 = rootTransaction.AddedThing.Single(x => x.Iid == email2.Iid);
             var tel = rootTransaction.AddedThing.Single(x => x.Iid == phone.Iid);
 
-            Assert.IsTrue(per1.EmailAddress.Contains(emailad1));
-            Assert.IsTrue(per1.EmailAddress.Contains(emailad2));
-            Assert.IsFalse(per1.TelephoneNumber.Contains(tel));
+            Assert.That(per1.EmailAddress.Contains(emailad1), Is.True);
+            Assert.That(per1.EmailAddress.Contains(emailad2), Is.True);
+            Assert.That(per1.TelephoneNumber.Contains(tel), Is.False);
 
-            Assert.IsTrue(per2.TelephoneNumber.Contains(tel));
+            Assert.That(per2.TelephoneNumber.Contains(tel), Is.True);
 
             var sitedir = (SiteDirectory)rootTransaction.UpdatedThing.Single().Value;
-            Assert.AreSame(sitedir, cloneSiteDir);
-            Assert.IsTrue(sitedir.Person.Contains(per1));
-            Assert.IsTrue(sitedir.Person.Contains(per2));
+            Assert.That(sitedir, Is.SameAs(cloneSiteDir));
+            Assert.That(sitedir.Person.Contains(per1), Is.True);
+            Assert.That(sitedir.Person.Contains(per2), Is.True);
         }
 
         /// <summary>
@@ -473,12 +473,12 @@ namespace CDP4Dal.Tests
 
             siterdlC1Trans.FinalizeSubTransaction(siterdlC1, siteDirClone);
 
-            Assert.IsTrue(rootTransaction.AddedThing.Contains(unitFactor2));
-            Assert.AreEqual(4, rootTransaction.UpdatedThing.Count);
+            Assert.That(rootTransaction.AddedThing.Contains(unitFactor2), Is.True);
+            Assert.That(4, Is.EqualTo(rootTransaction.UpdatedThing.Count));
 
-            Assert.AreEqual(2, unit1C1.UnitFactor.Count);
-            Assert.IsTrue(unit1C1.UnitFactor.Contains(unitFactor2));
-            Assert.IsTrue(unit1C1.UnitFactor.Contains(unitFactor1C1));
+            Assert.That(2, Is.EqualTo(unit1C1.UnitFactor.Count));
+            Assert.That(unit1C1.UnitFactor.Contains(unitFactor2), Is.True);
+            Assert.That(unit1C1.UnitFactor.Contains(unitFactor1C1), Is.True);
 
             // Add srdl2
             var srdl2 = new SiteReferenceDataLibrary();
@@ -493,9 +493,8 @@ namespace CDP4Dal.Tests
 
             srdl2Trans.FinalizeSubTransaction(srdl2, siteDirClone);
 
-            Assert.IsTrue(siteDirClone.SiteReferenceDataLibrary.Contains(srdl2));
-            Assert.IsTrue(srdl2.Unit.Contains(unit2));
-
+            Assert.That(siteDirClone.SiteReferenceDataLibrary.Contains(srdl2), Is.True);
+            Assert.That(srdl2.Unit.Contains(unit2), Is.True);
 
             // update site rdl1
             var srdlC2 = siterdlC1.Clone(false);
@@ -515,10 +514,10 @@ namespace CDP4Dal.Tests
             var unit2clone = unit2.Clone(false);
             factor1C2Trans.FinalizeSubTransaction(unitfactor1C2, unit2clone);
 
-            Assert.AreEqual(2, unit1C2Trans.AddedThing.Count());
-            Assert.AreEqual(3, unit1C2Trans.UpdatedThing.Count);
-            Assert.IsTrue(unit2clone.UnitFactor.Contains(unitfactor1C2));
-            Assert.IsFalse(unit1C2.UnitFactor.Contains(unitfactor1C2));
+            Assert.That(2, Is.EqualTo(unit1C2Trans.AddedThing.Count()));
+            Assert.That(3, Is.EqualTo(unit1C2Trans.UpdatedThing.Count));
+            Assert.That(unit2clone.UnitFactor.Contains(unitfactor1C2), Is.True);
+            Assert.That(unit1C2.UnitFactor.Contains(unitfactor1C2), Is.False);
 
             // update container of unitfactor2
             var unitfactor2C1 = unitFactor2.Clone(false);
@@ -528,32 +527,32 @@ namespace CDP4Dal.Tests
             var unit2clone2 = unit2clone.Clone(false);
             factor2C2Trans.FinalizeSubTransaction(unitfactor2C1, unit2clone2);
 
-            Assert.AreEqual(3, unit1C2Trans.AddedThing.Count());
-            Assert.IsTrue(unit1C2Trans.AddedThing.Contains(unit2clone2));
-            Assert.IsFalse(unit1C2Trans.AddedThing.Contains(unit2clone));
+            Assert.That(3, Is.EqualTo(unit1C2Trans.AddedThing.Count()));
+            Assert.That(unit1C2Trans.AddedThing.Contains(unit2clone2), Is.True);
+            Assert.That(unit1C2Trans.AddedThing.Contains(unit2clone), Is.False);
 
-            Assert.AreEqual(3, unit1C2Trans.UpdatedThing.Count);
-            Assert.IsTrue(unit2clone.UnitFactor.Contains(unitfactor1C2));
-            Assert.IsFalse(unit1C2.UnitFactor.Contains(unitfactor1C2));
+            Assert.That(3, Is.EqualTo(unit1C2Trans.UpdatedThing.Count));
+            Assert.That(unit2clone.UnitFactor.Contains(unitfactor1C2), Is.True);
+            Assert.That(unit1C2.UnitFactor.Contains(unitfactor1C2), Is.False);
 
             unit1C2Trans.FinalizeSubTransaction(unit1C2, srdlC2);
             srdlC2TRans.FinalizeSubTransaction(srdlC2, siteDirClone);
 
             // final transaction
-            Assert.AreEqual(3, rootTransaction.AddedThing.Count());
-            Assert.AreEqual(4, rootTransaction.UpdatedThing.Count);
-            Assert.IsTrue(rootTransaction.AddedThing.Contains(unitfactor2C1));
-            Assert.IsTrue(rootTransaction.AddedThing.Contains(unit2clone2));
+            Assert.That(3, Is.EqualTo(rootTransaction.AddedThing.Count()));
+            Assert.That(4, Is.EqualTo(rootTransaction.UpdatedThing.Count));
+            Assert.That(rootTransaction.AddedThing.Contains(unitfactor2C1), Is.True);
+            Assert.That(rootTransaction.AddedThing.Contains(unit2clone2), Is.True);
 
             var srdl2lastclone = (SiteReferenceDataLibrary)rootTransaction.GetClone(srdl2);
-            Assert.IsTrue(siteDirClone.SiteReferenceDataLibrary.Contains(srdl2lastclone));
-            Assert.IsTrue(srdl2lastclone.Unit.Contains(unit2clone2));
+            Assert.That(siteDirClone.SiteReferenceDataLibrary.Contains(srdl2lastclone), Is.True);
+            Assert.That(srdl2lastclone.Unit.Contains(unit2clone2), Is.True);
 
             var updatedThingValues = rootTransaction.UpdatedThing.ToList().Select(x => x.Value).ToList();
-            Assert.IsTrue(updatedThingValues.Contains(siteDirClone));
-            Assert.IsTrue(updatedThingValues.Contains(srdlC2));
-            Assert.IsTrue(updatedThingValues.Contains(unit1C2));
-            Assert.IsTrue(updatedThingValues.Contains(unitfactor1C2));
+            Assert.That(updatedThingValues.Contains(siteDirClone), Is.True);
+            Assert.That(updatedThingValues.Contains(srdlC2), Is.True);
+            Assert.That(updatedThingValues.Contains(unit1C2), Is.True);
+            Assert.That(updatedThingValues.Contains(unitfactor1C2), Is.True);
         }
 
         [Test]
@@ -563,7 +562,7 @@ namespace CDP4Dal.Tests
 
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
             var transaction = new ThingTransaction(transactionContext, person);
-            Assert.AreEqual(1, transaction.AddedThing.Count());
+            Assert.That(1, Is.EqualTo(transaction.AddedThing.Count()));
         }
 
         [Test]
@@ -583,7 +582,7 @@ namespace CDP4Dal.Tests
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
             var transaction = new ThingTransaction(transactionContext);
             transaction.CreateDeep(enumPt);
-            Assert.AreEqual(4, transaction.AddedThing.Count());
+            Assert.That(4, Is.EqualTo(transaction.AddedThing.Count()));
         }
 
         [Test]
@@ -603,12 +602,12 @@ namespace CDP4Dal.Tests
             var transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
             var transaction = new ThingTransaction(transactionContext);
             transaction.CopyDeep(enumPt.Clone(true));
-            Assert.AreEqual(4, transaction.AddedThing.Count());
+            Assert.That(4, Is.EqualTo(transaction.AddedThing.Count()));
 
             var valueDefInTransaction =
                 (EnumerationValueDefinition)transaction.AddedThing.Single(x => x.ClassKind == ClassKind.EnumerationValueDefinition);
 
-            Assert.AreNotEqual(enumValue.Iid, valueDefInTransaction.Iid);
+            Assert.That(enumValue.Iid, Is.Not.EqualTo(valueDefInTransaction.Iid));
         }
 
         /// <summary>
@@ -633,15 +632,15 @@ namespace CDP4Dal.Tests
 
             var deletedEmail = email.Clone(false);
             personTransaction.Delete(deletedEmail, person);
-            Assert.IsEmpty(person.EmailAddress);
+            Assert.That(person.EmailAddress, Is.Empty);
 
-            Assert.IsTrue(personTransaction.DeletedThing.Contains(deletedEmail));
+            Assert.That(personTransaction.DeletedThing.Contains(deletedEmail), Is.True);
 
             personTransaction.FinalizeSubTransaction(person, sitedir1);
             var operationContainer = transaction.FinalizeTransaction();
 
             // sitedir and person
-            Assert.AreEqual(2, operationContainer.Operations.Count());
+            Assert.That(2, Is.EqualTo(operationContainer.Operations.Count()));
         }
 
         /// <summary>
@@ -673,14 +672,14 @@ namespace CDP4Dal.Tests
             var deletedEmail = email.Clone(false);
             person1Transaction.Delete(deletedEmail, person1);
 
-            Assert.IsEmpty(person1.EmailAddress);
-            Assert.IsTrue(person1Transaction.DeletedThing.Contains(deletedEmail));
+            Assert.That(person1.EmailAddress, Is.Empty);
+            Assert.That(person1Transaction.DeletedThing.Contains(deletedEmail), Is.True);
 
             person1Transaction.FinalizeSubTransaction(person1, sitedir1);
             var operationContainer = transaction.FinalizeTransaction();
 
             // sitedir and person
-            Assert.AreEqual(2, operationContainer.Operations.Count());
+            Assert.That(2, Is.EqualTo(operationContainer.Operations.Count()));
         }
 
         /// <summary>
@@ -708,14 +707,14 @@ namespace CDP4Dal.Tests
 
             var deletedEmail = email.Clone(false);
             person1Transaction.Delete(deletedEmail, person1);
-            Assert.IsTrue(person1.EmailAddress.Contains(deletedEmail));
-            Assert.IsTrue(person1Transaction.DeletedThing.Contains(deletedEmail));
+            Assert.That(person1.EmailAddress.Contains(deletedEmail), Is.True);
+            Assert.That(person1Transaction.DeletedThing.Contains(deletedEmail), Is.True);
 
             person1Transaction.FinalizeSubTransaction(person1, sitedir1);
             var operationContainer = transaction.FinalizeTransaction();
 
             // sitedir and person
-            Assert.AreEqual(3, operationContainer.Operations.Count());
+            Assert.That(3, Is.EqualTo(operationContainer.Operations.Count()));
         }
 
         /// <summary>
@@ -749,14 +748,14 @@ namespace CDP4Dal.Tests
             var email2 = email1.Clone(false);
             person1Transaction.Delete(email2, person1);
 
-            Assert.IsTrue(person1.EmailAddress.Contains(email2));
-            Assert.IsTrue(person1Transaction.DeletedThing.Contains(email2));
+            Assert.That(person1.EmailAddress.Contains(email2), Is.True);
+            Assert.That(person1Transaction.DeletedThing.Contains(email2), Is.True);
 
             person1Transaction.FinalizeSubTransaction(person1, sitedir1);
             var operationContainer = transaction.FinalizeTransaction();
 
             // sitedir and person
-            Assert.AreEqual(3, operationContainer.Operations.Count());
+            Assert.That(3, Is.EqualTo(operationContainer.Operations.Count()));
         }
 
         /// <summary>
@@ -795,14 +794,14 @@ namespace CDP4Dal.Tests
             var email2 = email1.Clone(false);
             person2Transaction.Delete(email2, person2);
 
-            Assert.IsTrue(person2.EmailAddress.Contains(email2));
-            Assert.IsTrue(person2Transaction.DeletedThing.Contains(email2));
+            Assert.That(person2.EmailAddress.Contains(email2), Is.True);
+            Assert.That(person2Transaction.DeletedThing.Contains(email2), Is.True);
 
             person2Transaction.FinalizeSubTransaction(person2, sitedir1);
             var operationContainer = transaction.FinalizeTransaction();
 
             // sitedir and person
-            Assert.AreEqual(3, operationContainer.Operations.Count());
+            Assert.That(3, Is.EqualTo(operationContainer.Operations.Count()));
         }
 
         /// <summary>
@@ -830,7 +829,7 @@ namespace CDP4Dal.Tests
 
             var operationContainer = transaction.FinalizeTransaction();
             // Update sitedir
-            Assert.AreEqual(1, operationContainer.Operations.Count());
+            Assert.That(1, Is.EqualTo(operationContainer.Operations.Count()));
         }
 
         [Test]
@@ -860,11 +859,11 @@ namespace CDP4Dal.Tests
             transaction.Copy(elementDefinitionClone, targetIterationClone, OperationKind.CopyDefaultValuesChangeOwner);
 
             var copypair = transaction.CopiedThing.Single();
-            Assert.AreNotEqual(copypair.Key.Item1.Iid, copypair.Key.Item2.Iid);
+            Assert.That(copypair.Key.Item1.Iid, Is.Not.EqualTo(copypair.Key.Item2.Iid));
 
             var operationContainer = transaction.FinalizeTransaction();
-            Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.CopyDefaultValuesChangeOwner));
-            Assert.AreEqual(0, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
+            Assert.That(1, Is.EqualTo(operationContainer.Operations.Count(x => x.OperationKind == OperationKind.CopyDefaultValuesChangeOwner)));
+            Assert.That(0, Is.EqualTo(operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update)));
         }
 
         [Test]
@@ -894,11 +893,11 @@ namespace CDP4Dal.Tests
             transaction.Copy(elementDefinitionClone, targetIterationClone, OperationKind.CopyKeepValuesChangeOwner);
 
             var copypair = transaction.CopiedThing.Single();
-            Assert.AreNotEqual(copypair.Key.Item1.Iid, copypair.Key.Item2.Iid);
+            Assert.That(copypair.Key.Item1.Iid, Is.Not.EqualTo(copypair.Key.Item2.Iid));
 
             var operationContainer = transaction.FinalizeTransaction();
-            Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.CopyKeepValuesChangeOwner));
-            Assert.AreEqual(0, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
+            Assert.That(1, Is.EqualTo(operationContainer.Operations.Count(x => x.OperationKind == OperationKind.CopyKeepValuesChangeOwner)));
+            Assert.That(0, Is.EqualTo(operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update)));
         }
 
         [Test]
@@ -928,11 +927,11 @@ namespace CDP4Dal.Tests
             transaction.Copy(elementDefinitionClone, targetIterationClone, OperationKind.Copy);
 
             var copypair = transaction.CopiedThing.Single();
-            Assert.AreNotEqual(copypair.Key.Item1.Iid, copypair.Key.Item2.Iid);
+            Assert.That(copypair.Key.Item1.Iid, Is.Not.EqualTo(copypair.Key.Item2.Iid));
 
             var operationContainer = transaction.FinalizeTransaction();
-            Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Copy));
-            Assert.AreEqual(0, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
+            Assert.That(1, Is.EqualTo(operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Copy)));
+            Assert.That(0, Is.EqualTo(operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update)));
         }
 
         [Test]
@@ -962,11 +961,11 @@ namespace CDP4Dal.Tests
             transaction.Copy(elementDefinitionClone, targetIterationClone, OperationKind.CopyKeepValues);
 
             var copypair = transaction.CopiedThing.Single();
-            Assert.AreNotEqual(copypair.Key.Item1.Iid, copypair.Key.Item2.Iid);
+            Assert.That(copypair.Key.Item1.Iid, Is.Not.EqualTo(copypair.Key.Item2.Iid));
 
             var operationContainer = transaction.FinalizeTransaction();
-            Assert.AreEqual(1, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.CopyKeepValues));
-            Assert.AreEqual(0, operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update));
+            Assert.That(1, Is.EqualTo(operationContainer.Operations.Count(x => x.OperationKind == OperationKind.CopyKeepValues)));
+            Assert.That(0, Is.EqualTo(operationContainer.Operations.Count(x => x.OperationKind == OperationKind.Update)));
         }
 
         [Test]

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ProxySettingsTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -49,9 +49,9 @@ namespace CDP4Dal.NetCore.Tests.DAL
 
             var proxySettings = new ProxySettings(address, userName, password);
 
-            Assert.AreEqual(address, proxySettings.Address);
-            Assert.AreEqual(userName, proxySettings.UserName);
-            Assert.AreEqual(password, proxySettings.Password);
+            Assert.That(address, Is.EqualTo(proxySettings.Address));
+            Assert.That(userName, Is.EqualTo(proxySettings.UserName));
+            Assert.That(password, Is.EqualTo(proxySettings.Password));
         }
     }
 }

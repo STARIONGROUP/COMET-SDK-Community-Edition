@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TransactionContextResolverTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -102,26 +102,26 @@ namespace CDP4Dal.Tests
             TransactionContext transactionContext;
 
             transactionContext = TransactionContextResolver.ResolveContext(this.siteDirectory);
-            Assert.AreEqual(this.siteDirectory, transactionContext.Context);
+            Assert.That(this.siteDirectory, Is.EqualTo(transactionContext.Context));
 
             transactionContext = TransactionContextResolver.ResolveContext(this.textParameterType);
-            Assert.AreEqual(this.siteDirectory, transactionContext.Context);
+            Assert.That(this.siteDirectory, Is.EqualTo(transactionContext.Context));
 
             transactionContext = TransactionContextResolver.ResolveContext(this.activeIteration);
-            Assert.AreEqual(this.activeIteration, transactionContext.Context);
+            Assert.That(this.activeIteration, Is.EqualTo(transactionContext.Context));
 
             transactionContext = TransactionContextResolver.ResolveContext(this.activeElementDefinition);
-            Assert.AreEqual(this.activeIteration, transactionContext.Context);
+            Assert.That(this.activeIteration, Is.EqualTo(transactionContext.Context));
 
             transactionContext = TransactionContextResolver.ResolveContext(this.frozenElementDefinition);
-            Assert.AreEqual(this.frozenIteration, transactionContext.Context);
+            Assert.That(this.frozenIteration, Is.EqualTo(transactionContext.Context));
 
             transactionContext = TransactionContextResolver.ResolveContext(this.book);
-            Assert.AreEqual(this.activeIteration, transactionContext.Context);
+            Assert.That(this.activeIteration, Is.EqualTo(transactionContext.Context));
 
             this.engineeringModel.Iteration.Remove(this.activeIteration);
             transactionContext = TransactionContextResolver.ResolveContext(this.book);
-            Assert.AreEqual(this.frozenIteration, transactionContext.Context);
+            Assert.That(this.frozenIteration, Is.EqualTo(transactionContext.Context));
         }
 
         [Test]
@@ -135,15 +135,15 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatContextValidates()
         {
-            Assert.IsTrue(TransactionContextResolver.ValidateRouteContext("/SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650"));
-            Assert.IsTrue(TransactionContextResolver.ValidateRouteContext("/EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b/iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d"));
+            Assert.That(TransactionContextResolver.ValidateRouteContext("/SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650"), Is.True);
+            Assert.That(TransactionContextResolver.ValidateRouteContext("/EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b/iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d"), Is.True);
 
-            Assert.IsFalse(TransactionContextResolver.ValidateRouteContext("SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650"));
-            Assert.IsFalse(TransactionContextResolver.ValidateRouteContext("EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b/iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d"));
+            Assert.That(TransactionContextResolver.ValidateRouteContext("SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650"), Is.False);
+            Assert.That(TransactionContextResolver.ValidateRouteContext("EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b/iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d"), Is.False);
 
-            Assert.IsFalse(TransactionContextResolver.ValidateRouteContext("/SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650/whatever"));
-            Assert.IsFalse(TransactionContextResolver.ValidateRouteContext("/EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b/iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d/whatever"));
-            Assert.IsFalse(TransactionContextResolver.ValidateRouteContext("/EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b"));
+            Assert.That(TransactionContextResolver.ValidateRouteContext("/SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650/whatever"), Is.False);
+            Assert.That(TransactionContextResolver.ValidateRouteContext("/EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b/iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d/whatever"), Is.False);
+            Assert.That(TransactionContextResolver.ValidateRouteContext("/EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b"), Is.False);
         }
     }
 }

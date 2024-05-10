@@ -92,7 +92,7 @@ namespace CDP4Dal.Tests.Helpers
 
             this.state.ResolveRoute(list, this.session.Object);
             var route = this.state.Route;
-            Assert.AreEqual($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", route);
+            Assert.That($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", Is.EqualTo(route));
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace CDP4Dal.Tests.Helpers
 
             this.model.ResolveRoute(list, this.session.Object);
             var route = this.model.Route;
-            Assert.AreEqual($@"/EngineeringModel/{this.model.Iid}", route);
+            Assert.That($@"/EngineeringModel/{this.model.Iid}", Is.EqualTo(route));
         }
 
         [Test]
@@ -126,7 +126,7 @@ namespace CDP4Dal.Tests.Helpers
 
             this.state.ResolveRoute(list, this.session.Object);
             var route = this.state.Route;
-            Assert.AreEqual($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", route);
+            Assert.That($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", Is.EqualTo(route));
         }
 
         [Test]
@@ -144,7 +144,7 @@ namespace CDP4Dal.Tests.Helpers
 
             this.state.ResolveRoute(list, this.session.Object);
             var route = this.state.Route;
-            Assert.AreEqual($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", route);
+            Assert.That($@"/EngineeringModel/{this.model.Iid}/iteration/{this.iteration.Iid}/possibleFiniteStateList/{this.statelist.Iid}/possibleState/{this.state.Iid}", Is.EqualTo(route));
         }
 
         [Test]

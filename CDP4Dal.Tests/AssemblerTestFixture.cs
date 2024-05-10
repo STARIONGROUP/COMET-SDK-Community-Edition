@@ -117,14 +117,14 @@ namespace CDP4Dal.Tests
             var assembler = new Assembler(this.uri, this.messageBus);
 
             // Check that the cache is empty
-            Assert.IsFalse(assembler.Cache.Skip(0).Any());
+            Assert.That(assembler.Cache.Skip(0).Any(), Is.False);
 
             var id = Guid.NewGuid();
             var testThing = new Lazy<Thing>(() => new Alias(id, assembler.Cache, this.uri));
             testThing.Value.Cache.TryAdd(new CacheKey(testThing.Value.Iid, null), testThing);
 
             // Check that the cache is not empty anymore
-            Assert.IsTrue(assembler.Cache.Skip(0).Any());
+            Assert.That(assembler.Cache.Skip(0).Any(), Is.True);
 
             // Update the thing and the cache
             testThing = new Lazy<Thing>(() => new Alias(id, assembler.Cache, this.uri));
@@ -133,12 +133,12 @@ namespace CDP4Dal.Tests
             // Check that the thing retrieved from the cache has the updated value
             Lazy<Thing> updatedThing;
             testThing.Value.Cache.TryGetValue(new CacheKey(testThing.Value.Iid, null), out updatedThing);
-            Assert.IsNotNull(updatedThing);
+            Assert.That(updatedThing, Is.Not.Null);
 
             // Check that we can remove things from the cache
             testThing.Value.Cache.TryRemove(new CacheKey(testThing.Value.Iid, null), out updatedThing);
-            Assert.IsFalse(assembler.Cache.Skip(0).Any());
-            Assert.IsFalse(testThing.Value.Cache.Skip(0).Any());
+            Assert.That(assembler.Cache.Skip(0).Any(), Is.False);
+            Assert.That(testThing.Value.Cache.Skip(0).Any(), Is.False);
         }
 
         [Test]
@@ -150,15 +150,15 @@ namespace CDP4Dal.Tests
             await assembler.Synchronize(this.testInput);
 
             // Modification of the input Dtos
-            Assert.IsNotEmpty(assembler.Cache);
-            Assert.AreEqual(7, assembler.Cache.Count);
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(7, Is.EqualTo(assembler.Cache.Count));
 
             // check containerList Element
             var siteDirId = this.testInput[0].Iid;
             Lazy<Thing> lazySiteDir;
             assembler.Cache.TryGetValue(new CacheKey(siteDirId, null), out lazySiteDir);
             var siteDir = lazySiteDir.Value as SiteDirectory;
-            Assert.AreEqual(siteDirId, siteDir.SiteReferenceDataLibrary[0].Container.Iid);
+            Assert.That(siteDirId, Is.EqualTo(siteDir.SiteReferenceDataLibrary[0].Container.Iid));
 
             // get category to removes
             var categoryToRemove = this.testInput[3] as Dto.Category;
@@ -167,12 +167,12 @@ namespace CDP4Dal.Tests
             var parameterTypeId = this.testInput[6].Iid;
             Lazy<Thing> lazyPt;
             assembler.Cache.TryGetValue(new CacheKey(parameterTypeId, null), out lazyPt);
-            Assert.AreEqual(2, (lazyPt.Value as ParameterType).Category.Count);
+            Assert.That(2, Is.EqualTo((lazyPt.Value as ParameterType).Category.Count));
 
             //Check that route works
             Lazy<Thing> lazyCat;
             assembler.Cache.TryGetValue(new CacheKey(categoryToRemove.Iid, null), out lazyCat);
-            Assert.IsNotNull(lazyCat.Value.Route);
+            Assert.That(lazyCat.Value.Route, Is.Not.Null);
 
             var siteRdl = this.testInput[1] as Dto.SiteReferenceDataLibrary;
             siteRdl.DefinedCategory.Remove(categoryToRemove.Iid);
@@ -187,8 +187,8 @@ namespace CDP4Dal.Tests
             await assembler.Synchronize(newInput);
 
             // checks that the removed category is no longer in the cache
-            Assert.AreEqual(6, assembler.Cache.Count);            
-            Assert.IsFalse(assembler.Cache.TryGetValue(new CacheKey(categoryToRemove.Iid, null), out lazyCat));
+            Assert.That(6, Is.EqualTo(assembler.Cache.Count));            
+            Assert.That(assembler.Cache.TryGetValue(new CacheKey(categoryToRemove.Iid, null), out lazyCat), Is.False);
         }
 
         [Test]
@@ -215,22 +215,22 @@ namespace CDP4Dal.Tests
             await assembler.Synchronize(new List<Dto.Thing> { parameterRevision2, valueSet2 });
             
             //Cache should not be empty
-            Assert.IsNotEmpty(assembler.Cache);
+            Assert.That(assembler.Cache, Is.Not.Empty);
 
             //Cache should contain 2 items
-            Assert.AreEqual(2, assembler.Cache.Count);
+            Assert.That(2, Is.EqualTo(assembler.Cache.Count));
 
             //Get the cached version of the parameter
             var cachedParameter = assembler.Cache.First(x => x.Value.Value.Iid == parameterRevision2.Iid).Value.Value as Parameter;
 
             //Revision number should be 2 now
-            Assert.AreEqual(parameterRevision2.RevisionNumber, cachedParameter.RevisionNumber);
+            Assert.That(parameterRevision2.RevisionNumber, Is.EqualTo(cachedParameter.RevisionNumber));
 
             //Parameter should contain a ValueSet
-            Assert.AreEqual(1, cachedParameter.ValueSet.Count);
+            Assert.That(1, Is.EqualTo(cachedParameter.ValueSet.Count));
 
             //Parameter should contain the correct ValueSet
-            Assert.AreEqual(cachedParameter.ValueSet.First().Iid, valueSet2.Iid);
+            Assert.That(cachedParameter.ValueSet.First().Iid, Is.EqualTo(valueSet2.Iid));
 
             //******************************************************************************************************************
             // 2st call of Synchronize which introduces a newer revision: Revision nr. 3.
@@ -239,24 +239,24 @@ namespace CDP4Dal.Tests
 
             //Cache should still contain 2 things, because parameterRevision2 is removed from cache together with valueSet2
             //parameterRevision2 now is contained in the Revisions property of the cached version of the parameter
-            Assert.AreEqual(2, assembler.Cache.Count);
+            Assert.That(2, Is.EqualTo(assembler.Cache.Count));
 
             cachedParameter = assembler.Cache.First(x => x.Value.Value.Iid == parameterRevision3.Iid).Value.Value as Parameter;
 
             //Current cached parameter version is Revision 3
-            Assert.AreEqual(parameterRevision3.RevisionNumber, cachedParameter.RevisionNumber);
+            Assert.That(parameterRevision3.RevisionNumber, Is.EqualTo(cachedParameter.RevisionNumber));
 
             //cached parameter should contain a ValueSet
-            Assert.AreEqual(1, cachedParameter.ValueSet.Count);
+            Assert.That(1, Is.EqualTo(cachedParameter.ValueSet.Count));
 
             //cached parameter should contain exactly 1 revision
-            Assert.AreEqual(1, cachedParameter.Revisions.Count);
+            Assert.That(1, Is.EqualTo(cachedParameter.Revisions.Count));
 
             //cached parameter should contain the correct ValueSet
-            Assert.AreEqual(cachedParameter.ValueSet.First().Iid, valueSet3.Iid);
+            Assert.That(cachedParameter.ValueSet.First().Iid, Is.EqualTo(valueSet3.Iid));
             
             //Revisions property of current cached item should contain the right revision number
-            Assert.AreEqual(cachedParameter.Revisions.First().Value.RevisionNumber, parameterRevision2.RevisionNumber);
+            Assert.That(cachedParameter.Revisions.First().Value.RevisionNumber, Is.EqualTo(parameterRevision2.RevisionNumber));
 
             //******************************************************************************************************************
             // 3rd call of Synchronize with older revision, that should be added as a revision to an existing cached poco
@@ -264,32 +264,32 @@ namespace CDP4Dal.Tests
             await assembler.Synchronize(new List<Dto.Thing> { parameterRevision1, valueSet1 });
 
             //Cache should still contain 2 things, because parameterRevision1 is added to the Revisions property of the current cached parameter
-            Assert.AreEqual(2, assembler.Cache.Count);
+            Assert.That(2, Is.EqualTo(assembler.Cache.Count));
 
             cachedParameter = assembler.Cache.First(x => x.Value.Value.Iid == parameterRevision1.Iid).Value.Value as Parameter;
 
             //parameterRevision3 is still the current cached version
-            Assert.AreEqual(parameterRevision3.RevisionNumber, cachedParameter.RevisionNumber);
+            Assert.That(parameterRevision3.RevisionNumber, Is.EqualTo(cachedParameter.RevisionNumber));
 
             //cached parameter should contain a ValueSet
-            Assert.AreEqual(1, cachedParameter.ValueSet.Count);
+            Assert.That(1, Is.EqualTo(cachedParameter.ValueSet.Count));
 
             //cached parameter should contain the correct ValueSet
-            Assert.AreEqual(cachedParameter.ValueSet.First().Iid, valueSet3.Iid);
+            Assert.That(cachedParameter.ValueSet.First().Iid, Is.EqualTo(valueSet3.Iid));
 
             //cached parameter should contain exactly 2 revisions
-            Assert.AreEqual(2, cachedParameter.Revisions.Count);
+            Assert.That(2, Is.EqualTo(cachedParameter.Revisions.Count));
 
             var revisionParameter1 = cachedParameter.Revisions.Single(x => x.Value.Iid == parameterRevision1.Iid && x.Value.RevisionNumber == parameterRevision1.RevisionNumber).Value as Parameter;
             var revisionParameter2 = cachedParameter.Revisions.Single(x => x.Value.Iid == parameterRevision2.Iid && x.Value.RevisionNumber == parameterRevision2.RevisionNumber).Value as Parameter;
 
             //Should be empty, because an older revision than the one currently in the cache was asked for
             //In that case the ValueSet belonging to the Parameter doens't get cloned (because it is unknown at that moment)
-            Assert.AreEqual(0, revisionParameter1.ValueSet.Count);
+            Assert.That(0, Is.EqualTo(revisionParameter1.ValueSet.Count));
 
             //Should be 1, because the ValueSet2 was cloned and added to the Parameter added to the Revisions property of the cached parameter
             //when revision 3 was added to the cache
-            Assert.AreEqual(1, revisionParameter2.ValueSet.Count);
+            Assert.That(1, Is.EqualTo(revisionParameter2.ValueSet.Count));
         }
 
         [Test]
@@ -317,8 +317,8 @@ namespace CDP4Dal.Tests
                     .OfType<SiteReferenceDataLibrary>()
                     .Single(x => x.Iid == this.siteRdl.Iid);
             
-            Assert.AreEqual(siteRdl1, siteRdl2);
-            Assert.AreEqual(siteDir, siteRdl2.Container);
+            Assert.That(siteRdl1, Is.EqualTo(siteRdl2));
+            Assert.That(siteDir, Is.EqualTo(siteRdl2.Container));
         }
 
         [Test]
@@ -355,7 +355,7 @@ namespace CDP4Dal.Tests
             var assembler = new Assembler(this.uri, this.messageBus);
             await assembler.Synchronize(dtos);
 
-            Assert.AreEqual(4, assembler.Cache.Count);
+            Assert.That(4, Is.EqualTo(assembler.Cache.Count));
 
             srdl1.DefinedCategory.Clear();
             srdl2.DefinedCategory.Add(category.Iid);
@@ -373,9 +373,9 @@ namespace CDP4Dal.Tests
             var srdl2poco = (SiteReferenceDataLibrary)assembler.Cache[new CacheKey(srdl2.Iid, null)].Value;
             var catpoco = assembler.Cache[new CacheKey(category.Iid, null)].Value;
 
-            Assert.AreEqual(4, assembler.Cache.Count);
-            Assert.IsEmpty(srdl1poco.DefinedCategory);
-            Assert.IsTrue(srdl2poco.DefinedCategory.Contains(catpoco));
+            Assert.That(4, Is.EqualTo(assembler.Cache.Count));
+            Assert.That(srdl1poco.DefinedCategory, Is.Empty);
+            Assert.That(srdl2poco.DefinedCategory.Contains(catpoco), Is.True);
         }
 
         [Test]
@@ -443,7 +443,7 @@ namespace CDP4Dal.Tests
 
             assembler.Synchronize(dtos);
 
-            Assert.AreEqual(11, assembler.Cache.Count);
+            Assert.That(11, Is.EqualTo(assembler.Cache.Count));
         }
 
         [Test]
@@ -458,8 +458,8 @@ namespace CDP4Dal.Tests
             var rdl = (ReferenceDataLibrary)lazyrdl.Value;
             await assembler.CloseRdl(rdl);
 
-            Assert.IsEmpty(rdl.DefinedCategory);
-            Assert.AreEqual(5, assembler.Cache.Count); // 2 categories should have been removed
+            Assert.That(rdl.DefinedCategory, Is.Empty);
+            Assert.That(5, Is.EqualTo(assembler.Cache.Count)); // 2 categories should have been removed
         }
 
         [Test]
@@ -491,8 +491,8 @@ namespace CDP4Dal.Tests
 
             var citationPoco = (Citation)
                 assembler.Cache.Select(x => x.Value).Select(x => x.Value).Single(x => x.Iid == citation.Iid);
-            Assert.AreEqual(citationPoco.Source.Iid, Guid.Empty);
-            Assert.IsNotEmpty(citationPoco.ValidationErrors);
+            Assert.That(citationPoco.Source.Iid, Is.EqualTo(Guid.Empty));
+            Assert.That(citationPoco.ValidationErrors, Is.Not.Empty);
 
             sitedir.SiteReferenceDataLibrary.Add(srdl.Iid);
             input.Clear();
@@ -502,7 +502,7 @@ namespace CDP4Dal.Tests
             input.Add(referenceSource);
 
             await assembler.Synchronize(input);
-            Assert.IsNotNull(citationPoco.Source);
+            Assert.That(citationPoco.Source, Is.Not.Null);
         }
 
         [Test]
@@ -539,9 +539,9 @@ namespace CDP4Dal.Tests
             var itdto = (Dto.IterationSetup)iterationsetup1.ToDto();
             itdto.IsDeleted = true;
 
-            Assert.IsTrue(assembler.Cache.ContainsKey(new CacheKey(it1.Iid, null)));
+            Assert.That(assembler.Cache.ContainsKey(new CacheKey(it1.Iid, null)), Is.True);
             await assembler.Synchronize(new List<Dto.Thing> {sitedirdto, itdto});
-            Assert.IsFalse(assembler.Cache.ContainsKey(new CacheKey(it1.Iid, null)));
+            Assert.That(assembler.Cache.ContainsKey(new CacheKey(it1.Iid, null)), Is.False);
         }
 
         [Test]
@@ -574,9 +574,9 @@ namespace CDP4Dal.Tests
 
             var sitedirdto = new Dto.SiteDirectory(sitedir.Iid, 1);
 
-            Assert.AreEqual(7, assembler.Cache.Count);
+            Assert.That(7, Is.EqualTo(assembler.Cache.Count));
             await assembler.Synchronize(new List<Dto.Thing> { sitedirdto });
-            Assert.AreEqual(1, assembler.Cache.Count);
+            Assert.That(1, Is.EqualTo(assembler.Cache.Count));
         }
 
         [Test]
@@ -589,22 +589,22 @@ namespace CDP4Dal.Tests
 
             this.messageBus.Listen<ObjectChangedEvent>(typeof(EngineeringModel)).Subscribe(x =>
             {
-                Assert.AreEqual(engineeringModelIid, x.ChangedThing.Iid);
+                Assert.That(engineeringModelIid, Is.EqualTo(x.ChangedThing.Iid));
             });
 
             this.messageBus.Listen<ObjectChangedEvent>(typeof(EngineeringModelSetup)).Subscribe(x =>
             {
-                Assert.AreEqual(engineeringModelSetupIid, x.ChangedThing.Iid);
+                Assert.That(engineeringModelSetupIid, Is.EqualTo(x.ChangedThing.Iid));
             });
 
             this.messageBus.Listen<ObjectChangedEvent>(typeof(Iteration)).Subscribe(x =>
             {
-                Assert.AreEqual(iterationIid, x.ChangedThing.Iid);
+                Assert.That(iterationIid, Is.EqualTo(x.ChangedThing.Iid));
             });
 
             this.messageBus.Listen<ObjectChangedEvent>(typeof(IterationSetup)).Subscribe(x =>
             {
-                Assert.AreEqual(iterationSetupIid, x.ChangedThing.Iid);
+                Assert.That(iterationSetupIid, Is.EqualTo(x.ChangedThing.Iid));
             });
 
             var assembler = new Assembler(this.uri, this.messageBus);
@@ -629,11 +629,11 @@ namespace CDP4Dal.Tests
             assembler.Cache.TryAdd(new CacheKey(model.Iid, null), new Lazy<Thing>(() => model));
             assembler.Cache.TryAdd(new CacheKey(iteration.Iid, null), new Lazy<Thing>(() => iteration));
             
-            Assert.AreEqual(5, assembler.Cache.Count);
+            Assert.That(5, Is.EqualTo(assembler.Cache.Count));
 
             await assembler.Clear();
 
-            Assert.AreEqual(0, assembler.Cache.Count);
+            Assert.That(0, Is.EqualTo(assembler.Cache.Count));
         }
 
         [Test]
@@ -670,11 +670,11 @@ namespace CDP4Dal.Tests
             var siteRdl = lazySiteRdl.Value as SiteReferenceDataLibrary;
             var orderedItemList = siteRdl.BaseQuantityKind.ToDtoOrderedItemList();
 
-            Assert.AreEqual(1, orderedItemList.ToList()[0].K);
-            Assert.AreEqual(simpleQuantityKind1.Iid, orderedItemList.ToList()[0].V);
+            Assert.That(1, Is.EqualTo(orderedItemList.ToList()[0].K));
+            Assert.That(simpleQuantityKind1.Iid, Is.EqualTo(orderedItemList.ToList()[0].V));
 
-            Assert.AreEqual(2, orderedItemList.ToList()[1].K);
-            Assert.AreEqual(simpleQuantityKind2.Iid, orderedItemList.ToList()[1].V);
+            Assert.That(2, Is.EqualTo(orderedItemList.ToList()[1].K));
+            Assert.That(simpleQuantityKind2.Iid, Is.EqualTo(orderedItemList.ToList()[1].V));
         }
 
         [Test]
@@ -696,12 +696,12 @@ namespace CDP4Dal.Tests
             // 1st call of Synchronize, uses incoming DTO's
             await assembler.Synchronize(initialList);
 
-            Assert.IsNotEmpty(assembler.Cache);
-            Assert.AreEqual(4, assembler.Cache.Count);
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(4, Is.EqualTo(assembler.Cache.Count));
 
-            Assert.IsNull(folder.IterationContainerId);
-            Assert.IsNull(file.IterationContainerId);
-            Assert.IsNull(fileRevision.IterationContainerId);
+            Assert.That(folder.IterationContainerId, Is.Null);
+            Assert.That(file.IterationContainerId, Is.Null);
+            Assert.That(fileRevision.IterationContainerId, Is.Null);
 
             //Newly added FileRevision
             var addedFileRevision = new Dto.FileRevision(Guid.NewGuid(), 2) { IterationContainerId = iterationIid, ContainingFolder = folder.Iid };
@@ -714,11 +714,11 @@ namespace CDP4Dal.Tests
             // 2nd call of Synchronize, uses Cache and incoming DTO's
             await assembler.Synchronize(addFileRevisionList);
 
-            Assert.IsNotEmpty(assembler.Cache);
-            Assert.AreEqual(5, assembler.Cache.Count);
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(5, Is.EqualTo(assembler.Cache.Count));
 
-            Assert.IsNull(file.IterationContainerId);
-            Assert.IsNull(addedFileRevision.IterationContainerId);
+            Assert.That(file.IterationContainerId, Is.Null);
+            Assert.That(addedFileRevision.IterationContainerId, Is.Null);
         }
 
         [Test]
@@ -740,12 +740,12 @@ namespace CDP4Dal.Tests
             // 1st call of Synchronize, uses incoming DTO's
             await assembler.Synchronize(initialList);
 
-            Assert.IsNotEmpty(assembler.Cache);
-            Assert.AreEqual(4, assembler.Cache.Count);
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(4, Is.EqualTo(assembler.Cache.Count));
 
-            Assert.AreEqual(iterationIid, folder.IterationContainerId);
-            Assert.AreEqual(iterationIid,file.IterationContainerId);
-            Assert.AreEqual(iterationIid,fileRevision.IterationContainerId);
+            Assert.That(iterationIid, Is.EqualTo(folder.IterationContainerId));
+            Assert.That(iterationIid, Is.EqualTo(file.IterationContainerId));
+            Assert.That(iterationIid, Is.EqualTo(fileRevision.IterationContainerId));
 
             //Newly added FileRevision
             var addedFileRevision = new Dto.FileRevision(Guid.NewGuid(), 2) { IterationContainerId = iterationIid, ContainingFolder = folder.Iid };
@@ -758,11 +758,11 @@ namespace CDP4Dal.Tests
             // 2nd call of Synchronize, uses Cache and incoming DTO's
             await assembler.Synchronize(addFileRevisionList);
 
-            Assert.IsNotEmpty(assembler.Cache);
-            Assert.AreEqual(5, assembler.Cache.Count);
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(5, Is.EqualTo(assembler.Cache.Count));
 
-            Assert.AreEqual(iterationIid, file.IterationContainerId);
-            Assert.AreEqual(iterationIid, addedFileRevision.IterationContainerId);
+            Assert.That(iterationIid, Is.EqualTo(file.IterationContainerId));
+            Assert.That(iterationIid, Is.EqualTo(addedFileRevision.IterationContainerId));
         }
 
     }

@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CredentialsTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests.DAL
 {
@@ -45,7 +43,7 @@ namespace CDP4Dal.Tests.DAL
 
             var credentials = new Credentials("John", password, new Uri("file://someuri"));
 
-            Assert.AreEqual(password, credentials.Password);
+            Assert.That(password, Is.EqualTo(credentials.Password));
         }
 
         [Test]

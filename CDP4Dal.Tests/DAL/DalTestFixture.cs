@@ -66,7 +66,7 @@ namespace CDP4Dal.Tests.DAL
         {
             var dal = new TestDal(this.credentials);            
             dal.CloseSession();
-            Assert.IsNull(dal.Credentials);
+            Assert.That(dal.Credentials, Is.Null);
         }
 
         [Test]
@@ -76,10 +76,10 @@ namespace CDP4Dal.Tests.DAL
 
             var uriWithTrailingSlash = this.someURI + "/";
 
-            Assert.AreEqual(this.someURI, dal.CleanSlashes(this.someURI));
-            Assert.AreEqual(this.someURI, dal.CleanSlashes(uriWithTrailingSlash));
-            Assert.AreEqual(string.Empty, dal.CleanSlashes(string.Empty));
-            Assert.AreEqual(string.Empty, dal.CleanSlashes(null));
+            Assert.That(this.someURI, Is.EqualTo(dal.CleanSlashes(this.someURI)));
+            Assert.That(this.someURI, Is.EqualTo(dal.CleanSlashes(uriWithTrailingSlash)));
+            Assert.That(string.Empty, Is.EqualTo(dal.CleanSlashes(string.Empty)));
+            Assert.That(string.Empty, Is.EqualTo(dal.CleanSlashes(null)));
         }
 
         [Test]
@@ -89,10 +89,10 @@ namespace CDP4Dal.Tests.DAL
 
             var pathWithSlash = $"/{this.somePath}";
 
-            Assert.AreEqual(this.somePath, dal.CleanPathSlashes(this.somePath));
-            Assert.AreEqual(this.somePath, dal.CleanPathSlashes(pathWithSlash));
-            Assert.AreEqual(string.Empty, dal.CleanPathSlashes(string.Empty));
-            Assert.AreEqual(string.Empty, dal.CleanPathSlashes(null));
+            Assert.That(this.somePath, Is.EqualTo(dal.CleanPathSlashes(this.somePath)));
+            Assert.That(this.somePath, Is.EqualTo(dal.CleanPathSlashes(pathWithSlash)));
+            Assert.That(string.Empty, Is.EqualTo(dal.CleanPathSlashes(string.Empty)));
+            Assert.That(string.Empty, Is.EqualTo(dal.CleanPathSlashes(null)));
         }
 
         [Test]
@@ -103,31 +103,31 @@ namespace CDP4Dal.Tests.DAL
             var pathWithSlash = $"/{this.somePath}";
             var correctFullUri = "http://someuri:80/SiteDirectory";
 
-            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, ref pathWithSlash).ToString());
-            Assert.AreEqual(this.somePath, pathWithSlash);
+            Assert.That(correctFullUri, Is.EqualTo(dal.GetBuilder(this.credentials.Uri, ref pathWithSlash).ToString()));
+            Assert.That(this.somePath, Is.EqualTo(pathWithSlash));
             this.credentials = new Credentials("John", "Doe", new Uri("http://someURI/"));
 
-            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, ref pathWithSlash).ToString());
+            Assert.That(correctFullUri, Is.EqualTo(dal.GetBuilder(this.credentials.Uri, ref pathWithSlash).ToString()));
 
             var pathWithoutSlash = $"{this.somePath}";
-            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, ref pathWithoutSlash).ToString());
+            Assert.That(correctFullUri, Is.EqualTo(dal.GetBuilder(this.credentials.Uri, ref pathWithoutSlash).ToString()));
 
             this.credentials = new Credentials("John", "Doe", new Uri("http://someURI/mdb/"));
             correctFullUri = "http://someuri:80/mdb/SiteDirectory";
 
-            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, ref pathWithoutSlash).ToString());
-            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, ref pathWithSlash).ToString());
+            Assert.That(correctFullUri, Is.EqualTo(dal.GetBuilder(this.credentials.Uri, ref pathWithoutSlash).ToString()));
+            Assert.That(correctFullUri, Is.EqualTo(dal.GetBuilder(this.credentials.Uri, ref pathWithSlash).ToString()));
 
             this.credentials = new Credentials("John", "Doe", new Uri("http://someURI/mdb/a/b/c"));
             correctFullUri = "http://someuri:80/mdb/a/b/c/SiteDirectory";
 
-            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, ref pathWithoutSlash).ToString());
-            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, ref pathWithSlash).ToString());
+            Assert.That(correctFullUri, Is.EqualTo(dal.GetBuilder(this.credentials.Uri, ref pathWithoutSlash).ToString()));
+            Assert.That(correctFullUri, Is.EqualTo(dal.GetBuilder(this.credentials.Uri, ref pathWithSlash).ToString()));
 
             this.credentials = new Credentials("John", "Doe", new Uri("http://someURI/mdb/a/b/c/"));
 
-            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, ref pathWithoutSlash).ToString());
-            Assert.AreEqual(correctFullUri, dal.GetBuilder(this.credentials.Uri, ref pathWithSlash).ToString());
+            Assert.That(correctFullUri, Is.EqualTo(dal.GetBuilder(this.credentials.Uri, ref pathWithoutSlash).ToString()));
+            Assert.That(correctFullUri, Is.EqualTo(dal.GetBuilder(this.credentials.Uri, ref pathWithSlash).ToString()));
         }
 
         [Test]
@@ -153,10 +153,10 @@ namespace CDP4Dal.Tests.DAL
                 dal.SetIterationContainer(list, iterationId);
             }
 
-            Assert.IsNull(model.IterationContainerId);
-            Assert.IsNull(iteration.IterationContainerId);
-            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", elementDefinition.IterationContainerId.Value.ToString());
-            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", parameter.IterationContainerId.Value.ToString());
+            Assert.That(model.IterationContainerId, Is.Null);
+            Assert.That(iteration.IterationContainerId, Is.Null);
+            Assert.That("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", Is.EqualTo(elementDefinition.IterationContainerId.Value.ToString()));
+            Assert.That("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", Is.EqualTo(parameter.IterationContainerId.Value.ToString()));
         }
 
         [Test]
@@ -170,16 +170,16 @@ namespace CDP4Dal.Tests.DAL
             var fileRevision = new FileRevision();
             var list = new Thing[] { folder, file, fileRevision };
 
-            Assert.AreEqual(3, PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray.Length, "a ClassKind was added to or removed from PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray. Please make sure that this unit test, so that it tests all individual ClassKinds.");
+            Assert.That(PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray.Length, Is.EqualTo(3), "a ClassKind was added to or removed from PartitionDependentContainmentClassType.EngineeringModelAndIterationClassKindArray. Please make sure that this unit test, so that it tests all individual ClassKinds.");
 
             if (dal.TryExtractIterationIdfromUri(uri, out var iterationId))
             {
                 dal.SetIterationContainer(list, iterationId);
             }
 
-            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", folder.IterationContainerId.Value.ToString());
-            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", file.IterationContainerId.Value.ToString());
-            Assert.AreEqual("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", fileRevision.IterationContainerId.Value.ToString());
+            Assert.That("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", Is.EqualTo(folder.IterationContainerId.Value.ToString()));
+            Assert.That("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", Is.EqualTo(file.IterationContainerId.Value.ToString()));
+            Assert.That("44647ff6-ffe3-44ff-9ed9-3256e2a97f9d", Is.EqualTo(fileRevision.IterationContainerId.Value.ToString()));
         }
 
         [Test]
@@ -209,7 +209,7 @@ namespace CDP4Dal.Tests.DAL
             
             var elementDefinitionUri = new Uri("http://www.stariongroup.eu/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1/element/E9E8E386-B8BB-44F1-80B9-2C30761EE688");
             var elementDefinitionContext = testdal.QueryRequestContext(elementDefinitionUri);
-            Assert.AreEqual("/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1", elementDefinitionContext);
+            Assert.That("/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1", Is.EqualTo(elementDefinitionContext));
         }
 
         [Test]

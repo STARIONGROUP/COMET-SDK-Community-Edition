@@ -115,14 +115,14 @@ namespace CDP4Dal.Tests
             var assembler = new Assembler(this.uri, this.messageBus);
 
             // Check that the cache is empty
-            Assert.IsFalse(assembler.Cache.Skip(0).Any());
+            Assert.That(assembler.Cache.Skip(0).Any(), Is.False);
             
             var id = Guid.NewGuid();
             var testThing = new Lazy<Thing>(() => new Alias(id, assembler.Cache, this.uri));
             testThing.Value.Cache.TryAdd(new CacheKey(testThing.Value.Iid, null), testThing);
 
             // Check that the cache is not empty anymore
-            Assert.IsTrue(assembler.Cache.Skip(0).Any());
+            Assert.That(assembler.Cache.Skip(0).Any(), Is.True);
 
             // Update the thing and the cache
             testThing = new Lazy<Thing>(() => new Alias(id, assembler.Cache, this.uri));
@@ -131,12 +131,12 @@ namespace CDP4Dal.Tests
             // Check that the thing retrieved from the cache has the updated value
             Lazy<Thing> updatedThing;
             testThing.Value.Cache.TryGetValue(new CacheKey(testThing.Value.Iid, null), out updatedThing);
-            Assert.IsNotNull(updatedThing);
+            Assert.That(updatedThing, Is.Not.Null);
 
             // Check that we can remove things from the cache
             testThing.Value.Cache.TryRemove(new CacheKey(testThing.Value.Iid, null), out updatedThing);
-            Assert.IsFalse(assembler.Cache.Skip(0).Any());
-            Assert.IsFalse(testThing.Value.Cache.Skip(0).Any());
+            Assert.That(assembler.Cache.Skip(0).Any(), Is.False);
+            Assert.That(testThing.Value.Cache.Skip(0).Any(), Is.False);
         }
 
         [Test]
@@ -148,15 +148,15 @@ namespace CDP4Dal.Tests
             await assembler.Synchronize(this.testInput);
 
             // Modification of the input Dtos
-            Assert.IsNotEmpty(assembler.Cache);
-            Assert.AreEqual(7, assembler.Cache.Count);
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(assembler.Cache.Count, Is.EqualTo(7));
             
             // check containerList Element
             var siteDirId = this.testInput[0].Iid;
             Lazy<Thing> lazySiteDir;
             assembler.Cache.TryGetValue(new CacheKey(siteDirId, null), out lazySiteDir);
             var siteDir = lazySiteDir.Value as SiteDirectory;
-            Assert.AreEqual(siteDirId, siteDir.SiteReferenceDataLibrary[0].Container.Iid);
+            Assert.That(siteDir.SiteReferenceDataLibrary[0].Container.Iid, Is.EqualTo(siteDirId));
 
             // get category to removes
             var categoryToRemove = this.testInput[3] as Dto.Category;
@@ -165,12 +165,12 @@ namespace CDP4Dal.Tests
             var parameterTypeId = this.testInput[6].Iid;
             Lazy<Thing> lazyPt;
             assembler.Cache.TryGetValue(new CacheKey(parameterTypeId, null), out lazyPt);
-            Assert.AreEqual(2, (lazyPt.Value as ParameterType).Category.Count);
+            Assert.That((lazyPt.Value as ParameterType).Category.Count, Is.EqualTo(2));
             
             //Check that route works
             Lazy<Thing> lazyCat;
             assembler.Cache.TryGetValue(new CacheKey(categoryToRemove.Iid, null), out lazyCat);
-            Assert.IsNotNull(lazyCat.Value.Route);
+            Assert.That(lazyCat.Value.Route, Is.Not.Null);
 
             var siteRdl = this.testInput[1] as Dto.SiteReferenceDataLibrary;
             siteRdl.DefinedCategory.Remove(categoryToRemove.Iid);
@@ -180,8 +180,8 @@ namespace CDP4Dal.Tests
             await assembler.Synchronize(newInput);
             
             // checks that the removed category is no longer in the cache
-            Assert.AreEqual(6, assembler.Cache.Count);
-            Assert.IsFalse(assembler.Cache.TryGetValue(new CacheKey(categoryToRemove.Iid, null), out lazyCat));
+            Assert.That(assembler.Cache.Count, Is.EqualTo(6));
+            Assert.That(assembler.Cache.TryGetValue(new CacheKey(categoryToRemove.Iid, null), out lazyCat), Is.False);
         }
 
         [Test]
@@ -209,8 +209,8 @@ namespace CDP4Dal.Tests
                     .OfType<SiteReferenceDataLibrary>()
                     .Single(x => x.Iid == this.siteRdl.Iid);
             
-            Assert.AreEqual(siteRdl1, siteRdl2);
-            Assert.AreEqual(siteDir, siteRdl2.Container);
+            Assert.That(siteRdl1, Is.EqualTo(siteRdl2));
+            Assert.That(siteDir, Is.EqualTo(siteRdl2.Container));
         }
 
         [Test]
@@ -247,7 +247,7 @@ namespace CDP4Dal.Tests
             var assembler = new Assembler(this.uri, this.messageBus);
             await assembler.Synchronize(dtos);
 
-            Assert.AreEqual(4, assembler.Cache.Count);
+            Assert.That(assembler.Cache.Count, Is.EqualTo(4));
 
             srdl1.DefinedCategory.Clear();
             srdl2.DefinedCategory.Add(category.Iid);
@@ -265,13 +265,13 @@ namespace CDP4Dal.Tests
             var srdl2poco = (SiteReferenceDataLibrary)assembler.Cache[new CacheKey(srdl2.Iid, null)].Value;
             var catpoco = assembler.Cache[new CacheKey(category.Iid, null)].Value;
 
-            Assert.AreEqual(4, assembler.Cache.Count);
-            Assert.IsEmpty(srdl1poco.DefinedCategory);
-            Assert.IsTrue(srdl2poco.DefinedCategory.Contains(catpoco));
+            Assert.That(assembler.Cache.Count, Is.EqualTo(4));
+            Assert.That(srdl1poco.DefinedCategory, Is.Empty);
+            Assert.That(srdl2poco.DefinedCategory.Contains(catpoco), Is.True);
         }
 
         [Test]
-        public void VerifyThatMultipleIterationCanBeSynchronized()
+        public async Task VerifyThatMultipleIterationCanBeSynchronized()
         {
             var sitedir = new Dto.SiteDirectory(Guid.NewGuid(), 0);
             var srdl1 = new Dto.SiteReferenceDataLibrary(Guid.NewGuid(), 0);
@@ -320,7 +320,7 @@ namespace CDP4Dal.Tests
             };
 
             var assembler = new Assembler(this.uri, this.messageBus);
-            assembler.Synchronize(dtos);
+            await assembler.Synchronize(dtos);
 
             dtos = new List<Dto.Thing>
             {
@@ -333,9 +333,9 @@ namespace CDP4Dal.Tests
                 usage2dto
             };
 
-            assembler.Synchronize(dtos);
+            await assembler.Synchronize(dtos);
 
-            Assert.AreEqual(11, assembler.Cache.Count);
+            Assert.That(assembler.Cache.Count, Is.EqualTo(11));
         }
 
         [Test]
@@ -350,8 +350,8 @@ namespace CDP4Dal.Tests
             var rdl = (ReferenceDataLibrary)lazyrdl.Value;
             await assembler.CloseRdl(rdl);
 
-            Assert.IsEmpty(rdl.DefinedCategory);
-            Assert.AreEqual(5, assembler.Cache.Count); // 2 categories should have been removed
+            Assert.That(rdl.DefinedCategory, Is.Empty);
+            Assert.That(assembler.Cache.Count, Is.EqualTo(5)); // 2 categories should have been removed
         }
 
         [Test]
@@ -383,8 +383,8 @@ namespace CDP4Dal.Tests
 
             var citationPoco = (Citation)
                 assembler.Cache.Select(x => x.Value).Select(x => x.Value).Single(x => x.Iid == citation.Iid);
-            Assert.AreEqual(citationPoco.Source.Iid, Guid.Empty);
-            Assert.IsNotEmpty(citationPoco.ValidationErrors);
+            Assert.That(citationPoco.Source.Iid, Is.EqualTo(Guid.Empty));
+            Assert.That(citationPoco.ValidationErrors, Is.Not.Empty);
 
             sitedir.SiteReferenceDataLibrary.Add(srdl.Iid);
             input.Clear();
@@ -394,7 +394,7 @@ namespace CDP4Dal.Tests
             input.Add(referenceSource);
 
             await assembler.Synchronize(input);
-            Assert.IsNotNull(citationPoco.Source);
+            Assert.That(citationPoco.Source, Is.Not.Null);
         }
 
         [Test]
@@ -431,9 +431,9 @@ namespace CDP4Dal.Tests
             var itdto = (Dto.IterationSetup)iterationsetup1.ToDto();
             itdto.IsDeleted = true;
             
-            Assert.IsTrue(assembler.Cache.ContainsKey(new CacheKey(it1.Iid, null)));
+            Assert.That(assembler.Cache.ContainsKey(new CacheKey(it1.Iid, null)), Is.True);
             await assembler.Synchronize(new List<Dto.Thing> {sitedirdto, itdto});
-            Assert.IsFalse(assembler.Cache.ContainsKey(new CacheKey(it1.Iid, null)));
+            Assert.That(assembler.Cache.ContainsKey(new CacheKey(it1.Iid, null)), Is.False);
         }
 
         [Test]
@@ -466,9 +466,9 @@ namespace CDP4Dal.Tests
 
             var sitedirdto = new Dto.SiteDirectory(sitedir.Iid, 1);
 
-            Assert.AreEqual(7, assembler.Cache.Count);
+            Assert.That(assembler.Cache.Count, Is.EqualTo(7));
             await assembler.Synchronize(new List<Dto.Thing> { sitedirdto });
-            Assert.AreEqual(1, assembler.Cache.Count);
+            Assert.That(assembler.Cache.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -505,11 +505,11 @@ namespace CDP4Dal.Tests
             var siteRdl = lazySiteRdl.Value as SiteReferenceDataLibrary;
             var orderedItemList = siteRdl.BaseQuantityKind.ToDtoOrderedItemList();
 
-            Assert.AreEqual(1, orderedItemList.ToList()[0].K);
-            Assert.AreEqual(simpleQuantityKind1.Iid, orderedItemList.ToList()[0].V);
+            Assert.That(orderedItemList.ToList()[0].K, Is.EqualTo(1));
+            Assert.That(orderedItemList.ToList()[0].V, Is.EqualTo(simpleQuantityKind1.Iid));
 
-            Assert.AreEqual(2, orderedItemList.ToList()[1].K);
-            Assert.AreEqual(simpleQuantityKind2.Iid, orderedItemList.ToList()[1].V);
+            Assert.That(orderedItemList.ToList()[1].K, Is.EqualTo(2));
+            Assert.That(orderedItemList.ToList()[1].V, Is.EqualTo(simpleQuantityKind2.Iid));
         }
     }
 }

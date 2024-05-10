@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TransactionContextTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -80,24 +80,24 @@ namespace CDP4Dal.Tests
         public void VerifyThatContextIsSet()
         {
             var siteDirectoryTransactionContex = new TransactionContext(this.siteDirectory);
-            Assert.AreEqual(this.siteDirectory, siteDirectoryTransactionContex.Context);
+            Assert.That(this.siteDirectory, Is.EqualTo(siteDirectoryTransactionContex.Context));
 
             var iterationTransactionContex = new TransactionContext(this.iteration);
-            Assert.AreEqual(this.iteration, iterationTransactionContex.Context);
+            Assert.That(this.iteration, Is.EqualTo(iterationTransactionContex.Context));
         }
 
         [Test]
         public void Verify_That_ContextRoute_Returns_Expected_Result_for_SiteDirectory()
         {
             var siteDirectoryTransactionContex = new TransactionContext(this.siteDirectory);
-            Assert.AreEqual("/SiteDirectory/7d445137-5e73-41a1-b326-983db7a4e9a2", siteDirectoryTransactionContex.ContextRoute());
+            Assert.That("/SiteDirectory/7d445137-5e73-41a1-b326-983db7a4e9a2", Is.EqualTo(siteDirectoryTransactionContex.ContextRoute()));
         }
 
         [Test]
         public void Verify_That_ContextRoute_Returns_Expected_Result_for_Iteration()
         {
             var iterationTransactionContex = new TransactionContext(this.iteration);
-            Assert.AreEqual("/EngineeringModel/bddfb6a4-76b3-4cac-acab-5540126c47b6/iteration/05f17a1a-1021-450f-976d-286037f04646", iterationTransactionContex.ContextRoute());
+            Assert.That("/EngineeringModel/bddfb6a4-76b3-4cac-acab-5540126c47b6/iteration/05f17a1a-1021-450f-976d-286037f04646", Is.EqualTo(iterationTransactionContex.ContextRoute()));
         }
     }
 }

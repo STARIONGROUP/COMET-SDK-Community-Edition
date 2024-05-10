@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DalExportAttributeTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,11 +21,11 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 namespace CDP4Dal.Tests.Composition
 {
     using CDP4Dal.Composition;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -44,10 +43,10 @@ namespace CDP4Dal.Tests.Composition
             var type = DalType.Web;
 
             var attribute = new DalExportAttribute(name, description, cdpVersion, DalType.Web);
-            Assert.AreEqual(name, attribute.Name);
-            Assert.AreEqual(description, attribute.Description);
-            Assert.AreEqual(cdpVersion, attribute.CDPVersion);
-            Assert.AreEqual(type, attribute.DalType);
+            Assert.That(name, Is.EqualTo(attribute.Name));
+            Assert.That(description, Is.EqualTo(attribute.Description));
+            Assert.That(cdpVersion, Is.EqualTo(attribute.CDPVersion));
+            Assert.That(type, Is.EqualTo(attribute.DalType));
         }
     }
 }

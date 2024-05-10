@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SecureStringExtensionsTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -25,6 +25,7 @@
 namespace CDP4Dal.Tests
 {
     using System;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -40,7 +41,7 @@ namespace CDP4Dal.Tests
 
             var secureString = unsecurestring.ConvertToSecureString();
 
-            Assert.AreEqual(unsecurestring, secureString.ConvertToUnsecureString());
+            Assert.That(unsecurestring, Is.EqualTo(secureString.ConvertToUnsecureString()));
         }
 
         [Test]

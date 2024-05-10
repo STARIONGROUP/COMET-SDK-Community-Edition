@@ -206,8 +206,8 @@ namespace CDP4Dal.Tests.Permission
             var helper = new CopyPermissionHelper(this.session.Object, false);
             var canCopyRes = helper.ComputeCopyPermission(copy, target);
 
-            Assert.AreEqual(0, canCopyRes.ErrorList.Count);
-            Assert.AreEqual(6, canCopyRes.CopyableThings.Count());
+            Assert.That(0, Is.EqualTo(canCopyRes.ErrorList.Count));
+            Assert.That(6, Is.EqualTo(canCopyRes.CopyableThings.Count()));
         }
 
         [Test]
@@ -230,8 +230,8 @@ namespace CDP4Dal.Tests.Permission
             var helper = new CopyPermissionHelper(this.session.Object, false);
             var canCopyRes = helper.ComputeCopyPermission(copy, target);
 
-            Assert.AreEqual(1, canCopyRes.ErrorList.Count);
-            Assert.AreEqual(4, canCopyRes.CopyableThings.Count());
+            Assert.That(1, Is.EqualTo(canCopyRes.ErrorList.Count));
+            Assert.That(4, Is.EqualTo(canCopyRes.CopyableThings.Count()));
         }
 
         [Test]
@@ -251,8 +251,8 @@ namespace CDP4Dal.Tests.Permission
 
             // element def for usage cant be copied - missing rdl
             // usage cant be copied as element def cannot
-            Assert.AreEqual(2, canCopyRes.ErrorList.Count);
-            Assert.AreEqual(1, canCopyRes.CopyableThings.Count());
+            Assert.That(2, Is.EqualTo(canCopyRes.ErrorList.Count));
+            Assert.That(1, Is.EqualTo(canCopyRes.CopyableThings.Count()));
         }
 
         [Test]
@@ -271,8 +271,8 @@ namespace CDP4Dal.Tests.Permission
             var canCopyRes = helper.ComputeCopyPermission(copy, target);
 
             // subscription cant be copied
-            Assert.AreEqual(1, canCopyRes.ErrorList.Count);
-            Assert.AreEqual(5, canCopyRes.CopyableThings.Count());
+            Assert.That(1, Is.EqualTo(canCopyRes.ErrorList.Count));
+            Assert.That(5, Is.EqualTo(canCopyRes.CopyableThings.Count()));
         }
 
         [Test]

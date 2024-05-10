@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UtilsTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2020 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Nathanael Smiechowski
 //
@@ -62,15 +62,15 @@ namespace CDP4Dal.NetCore.Tests
         [Test]
         public void VerifyCapitalizefirstLetterFunction()
         {
-            Assert.AreEqual("A", StringExtensions.CapitalizeFirstLetter("a"));
-            Assert.AreEqual("Abcd", StringExtensions.CapitalizeFirstLetter("abcd"));
+            Assert.That("A", Is.EqualTo(StringExtensions.CapitalizeFirstLetter("a")));
+            Assert.That("Abcd", Is.EqualTo(StringExtensions.CapitalizeFirstLetter("abcd")));
         }
 
         [Test]
         public void VerifyLowerCasefirstLetterFunction()
         {
-            Assert.AreEqual("a", StringExtensions.LowerCaseFirstLetter("A"));
-            Assert.AreEqual("aBCD", StringExtensions.LowerCaseFirstLetter("ABCD"));
+            Assert.That("a", Is.EqualTo(StringExtensions.LowerCaseFirstLetter("A")));
+            Assert.That("aBCD", Is.EqualTo(StringExtensions.LowerCaseFirstLetter("ABCD")));
         }
 
         [Test]

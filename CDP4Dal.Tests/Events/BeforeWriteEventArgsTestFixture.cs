@@ -57,12 +57,12 @@ namespace CDP4Dal.Tests
         {
             var eventArgs1 = new BeforeWriteEventArgs(this.operationContainer1, null);
 
-            Assert.AreEqual(this.operationContainer1, eventArgs1.OperationContainer);
-            Assert.IsNull(eventArgs1.Files);
+            Assert.That(this.operationContainer1, Is.EqualTo(eventArgs1.OperationContainer));
+            Assert.That(eventArgs1.Files, Is.Null);
 
             var eventArgs2 = new BeforeWriteEventArgs(this.operationContainer2, this.files);
-            Assert.AreEqual(this.operationContainer2, eventArgs2.OperationContainer);
-            Assert.AreEqual(this.files, eventArgs2.Files);
+            Assert.That(this.operationContainer2, Is.EqualTo(eventArgs2.OperationContainer));
+            Assert.That(this.files, Is.EqualTo(eventArgs2.Files));
         }
     }
 }

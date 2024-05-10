@@ -144,15 +144,15 @@ namespace CDP4Dal.Tests
 
             TestContext.WriteLine($"Count: {this.messageBus.ActiveObservableCount}, Calls: {this.messageBus.ListenerCallCount}");
 
-            Assert.AreEqual(count + currentCount, this.messageBus.ActiveObservableCount);
-            Assert.AreEqual((count * 2 * repeat) + currentCalls, this.messageBus.ListenerCallCount);
+            Assert.That(this.messageBus.ActiveObservableCount, Is.EqualTo(count + currentCount));
+            Assert.That(this.messageBus.ListenerCallCount, Is.EqualTo((count * 2 * repeat) + currentCalls));
 
             GC.Collect();
 
             dotMemory.Check(x =>
             {
                 result2 = x.SizeInBytes;
-                Assert.IsTrue(result2 - result1 < 107000000, "ICDPMessageBus uses more memory that expected on creation of Observables and Subscriptions");
+                Assert.That(result2 - result1 < 107000000, Is.True, "ICDPMessageBus uses more memory than expected on creation of Observables and Subscriptions");
             });
 
             TestContext.WriteLine($"Number of bytes: {result2}");
@@ -169,8 +169,8 @@ namespace CDP4Dal.Tests
             dotMemory.Check(x =>
             {
                 result3 = x.SizeInBytes;
-                Assert.IsTrue(result2 - result3 > 80000000, "ICDPMessageBus frees up LESS memory than expected on disposing subscriptions");
-                Assert.IsTrue(result2 - result3 < 84000000, "ICDPMessageBus frees up MORE memory than expected on disposing subscriptions");
+                Assert.That(result2 - result3 > 80000000, Is.True, "ICDPMessageBus frees up LESS memory than expected on disposing subscriptions");
+                Assert.That(result2 - result3 < 84000000, Is.True, "ICDPMessageBus frees up MORE memory than expected on disposing subscriptions");
             });
 
             TestContext.WriteLine($"Number of bytes: {result3}");
@@ -187,7 +187,7 @@ namespace CDP4Dal.Tests
             dotMemory.Check(x =>
             {
                 result4 = x.SizeInBytes;
-                Assert.IsTrue(result4 - result1 < 6000000, "ICDPMessageBus seems to leak some memory.");
+                Assert.That(result4 - result1 < 6000000, Is.True, "ICDPMessageBus seems to leak some memory.");
             });
 
             TestContext.WriteLine($"Number of bytes: {result4}");
@@ -204,10 +204,10 @@ namespace CDP4Dal.Tests
             await assembler.Synchronize(this.testInput);
 
             // Check that the viewModel catches the event
-            Assert.AreEqual(2, this.cache.Count);
+            Assert.That(this.cache.Count, Is.EqualTo(2));
 
-            Assert.NotNull(this.cache.FirstOrDefault(p => p.Iid == this.person.Iid));
-            Assert.NotNull(this.cache.FirstOrDefault(p => p.Iid == this.person2.Iid));
+            Assert.That(this.cache.FirstOrDefault(p => p.Iid == this.person.Iid), Is.Not.Null);
+            Assert.That(this.cache.FirstOrDefault(p => p.Iid == this.person2.Iid), Is.Not.Null);
         }
 
         [Test]
@@ -221,12 +221,12 @@ namespace CDP4Dal.Tests
             await assembler.Synchronize(this.testInput);
 
             // Check that the viewModel catches the event
-            Assert.AreEqual(4, this.cache.Count);
+            Assert.That(this.cache.Count, Is.EqualTo(4));
 
-            Assert.NotNull(this.cache.FirstOrDefault(p => p.Iid == this.linearConversionUnitType.Iid));
-            Assert.IsTrue(this.cache.Any(p => p.Iid == this.prefixedUnitType.Iid));
-            Assert.IsTrue(this.cache.Any(p => p.Iid == this.derivedUnitType.Iid));
-            Assert.IsTrue(this.cache.Any(p => p.Iid == this.simpleUnitUnitType.Iid));
+            Assert.That(this.cache.FirstOrDefault(p => p.Iid == this.linearConversionUnitType.Iid), Is.Not.Null);
+            Assert.That(this.cache.Any(p => p.Iid == this.prefixedUnitType.Iid), Is.True);
+            Assert.That(this.cache.Any(p => p.Iid == this.derivedUnitType.Iid), Is.True);
+            Assert.That(this.cache.Any(p => p.Iid == this.simpleUnitUnitType.Iid), Is.True);
         }
 
         [Test]
@@ -244,7 +244,7 @@ namespace CDP4Dal.Tests
             this.messageBus.SendMessage(new ObjectChangedEvent(eu2), eu2);
             this.messageBus.SendMessage(new ObjectChangedEvent(eu2), eu2.GetType());
 
-            Assert.AreEqual(1, this.cache.Count);
+            Assert.That(this.cache.Count, Is.EqualTo(1));
 
             this.cache.Clear();
 
@@ -254,7 +254,7 @@ namespace CDP4Dal.Tests
             this.messageBus.SendObjectChangeEvent(eu2, EventKind.Updated);
 
             // 3 because the top subscription still exists.
-            Assert.AreEqual(3, this.cache.Count);
+            Assert.That(this.cache.Count, Is.EqualTo(3));
         }
 
         //TODO: remove this test from this project. This project should not have a dependency on CDP4Composition
@@ -264,14 +264,14 @@ namespace CDP4Dal.Tests
             var eu1 = new ElementUsage();
             this.messageBus.Listen<ObjectChangedEvent>(eu1).Subscribe(x => this.OnEvent(x.ChangedThing));
             this.messageBus.SendMessage(new ObjectChangedEvent(eu1), eu1);
-            Assert.AreEqual(1, this.cache.Count);
+            Assert.That(this.cache.Count, Is.EqualTo(1));
 
             this.messageBus.SendMessage(new ObjectChangedEvent(eu1), eu1);
-            Assert.AreEqual(2, this.cache.Count);
+            Assert.That(this.cache.Count, Is.EqualTo(2));
 
             this.messageBus.ClearSubscriptions();
             this.messageBus.SendMessage(new ObjectChangedEvent(eu1), eu1);
-            Assert.AreEqual(2, this.cache.Count);
+            Assert.That(this.cache.Count, Is.EqualTo(2));
         }
 
         [Test]
@@ -281,10 +281,10 @@ namespace CDP4Dal.Tests
             var credentials = new Credentials(" ", " ", this.uri);
             var session = new Session(mockedDal.Object, credentials, this.messageBus);
             var sessionEvent = new SessionEvent(session, SessionStatus.Open);
-            Assert.AreEqual(0, this.messagesReceivedCounter);
+            Assert.That(this.messagesReceivedCounter, Is.EqualTo(0));
             this.messageBus.Listen<SessionEvent>().Subscribe(x => this.MesssageReceived());
             this.messageBus.SendMessage(sessionEvent, null, null);
-            Assert.AreEqual(1, this.messagesReceivedCounter);
+            Assert.That(this.messagesReceivedCounter, Is.EqualTo(1));
         }
 
         [Test]
@@ -294,7 +294,7 @@ namespace CDP4Dal.Tests
 
             Guid? test = null;
 
-            Assert.IsFalse(ett.Equals(test));
+            Assert.That(ett.Equals(test), Is.False);
         }
 
         private void MesssageReceived()

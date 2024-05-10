@@ -1,7 +1,6 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PostOperationTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -22,7 +21,6 @@
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-#endregion
 
 using CDP4Common;
 
@@ -41,10 +39,10 @@ namespace CDP4Dal.Tests
         public void VerifyThatConstructorSetsLists()
         {
             var testPostOperation = new TestPostOperation();
-            Assert.IsNotNull(testPostOperation.Delete);
-            Assert.IsNotNull(testPostOperation.Create);
-            Assert.IsNotNull(testPostOperation.Update);
-            Assert.IsNotNull(testPostOperation.Copy);           
+            Assert.That(testPostOperation.Delete, Is.Not.Null);
+            Assert.That(testPostOperation.Create, Is.Not.Null);
+            Assert.That(testPostOperation.Update, Is.Not.Null);
+            Assert.That(testPostOperation.Copy, Is.Not.Null);           
         }
     }
 

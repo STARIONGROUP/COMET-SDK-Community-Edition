@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OperationContainerTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
@@ -50,7 +50,7 @@ namespace CDP4Dal.Tests
         public void Verify_that_token_is_set_when_constructed()
         {
             var operationContainer = new OperationContainer(this.siteDirectoryContext, 1);
-            Assert.IsNotEmpty(operationContainer.Token);
+            Assert.That(operationContainer.Token, Is.Not.Empty);
         }
 
         [Test]
@@ -65,9 +65,9 @@ namespace CDP4Dal.Tests
         public void VerifyThatConstructorInitializesObjectPropertiesWithValidSiteDirectoryContext()
         {
             var operationContainer = new OperationContainer(this.siteDirectoryContext, 1);
-            Assert.IsNotNull(operationContainer.Operations);
+            Assert.That(operationContainer.Operations, Is.Not.Null);
 
-            Assert.AreEqual(1, operationContainer.TopContainerRevisionNumber);
+            Assert.That(1, Is.EqualTo(operationContainer.TopContainerRevisionNumber));
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace CDP4Dal.Tests
         public void VerifyThatConstructorInitializesObjectPropertiesWithValidIterationContext()
         {
             var operationContainer = new OperationContainer(this.iterationContext, 1);
-            Assert.IsNotNull(operationContainer.Operations);
+            Assert.That(operationContainer.Operations, Is.Not.Null);
         }
 
         [Test]
@@ -105,10 +105,10 @@ namespace CDP4Dal.Tests
             var operationContainer = new OperationContainer(this.iterationContext);
 
             operationContainer.AddOperation(operation);
-            Assert.AreEqual(1, operationContainer.Operations.Count());
+            Assert.That(1, Is.EqualTo(operationContainer.Operations.Count()));
 
             operationContainer.RemoveOperation(operation);
-            Assert.AreEqual(0, operationContainer.Operations.Count());
+            Assert.That(0, Is.EqualTo(operationContainer.Operations.Count()));
         }
 
         [Test]

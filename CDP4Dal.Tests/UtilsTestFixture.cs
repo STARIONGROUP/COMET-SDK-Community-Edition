@@ -61,15 +61,15 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyCapitalizefirstLetterFunction()
         {
-            Assert.AreEqual("A", StringExtensions.CapitalizeFirstLetter("a"));
-            Assert.AreEqual("Abcd", StringExtensions.CapitalizeFirstLetter("abcd"));
+            Assert.That("A", Is.EqualTo(StringExtensions.CapitalizeFirstLetter("a")));
+            Assert.That("Abcd", Is.EqualTo(StringExtensions.CapitalizeFirstLetter("abcd")));
         }
 
         [Test]
         public void VerifyLowerCasefirstLetterFunction()
         {
-            Assert.AreEqual("a", StringExtensions.LowerCaseFirstLetter("A"));
-            Assert.AreEqual("aBCD", StringExtensions.LowerCaseFirstLetter("ABCD"));
+            Assert.That("a", Is.EqualTo(StringExtensions.LowerCaseFirstLetter("A")));
+            Assert.That("aBCD", Is.EqualTo(StringExtensions.LowerCaseFirstLetter("ABCD")));
         }
 
         [Test]
