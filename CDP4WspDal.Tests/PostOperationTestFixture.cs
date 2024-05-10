@@ -125,7 +125,7 @@ namespace CDP4WspDal.Tests
                 this.serializer.SerializeToStream(postOperation, stream);
 
                 stream.Position = 0;
-                Assert.AreEqual(expected, streamReader.ReadToEnd());
+                Assert.That(streamReader.ReadToEnd(), Is.EqualTo(expected));
             }
         }
         private class TestPostOperation : PostOperation

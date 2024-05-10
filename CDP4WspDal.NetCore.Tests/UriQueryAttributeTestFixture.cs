@@ -51,18 +51,18 @@ namespace CDP4WspDal.Tests
             this.attributes.RevisionNumber = 2;
 
             var test = this.attributes.ToString();
-            Assert.IsTrue(test.Contains("extent"));
-            Assert.IsTrue(test.Contains("includeReferenceData"));
-            Assert.IsTrue(test.Contains("includeAllContainers"));
-            Assert.IsTrue(test.Contains("includeFileData"));
-            Assert.IsTrue(test.Contains("revisionNumber"));
+            Assert.That(test.Contains("extent"), Is.True);
+            Assert.That(test.Contains("includeReferenceData"), Is.True);
+            Assert.That(test.Contains("includeAllContainers"), Is.True);
+            Assert.That(test.Contains("includeFileData"), Is.True);
+            Assert.That(test.Contains("revisionNumber"), Is.True);
         }
 
         [Test]
         public void TestEmptyAttributeToString()
         {
             var str = this.attributes.ToString();
-            Assert.AreEqual(string.Empty, str);
+            Assert.That(str, Is.EqualTo(string.Empty));
         }
     }
 }

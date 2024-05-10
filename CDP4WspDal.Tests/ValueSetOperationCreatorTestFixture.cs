@@ -321,12 +321,12 @@ namespace CDP4WspDal.Tests
             var operationCreator = new ValueSetOperationCreator(this.session.Object);
             var operationContainer = operationCreator.CreateValueSetsUpdateOperations(context, returnedDto, this.map);
 
-            Assert.AreEqual(2, operationContainer.Operations.Count());
+            Assert.That(operationContainer.Operations.Count(), Is.EqualTo(2));
             var operation = operationContainer.Operations.Single(x => x.OriginalThing.ClassKind == ClassKind.ParameterValueSet);
             var originalPvs = (Dto.ParameterValueSet)operation.OriginalThing;
             var modifiedPvs = (Dto.ParameterValueSet)operation.ModifiedThing;
 
-            Assert.AreNotEqual(originalPvs.Manual, modifiedPvs.Manual);
+            Assert.That(originalPvs.Manual, Is.Not.EqualTo(modifiedPvs.Manual));
         }
 
         [Test]
@@ -375,7 +375,7 @@ namespace CDP4WspDal.Tests
             var original = (Dto.ParameterValueSet)operation.OriginalThing;
             var modified = (Dto.ParameterValueSet)operation.ModifiedThing;
 
-            Assert.AreNotEqual(original.Manual, modified.Manual);
+            Assert.That(original.Manual, Is.Not.EqualTo(modified.Manual));
         }
 
         [Test]
@@ -420,7 +420,7 @@ namespace CDP4WspDal.Tests
             var original = (Dto.ParameterValueSet)operation.OriginalThing;
             var modified = (Dto.ParameterValueSet)operation.ModifiedThing;
 
-            Assert.AreNotEqual(original.Manual, modified.Manual);
+            Assert.That(original.Manual, Is.Not.EqualTo(modified.Manual));
         }
 
         [Test]
@@ -472,7 +472,7 @@ namespace CDP4WspDal.Tests
             var original = (Dto.ParameterValueSet)operation.OriginalThing;
             var modified = (Dto.ParameterValueSet)operation.ModifiedThing;
 
-            Assert.AreNotEqual(original.Manual, modified.Manual);
+            Assert.That(original.Manual, Is.Not.EqualTo(modified.Manual));
         }
 
         [Test]

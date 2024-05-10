@@ -264,7 +264,7 @@ namespace CDP4ServicesDal.Tests
             Assert.That(returned, Is.Not.Null);
             Assert.That(returned, Is.Not.Empty);
 
-            var sd = returned.First();
+            var sd = returned.OfType<CDP4Common.DTO.SiteDirectory>().First();
 
             var attributes = new QueryAttributes();
             var readResult = await dal.Read(sd, this.cancelationTokenSource.Token, attributes);

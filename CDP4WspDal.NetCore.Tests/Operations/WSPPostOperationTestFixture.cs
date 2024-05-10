@@ -69,9 +69,9 @@ namespace CDP4WspDal.Tests.Operations
         [Test]
         public void VerifyThatConstructorCreatesDeleteCreateAndUpdateContainers()
         {
-            Assert.AreEqual(0, this.wspPostOperation.Create.Count);
-            Assert.AreEqual(0, this.wspPostOperation.Delete.Count);
-            Assert.AreEqual(0, this.wspPostOperation.Update.Count);
+            Assert.That(this.wspPostOperation.Create.Count, Is.EqualTo(0));
+            Assert.That(this.wspPostOperation.Delete.Count, Is.EqualTo(0));
+            Assert.That(this.wspPostOperation.Update.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -81,9 +81,9 @@ namespace CDP4WspDal.Tests.Operations
             var operation = new Operation(simpleUnit, simpleUnit, OperationKind.Update);
             this.wspPostOperation.ConstructFromOperation(operation);
 
-            Assert.IsEmpty(this.wspPostOperation.Create);
-            Assert.IsEmpty(this.wspPostOperation.Update);
-            Assert.IsEmpty(this.wspPostOperation.Delete);
+            Assert.That(this.wspPostOperation.Create, Is.Empty);
+            Assert.That(this.wspPostOperation.Update, Is.Empty);
+            Assert.That(this.wspPostOperation.Delete, Is.Empty);
 
             var person1 = new Person(Guid.NewGuid(), 1);
             var person1update = new Person(person1.Iid, 1);
@@ -91,9 +91,9 @@ namespace CDP4WspDal.Tests.Operations
             var operation2 = new Operation(person1, person1update, OperationKind.Update);
             this.wspPostOperation.ConstructFromOperation(operation2);
 
-            Assert.IsEmpty(this.wspPostOperation.Create);
-            Assert.IsNotEmpty(this.wspPostOperation.Update);
-            Assert.IsEmpty(this.wspPostOperation.Delete);
+            Assert.That(this.wspPostOperation.Create, Is.Empty);
+            Assert.That(this.wspPostOperation.Update, Is.Not.Empty);
+            Assert.That(this.wspPostOperation.Delete, Is.Empty);
         }
 
         [Test]
@@ -145,16 +145,16 @@ namespace CDP4WspDal.Tests.Operations
             var operation = new Operation(array1, array2, OperationKind.Update);
             this.wspPostOperation.ConstructFromOperation(operation);
             var updatedClasslessdto = this.wspPostOperation.Update.SingleOrDefault();
-            Assert.IsNotNull(updatedClasslessdto);
+            Assert.That(updatedClasslessdto, Is.Not.Null);
 
             object outValue;
-            Assert.IsTrue(updatedClasslessdto.TryGetValue("Dimension", out outValue));
+            Assert.That(updatedClasslessdto.TryGetValue("Dimension", out outValue), Is.True);
             var orderedItems = (IEnumerable)outValue;
             var orderedItemList = orderedItems.Cast<OrderedItem>().ToList();
 
-            Assert.AreEqual(1234, orderedItemList[0].K);
-            Assert.AreEqual(4567, orderedItemList[1].K);
-            Assert.AreEqual(7890, orderedItemList[2].K);
+            Assert.That(orderedItemList[0].K, Is.EqualTo(1234));
+            Assert.That(orderedItemList[1].K, Is.EqualTo(4567));
+            Assert.That(orderedItemList[2].K, Is.EqualTo(7890));
         }
 
         [Test]
@@ -178,24 +178,24 @@ namespace CDP4WspDal.Tests.Operations
             var operation = new Operation(array1, array2, OperationKind.Update);
             this.wspPostOperation.ConstructFromOperation(operation);
             var updatedClasslessdto = this.wspPostOperation.Update.SingleOrDefault();
-            Assert.IsNotNull(updatedClasslessdto);
+            Assert.That(updatedClasslessdto, Is.Not.Null);
 
             object outValue;
-            Assert.IsTrue(updatedClasslessdto.TryGetValue("Dimension", out outValue));
+            Assert.That(updatedClasslessdto.TryGetValue("Dimension", out outValue), Is.True);
             var orderedItems = (IEnumerable)outValue;
             var orderedItemList = orderedItems.Cast<OrderedItem>().ToList();
 
-            Assert.AreEqual(123, orderedItemList[0].K);
-            Assert.AreEqual(456, orderedItemList[1].K);
-            Assert.AreEqual(789, orderedItemList[2].K);
+            Assert.That(orderedItemList[0].K, Is.EqualTo(123));
+            Assert.That(orderedItemList[1].K, Is.EqualTo(456));
+            Assert.That(orderedItemList[2].K, Is.EqualTo(789));
 
-            Assert.AreEqual(1234, orderedItemList[0].M);
-            Assert.AreEqual(4567, orderedItemList[1].M);
-            Assert.AreEqual(7890, orderedItemList[2].M);
+            Assert.That(orderedItemList[0].M, Is.EqualTo(1234));
+            Assert.That(orderedItemList[1].M, Is.EqualTo(4567));
+            Assert.That(orderedItemList[2].M, Is.EqualTo(7890));
 
-            Assert.AreEqual(guid1, orderedItemList[0].V);
-            Assert.AreEqual(guid2, orderedItemList[1].V);
-            Assert.AreEqual(guid3, orderedItemList[2].V);
+            Assert.That(orderedItemList[0].V, Is.EqualTo(guid1));
+            Assert.That(orderedItemList[1].V, Is.EqualTo(guid2));
+            Assert.That(orderedItemList[2].V, Is.EqualTo(guid3));
         }
     }
 }

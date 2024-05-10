@@ -81,11 +81,11 @@ namespace CDP4WspDal.Tests
             var dal = new WspDal();
             this.session = new Session(dal, this.credentials, this.messageBus);
 
-            Assert.AreEqual(0, this.session.Assembler.Cache.Count);
+            Assert.That(this.session.Assembler.Cache.Count, Is.EqualTo(0));
 
             await this.session.Open();
 
-            Assert.AreNotEqual(0, this.session.Assembler.Cache.Count);
+            Assert.That(this.session.Assembler.Cache.Count, Is.Not.EqualTo(0));
         }
     }
 }
