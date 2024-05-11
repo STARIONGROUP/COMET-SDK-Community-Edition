@@ -26,7 +26,13 @@ jobs:
 
       - name: add DevExpress nuget feed
         run: dotnet nuget add source https://nuget.devexpress.com/api -n DXFeed -u DevExpress -p ${{ secrets.DEVEXPRESS_NUGET_KEY }} --store-password-in-clear-text
-  
+
+      - name: Install dependencies
+        run: dotnet restore CDP4-SDK.sln
+
+      - name: Build
+        run: dotnet build CDP4-SDK.sln --no-restore /p:ContinuousIntegrationBuild=true
+
       - name: Sonarqube Begin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -36,7 +42,7 @@ jobs:
           dotnet sonarscanner begin /k:"STARIONGROUP_CDP4-SDK-Community-Edition" /o:"stariongroup" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
 
       - name: Run Tests and Compute Coverage
-        run: dotnet test CDP4-SDK.sln --verbosity normal --filter="(TestCategory!~WebServicesDependent) & (TestCategory!~CICDExclusion)" /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
+        run: dotnet test CDP4-SDK.sln --no-restore --no-build --verbosity normal --filter="(TestCategory!~WebServicesDependent) & (TestCategory!~CICDExclusion)" /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
 
       - name: Sonarqube end
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
