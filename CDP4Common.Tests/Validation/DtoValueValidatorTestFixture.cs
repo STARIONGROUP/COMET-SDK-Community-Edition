@@ -464,13 +464,14 @@ namespace CDP4Common.Tests.Validation
                 Assert.That(cleanedValue2, Is.EqualTo("0001-01-01T12:45:35.0000000"));
             });
 
-            //result = this.timeOfDayParameterType.Validate(new DateTime(1, 1, 1, 12, 45, 35, DateTimeKind.Local), out var cleanedValue3);
+            var dtValue = new DateTime(1, 1, 1, 12, 45, 35, DateTimeKind.Local);
+            result = this.timeOfDayParameterType.Validate(dtValue, out var cleanedValue3);
 
-            //Assert.Multiple(() =>
-            //{
-            //    Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-            //    Assert.That(cleanedValue3, Is.EqualTo("0001-01-01T12:45:35.0000000+01:00"));
-            //});
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
+                Assert.That(cleanedValue3, Is.EqualTo(dtValue.ToString("o")));
+            });
 
             result = this.timeOfDayParameterType.Validate(new DateTime(2001, 1, 1, 12, 45, 35, DateTimeKind.Utc), out _);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Invalid));
