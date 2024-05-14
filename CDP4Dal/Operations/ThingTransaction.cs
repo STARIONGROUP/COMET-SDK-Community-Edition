@@ -552,7 +552,7 @@ namespace CDP4Dal.Operations
                     this.AddedThing.Where(
                         x => x != this.AssociatedClone && x.GetContainerInformation().Item1 == cloneTypeToUpdate))
             {
-                if (!addedThing.IsContainedBy(rootClone.Iid))
+                if (addedThing.Container.Iid != rootClone.Iid)
                 {
                     // no need to update the container as it cannot be accessed through the current chain of operations
                     continue;
@@ -573,7 +573,7 @@ namespace CDP4Dal.Operations
                     this.UpdatedThing.Values.Where(
                         x => x != this.AssociatedClone && x.GetContainerInformation().Item1 == cloneTypeToUpdate))
             {
-                if (!updatedThing.IsContainedBy(rootClone.Iid))
+                if (updatedThing.Container.Iid != rootClone.Iid)
                 {
                     // no need to update the container as it cannot be access through the current chain of operations
                     continue;
