@@ -453,7 +453,7 @@ namespace CDP4Common.Validation
                     continue;
                 }
 
-                var validationResult = parameterType.ValidateAndCleanup(valueArray, kvp.Key, parameterOverride.Scale, things, provider);
+                var validationResult = parameterType.ValidateAndCleanup(valueArray, kvp.Key, parameter.Scale, things, provider);
 
                 if (validationResult.ResultKind != ValidationResultKind.Valid)
                 {
