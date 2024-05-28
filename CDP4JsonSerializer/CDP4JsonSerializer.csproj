@@ -20,8 +20,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25 JSON</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-        [Update] to Starion Group
-        [REMOVE] reference to net47* and netstandard 2.1
+      [BUMP] To CDP4Common 27.0.1
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
