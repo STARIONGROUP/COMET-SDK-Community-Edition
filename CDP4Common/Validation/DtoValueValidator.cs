@@ -421,6 +421,50 @@ namespace CDP4Common.Validation
         }
 
         /// <summary>
+        /// Validates and cleanup the <see cref="ValueArray{T}" /> contained in a <see cref="ClasslessDTO" /> for a
+        /// <see cref="ParameterOverride" />
+        /// </summary>
+        /// <param name="parameterOverride">The <see cref="ParameterOverride" /> to be validated</param>
+        /// <param name="classlessDto">The <see cref="ClasslessDTO" /> that contains <see cref="ValueArray{T}" /> to validate</param>
+        /// <param name="things">The collection of <see cref="Thing" /> to retrieve referenced <see cref="Thing" /></param>
+        /// <param name="provider">
+        /// The <see cref="IFormatProvider" /> used to validate, if set to null
+        /// <see cref="CultureInfo.CurrentCulture" /> will be used.
+        /// </param>
+        /// <returns>a <see cref="ValidationResult" /> that carries the <see cref="ValidationResultKind" /> and an optional message.</returns>
+        /// <exception cref="ThingNotFoundException">
+        /// If the <see cref="ParameterType" /> referenced by the <see cref="ParameterOrOverrideBase" />
+        /// is not contained inside the <paramref name="things" />
+        /// </exception>
+        public static ValidationResult ValidateAndCleanup(this ParameterOverride parameterOverride, ClasslessDTO classlessDto, IReadOnlyCollection<Thing> things, IFormatProvider provider = null)
+        {
+            var parameter = things.OfType<Parameter>()
+                                    .FirstOrDefault(x => x.Iid == parameterOverride.Parameter)
+                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contain a reference to the Parameter {parameterOverride.Parameter}");
+
+            var parameterType = things.OfType<ParameterType>()
+                                    .FirstOrDefault(x => x.Iid == parameter.ParameterType)
+                                ?? throw new ThingNotFoundException($"The provided collection of Things does not contain a reference to the ParameterType {parameter.ParameterType}");
+
+            foreach (var kvp in classlessDto)
+            {
+                if (!(kvp.Value is ValueArray<string> valueArray))
+                {
+                    continue;
+                }
+
+                var validationResult = parameterType.ValidateAndCleanup(valueArray, kvp.Key, parameter.Scale, things, provider);
+
+                if (validationResult.ResultKind != ValidationResultKind.Valid)
+                {
+                    return validationResult;
+                }
+            }
+
+            return ValidationResult.ValidResult();
+        }
+
+        /// <summary>
         /// Validates and cleanup the <see cref="ValueArray{T}" /> for a <see cref="ParameterType" />
         /// </summary>
         /// <param name="parameterType">The <see cref="ParameterType" /> to use for validation</param>
