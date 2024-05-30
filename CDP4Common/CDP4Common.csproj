@@ -20,7 +20,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [ADD] ParameterOverride implementation of DtoValueValidator.ValidateAndCleanup overload method
+      [ADD] Extension method for human readable texts on IRuleVerification
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
