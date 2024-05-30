@@ -27,7 +27,9 @@ namespace CDP4Common.SiteDirectoryData
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Extensions;
 
     /// <summary>
     /// representation of a validation rule for BinaryRelationships
@@ -53,6 +55,7 @@ namespace CDP4Common.SiteDirectoryData
             }
 
             var binaryRelationShips = iteration.Relationship.OfType<BinaryRelationship>().ToList();
+
             if (binaryRelationShips.Count == 0)
             {
                 return Enumerable.Empty<RuleViolation>();
@@ -71,8 +74,9 @@ namespace CDP4Common.SiteDirectoryData
             foreach (var binaryRelationship in binaryRelationShips)
             {
                 var allCategories = binaryRelationship.GetAllCategories().ToList();
-                
+
                 var relationshipIsCategorizedWithRuleRelationshipCategory = false;
+
                 foreach (var category in allCategories)
                 {
                     if (applicableRelationshipCategories.Contains(category))
@@ -87,16 +91,18 @@ namespace CDP4Common.SiteDirectoryData
                 }
 
                 var sourceViolation = this.VerifySource(binaryRelationship);
+
                 if (sourceViolation != null)
                 {
                     violations.Add(sourceViolation);
                 }
 
                 var targetViolation = this.VerifyTarget(binaryRelationship);
+
                 if (targetViolation != null)
                 {
                     violations.Add(targetViolation);
-                }    
+                }
             }
 
             return violations;
@@ -114,27 +120,29 @@ namespace CDP4Common.SiteDirectoryData
         private RuleViolation VerifySource(BinaryRelationship binaryRelationship)
         {
             var sourceCategorizableThing = binaryRelationship.Source as ICategorizableThing;
+
             if (sourceCategorizableThing == null)
             {
                 var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                 violation.ViolatingThing.Add(binaryRelationship.Iid);
                 violation.ViolatingThing.Add(binaryRelationship.Source.Iid);
-                violation.Description = $"The Source [{binaryRelationship.Source.ClassKind}:{binaryRelationship.Source.Iid}] of the BinaryRelationShip is not a CategorizableThing";
+                violation.Description = $"The Source [{binaryRelationship.Source.ClassKind}:{this.GetHumanReadableIdentifier(binaryRelationship.Source)}] of the BinaryRelationShip is not a CategorizableThing";
 
                 return violation;
             }
 
             var isMemberOfCategory = sourceCategorizableThing.IsMemberOfCategory(this.SourceCategory);
+
             if (!isMemberOfCategory)
             {
                 var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                 violation.ViolatingThing.Add(binaryRelationship.Iid);
                 violation.ViolatingThing.Add(binaryRelationship.Source.Iid);
-                violation.Description = $"The Source [{binaryRelationship.Source.ClassKind}:{binaryRelationship.Source.Iid}] of the BinaryRelationShip {binaryRelationship.Iid} is not a member of Category {this.SourceCategory.Iid} with shortname {this.SourceCategory.ShortName} or any of it's super categories";
+                violation.Description = $"The Source [{binaryRelationship.Source.ClassKind}:{this.GetHumanReadableIdentifier(binaryRelationship.Source)}] of the BinaryRelationShip {this.GetHumanReadableIdentifier(binaryRelationship)} is not a member of Category {this.GetHumanReadableIdentifier(this.SourceCategory)} with shortname {this.SourceCategory.ShortName} or any of it's super categories";
 
-                return violation;                    
+                return violation;
             }
-            
+
             return null;
         }
 
@@ -150,27 +158,29 @@ namespace CDP4Common.SiteDirectoryData
         private RuleViolation VerifyTarget(BinaryRelationship binaryRelationship)
         {
             var targetCategorizableThing = binaryRelationship.Target as ICategorizableThing;
+
             if (targetCategorizableThing == null)
             {
                 var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                 violation.ViolatingThing.Add(binaryRelationship.Iid);
                 violation.ViolatingThing.Add(binaryRelationship.Target.Iid);
-                violation.Description = $"The Target [{binaryRelationship.Target.ClassKind}:{binaryRelationship.Target.Iid}] of the BinaryRelationShip is not a CategorizableThing";
+                violation.Description = $"The Target [{binaryRelationship.Target.ClassKind}:{this.GetHumanReadableIdentifier(binaryRelationship.Target)}] of the BinaryRelationShip is not a CategorizableThing";
 
                 return violation;
             }
-            
+
             var isMemberOfCategory = targetCategorizableThing.IsMemberOfCategory(this.TargetCategory);
+
             if (!isMemberOfCategory)
             {
                 var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                 violation.ViolatingThing.Add(binaryRelationship.Iid);
                 violation.ViolatingThing.Add(binaryRelationship.Target.Iid);
-                violation.Description = $"The Target [{binaryRelationship.Target.ClassKind}:{binaryRelationship.Target.Iid}] of the BinaryRelationShip {binaryRelationship.Iid} is not a member of Category {this.TargetCategory.Iid} with shortname {this.TargetCategory.ShortName} or any of it's super categories";
+                violation.Description = $"The Target [{binaryRelationship.Target.ClassKind}:{this.GetHumanReadableIdentifier(binaryRelationship.Target)}] of the BinaryRelationShip {this.GetHumanReadableIdentifier(binaryRelationship)} is not a member of Category {this.GetHumanReadableIdentifier(this.TargetCategory)} with shortname {this.TargetCategory.ShortName} or any of it's super categories";
 
                 return violation;
             }
-            
+
             return null;
         }
     }

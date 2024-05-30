@@ -29,6 +29,7 @@ namespace CDP4Common.SiteDirectoryData
     using System.Linq;
 
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Extensions;
 
     /// <summary>
     /// representation of a validation rule for <see cref="MultiRelationship"/>s that relate (potentially) more than two <see cref="ICategorizableThing"/>s
@@ -52,6 +53,7 @@ namespace CDP4Common.SiteDirectoryData
             }
 
             var multiRelationships = iteration.Relationship.OfType<MultiRelationship>().ToList();
+
             if (multiRelationships.Count == 0)
             {
                 return Enumerable.Empty<RuleViolation>();
@@ -67,11 +69,12 @@ namespace CDP4Common.SiteDirectoryData
 
             var violations = new List<RuleViolation>();
 
-            foreach (var multiReplationship in multiRelationships)
+            foreach (var multiRelationship in multiRelationships)
             {
-                var allCategories = multiReplationship.GetAllCategories().ToList();
+                var allCategories = multiRelationship.GetAllCategories().ToList();
 
                 var relationshipIsCategorizedWithRuleRelationshipCategory = false;
+
                 foreach (var category in allCategories)
                 {
                     if (applicableRelationshipCategories.Contains(category))
@@ -86,15 +89,16 @@ namespace CDP4Common.SiteDirectoryData
                     continue;
                 }
 
-                foreach (var relatedThing in multiReplationship.RelatedThing)
+                foreach (var relatedThing in multiRelationship.RelatedThing)
                 {
                     var relatedCategorizableThing = relatedThing as ICategorizableThing;
+
                     if (relatedCategorizableThing == null)
                     {
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
-                        violation.ViolatingThing.Add(multiReplationship.Iid);
+                        violation.ViolatingThing.Add(multiRelationship.Iid);
                         violation.ViolatingThing.Add(relatedThing.Iid);
-                        violation.Description = $"The related Thing [{relatedThing.ClassKind}:{relatedThing.Iid}] of the MultiRelationship {multiReplationship.Iid} is not a CategorizableThing";
+                        violation.Description = $"The related Thing [{relatedThing.ClassKind}:{this.GetHumanReadableIdentifier(relatedThing)}] of the MultiRelationship {this.GetHumanReadableIdentifier(multiRelationship)} is not a CategorizableThing";
 
                         violations.Add(violation);
                     }
@@ -107,16 +111,16 @@ namespace CDP4Common.SiteDirectoryData
                             if (relatedCategorizableThing.IsMemberOfCategory(category))
                             {
                                 isMemberOfCategory = true;
-                               continue;
-                            }                        
+                                continue;
+                            }
                         }
 
                         if (!isMemberOfCategory)
                         {
                             var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
-                            violation.ViolatingThing.Add(multiReplationship.Iid);
+                            violation.ViolatingThing.Add(multiRelationship.Iid);
                             violation.ViolatingThing.Add(relatedThing.Iid);
-                            violation.Description = $"The related Thing [{relatedThing.ClassKind}:{relatedThing.Iid}] is not a member of any of the required categories";
+                            violation.Description = $"The related Thing [{relatedThing.ClassKind}:{this.GetHumanReadableIdentifier(relatedThing)}] is not a member of any of the required categories";
 
                             violations.Add(violation);
                         }
