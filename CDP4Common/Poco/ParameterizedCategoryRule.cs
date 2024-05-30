@@ -27,7 +27,9 @@ namespace CDP4Common.SiteDirectoryData
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.Extensions;
 
     /// <summary>
     /// Rule that asserts that one or more parameters of a given <see cref="ParameterType"/> should be defined for CategorizableThings that are a member of the associated Category
@@ -86,9 +88,11 @@ namespace CDP4Common.SiteDirectoryData
                 if (elementDefinition.IsMemberOfCategory(this.Category))
                 {
                     var missingParameterTypes = new List<ParameterType>();
+
                     foreach (var parameterType in this.ParameterType)
                     {
                         var parameter = elementDefinition.Parameter.SingleOrDefault(p => p.ParameterType == parameterType);
+
                         if (parameter == null)
                         {
                             missingParameterTypes.Add(parameterType);
@@ -123,9 +127,11 @@ namespace CDP4Common.SiteDirectoryData
                 if (relationship.IsMemberOfCategory(this.Category))
                 {
                     var missingParameterTypes = new List<ParameterType>();
+
                     foreach (var parameterType in this.ParameterType)
                     {
                         var parameter = relationship.ParameterValue.SingleOrDefault(p => p.ParameterType == parameterType);
+
                         if (parameter == null)
                         {
                             missingParameterTypes.Add(parameterType);
@@ -140,7 +146,7 @@ namespace CDP4Common.SiteDirectoryData
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.RuleViolatedClassKind.Add(relationship.ClassKind);
                         violation.ViolatingThing.Add(relationship.Iid);
-                        violation.Description = $"The Relationship {relationship.Iid} does not contain parameters that reference the following parameter types {iids} with shortnames: {shortnames}";
+                        violation.Description = $"The Relationship {this.GetHumanReadableIdentifier(relationship)} does not contain parameters that reference the following parameter types {iids} with shortnames: {shortnames}";
 
                         violations.Add(violation);
                     }
@@ -160,9 +166,11 @@ namespace CDP4Common.SiteDirectoryData
                 if (specification.IsMemberOfCategory(this.Category))
                 {
                     var missingParameterTypes = new List<ParameterType>();
+
                     foreach (var parameterType in this.ParameterType)
                     {
                         var parameter = specification.ParameterValue.SingleOrDefault(p => p.ParameterType == parameterType);
+
                         if (parameter == null)
                         {
                             missingParameterTypes.Add(parameterType);
@@ -200,9 +208,11 @@ namespace CDP4Common.SiteDirectoryData
                 if (group.IsMemberOfCategory(this.Category))
                 {
                     var missingParameterTypes = new List<ParameterType>();
+
                     foreach (var parameterType in this.ParameterType)
                     {
                         var parameter = group.ParameterValue.SingleOrDefault(p => p.ParameterType == parameterType);
+
                         if (parameter == null)
                         {
                             missingParameterTypes.Add(parameterType);
@@ -239,9 +249,11 @@ namespace CDP4Common.SiteDirectoryData
                 if (requirement.IsMemberOfCategory(this.Category))
                 {
                     var missingParameterTypes = new List<ParameterType>();
+
                     foreach (var parameterType in this.ParameterType)
                     {
                         var parameter = requirement.ParameterValue.SingleOrDefault(p => p.ParameterType == parameterType);
+
                         if (parameter == null)
                         {
                             missingParameterTypes.Add(parameterType);

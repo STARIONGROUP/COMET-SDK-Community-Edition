@@ -27,6 +27,7 @@ namespace CDP4Common.SiteDirectoryData
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common.EngineeringModelData;
 
     /// <summary>
@@ -53,6 +54,7 @@ namespace CDP4Common.SiteDirectoryData
             }
 
             var elementDefinitions = iteration.Element;
+
             if (elementDefinitions.Count == 0)
             {
                 return Enumerable.Empty<RuleViolation>();
@@ -72,7 +74,7 @@ namespace CDP4Common.SiteDirectoryData
                     {
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.ViolatingThing.Add(elementDefinition.Iid);
-                        violation.Description = $"The Element Definition {elementDefinition.Iid} does not contain the minimum of {this.MinContained} Element Usages specified";
+                        violation.Description = $"The Element Definition {elementDefinition.ModelCode()} does not contain the minimum of {this.MinContained} Element Usages specified";
 
                         violations.Add(violation);
                     }
@@ -81,7 +83,7 @@ namespace CDP4Common.SiteDirectoryData
                     {
                         var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                         violation.ViolatingThing.Add(elementDefinition.Iid);
-                        violation.Description = $"The Element Definition {elementDefinition.Iid} contains more Element Usages than the maximum of {this.MaxContained.Value} specified";
+                        violation.Description = $"The Element Definition {elementDefinition.ModelCode()} contains more Element Usages than the maximum of {this.MaxContained.Value} specified";
 
                         violations.Add(violation);
                     }
@@ -115,6 +117,7 @@ namespace CDP4Common.SiteDirectoryData
                 foreach (var category in this.ContainedCategory)
                 {
                     var isElementUsageAMember = elementUsage.IsMemberOfCategory(category);
+
                     if (isElementUsageAMember)
                     {
                         isValidUsage = true;
@@ -122,6 +125,7 @@ namespace CDP4Common.SiteDirectoryData
                     }
 
                     var isElementDefinitionAMember = elementUsage.ElementDefinition.IsMemberOfCategory(category);
+
                     if (isElementDefinitionAMember)
                     {
                         isValidUsage = true;
@@ -133,13 +137,13 @@ namespace CDP4Common.SiteDirectoryData
                     var violation = new RuleViolation(Guid.NewGuid(), this.Cache, this.IDalUri);
                     violation.ViolatingThing.Add(elementDefinition.Iid);
                     violation.ViolatingThing.Add(elementUsage.Iid);
-                    violation.Description = $"The Element Definition {elementDefinition.Iid} contains an Element Usage {elementUsage.Iid} of an incorrect type";
+                    violation.Description = $"The Element Definition {elementDefinition.ModelCode()} contains an Element Usage {elementUsage.ModelCode()} of an incorrect type";
 
                     violations.Add(violation);
                 }
                 else
                 {
-                    validElementUsages.Add(elementUsage);                    
+                    validElementUsages.Add(elementUsage);
                 }
             }
 
