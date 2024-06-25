@@ -61,7 +61,7 @@ namespace CDP4Dal
         /// <summary>
         /// The <see cref="IExceptionHandlerService"/>
         /// </summary>
-        private readonly IExceptionHandlerService exceptionHandlerService;
+        public IExceptionHandlerService ExceptionHandlerService { get; private set; }
 
         /// <summary>
         /// Executes just before data from an <see cref="OperationContainer"/> is written to the datastore.
@@ -108,7 +108,7 @@ namespace CDP4Dal
         /// <param name="exceptionHandlerService">The instance of <see cref="IExceptionHandlerService"/></param>
         public Session(IDal dal, Credentials credentials, ICDPMessageBus messageBus, IExceptionHandlerService exceptionHandlerService) : this(dal, credentials, messageBus)
         {
-            this.exceptionHandlerService = exceptionHandlerService;
+            this.ExceptionHandlerService = exceptionHandlerService;
         }
 
         /// <summary>
@@ -867,7 +867,7 @@ namespace CDP4Dal
             }
             catch (Exception ex)
             {
-                if (!this.exceptionHandlerService?.HandleException(ex) ?? true)
+                if (!this.ExceptionHandlerService?.HandleException(ex) ?? true)
                 {
                     throw;
                 }
@@ -924,7 +924,7 @@ namespace CDP4Dal
             }
             catch (Exception ex)
             {
-                if (!this.exceptionHandlerService?.HandleException(ex) ?? true)
+                if (!this.ExceptionHandlerService?.HandleException(ex) ?? true)
                 {
                     throw;
                 }
