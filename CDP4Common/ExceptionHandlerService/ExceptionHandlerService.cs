@@ -33,7 +33,7 @@ namespace CDP4Common.ExceptionHandlerService
     using System.Linq;
 
     /// <summary>
-    /// The purpose of the <see cref="ExceptionHandlerService" /> is to check server exceptions and start IME processes accordingly
+    /// The purpose of the <see cref="ExceptionHandlerService" /> is to check server exceptions and start Application processes accordingly
     /// </summary>
 
 #if NETFRAMEWORK
@@ -65,17 +65,18 @@ namespace CDP4Common.ExceptionHandlerService
 #endif
 
         /// <summary>
-        /// Handles a specific <see cref="Exception"/> and enables the IME to start a process based on the ocntent or type of the <see cref="Exception"/>
+        /// Handles a specific <see cref="Exception"/> and enables the Application to start a process based on the ocntent or type of the <see cref="Exception"/>
         /// </summary>
         /// <param name="exception">The <see cref="Exception"/></param>
+        /// <param name="payload"></param>
         /// <returns>a boolean value indicating if the <see cref="Exception"/> was handled or not, so it could be thrown again</returns>
-        public bool HandleException(Exception exception)
+        public bool HandleException(Exception exception, params object[] payload)
         {
             var isHandled = false;
 
             foreach (var exceptionHandler in this.exceptionHandlers)
             {
-                isHandled = isHandled || exceptionHandler.HandleException(exception);
+                isHandled = isHandled || exceptionHandler.HandleException(exception, payload);
             }
 
             return isHandled;

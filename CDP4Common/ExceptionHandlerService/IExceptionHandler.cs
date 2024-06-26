@@ -28,15 +28,16 @@ namespace CDP4Common.ExceptionHandlerService
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="IExceptionHandler" /> is to check exceptions and start IME processes accordingly
+    /// The purpose of the <see cref="IExceptionHandler" /> is to check exceptions and start Application processes accordingly
     /// </summary>
     public interface IExceptionHandler
     {
         /// <summary>
-        /// Handles a specific <see cref="Exception"/> and enables the IME to start a process based on the ocntent or type of the <see cref="Exception"/>
+        /// Handles a specific <see cref="Exception"/> and enables the application to start a process based on the content or type of the <see cref="Exception"/>
         /// </summary>
         /// <param name="exception">The <see cref="Exception"/></param>
+        /// <param name="payload">A collection of objects that can be used for exception handling</param>
         /// <returns>a boolean value indicating if the <see cref="Exception"/> was handled or not, so it could be thrown again</returns>
-        bool HandleException(Exception exception);
+        bool HandleException(Exception exception, params object[] payload);
     }
 }

@@ -867,7 +867,7 @@ namespace CDP4Dal
             }
             catch (Exception ex)
             {
-                if (!this.ExceptionHandlerService?.HandleException(ex) ?? true)
+                if (!this.ExceptionHandlerService?.HandleException(ex, this, operationContainer, files) ?? true)
                 {
                     throw;
                 }
@@ -924,7 +924,7 @@ namespace CDP4Dal
             }
             catch (Exception ex)
             {
-                if (!this.ExceptionHandlerService?.HandleException(ex) ?? true)
+                if (!this.ExceptionHandlerService?.HandleException(ex, this, operationContainer, files) ?? true)
                 {
                     throw;
                 }
