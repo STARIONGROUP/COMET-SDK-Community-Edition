@@ -35,6 +35,11 @@ namespace CDP4Dal.Exceptions
     public class DalWriteException : Exception
     {
         /// <summary>
+        /// Gets or sets the CDPErrorTag (error code), typically found in the CDPErrorTag header of a CDP4-COMET Webservice http response
+        /// </summary>
+        public string CDPErrorTag { get; set; } = string.Empty;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DalWriteException"/> class.
         /// </summary>
         public DalWriteException()
