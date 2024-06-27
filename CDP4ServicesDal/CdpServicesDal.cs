@@ -248,13 +248,13 @@ namespace CDP4ServicesDal
             var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
             var msg = $"The CDP4 Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
 
-            if (httpResponseMessage.Headers.Contains("CDPErrorTag"))
+            if (httpResponseMessage.Headers.Contains(Headers.CDPErrorTag))
             {
-                var cdpErrorTag = httpResponseMessage.Headers.GetValues("CDPErrorTag").FirstOrDefault() ?? string.Empty;
+                var cdpErrorTag = httpResponseMessage.Headers.GetValues(Headers.CDPErrorTag).FirstOrDefault() ?? string.Empty;
 
                 if (cdpErrorTag != null)
                 {
-                    Logger.Error($"CDPErrorTag {cdpErrorTag} - {msg}");
+                    Logger.Error($"{Headers.CDPErrorTag} {cdpErrorTag} - {msg}");
                     throw new DalWriteException(msg) { CDPErrorTag = cdpErrorTag };
                 }
             }
