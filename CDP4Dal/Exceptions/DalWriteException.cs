@@ -27,12 +27,14 @@ namespace CDP4Dal.Exceptions
     using System;
     using System.Runtime.Serialization;
 
+    using CDP4Common.Exceptions;
+
     /// <summary>
     /// A <see cref="DalWriteException"/> is thrown the when a during a Write operation the data-source
     /// returns an exception
     /// </summary>
     [Serializable]
-    public class DalWriteException : Exception
+    public class DalWriteException : Exception, IHaveCDPErrorTag
     {
         /// <summary>
         /// Gets or sets the CDPErrorTag (error code), typically found in the CDPErrorTag header of a CDP4-COMET Webservice http response
