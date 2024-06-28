@@ -76,7 +76,7 @@ namespace CDP4Common.ExceptionHandlerService
 
             foreach (var exceptionHandler in this.exceptionHandlers)
             {
-                isHandled = isHandled || exceptionHandler.HandleException(exception, payload);
+                isHandled = exceptionHandler.HandleException(exception, payload) || isHandled;
             }
 
             return isHandled;
