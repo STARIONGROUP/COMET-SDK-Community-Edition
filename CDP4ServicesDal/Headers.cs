@@ -68,5 +68,10 @@ namespace CDP4ServicesDal
         /// The header that specifies the version of CDP extensions that are accepted
         /// </summary>
         internal const string AcceptCdpVersionValue = "1.3.0";
+
+        /// <summary>
+        /// The header that specifies the the error tag of an http response message
+        /// </summary>
+        internal const string CDPErrorTag = "CDP-Error-Tag";
     }
 }
