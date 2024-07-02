@@ -37,6 +37,7 @@ namespace CDP4Dal
     using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.ExceptionHandlerService;
     using CDP4Common.Exceptions;
     using CDP4Common.Extensions;
     using CDP4Common.SiteDirectoryData;
@@ -57,6 +58,11 @@ namespace CDP4Dal
     /// </summary>
     public class Session : ISession
     {
+        /// <summary>
+        /// The <see cref="IExceptionHandlerService"/>
+        /// </summary>
+        public IExceptionHandlerService ExceptionHandlerService { get; private set; }
+
         /// <summary>
         /// Executes just before data from an <see cref="OperationContainer"/> is written to the datastore.
         /// </summary>
@@ -86,6 +92,24 @@ namespace CDP4Dal
         /// Contains all <see cref="CometTask" /> created or read during the session
         /// </summary>
         private readonly Dictionary<Guid, CometTask> cometTasks = new Dictionary<Guid, CometTask>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Session"/> class.
+        /// </summary>
+        /// <param name="dal">
+        /// the associated <see cref="IDal"/> that is used to communicate with the data-source
+        /// </param>
+        /// <param name="credentials">
+        /// the <see cref="DAL.Credentials"/> associated to the <see cref="IDal"/>
+        /// </param>
+        /// <param name="messageBus">
+        /// The instance of <see cref="ICDPMessageBus"/>
+        /// </param>
+        /// <param name="exceptionHandlerService">The instance of <see cref="IExceptionHandlerService"/></param>
+        public Session(IDal dal, Credentials credentials, ICDPMessageBus messageBus, IExceptionHandlerService exceptionHandlerService) : this(dal, credentials, messageBus)
+        {
+            this.ExceptionHandlerService = exceptionHandlerService;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Session"/> class.
@@ -832,11 +856,22 @@ namespace CDP4Dal
         public async Task Write(OperationContainer operationContainer, IEnumerable<string> files)
         {
             var filesList = this.BeforeDalWriteAndProcessFiles(operationContainer, files);
-            var dtoThings = await this.Dal.Write(operationContainer, filesList);
 
-            var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
+            try
+            {
+                var dtoThings = await this.Dal.Write(operationContainer, filesList);
 
-            await this.AfterReadOrWriteOrUpdate(enumerable);
+                var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
+
+                await this.AfterReadOrWriteOrUpdate(enumerable);
+            }
+            catch (Exception ex)
+            {
+                if (!this.ExceptionHandlerService?.HandleException(ex, this, operationContainer, files) ?? true)
+                {
+                    throw;
+                }
+            }
         }
 
         /// <summary>
@@ -873,16 +908,28 @@ namespace CDP4Dal
         public async Task<CometTask?> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
         {
             var filesList = this.BeforeDalWriteAndProcessFiles(operationContainer, files);
-            var longRunningTaskResult = await this.Dal.Write(operationContainer, waitTime, filesList);
-            
-            if (longRunningTaskResult.IsWaitTimeReached)
+
+            try
             {
-                this.cometTasks[longRunningTaskResult.Task.Id] = longRunningTaskResult.Task;
-                return longRunningTaskResult.Task;
+                var longRunningTaskResult = await this.Dal.Write(operationContainer, waitTime, filesList);
+
+                if (longRunningTaskResult.IsWaitTimeReached)
+                {
+                    this.cometTasks[longRunningTaskResult.Task.Id] = longRunningTaskResult.Task;
+                    return longRunningTaskResult.Task;
+                }
+
+                var things = longRunningTaskResult.Things as IList<CDP4Common.DTO.Thing> ?? longRunningTaskResult.Things.ToList();
+                await this.AfterReadOrWriteOrUpdate(things);
+            }
+            catch (Exception ex)
+            {
+                if (!this.ExceptionHandlerService?.HandleException(ex, this, operationContainer, files) ?? true)
+                {
+                    throw;
+                }
             }
 
-            var things = longRunningTaskResult.Things as IList<CDP4Common.DTO.Thing> ?? longRunningTaskResult.Things.ToList();
-            await this.AfterReadOrWriteOrUpdate(things);
             return null;
         }
 

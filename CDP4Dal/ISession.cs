@@ -31,6 +31,7 @@ namespace CDP4Dal
     using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
+    using CDP4Common.ExceptionHandlerService;
     using CDP4Common.SiteDirectoryData;
 
     using CDP4Dal.Operations;
@@ -97,6 +98,11 @@ namespace CDP4Dal
         /// Gets the <see cref="IPermissionService"/> that handles access permissions for this Session.
         /// </summary>
         IPermissionService PermissionService { get; }
+
+        /// <summary>
+        /// The <see cref="IExceptionHandlerService"/>
+        /// </summary>
+        IExceptionHandlerService ExceptionHandlerService { get; }
 
         /// <summary>
         /// Gets the uri of the connected data-source

@@ -195,10 +195,7 @@ namespace CDP4ServicesDal
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
-                    var msg = $"The CDP4 Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
-                    Logger.Error(msg);
-                    throw new DalWriteException(msg);
+                    await this.ProcessWriteException(httpResponseMessage);
                 }
 
                 this.ProcessHeaders(httpResponseMessage);
@@ -238,6 +235,32 @@ namespace CDP4ServicesDal
             Logger.Info("Write Operation completed in {0} [ms]", watch.ElapsedMilliseconds);
 
             return result;
+        }
+
+        /// <summary>
+        /// Handles the situation where a Write failed
+        /// </summary>
+        /// <param name="httpResponseMessage">The <see cref="HttpResponseMessage"/></param>
+        /// <exception cref="DalWriteException">Always throws a <see cref="DalWriteException"/></exception>
+        /// <returns>An awaitable <see cref="Task"/></returns>
+        private async Task ProcessWriteException(HttpResponseMessage httpResponseMessage)
+        {
+            var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
+            var msg = $"The CDP4 Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
+
+            if (httpResponseMessage.Headers.Contains(Headers.CDPErrorTag))
+            {
+                var cdpErrorTag = httpResponseMessage.Headers.GetValues(Headers.CDPErrorTag).FirstOrDefault() ?? string.Empty;
+
+                if (cdpErrorTag != null)
+                {
+                    Logger.Error($"{Headers.CDPErrorTag} {cdpErrorTag} - {msg}");
+                    throw new DalWriteException(msg) { CDPErrorTag = cdpErrorTag };
+                }
+            }
+
+            Logger.Error(msg);
+            throw new DalWriteException(msg);
         }
 
         /// <summary>
@@ -301,10 +324,7 @@ namespace CDP4ServicesDal
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
-                    var msg = $"The CDP4 Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
-                    Logger.Error(msg);
-                    throw new DalWriteException(msg);
+                    await this.ProcessWriteException(httpResponseMessage);
                 }
 
                 this.ProcessHeaders(httpResponseMessage);
