@@ -20,7 +20,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25 JSON</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [BUMP] To CDP4Common 27.1.0
+      [BUMP] To CDP4Common 27.2.0
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
