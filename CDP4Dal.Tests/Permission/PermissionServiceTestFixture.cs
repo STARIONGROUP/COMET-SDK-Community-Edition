@@ -2,20 +2,20 @@
 // <copyright file="PermissionServiceTestFixture.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2024 Starion Group S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
-// 
+//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft, Yevhen Ikonnykov
+//
 //    This file is part of CDP4-COMET SDK Community Edition
-// 
+//
 //    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-// 
+//
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-// 
+//
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -70,6 +70,7 @@ namespace CDP4Dal.Tests.Permission
 
         private PermissionService permissionService;
         private CommonFileStore commonFileStore;
+        private File file;
 
         [SetUp]
         public void Setup()
@@ -103,6 +104,7 @@ namespace CDP4Dal.Tests.Permission
             this.requirementsSpecification = new RequirementsSpecification(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.requirement = new Requirement(Guid.NewGuid(), this.assembler.Cache, this.uri);
             this.commonFileStore = new CommonFileStore(Guid.NewGuid(), this.assembler.Cache, this.uri);
+            this.file = new File(Guid.NewGuid(), this.assembler.Cache, this.uri);
 
             this.sitedir.Model.Add(this.modelsetup);
             this.sitedir.Person.Add(this.person);
@@ -134,6 +136,8 @@ namespace CDP4Dal.Tests.Permission
             this.requirementsSpecification.Requirement.Add(this.requirement);
             this.iteration.RequirementsSpecification.Add(this.requirementsSpecification);
             this.model.CommonFileStore.Add(this.commonFileStore);
+            this.file.Owner = this.domain1;
+            this.commonFileStore.File.Add(this.file);
 
             this.session.Setup(x => x.ActivePerson).Returns(this.person);
             this.session.Setup(x => x.Assembler).Returns(this.assembler);
@@ -172,6 +176,7 @@ namespace CDP4Dal.Tests.Permission
 
             Assert.That(this.permissionService.CanRead(this.model), Is.False);
             Assert.That(this.permissionService.CanRead(this.iteration), Is.False);
+            Assert.That(this.permissionService.CanRead(this.file), Is.False);
         }
 
         [Test]
@@ -399,8 +404,37 @@ namespace CDP4Dal.Tests.Permission
 
             //Thing has other owner as User's participant
             this.commonFileStore.Owner = this.domain2;
-            Assert.That(this.permissionService.CanWrite(this.commonFileStore), Is.True);
+            Assert.That(this.permissionService.CanWrite(this.commonFileStore), Is.False);
             Assert.That(this.permissionService.CanRead(this.commonFileStore), Is.True);
+        }
+
+        [Test]
+        public void VerifyModifyIfOwnerForThingsThatContainedInThingsThatAreDirectlyUnderEngineeringModel()
+        {
+            this.session.Setup(x => x.ActivePersonParticipants).Returns(new List<Participant> { this.participant });
+            Assert.That(this.permissionService.CanWrite(this.model), Is.False);
+            Assert.That(this.permissionService.CanRead(this.model), Is.False);
+
+            var permission =
+                this.participantRole.ParticipantPermission.Single(x => x.ObjectClass == ClassKind.File);
+
+            permission.AccessRight = ParticipantAccessRightKind.MODIFY_IF_OWNER;
+
+            this.file.Owner = null;
+
+            //Thing has no owner
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanWrite(this.file));
+            Assert.Throws<IncompleteModelException>(() => this.permissionService.CanRead(this.file));
+
+            //Thing has same owner as User's participant
+            this.file.Owner = this.domain1;
+            Assert.That(this.permissionService.CanWrite(this.file), Is.True);
+            Assert.That(this.permissionService.CanRead(this.file), Is.True);
+
+            //Thing has other owner as User's participant
+            this.file.Owner = this.domain2;
+            Assert.That(this.permissionService.CanWrite(this.file), Is.False);
+            Assert.That(this.permissionService.CanRead(this.file), Is.True);
         }
 
         [Test]
