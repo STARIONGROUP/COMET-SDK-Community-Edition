@@ -650,7 +650,7 @@ namespace CDP4Dal.Permission
 
             if (thing.Container is EngineeringModel currentModel)
             {
-                return this.Session.OpenIterations.Where(x => x.Key.Container == currentModel).Select(x => x.Value).Any();
+                return this.Session.OpenIterations.Where(x => x.Key.Container == currentModel && x.Value.Item2.Domain.Contains(ownedThing.Owner)).Select(x => x.Value).Any();
             }
 
             //Check if the ownedThing domain is contained in the participant domains 
@@ -669,13 +669,30 @@ namespace CDP4Dal.Permission
             var iteration = thing is Iteration it ? it : thing.GetContainerOfType<Iteration>();
             participant = null;
 
-            if (iteration != null
-                && this.Session.OpenIterations.TryGetValue(iteration, out var participation)
+            if (iteration != null)
+            {
+                if (this.Session.OpenIterations.TryGetValue(iteration, out var participation)
                 && participation.Item1 != null
                 && participation.Item2 != null)
+                {
+                    participant = participation.Item2;
+                    return true;
+                }
+            }
+            else
             {
-                participant = participation.Item2;
-                return true;
+                // Check TopContainer, for contained Things on a non Iteration Thing directly under EngineeringModel,
+                // like EngineeringModel=>CommonFileStore=>File
+                if (thing.TopContainer is EngineeringModel currentModel)
+                {
+                    var iterations = this.Session.OpenIterations.FirstOrDefault(x => x.Key.Container == currentModel);
+
+                    if (iterations.Key != null)
+                    {
+                        participant = iterations.Value.Item2;
+                        return true;
+                    }
+                }
             }
 
             return false;
