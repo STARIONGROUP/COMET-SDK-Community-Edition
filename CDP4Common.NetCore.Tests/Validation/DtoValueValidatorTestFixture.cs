@@ -84,8 +84,8 @@ namespace CDP4Common.NetCore.Tests.Validation
                 NumberSet = NumberSetKind.NATURAL_NUMBER_SET
             };
 
-            this.valueDefinitions =
-            [
+            this.valueDefinitions = new List<EnumerationValueDefinition>()
+            {
                 new EnumerationValueDefinition(Guid.NewGuid(), 1)
                 {
                     Name = "LOW",
@@ -97,17 +97,44 @@ namespace CDP4Common.NetCore.Tests.Validation
                     Name = "MEDIUM",
                     ShortName = "medium"
                 }
-            ];
+            };
 
             this.enumerationParameterType.ValueDefinition.Add(new OrderedItem { V = this.valueDefinitions[0].Iid });
             this.enumerationParameterType.ValueDefinition.Add(new OrderedItem { V = this.valueDefinitions[1].Iid });
 
             this.valueSet = new ParameterValueSet(Guid.NewGuid(), 1)
             {
-                Reference = new ValueArray<string>([ObjectValueValidator.DefaultValue]),
-                Computed = new ValueArray<string>([ObjectValueValidator.DefaultValue]),
-                Manual = new ValueArray<string>([ObjectValueValidator.DefaultValue])
+                Reference = new ValueArray<string>(new List<string>() { ObjectValueValidator.DefaultValue }),
+                Computed = new ValueArray<string>(new List<string>() { ObjectValueValidator.DefaultValue }),
+                Manual = new ValueArray<string>(new List<string>() { ObjectValueValidator.DefaultValue }),
+                Formula = new ValueArray<string>(new List<string>() { ObjectValueValidator.DefaultValue })
             };
+        }
+
+        [Test]
+        public void VerifyQuantityFormula()
+        {
+            var parameter = new Parameter(Guid.NewGuid(), 1)
+            {
+                ParameterType = this.simpleQuantityKind.Iid,
+                Scale = this.ratioScale.Iid
+            };
+
+            var classlessDto = new ClasslessDTO()
+            {
+                {"Manual", new ValueArray<string>(new List<string>(){"1"})},
+                {"Computed", new ValueArray<string>(new List<string>(){"2"})},
+                {"Reference", new ValueArray<string>(new List<string>(){"3"})},
+                {"Formula", new ValueArray<string>(new List<string>(){"=CELLNAME"})},
+            };
+
+            var things = new List<Thing>();
+            things.Add(this.simpleQuantityKind);
+            things.Add(this.ratioScale);
+
+            var result = parameter.ValidateAndCleanup(classlessDto, things);
+
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
         }
 
         [Test]
@@ -526,7 +553,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             });
 
             result = this.simpleQuantityKind.Validate(1.00, this.ratioScale.Iid, out cleanedValue, things);
-            
+
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
@@ -583,14 +610,14 @@ namespace CDP4Common.NetCore.Tests.Validation
             });
 
             result = this.simpleQuantityKind.Validate(1.00, this.ratioScale.Iid, out cleanedValue, things);
-            
+
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
                 Assert.That(cleanedValue, Is.EqualTo("1"));
             });
 
-            result = this.simpleQuantityKind.Validate(1.001, this.ratioScale.Iid, out _, things); 
+            result = this.simpleQuantityKind.Validate(1.001, this.ratioScale.Iid, out _, things);
 
             Assert.Multiple(() =>
             {
@@ -627,10 +654,10 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             this.valueSet.Manual[0] = "-1";
 
-            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet,  this.ratioScale.Iid, things);
+            result = this.simpleQuantityKind.ValidateAndCleanup(this.valueSet, this.ratioScale.Iid, things);
             Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
 
-            result = this.simpleQuantityKind.Validate(1,  this.ratioScale.Iid, out var cleanedValue, things);
+            result = this.simpleQuantityKind.Validate(1, this.ratioScale.Iid, out var cleanedValue, things);
 
             Assert.Multiple(() =>
             {
@@ -639,7 +666,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             });
 
             result = this.simpleQuantityKind.Validate(1.00, this.ratioScale.Iid, out cleanedValue, things);
-            
+
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
@@ -653,7 +680,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
                 Assert.That(cleanedValue, Is.EqualTo("1.001"));
             });
-            
+
             result = this.simpleQuantityKind.Validate(false, this.ratioScale.Iid, out _, things);
 
             Assert.Multiple(() =>
@@ -673,7 +700,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 this.ratioScale
             };
 
-            var result = this.simpleQuantityKind.Validate(false,  this.ratioScale.Iid, out _, things);
+            var result = this.simpleQuantityKind.Validate(false, this.ratioScale.Iid, out _, things);
 
             Assert.Multiple(() =>
             {
@@ -711,8 +738,8 @@ namespace CDP4Common.NetCore.Tests.Validation
                 MeasurementScale = this.ratioScale.Iid
             };
 
-            sampledFunctionParameterType.IndependentParameterType.Add(new OrderedItem(){V = independentParameterAssignment.Iid});
-            sampledFunctionParameterType.DependentParameterType.Add(new OrderedItem(){V = dependentParameterAssignment.Iid});
+            sampledFunctionParameterType.IndependentParameterType.Add(new OrderedItem() { V = independentParameterAssignment.Iid });
+            sampledFunctionParameterType.DependentParameterType.Add(new OrderedItem() { V = dependentParameterAssignment.Iid });
 
             Assert.Multiple(() =>
             {
@@ -730,7 +757,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
                     .With.Message.Contain("The provided collection of referenced Things does not contain the IndependentParameterTypeAssignment"));
             });
-            
+
             things.Add(independentParameterAssignment);
 
             Assert.Multiple(() =>
@@ -752,7 +779,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(() => sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
                     .With.Message.Contain("The provided collection of referenced Things does not contain the DependentParameterTypeAssignment"));
             });
-            
+
             things.Add(dependentParameterAssignment);
 
             Assert.Multiple(() =>
@@ -775,18 +802,18 @@ namespace CDP4Common.NetCore.Tests.Validation
                     .With.Message.Contain("The ValueArray Manual ({\"-\"}) does not have the required amount of values !"));
             });
 
-            this.valueSet.Manual = new ValueArray<string>(["-","-"]);
-            this.valueSet.Computed = new ValueArray<string>(["-","-","-","-"]);
-            this.valueSet.Reference = new ValueArray<string>(["-","-", "-","-", "-","-"]);
+            this.valueSet.Manual = new ValueArray<string>(new List<string>() { "-", "-" });
+            this.valueSet.Computed = new ValueArray<string>(new List<string>() { "-", "-", "-", "-" });
+            this.valueSet.Reference = new ValueArray<string>(new List<string>() { "-", "-", "-", "-", "-", "-" });
 
             var result = sampledFunctionParameterType.ValidateAndCleanup(this.valueSet, things);
 
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["-","-"])));
-                Assert.That(this.valueSet.Computed, Is.EquivalentTo(new ValueArray<string>(["-","-","-","-"])));
-                Assert.That(this.valueSet.Reference, Is.EquivalentTo(new ValueArray<string>(["-","-","-","-","-","-"])));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "-", "-" })));
+                Assert.That(this.valueSet.Computed, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "-", "-", "-", "-" })));
+                Assert.That(this.valueSet.Reference, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "-", "-", "-", "-", "-", "-" })));
             });
 
             result = sampledFunctionParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things);
@@ -794,7 +821,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["-","-"])));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "-", "-" })));
             });
 
             this.valueSet.Manual[0] = "1";
@@ -816,7 +843,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["true","2"])));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "true", "2" })));
             });
 
             this.valueSet.Manual[0] = "1";
@@ -826,7 +853,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["true","2"])));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "true", "2" })));
             });
 
             this.valueSet.Manual[1] = "-1";
@@ -852,8 +879,8 @@ namespace CDP4Common.NetCore.Tests.Validation
                 ParameterType = this.textParameterType.Iid
             };
 
-            compoundParameterType.Component.Add(new OrderedItem(){V = boolParameterTypeComponent.Iid});
-            compoundParameterType.Component.Add(new OrderedItem(){V = textParameterTypeComponent.Iid});
+            compoundParameterType.Component.Add(new OrderedItem() { V = boolParameterTypeComponent.Iid });
+            compoundParameterType.Component.Add(new OrderedItem() { V = textParameterTypeComponent.Iid });
 
             Assert.Multiple(() =>
             {
@@ -871,7 +898,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
                     .With.Message.Contain("The provided collection of referenced Things does not contain the ParameterTypeComponent"));
             });
-            
+
             things.Add(boolParameterTypeComponent);
 
             Assert.Multiple(() =>
@@ -879,7 +906,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet, things), Throws.Exception.TypeOf<ThingNotFoundException>()
                     .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
 
-                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet.Manual,"Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
+                Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
                     .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
             });
 
@@ -893,7 +920,7 @@ namespace CDP4Common.NetCore.Tests.Validation
                 Assert.That(() => compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things), Throws.Exception.TypeOf<ThingNotFoundException>()
                     .With.Message.Contain("The provided collection of referenced Things does not contain the ParameterTypeComponent"));
             });
-            
+
             things.Add(textParameterTypeComponent);
 
             Assert.Multiple(() =>
@@ -916,18 +943,18 @@ namespace CDP4Common.NetCore.Tests.Validation
                     .With.Message.Contain("The ValueArray Manual ({\"-\"}) does not have the required amount of values ! Expected: 2 Received: 1"));
             });
 
-            this.valueSet.Manual = new ValueArray<string>(["-","-"]);
-            this.valueSet.Computed = new ValueArray<string>(["-","-"]);
-            this.valueSet.Reference = new ValueArray<string>(["-","-"]);
+            this.valueSet.Manual = new ValueArray<string>(new List<string>() { "-", "-" });
+            this.valueSet.Computed = new ValueArray<string>(new List<string>() { "-", "-" });
+            this.valueSet.Reference = new ValueArray<string>(new List<string>() { "-", "-" });
 
             var result = compoundParameterType.ValidateAndCleanup(this.valueSet, things);
 
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["-","-"])));
-                Assert.That(this.valueSet.Computed, Is.EquivalentTo(new ValueArray<string>(["-","-"])));
-                Assert.That(this.valueSet.Reference, Is.EquivalentTo(new ValueArray<string>(["-","-"])));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "-", "-" })));
+                Assert.That(this.valueSet.Computed, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "-", "-" })));
+                Assert.That(this.valueSet.Reference, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "-", "-" })));
             });
 
             result = compoundParameterType.ValidateAndCleanup(this.valueSet.Manual, "Manual", things);
@@ -935,7 +962,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["-","-"])));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "-", "-" })));
             });
 
             this.valueSet.Manual[0] = "1";
@@ -946,7 +973,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["true","2"])));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "true", "2" })));
             });
 
             this.valueSet.Manual[0] = "1";
@@ -957,7 +984,7 @@ namespace CDP4Common.NetCore.Tests.Validation
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(["true","2"])));
+                Assert.That(this.valueSet.Manual, Is.EquivalentTo(new ValueArray<string>(new List<string>() { "true", "2" })));
             });
 
             this.valueSet.Manual[1] = " ";
@@ -986,7 +1013,7 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             var things = new List<Thing>();
 
-            Assert.That(() => parameter.ValidateAndCleanup(classlessDto,things), Throws.Exception.TypeOf<ThingNotFoundException>()
+            Assert.That(() => parameter.ValidateAndCleanup(classlessDto, things), Throws.Exception.TypeOf<ThingNotFoundException>()
                 .With.Message.Contain("The provided collection of Things does not contain a reference to the ParameterType"));
 
             things.Add(this.booleanParameterType);
@@ -997,12 +1024,12 @@ namespace CDP4Common.NetCore.Tests.Validation
 
             ((ValueArray<string>)classlessDto["Manual"])[0] = "FALSE";
 
-            result =  parameter.ValidateAndCleanup(classlessDto, things);
+            result = parameter.ValidateAndCleanup(classlessDto, things);
 
             Assert.Multiple(() =>
             {
                 Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
-                Assert.That( ((ValueArray<string>)classlessDto["Manual"])[0], Is.EqualTo("false"));
+                Assert.That(((ValueArray<string>)classlessDto["Manual"])[0], Is.EqualTo("false"));
             });
 
             ((ValueArray<string>)classlessDto["Manual"])[0] = "2";
