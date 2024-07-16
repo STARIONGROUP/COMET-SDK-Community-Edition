@@ -396,10 +396,15 @@ namespace CDP4Dal
                 // clear cache
                 await this.Assembler.Clear();
 
+                this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+
                 throw new IncompleteModelException("The Person object that matches the user specified in the Credentials could not be found");
             }
+            else
+            {
+                this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            }
 
-            this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
 
             logger.Info("Synchronization with the {0} server done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
 
@@ -493,11 +498,17 @@ namespace CDP4Dal
 
             this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
 
-            await this.Assembler.Synchronize(enumerable, activeMessageBus);
+            try
+            {
+                await this.Assembler.Synchronize(enumerable, activeMessageBus);
 
-            this.AddIterationToOpenList(iteration.Iid, domain);
+                this.AddIterationToOpenList(iteration.Iid, domain);
+            }
+            finally
+            {
+                this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            }
 
-            this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
             logger.Info("Synchronization with the {0} server done", this.DataSourceUri);
         }
 
@@ -838,8 +849,16 @@ namespace CDP4Dal
             var sw = new Stopwatch();
             logger.Info($"Synchronization of DTOs for {caller} from/to server {0} started", this.DataSourceUri);
             this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
-            await this.Assembler.Synchronize(things);
-            this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+
+            try
+            {
+                await this.Assembler.Synchronize(things);
+            }
+            finally
+            {
+                this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            }
+
             logger.Info($"Synchronization of DTOs for {caller} from/to server {0} done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
         }
 
@@ -1087,8 +1106,15 @@ namespace CDP4Dal
             }
 
             this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
-            await Task.WhenAll(tasks);
-            this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+
+            try
+            {
+                await Task.WhenAll(tasks);
+            }
+            finally
+            {
+                this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            }
 
             foreach (var siteReferenceDataLibrary in orderedRdlsToClose)
             {
@@ -1155,8 +1181,16 @@ namespace CDP4Dal
         public async Task CloseModelRdl(ModelReferenceDataLibrary modelRdl)
         {
             this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
-            await this.Assembler.CloseRdl(modelRdl);
-            this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+
+            try
+            {
+                await this.Assembler.CloseRdl(modelRdl);
+            }
+            finally
+            {
+                this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            }
+
             this.openReferenceDataLibraries.Remove(modelRdl);
             this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.RdlClosed));
         }
@@ -1171,16 +1205,21 @@ namespace CDP4Dal
         {
             this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
 
-            await this.Assembler.CloseIterationSetup(iterationSetup);
-
-            var iterationToRemove = this.openIterations.Select(x => x.Key).SingleOrDefault(x => x.Iid == iterationSetup.IterationIid);
-
-            if (iterationToRemove != null)
+            try
             {
-                this.openIterations.Remove(iterationToRemove);
-            }
+                await this.Assembler.CloseIterationSetup(iterationSetup);
 
-            this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+                var iterationToRemove = this.openIterations.Select(x => x.Key).SingleOrDefault(x => x.Iid == iterationSetup.IterationIid);
+
+                if (iterationToRemove != null)
+                {
+                    this.openIterations.Remove(iterationToRemove);
+                }
+            }
+            finally
+            {
+                this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
+            }
         }
 
         /// <summary>
