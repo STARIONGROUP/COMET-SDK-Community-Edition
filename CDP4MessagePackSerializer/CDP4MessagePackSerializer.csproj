@@ -4,7 +4,7 @@
       <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
       <Company>Starion Group S.A.</Company>
       <Title>CDP4MessagePackSerializer Community Edition</Title>
-      <VersionPrefix>27.2.0</VersionPrefix>
+      <VersionPrefix>27.2.1</VersionPrefix>
       <Description>CDP4 MessagePack Serialization Library</Description>
       <Copyright>Copyright © Starion Group S.A.</Copyright>
       <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar</Authors>

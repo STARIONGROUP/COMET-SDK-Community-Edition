@@ -404,9 +404,9 @@ namespace CDP4Common.Validation
 
             foreach (var kvp in classlessDto)
             {
-                if (!(kvp.Value is ValueArray<string> valueArray))
+                if (!(kvp.Value is ValueArray<string> valueArray) || kvp.Key == nameof(ParameterValueSet.Formula))
                 {
-                    continue;
+                        continue;
                 }
 
                 var validationResult = parameterType.ValidateAndCleanup(valueArray, kvp.Key, parameter.Scale, things, provider);
@@ -448,7 +448,7 @@ namespace CDP4Common.Validation
 
             foreach (var kvp in classlessDto)
             {
-                if (!(kvp.Value is ValueArray<string> valueArray))
+                if (!(kvp.Value is ValueArray<string> valueArray) || kvp.Key == nameof(ParameterValueSet.Formula))
                 {
                     continue;
                 }

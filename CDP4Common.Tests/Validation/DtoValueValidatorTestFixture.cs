@@ -106,8 +106,35 @@ namespace CDP4Common.Tests.Validation
             {
                 Reference = new ValueArray<string>(new List<string>(){ObjectValueValidator.DefaultValue}),
                 Computed = new ValueArray<string>(new List<string>(){ObjectValueValidator.DefaultValue}),
-                Manual = new ValueArray<string>(new List<string>(){ObjectValueValidator.DefaultValue})
+                Manual = new ValueArray<string>(new List<string>(){ObjectValueValidator.DefaultValue}),
+                Formula = new ValueArray<string>(new List<string>() { ObjectValueValidator.DefaultValue })
             };
+        }
+
+        [Test]
+        public void VerifyQuantityFormula()
+        {
+            var parameter = new Parameter(Guid.NewGuid(), 1)
+            {
+                ParameterType = this.simpleQuantityKind.Iid,
+                Scale = this.ratioScale.Iid
+            };
+
+            var classlessDto = new ClasslessDTO()
+            {
+                {"Manual", new ValueArray<string>(new List<string>(){"1"})},
+                {"Computed", new ValueArray<string>(new List<string>(){"2"})},
+                {"Reference", new ValueArray<string>(new List<string>(){"3"})},
+                {"Formula", new ValueArray<string>(new List<string>(){"=CELLNAME"})},
+            };
+
+            var things = new List<Thing>();
+            things.Add(this.simpleQuantityKind);
+            things.Add(this.ratioScale);
+
+            var result = parameter.ValidateAndCleanup(classlessDto, things);
+
+            Assert.That(result.ResultKind, Is.EqualTo(ValidationResultKind.Valid));
         }
 
         [Test]
