@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Company>Starion Group S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>27.2.1</VersionPrefix>
+    <VersionPrefix>27.2.2</VersionPrefix>
     <Description>CDP4 Services Messaging is a Class Library that contains clients and messages class that can be used for inter services communication</Description>
     <Copyright>Copyright © Starion Group S.A.</Copyright>
     <Authors>Sam, Alex, Alexander, Nathanael, Antoine</Authors>
@@ -20,7 +20,8 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [BUMP] To CDP4Common 27.2.0
+        [Update] Polly to version 8.4.1
+        [Update] Microsoft.Extensions.Configuration.Binder to version 8.0.2
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <LangVersion>latest</LangVersion>
@@ -38,9 +39,9 @@
   </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-        <PackageReference Include="Polly" Version="8.4.0" />
+        <PackageReference Include="Polly" Version="8.4.1" />
         <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     </ItemGroup>
     <ItemGroup>
