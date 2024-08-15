@@ -4,7 +4,7 @@
     <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
     <Company>Starion Group S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>27.2.2</VersionPrefix>
+    <VersionPrefix>27.2.3</VersionPrefix>
     <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
     <Copyright>Copyright © Starion Group S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
@@ -20,7 +20,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-        [Update] NLog version 5.3.3
+        [Update] System.Text.RegularExpressions version 4.3.1 - resolves transitive vulnerability
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
@@ -48,5 +48,9 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
+
+    <ItemGroup Label="override transitive vulnerable dependency">
+        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    </ItemGroup>
 
 </Project>

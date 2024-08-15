@@ -50,8 +50,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8B27CAF4-B780-43A8-B0CA-768A294C599C}"
 	ProjectSection(SolutionItems) = preProject
 		CDP4-SDK.sln.DotSettings = CDP4-SDK.sln.DotSettings
-		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
-		.github\workflows\CodeQuality.yml = .github\workflows\CodeQuality.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -67,6 +65,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Github Actions", "Github Ac
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
 		.github\workflows\CodeQuality.yml = .github\workflows\CodeQuality.yml
+		.github\workflows\nuget-reference-check.yml = .github\workflows\nuget-reference-check.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDP4Web", "CDP4Web\CDP4Web.csproj", "{7192A78E-654C-4993-A9D7-A3EFE78DD66F}"
