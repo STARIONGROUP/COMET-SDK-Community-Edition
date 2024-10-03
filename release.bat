@@ -38,12 +38,7 @@ ECHO.
 ECHO Pushing to nuget.org ...
 ECHO.
 
-for %%f in (%~dp0ReleaseBuilds\*.nupkg) do (
-    (Echo "%%f" | FIND /I "symbols" 1>NUL) || (
-        echo Pushing %%f
-        dotnet nuget push "%%f" -s api.nuget.org -k %apikey%
-    )
-)
+dotnet nuget push ReleaseBuilds\*.nupkg -s api.nuget.org -k %apikey% --skip-duplicate
 
 :End
 
