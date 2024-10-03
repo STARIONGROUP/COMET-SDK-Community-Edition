@@ -25,19 +25,19 @@ The SDK contains multiple libraries that are each packaged as a nuget and avaial
 
 Package | Link
 --------|--------
-CDP4Common | [![NuGet Badge](https://buildstats.info/nuget/CDP4Common-CE)](https://buildstats.info/nuget/CDP4Common-CE)
-CDP4Rules | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4Rules-CE)
-CDP4RequirementsVerification | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4RequirementsVerification-CE)
-CDP4JsonSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonSerializer-CE)](https://buildstats.info/nuget/CDP4JsonSerializer-CE)
-CDP4MessagePackSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4MessagePackSerializer-CE)](https://buildstats.info/nuget/CDP4MessagePackSerializer-CE)
-CDP4Reporting | [![NuGet Badge](https://buildstats.info/nuget/CDP4Reporting-CE)](https://buildstats.info/nuget/CDP4Reporting-CE)
-CDP4Dal | [![NuGet Badge](https://buildstats.info/nuget/CDP4Dal-CE)](https://buildstats.info/nuget/CDP4Dal-CE)
-CDP4DalCommon | [![NuGet Badge](https://buildstats.info/nuget/CDP4DalCommon-CE)](https://buildstats.info/nuget/CDP4DalCommon-CE)
-CDP4JsonFileDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonFileDal-CE)](https://buildstats.info/nuget/CDP4JsonFileDal-CE)
-CDP4ServicesDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4ServicesDal-CE)](https://buildstats.info/nuget/CDP4ServicesDal-CE)
-CDP4WspDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4WspDal-CE)](https://buildstats.info/nuget/CDP4WspDal-CE)
-CDP4Web | [![NuGet Badge](https://buildstats.info/nuget/CDP4Web-CE)](https://buildstats.info/nuget/CDP4Web-CE)
-CDP4ServicesMessaging | [![NuGet Badge](https://buildstats.info/nuget/CDP4ServicesMessaging-CE)](https://buildstats.info/nuget/CDP4ServicesMessaging-CE)
+CDP4Common | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Common-CE)
+CDP4Rules | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Rules-CE)
+CDP4RequirementsVerification | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Rules-CE)
+CDP4JsonSerializer | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4JsonSerializer-CE)
+CDP4MessagePackSerializer | [![NuGet Badge](https://img.shields.io/nuget/v/CDP4MessagePackSerializer-CE)
+CDP4Reporting | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Reporting-CE)
+CDP4Dal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Dal-CE)
+CDP4DalCommon | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4DalCommon-CE)
+CDP4JsonFileDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4JsonFileDal-CE)
+CDP4ServicesDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4ServicesDal-CE)
+CDP4WspDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4WspDal-CE)
+CDP4Web | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Web-CE)
+CDP4ServicesMessaging | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4ServicesMessaging-CE)
 
 ## Build status
 
