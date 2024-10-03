@@ -2,22 +2,7 @@
 
 > CDP4-COMET is the new name for what was previously called the CDP4. We are transitioning the applications and software libraries. The code and documentation will still refer to CDP4 in a number of places while we are updating.
 
-The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the CDP4-COMET to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/STARIONGROUP/COMET-WebServices-Community-Edition) and the [Desktop Application](https://github.com/STARIONGROUP/COMET-IME-Community-Edition). The following libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
-
-  - CDP4Common
-  - CDP4DalCommon
-  - CDP4Rules
-  - CDP4RequirementsVerification
-  - CDP4JsonSerializer
-  - CDP4MessagePackSerializer
-  - CDP4Reporting
-  - CDP4Dal
-  - CDP4DalCommon
-  - CDP4JsonFileDal
-  - CDP4ServicesDal
-  - CDP4WspDal
-  - CDP4Web
-  - CDP4ServicesMessaging
+The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the CDP4-COMET to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/STARIONGROUP/COMET-WebServices-Community-Edition) and the [Desktop Application](https://github.com/STARIONGROUP/COMET-IME-Community-Edition). The libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
 
 ## Nuget
 
@@ -25,19 +10,19 @@ The SDK contains multiple libraries that are each packaged as a nuget and avaial
 
 Package | Link
 --------|--------
-CDP4Common | [![NuGet Badge](https://buildstats.info/nuget/CDP4Common-CE)](https://buildstats.info/nuget/CDP4Common-CE)
-CDP4Rules | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4Rules-CE)
-CDP4RequirementsVerification | [![NuGet Badge](https://buildstats.info/nuget/CDP4Rules-CE)](https://buildstats.info/nuget/CDP4RequirementsVerification-CE)
-CDP4JsonSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonSerializer-CE)](https://buildstats.info/nuget/CDP4JsonSerializer-CE)
-CDP4MessagePackSerializer | [![NuGet Badge](https://buildstats.info/nuget/CDP4MessagePackSerializer-CE)](https://buildstats.info/nuget/CDP4MessagePackSerializer-CE)
-CDP4Reporting | [![NuGet Badge](https://buildstats.info/nuget/CDP4Reporting-CE)](https://buildstats.info/nuget/CDP4Reporting-CE)
-CDP4Dal | [![NuGet Badge](https://buildstats.info/nuget/CDP4Dal-CE)](https://buildstats.info/nuget/CDP4Dal-CE)
-CDP4DalCommon | [![NuGet Badge](https://buildstats.info/nuget/CDP4DalCommon-CE)](https://buildstats.info/nuget/CDP4DalCommon-CE)
-CDP4JsonFileDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4JsonFileDal-CE)](https://buildstats.info/nuget/CDP4JsonFileDal-CE)
-CDP4ServicesDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4ServicesDal-CE)](https://buildstats.info/nuget/CDP4ServicesDal-CE)
-CDP4WspDal | [![NuGet Badge](https://buildstats.info/nuget/CDP4WspDal-CE)](https://buildstats.info/nuget/CDP4WspDal-CE)
-CDP4Web | [![NuGet Badge](https://buildstats.info/nuget/CDP4Web-CE)](https://buildstats.info/nuget/CDP4Web-CE)
-CDP4ServicesMessaging | [![NuGet Badge](https://buildstats.info/nuget/CDP4ServicesMessaging-CE)](https://buildstats.info/nuget/CDP4ServicesMessaging-CE)
+CDP4Common | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Common-CE)
+CDP4Rules | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Rules-CE)
+CDP4RequirementsVerification | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Rules-CE)
+CDP4JsonSerializer | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4JsonSerializer-CE)
+CDP4MessagePackSerializer | [![NuGet Badge](https://img.shields.io/nuget/v/CDP4MessagePackSerializer-CE)
+CDP4Reporting | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Reporting-CE)
+CDP4Dal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Dal-CE)
+CDP4DalCommon | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4DalCommon-CE)
+CDP4JsonFileDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4JsonFileDal-CE)
+CDP4ServicesDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4ServicesDal-CE)
+CDP4WspDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4WspDal-CE)
+CDP4Web | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Web-CE)
+CDP4ServicesMessaging | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4ServicesMessaging-CE)
 
 ## Build status
 
