@@ -33,6 +33,10 @@ namespace CDP4Common.Extensions
     /// </summary>
     public static class IEnumerableExtensions
     {
+#if (NET8_0_OR_GREATER)
+    // Already part of Linq in Net 8 and greater
+#else
+
         /// <summary>
         /// Returns all distinct elements of the given source, where "distinctness"
         /// is determined via a projection and the default equality comparer for the projected type.
@@ -57,6 +61,7 @@ namespace CDP4Common.Extensions
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Checks wether a <see cref="IEnumerable{T}"/> is null or does not contains any items

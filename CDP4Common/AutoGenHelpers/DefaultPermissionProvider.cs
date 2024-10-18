@@ -31,7 +31,7 @@ namespace CDP4Common.Helpers
 {
     using System;
     using System.Collections.Generic;
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
     using System.ComponentModel.Composition;
 #endif
     using CDP4Common.CommonData;
@@ -39,7 +39,7 @@ namespace CDP4Common.Helpers
     /// <summary>
     /// A utility class that supplies common functionalities to the Service layer.
     /// </summary>
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
     [Export(typeof(IDefaultPermissionProvider))]
     [PartCreationPolicy(CreationPolicy.Shared)]
 #endif

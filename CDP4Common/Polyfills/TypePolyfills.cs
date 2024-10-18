@@ -27,7 +27,7 @@ namespace CDP4Common.Polyfills
     using System;
     using System.Reflection;
 
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
 
     /// <summary>
     /// The purpose of the <see cref="TypePolyfills"/> class is to provide extension methods on the <see cref="Type"/>

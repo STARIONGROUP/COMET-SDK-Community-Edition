@@ -31,7 +31,7 @@ namespace CDP4Dal
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
 
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
     using System.ComponentModel.Composition;
 #endif
 
@@ -48,7 +48,7 @@ namespace CDP4Dal
     /// The <see cref="ISession"/> Lifetime scope for DI registration should have the same lifetime scope as CDPMessageBus,
     /// otherwise publications and subscriptions might be made to different instances of CDPMessageBus which breaks the pub/sub pattern.
     /// </remarks>
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
     [Export(typeof(ICDPMessageBus))]
     [PartCreationPolicy(CreationPolicy.Shared)]
 #endif

@@ -26,8 +26,11 @@ namespace CDP4Dal
 {
     using System;
     using System.Collections.Generic;
-#if NETFRAMEWORK
+#if (NETFRAMEWORK)
     using System.ComponentModel.Composition;
+#endif
+#if (NET8_0_OR_GREATER)
+    using System.Composition;
 #endif
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;
@@ -35,9 +38,13 @@ namespace CDP4Dal
     /// <summary>
     /// Instantiated by MEF to provide a list of <see cref="IDal"/> available in the application
     /// </summary>
-#if NETFRAMEWORK
+#if (NETFRAMEWORK)
     [Export(typeof(AvailableDals))]
     [PartCreationPolicy(CreationPolicy.Shared)]
+#endif
+#if (NET8_0_OR_GREATER)
+    [Export(typeof(AvailableDals))]
+    [Shared]
 #endif
     public class AvailableDals
     {
@@ -45,7 +52,7 @@ namespace CDP4Dal
         /// Initializes a new instance of the <see cref="AvailableDals"/> class
         /// </summary>
         /// <param name="dataAccessLayerKinds">the list of <see cref="IDal"/> in the application</param>
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
         [ImportingConstructor]
         public AvailableDals([ImportMany] IEnumerable<Lazy<IDal, IDalMetaData>> dataAccessLayerKinds)
         {

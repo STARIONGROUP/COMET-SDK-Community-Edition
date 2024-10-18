@@ -24,7 +24,7 @@
 
 namespace CDP4WspDal
 {
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
     using System.ComponentModel.Composition;
 #endif
 
@@ -63,7 +63,7 @@ namespace CDP4WspDal
     /// Provides the Data Access Layer for OCDT's WSP 
     /// </summary>
     [DalExport("OCDT WSP", "An OCDT WSP Data Access Layer", "1.0.0", DalType.Web)]
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif
     public class WspDal : Dal

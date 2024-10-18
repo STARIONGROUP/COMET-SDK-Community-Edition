@@ -28,7 +28,7 @@ namespace CDP4Dal.Composition
 
     using CDP4Dal.DAL;
 
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
 
     using System.ComponentModel.Composition;
     

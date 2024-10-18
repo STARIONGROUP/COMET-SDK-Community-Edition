@@ -59,7 +59,7 @@ namespace CDP4JsonFileDal
     using Person = CDP4Common.SiteDirectoryData.Person;
     using SiteDirectory = CDP4Common.SiteDirectoryData.SiteDirectory;
     using Thing = CDP4Common.DTO.Thing;
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
     using System.ComponentModel.Composition;
     using Newtonsoft.Json.Linq;
 #endif
@@ -68,7 +68,7 @@ namespace CDP4JsonFileDal
     /// Provides the Data Access Layer for file based import/export
     /// </summary>
     [DalExport("JSON File Based", "A file based JSON Data Access Layer", "1.3.0", DalType.File)]
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif
     public class JsonFileDal : Dal

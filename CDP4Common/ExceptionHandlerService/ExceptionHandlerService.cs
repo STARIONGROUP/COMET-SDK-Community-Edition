@@ -27,7 +27,7 @@ namespace CDP4Common.ExceptionHandlerService
 {
     using System;
     using System.Collections.Generic;
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
     using System.ComponentModel.Composition;
 #endif
     using System.Linq;
@@ -36,7 +36,7 @@ namespace CDP4Common.ExceptionHandlerService
     /// The purpose of the <see cref="ExceptionHandlerService" /> is to check server exceptions and start Application processes accordingly
     /// </summary>
 
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
     [Export(typeof(IExceptionHandlerService))]
     [PartCreationPolicy(CreationPolicy.Shared)]
 #endif
@@ -51,7 +51,7 @@ namespace CDP4Common.ExceptionHandlerService
         /// Creates a new instance of the <see cref="ExceptionHandlerService"/> class
         /// </summary>
         /// <param name="exceptionHandlers">INJECTED collection of <see cref="IExceptionHandler"/>s registered in the application.</param>
-#if NETFRAMEWORK
+#if (NETFRAMEWORK || NET8_0_OR_GREATER)
         [ImportingConstructor]
         public ExceptionHandlerService([ImportMany] IEnumerable<IExceptionHandler> exceptionHandlers)
         {
