@@ -30,12 +30,6 @@ jobs:
       - name: add DevExpress nuget feed
         run: dotnet nuget add source https://nuget.devexpress.com/api -n DXFeed -u DevExpress -p ${{ secrets.DEVEXPRESS_NUGET_KEY }} --store-password-in-clear-text
 
-      - name: Install dependencies
-        run: dotnet restore CDP4-SDK.sln
-
-      - name: Build
-        run: dotnet build CDP4-SDK.sln --no-restore /p:ContinuousIntegrationBuild=true
-
       - name: Sonarqube Begin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -43,6 +37,12 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
           dotnet sonarscanner begin /k:"STARIONGROUP_CDP4-SDK-Community-Edition" /o:"stariongroup" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
+
+      - name: Install dependencies
+        run: dotnet restore CDP4-SDK.sln
+  
+      - name: Build
+        run: dotnet build CDP4-SDK.sln --no-restore /p:ContinuousIntegrationBuild=true
 
       - name: Run Tests and Compute Coverage
         run: dotnet test CDP4-SDK.sln --no-restore --no-build --verbosity detailed --filter="(TestCategory!~WebServicesDependent) & (TestCategory!~CICDExclusion)" /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"cobertura,opencover,json\"
