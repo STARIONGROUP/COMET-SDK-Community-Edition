@@ -138,7 +138,7 @@ namespace CDP4Common.EngineeringModelData
 
             var unreferencedElementDefinitions = this.Element.ToList();
             unreferencedElementDefinitions.RemoveAll(x => associatedElementDefinitions.Any(e => e.Iid == x.Iid));
-            unreferencedElementDefinitions.RemoveAll(x => x.Iid == this.TopElement.Iid);
+            unreferencedElementDefinitions.RemoveAll(x => x.Iid == this.TopElement?.Iid);
 
             return unreferencedElementDefinitions;
         }
