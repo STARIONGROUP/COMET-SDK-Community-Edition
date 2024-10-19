@@ -102,7 +102,7 @@ namespace CDP4Common.Extensions
         /// </returns>
         /// <remarks>
         /// A ShortGuid is a base64 encoded guid-string representation where any "/" has been replaced with a "_"
-        /// and any "+" has been replaced with a "-" (to make the string representation <see cref=".Uri" /> friendly)
+        /// and any "+" has been replaced with a "-" (to make the string representation <see cref="Uri" /> friendly)
         /// A ShortGuid Array is a string that starts with "[", ends with "]" and contains a number of ShortGuid separated by a ";"
         /// </remarks>
         /// <exception cref="ArgumentException">

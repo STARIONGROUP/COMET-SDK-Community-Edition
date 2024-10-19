@@ -44,6 +44,7 @@ namespace CDP4ServicesDal
     using CDP4Common.CommonData;
     using CDP4Common.DTO;
     using CDP4Common.Extensions;
+
     using CDP4DalCommon.Tasks;
 
     using CDP4Dal;
@@ -62,7 +63,6 @@ namespace CDP4ServicesDal
     using EngineeringModelSetup = CDP4Common.SiteDirectoryData.EngineeringModelSetup;
     using Thing = CDP4Common.DTO.Thing;
     using UriExtensions = CDP4Dal.UriExtensions;
-    using System.Runtime.InteropServices;
 
     /// <summary>
     /// The purpose of the <see cref="CdpServicesDal"/> is to provide the Data Access Layer for CDP4 ECSS-E-TM-10-25
@@ -222,9 +222,7 @@ namespace CDP4ServicesDal
 
                     deserializationWatch.Stop();
 
-                    Guid iterationId;
-
-                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out iterationId))
+                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(result, iterationId);
                     }
@@ -1022,10 +1020,6 @@ namespace CDP4ServicesDal
         /// </param>
         /// <param name="injectedClient">
         /// The injected <see cref="HttpClient"/> that will be used to created the returned <see cref="HttpClient"/>
-        /// </param>
-        /// <param name="trustAllSSL">
-        /// The value that indicates whether all SSL certificates are trusted or not. If false, then only properly signed
-        /// SSL certs are accepted
         /// </param>
         /// <returns>
         /// An instance of <see cref="HttpClient"/> with the DefaultRequestHeaders set

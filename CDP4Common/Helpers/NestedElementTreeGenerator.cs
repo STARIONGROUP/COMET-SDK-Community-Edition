@@ -691,7 +691,7 @@ namespace CDP4Common.Helpers
             {
                 actualValue = valueSet.ActualValue == null ? "-" : valueSet.ActualValue[componentIndex];
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 actualValue = "-";
             }
@@ -702,7 +702,7 @@ namespace CDP4Common.Helpers
             {
                 formula = valueSet.Formula == null ? "-" : valueSet.Formula[componentIndex];
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 formula = "-";
             }
@@ -754,7 +754,7 @@ namespace CDP4Common.Helpers
             {
                 actualValue = valueSet.ActualValue == null ? "-" : valueSet.ActualValue[componentIndex];
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 actualValue = "-";
             }

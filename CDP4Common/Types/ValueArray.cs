@@ -68,7 +68,7 @@ namespace CDP4Common.Types
         /// Initializes a new instance of the <see cref="ValueArray{T}"/> class.
         /// </summary>
         /// <param name="initializationCollection">
-        /// Collection to initialize this <see cref="Collection{T}"/>.
+        /// Collection to initialize this <see cref="IEnumerable{T}"/>.
         /// </param>
         public ValueArray(IEnumerable<T> initializationCollection)
         {
@@ -79,7 +79,7 @@ namespace CDP4Common.Types
         /// Initializes a new instance of the <see cref="ValueArray{T}"/> class.
         /// </summary>
         /// <param name="initializationCollection">
-        /// Collection to initialize this <see cref="Collection{T}"/>.
+        /// Collection to initialize this <see cref="IEnumerable{T}"/>.
         /// </param>
         /// <param name="container">The container of this <see cref="ValueArray{T}"/></param>
         public ValueArray(IEnumerable<T> initializationCollection, Thing container)

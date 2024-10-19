@@ -36,7 +36,6 @@ namespace CDP4Common.Extensions
         /// <summary>
         /// Returns a human readable string of a <see cref="Thing"/> to identify a <see cref="Thing"/> in RuleVerification text
         /// </summary>
-        /// <typeparam name="T">Any type</typeparam>
         /// <param name="value">The <see cref="IRuleVerification"/> to check</param>
         /// <param name="thing">The <see cref="Thing"/></param>
         /// <returns>The human readable identifier</returns>
