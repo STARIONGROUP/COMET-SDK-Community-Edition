@@ -25,12 +25,10 @@
 namespace CDP4Dal.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// A <see cref="InstanceNotFoundException"/> is thrown the when a <see cref="CDP4Common.CommonData.Thing"/> cannot be found.
     /// </summary>
-    [Serializable]
     public class InstanceNotFoundException : Exception
     {
         /// <summary>
@@ -62,20 +60,6 @@ namespace CDP4Dal.Exceptions
         /// </param>
         public InstanceNotFoundException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InstanceNotFoundException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected InstanceNotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

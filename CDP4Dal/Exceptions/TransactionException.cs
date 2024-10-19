@@ -25,7 +25,6 @@
 namespace CDP4Dal.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     using CDP4Dal.Operations;
 
@@ -33,7 +32,6 @@ namespace CDP4Dal.Exceptions
     /// A <see cref="TransactionException"/> is thrown by the <see cref="ThingTransaction"/> whenever the transaction is in an
     /// inconsistent state.
     /// </summary>
-    [Serializable]
     public class TransactionException : Exception
     {
         /// <summary>
@@ -65,20 +63,6 @@ namespace CDP4Dal.Exceptions
         /// </param>
         public TransactionException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TransactionException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected TransactionException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

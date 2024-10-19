@@ -25,12 +25,10 @@
 namespace CDP4Common.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// The CDP4 model validation exception.
     /// </summary>
-    [Serializable]
     public class Cdp4ModelValidationException : ModelErrorException
     {
         /// <summary>
@@ -62,20 +60,6 @@ namespace CDP4Common.Exceptions
         /// </param>
         public Cdp4ModelValidationException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ContainmentException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected Cdp4ModelValidationException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

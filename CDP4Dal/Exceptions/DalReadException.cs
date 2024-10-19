@@ -25,13 +25,11 @@
 namespace CDP4Dal.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
     
     /// <summary>
     /// A <see cref="DalReadException"/> is thrown the when a during a Read operation the data-source
     /// returns an exception
     /// </summary>
-    [Serializable]
     public class DalReadException : Exception
     {
         /// <summary>
@@ -63,20 +61,6 @@ namespace CDP4Dal.Exceptions
         /// </param>
         public DalReadException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DalReadException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected DalReadException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

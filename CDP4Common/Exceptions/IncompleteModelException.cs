@@ -25,7 +25,6 @@
 namespace CDP4Common.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     using CDP4Common.CommonData;
 
@@ -33,7 +32,6 @@ namespace CDP4Common.Exceptions
     /// An <see cref="IncompleteModelException"/> is thrown when the containment tree of any <see cref="Thing"/> is walked, either
     /// up or down and the model is incomplete.
     /// </summary>
-    [Serializable]
     public class IncompleteModelException : ModelErrorException
     {
         /// <summary>
@@ -65,20 +63,6 @@ namespace CDP4Common.Exceptions
         /// </param>
         public IncompleteModelException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IncompleteModelException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected IncompleteModelException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

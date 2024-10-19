@@ -25,7 +25,6 @@
 namespace CDP4Dal.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     using CDP4Dal.DAL;
 
@@ -33,7 +32,6 @@ namespace CDP4Dal.Exceptions
     /// A <see cref="DalVersionException"/> is thrown when a <see cref="Dal"/> has a <see cref="Version"/> problem.
     /// returns an exception
     /// </summary>
-    [Serializable]
     public class DalVersionException : Exception
     {
         /// <summary>
@@ -58,20 +56,6 @@ namespace CDP4Dal.Exceptions
         /// </param>
         public DalVersionException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DalWriteException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected DalVersionException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

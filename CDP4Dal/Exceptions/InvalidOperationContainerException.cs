@@ -25,7 +25,6 @@
 namespace CDP4Dal.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     using CDP4Dal.Operations;
 
@@ -33,7 +32,6 @@ namespace CDP4Dal.Exceptions
     /// A <see cref="InvalidOperationContainerException"/> is thrown when an <see cref="OperationContainer"/> is invalid or incomplete,
     /// or one of the contained <see cref="Operation"/>s is invalid or incomplete.
     /// </summary>
-    [Serializable]
     public class InvalidOperationContainerException : Exception
     {
         /// <summary>
@@ -65,20 +63,6 @@ namespace CDP4Dal.Exceptions
         /// </param>
         public InvalidOperationContainerException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidOperationContainerException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected InvalidOperationContainerException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

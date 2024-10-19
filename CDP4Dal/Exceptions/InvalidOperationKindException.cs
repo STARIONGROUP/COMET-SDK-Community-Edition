@@ -25,7 +25,6 @@
 namespace CDP4Dal.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     using CDP4Dal.DAL;
 
@@ -33,7 +32,6 @@ namespace CDP4Dal.Exceptions
     /// A InvalidOperationKindException is thrown whenever an <see cref="CDP4Dal.Operations.OperationContainer"/> contains
     /// <see cref="CDP4Dal.Operations.Operation"/> that are not supported by the implementation of an <see cref="IDal"/>
     /// </summary>
-    [Serializable]
     public class InvalidOperationKindException : Exception
     {
         /// <summary>
@@ -65,20 +63,6 @@ namespace CDP4Dal.Exceptions
         /// </param>
         public InvalidOperationKindException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidOperationKindException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected InvalidOperationKindException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

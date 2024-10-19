@@ -25,12 +25,10 @@
 namespace CDP4Common.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Thrown when a Thing is not found or missing from a dataset
     /// </summary>
-    [Serializable]
     public class ThingNotFoundException : Exception
     {
         /// <summary>
@@ -62,20 +60,6 @@ namespace CDP4Common.Exceptions
         /// </param>
         public ThingNotFoundException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NestedElementTreeException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected ThingNotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

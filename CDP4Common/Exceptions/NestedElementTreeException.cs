@@ -25,7 +25,6 @@
 namespace CDP4Common.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
 
     using CDP4Common.EngineeringModelData;
 
@@ -33,7 +32,6 @@ namespace CDP4Common.Exceptions
     /// A <see cref="NestedElementTreeException"/> is thrown when a problem occurs while
     /// generating the <see cref="NestedElement"/> Tree
     /// </summary>
-    [Serializable]
     public class NestedElementTreeException : Exception
     {
         /// <summary>
@@ -65,20 +63,6 @@ namespace CDP4Common.Exceptions
         /// </param>
         public NestedElementTreeException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NestedElementTreeException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected NestedElementTreeException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

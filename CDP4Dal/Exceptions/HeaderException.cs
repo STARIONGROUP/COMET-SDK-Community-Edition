@@ -25,8 +25,7 @@
 namespace CDP4Dal.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
-
+    
     /// <summary>
     /// A <see cref="HeaderException"/> is thrown the when a specific header was not found in a REST response
     /// or if is found it has an incorrect value 
@@ -62,20 +61,6 @@ namespace CDP4Dal.Exceptions
         /// </param>
         public HeaderException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HeaderException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected HeaderException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

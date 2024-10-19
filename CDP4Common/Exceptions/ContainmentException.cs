@@ -25,15 +25,13 @@
 namespace CDP4Common.Exceptions
 {
     using System;
-    using System.Runtime.Serialization;
-
+    
     using CDP4Common.CommonData;
 
     /// <summary>
     /// A <see cref="ContainmentException"/> is thrown the when Container of a <see cref="Thing"/> is not set and it is 
     /// requested in an operation.
     /// </summary>
-    [Serializable]
     public class ContainmentException : ModelErrorException
     {
         /// <summary>
@@ -65,20 +63,6 @@ namespace CDP4Common.Exceptions
         /// </param>
         public ContainmentException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ContainmentException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The serialization data
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="StreamingContext"/>
-        /// </param>
-        protected ContainmentException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }
