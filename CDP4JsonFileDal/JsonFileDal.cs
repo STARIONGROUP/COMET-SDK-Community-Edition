@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonFileDal.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2023 Starion Group S.A.
+//    Copyright (c) 2015-2024 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexandervan Delft, Nathanael Smiechowski, Ahmed Abulwafa Ahmed
 //
@@ -26,9 +26,9 @@ namespace CDP4JsonFileDal
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
+    using System.IO.Compression;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -51,8 +51,6 @@ namespace CDP4JsonFileDal
     using CDP4JsonFileDal.Json;
 
     using CDP4JsonSerializer;
-
-    using Ionic.Zip;
 
     using NLog;
 
@@ -306,22 +304,23 @@ namespace CDP4JsonFileDal
 
             try
             {
-                using (var zipFile = new ZipFile())
+                using (var file = new FileStream(path, FileMode.OpenOrCreate))
                 {
-                    zipFile.Password = this.Session.Credentials.Password;
+                    using (var zipArchive = new ZipArchive(file, ZipArchiveMode.Update))
+                    {
+                        this.WriteHeaderToZipFile(exchangeFileHeader, zipArchive);
 
-                    this.WriteHeaderToZipFile(exchangeFileHeader, zipFile, path);
+                        this.WriteSiteDirectoryToZipFile(prunedSiteDirectoryDtos, zipArchive);
 
-                    this.WriteSiteDirectoryToZipFile(prunedSiteDirectoryDtos, zipFile, path);
+                        this.WriteSiteReferenceDataLibraryToZipFile(siteReferenceDataLibraryData, zipArchive);
 
-                    this.WriteSiteReferenceDataLibraryToZipFile(siteReferenceDataLibraryData, zipFile, path);
+                        this.WriteModelReferenceDataLibraryToZipFile(modelReferenceDataLibraryData, zipArchive);
 
-                    this.WriteModelReferenceDataLibraryToZipFile(modelReferenceDataLibraryData, zipFile, path);
+                        this.WriteIterationsToZipFile(iterationData, zipArchive);
 
-                    this.WriteIterationsToZipFile(iterationData, zipFile, path);
-
-                    //ToDo: GH283: Remove extensionsFiles that are referenced by removed instances
-                    this.WriteExtensionFilesToZipFile(extensionFiles, zipFile, path);
+                        //ToDo: GH283: Remove extensionsFiles that are referenced by removed instances
+                        this.WriteExtensionFilesToZipFile(extensionFiles, zipArchive);
+                    }
                 }
 
                 Logger.Info("Successfully exported the open session {1} to {0}.", path, this.Session.Credentials.Uri);
@@ -509,7 +508,7 @@ namespace CDP4JsonFileDal
                 var siteDirectoryData = this.ReadSiteDirectoryJson(filePath, this.Credentials).ToList();
 
                 // read file, SiteDirectory first.
-                using (var zip = ZipFile.Read(filePath))
+                using (var zip = ZipFile.OpenRead(filePath))
                 {
                     // get all relevant info from the selected iteration
                     var siteDir = this.Session.RetrieveSiteDirectory();
@@ -690,7 +689,7 @@ namespace CDP4JsonFileDal
         /// <param name="zip">The zip file</param>
         /// <param name="siteDir">The <see cref="SiteDirectory"/> object</param>
         /// <returns>List of things contained by the particular srdl</returns>
-        private List<Thing> RetrieveSRDLThings(CDP4Common.DTO.SiteReferenceDataLibrary siteRdl, List<Thing> siteDirectoryData, ZipFile zip, SiteDirectory siteDir)
+        private List<Thing> RetrieveSRDLThings(CDP4Common.DTO.SiteReferenceDataLibrary siteRdl, List<Thing> siteDirectoryData, ZipArchive zip, SiteDirectory siteDir)
         {
             var returned = new List<Thing>();
 
@@ -706,7 +705,7 @@ namespace CDP4JsonFileDal
                 returned.Add(requiredRdlDto);
 
                 var siteRdlFilePath = $"{requiredRdl.Iid}.json";
-                var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteRdlFilePath));
+                var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(siteRdlFilePath));
                 var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry, this.Credentials.Password);
                 returned.AddRange(siteRdlItems);
 
@@ -725,7 +724,7 @@ namespace CDP4JsonFileDal
         /// <param name="zip">The zip file</param>
         /// <param name="siteDir">The <see cref="SiteDirectory"/> object</param>
         /// <returns>List of things relevant for a particular iteration</returns>
-        private List<Thing> RetrieveIterationThings(CDP4Common.DTO.Iteration iteration, List<Thing> siteDirectoryData, ZipFile zip, SiteDirectory siteDir)
+        private List<Thing> RetrieveIterationThings(CDP4Common.DTO.Iteration iteration, List<Thing> siteDirectoryData, ZipArchive zip, SiteDirectory siteDir)
         {
             var engineeringModelSetup =
                 siteDir.Model.SingleOrDefault(x => x.IterationSetup.Any(y => y.IterationIid == iteration.Iid));
@@ -739,12 +738,12 @@ namespace CDP4JsonFileDal
             var engineeringModelFilePath = $"{engineeringModelSetup.EngineeringModelIid}.json";
 
             var engineeringModelZipEntry =
-                zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(engineeringModelFilePath));
+                zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(engineeringModelFilePath));
 
             var returned = this.ReadInfoFromArchiveEntry(engineeringModelZipEntry, this.Credentials.Password);
 
             var iterationFilePath = $"{iteration.Iid}.json";
-            var iterationZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(iterationFilePath));
+            var iterationZipEntry = zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(iterationFilePath));
             returned.AddRange(this.ReadIterationArchiveEntry(iterationZipEntry, this.Credentials.Password));
 
             // use the loaded sitedirectory information to determine the required model reference data library
@@ -759,7 +758,7 @@ namespace CDP4JsonFileDal
 
             // based on engineering model setup load rdl chain
             var modelRdlFilePath = $"{modelRdl.Iid}.json";
-            var modelRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(modelRdlFilePath));
+            var modelRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(modelRdlFilePath));
             var modelRdlItems = this.ReadInfoFromArchiveEntry(modelRdlZipEntry, this.Credentials.Password);
             returned.AddRange(modelRdlItems);
 
@@ -773,7 +772,7 @@ namespace CDP4JsonFileDal
                 returned.Add(requiredRdlDto);
 
                 var siteRdlFilePath = $"{requiredRdl.Iid}.json";
-                var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteRdlFilePath));
+                var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(siteRdlFilePath));
                 var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry, this.Credentials.Password);
                 returned.AddRange(siteRdlItems);
 
@@ -1002,55 +1001,39 @@ namespace CDP4JsonFileDal
         /// Write the header file to the zip export archive.
         /// </summary>
         /// <param name="echExchangeFileHeader">
-        /// The <see cref="ExchangeFileHeader"/> that is to be written to the <paramref name="zipFile"/>
+        /// The <see cref="ExchangeFileHeader"/> that is to be written to the <paramref name="zipArchive"/>
         /// </param>
-        /// <param name="zipFile">
+        /// <param name="zipArchive">
         /// The zip archive instance to add the information to.
         /// </param>
-        /// <param name="filePath">
-        /// The path of the file.
-        /// </param>
-        private void WriteHeaderToZipFile(ExchangeFileHeader echExchangeFileHeader, ZipFile zipFile, string filePath)
+        private void WriteHeaderToZipFile(ExchangeFileHeader echExchangeFileHeader, ZipArchive zipArchive)
         {
-            using (var memoryStream = new MemoryStream())
+            var zipEntry = zipArchive.CreateEntry("Header.json");
+
+            using (var memoryStream = zipEntry.Open())
             {
                 this.Serializer.SerializeToStream(echExchangeFileHeader, memoryStream);
-
-                using (var outputStream = new MemoryStream(memoryStream.ToArray()))
-                {
-                    var zipEntry = zipFile.AddEntry("Header.json", outputStream);
-                    zipEntry.Comment = "The Header for this file based source";
-                    zipFile.Save(filePath);
-                }
             }
         }
 
         /// <summary>
-        /// Writes the pruned <see cref="CDP4Common.SiteDirectoryData.SiteDirectory"/> to the <see cref="ZipFile"/>
+        /// Writes the pruned <see cref="CDP4Common.SiteDirectoryData.SiteDirectory"/> to the <see cref="ZipArchive"/>
         /// </summary>
         /// <param name="prunedSiteDirectoryContents">
         /// The <see cref="CDP4Common.SiteDirectoryData.SiteDirectory"/> that has been pruned of all unnecessary data
         /// </param>
-        /// <param name="zipFile">
-        /// The target <see cref="ZipFile"/>
+        /// <param name="zipArchive">
+        /// The target <see cref="ZipArchive"/>
         /// </param>
-        /// <param name="filePath">
-        /// The file Path.
-        /// </param>
-        private void WriteSiteDirectoryToZipFile(IEnumerable<Thing> prunedSiteDirectoryContents, ZipFile zipFile, string filePath)
+        private void WriteSiteDirectoryToZipFile(IEnumerable<Thing> prunedSiteDirectoryContents, ZipArchive zipArchive)
         {
-            using (var memoryStream = new MemoryStream())
+            var zipEntry = zipArchive.CreateEntry("SiteDirectory.json");
+
+            using (var memoryStream = zipEntry.Open())
             {
                 var orderedContents = prunedSiteDirectoryContents.OrderBy(x => x.Iid, this.guidComparer);
 
                 this.Serializer.SerializeToStream(orderedContents, memoryStream);
-
-                using (var outputStream = new MemoryStream(memoryStream.ToArray()))
-                {
-                    var zipEntry = zipFile.AddEntry("SiteDirectory.json", outputStream);
-                    zipEntry.Comment = "The SiteDirectory for this file based source";
-                    zipFile.Save(filePath);
-                }
             }
         }
 
@@ -1085,32 +1068,25 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Writes <see cref="CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary"/>s to the <see cref="ZipFile"/>
+        /// Writes <see cref="CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary"/>s to the <see cref="ZipArchive"/>
         /// </summary>
         /// <param name="siteReferenceDataLibraries">
-        /// The <see cref="Dictionary{SiteReferenceDataLibrary, Dtos}"/> that contains the <see cref="CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary"/>s and related Dtos that are to be written to the <see cref="ZipFile"/>
+        /// The <see cref="Dictionary{SiteReferenceDataLibrary, Dtos}"/> that contains the <see cref="CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary"/>s and related Dtos that are to be written to the <see cref="ZipArchive"/>
         /// </param>
-        /// <param name="zipFile">
-        /// The target <see cref="ZipFile"/> that the <paramref name="siteReferenceDataLibraries"/> are written to.
+        /// <param name="zipArchive">
+        /// The target <see cref="ZipArchive"/> that the <paramref name="siteReferenceDataLibraries"/> are written to.
         /// </param>
-        /// <param name="filePath">
-        /// The file of the target <see cref="ZipFile"/>
-        /// </param>
-        private void WriteSiteReferenceDataLibraryToZipFile(Dictionary<SiteReferenceDataLibrary, IEnumerable<Thing>> siteReferenceDataLibraries, ZipFile zipFile, string filePath)
+        private void WriteSiteReferenceDataLibraryToZipFile(Dictionary<SiteReferenceDataLibrary, IEnumerable<Thing>> siteReferenceDataLibraries, ZipArchive zipArchive)
         {
             foreach (var siteReferenceDataLibrary in siteReferenceDataLibraries)
             {
-                using (var memoryStream = new MemoryStream())
+                var siteReferenceDataLibraryFilename = $"{SiteRdlZipLocation}\\{siteReferenceDataLibrary.Key.Iid}.json";
+
+                var zipEntry = zipArchive.CreateEntry(siteReferenceDataLibraryFilename);
+
+                using (var memoryStream = zipEntry.Open())
                 {
                     this.Serializer.SerializeToStream(siteReferenceDataLibrary.Value, memoryStream);
-
-                    using (var outputStream = new MemoryStream(memoryStream.ToArray()))
-                    {
-                        var siteReferenceDataLibraryFilename = $"{SiteRdlZipLocation}\\{siteReferenceDataLibrary.Key.Iid}.json";
-                        var zipEntry = zipFile.AddEntry(siteReferenceDataLibraryFilename, outputStream);
-                        zipEntry.Comment = $"The {siteReferenceDataLibrary.Key.ShortName} SiteReferenceDataLibrary";
-                        zipFile.Save(filePath);
-                    }
                 }
             }
         }
@@ -1147,32 +1123,25 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Writes the <see cref="CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary"/> to the <see cref="ZipFile"/>
+        /// Writes the <see cref="CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary"/> to the <see cref="ZipArchive"/>
         /// </summary>
         /// <param name="modelReferenceDataLibraries">
-        /// The <see cref="Dictionary{ModelReferenceDataLibrary, Dtos}"/> that contains the <see cref="CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary"/>s and related Dtos that are to be written to the <see cref="ZipFile"/>
+        /// The <see cref="Dictionary{ModelReferenceDataLibrary, Dtos}"/> that contains the <see cref="CDP4Common.SiteDirectoryData.ModelReferenceDataLibrary"/>s and related Dtos that are to be written to the <see cref="ZipArchive"/>
         /// </param>
-        /// <param name="zipFile">
-        /// The target <see cref="ZipFile"/> that the <paramref name="modelReferenceDataLibraries"/> are written to.
+        /// <param name="zipArchive">
+        /// The target <see cref="ZipArchive"/> that the <paramref name="modelReferenceDataLibraries"/> are written to.
         /// </param>
-        /// <param name="filePath">
-        /// The file of the target <see cref="ZipFile"/>
-        /// </param>
-        private void WriteModelReferenceDataLibraryToZipFile(Dictionary<ModelReferenceDataLibrary, IEnumerable<Thing>> modelReferenceDataLibraries, ZipFile zipFile, string filePath)
+        private void WriteModelReferenceDataLibraryToZipFile(Dictionary<ModelReferenceDataLibrary, IEnumerable<Thing>> modelReferenceDataLibraries, ZipArchive zipArchive)
         {
             foreach (var modelReferenceDataLibrary in modelReferenceDataLibraries)
             {
-                using (var memoryStream = new MemoryStream())
+                var modelReferenceDataLibraryFilename = $"{ModelRdlZipLocation}\\{modelReferenceDataLibrary.Key.Iid}.json";
+
+                var zipEntry = zipArchive.CreateEntry(modelReferenceDataLibraryFilename);
+
+                using (var memoryStream = zipEntry.Open())
                 {
                     this.Serializer.SerializeToStream(modelReferenceDataLibrary.Value, memoryStream);
-
-                    using (var outputStream = new MemoryStream(memoryStream.ToArray()))
-                    {
-                        var modelReferenceDataLibraryFilename = $"{ModelRdlZipLocation}\\{modelReferenceDataLibrary.Key.Iid}.json";
-                        var zipEntry = zipFile.AddEntry(modelReferenceDataLibraryFilename, outputStream);
-                        zipEntry.Comment = $"The {modelReferenceDataLibrary.Key.ShortName} ModelReferenceDataLibrary";
-                        zipFile.Save(filePath);
-                    }
                 }
             }
         }
@@ -1204,19 +1173,16 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Writes the <see cref="CDP4Common.EngineeringModelData.Iteration"/> to the <see cref="ZipFile"/>
+        /// Writes the <see cref="CDP4Common.EngineeringModelData.Iteration"/> to the <see cref="ZipArchive"/>
         /// </summary>
         /// <param name="iterations">
-        /// The <see cref="Dictionary{Iteration, Dtos}"/> that contains the <see cref="CDP4Common.EngineeringModelData.Iteration"/>s and related Dtos that are to be written to the <see cref="ZipFile"/>
-        /// The <see cref="CDP4Common.EngineeringModelData.Iteration"/> that are to be written to the <see cref="ZipFile"/>
+        /// The <see cref="Dictionary{Iteration, Dtos}"/> that contains the <see cref="CDP4Common.EngineeringModelData.Iteration"/>s and related Dtos that are to be written to the <see cref="ZipArchive"/>
+        /// The <see cref="CDP4Common.EngineeringModelData.Iteration"/> that are to be written to the <see cref="ZipArchive"/>
         /// </param>
-        /// <param name="zipFile">
-        /// The target <see cref="ZipFile"/> that the <paramref name="iterations"/> are written to.
+        /// <param name="zipArchive">
+        /// The target <see cref="ZipArchive"/> that the <paramref name="iterations"/> are written to.
         /// </param>
-        /// <param name="filePath">
-        /// The file of the target <see cref="ZipFile"/>
-        /// </param>
-        private void WriteIterationsToZipFile(Dictionary<Iteration, IEnumerable<Thing>> iterations, ZipFile zipFile, string filePath)
+        private void WriteIterationsToZipFile(Dictionary<Iteration, IEnumerable<Thing>> iterations, ZipArchive zipArchive)
         {
             var engineeringModels = new List<EngineeringModel>();
 
@@ -1227,44 +1193,35 @@ namespace CDP4JsonFileDal
 
                 if (!engineeringModels.Contains(engineeringModel))
                 {
-                    using (var engineeringModelMemoryStream = new MemoryStream())
-                    {
-                        this.Serializer.SerializeToStream(new[] { engineeringModelDto }, engineeringModelMemoryStream);
+                    var engineeringModelFilename = $@"{EngineeringModelZipLocation}\{engineeringModelDto.Iid}\{engineeringModelDto.Iid}.json";
 
-                        using (var outputStream = new MemoryStream(engineeringModelMemoryStream.ToArray()))
-                        {
-                            var engineeringModelFilename = $@"{EngineeringModelZipLocation}\{engineeringModelDto.Iid}\{engineeringModelDto.Iid}.json";
-                            var engineeringModelZipEntry = zipFile.AddEntry(engineeringModelFilename, outputStream);
-                            engineeringModelZipEntry.Comment = $"The {engineeringModel.EngineeringModelSetup.ShortName} EngineeringModel";
-                            zipFile.Save(filePath);
-                        }
+                    var zipEntry = zipArchive.CreateEntry(engineeringModelFilename);
+
+                    using (var memoryStream = zipEntry.Open())
+                    {
+                        this.Serializer.SerializeToStream(new[] { engineeringModelDto }, memoryStream);
                     }
 
                     engineeringModels.Add(engineeringModel);
                 }
 
-                using (var iterationMemoryStream = new MemoryStream())
-                {
-                    this.Serializer.SerializeToStream(iteration.Value, iterationMemoryStream);
+                var iterationFilename = $@"{EngineeringModelZipLocation}\{engineeringModelDto.Iid}\{IterationZipLocation}\{iteration.Key.Iid}.json";
 
-                    using (var outputStream = new MemoryStream(iterationMemoryStream.ToArray()))
-                    {
-                        var iterationFilename = $@"{EngineeringModelZipLocation}\{engineeringModelDto.Iid}\{IterationZipLocation}\{iteration.Key.Iid}.json";
-                        var iterationZipEntry = zipFile.AddEntry(iterationFilename, outputStream);
-                        iterationZipEntry.Comment = $"The {iteration.Key.IterationSetup.IsDeleted} Iteration";
-                        zipFile.Save(filePath);
-                    }
+                var iterationZipEntry = zipArchive.CreateEntry(iterationFilename);
+
+                using (var memoryStream = iterationZipEntry.Open())
+                {
+                    this.Serializer.SerializeToStream(iteration.Value, memoryStream);
                 }
             }
         }
 
         /// <summary>
-        ///  Writes the application dependend files inside specific folder to the <see cref="ZipFile"/>
+        ///  Writes the application dependend files inside specific folder to the <see cref="ZipArchive"/>
         /// </summary>
         /// <param name="extraFilesPath">The files list that will be written</param>
-        /// <param name="zipFile">The target <see cref="ZipFile"/></param>
-        /// <param name="filePath">The file path of the target <see cref="ZipFile"/></param>
-        private void WriteExtensionFilesToZipFile(IEnumerable<string> extraFilesPath, ZipFile zipFile, string filePath)
+        /// <param name="zipArchive">The target <see cref="ZipArchive"/></param>
+        private void WriteExtensionFilesToZipFile(IEnumerable<string> extraFilesPath, ZipArchive zipArchive)
         {
             if (extraFilesPath is null)
             {
@@ -1273,11 +1230,8 @@ namespace CDP4JsonFileDal
 
             foreach (var extraFile in extraFilesPath)
             {
-                var zipEntry = zipFile.AddFile(extraFile, ExtensionsZipLocation);
-                zipEntry.Comment = $"The {extraFile} file";
+                var zipEntry = zipArchive.CreateEntryFromFile(extraFile, extraFile);
             }
-
-            zipFile.Save(filePath);
         }
 
         /// <summary>
@@ -1294,11 +1248,11 @@ namespace CDP4JsonFileDal
         /// </returns>
         private IEnumerable<Thing> ReadSiteDirectoryJson(string filePath, Credentials credentials)
         {
-            using (var zip = ZipFile.Read(filePath))
+            using (var zip = ZipFile.OpenRead(filePath))
             {
                 // read SiteDirectory
                 var siteDirectoryFilePath = "SiteDirectory.json";
-                var siteDirectoryZipEntry = zip.Entries.SingleOrDefault(x => x.FileName.EndsWith(siteDirectoryFilePath));
+                var siteDirectoryZipEntry = zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(siteDirectoryFilePath));
                 var returned = this.ReadInfoFromArchiveEntry(siteDirectoryZipEntry, credentials.Password);
 
                 return returned;
@@ -1317,7 +1271,7 @@ namespace CDP4JsonFileDal
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        private List<Thing> ReadIterationArchiveEntry(ZipEntry zipEntry, string archivePassword)
+        private List<Thing> ReadIterationArchiveEntry(ZipArchiveEntry zipEntry, string archivePassword)
         {
             var returned = this.ReadInfoFromArchiveEntry(zipEntry, archivePassword);
 
@@ -1343,7 +1297,7 @@ namespace CDP4JsonFileDal
         /// <exception cref="Exception">
         /// throws exception if the file failed to open
         /// </exception>
-        private List<Thing> ReadInfoFromArchiveEntry(ZipEntry zipEntry, string archivePassword)
+        private List<Thing> ReadInfoFromArchiveEntry(ZipArchiveEntry zipEntry, string archivePassword)
         {
             if (zipEntry == null)
             {
@@ -1352,12 +1306,11 @@ namespace CDP4JsonFileDal
 
             var watch = Stopwatch.StartNew();
 
-            var stream = new MemoryStream();
+            Stream stream;
 
             try
             {
-                zipEntry.Password = archivePassword;
-                zipEntry.Extract(stream);
+                stream = zipEntry.Open();
             }
             catch (Exception ex)
             {
@@ -1368,16 +1321,15 @@ namespace CDP4JsonFileDal
             }
 
             watch.Stop();
-            Logger.Info("ZipEntry {0} retrieved in {1} [ms]", zipEntry.FileName, watch.ElapsedMilliseconds);
+            Logger.Info("ZipEntry {0} retrieved in {1} [ms]", zipEntry.FullName, watch.ElapsedMilliseconds);
 
             watch = Stopwatch.StartNew();
 
-            stream.Position = 0;
             var returned = this.Serializer.Deserialize(stream).ToList();
 
             stream.Dispose();
             watch.Stop();
-            Logger.Info("JSON Deserializer of {0} completed in {1} [ms]", zipEntry.FileName, watch.ElapsedMilliseconds);
+            Logger.Info("JSON Deserializer of {0} completed in {1} [ms]", zipEntry.FullName, watch.ElapsedMilliseconds);
             return returned;
         }
     }
