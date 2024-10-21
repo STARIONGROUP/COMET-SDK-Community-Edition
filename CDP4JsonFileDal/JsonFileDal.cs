@@ -505,7 +505,7 @@ namespace CDP4JsonFileDal
             {
                 // re-read the to extract the reference data libraries that have not yet been fully dereferenced
                 // and that are part of the required RDL's
-                var siteDirectoryData = this.ReadSiteDirectoryJson(filePath, this.Credentials).ToList();
+                var siteDirectoryData = this.ReadSiteDirectoryJson(filePath).ToList();
 
                 // read file, SiteDirectory first.
                 using (var zip = ZipFile.OpenRead(filePath))
@@ -706,7 +706,7 @@ namespace CDP4JsonFileDal
 
                 var siteRdlFilePath = $"{requiredRdl.Iid}.json";
                 var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(siteRdlFilePath));
-                var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry, this.Credentials.Password);
+                var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry);
                 returned.AddRange(siteRdlItems);
 
                 // set the requiredRdl for the next iteration
@@ -740,11 +740,11 @@ namespace CDP4JsonFileDal
             var engineeringModelZipEntry =
                 zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(engineeringModelFilePath));
 
-            var returned = this.ReadInfoFromArchiveEntry(engineeringModelZipEntry, this.Credentials.Password);
+            var returned = this.ReadInfoFromArchiveEntry(engineeringModelZipEntry);
 
             var iterationFilePath = $"{iteration.Iid}.json";
             var iterationZipEntry = zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(iterationFilePath));
-            returned.AddRange(this.ReadIterationArchiveEntry(iterationZipEntry, this.Credentials.Password));
+            returned.AddRange(this.ReadIterationArchiveEntry(iterationZipEntry));
 
             // use the loaded sitedirectory information to determine the required model reference data library
             var modelRdl = engineeringModelSetup.RequiredRdl.Single();
@@ -759,7 +759,7 @@ namespace CDP4JsonFileDal
             // based on engineering model setup load rdl chain
             var modelRdlFilePath = $"{modelRdl.Iid}.json";
             var modelRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(modelRdlFilePath));
-            var modelRdlItems = this.ReadInfoFromArchiveEntry(modelRdlZipEntry, this.Credentials.Password);
+            var modelRdlItems = this.ReadInfoFromArchiveEntry(modelRdlZipEntry);
             returned.AddRange(modelRdlItems);
 
             // load the reference data libraries as per the containment chain
@@ -773,7 +773,7 @@ namespace CDP4JsonFileDal
 
                 var siteRdlFilePath = $"{requiredRdl.Iid}.json";
                 var siteRdlZipEntry = zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(siteRdlFilePath));
-                var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry, this.Credentials.Password);
+                var siteRdlItems = this.ReadInfoFromArchiveEntry(siteRdlZipEntry);
                 returned.AddRange(siteRdlItems);
 
                 // set the requiredRdl for the next iteration
@@ -879,7 +879,7 @@ namespace CDP4JsonFileDal
 
             try
             {
-                var returned = this.ReadSiteDirectoryJson(filePath, credentials).ToList();
+                var returned = this.ReadSiteDirectoryJson(filePath).ToList();
 
                 Logger.Debug("The SiteDirectory contains {0} Things", returned.Count);
 
@@ -1230,7 +1230,9 @@ namespace CDP4JsonFileDal
 
             foreach (var extraFile in extraFilesPath)
             {
-                var zipEntry = zipArchive.CreateEntryFromFile(extraFile, extraFile);
+                var extraFileName = Path.GetFileName(extraFile);
+                var entryLocation = Path.Combine(ExtensionsZipLocation, extraFileName);
+                zipArchive.CreateEntryFromFile(extraFile, entryLocation);
             }
         }
 
@@ -1240,20 +1242,17 @@ namespace CDP4JsonFileDal
         /// <param name="filePath">
         /// the file path to the archive
         /// </param>
-        /// <param name="credentials">
-        /// the <see cref="Credentials"/> used to read the archive
-        /// </param>
         /// <returns>
-        /// an <see cref="IEnumerable{Thing}"/> containing <see cref="CDP4Common.SiteDirectoryData.SiteDirectory"/> data
+        /// an <see cref="IEnumerable{Thing}"/> containing <see cref="SiteDirectory"/> data
         /// </returns>
-        private IEnumerable<Thing> ReadSiteDirectoryJson(string filePath, Credentials credentials)
+        private IEnumerable<Thing> ReadSiteDirectoryJson(string filePath)
         {
             using (var zip = ZipFile.OpenRead(filePath))
             {
                 // read SiteDirectory
                 var siteDirectoryFilePath = "SiteDirectory.json";
                 var siteDirectoryZipEntry = zip.Entries.SingleOrDefault(x => x.FullName.EndsWith(siteDirectoryFilePath));
-                var returned = this.ReadInfoFromArchiveEntry(siteDirectoryZipEntry, credentials.Password);
+                var returned = this.ReadInfoFromArchiveEntry(siteDirectoryZipEntry);
 
                 return returned;
             }
@@ -1265,15 +1264,12 @@ namespace CDP4JsonFileDal
         /// <param name="zipEntry">
         /// The zip entry pointing to the iteration file in the archive.
         /// </param>
-        /// <param name="archivePassword">
-        /// The password of the archive.
-        /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        private List<Thing> ReadIterationArchiveEntry(ZipArchiveEntry zipEntry, string archivePassword)
+        private List<Thing> ReadIterationArchiveEntry(ZipArchiveEntry zipEntry)
         {
-            var returned = this.ReadInfoFromArchiveEntry(zipEntry, archivePassword);
+            var returned = this.ReadInfoFromArchiveEntry(zipEntry);
 
             // set the iteration id for returned objects
             var iterationId = returned.First().Iid;
@@ -1288,16 +1284,13 @@ namespace CDP4JsonFileDal
         /// <param name="zipEntry">
         /// The zip entry.
         /// </param>
-        /// <param name="archivePassword">
-        /// The password of the archive.
-        /// </param>
         /// <returns>
         /// A <see cref="List{Thing}"/>
         /// </returns>
         /// <exception cref="Exception">
         /// throws exception if the file failed to open
         /// </exception>
-        private List<Thing> ReadInfoFromArchiveEntry(ZipArchiveEntry zipEntry, string archivePassword)
+        private List<Thing> ReadInfoFromArchiveEntry(ZipArchiveEntry zipEntry)
         {
             if (zipEntry == null)
             {
