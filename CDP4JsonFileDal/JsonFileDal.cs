@@ -1336,7 +1336,7 @@ namespace CDP4JsonFileDal
 
             if (entry == null)
             {
-                return new List<Thing>();
+                throw new ArgumentOutOfRangeException(entryName, "Supplied archive entry name could not be found in the ZipFile.");
             }
 
             var stream = zipFile.GetInputStream(entry);
