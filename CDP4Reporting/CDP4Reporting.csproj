@@ -4,7 +4,7 @@
      <TargetFrameworks>netstandard2.0</TargetFrameworks>
      <Company>Starion Group S.A.</Company>
      <Title>CDP4Reporting Community Edition</Title>
-     <VersionPrefix>27.3.5</VersionPrefix>
+     <VersionPrefix>27.4.0</VersionPrefix>
      <Description>CDP4 Reporting</Description>
      <Copyright>Copyright © Starion Group S.A.</Copyright>
      <Authors>Sam, Alex, Alexander</Authors>
