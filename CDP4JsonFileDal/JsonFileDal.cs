@@ -34,7 +34,6 @@ namespace CDP4JsonFileDal
 
     using CDP4Common.CommonData;
     using CDP4Common.Comparers;
-    using CDP4Common.Encryption;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Exceptions;
     using CDP4Common.Extensions;
@@ -56,7 +55,10 @@ namespace CDP4JsonFileDal
 
     using NLog;
 
+    using Alias = CDP4Common.DTO.Alias;
+    using Definition = CDP4Common.DTO.Definition;
     using File = System.IO.File;
+    using HyperLink = CDP4Common.DTO.HyperLink;
     using Person = CDP4Common.SiteDirectoryData.Person;
     using SiteDirectory = CDP4Common.SiteDirectoryData.SiteDirectory;
     using Thing = CDP4Common.DTO.Thing;
@@ -311,7 +313,7 @@ namespace CDP4JsonFileDal
                 {
                     var password = this.Session.Credentials.Password;
 
-                    using (var zipArchive = SharpZipLibUtils.CreateZipOutputStream(file, password))
+                    using (var zipArchive = file.CreateEncryptableZipOutputStream(password))
                     {
                         this.WriteHeaderToZipFile(exchangeFileHeader, zipArchive);
 
@@ -499,7 +501,7 @@ namespace CDP4JsonFileDal
             }
 
             // make sure that the uri is of the correct format
-            UriExtensions.AssertUriIsFileSchema(this.Credentials.Uri);
+            this.Credentials.Uri.AssertUriIsFileSchema();
 
             var filePath = this.Credentials.Uri.LocalPath;
 
@@ -657,9 +659,7 @@ namespace CDP4JsonFileDal
 
             foreach (var refThing in domain.Alias.ToList())
             {
-                var thingDto = siteDirectoryData.FirstOrDefault(s => s.Iid.Equals(refThing)) as CDP4Common.DTO.Alias;
-
-                if (thingDto != null)
+                if (siteDirectoryData.FirstOrDefault(s => s.Iid.Equals(refThing)) is Alias thingDto)
                 {
                     thingDto.ExcludedPerson.Clear();
                     thingDto.ExcludedDomain.Clear();
@@ -673,9 +673,7 @@ namespace CDP4JsonFileDal
 
             foreach (var refThing in domain.HyperLink.ToList())
             {
-                var thingDto = siteDirectoryData.FirstOrDefault(s => s.Iid.Equals(refThing)) as CDP4Common.DTO.HyperLink;
-
-                if (thingDto != null)
+                if (siteDirectoryData.FirstOrDefault(s => s.Iid.Equals(refThing)) is HyperLink thingDto)
                 {
                     thingDto.ExcludedPerson.Clear();
                     thingDto.ExcludedDomain.Clear();
@@ -692,9 +690,7 @@ namespace CDP4JsonFileDal
 
             foreach (var refThing in domain.Definition.ToList())
             {
-                var thingDto = siteDirectoryData.FirstOrDefault(s => s.Iid.Equals(refThing)) as CDP4Common.DTO.Definition;
-
-                if (thingDto != null)
+                if (siteDirectoryData.FirstOrDefault(s => s.Iid.Equals(refThing)) is Definition thingDto)
                 {
                     thingDto.ExcludedDomain.Clear();
                     thingDto.ExcludedPerson.Clear();
@@ -903,7 +899,7 @@ namespace CDP4JsonFileDal
             }
 
             // make sure that the uri is of the correct format
-            UriExtensions.AssertUriIsFileSchema(credentials.Uri);
+            credentials.Uri.AssertUriIsFileSchema();
 
             var filePath = credentials.Uri.LocalPath;
 
@@ -1055,7 +1051,7 @@ namespace CDP4JsonFileDal
             using (var memoryStream = new MemoryStream())
             {
                 this.Serializer.SerializeToStream(echExchangeFileHeader, memoryStream);
-                SharpZipLibUtils.AddEntryFromStream(zipArchive, memoryStream, "Header.json");
+                zipArchive.AddEntryFromStream(memoryStream, "Header.json");
             }
         }
 
@@ -1076,7 +1072,7 @@ namespace CDP4JsonFileDal
 
                 this.Serializer.SerializeToStream(orderedContents, memoryStream);
 
-                SharpZipLibUtils.AddEntryFromStream(zipOutputStream, memoryStream, "SiteDirectory.json");
+                zipOutputStream.AddEntryFromStream(memoryStream, "SiteDirectory.json");
             }
         }
 
@@ -1129,7 +1125,7 @@ namespace CDP4JsonFileDal
                 {
                     this.Serializer.SerializeToStream(siteReferenceDataLibrary.Value, memoryStream);
 
-                    SharpZipLibUtils.AddEntryFromStream(zipOutputStream, memoryStream, siteReferenceDataLibraryFilename);
+                    zipOutputStream.AddEntryFromStream(memoryStream, siteReferenceDataLibraryFilename);
                 }
             }
         }
@@ -1183,7 +1179,7 @@ namespace CDP4JsonFileDal
                 using (var memoryStream = new MemoryStream())
                 {
                     this.Serializer.SerializeToStream(modelReferenceDataLibrary.Value, memoryStream);
-                    SharpZipLibUtils.AddEntryFromStream(zipOutputStream, memoryStream, modelReferenceDataLibraryFilename);
+                    zipOutputStream.AddEntryFromStream(memoryStream, modelReferenceDataLibraryFilename);
                 }
             }
         }
@@ -1240,7 +1236,7 @@ namespace CDP4JsonFileDal
                     using (var memoryStream = new MemoryStream())
                     {
                         this.Serializer.SerializeToStream(new[] { engineeringModelDto }, memoryStream);
-                        SharpZipLibUtils.AddEntryFromStream(zipOutputStream, memoryStream, engineeringModelFilename);
+                        zipOutputStream.AddEntryFromStream(memoryStream, engineeringModelFilename);
                     }
 
                     engineeringModels.Add(engineeringModel);
@@ -1252,7 +1248,7 @@ namespace CDP4JsonFileDal
                 {
                     this.Serializer.SerializeToStream(iteration.Value, memoryStream);
 
-                    SharpZipLibUtils.AddEntryFromStream(zipOutputStream, memoryStream, iterationFilename);
+                    zipOutputStream.AddEntryFromStream(memoryStream, iterationFilename);
                 }
             }
         }
@@ -1274,7 +1270,7 @@ namespace CDP4JsonFileDal
                 var extraFileName = Path.GetFileName(extraFile);
                 var entryLocation = Path.Combine(ExtensionsZipLocation, extraFileName);
 
-                SharpZipLibUtils.AddEntryFromFile(zipOutputStream, extraFile, entryLocation);
+                zipOutputStream.AddEntryFromFile(extraFile, entryLocation);
             }
         }
 

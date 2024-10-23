@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="SharpZipLibHelper.cs" company="Starion Group S.A.">
+// <copyright file="ZipOutputStreamExtensions.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2024 Starion Group S.A.
 // 
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
@@ -22,31 +22,21 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Encryption
+namespace CDP4Common.Extensions
 {
     using System.IO;
-    
+
     using ICSharpCode.SharpZipLib.Zip;
 
     /// <summary>
-    /// A class containing Helper Methods for working with SharpZipLib and creating AES 256 encrypted zip files
+    /// A class containing Extension Methods for working with SharpZipLib and creating AES 256 encrypted zip files
     /// </summary>
-    public static class SharpZipLibUtils
+    public static class ZipOutputStreamExtensions
     {
         /// <summary>
-        /// Create a <see cref="ZipOutputStream"/> to create a AES 256 encrypted zip file
+        /// The AESKeySize setting for new <see cref="ZipEntry"/>s
         /// </summary>
-        /// <param name="inputStream">The input <see cref="Stream"/> to write to</param>
-        /// <param name="password">The password to be used to protect the data</param>
-        /// <returns>The created <see cref="ZipOutputStream"/></returns>
-        public static ZipOutputStream CreateZipOutputStream(Stream inputStream, string password)
-        {
-            var zipStream = new ZipOutputStream(inputStream);
-            zipStream.Password = password;
-            zipStream.IsStreamOwner = true; // underlying streams will be forcibly closed
-
-            return zipStream;
-        }
+        private const int AESKeySize = 256;
 
         /// <summary>
         /// Add a <see cref="ZipEntry"/> and add it to a <see cref="ZipOutputStream"/>
@@ -54,7 +44,7 @@ namespace CDP4Common.Encryption
         /// <param name="zipOutputStream">The <see cref="ZipOutputStream"/></param>
         /// <param name="stream">The input <see cref="Stream"/> from which to create the <see cref="ZipEntry"/></param>
         /// <param name="name">The name of the entry, including (sub)folder information</param>
-        public static void AddEntryFromStream(ZipOutputStream zipOutputStream, Stream stream, string name)
+        public static void AddEntryFromStream(this ZipOutputStream zipOutputStream, Stream stream, string name)
         {
             if (stream.Length == 0)
             {
@@ -63,7 +53,7 @@ namespace CDP4Common.Encryption
 
             var entry = new ZipEntry(name)
             {
-                AESKeySize = 256, // Set AES encryption to 256 bits for each individual entry
+                AESKeySize = AESKeySize, // Set AES encryption for each individual entry
             };
 
             zipOutputStream.PutNextEntry(entry);
@@ -79,11 +69,11 @@ namespace CDP4Common.Encryption
         /// <param name="zipOutputStream">The <see cref="ZipOutputStream"/></param>
         /// <param name="extraFile">The location of the file to add</param>
         /// <param name="entryLocation">The location (fullname) of the file to create in the <see cref="ZipOutputStream"/>, including (sub)folder information</param>
-        public static void AddEntryFromFile(ZipOutputStream zipOutputStream, string extraFile, string entryLocation)
+        public static void AddEntryFromFile(this ZipOutputStream zipOutputStream, string extraFile, string entryLocation)
         {
             var entry = new ZipEntry(entryLocation)
             {
-                AESKeySize = 256, // Set AES encryption to 256 bits
+                AESKeySize = AESKeySize, // Set AES encryption for each individual entry
             };
 
             zipOutputStream.PutNextEntry(entry);

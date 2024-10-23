@@ -21,7 +21,7 @@
         <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
         <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
         <PackageReleaseNotes>
-            [BUMP] To CDP4Common 27.3.5
+            [BUMP] To CDP4Common 27.4.0
             [Update] to Microsoft.Extensions.Logging.Abstractions 8.0.2
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
