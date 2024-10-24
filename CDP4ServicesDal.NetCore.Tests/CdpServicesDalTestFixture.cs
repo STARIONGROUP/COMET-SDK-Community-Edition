@@ -1,8 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CdpServicesDalTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2024 Starion Group S.A.
-//
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+﻿// -------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="CdpServicesDalTestFixture.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -20,7 +20,7 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4ServicesDal.Tests
 {
@@ -49,7 +49,8 @@ namespace CDP4ServicesDal.Tests
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
-    using CDP4DalCommon.Tasks;
+    using CDP4DalCommon.Protocol.Operations;
+    using CDP4DalCommon.Protocol.Tasks;
 
     using NUnit.Framework;
 
@@ -92,7 +93,7 @@ namespace CDP4ServicesDal.Tests
             this.siteDirectory = new SiteDirectory(Guid.Parse("f13de6f8-b03a-46e7-a492-53b2f260f294"), this.session.Assembler.Cache, this.uri);
             var lazySiteDirectory = new Lazy<Thing>(() => this.siteDirectory);
             lazySiteDirectory.Value.Cache.TryAdd(new CacheKey(lazySiteDirectory.Value.Iid, null), lazySiteDirectory);
-            
+
             this.jsonSerializerOptions = new JsonSerializerOptions()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -183,7 +184,7 @@ namespace CDP4ServicesDal.Tests
             HttpClient httpClient = null;
             Assert.Throws<ArgumentNullException>(() => new CdpServicesDal(httpClient));
         }
-        
+
         [Test]
         [Category("WebServicesDependent")]
         public async Task VerifThatAClosedDalCannotBeClosedAgain()
@@ -264,7 +265,7 @@ namespace CDP4ServicesDal.Tests
             Assert.That(returned, Is.Not.Null);
             Assert.That(returned, Is.Not.Empty);
 
-            var sd = returned.OfType<CDP4Common.DTO.SiteDirectory>().First();
+            var sd = returned.First(x => x.ClassKind == ClassKind.SiteDirectory);
 
             var attributes = new QueryAttributes();
             var readResult = await dal.Read(sd, this.cancelationTokenSource.Token, attributes);
@@ -326,6 +327,7 @@ namespace CDP4ServicesDal.Tests
                 IsSynonym = false,
                 LanguageCode = "en",
             };
+
             testDtoOriginal.AddContainer(ClassKind.DomainOfExpertise, domainOfExpertiseIid);
             testDtoOriginal.AddContainer(ClassKind.SiteDirectory, siteDirecortoryIid);
 
@@ -335,6 +337,7 @@ namespace CDP4ServicesDal.Tests
                 IsSynonym = true,
                 LanguageCode = "en",
             };
+
             testDtoModified.AddContainer(ClassKind.DomainOfExpertise, domainOfExpertiseIid);
             testDtoModified.AddContainer(ClassKind.SiteDirectory, siteDirecortoryIid);
 
@@ -343,6 +346,7 @@ namespace CDP4ServicesDal.Tests
                 Content = "somecontent",
                 LanguageCode = "en",
             };
+
             testDtoOriginal2.AddContainer(ClassKind.DomainOfExpertise, domainOfExpertiseIid);
             testDtoOriginal2.AddContainer(ClassKind.SiteDirectory, siteDirecortoryIid);
 
@@ -351,6 +355,7 @@ namespace CDP4ServicesDal.Tests
                 Content = "somecontent2",
                 LanguageCode = "en",
             };
+
             testDtoModified2.AddContainer(ClassKind.DomainOfExpertise, domainOfExpertiseIid);
             testDtoModified2.AddContainer(ClassKind.SiteDirectory, siteDirecortoryIid);
 
@@ -477,10 +482,11 @@ namespace CDP4ServicesDal.Tests
                     await assembler.Clear();
                 }
             }, Throws.Nothing);
-            
+
             var synchronizeMeanElapsedTime = elapsedTimes.Average();
             var maxElapsedTime = elapsedTimes.Max();
             var minElapsedTime = elapsedTimes.Min();
+
             // 204.64 | 181 | 458 ms
             // refactor: 31.61 | 26 | 283
         }
@@ -497,7 +503,7 @@ namespace CDP4ServicesDal.Tests
             var files = new List<string> { filepath };
 
             var contentHash = "F73747371CFD9473C19A0A7F99BCAB008474C4CA";
-            var uri = new Uri("https://cdp4services-test.cdp4.org");            
+            var uri = new Uri("https://cdp4services-test.cdp4.org");
             this.credentials = new Credentials("admin", "pass", uri);
 
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
@@ -621,7 +627,7 @@ namespace CDP4ServicesDal.Tests
         public async Task Verify_that_open_with_proxy_returns_expected_result()
         {
             var proxySettings = new ProxySettings(new Uri("http://tinyproxy:8888"));
-            
+
             var uri = new Uri("https://cdp4services-test.cdp4.org");
             this.credentials = new Credentials("admin", "pass", uri, false, proxySettings);
 
@@ -630,16 +636,15 @@ namespace CDP4ServicesDal.Tests
             
             Assert.That(result, Is.Not.Null);
         }
-        
+
         [Test]
         [Category("WebServicesDependent")]
         public async Task Verify_that_multiple_read_requests_can_be_made_in_parallel()
         {
             var uri = new Uri("https://cdp4services-test.cdp4.org");
             var credentials = new Credentials("admin", "pass", uri);
-            
+
             var dal = new CdpServicesDal();
-            
 
             var result = await dal.Open(credentials, new CancellationToken());
 
@@ -699,7 +704,7 @@ namespace CDP4ServicesDal.Tests
 
             this.dal = new CdpServicesDal(httpClient);
             this.SetDalToBeOpen(this.dal);
-            
+
             var cometTaskId = Guid.NewGuid();
 
             var requestHandler = mockHttp.When($"{CdpServicesDal.CometTaskRoute}/{cometTaskId}");
@@ -748,7 +753,7 @@ namespace CDP4ServicesDal.Tests
 
             this.dal = new CdpServicesDal(httpClient);
             this.SetDalToBeOpen(this.dal);
-            
+
             var requestHandler = mockHttp.When($"{CdpServicesDal.CometTaskRoute}");
 
             var notFoundHttpResponse = new HttpResponseMessage()
@@ -764,7 +769,7 @@ namespace CDP4ServicesDal.Tests
 
             var cometTasks = new List<CometTask>()
             {
-                new ()
+                new()
                 {
                     Id = Guid.NewGuid(),
                     Actor = Guid.NewGuid(),
@@ -830,7 +835,7 @@ namespace CDP4ServicesDal.Tests
             newCometTaskResponse.Content = new StringContent(JsonSerializer.Serialize(cometTask, this.jsonSerializerOptions));
             SetHttpHeader(newCometTaskResponse, "application/json");
 
-            var longRunningTaskResult = await this.dal.Write(operationContainer,1);
+            var longRunningTaskResult = await this.dal.Write(operationContainer, 1);
 
             Assert.Multiple(() =>
             {
@@ -843,12 +848,12 @@ namespace CDP4ServicesDal.Tests
             requestHandler.Respond(_ => thingsResponse);
 
             var stream = new MemoryStream();
-            this.dal.Cdp4JsonSerializer.SerializeToStream(this.iteration, stream, true);
+            this.dal.Cdp4DalJsonSerializer.SerializeToStream(this.iteration, stream, true);
             stream.Position = 0;
             thingsResponse.Content = new StreamContent(stream);
             SetHttpHeader(thingsResponse, "application/json");
 
-            longRunningTaskResult = await this.dal.Write(operationContainer,1);
+            longRunningTaskResult = await this.dal.Write(operationContainer, 1);
 
             Assert.Multiple(() =>
             {

@@ -1,0 +1,62 @@
+﻿{
+  "_delete": [],
+  "_create": [
+    {
+      "alias": [],
+      "category": [],
+      "classKind": "DerivedQuantityKind",
+      "defaultScale": "56863161-fa3a-47b8-a3cd-16465f734b27",
+      "definition": [],
+      "excludedDomain": [],
+      "excludedPerson": [],
+      "hyperLink": [],
+      "iid": "08c130ca-a270-408f-8069-b7e1d00659f0",
+      "isDeprecated": false,
+      "modifiedOn": "2018-08-12T14:10:55.560Z",
+      "name": "derivedQuantityKind",
+      "possibleScale": [ "56863161-fa3a-47b8-a3cd-16465f734b27" ],
+      "quantityDimensionSymbol": "dqk",
+      "quantityKindFactor": [
+        {
+          "k": -12551680,
+          "v": "11aa4db6-40ef-4368-92ac-bda8af9b27a9"
+        },
+        {
+          "k": 77606679,
+          "v": "125abfbd-f717-42c0-91da-738316159ea5"
+        }
+      ],
+      "revisionNumber": 0,
+      "shortName": "derivedQuantityKind",
+      "symbol": "derivedQuantityKind"
+    },
+    {
+      "classKind": "QuantityKindFactor",
+      "excludedDomain": [],
+      "excludedPerson": [],
+      "exponent": "1",
+      "iid": "11aa4db6-40ef-4368-92ac-bda8af9b27a9",
+      "modifiedOn": "2018-08-12T14:10:45.476Z",
+      "quantityKind": "9513aca9-5397-48a1-8187-1683490bdb4f",
+      "revisionNumber": 0
+    },
+    {
+      "classKind": "QuantityKindFactor",
+      "excludedDomain": [],
+      "excludedPerson": [],
+      "exponent": "2",
+      "iid": "125abfbd-f717-42c0-91da-738316159ea5",
+      "modifiedOn": "2018-08-12T14:10:50.681Z",
+      "quantityKind": "1c53f8f4-024b-4f42-987a-439901a4bcb2",
+      "revisionNumber": 0
+    }
+  ],
+  "_update": [
+    {
+      "classKind": "SiteReferenceDataLibrary",
+      "iid": "bff9f871-3b7f-4e57-ac82-5ab499f9baf5",
+      "parameterType": [ "08c130ca-a270-408f-8069-b7e1d00659f0" ]
+    }
+  ],
+  "_copy": []
+}

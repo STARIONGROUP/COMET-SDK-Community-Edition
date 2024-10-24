@@ -2,7 +2,7 @@
 // <copyright file="CdpServicesDal.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2024 Starion Group S.A.
 // 
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -27,7 +27,6 @@ namespace CDP4ServicesDal
 #if NETFRAMEWORK
     using System.ComponentModel.Composition;
 #endif
-
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -45,14 +44,15 @@ namespace CDP4ServicesDal
     using CDP4Common.DTO;
     using CDP4Common.Extensions;
 
-    using CDP4DalCommon.Tasks;
-
     using CDP4Dal;
     using CDP4Dal.Composition;
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
+
+    using CDP4DalCommon.Protocol.Operations;
+    using CDP4DalCommon.Protocol.Tasks;
 
     using CDP4JsonSerializer;
 
@@ -94,7 +94,7 @@ namespace CDP4ServicesDal
         /// </summary>
         public CdpServicesDal()
         {
-            this.Cdp4JsonSerializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Cdp4DalJsonSerializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion, false);
             this.MessagePackSerializer = new MessagePackSerializer();
         }
 
@@ -106,18 +106,13 @@ namespace CDP4ServicesDal
         /// </param>
         public CdpServicesDal(HttpClient httpClient) : this()
         {
-            if (httpClient == null)
-            {
-                throw new ArgumentNullException(nameof(httpClient));
-            }
-
-            this.httpClient = httpClient;
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         /// <summary>
-        /// Gets the <see cref="Cdp4JsonSerializer"/>
+        /// Gets the <see cref="CDP4JsonSerializer.Cdp4DalJsonSerializer"/>
         /// </summary>
-        public Cdp4JsonSerializer Cdp4JsonSerializer { get; private set; }
+        public Cdp4DalJsonSerializer Cdp4DalJsonSerializer { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="MessagePackSerializer"/>
@@ -208,7 +203,7 @@ namespace CDP4ServicesDal
                     {
                         case ContentTypeKind.JSON:
                             Logger.Info("Deserializing JSON response");
-                            result.AddRange(this.Cdp4JsonSerializer.Deserialize(resultStream));
+                            result.AddRange(this.Cdp4DalJsonSerializer.Deserialize(resultStream));
                             Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             break;
                         case ContentTypeKind.MESSAGEPACK:
@@ -342,7 +337,7 @@ namespace CDP4ServicesDal
                         case ContentTypeKind.MESSAGEPACK:
                             throw new NotSupportedException("Long running task not supported with MESSAGEPACK");
                         default:
-                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                            throw new InvalidOperationException($"ContentTypeKind {contentTypeKind} not supported");
                     }
 
                     deserializationWatch.Stop();
@@ -500,7 +495,7 @@ namespace CDP4ServicesDal
                     {
                         case ContentTypeKind.JSON:
                             Logger.Info("Deserializing JSON response");
-                            returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
+                            returned = this.Cdp4DalJsonSerializer.Deserialize(resultStream);
                             Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             break;
                         case ContentTypeKind.MESSAGEPACK:
@@ -661,7 +656,7 @@ namespace CDP4ServicesDal
                     {
                         case ContentTypeKind.JSON:
                             Logger.Info("Deserializing JSON response");
-                            returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
+                            returned = this.Cdp4DalJsonSerializer.Deserialize(resultStream);
                             Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             break;
                         case ContentTypeKind.MESSAGEPACK:
@@ -729,13 +724,13 @@ namespace CDP4ServicesDal
                     {
                         case ContentTypeKind.JSON:
                             Logger.Info("Deserializing JSON response");
-                            returned = this.Cdp4JsonSerializer.Deserialize<CometTask>(resultStream);
+                            returned = this.Cdp4DalJsonSerializer.Deserialize<CometTask>(resultStream);
                             Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             break;
                         case ContentTypeKind.MESSAGEPACK:
                             throw new NotSupportedException("Read CometTask by id not supported with MESSAGEPACK");
                         default:
-                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                            throw new InvalidOperationException($"ContentTypeKind {contentTypeKind} not supported");
                     }
 
                     deserializationWatch.Stop();
@@ -790,13 +785,13 @@ namespace CDP4ServicesDal
                     {
                         case ContentTypeKind.JSON:
                             Logger.Info("Deserializing JSON response");
-                            returned = this.Cdp4JsonSerializer.Deserialize<IEnumerable<CometTask>>(resultStream);
+                            returned = this.Cdp4DalJsonSerializer.Deserialize<IEnumerable<CometTask>>(resultStream);
                             Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             break;
                         case ContentTypeKind.MESSAGEPACK:
                             throw new NotSupportedException("Read all CometTask not supported with MESSAGEPACK");
                         default:
-                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                            throw new InvalidOperationException($"ContentTypeKind {contentTypeKind} not supported");
                     }
 
                     deserializationWatch.Stop();
@@ -934,7 +929,7 @@ namespace CDP4ServicesDal
                     {
                         case ContentTypeKind.JSON:
                             Logger.Info("Deserializing JSON response");
-                            returned = this.Cdp4JsonSerializer.Deserialize(resultStream);
+                            returned = this.Cdp4DalJsonSerializer.Deserialize(resultStream);
                             Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             break;
                         case ContentTypeKind.MESSAGEPACK:
@@ -1090,7 +1085,8 @@ namespace CDP4ServicesDal
             result.DefaultRequestHeaders.Accept.Clear();
             result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/msgpack"));
-            result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.UserName}:{credentials.Password}")));
+
+            result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
             result.DefaultRequestHeaders.Add(Headers.AcceptCdpVersion, Headers.AcceptCdpVersionValue);
             result.DefaultRequestHeaders.Add("User-Agent", "CDP4 (ECSS-E-TM-10-25 Annex C.2) CDPServicesDal");
 
@@ -1173,7 +1169,7 @@ namespace CDP4ServicesDal
                 postOperation.ConstructFromOperation(operation);
             }
 
-            this.Cdp4JsonSerializer.SerializeToStream(postOperation, outputStream);
+            this.Cdp4DalJsonSerializer.SerializeToStream(postOperation, outputStream);
             outputStream.Position = 0;
 
             if (Logger.IsTraceEnabled)
@@ -1402,9 +1398,9 @@ namespace CDP4ServicesDal
                 var firstChar = (char)reader.Peek();
                 stream.Position = 0;
 
-                return firstChar == '[' 
-                    ? new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize(stream)) 
-                    : new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize<CometTask>(stream));
+                return firstChar == '['
+                    ? new LongRunningTaskResult(this.Cdp4DalJsonSerializer.Deserialize(stream))
+                    : new LongRunningTaskResult(this.Cdp4DalJsonSerializer.Deserialize<CometTask>(stream));
             }
         }
 
