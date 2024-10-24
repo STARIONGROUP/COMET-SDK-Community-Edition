@@ -42,6 +42,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Update="PostOperation\CreateDerivedQuantityKindPostMessage.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="PostOperation\ReOderFactorsOfDerivedQuantityKindPostMessage.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Update="TestData\bigmodel.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

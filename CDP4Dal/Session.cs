@@ -1,8 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Session.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2025 Starion Group S.A.
-//
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+﻿// -------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="Session.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -20,7 +20,7 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal
 {
@@ -48,8 +48,9 @@ namespace CDP4Dal
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
 
+    using CDP4DalCommon.Protocol.Operations;
+    using CDP4DalCommon.Protocol.Tasks;
     using CDP4DalCommon.Authentication;
-    using CDP4DalCommon.Tasks;
 
     using NLog;
 
@@ -529,7 +530,7 @@ namespace CDP4Dal
                 throw new InvalidOperationException("The ReferenceDataLibrary cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
             }
 
-            await this.Read((Thing) rdl);
+            await this.Read((Thing)rdl);
             this.AddRdlToOpenList(rdl);
         }
 
@@ -559,7 +560,7 @@ namespace CDP4Dal
             }
 
             logger.Info("Session.Read {EngineeringModel} {0}", !engineeringModels.Any() ? "*" : $"EngineeringModel/{engineeringModels.ToShortGuidArray()}");
-            
+
             // Create the token source
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationTokenKey = Guid.NewGuid();
@@ -1479,7 +1480,7 @@ namespace CDP4Dal
                 .Select(x => x.Value.Value)
                 .Where(x =>
                     x is SiteDirectory
-                    || x is Iteration && ((Iteration) x).IterationSetup.FrozenOn == null && this.OpenIterations.ContainsKey((Iteration) x)
+                    || x is Iteration && ((Iteration)x).IterationSetup.FrozenOn == null && this.OpenIterations.ContainsKey((Iteration)x)
                 )
                 .ToList();
         }
@@ -1546,7 +1547,7 @@ namespace CDP4Dal
                 return;
             }
 
-            var activeParticipant = ((EngineeringModel) iteration.Container).EngineeringModelSetup.Participant.SingleOrDefault(p => p.Person == this.ActivePerson);
+            var activeParticipant = ((EngineeringModel)iteration.Container).EngineeringModelSetup.Participant.SingleOrDefault(p => p.Person == this.ActivePerson);
 
             if (activeParticipant == null)
             {
@@ -1555,7 +1556,7 @@ namespace CDP4Dal
 
             this.openIterations.Add(iteration, new Tuple<DomainOfExpertise, Participant>(activeDomain, activeParticipant));
 
-            var modelRdl = ((EngineeringModel) iteration.Container).EngineeringModelSetup.RequiredRdl.Single();
+            var modelRdl = ((EngineeringModel)iteration.Container).EngineeringModelSetup.RequiredRdl.Single();
             this.AddRdlToOpenList(modelRdl);
         }
 

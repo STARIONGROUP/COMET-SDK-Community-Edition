@@ -22,9 +22,7 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] Microsoft.Extensions.Logging.Abstractions
-            [Update] FluentResults
-            [Add] SBOM
+          [Refactor] Newtonsoft to System.Text.Json
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <NeutralLanguage>en-US</NeutralLanguage>

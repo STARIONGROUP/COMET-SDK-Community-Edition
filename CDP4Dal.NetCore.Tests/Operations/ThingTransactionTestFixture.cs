@@ -1,26 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ThingTransactionTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2025 Starion Group S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+﻿// -------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="ThingTransactionTestFixture.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal.Tests
 {
@@ -34,9 +34,11 @@ namespace CDP4Dal.Tests
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
-    
+
     using CDP4Dal.Operations;
-    
+
+    using CDP4DalCommon.Protocol.Operations;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -131,6 +133,7 @@ namespace CDP4Dal.Tests
             {
                 Container = this.siteDirectory
             };
+
             this.cache.TryAdd(new CacheKey(siteRdl.Iid, null), new Lazy<Thing>(() => siteRdl));
 
             var cloneRdl = siteRdl.Clone(false);
@@ -183,7 +186,7 @@ namespace CDP4Dal.Tests
             var transaction = new ThingTransaction(transactionContext, this.siteDirectory.Clone(false));
             var phone = new TelephoneNumber(Guid.NewGuid(), this.cache, this.uri);
 
-            Assert.That(() => 
+            Assert.That(() =>
             {
                 transaction.Create(phone);
                 transaction.Create(phone);
@@ -246,7 +249,6 @@ namespace CDP4Dal.Tests
         [Test]
         public void VerifyThatUpdateContainerWorks()
         {
-
             var iterationClone = this.iteration.Clone(false);
             var option1 = new Option(Guid.NewGuid(), this.cache, this.uri);
 
@@ -328,6 +330,7 @@ namespace CDP4Dal.Tests
             emailTrans.Create(email);
 
             emailTrans.FinalizeSubTransaction(email, person1_1);
+
             // end add email, verify that email is added to person1_1, (the clone of person1)
 
             Assert.That(2, Is.EqualTo(person1_1Tr.AddedThing.Count()));
@@ -339,6 +342,7 @@ namespace CDP4Dal.Tests
             var phone_1Trans = new ThingTransaction(phone_1, person1_1Tr, person1_1);
             phone_1Trans.CreateOrUpdate(phone_1);
             phone_1Trans.FinalizeSubTransaction(phone_1, person1_1);
+
             // end update phone
 
             // verify that the new reference is used
@@ -353,7 +357,6 @@ namespace CDP4Dal.Tests
             Assert.That(cloneSiteDir.Person.Contains(person1_1), Is.True);
             Assert.That(rootTransaction.AddedThing.Contains(phone_1), Is.True);
             Assert.That(1, Is.EqualTo(cloneSiteDir.Person.Count));
-
 
             // Create new person
             var person2 = new Person();
@@ -828,6 +831,7 @@ namespace CDP4Dal.Tests
             transaction.Delete(person.Clone(false));
 
             var operationContainer = transaction.FinalizeTransaction();
+
             // Update sitedir
             Assert.That(1, Is.EqualTo(operationContainer.Operations.Count()));
         }

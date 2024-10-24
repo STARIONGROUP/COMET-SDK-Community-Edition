@@ -1,26 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingTransaction.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2025 Starion Group S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2024 Starion Group S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.copy
-//
+//    Lesser General Public License for more details.
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal.Operations
 {
@@ -31,14 +31,16 @@ namespace CDP4Dal.Operations
     using System.Reflection;
 
     using CDP4Common;
+    using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.Extensions;
     using CDP4Common.Polyfills;
     using CDP4Common.SiteDirectoryData;
-    using CDP4Common.CommonData;
     using CDP4Common.Types;
 
     using CDP4Dal.Exceptions;
+
+    using CDP4DalCommon.Protocol.Operations;
 
     using NLog;
 
@@ -92,10 +94,10 @@ namespace CDP4Dal.Operations
         /// </remarks>
         public ThingTransaction(TransactionContext transactionContext, Thing clone = null)
         {
-            this.TransactionContext = 
-                transactionContext ?? 
+            this.TransactionContext =
+                transactionContext ??
                 throw new ArgumentNullException(nameof(transactionContext), $"The {nameof(transactionContext)} may not be null");
-           
+
             this.addedThing = new List<Thing>();
             this.updatedThing = new Dictionary<Thing, Thing>();
             this.deletedThing = new List<Thing>();
@@ -137,7 +139,7 @@ namespace CDP4Dal.Operations
             {
                 throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null.");
             }
-            
+
             this.TransactionContext = parentTransaction.TransactionContext;
 
             this.addedThing = new List<Thing>();
@@ -299,18 +301,19 @@ namespace CDP4Dal.Operations
                 throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null");
             }
 
-            if(this.UpdatedThing.Values.Any(x => x == clone) || this.AddedThing.Any(x => x == clone))
+            if (this.UpdatedThing.Values.Any(x => x == clone) || this.AddedThing.Any(x => x == clone))
             {
                 return;
             }
 
-            if(this.UpdatedThing.Values.Any(x => x.Iid == clone.Iid) || this.AddedThing.Any(x => x.Iid == clone.Iid))
+            if (this.UpdatedThing.Values.Any(x => x.Iid == clone.Iid) || this.AddedThing.Any(x => x.Iid == clone.Iid))
             {
                 return;
             }
 
             var UpdatedThing = this.GetUpdatedThing(clone);
-            if(UpdatedThing != null)
+
+            if (UpdatedThing != null)
             {
                 if (clone.Iid == Guid.Empty)
                 {
@@ -337,7 +340,7 @@ namespace CDP4Dal.Operations
             {
                 throw new ArgumentNullException(nameof(clone), $"The {nameof(clone)} may not be null.");
             }
-            
+
             if (this.DeletedThing.Any(x => x.Iid == clone.Iid))
             {
                 return;
@@ -363,6 +366,7 @@ namespace CDP4Dal.Operations
                 {
                     // remove potential reference from the list of updated thing in the current transaction
                     var updatedThingKey = this.UpdatedThing.Keys.SingleOrDefault(x => x.Iid == clone.Iid);
+
                     if (updatedThingKey != null)
                     {
                         this.updatedThing.Remove(updatedThingKey);
@@ -375,6 +379,7 @@ namespace CDP4Dal.Operations
                 {
                     // remove from the list of added thing 
                     var thingInAddedList = this.AddedThing.SingleOrDefault(x => x.Iid == clone.Iid);
+
                     if (thingInAddedList != null)
                     {
                         this.addedThing.Remove(thingInAddedList);
@@ -434,7 +439,7 @@ namespace CDP4Dal.Operations
             {
                 throw new ArgumentException("The copy operation may only be performed with Copy or CopyDefaultValuesChangeOwner or CopyKeepValues or CopyKeepValuesChangeOwner", nameof(operationKind));
             }
-            
+
             var original = this.GetUpdatedThing(clone);
 
             // setting a new iid for the copy
@@ -445,7 +450,7 @@ namespace CDP4Dal.Operations
             {
                 return;
             }
-            
+
             // setting a new iid for the copy
             clone.Iid = Guid.NewGuid();
             this.copiedThing.Add(originalCopyPair, operationKind);
@@ -469,13 +474,14 @@ namespace CDP4Dal.Operations
             }
 
             var clone = this.UpdatedThing.Values.SingleOrDefault(x => x.Iid == thing.Iid);
+
             if (clone != null)
             {
                 return clone;
             }
 
             clone = this.AddedThing.SingleOrDefault(x => x.Iid == thing.Iid);
-            
+
             return clone;
         }
 
@@ -498,6 +504,7 @@ namespace CDP4Dal.Operations
 
             var allAddedThing = this.GetAllAddedThings().ToList();
             var clone = allAddedThing.SingleOrDefault(x => x.Iid == thing.Iid);
+
             if (clone != null)
             {
                 return clone;
@@ -505,7 +512,7 @@ namespace CDP4Dal.Operations
 
             var allUpdatedThing = this.GetAllUpdatedThings().ToList();
             clone = allUpdatedThing.SingleOrDefault(x => x.Iid == thing.Iid);
-            
+
             return clone;
         }
 
@@ -549,8 +556,8 @@ namespace CDP4Dal.Operations
 
             foreach (
                 var addedThing in
-                    this.AddedThing.Where(
-                        x => x != this.AssociatedClone && x.GetContainerInformation().Item1 == cloneTypeToUpdate))
+                this.AddedThing.Where(
+                    x => x != this.AssociatedClone && x.GetContainerInformation().Item1 == cloneTypeToUpdate))
             {
                 if (!addedThing.IsContainedBy(rootClone.Iid))
                 {
@@ -560,6 +567,7 @@ namespace CDP4Dal.Operations
 
                 // the clone should have been added
                 var containerOfAddedThing = this.GetClone(addedThing.Container);
+
                 if (containerOfAddedThing == null)
                 {
                     throw new TransactionException("could not find the corresponding clone for the container of the added thing added outside the chain of transaction.");
@@ -570,8 +578,8 @@ namespace CDP4Dal.Operations
 
             foreach (
                 var updatedThing in
-                    this.UpdatedThing.Values.Where(
-                        x => x != this.AssociatedClone && x.GetContainerInformation().Item1 == cloneTypeToUpdate))
+                this.UpdatedThing.Values.Where(
+                    x => x != this.AssociatedClone && x.GetContainerInformation().Item1 == cloneTypeToUpdate))
             {
                 if (!updatedThing.IsContainedBy(rootClone.Iid))
                 {
@@ -581,6 +589,7 @@ namespace CDP4Dal.Operations
 
                 // the clone should have been added
                 var containerOfUpdatedThing = this.GetClone(updatedThing.Container);
+
                 if (containerOfUpdatedThing == null)
                 {
                     throw new TransactionException(
@@ -605,7 +614,7 @@ namespace CDP4Dal.Operations
             }
 
             this.FilterOperationCausedByDelete();
-            
+
             var context = this.TransactionContext.ContextRoute();
             var operationContainer = new OperationContainer(context, this.GetTopContainerRevisionNumber());
 
@@ -629,7 +638,7 @@ namespace CDP4Dal.Operations
             {
                 if (string.IsNullOrWhiteSpace(thing.ContentHash))
                 {
-                    throw new InvalidOperationException($"File {thing.LocalPath} cannot be saved because of an empty ContentHash" );
+                    throw new InvalidOperationException($"File {thing.LocalPath} cannot be saved because of an empty ContentHash");
                 }
 
                 files.Add(thing.LocalPath);
@@ -649,7 +658,8 @@ namespace CDP4Dal.Operations
             var allUpdatedThings = this.GetAllUpdatedThings().ToList();
 
             var updatedThing = allUpdatedThings.SingleOrDefault(x => x.Iid == clone.Iid);
-            if(updatedThing != null)
+
+            if (updatedThing != null)
             {
                 if (updatedThing == clone)
                 {
@@ -662,6 +672,7 @@ namespace CDP4Dal.Operations
             // case2: the updated thing is already in the transaction as an added thing
             var allAddedThings = this.GetAllAddedThings().ToList();
             updatedThing = allAddedThings.SingleOrDefault(x => x.Iid == clone.Iid);
+
             if (updatedThing != null)
             {
                 if (updatedThing == clone)
@@ -681,6 +692,7 @@ namespace CDP4Dal.Operations
 
             // case3: the cache does not contain the key, its a new
             var lazy = clone.Cache.SingleOrDefault(x => Equals(x.Key, clone.CacheKey)).Value;
+
             if (lazy == null)
             {
                 return null;
@@ -688,6 +700,7 @@ namespace CDP4Dal.Operations
 
             // case4: the updated thing is the original
             updatedThing = lazy.Value;
+
             if (updatedThing == clone)
             {
                 throw new InvalidOperationException("The transaction only accepts clones.");
@@ -703,6 +716,7 @@ namespace CDP4Dal.Operations
         private IEnumerable<Thing> GetAllAddedThings()
         {
             var allAddedThing = this.AddedThing.ToList();
+
             if (this.ParentTransaction != null)
             {
                 this.PopulateAllAddedThingsList(this.ParentTransaction, allAddedThing);
@@ -720,6 +734,7 @@ namespace CDP4Dal.Operations
         {
             var thingsToAdd = transaction.AddedThing.Where(x => allAddedThing.All(y => y.Iid != x.Iid));
             allAddedThing.AddRange(thingsToAdd);
+
             if (transaction.ParentTransaction != null)
             {
                 this.PopulateAllAddedThingsList(transaction.ParentTransaction, allAddedThing);
@@ -733,6 +748,7 @@ namespace CDP4Dal.Operations
         private IEnumerable<Thing> GetAllUpdatedThings()
         {
             var allUpdatedThings = this.UpdatedThing.Values.ToList();
+
             if (this.ParentTransaction != null)
             {
                 this.PopulateAllUpdatedThingsList(this.ParentTransaction, allUpdatedThings);
@@ -750,6 +766,7 @@ namespace CDP4Dal.Operations
         {
             var thingsToAdd = transaction.UpdatedThing.Values.Where(x => allUpdatedThing.All(y => y.Iid != x.Iid));
             allUpdatedThing.AddRange(thingsToAdd);
+
             if (transaction.ParentTransaction != null)
             {
                 this.PopulateAllUpdatedThingsList(transaction.ParentTransaction, allUpdatedThing);
@@ -765,14 +782,15 @@ namespace CDP4Dal.Operations
         private void UpdateContainerList(Thing thing, Thing containerClone, PropertyInfo containerProperty)
         {
             var containerList = containerProperty.GetValue(containerClone);
-           
+
             if (thing.Container != null && thing.Container.Iid == containerClone.Iid)
             {
                 // replace the reference in the container list
-                var findIndexMethod = containerProperty.PropertyType.GetMethod("FindIndex", new []{ typeof(Predicate<Thing>) });
+                var findIndexMethod = containerProperty.PropertyType.GetMethod("FindIndex", new[] { typeof(Predicate<Thing>) });
                 Predicate<Thing> predicate = x => x.Iid == thing.Iid;
 
-                var index = (int)(findIndexMethod?.Invoke(containerList, new object[] { predicate })??-1);
+                var index = (int)(findIndexMethod?.Invoke(containerList, new object[] { predicate }) ?? -1);
+
                 if (index != -1)
                 {
                     // Get the indexer property, by default the indexer property name is "Item"
@@ -809,6 +827,7 @@ namespace CDP4Dal.Operations
                 Predicate<Thing> predicate = x => x.Iid == thing.Iid;
 
                 var index = (int)findIndexMethod.Invoke(containerList, new object[] { predicate });
+
                 if (index != -1)
                 {
                     // Get the indexer property, by default the indexer property name is "Item"
@@ -822,7 +841,7 @@ namespace CDP4Dal.Operations
                 {
                     // normal add
                     var addMethod = orderedListProperty.PropertyType.GetMethod("Add");
-                    addMethod.Invoke(containerList, new object[] {thing});
+                    addMethod.Invoke(containerList, new object[] { thing });
                 }
                 else
                 {
@@ -830,6 +849,7 @@ namespace CDP4Dal.Operations
                     var indexOfMethod = orderedListProperty.PropertyType.GetMethod("IndexOf");
 
                     var index = indexOfMethod.Invoke(containerList, new object[] { nextThing }) as int?;
+
                     if (index == -1 || !index.HasValue)
                     {
                         throw new InvalidOperationException("The Thing before which the new item needs to be inserted does not exist.");
@@ -850,14 +870,15 @@ namespace CDP4Dal.Operations
         private void RemoveThingFromContainer(Thing thing)
         {
             var containers = this.AddedThing.Concat(this.UpdatedThing.Values);
-            
+
             var thingType = thing.GetType();
 
             Thing originalThing = null;
+
             if (thing.Cache != null && thing.Cache.ContainsKey(thing.CacheKey))
             {
                 var result = thing.Cache.TryGetValue(thing.CacheKey, out var lazyThing);
-                originalThing = (result)? lazyThing.Value : null;
+                originalThing = (result) ? lazyThing.Value : null;
             }
 
             // Find in all the thing in the transaction the potential container that contains the current thing
@@ -877,7 +898,7 @@ namespace CDP4Dal.Operations
                 var matchingPropertyInfos = containerType.GetProperties().Where(x =>
                     x.PropertyType.QueryIsGenericType() &&
                     (x.PropertyType.GetGenericTypeDefinition() == typeof(ContainerList<>) ||
-                    x.PropertyType.GetGenericTypeDefinition() == typeof(OrderedItemList<>)) &&
+                     x.PropertyType.GetGenericTypeDefinition() == typeof(OrderedItemList<>)) &&
                     x.PropertyType.GetGenericArguments().Single().QueryIsAssignableFrom(thingType)).ToList();
 
                 foreach (var propertyInfo in matchingPropertyInfos)
@@ -886,6 +907,7 @@ namespace CDP4Dal.Operations
                     var containerList = propertyInfo.GetValue(container) as IEnumerable;
 
                     Thing thingToRemove = null;
+
                     foreach (Thing containedThing in containerList)
                     {
                         if (containedThing.Iid == thing.Iid)
@@ -900,6 +922,7 @@ namespace CDP4Dal.Operations
                     }
 
                     var success = (bool)removeMethod.Invoke(containerList, new object[] { thingToRemove });
+
                     if (success)
                     {
                         thingToRemove.Container = null;
@@ -921,6 +944,7 @@ namespace CDP4Dal.Operations
             if (containerClone != null)
             {
                 var currentContainertype = containerClone.GetType();
+
                 if (!containerType.QueryIsAssignableFrom(currentContainertype))
                 {
                     throw new InvalidOperationException("The specified container is not allowed as a container.");
@@ -949,6 +973,7 @@ namespace CDP4Dal.Operations
         private void AddChainOfContainers(Thing clone)
         {
             var topOperationClone = this.GetOperationRootClone();
+
             if (!clone.IsContainedBy(topOperationClone.Iid))
             {
                 return;
@@ -972,6 +997,7 @@ namespace CDP4Dal.Operations
                 // add a new clone if newContainerClone is not contained by the current operation's chain of clones
                 var containerType = transaction.AssociatedClone.GetType();
                 var container = clone.GetContainerOfType(containerType);
+
                 if (container == null)
                 {
                     return;
@@ -992,6 +1018,7 @@ namespace CDP4Dal.Operations
         {
             var rootClone = this.AssociatedClone;
             var parent = this.ParentTransaction;
+
             while (parent != null)
             {
                 rootClone = parent.AssociatedClone ?? rootClone;
@@ -1008,9 +1035,11 @@ namespace CDP4Dal.Operations
         private IEnumerable<IThingTransaction> GetChainOfSubTransactions()
         {
             var parent = this.ParentTransaction;
+
             while (parent != null)
             {
                 yield return parent;
+
                 parent = parent.ParentTransaction;
             }
         }
@@ -1027,6 +1056,7 @@ namespace CDP4Dal.Operations
         private void UpdateContainer(Thing clone, Thing containerclone, Thing nextThing = null)
         {
             var containerInformation = clone.GetContainerInformation();
+
             if (!containerInformation.Item1.IsInstanceOfType(containerclone))
             {
                 throw new InvalidOperationException("The containerClone does not have the right type");
@@ -1055,6 +1085,7 @@ namespace CDP4Dal.Operations
         private void AddCloneToContainer(Thing clone, Thing containerclone, Thing nextThing = null)
         {
             var containerInformation = clone.GetContainerInformation();
+
             if (!containerInformation.Item1.IsInstanceOfType(containerclone))
             {
                 throw new InvalidOperationException("The containerClone does not have the right type");
@@ -1095,6 +1126,7 @@ namespace CDP4Dal.Operations
                 }
 
                 var existingThing = this.AddedThing.SingleOrDefault(t => t.Iid == thing.Iid);
+
                 if (existingThing != null)
                 {
                     // replace the current thing with the one from the sub-transaction
@@ -1112,6 +1144,7 @@ namespace CDP4Dal.Operations
                 if (this.UpdatedThing.ContainsKey(keyValuePair.Key))
                 {
                     var parentKeyValue = this.UpdatedThing.Single(x => x.Key == keyValuePair.Key);
+
                     if (parentKeyValue.Value != keyValuePair.Value)
                     {
                         throw new InvalidOperationException("2 clones have been created for the same thing.");
@@ -1122,6 +1155,7 @@ namespace CDP4Dal.Operations
 
                 // check if the key in a sub-transaction correspond to a value in the current one
                 var existingKeyValue = this.UpdatedThing.SingleOrDefault(x => x.Value == keyValuePair.Key);
+
                 if (existingKeyValue.Key != null)
                 {
                     this.updatedThing[existingKeyValue.Key] = keyValuePair.Value;
@@ -1249,7 +1283,7 @@ namespace CDP4Dal.Operations
                 if (copyOperationKind.IsCopyOperation())
                 {
                     operationContainer.AddOperation(new Operation(original, copy, copyOperationKind));
-                }                
+                }
             }
         }
 
@@ -1273,7 +1307,8 @@ namespace CDP4Dal.Operations
             things.AddRange(this.DeletedThing);
             things.AddRange(this.CopiedThing.Select(x => x.Key.Item2));
 
-            var distinctTopContainer = things.Select(x => x.TopContainer).DistinctBy(t => t.Iid).ToList();            
+            var distinctTopContainer = things.Select(x => x.TopContainer).DistinctBy(t => t.Iid).ToList();
+
             if (distinctTopContainer.Count != 1)
             {
                 throw new InvalidOperationException("multiple top container updates in one transaction, operation not allowed.");
@@ -1290,18 +1325,21 @@ namespace CDP4Dal.Operations
             // filter out the added thing or updated thing that have been marked as deleted
             // filter out the contained thing of a deleted thing
             var markedForDeletion = this.DeletedThing.ToList();
+
             foreach (var thing in markedForDeletion)
             {
                 var cloneType = thing.GetType();
+
                 var containersInfo = cloneType.GetProperties().Where(x =>
-                        x.PropertyType.QueryIsGenericType() &&
-                        (x.PropertyType.GetGenericTypeDefinition() == typeof(ContainerList<>) ||
-                        x.PropertyType.GetGenericTypeDefinition() == typeof(OrderedItemList<>)) &&
-                         typeof(Thing).QueryIsAssignableFrom(x.PropertyType.GetGenericArguments().Single())).ToList();
+                    x.PropertyType.QueryIsGenericType() &&
+                    (x.PropertyType.GetGenericTypeDefinition() == typeof(ContainerList<>) ||
+                     x.PropertyType.GetGenericTypeDefinition() == typeof(OrderedItemList<>)) &&
+                    typeof(Thing).QueryIsAssignableFrom(x.PropertyType.GetGenericArguments().Single())).ToList();
 
                 foreach (var containerInfo in containersInfo)
                 {
                     var container = (IEnumerable)containerInfo.GetValue(thing);
+
                     foreach (Thing containedThing in container)
                     {
                         this.RemoveThingFromOperationLists(containedThing);
@@ -1320,6 +1358,7 @@ namespace CDP4Dal.Operations
         {
             // remove it from the list of updated thing in the current transaction
             var updatedThingKey = this.UpdatedThing.Keys.SingleOrDefault(x => x.Iid == thingToRemove.Iid);
+
             if (updatedThingKey != null)
             {
                 this.updatedThing.Remove(updatedThingKey);
@@ -1327,6 +1366,7 @@ namespace CDP4Dal.Operations
 
             // remove from the list of added thing 
             var thingInAddedList = this.AddedThing.SingleOrDefault(x => x.Iid == thingToRemove.Iid);
+
             if (thingInAddedList != null)
             {
                 this.addedThing.Remove(thingInAddedList);
@@ -1336,6 +1376,7 @@ namespace CDP4Dal.Operations
             if (!thingToRemove.IsCached())
             {
                 var thingInDeletedList = this.DeletedThing.SingleOrDefault(x => x.Iid == thingToRemove.Iid);
+
                 if (thingInDeletedList != null)
                 {
                     this.deletedThing.Remove(thingInDeletedList);

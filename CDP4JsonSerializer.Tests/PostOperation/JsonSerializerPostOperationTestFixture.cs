@@ -34,7 +34,7 @@ namespace CDP4JsonSerializer.Tests.PostOperation
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
 
-    using CDP4JsonSerializer.Tests.Cdp4PostOperation;
+    using CDP4DalCommon.Protocol.Operations;
 
     using NUnit.Framework;
 
@@ -62,9 +62,9 @@ namespace CDP4JsonSerializer.Tests.PostOperation
             var byteArray = Encoding.UTF8.GetBytes(postMessage);
             var stream = new MemoryStream(byteArray);
 
-            var cdp4JsonSerializer = new Cdp4JsonSerializer(this.metaDataProvider, this.supportedVersion);
+            var cdp4JsonSerializer = new Cdp4DalJsonSerializer(this.metaDataProvider, this.supportedVersion, false);
             
-            var cdpPostOperation = cdp4JsonSerializer.Deserialize<CdpPostOperation>(stream);
+            var cdpPostOperation = cdp4JsonSerializer.Deserialize<PostOperation>(stream);
 
             Assert.That(cdpPostOperation.Create, Is.Empty);
             Assert.That(cdpPostOperation.Delete, Is.Empty);
@@ -88,9 +88,9 @@ namespace CDP4JsonSerializer.Tests.PostOperation
             var byteArray = Encoding.UTF8.GetBytes(postMessage);
             var stream = new MemoryStream(byteArray);
 
-            var cdp4JsonSerializer = new Cdp4JsonSerializer(this.metaDataProvider, this.supportedVersion);
+            var cdp4JsonSerializer = new Cdp4DalJsonSerializer(this.metaDataProvider, this.supportedVersion, false);
 
-            var cdpPostOperation = cdp4JsonSerializer.Deserialize<CdpPostOperation>(stream);
+            var cdpPostOperation = cdp4JsonSerializer.Deserialize<PostOperation>(stream);
             
             Assert.That(cdpPostOperation.Delete, Is.Empty);
             Assert.That(cdpPostOperation.Copy, Is.Empty);

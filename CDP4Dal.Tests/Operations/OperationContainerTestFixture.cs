@@ -1,26 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OperationContainerTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2025 Starion Group S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+﻿// -------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="OperationContainerTestFixture.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal.Tests
 {
@@ -28,10 +28,14 @@ namespace CDP4Dal.Tests
     using System.Linq;
 
     using CDP4Common.CommonData;
-    using CDP4Common.DTO;    
+    using CDP4Common.DTO;
+
     using CDP4Dal.Operations;
+
+    using CDP4DalCommon.Protocol.Operations;
+
     using NUnit.Framework;
-    
+
     [TestFixture]
     public class OperationContainerTestFixture
     {
@@ -42,7 +46,7 @@ namespace CDP4Dal.Tests
         [SetUp]
         public void SetUp()
         {
-            this.siteDirectoryContext = "/SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650";            
+            this.siteDirectoryContext = "/SiteDirectory/47363f0d-eb6d-4a58-95f5-fa7854995650";
             this.iterationContext = "/EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b/iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d";
         }
 
@@ -98,9 +102,9 @@ namespace CDP4Dal.Tests
             var elementDefinition = new ElementDefinition(Guid.NewGuid(), 0);
             elementDefinition.PartialRoutes.Add("iteration/b58ea73d-350d-4520-b9d9-a52c75ac2b5d");
             elementDefinition.PartialRoutes.Add("EngineeringModel/5e5dc7f8-833d-4331-b421-eb2c64fcf64b");
-            
+
             var clone = elementDefinition.DeepClone<ElementDefinition>();
-            var operation = new Operation(elementDefinition,  clone, OperationKind.Update);
+            var operation = new Operation(elementDefinition, clone, OperationKind.Update);
 
             var operationContainer = new OperationContainer(this.iterationContext);
 

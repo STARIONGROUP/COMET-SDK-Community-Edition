@@ -22,8 +22,7 @@
       <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
       <GenerateSBOM>true</GenerateSBOM>
       <PackageReleaseNotes>
-          [BUMP] Version to 28.3.2
-          [Add] SBOM
+        [Refactor] Newtonsoft to System.Text.Json
       </PackageReleaseNotes>
       <PackageReadmeFile>README.md</PackageReadmeFile>
       <GenerateDocumentationFile>true</GenerateDocumentationFile>

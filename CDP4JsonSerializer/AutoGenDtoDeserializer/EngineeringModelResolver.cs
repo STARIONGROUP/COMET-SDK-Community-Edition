@@ -1,27 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="EngineeringModelResolver.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elebiary, Jaime Bernar
-//
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
 //    This file is part of CDP4-COMET SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
+// 
 //    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
+// 
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -29,96 +28,151 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
     using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="EngineeringModelResolver"/> is to deserialize a JSON object to a <see cref="EngineeringModel"/>
+    /// The purpose of the <see cref="EngineeringModelResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.EngineeringModel"/>
     /// </summary>
     public static class EngineeringModelResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="EngineeringModel"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="EngineeringModel"/> to instantiate</returns>
-        public static CDP4Common.DTO.EngineeringModel FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.EngineeringModel"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.EngineeringModel"/> to instantiate</returns>
+        public static CDP4Common.DTO.EngineeringModel FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var engineeringModel = new CDP4Common.DTO.EngineeringModel(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                engineeringModel.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the EngineeringModelResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["book"].IsNullOrEmpty())
+            var engineeringModel = new CDP4Common.DTO.EngineeringModel(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("book"u8, out var bookProperty))
             {
-                engineeringModel.Book.AddRange(jObject["book"].ToOrderedItemCollection());
+                engineeringModel.Book.AddRange(bookProperty.ToOrderedItemCollection());
             }
 
-            if (!jObject["commonFileStore"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("commonFileStore"u8, out var commonFileStoreProperty) && commonFileStoreProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModel.CommonFileStore.AddRange(jObject["commonFileStore"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in commonFileStoreProperty.EnumerateArray())
+                {
+                    engineeringModel.CommonFileStore.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["engineeringModelSetup"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("engineeringModelSetup"u8, out var engineeringModelSetupProperty))
             {
-                engineeringModel.EngineeringModelSetup = jObject["engineeringModelSetup"].ToObject<Guid>();
+                if(engineeringModelSetupProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale engineeringModelSetup property of the engineeringModel {id} is null", engineeringModel.Iid);
+                }
+                else
+                {
+                    engineeringModel.EngineeringModelSetup = engineeringModelSetupProperty.GetGuid();
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModel.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    engineeringModel.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModel.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    engineeringModel.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["genericNote"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("genericNote"u8, out var genericNoteProperty) && genericNoteProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModel.GenericNote.AddRange(jObject["genericNote"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in genericNoteProperty.EnumerateArray())
+                {
+                    engineeringModel.GenericNote.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["iteration"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("iteration"u8, out var iterationProperty) && iterationProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModel.Iteration.AddRange(jObject["iteration"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in iterationProperty.EnumerateArray())
+                {
+                    engineeringModel.Iteration.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["lastModifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("lastModifiedOn"u8, out var lastModifiedOnProperty))
             {
-                engineeringModel.LastModifiedOn = jObject["lastModifiedOn"].ToObject<DateTime>();
+                if(lastModifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale lastModifiedOn property of the engineeringModel {id} is null", engineeringModel.Iid);
+                }
+                else
+                {
+                    engineeringModel.LastModifiedOn = lastModifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["logEntry"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("logEntry"u8, out var logEntryProperty) && logEntryProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModel.LogEntry.AddRange(jObject["logEntry"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in logEntryProperty.EnumerateArray())
+                {
+                    engineeringModel.LogEntry.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modellingAnnotation"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modellingAnnotation"u8, out var modellingAnnotationProperty) && modellingAnnotationProperty.ValueKind != JsonValueKind.Null)
             {
-                engineeringModel.ModellingAnnotation.AddRange(jObject["modellingAnnotation"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in modellingAnnotationProperty.EnumerateArray())
+                {
+                    engineeringModel.ModellingAnnotation.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                engineeringModel.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale modifiedOn property of the engineeringModel {id} is null", engineeringModel.Iid);
+                }
+                else
+                {
+                    engineeringModel.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                engineeringModel.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale thingPreference property of the engineeringModel {id} is null", engineeringModel.Iid);
+                }
+                else
+                {
+                    engineeringModel.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return engineeringModel;

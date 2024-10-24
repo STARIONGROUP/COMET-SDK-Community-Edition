@@ -1,5 +1,4 @@
-﻿#region Copyright
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpPostOperation.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2019 Starion Group S.A.
 //
@@ -11,18 +10,17 @@
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-#endregion
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4ServicesDal
 {
@@ -30,16 +28,19 @@ namespace CDP4ServicesDal
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+
     using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.Dto;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.MetaInfo;    
+    using CDP4Common.MetaInfo;
     using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
-    using Newtonsoft.Json;
+
+    using CDP4DalCommon.Protocol.Operations;
 
     /// <summary>
     /// The CDP POST operation
@@ -79,30 +80,6 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
-        /// Gets or sets the collection of DTOs to delete.
-        /// </summary>
-        [JsonProperty("_delete")]
-        public override List<ClasslessDTO> Delete { get; set; }
-
-        /// <summary>
-        /// Gets or sets the collection of DTOs to create.
-        /// </summary>
-        [JsonProperty("_create")]
-        public override List<CDP4Common.DTO.Thing> Create { get; set; }
-
-        /// <summary>
-        /// Gets or sets the collection of DTOs to update.
-        /// </summary>
-        [JsonProperty("_update")]
-        public override List<ClasslessDTO> Update { get; set; }
-
-        /// <summary>
-        /// Gets or sets the collection of DTOs to copy.
-        /// </summary>
-        [JsonProperty("_copy")]
-        public override List<CopyInfo> Copy { get; set; }
-
-        /// <summary>
         /// Populate the current <see cref="PostOperation"/> with the content based on the 
         /// provided <see cref="Operation"/>
         /// </summary>
@@ -114,7 +91,7 @@ namespace CDP4ServicesDal
         {
             if (operation.ModifiedThing == null)
             {
-                throw new ArgumentNullException("operation", "The operation may not be null");
+                throw new ArgumentNullException(nameof(operation), "The operation may not be null");
             }
 
             switch (operation.OperationKind)
@@ -154,6 +131,7 @@ namespace CDP4ServicesDal
             foreach (var key in original.Keys)
             {
                 var originalIenumerable = original[key] as IEnumerable;
+
                 if (originalIenumerable != null && originalIenumerable.GetType().IsGenericType)
                 {
                     var modifiedIenumerable = (IEnumerable)modifiedFull[key];
@@ -177,6 +155,7 @@ namespace CDP4ServicesDal
                         List<object> modifiedProperty;
 
                         var genericTypeArgument = original[key].GetType().GenericTypeArguments[0];
+
                         if (genericTypeArgument == typeof(Guid) || genericTypeArgument == typeof(ClassKind) || genericTypeArgument == typeof(VcardTelephoneNumberKind))
                         {
                             originalProperty = originalIenumerable.Cast<object>().ToList();
@@ -221,6 +200,7 @@ namespace CDP4ServicesDal
                         }
 
                         var possibleDeletions = originalProperty.Except(modifiedProperty).ToList();
+
                         if (possibleDeletions.Count > 0)
                         {
                             // this part will be added to the delete
@@ -275,6 +255,7 @@ namespace CDP4ServicesDal
             if (listsToAdd.Count > 0)
             {
                 var updateDto = modified;
+
                 foreach (var kvp in listsToAdd)
                 {
                     updateDto.Add(kvp.Key, kvp.Value);
@@ -311,18 +292,20 @@ namespace CDP4ServicesDal
 
             var source = new CopySource
             {
-                Thing = new CopyReference {Iid = operation.OriginalThing.Iid, ClassKind = operation.OriginalThing.ClassKind},
-                TopContainer = new CopyReference {Iid = sourcepoco.TopContainer.Iid, ClassKind = sourcepoco.TopContainer.ClassKind},
+                Thing = new CopyReference { Iid = operation.OriginalThing.Iid, ClassKind = operation.OriginalThing.ClassKind },
+                TopContainer = new CopyReference { Iid = sourcepoco.TopContainer.Iid, ClassKind = sourcepoco.TopContainer.ClassKind },
                 IterationId = sourceIteration?.Iid
             };
 
             var poco = operation.ModifiedThing.QuerySourceThing();
+
             if (poco.Container == null)
             {
                 throw new InvalidOperationException("The container cannot be null.");
             }
 
             var targetIteration = poco.GetContainerOfType<Iteration>();
+
             var target = new CopyTarget
             {
                 Container = new CopyReference { Iid = poco.Container.Iid, ClassKind = poco.Container.ClassKind },

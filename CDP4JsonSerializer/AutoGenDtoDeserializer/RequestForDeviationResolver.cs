@@ -1,27 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="RequestForDeviationResolver.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elebiary, Jaime Bernar
-//
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
 //    This file is part of CDP4-COMET SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
+// 
 //    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
+// 
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -29,131 +28,242 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
     using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="RequestForDeviationResolver"/> is to deserialize a JSON object to a <see cref="RequestForDeviation"/>
+    /// The purpose of the <see cref="RequestForDeviationResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.RequestForDeviation"/>
     /// </summary>
     public static class RequestForDeviationResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="RequestForDeviation"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="RequestForDeviation"/> to instantiate</returns>
-        public static CDP4Common.DTO.RequestForDeviation FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.RequestForDeviation"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.RequestForDeviation"/> to instantiate</returns>
+        public static CDP4Common.DTO.RequestForDeviation FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var requestForDeviation = new CDP4Common.DTO.RequestForDeviation(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                requestForDeviation.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the RequestForDeviationResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["approvedBy"].IsNullOrEmpty())
+            var requestForDeviation = new CDP4Common.DTO.RequestForDeviation(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("approvedBy"u8, out var approvedByProperty) && approvedByProperty.ValueKind != JsonValueKind.Null)
             {
-                requestForDeviation.ApprovedBy.AddRange(jObject["approvedBy"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in approvedByProperty.EnumerateArray())
+                {
+                    requestForDeviation.ApprovedBy.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["author"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("author"u8, out var authorProperty))
             {
-                requestForDeviation.Author = jObject["author"].ToObject<Guid>();
+                if(authorProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale author property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.Author = authorProperty.GetGuid();
+                }
             }
 
-            if (!jObject["category"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("category"u8, out var categoryProperty) && categoryProperty.ValueKind != JsonValueKind.Null)
             {
-                requestForDeviation.Category.AddRange(jObject["category"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in categoryProperty.EnumerateArray())
+                {
+                    requestForDeviation.Category.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["classification"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("classification"u8, out var classificationProperty))
             {
-                requestForDeviation.Classification = jObject["classification"].ToObject<AnnotationClassificationKind>();
+                if(classificationProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale classification property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.Classification = AnnotationClassificationKindDeserializer.Deserialize(classificationProperty);
+                }
             }
 
-            if (!jObject["content"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("content"u8, out var contentProperty))
             {
-                requestForDeviation.Content = jObject["content"].ToObject<string>();
+                if(contentProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale content property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.Content = contentProperty.GetString();
+                }
             }
 
-            if (!jObject["createdOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("createdOn"u8, out var createdOnProperty))
             {
-                requestForDeviation.CreatedOn = jObject["createdOn"].ToObject<DateTime>();
+                if(createdOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale createdOn property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.CreatedOn = createdOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["discussion"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("discussion"u8, out var discussionProperty) && discussionProperty.ValueKind != JsonValueKind.Null)
             {
-                requestForDeviation.Discussion.AddRange(jObject["discussion"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in discussionProperty.EnumerateArray())
+                {
+                    requestForDeviation.Discussion.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                requestForDeviation.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    requestForDeviation.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                requestForDeviation.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    requestForDeviation.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["languageCode"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("languageCode"u8, out var languageCodeProperty))
             {
-                requestForDeviation.LanguageCode = jObject["languageCode"].ToObject<string>();
+                if(languageCodeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale languageCode property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.LanguageCode = languageCodeProperty.GetString();
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                requestForDeviation.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale modifiedOn property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["owner"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
             {
-                requestForDeviation.Owner = jObject["owner"].ToObject<Guid>();
+                if(ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale owner property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.Owner = ownerProperty.GetGuid();
+                }
             }
 
-            if (!jObject["primaryAnnotatedThing"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("primaryAnnotatedThing"u8, out var primaryAnnotatedThingProperty))
             {
-                requestForDeviation.PrimaryAnnotatedThing = jObject["primaryAnnotatedThing"].ToObject<Guid?>();
+                if(primaryAnnotatedThingProperty.ValueKind == JsonValueKind.Null)
+                {
+                    requestForDeviation.PrimaryAnnotatedThing = null;
+                }
+                else
+                {
+                    requestForDeviation.PrimaryAnnotatedThing = primaryAnnotatedThingProperty.GetGuid();
+                }
             }
 
-            if (!jObject["relatedThing"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("relatedThing"u8, out var relatedThingProperty) && relatedThingProperty.ValueKind != JsonValueKind.Null)
             {
-                requestForDeviation.RelatedThing.AddRange(jObject["relatedThing"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in relatedThingProperty.EnumerateArray())
+                {
+                    requestForDeviation.RelatedThing.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                requestForDeviation.ShortName = jObject["shortName"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale shortName property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["sourceAnnotation"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("sourceAnnotation"u8, out var sourceAnnotationProperty) && sourceAnnotationProperty.ValueKind != JsonValueKind.Null)
             {
-                requestForDeviation.SourceAnnotation.AddRange(jObject["sourceAnnotation"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in sourceAnnotationProperty.EnumerateArray())
+                {
+                    requestForDeviation.SourceAnnotation.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["status"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("status"u8, out var statusProperty))
             {
-                requestForDeviation.Status = jObject["status"].ToObject<AnnotationStatusKind>();
+                if(statusProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale status property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.Status = AnnotationStatusKindDeserializer.Deserialize(statusProperty);
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                requestForDeviation.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale thingPreference property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
-            if (!jObject["title"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("title"u8, out var titleProperty))
             {
-                requestForDeviation.Title = jObject["title"].ToObject<string>();
+                if(titleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale title property of the requestForDeviation {id} is null", requestForDeviation.Iid);
+                }
+                else
+                {
+                    requestForDeviation.Title = titleProperty.GetString();
+                }
             }
 
             return requestForDeviation;

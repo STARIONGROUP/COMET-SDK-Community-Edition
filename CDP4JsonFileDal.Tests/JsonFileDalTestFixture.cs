@@ -1,8 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="JsonFileDalTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2025 Starion Group S.A.
-//
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+﻿// -------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="JsonFileDalTestFixture.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2024 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -20,7 +20,7 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonFileDal.Tests
 {
@@ -32,6 +32,7 @@ namespace CDP4JsonFileDal.Tests
     using System.Threading;
     using System.Threading.Tasks;
 
+    using CDP4Common;
     using CDP4Common.CommonData;
     using CDP4Common.DTO;
     using CDP4Common.Types;
@@ -41,7 +42,7 @@ namespace CDP4JsonFileDal.Tests
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
-    using CDP4JsonFileDal;
+    using CDP4DalCommon.Protocol.Operations;
 
     using Moq;
 
@@ -69,9 +70,6 @@ namespace CDP4JsonFileDal.Tests
     using SampledFunctionParameterType = CDP4Common.SiteDirectoryData.SampledFunctionParameterType;
     using ElementDefinition = CDP4Common.EngineeringModelData.ElementDefinition;
     using Parameter = CDP4Common.EngineeringModelData.Parameter;
-
-    using CDP4Common;
-
     using OrganizationalParticipant = CDP4Common.SiteDirectoryData.OrganizationalParticipant;
 
     [TestFixture]
@@ -252,7 +250,7 @@ namespace CDP4JsonFileDal.Tests
             // General assertions for any kind of Thing we read
             Assert.That(readResult, Is.Not.Null);
             Assert.That(readResult.Count, Is.Not.EqualTo(1));
-            
+
             var iter1 = readResult.Single(d => d.ClassKind == ClassKind.Iteration);
             Assert.That(iter1.ClassKind, Is.EqualTo(iterObject.ClassKind));
             Assert.That(iter1.Iid, Is.EqualTo(iterObject.Iid));
@@ -436,7 +434,7 @@ namespace CDP4JsonFileDal.Tests
             Assert.That(this.dal.Serializer.RequestDataModelVersion.Major, Is.EqualTo(1));
             Assert.That(this.dal.Serializer.RequestDataModelVersion.Minor, Is.EqualTo(0));
             Assert.That(this.dal.Serializer.RequestDataModelVersion.Build, Is.EqualTo(0));
-            
+
             this.dal.UpdateExchangeFileHeader(new Person { ShortName = "admin" });
             Assert.That(this.dal.FileHeader, Is.InstanceOf<CDP4JsonFileDal.Json.ExchangeFileHeader>());
 
@@ -689,6 +687,7 @@ namespace CDP4JsonFileDal.Tests
 
             iterationSetup.IterationIid = this.iterationIid;
             iterationSetupPoco.IterationIid = this.iterationIid;
+
             // EngineeringModel
             this.model = new EngineeringModel(Guid.NewGuid(), this.cache, this.credentials.Uri);
             this.modelSetupId = Guid.NewGuid();
@@ -732,10 +731,10 @@ namespace CDP4JsonFileDal.Tests
             var elementDefinition2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
             elementDefinition2.ShortName = "ED2";
             elementDefinition2.Owner = this.model.EngineeringModelSetup.ActiveDomain.First();
-            
+
             var elementDefinition3 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
             elementDefinition3.ShortName = "ED3";
-            
+
             var elementDefinition4 = new ElementDefinition(Guid.NewGuid(), this.cache, this.credentials.Uri);
             elementDefinition4.ShortName = "ED4";
             elementDefinition4.Owner = new DomainOfExpertise(Guid.NewGuid(), this.cache, this.credentials.Uri); //Not in file
@@ -754,7 +753,7 @@ namespace CDP4JsonFileDal.Tests
 
             elementDefinition1.Parameter.Add(sampledFunctionParameter1);
             elementDefinition2.Parameter.Add(sampledFunctionParameter2);
-            
+
             this.iterationPoco.Element.Add(elementDefinition1);
             this.iterationPoco.Element.Add(elementDefinition2);
             this.iterationPoco.Element.Add(elementDefinition3);
@@ -770,7 +769,7 @@ namespace CDP4JsonFileDal.Tests
             parameterOverride.ValueSet.Add(new CDP4Common.EngineeringModelData.ParameterOverrideValueSet(Guid.NewGuid(), this.cache, this.credentials.Uri));
             parameterOverride.ValueSet.First().ParameterValueSet = sampledFunctionParameter2.ValueSet.First();
             elementUsage.ParameterOverride.Add(parameterOverride);
-            
+
             elementDefinition1.ContainedElement.Add(elementUsage);
 
             var citation = new CDP4Common.CommonData.Citation(Guid.NewGuid(), this.cache, this.credentials.Uri);
