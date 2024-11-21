@@ -20,7 +20,7 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4WspDal.Tests
 {
@@ -44,6 +44,8 @@ namespace CDP4WspDal.Tests
     using CDP4Dal.DAL;
     using CDP4Dal.DAL.ECSS1025AnnexC;
     using CDP4Dal.Operations;
+
+    using CDP4DalCommon.Protocol.Operations;
 
     using NUnit.Framework;
 

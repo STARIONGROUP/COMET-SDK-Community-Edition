@@ -5,29 +5,32 @@
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-COMET SDK Community Edition
-//
+// 
 //    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
+// 
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer.Tests.Helper
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
-    
+    using System.Text.Json;
+    using System.Text.Json.Nodes;
+
     using CDP4Common.EngineeringModelData;
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
@@ -45,23 +48,30 @@ namespace CDP4JsonSerializer.Tests.Helper
         {
             var uniqueIdentifier = Guid.NewGuid();
 
-            var orderedItem = new OrderedItem {K = 1, V = uniqueIdentifier};
+            var orderedItem = new OrderedItem { K = 1, V = uniqueIdentifier };
 
             var propertyInfo = orderedItem.GetType().GetProperty("M");
 
-            var value = System.Convert.ChangeType(123, Nullable.GetUnderlyingType(propertyInfo.PropertyType));
+            object value = null;
+            value = System.Convert.ChangeType(123, Nullable.GetUnderlyingType(propertyInfo.PropertyType));
             propertyInfo.SetValue(orderedItem, value);
+            var stream = new MemoryStream();
+            var utf8Writer = new Utf8JsonWriter(stream);
+            utf8Writer.WriteOrderedItem(orderedItem);
+            utf8Writer.Flush();
+            stream.Position = 0;
+            var ut8Reader = new Utf8JsonReader(stream.ToArray());
 
-            var jObject = orderedItem.ToJsonObject();
-            Assert.That(jObject.Properties().Count(), Is.EqualTo(3));
+            var jObject = JsonObject.Create(JsonElement.ParseValue(ref ut8Reader));
+            Assert.That(jObject.AsEnumerable().Count(), Is.EqualTo(3));
 
-            var k = jObject.Property("k");
+            jObject.TryGetPropertyValue("k", out var k);
             Assert.That(k, Is.Not.Null);
 
-            var v = jObject.Property("v");
+            jObject.TryGetPropertyValue("v", out var v);
             Assert.That(v, Is.Not.Null);
 
-            var m = jObject.Property("m");
+            jObject.TryGetPropertyValue("m", out var m);
             Assert.That(m, Is.Not.Null);
         }
 
@@ -113,7 +123,7 @@ namespace CDP4JsonSerializer.Tests.Helper
 
             Assert.That(resultjson, Is.EqualTo(json), $"Json creation failed for string \"{input}\".");
         }
-        
+
         private const string JsonString = @"{""widget"": {
                 ""debug"": ""on"",
                 ""window"": {
@@ -170,7 +180,7 @@ namespace CDP4JsonSerializer.Tests.Helper
                 </book>
             </bookstore>";
 
-        private static readonly string[] TestStrings = 
+        private static readonly string[] TestStrings =
         {
             "value with trailing spaces  ",
             "value with trailing space ",

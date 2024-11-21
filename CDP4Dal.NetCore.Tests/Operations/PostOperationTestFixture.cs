@@ -10,17 +10,17 @@
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal.Tests
 {
@@ -29,9 +29,9 @@ namespace CDP4Dal.Tests
     using CDP4Common;
     using CDP4Common.Dto;
     using CDP4Common.DTO;
-    
-    using CDP4Dal.Operations;
-    
+
+    using CDP4DalCommon.Protocol.Operations;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -50,13 +50,5 @@ namespace CDP4Dal.Tests
 
     internal class TestPostOperation : PostOperation
     {
-        public override List<ClasslessDTO> Delete { get; set; }
-        public override List<Thing> Create { get; set; }
-        public override List<ClasslessDTO> Update { get; set; }
-        public override List<CopyInfo> Copy { get; set; }
-        public override void ConstructFromOperation(Operation operation)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

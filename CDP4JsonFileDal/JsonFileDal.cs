@@ -10,12 +10,12 @@
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -45,7 +45,10 @@ namespace CDP4JsonFileDal
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
-    using CDP4DalCommon.Tasks;
+    using CDP4DalCommon.Protocol.Operations;
+    using CDP4DalCommon.Protocol.Tasks;
+
+    using CDP4DalJsonSerializer;
 
     using CDP4JsonFileDal.Json;
 
@@ -122,7 +125,7 @@ namespace CDP4JsonFileDal
         /// </summary>
         public JsonFileDal()
         {
-            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Serializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion, false);
         }
 
         /// <summary>
@@ -141,7 +144,7 @@ namespace CDP4JsonFileDal
                 this.DalVersion = dalVersion;
             }
 
-            this.Serializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Serializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion, false);
         }
 
         /// <summary>
@@ -160,9 +163,9 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
-        /// Gets the <see cref="Cdp4JsonSerializer"/>
+        /// Gets the <see cref="Cdp4DalJsonSerializer"/>
         /// </summary>
-        public Cdp4JsonSerializer Serializer { get; private set; }
+        public Cdp4DalJsonSerializer Serializer { get; private set; }
 
         /// <summary>
         /// Gets the value indicating whether this <see cref="IDal"/> is read only

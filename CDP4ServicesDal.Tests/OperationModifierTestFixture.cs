@@ -20,7 +20,7 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4ServicesDal.Tests
 {
@@ -33,6 +33,8 @@ namespace CDP4ServicesDal.Tests
 
     using CDP4Dal;
     using CDP4Dal.Operations;
+
+    using CDP4DalCommon.Protocol.Operations;
 
     using Moq;
 

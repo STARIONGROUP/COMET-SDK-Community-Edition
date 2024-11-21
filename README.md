@@ -75,6 +75,10 @@ The CDP4Dal library is a library that provides the basis to implement ECSS-E-TM-
 
 The CDP4DalCommon library provides common classes to support the ECSS-E-TM-10-25 and CDP4-COMET protocol.
 
+## CDP4DalJsonSerializer
+
+The CDP4DalJsonSerializer library provides JsonSerializer converter for common classes contained in CDP4DalCommon library.
+
 ## CDP4JsonFileDal
 
 The CDP4JsonFileDal library is a C# library that provides an implementation of ECSS-E-TM-10-25A Annex C.3, the JSON Exchange File Format. This file format is a ZIP archive in which a number of files are stored that each contain one or more ECSS-E-TM-10-25 objects that are serialized in the form of a JSON array of JSON objects. The CDP4JsonFileDal library can be used to read from such a ZIP archive, and to create such a ZIP archive. The ZIP archive is typically used to exchange complete models between organizations.

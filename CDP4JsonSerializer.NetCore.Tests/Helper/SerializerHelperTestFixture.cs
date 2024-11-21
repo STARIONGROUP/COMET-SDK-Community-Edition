@@ -5,28 +5,31 @@
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
 //    This file is part of CDP4-COMET SDK Community Edition
-//
+// 
 //    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
+// 
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4JsonSerializer.Tests.Helper
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text.Json;
+    using System.Text.Json.Nodes;
 
     using CDP4Common.EngineeringModelData;
     using CDP4Common.MetaInfo;
@@ -54,17 +57,23 @@ namespace CDP4JsonSerializer.Tests.Helper
             object value = null;
             value = System.Convert.ChangeType(123, Nullable.GetUnderlyingType(propertyInfo.PropertyType));
             propertyInfo.SetValue(orderedItem, value);
+            var stream = new MemoryStream();
+            var utf8Writer = new Utf8JsonWriter(stream);
+            utf8Writer.WriteOrderedItem(orderedItem);
+            utf8Writer.Flush();
+            stream.Position = 0;
+            var ut8Reader = new Utf8JsonReader(stream.ToArray());
 
-            var jObject = SerializerHelper.ToJsonObject(orderedItem);
-            Assert.That(jObject.Properties().Count(), Is.EqualTo(3));
+            var jObject = JsonObject.Create(JsonElement.ParseValue(ref ut8Reader));
+            Assert.That(jObject.AsEnumerable().Count(), Is.EqualTo(3));
 
-            var k = jObject.Property("k");
+            jObject.TryGetPropertyValue("k", out var k);
             Assert.That(k, Is.Not.Null);
 
-            var v = jObject.Property("v");
+            jObject.TryGetPropertyValue("v", out var v);
             Assert.That(v, Is.Not.Null);
 
-            var m = jObject.Property("m");
+            jObject.TryGetPropertyValue("m", out var m);
             Assert.That(m, Is.Not.Null);
         }
 
@@ -75,10 +84,11 @@ namespace CDP4JsonSerializer.Tests.Helper
             values.Add("this is a\nnewline");
             values.Add("this is another\nnewline");
 
-            var engineeringModel = new EngineeringModel {Iid = Guid.Parse("5643764e-f880-44bf-90ae-361f6661ceae")};
-            var iteration = new Iteration {Iid = Guid.Parse("f744ae63-cf36-4cc4-8d76-e83edd44f6d2")};
-            var elementDefinition = new ElementDefinition {Iid = Guid.Parse("f7f173ea-a742-42a5-81f1-59da2f470f16") };
-            var parameter = new Parameter {Iid = Guid.Parse("607764de-7598-4be2-9a95-34669de273e3") };
+            var engineeringModel = new EngineeringModel { Iid = Guid.Parse("5643764e-f880-44bf-90ae-361f6661ceae") };
+            var iteration = new Iteration { Iid = Guid.Parse("f744ae63-cf36-4cc4-8d76-e83edd44f6d2") };
+            var elementDefinition = new ElementDefinition { Iid = Guid.Parse("f7f173ea-a742-42a5-81f1-59da2f470f16") };
+            var parameter = new Parameter { Iid = Guid.Parse("607764de-7598-4be2-9a95-34669de273e3") };
+
             var parameterValueSet = new ParameterValueSet
             {
                 Iid = Guid.Parse("2366c662-b857-4313-85ea-51f9bf4588b1"), Manual = new ValueArray<string>(values)
@@ -171,7 +181,7 @@ namespace CDP4JsonSerializer.Tests.Helper
                 </book>
             </bookstore>";
 
-        private static readonly string[] TestStrings = 
+        private static readonly string[] TestStrings =
         {
             "value with trailing spaces  ",
             "value with trailing space ",

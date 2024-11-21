@@ -44,7 +44,7 @@ ECHO.
 for %%f in (%~dp0PreReleaseBuilds\*.nupkg) do (
     (Echo "%%f" | FIND /I "symbols" 1>NUL) || (
         echo Pushing %%f
-        dotnet nuget push "%%f" --source https://nuget.pkg.github.com/RHEAGROUP/index.json -k %apikey%
+        dotnet nuget push "%%f" --source https://nuget.pkg.github.com/STARIONGROUP/index.json -k %apikey%
     )
 )
 
