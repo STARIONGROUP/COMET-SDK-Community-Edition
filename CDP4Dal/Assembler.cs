@@ -143,9 +143,7 @@ namespace CDP4Dal
                 logger.Info("Start Synchronization of {0}", this.IDalUri);
 
                 var existentGuid =
-                    this.Cache.Select(
-                            x => new Tuple<CacheKey, int>(x.Value.Value.CacheKey, x.Value.Value.RevisionNumber))
-                        .ToList();
+                    new Dictionary<CacheKey, int>(this.Cache.ToDictionary(x => x.Value.Value.CacheKey, y => y.Value.Value.RevisionNumber));
 
                 this.CheckPartitionDependentContainmentContainerIds(dtoThings);
 
@@ -224,17 +222,14 @@ namespace CDP4Dal
                         if (succeed)
                         {
                             var thingObject = updatedLazyThing.Value;
-                            var cacheId = new CacheKey(dtoThing.Iid, dtoThing.IterationContainerId);
-
-                            if (!existentGuid.Select(x => x.Item1).Contains(cacheId))
+                            
+                            if (!existentGuid.TryGetValue(cacheKey, out var cacheThingRevisionNumber))
                             {
                                 this.messageBus.SendObjectChangeEvent(thingObject, EventKind.Added);
                                 messageCounter++;
                             }
                             else
                             {
-                                var cacheThingRevisionNumber = existentGuid.Single(x => x.Item1.Equals(cacheId)).Item2;
-
                                 if (dtoThing.RevisionNumber > cacheThingRevisionNumber)
                                 {
                                     // send event if revision number has increased from the old cached version
@@ -243,7 +238,7 @@ namespace CDP4Dal
                                 }
                                 else if (dtoThing.RevisionNumber < cacheThingRevisionNumber)
                                 {
-                                    if (this.Cache.TryGetValue(cacheId, out var cacheThing))
+                                    if (this.Cache.TryGetValue(cacheKey, out var cacheThing))
                                     {
                                         // send event if revision number is lower. That means that the original cached item was changed (revision was added!)                                        ICDPMessageBus.Current.SendObjectChangeEvent(cacheThing.Value, EventKind.Updated);
                                         this.messageBus.SendObjectChangeEvent(cacheThing.Value, EventKind.Updated);

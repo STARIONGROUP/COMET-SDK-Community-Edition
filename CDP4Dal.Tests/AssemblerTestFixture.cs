@@ -26,6 +26,7 @@ namespace CDP4Dal.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -189,6 +190,59 @@ namespace CDP4Dal.Tests
             // checks that the removed category is no longer in the cache
             Assert.That(6, Is.EqualTo(assembler.Cache.Count));            
             Assert.That(assembler.Cache.TryGetValue(new CacheKey(categoryToRemove.Iid, null), out lazyCat), Is.False);
+        }
+
+        [Test]
+        public async Task AssertThatAssemblerSynchronizationWorksFastEnough()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+
+            var domain = new Dto.DomainOfExpertise(Guid.NewGuid(), 1);
+            this.testInput.Add(domain);
+
+            for (var i = 0; i < 20000; i++)
+            {
+                this.testInput.Add(new Dto.ElementDefinition(Guid.NewGuid(), 1) {Owner = domain.Iid});
+            }
+
+            var sw = new Stopwatch();
+
+            sw.Reset();
+            sw.Start();
+            
+            // 1st call of Synnchronize
+            await assembler.Synchronize(this.testInput);
+            
+            sw.Stop();
+            var elapsed = sw.Elapsed;
+            await TestContext.Progress.WriteLineAsync($"First synchronize took {elapsed}");
+            // Modification of the input Dtos
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(this.testInput.Count, Is.EqualTo(assembler.Cache.Count));
+
+            sw.Reset();
+            sw.Start();
+
+            // 1st call of Synnchronize
+            await assembler.Synchronize(this.testInput);
+
+            sw.Stop();
+            elapsed = sw.Elapsed;
+            await TestContext.Progress.WriteLineAsync($"Second synchronize took {elapsed}");
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(this.testInput.Count, Is.EqualTo(assembler.Cache.Count));
+
+            sw.Reset();
+            sw.Start();
+
+            // 1st call of Synnchronize
+            await assembler.Synchronize(this.testInput);
+
+            sw.Stop();
+            elapsed = sw.Elapsed;
+            await TestContext.Progress.WriteLineAsync($"Third synchronize took {elapsed}");
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(this.testInput.Count, Is.EqualTo(assembler.Cache.Count));
         }
 
         [Test]

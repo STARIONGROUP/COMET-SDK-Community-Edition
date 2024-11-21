@@ -4,7 +4,7 @@
       <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
       <Company>Starion Group S.A.</Company>
       <Title>CDP4MessagePackSerializer Community Edition</Title>
-      <VersionPrefix>27.4.0</VersionPrefix>
+      <VersionPrefix>27.4.1</VersionPrefix>
       <Description>CDP4 MessagePack Serialization Library</Description>
       <Copyright>Copyright © Starion Group S.A.</Copyright>
       <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar</Authors>
@@ -20,8 +20,7 @@
       <PackageTags>CDP COMET ECSS-E-TM-10-25 MessagePack</PackageTags>
       <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
       <PackageReleaseNotes>
-          [BUMP] To CDP4Common 27.4.0
-          [Update] To MessagePack 2.5.187
+          [BUMP] To CDP4Common 27.4.1
       </PackageReleaseNotes>
       <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
