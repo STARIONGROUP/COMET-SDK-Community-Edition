@@ -90,20 +90,12 @@ namespace CDP4ServicesDal
         private HttpClient httpClient;
 
         /// <summary>
-        /// Asserts that the MessagePack deserialization should be used or not
-        /// </summary>
-        private readonly bool isMessagePackSupported;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CdpServicesDal"/> class.
         /// </summary>
-        /// <param name="isMessagePackSupported">Asserts that the MessagePack deserialization should be used or not. Supported by default</param>
-        public CdpServicesDal(bool isMessagePackSupported = true)
+        public CdpServicesDal()
         {
             this.Cdp4JsonSerializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion, false);
             this.MessagePackSerializer = new MessagePackSerializer();
-
-            this.isMessagePackSupported = isMessagePackSupported;
         }
 
         /// <summary>
@@ -112,15 +104,9 @@ namespace CDP4ServicesDal
         /// <param name="httpClient">
         /// The (injected) <see cref="HttpClient"/>
         /// </param>
-        /// <param name="isMessagePackSupported">Asserts that the MessagePack deserialization should be used or not. Supported by default</param>
-        public CdpServicesDal(HttpClient httpClient, bool isMessagePackSupported = true) : this(isMessagePackSupported)
+        public CdpServicesDal(HttpClient httpClient) : this()
         {
-            if (httpClient == null)
-            {
-                throw new ArgumentNullException(nameof(httpClient));
-            }
-
-            this.httpClient = httpClient;
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         /// <summary>
@@ -1061,13 +1047,9 @@ namespace CDP4ServicesDal
             result.BaseAddress = credentials.Uri;
             result.DefaultRequestHeaders.Accept.Clear();
             result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/msgpack"));
 
-            if (this.isMessagePackSupported)
-            {
-                result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/msgpack"));
-            }
-
-            result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
+            result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
             result.DefaultRequestHeaders.Add(Headers.AcceptCdpVersion, Headers.AcceptCdpVersionValue);
             result.DefaultRequestHeaders.Add("User-Agent", "CDP4 (ECSS-E-TM-10-25 Annex C.2) CDPServicesDal");
 

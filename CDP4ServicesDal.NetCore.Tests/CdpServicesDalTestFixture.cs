@@ -258,9 +258,9 @@ namespace CDP4ServicesDal.Tests
         [TestCase(true)]
         [TestCase(false)]
         [Category("WebServicesDependent")]
-        public async Task VerifyThatReadReturnsCorrectDTO(bool isMessagePackSupported)
+        public async Task VerifyThatReadReturnsCorrectDTO()
         {
-            this.dal = new CdpServicesDal(isMessagePackSupported);
+            this.dal = new CdpServicesDal();
 
             var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();
             Assert.NotNull(returned);
