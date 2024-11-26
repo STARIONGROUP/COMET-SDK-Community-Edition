@@ -255,8 +255,7 @@ namespace CDP4ServicesDal.Tests
             Assert.Throws<InvalidOperationException>(() => this.dal.Close());
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
+        [Test]
         [Category("WebServicesDependent")]
         public async Task VerifyThatReadReturnsCorrectDTO()
         {
