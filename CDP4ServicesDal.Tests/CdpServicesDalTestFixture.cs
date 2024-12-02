@@ -232,12 +232,11 @@ namespace CDP4ServicesDal.Tests
             Assert.Throws<InvalidOperationException>(() => this.dal.Close());
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
+        [Test]
         [Category("WebServicesDependent")]
-        public async Task VerifyThatReadReturnsCorrectDTO(bool isMessagePackSupported)
+        public async Task VerifyThatReadReturnsCorrectDTO()
         {
-            this.dal = new CdpServicesDal(isMessagePackSupported);
+            this.dal = new CdpServicesDal();
 
             var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();
             Assert.That(returned, Is.Not.Null);
