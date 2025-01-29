@@ -422,5 +422,11 @@ namespace CDP4Dal
         /// </summary>
         /// <exception cref="InvalidOperationException">If all required <see cref="Session.Credentials"/> informations are not provided</exception>
         Task RefreshAuthenticationInformation();
+
+        /// <summary>
+        /// Retrieves all supported <see cref="AuthenticationSchemeKind" /> by the CDP4-COMET datasource
+        /// </summary>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> that contains the value of the queried <see cref="AuthenticationSchemeResponse" /></returns>
+        Task<AuthenticationSchemeResponse> QueryAvailableAuthenticationScheme();
     }
 }
