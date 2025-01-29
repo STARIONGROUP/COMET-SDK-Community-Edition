@@ -35,6 +35,7 @@ namespace CDP4Dal.DAL
 
     using CDP4Dal.Operations;
 
+    using CDP4DalCommon.Authentication;
     using CDP4DalCommon.Tasks;
 
     using Thing = CDP4Common.DTO.Thing;
@@ -278,5 +279,34 @@ namespace CDP4Dal.DAL
         /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
         Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, 
             IEnumerable<Guid> categoriesId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Requests to retrieve all available <see cref="AuthenticationSchemeKind" /> available on the datasource
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> that contains the value of the queried <see cref="AuthenticationSchemeResponse" /></returns>
+        Task<AuthenticationSchemeResponse> RequestAvailableAuthenticationScheme(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Initializes this <see cref="Dal" /> with created <see cref="Dal.Credentials" />. 
+        /// </summary>
+        /// <param name="credentials">The <see cref="Dal.Credentials"/></param>
+        /// <remarks>To be used in case of multiple-step authentication, requires to be able to support multiple Authentication scheme</remarks>
+        void InitializeDalCredentials(Credentials credentials);
+
+        /// <summary>
+        /// Provides login capabitilities against data-source, based on provided <paramref name="userName"/> and <paramref name="password"/>. 
+        /// </summary>
+        /// <param name="userName">The username that should be used for authentication</param>
+        /// <param name="password">The password that should be used for authentication</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <remarks>This method should be used when using a CDP4-COMET WebServices and that it provides LocalJwtBearer authentication flow</remarks>
+        Task Login(string userName, string password, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Applies Authentication information based on the <see cref="Dal.Credentials" /> 
+        /// </summary>
+        /// <param name="credentials">The <see cref="Credentials" /></param>
+        void ApplyAuthenticationCredentials(Credentials credentials);
     }
 }

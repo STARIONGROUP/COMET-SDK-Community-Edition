@@ -47,6 +47,7 @@ namespace CDP4ServicesDal.Tests
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
+    using CDP4DalCommon.Authentication;
     using CDP4DalCommon.Tasks;
 
     using Newtonsoft.Json;
@@ -898,6 +899,67 @@ namespace CDP4ServicesDal.Tests
             messagePackResponse.Content = new StringContent(JsonConvert.SerializeObject(cometTask));
             SetHttpHeader(messagePackResponse, "application/msgpack");
             Assert.That(() => this.dal.Write(operationContainer, 1), Throws.Exception.TypeOf<NotSupportedException>());
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
+        // To test this, please enable one by one authentication scheme on the CDP4 COMET Server
+        public async Task VerifyCanAuthenticateWithMultipleSchemeAtDalLevel()
+        {
+            var authentitcatioCredentials = new Credentials(new Uri("http://localhost:5000/"));
+            var servicesDal = new CdpServicesDal();
+            
+            var cancellationSource = new CancellationTokenSource();
+            servicesDal.InitializeDalCredentials(authentitcatioCredentials);
+            var availableScheme = (await servicesDal.RequestAvailableAuthenticationScheme(cancellationSource.Token)).Schemes.Single();
+            const string username = "admin";
+            const string password = "pass";
+            const string externalToken = "update-with-a-generated-token";
+            
+            switch (availableScheme)
+            {
+                case AuthenticationSchemeKind.Basic:
+                    authentitcatioCredentials.ProvideUserCredentials(username, password, availableScheme);
+                    break;
+                case AuthenticationSchemeKind.LocalJwtBearer:
+                    await servicesDal.Login(username, password, cancellationSource.Token);
+                    break;
+                case AuthenticationSchemeKind.ExternalJwtBearer:
+                    authentitcatioCredentials.ProvideUserToken(externalToken,availableScheme);
+                    break;
+            }
+
+            var readThings = await servicesDal.Open(authentitcatioCredentials, cancellationSource.Token);
+            cancellationSource.Dispose();
+            
+            Assert.That(readThings, Is.Not.Empty);
+            Console.WriteLine($"Test passed wih {availableScheme}");
+        }
+
+        [Test]
+        [Category("WebServicesDependent")]
+        // To test this, please enable one by one authentication scheme on the CDP4 COMET Server
+        public async Task VerifyCanAuthenticateWithMultipleSchemeAtSessionLevel()
+        {
+            var authentitcatioCredentials = new Credentials(new Uri("http://localhost:5000/"));
+            var authenticationSession = new Session(new CdpServicesDal(), authentitcatioCredentials, this.messageBus);
+
+            var availableScheme = (await authenticationSession.QueryAvailableAuthenticationScheme()).Schemes.Single();
+
+            const string username = "admin";
+            const string password = "pass";
+            const string externalToken = "update-with-a-generated-token";
+
+            var authenticationInformation = availableScheme switch
+            {
+                AuthenticationSchemeKind.Basic or AuthenticationSchemeKind.LocalJwtBearer => new AuthenticationInformation(username, password),
+                AuthenticationSchemeKind.ExternalJwtBearer => new AuthenticationInformation(externalToken),
+                _ => throw new ArgumentOutOfRangeException(nameof(availableScheme))
+            };
+
+            await authenticationSession.AuthenticateAndOpen(availableScheme, authenticationInformation);
+            Assert.That(authenticationSession.RetrieveSiteDirectory(), Is.Not.Null);
+            Console.WriteLine($"Test passed wih {availableScheme}");
         }
 
         /// <summary>

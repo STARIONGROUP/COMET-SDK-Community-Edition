@@ -6,6 +6,7 @@
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
         <IsPackable>false</IsPackable>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
  
     <ItemGroup>

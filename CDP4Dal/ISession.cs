@@ -38,6 +38,7 @@ namespace CDP4Dal
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
 
+    using CDP4DalCommon.Authentication;
     using CDP4DalCommon.Tasks;
 
     using Permission;
@@ -407,5 +408,19 @@ namespace CDP4Dal
         /// <param name="categoriesId">A collection of <see cref="Guid"/> of <see cref="Category"/> that <see cref="Thing"/> to retrieve should be categorized by</param>
         /// <returns>A <see cref="Task{T}"/> with retrieved <see cref="CDP4Common.DTO.Thing"/>s</returns>
         Task<IEnumerable<CDP4Common.DTO.Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId);
+
+        /// <summary>
+        /// Authenticate against the data-source and open the session
+        /// </summary>
+        /// <param name="authenticationSchemeKind">The <see cref="AuthenticationSchemeKind"/> that is used to authenticate</param>
+        /// <param name="authenticationInformation">The <see cref="AuthenticationInformation"/> that contains user's authentication information</param>
+        /// <param name="activeMessageBus">Specify if the <see cref="ICDPMessageBus"/> is used or not to notify listeners</param>
+        Task AuthenticateAndOpen(AuthenticationSchemeKind authenticationSchemeKind, AuthenticationInformation authenticationInformation, bool activeMessageBus = true);
+
+        /// <summary>
+        /// Refreshes and apply authentication information based on the <see cref="Session.Credentials"/>
+        /// </summary>
+        /// <exception cref="InvalidOperationException">If all required <see cref="Session.Credentials"/> informations are not provided</exception>
+        Task RefreshAuthenticationInformation();
     }
 }

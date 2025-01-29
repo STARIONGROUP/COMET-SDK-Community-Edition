@@ -54,9 +54,15 @@ namespace CDP4ServicesDal
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
+    using CDP4DalCommon.Authentication;
+
     using CDP4JsonSerializer;
 
     using CDP4MessagePackSerializer;
+
+    using CDP4ServicesDal.Extensions;
+
+    using Newtonsoft.Json;
 
     using NLog;
 
@@ -146,7 +152,7 @@ namespace CDP4ServicesDal
         /// </returns>
         public override async Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
         {
-            if (this.Credentials == null || this.Credentials.Uri == null)
+            if (this.Credentials is not { IsFullyInitiliazed: true })
             {
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
@@ -280,7 +286,7 @@ namespace CDP4ServicesDal
         /// <exception cref="ArgumentOutOfRangeException">If the provided <paramref name="waitTime"/> is lower than 1</exception>
         public override async Task<LongRunningTaskResult> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
         {
-            if (this.Credentials == null || this.Credentials.Uri == null)
+            if (this.Credentials is not { IsFullyInitiliazed: true })
             {
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
@@ -342,7 +348,7 @@ namespace CDP4ServicesDal
                         case ContentTypeKind.MESSAGEPACK:
                             throw new NotSupportedException("Long running task not supported with MESSAGEPACK");
                         default:
-                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                            throw new InvalidOperationException($"ContentTypeKind {contentTypeKind} not supported");
                     }
 
                     deserializationWatch.Stop();
@@ -453,7 +459,7 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The Session may not be null and must be set prior to reading the EngineeringModels");
             }
 
-            if (this.Credentials == null || this.Credentials.Uri == null)
+            if (this.Credentials is not { IsFullyInitiliazed: true })
             {
                 throw new InvalidOperationException("The CDP4-COMET DAL is not open.");
             }
@@ -527,7 +533,7 @@ namespace CDP4ServicesDal
         /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
         public override async Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
         {
-            if (this.Credentials == null || this.Credentials.Uri == null)
+            if (this.Credentials is not { IsFullyInitiliazed: true })
             {
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
@@ -605,7 +611,7 @@ namespace CDP4ServicesDal
         /// </returns>
         public override async Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken cancellationToken, IQueryAttributes attributes = null)
         {
-            if (this.Credentials == null || this.Credentials.Uri == null)
+            if (this.Credentials is not { IsFullyInitiliazed: true })
             {
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
@@ -735,7 +741,7 @@ namespace CDP4ServicesDal
                         case ContentTypeKind.MESSAGEPACK:
                             throw new NotSupportedException("Read CometTask by id not supported with MESSAGEPACK");
                         default:
-                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                            throw new InvalidOperationException($"ContentTypeKind {contentTypeKind} not supported");
                     }
 
                     deserializationWatch.Stop();
@@ -796,7 +802,7 @@ namespace CDP4ServicesDal
                         case ContentTypeKind.MESSAGEPACK:
                             throw new NotSupportedException("Read all CometTask not supported with MESSAGEPACK");
                         default:
-                            throw new InvalidOperationException( $"ContentTypeKind {contentTypeKind} not supported");
+                            throw new InvalidOperationException($"ContentTypeKind {contentTypeKind} not supported");
                     }
 
                     deserializationWatch.Stop();
@@ -881,6 +887,11 @@ namespace CDP4ServicesDal
                 throw new ArgumentNullException(nameof(credentials.Uri), $"The Credentials URI may not be null");
             }
 
+            if (!credentials.IsFullyInitiliazed)
+            {
+                throw new ArgumentException("The Credentials is not be fully initiliazed");
+            }
+
             UriExtensions.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
 
             var queryAttributes = new QueryAttributes
@@ -894,7 +905,8 @@ namespace CDP4ServicesDal
             var openToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
 
             this.httpClient = this.CreateHttpClient(credentials, this.httpClient);
-
+            this.ApplyAuthenticationCredentials(credentials);
+        
             var watch = Stopwatch.StartNew();
 
             var uriBuilder = this.GetUriBuilder(credentials.Uri, ref resourcePath);
@@ -946,6 +958,11 @@ namespace CDP4ServicesDal
 
                     deserializationWatch.Stop();
 
+                    if (string.IsNullOrEmpty(credentials.UserName))
+                    {
+                        credentials.UserName = await this.QueryAuthenticatedUserName(cancellationToken);
+                    }
+
                     var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
 
                     if (returnedPerson == null)
@@ -985,6 +1002,117 @@ namespace CDP4ServicesDal
             this.httpClient = httpClient;
 
             return await this.Open(credentials, cancellationToken);
+        }
+
+        /// <summary>
+        /// Applies Authentication information based on the <see cref="Credentials" /> 
+        /// </summary>
+        /// <param name="credentials">The <see cref="Credentials"/></param>
+        public override void ApplyAuthenticationCredentials(Credentials credentials)
+        {
+            if (this.httpClient == null)
+            {
+                throw new InvalidOperationException("Connection to datasource not established");
+            }
+
+            if (credentials is not { IsFullyInitiliazed: true })
+            {
+                throw new InvalidOperationException("Credentials not fully initialized");
+            }
+            
+            this.httpClient.SetAuthorizationHeader(credentials);
+        }
+
+        /// <summary>
+        /// Initializes this <see cref="CdpServicesDal" /> with created <see cref="Credentials" />. 
+        /// </summary>
+        /// <param name="credentials">The <see cref="Credentials"/></param>
+        /// <remarks>To be used in case of multiple-step authentication, requires to be able to support multiple Authentication scheme</remarks>
+        public override void InitializeDalCredentials(Credentials credentials)
+        {
+            base.InitializeDalCredentials(credentials);
+
+            try
+            {
+                credentials.Uri.AssertUriIsHttpOrHttpsSchema();
+            }
+            catch (ArgumentException)
+            {
+                this.Credentials = null;
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Provides login capabitilities against data-source, based on provided <paramref name="userName"/> and <paramref name="password"/>. 
+        /// </summary>
+        /// <param name="userName">The username that should be used for authentication</param>
+        /// <param name="password">The password that should be used for authentication</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <remarks>This method should be used when the CDP4-COMET WebServices provides LocalJwtBearer authentication flow</remarks>
+        public override async Task Login(string userName, string password, CancellationToken cancellationToken)
+        {
+            if (this.Credentials == null || this.Credentials.Uri == null)
+            {
+                throw new InvalidOperationException("The Credentials may not be null, this service should have been initialized before");
+            }
+
+            var temporaryClient = this.CreateHttpClient(this.Credentials, this.httpClient);
+
+            var resourcePath = "login";
+            var watch = Stopwatch.StartNew();
+            var loginToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", loginToken, resourcePath);
+            Logger.Debug("CDP4Services Open {0}: {1}", loginToken, uriBuilder);
+
+            var requestsw = Stopwatch.StartNew();
+
+            var loginUser = new LoginUser()
+            {
+                Password = password,
+                UserName = userName
+            };
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, resourcePath);
+            requestMessage.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(loginUser), System.Text.Encoding.UTF8, "application/json");
+            requestMessage.Headers.Add(Headers.CDPToken, loginToken);
+            using var httpResponseMessage = await temporaryClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
+
+            Logger.Info("CDP4 Services responded in {0} [ms] to Login {1}", requestsw.ElapsedMilliseconds, loginToken);
+            requestsw.Stop();
+
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                Logger.Error(msg);
+                throw new DalReadException(msg);
+            }
+
+            watch.Stop();
+            Logger.Info("CDP4Services Login {0}: {1} completed in {2} [ms]", loginToken, uriBuilder, watch.ElapsedMilliseconds);
+
+            using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync();
+
+            var deserializationWatch = Stopwatch.StartNew();
+            string returnedToken = null;
+
+            switch (this.QueryContentTypeKind(httpResponseMessage))
+            {
+                case ContentTypeKind.JSON:
+                    Logger.Info("Deserializing JSON response");
+                    returnedToken = await System.Text.Json.JsonSerializer.DeserializeAsync<string>(resultStream, cancellationToken: cancellationToken);
+                    Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                    break;
+                case ContentTypeKind.MESSAGEPACK:
+                    throw new InvalidOperationException("No support of JWT token via MessagePack available");
+            }
+
+            deserializationWatch.Stop();
+            this.Credentials.ProvideUserCredentials(userName, password, AuthenticationSchemeKind.LocalJwtBearer);
+            this.Credentials.ProvideUserToken(returnedToken, AuthenticationSchemeKind.LocalJwtBearer);
         }
 
         /// <summary>
@@ -1090,7 +1218,6 @@ namespace CDP4ServicesDal
             result.DefaultRequestHeaders.Accept.Clear();
             result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/msgpack"));
-            result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.UserName}:{credentials.Password}")));
             result.DefaultRequestHeaders.Add(Headers.AcceptCdpVersion, Headers.AcceptCdpVersionValue);
             result.DefaultRequestHeaders.Add("User-Agent", "CDP4 (ECSS-E-TM-10-25 Annex C.2) CDPServicesDal");
 
@@ -1366,6 +1493,64 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
+        /// Requests to retrieve all available <see cref="AuthenticationSchemeKind" /> available on the datasource
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> that contains the value of the queried <see cref="AuthenticationSchemeResponse" /></returns>
+        public override async Task<AuthenticationSchemeResponse> RequestAvailableAuthenticationScheme(CancellationToken cancellationToken)
+        {
+            if (this.Credentials == null || this.Credentials.Uri == null)
+            {
+                throw new InvalidOperationException("The CDP4 DAL URI not specified.");
+            }
+
+            var temporaryHttpClient = this.CreateHttpClient(this.Credentials, this.httpClient);
+            var watch = Stopwatch.StartNew();
+
+            var resourcePath = "auth/schemes";
+
+            var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
+            Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
+
+            var requestsw = Stopwatch.StartNew();
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, readToken);
+
+            using var httpResponseMessage = await temporaryHttpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+
+            Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
+            requestsw.Stop();
+
+            if (httpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                Logger.Warn("The data-source does not support multiple authentication schemes, Basic Authentication returned");
+
+                return new AuthenticationSchemeResponse()
+                {
+                    Schemes = [AuthenticationSchemeKind.Basic]
+                };
+            }
+
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                var message = $"The data-source replied error status code for {resourcePath}: {httpResponseMessage.StatusCode}";
+                Logger.Error(message);
+                throw new DalReadException(message);
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            var response = this.Cdp4JsonSerializer.Deserialize<AuthenticationSchemeResponse>(await httpResponseMessage.Content.ReadAsStreamAsync());
+
+            watch.Stop();
+            Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
+            return response;
+        }
+
+        /// <summary>
         /// gets the <see cref="QueryAttributes"/> associated to the <see cref="CdpServicesDal"/>
         /// </summary>
         /// <param name="includeReferenceData">
@@ -1402,8 +1587,8 @@ namespace CDP4ServicesDal
                 var firstChar = (char)reader.Peek();
                 stream.Position = 0;
 
-                return firstChar == '[' 
-                    ? new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize(stream)) 
+                return firstChar == '['
+                    ? new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize(stream))
                     : new LongRunningTaskResult(this.Cdp4JsonSerializer.Deserialize<CometTask>(stream));
             }
         }
@@ -1433,5 +1618,63 @@ namespace CDP4ServicesDal
                 throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
             }
         }
+        
+        /// <summary>
+        /// Queries the shortname of the authenticated User
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{TResult}"/> that contains the retrieved user shortname</returns>
+        private async Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken)
+        {
+            if (this.Credentials is not { IsFullyInitiliazed: true })
+            {
+                throw new InvalidOperationException("Credentials are not fully initiliazed");
+            }
+            
+            var resourcePath = "username";
+            var watch = Stopwatch.StartNew();
+            var loginToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", loginToken, resourcePath);
+            Logger.Debug("CDP4Services UserName {0}: {1}", loginToken, uriBuilder);
+
+            var requestsw = Stopwatch.StartNew();
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, loginToken);
+            using var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
+
+            Logger.Info("CDP4 Services responded in {0} [ms] to Login {1}", requestsw.ElapsedMilliseconds, loginToken);
+            requestsw.Stop();
+
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                Logger.Error(msg);
+                throw new DalReadException(msg);
+            }
+
+            watch.Stop();
+            Logger.Info("CDP4Services UserName {0}: {1} completed in {2} [ms]", loginToken, uriBuilder, watch.ElapsedMilliseconds);
+
+            using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync();
+
+            var deserializationWatch = Stopwatch.StartNew();
+            deserializationWatch.Stop();
+
+            switch (this.QueryContentTypeKind(httpResponseMessage))
+            {
+                case ContentTypeKind.JSON:
+                    Logger.Info("Deserializing JSON response");
+                    return await System.Text.Json.JsonSerializer.DeserializeAsync<string>(resultStream, cancellationToken: cancellationToken);
+                case ContentTypeKind.MESSAGEPACK:
+                    throw new InvalidOperationException("No support of UserName via MessagePack available");
+            }
+
+            return null;
+        }
     }
 }
+    

@@ -23,6 +23,7 @@
         [BUMP] To CDP4DalCommon 27.4.2
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
