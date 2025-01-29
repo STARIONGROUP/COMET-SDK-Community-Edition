@@ -865,8 +865,8 @@ namespace CDP4ServicesDal.Tests
             SetHttpHeader(messagePackResponse, "application/msgpack");
             Assert.That(() => this.dal.Write(operationContainer, 1), Throws.Exception.TypeOf<NotSupportedException>());
         }
-
-                [Test]
+        
+        [Test]
         [Category("WebServicesDependent")]
         // To test this, please enable one by one authentication scheme on the CDP4 COMET Server
         public async Task VerifyCanAuthenticateWithMultipleSchemeAtDalLevel()

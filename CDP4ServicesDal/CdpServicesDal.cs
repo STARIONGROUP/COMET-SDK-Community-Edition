@@ -978,33 +978,6 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
-        /// Opens a connection to a data source <see cref="Uri"/> specified by the provided <see cref="Credentials"/>
-        /// </summary>
-        /// <param name="credentials">
-        /// The <see cref="Dal.Credentials"/> that are used to connect to the data source such as username, password and <see cref="Uri"/>
-        /// </param>
-        /// <param name="cancellationToken">
-        /// The cancellation Token.
-        /// </param>
-        /// <param name="httpClient">
-        /// The injected <see cref="HttpClient"/> that will be used to set the cached <see cref="HttpClient"/>
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{T}"/> that the services return when connecting to the <see cref="CDP4Common.SiteDirectoryData.SiteDirectory"/>.
-        /// </returns>
-        public async Task<IEnumerable<Thing>> Open(Credentials credentials, CancellationToken cancellationToken, HttpClient httpClient)
-        {
-            if (httpClient == null)
-            {
-                throw new ArgumentNullException(nameof(httpClient), $"The {nameof(httpClient)} may not be null");
-            }
-
-            this.httpClient = httpClient;
-
-            return await this.Open(credentials, cancellationToken);
-        }
-
-        /// <summary>
         /// Applies Authentication information based on the <see cref="Credentials" /> 
         /// </summary>
         /// <param name="credentials">The <see cref="Credentials"/></param>
@@ -1057,7 +1030,7 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The Credentials may not be null, this service should have been initialized before");
             }
 
-            var temporaryClient = this.CreateHttpClient(this.Credentials, this.httpClient);
+            var temporaryClient = this.CreateHttpClient(this.Credentials, null);
 
             var resourcePath = "login";
             var watch = Stopwatch.StartNew();
@@ -1504,7 +1477,7 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The CDP4 DAL URI not specified.");
             }
 
-            var temporaryHttpClient = this.CreateHttpClient(this.Credentials, this.httpClient);
+            var temporaryHttpClient = this.CreateHttpClient(this.Credentials, null);
             var watch = Stopwatch.StartNew();
 
             var resourcePath = "auth/schemes";
