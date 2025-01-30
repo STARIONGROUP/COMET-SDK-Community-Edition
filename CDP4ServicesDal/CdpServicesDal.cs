@@ -152,7 +152,7 @@ namespace CDP4ServicesDal
         /// </returns>
         public override async Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null)
         {
-            if (this.Credentials is not { IsFullyInitiliazed: true })
+            if (this.Credentials is not { IsFullyInitialized: true })
             {
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
@@ -286,7 +286,7 @@ namespace CDP4ServicesDal
         /// <exception cref="ArgumentOutOfRangeException">If the provided <paramref name="waitTime"/> is lower than 1</exception>
         public override async Task<LongRunningTaskResult> Write(OperationContainer operationContainer, int waitTime, IEnumerable<string> files = null)
         {
-            if (this.Credentials is not { IsFullyInitiliazed: true })
+            if (this.Credentials is not { IsFullyInitialized: true })
             {
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
@@ -459,7 +459,7 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The Session may not be null and must be set prior to reading the EngineeringModels");
             }
 
-            if (this.Credentials is not { IsFullyInitiliazed: true })
+            if (this.Credentials is not { IsFullyInitialized: true })
             {
                 throw new InvalidOperationException("The CDP4-COMET DAL is not open.");
             }
@@ -533,7 +533,7 @@ namespace CDP4ServicesDal
         /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
         public override async Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken)
         {
-            if (this.Credentials is not { IsFullyInitiliazed: true })
+            if (this.Credentials is not { IsFullyInitialized: true })
             {
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
@@ -611,7 +611,7 @@ namespace CDP4ServicesDal
         /// </returns>
         public override async Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken cancellationToken, IQueryAttributes attributes = null)
         {
-            if (this.Credentials is not { IsFullyInitiliazed: true })
+            if (this.Credentials is not { IsFullyInitialized: true })
             {
                 throw new InvalidOperationException("The CDP4 DAL is not open.");
             }
@@ -887,9 +887,9 @@ namespace CDP4ServicesDal
                 throw new ArgumentNullException(nameof(credentials.Uri), $"The Credentials URI may not be null");
             }
 
-            if (!credentials.IsFullyInitiliazed)
+            if (!credentials.IsFullyInitialized)
             {
-                throw new ArgumentException("The Credentials is not be fully initiliazed");
+                throw new ArgumentException("The Credentials is not be fully initialized");
             }
 
             UriExtensions.AssertUriIsHttpOrHttpsSchema(credentials.Uri);
@@ -988,7 +988,7 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("Connection to datasource not established");
             }
 
-            if (credentials is not { IsFullyInitiliazed: true })
+            if (credentials is not { IsFullyInitialized: true })
             {
                 throw new InvalidOperationException("Credentials not fully initialized");
             }
@@ -1599,7 +1599,7 @@ namespace CDP4ServicesDal
         /// <returns>A <see cref="Task{TResult}"/> that contains the retrieved user shortname</returns>
         private async Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken)
         {
-            if (this.Credentials is not { IsFullyInitiliazed: true })
+            if (this.Credentials is not { IsFullyInitialized: true })
             {
                 throw new InvalidOperationException("Credentials are not fully initiliazed");
             }

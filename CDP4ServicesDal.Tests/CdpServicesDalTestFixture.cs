@@ -906,11 +906,11 @@ namespace CDP4ServicesDal.Tests
         // To test this, please enable one by one authentication scheme on the CDP4 COMET Server
         public async Task VerifyCanAuthenticateWithMultipleSchemeAtDalLevel()
         {
-            var authentitcatioCredentials = new Credentials(new Uri("http://localhost:5000/"));
+            var authenticationCredentials = new Credentials(new Uri("http://localhost:5000/"));
             var servicesDal = new CdpServicesDal();
             
             var cancellationSource = new CancellationTokenSource();
-            servicesDal.InitializeDalCredentials(authentitcatioCredentials);
+            servicesDal.InitializeDalCredentials(authenticationCredentials);
             var availableScheme = (await servicesDal.RequestAvailableAuthenticationScheme(cancellationSource.Token)).Schemes.Single();
             const string username = "admin";
             const string password = "pass";
@@ -919,17 +919,17 @@ namespace CDP4ServicesDal.Tests
             switch (availableScheme)
             {
                 case AuthenticationSchemeKind.Basic:
-                    authentitcatioCredentials.ProvideUserCredentials(username, password, availableScheme);
+                    authenticationCredentials.ProvideUserCredentials(username, password, availableScheme);
                     break;
                 case AuthenticationSchemeKind.LocalJwtBearer:
                     await servicesDal.Login(username, password, cancellationSource.Token);
                     break;
                 case AuthenticationSchemeKind.ExternalJwtBearer:
-                    authentitcatioCredentials.ProvideUserToken(externalToken,availableScheme);
+                    authenticationCredentials.ProvideUserToken(externalToken,availableScheme);
                     break;
             }
 
-            var readThings = await servicesDal.Open(authentitcatioCredentials, cancellationSource.Token);
+            var readThings = await servicesDal.Open(authenticationCredentials, cancellationSource.Token);
             cancellationSource.Dispose();
             
             Assert.That(readThings, Is.Not.Empty);
@@ -941,8 +941,8 @@ namespace CDP4ServicesDal.Tests
         // To test this, please enable one by one authentication scheme on the CDP4 COMET Server
         public async Task VerifyCanAuthenticateWithMultipleSchemeAtSessionLevel()
         {
-            var authentitcatioCredentials = new Credentials(new Uri("http://localhost:5000/"));
-            var authenticationSession = new Session(new CdpServicesDal(), authentitcatioCredentials, this.messageBus);
+            var authenticationCredentials = new Credentials(new Uri("http://localhost:5000/"));
+            var authenticationSession = new Session(new CdpServicesDal(), authenticationCredentials, this.messageBus);
 
             var availableScheme = (await authenticationSession.QueryAvailableAuthenticationScheme()).Schemes.Single();
 

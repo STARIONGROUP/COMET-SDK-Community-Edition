@@ -179,10 +179,10 @@ namespace CDP4Dal.DAL
         /// <summary>
         /// Provides an asserts to assess that all informations are ready to be provided  
         /// </summary>
-        public bool IsFullyInitiliazed => this.ComputeIsFullyInitialized();
+        public bool IsFullyInitialized => this.ComputeIsFullyInitialized();
 
         /// <summary>
-        /// Compute the <see cref="IsFullyInitiliazed"/> property
+        /// Compute the <see cref="IsFullyInitialized"/> property
         /// </summary>
         /// <returns>The asserts computated</returns>
         private bool ComputeIsFullyInitialized()
