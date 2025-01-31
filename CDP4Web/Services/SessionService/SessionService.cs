@@ -43,6 +43,8 @@ namespace CDP4Web.Services.SessionService
     using CDP4Dal.Operations;
     using CDP4Dal.Utilities;
 
+    using CDP4DalCommon.Authentication;
+
     using CDP4ServicesDal;
 
     using CDP4Web.Enumerations;
@@ -153,6 +155,74 @@ namespace CDP4Web.Services.SessionService
             Guard.ThrowIfNullOrEmpty(url, nameof(url));
 
             return this.OpenSession(new Credentials(username, password, new Uri(url)));
+        }
+
+        /// <summary>
+        /// Initializes a new session and requests available <see cref="AuthenticationSchemeKind"/> supported by the server.
+        /// </summary>
+        /// <param name="credentials">The <see cref="Credentials"/> that provides URL and proxy settings required to initializes </param>
+        /// <returns>A <see cref="Task{TResult}"/> that contains the <see cref="Result{TValue}"/> of the operation, with the retrieved
+        /// <see cref="AuthenticationSchemeResponse"/></returns>
+        public async Task<Result<AuthenticationSchemeResponse>> InitializeSessionAndRequestServerSupportedAuthenticationScheme(Credentials credentials)
+        {
+            if (this.IsSessionOpen)
+            {
+                await this.CloseSession();
+            }
+
+            this.logger.LogInformation("Requesting supported AuthenticationScheme by server at {Url}", credentials.Uri);
+
+            try
+            {
+                this.Session = new Session(new CdpServicesDal(), credentials, this.messageBus);
+                var returnedResponse = await this.Session.QueryAvailableAuthenticationScheme();
+                return Result.Ok(returnedResponse);
+            }
+            catch (HttpRequestException httpException)
+            {
+                this.logger.LogError("Failed to reach {Url}, reason: {Exception}", credentials.Uri, httpException.Message);
+                return Result.Fail(new Error($"Failed to reach {credentials.Uri}").AddReasonIdentifier(HttpStatusCode.ServiceUnavailable));
+            }
+        }
+
+        /// <summary>
+        /// Provides authentication information for the <see cref="ISession"/> that we wants to open and open it, if authorized
+        /// </summary>
+        /// <param name="selectedAuthenticationScheme">The <see cref="AuthenticationSchemeKind"/> that has been selected</param>
+        /// <param name="authenticationInformation">The <see cref="AuthenticationInformation"/> to use for authentication</param>
+        /// <returns>A <see cref="Task{TResult}"/> that contains operation result</returns>
+        /// <exception cref="InvalidOperationException">If a <see cref="ISession"/> is alreadu open</exception>
+        public async Task<Result> AuthenticateAndOpenSession(AuthenticationSchemeKind selectedAuthenticationScheme, AuthenticationInformation authenticationInformation)
+        {
+            Guard.ThrowIfNull(this.Session, nameof(this.Session));
+
+            if (this.IsSessionOpen)
+            {
+                throw new InvalidOperationException("Session is already open.");
+            }
+
+            var result = Result.Ok();
+
+            this.logger.LogInformation("Authentication against CDP4 Server at {Url}", this.Session.DataSourceUri);
+            var stopWatch = Stopwatch.StartNew();
+
+            try
+            {
+                await this.Session.AuthenticateAndOpen(selectedAuthenticationScheme, authenticationInformation);
+            }
+            catch (DalReadException dalException)
+            {
+                this.logger.LogError("Authentication failure against {Url}, reason: {Exception}", this.Session.DataSourceUri, dalException.Message);
+                result.Reasons.Add(new Error($"Failed to authenticate against {this.Session.DataSourceUri}").AddReasonIdentifier(HttpStatusCode.Unauthorized));
+            }
+            catch (HttpRequestException httpException)
+            {
+                this.logger.LogError("Failed to reach {Url}, reason: {Exception}", this.Session.DataSourceUri, httpException.Message);
+                result.Reasons.Add(new Error($"Failed to reach {this.Session.DataSourceUri}").AddReasonIdentifier(HttpStatusCode.ServiceUnavailable));
+            }
+            
+            stopWatch.Stop();
+            return result;
         }
 
         /// <summary>
