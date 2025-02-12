@@ -445,6 +445,26 @@ namespace CDP4Dal.Tests.DAL
         {
             throw new System.NotImplementedException();
         }
+
+        /// <summary>
+        /// Provides login capabitilities against data-source, based on provided <paramref name="userName"/> and <paramref name="password"/>. 
+        /// </summary>
+        /// <param name="userName">The username that should be used for authentication</param>
+        /// <param name="password">The password that should be used for authentication</param>
+        /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken"/></param>
+        /// <remarks>This method should be used when using a CDP4-COMET WebServices and that it provides LocalJwtBearer authentication flow</remarks>
+        public override Task Login(string userName, string password, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Applies Authentication information based on the <see cref="Dal.Credentials" /> 
+        /// </summary>
+        public override void ApplyAuthenticationCredentials(Credentials credentials)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     [DalExportAttribute("decorateddal", "a decorated dal", "1.1.0", DalType.Web)]
@@ -564,6 +584,26 @@ namespace CDP4Dal.Tests.DAL
         public override Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, IEnumerable<Guid> categoriesId, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Provides login capabitilities against data-source, based on provided <paramref name="userName"/> and <paramref name="password"/>. 
+        /// </summary>
+        /// <param name="userName">The username that should be used for authentication</param>
+        /// <param name="password">The password that should be used for authentication</param>
+        /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken"/></param>
+        /// <remarks>This method should be used when using a CDP4-COMET WebServices and that it provides LocalJwtBearer authentication flow</remarks>
+        public override Task Login(string userName, string password, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Applies Authentication information based on the <see cref="Dal.Credentials" /> 
+        /// </summary>
+        public override void ApplyAuthenticationCredentials(Credentials credentials)
+        {            
+            throw new System.NotImplementedException();
         }
     }
 }

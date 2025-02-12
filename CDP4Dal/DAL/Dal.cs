@@ -41,6 +41,7 @@ namespace CDP4Dal.DAL
     using CDP4Dal.Composition;
     using CDP4Dal.Exceptions;
 
+    using CDP4DalCommon.Authentication;
     using CDP4DalCommon.Tasks;
 
     using NLog;
@@ -304,6 +305,54 @@ namespace CDP4Dal.DAL
         /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
         public abstract Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds,
             IEnumerable<Guid> categoriesId, CancellationToken cancellationToken);
+        
+        /// <summary>
+        /// Provides login capabitilities against data-source, based on provided <paramref name="userName"/> and <paramref name="password"/>. 
+        /// </summary>
+        /// <param name="userName">The username that should be used for authentication</param>
+        /// <param name="password">The password that should be used for authentication</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <remarks>This method should be used when using a CDP4-COMET WebServices and that it provides LocalJwtBearer authentication flow</remarks>
+        public abstract Task Login(string userName, string password, CancellationToken cancellationToken);
+        
+        /// <summary>
+        /// Requests to retrieve all available <see cref="AuthenticationSchemeKind" /> available on the datasource
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> that contains the value of the queried <see cref="AuthenticationSchemeResponse" /></returns>
+        public virtual Task<AuthenticationSchemeResponse> RequestAvailableAuthenticationScheme(CancellationToken cancellationToken)
+        {
+            return Task.FromResult(new AuthenticationSchemeResponse()
+            {
+                Schemes = [AuthenticationSchemeKind.Basic]
+            });
+        }
+
+        /// <summary>
+        /// Initializes this <see cref="Dal" /> with created <see cref="Credentials" />. 
+        /// </summary>
+        /// <param name="credentials">The <see cref="Credentials"/></param>
+        /// <remarks>To be used in case of multiple-step authentication, requires to be able to support multiple Authentication scheme</remarks>
+        public virtual void InitializeDalCredentials(Credentials credentials)
+        {
+            if (credentials == null)
+            {
+                throw new ArgumentNullException(nameof(credentials), $"The {nameof(credentials)} may not be null");
+            }
+
+            if (credentials.Uri == null)
+            {
+                throw new ArgumentNullException(nameof(credentials.Uri), "The Credentials URI may not be null");
+            }
+
+            this.Credentials = credentials;
+        }
+
+        /// <summary>
+        /// Applies Authentication information based on the <see cref="Credentials" /> 
+        /// </summary>
+        /// <param name="credentials">The <see cref="Credentials" /></param>
+        public abstract void ApplyAuthenticationCredentials(Credentials credentials);
 
         /// <summary>
         /// Closes the active session

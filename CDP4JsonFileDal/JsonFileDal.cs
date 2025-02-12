@@ -1006,6 +1006,27 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
+        /// Provides login capabitilities against data-source, based on provided <paramref name="userName"/> and <paramref name="password"/>. 
+        /// </summary>
+        /// <param name="userName">The username that should be used for authentication</param>
+        /// <param name="password">The password that should be used for authentication</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <remarks>This method should be used when using a CDP4-COMET WebServices and that it provides LocalJwtBearer authentication flow</remarks>
+        public override Task Login(string userName, string password, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Login is not supported");
+        }
+
+        /// <summary>
+        /// Applies Authentication information based on the <see cref="Dal.Credentials" /> 
+        /// </summary>
+        /// <param name="credentials"></param>
+        public override void ApplyAuthenticationCredentials(Credentials credentials)
+        {
+            throw new NotSupportedException("Apply Authentication Credentials is not supported");
+        }
+
+        /// <summary>
         /// Validates that the correctness of the <paramref name="operationContainers"/>
         /// </summary>
         /// <param name="operationContainers">

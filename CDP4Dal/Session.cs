@@ -48,6 +48,7 @@ namespace CDP4Dal
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
 
+    using CDP4DalCommon.Authentication;
     using CDP4DalCommon.Tasks;
 
     using NLog;
@@ -404,7 +405,6 @@ namespace CDP4Dal
             {
                 this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
             }
-
 
             logger.Info("Synchronization with the {0} server done in {1} [ms]", this.DataSourceUri, sw.ElapsedMilliseconds);
 
@@ -828,6 +828,121 @@ namespace CDP4Dal
             }
 
             return fileContent;
+        }
+
+        /// <summary>
+        /// Retrieves all supported <see cref="AuthenticationSchemeKind" /> by the CDP4-COMET datasource
+        /// </summary>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> that contains the value of the queried <see cref="AuthenticationSchemeResponse" /></returns>
+        public async Task<AuthenticationSchemeResponse> QueryAvailableAuthenticationScheme()
+        {
+            logger.Info("Request Authentication Scheme for {0}", this.DataSourceUri);
+            
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+
+            var supportedScheme = new AuthenticationSchemeResponse();
+            this.Dal.Session = this;
+            
+            try
+            {
+                this.Dal.InitializeDalCredentials(this.Credentials);
+                supportedScheme = await this.Dal.RequestAvailableAuthenticationScheme(cancellationTokenSource.Token);
+            } 
+            catch (OperationCanceledException)
+            {
+                logger.Info("Request Authentication Scheme for {0} cancelled", this.DataSourceUri);
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
+            }
+            
+            return supportedScheme;
+        }
+
+        /// <summary>
+        /// Authenticate against the data-source and open the session
+        /// </summary>
+        /// <param name="authenticationSchemeKind">The <see cref="AuthenticationSchemeKind"/> that is used to authenticate</param>
+        /// <param name="authenticationInformation">The <see cref="AuthenticationInformation"/> that contains user's authentication information</param>
+        /// <param name="activeMessageBus">Specify if the <see cref="ICDPMessageBus"/> is used or not to notify listeners</param>
+        public async Task AuthenticateAndOpen(AuthenticationSchemeKind authenticationSchemeKind, AuthenticationInformation authenticationInformation, bool activeMessageBus = true)
+        {
+            switch (authenticationSchemeKind)
+            {
+                case AuthenticationSchemeKind.Basic:
+                    this.Credentials.ProvideUserCredentials(authenticationInformation.UserName, authenticationInformation.Password, authenticationSchemeKind);
+                    break;
+                case AuthenticationSchemeKind.LocalJwtBearer:
+                    await this.Login(authenticationInformation.UserName, authenticationInformation.Password);
+                    break;
+                case AuthenticationSchemeKind.ExternalJwtBearer:
+                    this.Credentials.ProvideUserToken(authenticationInformation.Token, authenticationSchemeKind);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(authenticationSchemeKind), authenticationSchemeKind, "Unknowned value");
+            }
+
+            await this.Open(activeMessageBus);
+        }
+
+        /// <summary>
+        /// Refreshes and apply authentication information based on the <see cref="Credentials"/>
+        /// </summary>
+        /// <exception cref="InvalidOperationException">If all required <see cref="Credentials"/> informations are not provided</exception>
+        public async Task RefreshAuthenticationInformation()
+        {
+            if (this.Credentials.IsFullyInitialized)
+            {
+                throw new InvalidOperationException("Cannot refresh authentication information when credentials are fully initiliazed");
+            }
+
+            if (this.Credentials.AuthenticationScheme == AuthenticationSchemeKind.LocalJwtBearer)
+            {
+                await this.Login(this.Credentials.UserName, this.Credentials.Password);
+            }
+
+            this.Dal.ApplyAuthenticationCredentials(this.Credentials);
+        }
+
+        /// <summary>
+        /// Provides login capabitilities against data-source, based on provided <paramref name="userName"/> and <paramref name="password"/>. 
+        /// </summary>
+        /// <param name="userName">The username that should be used for authentication</param>
+        /// <param name="password">The password that should be used for authentication</param>
+        /// <remarks>This method should be used when using a CDP4-COMET WebServices and that it provides LocalJwtBearer authentication flow</remarks>
+        private async Task Login(string userName, string password)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentNullException(nameof(userName),"UserName must be set");
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentNullException(nameof(password),"Password must be set");
+            }
+            
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+            
+            this.Dal.Session = this;
+            
+            try
+            {
+                await this.Dal.Login(userName, password, cancellationTokenSource.Token);
+            } 
+            catch (OperationCanceledException)
+            {
+                logger.Info("Login request for {0} cancelled", this.DataSourceUri);
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
+            }
         }
 
         /// <summary>

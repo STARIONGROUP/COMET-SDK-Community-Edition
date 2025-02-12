@@ -36,6 +36,8 @@ namespace CDP4Web.Services.SessionService
     using CDP4Dal.DAL;
     using CDP4Dal.Operations;
 
+    using CDP4DalCommon.Authentication;
+
     using FluentResults;
 
     /// <summary>
@@ -197,5 +199,22 @@ namespace CDP4Web.Services.SessionService
         /// <param name="iteration">The <see cref="Iteration" /></param>
         /// <param name="domainOfExpertise">The domain</param>
         void SwitchDomain(Iteration iteration, DomainOfExpertise domainOfExpertise);
+
+        /// <summary>
+        /// Initializes a new session and requests available <see cref="AuthenticationSchemeKind"/> supported by the server.
+        /// </summary>
+        /// <param name="credentials">The <see cref="Credentials"/> that provides URL and proxy settings required to initializes </param>
+        /// <returns>A <see cref="Task{TResult}"/> that contains the <see cref="Result{TValue}"/> of the operation, with the retrieved
+        /// <see cref="AuthenticationSchemeResponse"/></returns>
+        Task<Result<AuthenticationSchemeResponse>> InitializeSessionAndRequestServerSupportedAuthenticationScheme(Credentials credentials);
+
+        /// <summary>
+        /// Provides authentication information for the <see cref="ISession"/> that we wants to open and open it, if authorized
+        /// </summary>
+        /// <param name="selectedAuthenticationScheme">The <see cref="AuthenticationSchemeKind"/> that has been selected</param>
+        /// <param name="authenticationInformation">The <see cref="AuthenticationInformation"/> to use for authentication</param>
+        /// <returns>A <see cref="Task{TResult}"/> that contains operation result</returns>
+        /// <exception cref="InvalidOperationException">If a <see cref="ISession"/> is alreadu open</exception>
+        Task<Result> AuthenticateAndOpenSession(AuthenticationSchemeKind selectedAuthenticationScheme, AuthenticationInformation authenticationInformation);
     }
 }
