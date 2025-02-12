@@ -117,23 +117,23 @@ namespace CDP4Web.Services.SessionService
                 await this.CloseSession();
             }
 
-            this.logger.LogInformation("Opening a session against {url}", credentials.Uri);
+            this.logger.LogInformation("Opening a session against {Url}", credentials.Uri);
             var stopWatch = Stopwatch.StartNew();
 
             try
             {
                 this.Session = new Session(new CdpServicesDal(), credentials, this.messageBus);
                 await this.Session.Open();
-                this.logger.LogInformation("CDP4Comet Session opened against {url} in {time} [ms]", credentials.Uri, stopWatch.ElapsedMilliseconds);
+                this.logger.LogInformation("CDP4Comet Session opened against {Url} in {Time} [ms]", credentials.Uri, stopWatch.ElapsedMilliseconds);
             }
             catch (DalReadException dalException)
             {
-                this.logger.LogError("Authentication failure against {url}, reason: {exception}", credentials.Uri, dalException.Message);
+                this.logger.LogError(exception:dalException, "Authentication failure against {Url}, reason: {Exception}", credentials.Uri, dalException.Message);
                 result.Reasons.Add(new Error($"Failed to authenticate against {credentials.Uri}").AddReasonIdentifier(HttpStatusCode.Unauthorized));
             }
             catch (HttpRequestException httpException)
             {
-                this.logger.LogError("Failed to reach {url}, reason: {exception}", credentials.Uri, httpException.Message);
+                this.logger.LogError(exception: httpException, "Failed to reach {Url}, reason: {Exception}", credentials.Uri, httpException.Message);
                 result.Reasons.Add(new Error($"Failed to reach {credentials.Uri}").AddReasonIdentifier(HttpStatusCode.ServiceUnavailable));
             }
 
@@ -180,7 +180,7 @@ namespace CDP4Web.Services.SessionService
             }
             catch (HttpRequestException httpException)
             {
-                this.logger.LogError("Failed to reach {Url}, reason: {Exception}", credentials.Uri, httpException.Message);
+                this.logger.LogError(exception: httpException, "Failed to reach {Url}, reason: {Exception}", credentials.Uri, httpException.Message);
                 return Result.Fail(new Error($"Failed to reach {credentials.Uri}").AddReasonIdentifier(HttpStatusCode.ServiceUnavailable));
             }
         }
@@ -212,12 +212,12 @@ namespace CDP4Web.Services.SessionService
             }
             catch (DalReadException dalException)
             {
-                this.logger.LogError("Authentication failure against {Url}, reason: {Exception}", this.Session.DataSourceUri, dalException.Message);
+                this.logger.LogError(exception: dalException,"Authentication failure against {Url}, reason: {Exception}", this.Session.DataSourceUri, dalException.Message);
                 result.Reasons.Add(new Error($"Failed to authenticate against {this.Session.DataSourceUri}").AddReasonIdentifier(HttpStatusCode.Unauthorized));
             }
             catch (HttpRequestException httpException)
             {
-                this.logger.LogError("Failed to reach {Url}, reason: {Exception}", this.Session.DataSourceUri, httpException.Message);
+                this.logger.LogError(exception:httpException,"Failed to reach {Url}, reason: {Exception}", this.Session.DataSourceUri, httpException.Message);
                 result.Reasons.Add(new Error($"Failed to reach {this.Session.DataSourceUri}").AddReasonIdentifier(HttpStatusCode.ServiceUnavailable));
             }
             
@@ -284,7 +284,7 @@ namespace CDP4Web.Services.SessionService
         /// <returns>A collection of accessible <see cref="EngineeringModelSetup" /></returns>
         public IEnumerable<EngineeringModelSetup> GetParticipantModels()
         {
-            return !this.IsSessionOpen ? Enumerable.Empty<EngineeringModelSetup>() : this.GetSiteDirectory().Model.Where(x => x.Participant.Exists(p => p.Person.Iid == this.Session.ActivePerson.Iid));
+            return !this.IsSessionOpen ? [] : this.GetSiteDirectory().Model.Where(x => x.Participant.Exists(p => p.Person.Iid == this.Session.ActivePerson.Iid));
         }
 
         /// <summary>

@@ -37,8 +37,13 @@ namespace CDP4DalCommon.Authentication
         public List<AuthenticationSchemeKind> Schemes { get; set; } = [];
 
         /// <summary>
-        /// Gets or sets a potentiel URL that should be used as redirection to access login interface
+        /// Gets or sets a Authority that would take care of the authentication
         /// </summary>
-        public string RedirectUrl { get; set; }
+        public string Authority { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the client ID used by the authority to provide authentication features 
+        /// </summary>
+        public string ClientId { get; set; }
     }
 }

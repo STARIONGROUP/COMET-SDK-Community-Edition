@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="AuthenticationInformation.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
 // 
@@ -43,7 +43,7 @@ namespace CDP4Dal.DAL
         /// Gets the token that should be used for authentication
         /// </summary>
         public string Token { get; }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationInformation"></see> class.
         /// </summary>
