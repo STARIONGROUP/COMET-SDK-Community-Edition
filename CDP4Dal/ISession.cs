@@ -428,5 +428,12 @@ namespace CDP4Dal
         /// </summary>
         /// <returns>An awaitable <see cref="Task{TResult}"/> that contains the value of the queried <see cref="AuthenticationSchemeResponse" /></returns>
         Task<AuthenticationSchemeResponse> QueryAvailableAuthenticationScheme();
+
+        /// <summary>
+        /// Retrieves the  username of the authenticated user, if applicable
+        /// </summary>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> with the username</returns>
+        /// <exception cref="InvalidOperationException">If credentials are not fully initialized</exception>
+        Task<string> QueryAuthenticatedUserName();
     }
 }

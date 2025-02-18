@@ -925,6 +925,24 @@ namespace CDP4Dal.Tests
 
             Assert.That(() =>this.session.Write(new OperationContainer(context), 1), Throws.Exception.TypeOf<DalReadException>());
         }
+        
+        [Test]
+        public async Task VerifyQueryAuthenticatedUserName()
+        {
+            var temporaryCredentials = new Credentials(this.uri);
+            var multipleAuthSchemeSession = new Session(this.mockedDal.Object, temporaryCredentials, this.messageBus);
+            
+            await Assert.ThatAsync(() => multipleAuthSchemeSession.QueryAuthenticatedUserName(), Throws.InvalidOperationException);
+            temporaryCredentials.ProvideUserToken("token", AuthenticationSchemeKind.ExternalJwtBearer);
+
+            this.mockedDal.Setup(x => x.QueryAuthenticatedUserName(It.IsAny<CancellationToken>())).ReturnsAsync("user");
+
+            await Assert.ThatAsync(() => multipleAuthSchemeSession.QueryAuthenticatedUserName(), Is.EqualTo("user"));
+            this.AssignActivePerson();
+            
+            await Assert.ThatAsync(() => this.session.QueryAuthenticatedUserName(), Is.EqualTo("John"));
+        }
+        
         private void AssignActivePerson()
         {
             var johnDoe = new Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
@@ -1224,6 +1242,16 @@ namespace CDP4Dal.Tests
         /// </summary>
         /// <param name="credentials"></param>
         public void ApplyAuthenticationCredentials(Credentials credentials)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Queries the shortname of the authenticated User
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{TResult}"/> that contains the retrieved user shortname</returns>
+        public Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
         }

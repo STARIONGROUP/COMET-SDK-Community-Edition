@@ -908,6 +908,46 @@ namespace CDP4Dal
         }
 
         /// <summary>
+        /// Retrieves the  username of the authenticated user, if applicable
+        /// </summary>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> with the username</returns>
+        /// <exception cref="InvalidOperationException">If credentials are not fully initialized</exception>
+        public async Task<string> QueryAuthenticatedUserName()
+        {
+            if (this.ActivePerson != null)
+            {
+                return this.ActivePerson.ShortName;
+            }
+
+            if (!this.Credentials.IsFullyInitialized)
+            {
+                throw new InvalidOperationException("Cannot retrieve authenticated User Name when credentials are fully initiliazed");
+            }
+            
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+            this.Dal.Session = this;
+            var userName = "";
+            
+            try
+            {
+                this.Dal.InitializeDalCredentials(this.Credentials);
+                userName = await this.Dal.QueryAuthenticatedUserName(cancellationTokenSource.Token);
+            } 
+            catch (OperationCanceledException)
+            {
+                logger.Info("Request Authentication Scheme for {0} cancelled", this.DataSourceUri);
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
+            }
+
+            return userName;
+        }
+
+        /// <summary>
         /// Provides login capabitilities against data-source, based on provided <paramref name="userName"/> and <paramref name="password"/>. 
         /// </summary>
         /// <param name="userName">The username that should be used for authentication</param>

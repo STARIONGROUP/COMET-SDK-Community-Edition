@@ -1059,6 +1059,16 @@ namespace CDP4JsonFileDal
         }
 
         /// <summary>
+        /// Queries the shortname of the authenticated User
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{TResult}"/> that contains the retrieved user shortname</returns>
+        public override Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Cannot query authenticaticated username in this DAL");
+        }
+
+        /// <summary>
         /// Write the header file to the zip export archive.
         /// </summary>
         /// <param name="echExchangeFileHeader">
