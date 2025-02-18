@@ -1522,6 +1522,66 @@ namespace CDP4ServicesDal
             Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
             return response;
         }
+        
+        /// <summary>
+        /// Queries the shortname of the authenticated User
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{TResult}"/> that contains the retrieved user shortname</returns>
+        public override async Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken)
+        {
+            if (this.Credentials is not { IsFullyInitialized: true })
+            {
+                throw new InvalidOperationException("Credentials are not fully initialized");
+            }
+            
+            var httpClientToUse = this.CreateHttpClient(this.Credentials, null);
+            httpClientToUse.SetAuthorizationHeader(this.Credentials);
+            
+            var resourcePath = "username";
+            var watch = Stopwatch.StartNew();
+            var loginToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", loginToken, resourcePath);
+            Logger.Debug("CDP4Services UserName {0}: {1}", loginToken, uriBuilder);
+
+            var requestsw = Stopwatch.StartNew();
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+            requestMessage.Headers.Add(Headers.CDPToken, loginToken);
+            using var httpResponseMessage = await httpClientToUse.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
+
+            Logger.Info("CDP4 Services responded in {0} [ms] to Login {1}", requestsw.ElapsedMilliseconds, loginToken);
+            requestsw.Stop();
+
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                Logger.Error(msg);
+                throw new DalReadException(msg);
+            }
+
+            watch.Stop();
+            Logger.Info("CDP4Services UserName {0}: {1} completed in {2} [ms]", loginToken, uriBuilder, watch.ElapsedMilliseconds);
+
+            using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync();
+
+            var deserializationWatch = Stopwatch.StartNew();
+            deserializationWatch.Stop();
+
+            switch (this.QueryContentTypeKind(httpResponseMessage))
+            {
+                case ContentTypeKind.JSON:
+                    Logger.Info("Deserializing JSON response");
+                    return await System.Text.Json.JsonSerializer.DeserializeAsync<string>(resultStream, cancellationToken: cancellationToken);
+                case ContentTypeKind.MESSAGEPACK:
+                    throw new InvalidOperationException("No support of UserName via MessagePack available");
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// gets the <see cref="QueryAttributes"/> associated to the <see cref="CdpServicesDal"/>
@@ -1590,63 +1650,6 @@ namespace CDP4ServicesDal
             {
                 throw new ArgumentNullException(nameof(operationContainer), $"The {nameof(operationContainer)} may not be null");
             }
-        }
-        
-        /// <summary>
-        /// Queries the shortname of the authenticated User
-        /// </summary>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns>A <see cref="Task{TResult}"/> that contains the retrieved user shortname</returns>
-        private async Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken)
-        {
-            if (this.Credentials is not { IsFullyInitialized: true })
-            {
-                throw new InvalidOperationException("Credentials are not fully initiliazed");
-            }
-            
-            var resourcePath = "username";
-            var watch = Stopwatch.StartNew();
-            var loginToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
-
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
-
-            Logger.Debug("Resource Path {0}: {1}", loginToken, resourcePath);
-            Logger.Debug("CDP4Services UserName {0}: {1}", loginToken, uriBuilder);
-
-            var requestsw = Stopwatch.StartNew();
-
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
-            requestMessage.Headers.Add(Headers.CDPToken, loginToken);
-            using var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
-
-            Logger.Info("CDP4 Services responded in {0} [ms] to Login {1}", requestsw.ElapsedMilliseconds, loginToken);
-            requestsw.Stop();
-
-            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
-            {
-                var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
-                Logger.Error(msg);
-                throw new DalReadException(msg);
-            }
-
-            watch.Stop();
-            Logger.Info("CDP4Services UserName {0}: {1} completed in {2} [ms]", loginToken, uriBuilder, watch.ElapsedMilliseconds);
-
-            using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync();
-
-            var deserializationWatch = Stopwatch.StartNew();
-            deserializationWatch.Stop();
-
-            switch (this.QueryContentTypeKind(httpResponseMessage))
-            {
-                case ContentTypeKind.JSON:
-                    Logger.Info("Deserializing JSON response");
-                    return await System.Text.Json.JsonSerializer.DeserializeAsync<string>(resultStream, cancellationToken: cancellationToken);
-                case ContentTypeKind.MESSAGEPACK:
-                    throw new InvalidOperationException("No support of UserName via MessagePack available");
-            }
-
-            return null;
         }
     }
 }

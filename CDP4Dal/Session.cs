@@ -894,9 +894,9 @@ namespace CDP4Dal
         /// <exception cref="InvalidOperationException">If all required <see cref="Credentials"/> informations are not provided</exception>
         public async Task RefreshAuthenticationInformation()
         {
-            if (this.Credentials.IsFullyInitialized)
+            if (!this.Credentials.IsFullyInitialized)
             {
-                throw new InvalidOperationException("Cannot refresh authentication information when credentials are fully initiliazed");
+                throw new InvalidOperationException("Cannot refresh authentication information when credentials are not fully initialized");
             }
 
             if (this.Credentials.AuthenticationScheme == AuthenticationSchemeKind.LocalJwtBearer)
@@ -905,6 +905,46 @@ namespace CDP4Dal
             }
 
             this.Dal.ApplyAuthenticationCredentials(this.Credentials);
+        }
+
+        /// <summary>
+        /// Retrieves the  username of the authenticated user, if applicable
+        /// </summary>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> with the username</returns>
+        /// <exception cref="InvalidOperationException">If credentials are not fully initialized</exception>
+        public async Task<string> QueryAuthenticatedUserName()
+        {
+            if (this.ActivePerson != null)
+            {
+                return this.ActivePerson.ShortName;
+            }
+
+            if (!this.Credentials.IsFullyInitialized)
+            {
+                throw new InvalidOperationException("Cannot retrieve authenticated User Name when credentials are fully initialized");
+            }
+            
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+            this.Dal.Session = this;
+            var userName = "";
+            
+            try
+            {
+                this.Dal.InitializeDalCredentials(this.Credentials);
+                userName = await this.Dal.QueryAuthenticatedUserName(cancellationTokenSource.Token);
+            } 
+            catch (OperationCanceledException)
+            {
+                logger.Info("Request Authentication Scheme for {0} cancelled", this.DataSourceUri);
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
+            }
+
+            return userName;
         }
 
         /// <summary>

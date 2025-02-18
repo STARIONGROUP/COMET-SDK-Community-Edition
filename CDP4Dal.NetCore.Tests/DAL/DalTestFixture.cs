@@ -465,6 +465,16 @@ namespace CDP4Dal.Tests.DAL
         {
             throw new System.NotImplementedException();
         }
+
+        /// <summary>
+        /// Queries the shortname of the authenticated User
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken"/></param>
+        /// <returns>A <see cref="System.Threading.Tasks.Task{TResult}"/> that contains the retrieved user shortname</returns>
+        public override Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     [DalExportAttribute("decorateddal", "a decorated dal", "1.1.0", DalType.Web)]
@@ -603,6 +613,16 @@ namespace CDP4Dal.Tests.DAL
         /// </summary>
         public override void ApplyAuthenticationCredentials(Credentials credentials)
         {            
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Queries the shortname of the authenticated User
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken"/></param>
+        /// <returns>A <see cref="System.Threading.Tasks.Task{TResult}"/> that contains the retrieved user shortname</returns>
+        public override Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken)
+        {
             throw new System.NotImplementedException();
         }
     }

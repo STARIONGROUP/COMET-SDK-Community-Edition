@@ -591,5 +591,12 @@ namespace CDP4Dal.DAL
                 this.DalVersion = new Version("1.0.0");
             }
         }
+
+        /// <summary>
+        /// Queries the shortname of the authenticated User
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{TResult}"/> that contains the retrieved user shortname</returns>
+        public abstract Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken);
     }
 }

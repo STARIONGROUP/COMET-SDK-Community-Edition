@@ -308,5 +308,12 @@ namespace CDP4Dal.DAL
         /// </summary>
         /// <param name="credentials">The <see cref="Credentials" /></param>
         void ApplyAuthenticationCredentials(Credentials credentials);
+
+        /// <summary>
+        /// Queries the shortname of the authenticated User
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="Task{TResult}"/> that contains the retrieved user shortname</returns>
+        Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken);
     }
 }
