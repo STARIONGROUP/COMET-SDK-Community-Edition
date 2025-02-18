@@ -896,7 +896,7 @@ namespace CDP4Dal
         {
             if (!this.Credentials.IsFullyInitialized)
             {
-                throw new InvalidOperationException("Cannot refresh authentication information when credentials are fully initiliazed");
+                throw new InvalidOperationException("Cannot refresh authentication information when credentials are not fully initialized");
             }
 
             if (this.Credentials.AuthenticationScheme == AuthenticationSchemeKind.LocalJwtBearer)
