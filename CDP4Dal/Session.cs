@@ -894,7 +894,7 @@ namespace CDP4Dal
         /// <exception cref="InvalidOperationException">If all required <see cref="Credentials"/> informations are not provided</exception>
         public async Task RefreshAuthenticationInformation()
         {
-            if (this.Credentials.IsFullyInitialized)
+            if (!this.Credentials.IsFullyInitialized)
             {
                 throw new InvalidOperationException("Cannot refresh authentication information when credentials are fully initiliazed");
             }

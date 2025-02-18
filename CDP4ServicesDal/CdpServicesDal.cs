@@ -1535,6 +1535,9 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("Credentials are not fully initiliazed");
             }
             
+            var httpClientToUse = this.CreateHttpClient(this.Credentials, null);
+            httpClientToUse.SetAuthorizationHeader(this.Credentials);
+            
             var resourcePath = "username";
             var watch = Stopwatch.StartNew();
             var loginToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
@@ -1548,7 +1551,7 @@ namespace CDP4ServicesDal
 
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
             requestMessage.Headers.Add(Headers.CDPToken, loginToken);
-            using var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
+            using var httpResponseMessage = await httpClientToUse.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
 
             Logger.Info("CDP4 Services responded in {0} [ms] to Login {1}", requestsw.ElapsedMilliseconds, loginToken);
             requestsw.Stop();

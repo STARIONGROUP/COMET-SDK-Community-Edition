@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Company>Starion Group S.A.</Company>
     <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>28.0.0</VersionPrefix>
+    <VersionPrefix>28.0.1</VersionPrefix>
     <Description>CDP4 Services Messaging is a Class Library that contains clients and messages class that can be used for inter services communication</Description>
     <Copyright>Copyright © Starion Group S.A.</Copyright>
     <Authors>Sam, Alex, Alexander, Nathanael, Antoine</Authors>
@@ -20,7 +20,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-        [BUMP] to CDP4Dal 28.0.0
+      [BUMP] Version to 28.0.1
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <LangVersion>latest</LangVersion>
