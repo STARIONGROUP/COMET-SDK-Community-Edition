@@ -1532,7 +1532,7 @@ namespace CDP4ServicesDal
         {
             if (this.Credentials is not { IsFullyInitialized: true })
             {
-                throw new InvalidOperationException("Credentials are not fully initiliazed");
+                throw new InvalidOperationException("Credentials are not fully initialized");
             }
             
             var httpClientToUse = this.CreateHttpClient(this.Credentials, null);

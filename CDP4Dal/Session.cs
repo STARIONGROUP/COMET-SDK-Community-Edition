@@ -921,7 +921,7 @@ namespace CDP4Dal
 
             if (!this.Credentials.IsFullyInitialized)
             {
-                throw new InvalidOperationException("Cannot retrieve authenticated User Name when credentials are fully initiliazed");
+                throw new InvalidOperationException("Cannot retrieve authenticated User Name when credentials are fully initialized");
             }
             
             var cancellationTokenSource = new CancellationTokenSource();
