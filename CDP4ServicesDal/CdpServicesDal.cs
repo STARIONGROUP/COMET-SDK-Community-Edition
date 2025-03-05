@@ -38,6 +38,7 @@ namespace CDP4ServicesDal
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
+    using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -61,8 +62,6 @@ namespace CDP4ServicesDal
     using CDP4MessagePackSerializer;
 
     using CDP4ServicesDal.Extensions;
-
-    using Newtonsoft.Json;
 
     using NLog;
 
@@ -94,6 +93,14 @@ namespace CDP4ServicesDal
         /// The <see cref="HttpClient"/> that is reused for each HTTP request by the current <see cref="Dal"/>.
         /// </summary>
         private HttpClient httpClient;
+
+        /// <summary>
+        /// The <see cref="JsonSerializerOptions" /> used to deserialize tokens
+        /// </summary>
+        private JsonSerializerOptions tokensOption = new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CdpServicesDal"/> class.
@@ -1067,16 +1074,21 @@ namespace CDP4ServicesDal
             watch.Stop();
             Logger.Info("CDP4Services Login {0}: {1} completed in {2} [ms]", loginToken, uriBuilder, watch.ElapsedMilliseconds);
 
-            using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync();
+            var resultString = await httpResponseMessage.Content.ReadAsStringAsync();
 
             var deserializationWatch = Stopwatch.StartNew();
-            string returnedToken = null;
+            AuthenticationTokens returnedToken = null;
 
             switch (this.QueryContentTypeKind(httpResponseMessage))
             {
                 case ContentTypeKind.JSON:
                     Logger.Info("Deserializing JSON response");
-                    returnedToken = await System.Text.Json.JsonSerializer.DeserializeAsync<string>(resultStream, cancellationToken: cancellationToken);
+
+                    // Required to be compatible with all versions of WebServices (that does not support refresh)
+                    returnedToken = resultString.StartsWith("{") 
+                        ? System.Text.Json.JsonSerializer.Deserialize<AuthenticationTokens>(resultString, options:this.tokensOption)
+                        : new AuthenticationTokens(System.Text.Json.JsonSerializer.Deserialize<string>(resultString), string.Empty);
+
                     Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                     break;
                 case ContentTypeKind.MESSAGEPACK:
@@ -1085,6 +1097,87 @@ namespace CDP4ServicesDal
 
             deserializationWatch.Stop();
             this.Credentials.ProvideUserCredentials(userName, password, AuthenticationSchemeKind.LocalJwtBearer);
+            this.Credentials.ProvideUserToken(returnedToken, AuthenticationSchemeKind.LocalJwtBearer);
+        }
+
+        /// <summary>
+        /// Requests new <see cref="AuthenticationTokens" /> based on the current refresh token
+        /// </summary>
+        /// <returns>An awaitabl <see cref="Task" /></returns>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <exception cref="InvalidOperationException">If the current <see cref="Credentials" /> does not meet following constraints : not null, with non-null <see cref="AuthenticationTokens" />
+        ///  containing a refresh token and where the <see cref="AuthenticationSchemeKind" /> is <see cref="AuthenticationSchemeKind.LocalJwtBearer" /></exception>
+        /// <exception cref="DalReadException">In case of non successful response from the CDP4 Data source</exception>
+        public override async Task RequestAuthenticationTokenFromRefreshToken(CancellationToken cancellationToken)
+        {
+            if (this.Credentials == null)
+            {
+                throw new InvalidOperationException("The Credentials may not be null");
+            }
+
+            if (this.Credentials.Tokens == null)
+            {
+                throw new InvalidOperationException("The AuthenticationTokns may not be null");
+            }
+
+            if (this.Credentials.AuthenticationScheme != AuthenticationSchemeKind.LocalJwtBearer)
+            {
+                throw new InvalidOperationException("The AuthenticationScheme should be LocalJwtBearer to use this refresh action");
+            }
+
+            if (string.IsNullOrEmpty(this.Credentials.Tokens.RefreshToken))
+            {
+                throw new InvalidOperationException("The refresh token must be set");
+            }
+            
+            var temporaryClient = this.CreateHttpClient(this.Credentials, null);
+
+            var resourcePath = "refresh";
+            var watch = Stopwatch.StartNew();
+            var refreshQueryToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
+
+            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+
+            Logger.Debug("Resource Path {0}: {1}", refreshQueryToken, resourcePath);
+            Logger.Debug("CDP4Services Open {0}: {1}", refreshQueryToken, uriBuilder);
+
+            var requestsw = Stopwatch.StartNew();
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, resourcePath);
+            requestMessage.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(this.Credentials.Tokens.RefreshToken), System.Text.Encoding.UTF8, "application/json");
+            requestMessage.Headers.Add(Headers.CDPToken, refreshQueryToken);
+            using var httpResponseMessage = await temporaryClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
+
+            Logger.Info("CDP4 Services responded in {0} [ms] to Refresh {1}", requestsw.ElapsedMilliseconds, refreshQueryToken);
+            requestsw.Stop();
+
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                Logger.Error(msg);
+                throw new DalReadException(msg);
+            }
+
+            watch.Stop();
+            Logger.Info("CDP4Services Refresh {0}: {1} completed in {2} [ms]", refreshQueryToken, uriBuilder, watch.ElapsedMilliseconds);
+
+            using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync();
+
+            var deserializationWatch = Stopwatch.StartNew();
+            AuthenticationTokens returnedToken = null;
+
+            switch (this.QueryContentTypeKind(httpResponseMessage))
+            {
+                case ContentTypeKind.JSON:
+                    Logger.Info("Deserializing JSON response");
+                    returnedToken = await System.Text.Json.JsonSerializer.DeserializeAsync<AuthenticationTokens>(resultStream, options:this.tokensOption, cancellationToken: cancellationToken);
+                    Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                    break;
+                case ContentTypeKind.MESSAGEPACK:
+                    throw new InvalidOperationException("No support of JWT token via MessagePack available");
+            }
+
+            deserializationWatch.Stop();
             this.Credentials.ProvideUserToken(returnedToken, AuthenticationSchemeKind.LocalJwtBearer);
         }
 

@@ -435,5 +435,11 @@ namespace CDP4Dal
         /// <returns>An awaitable <see cref="Task{TResult}"/> with the username</returns>
         /// <exception cref="InvalidOperationException">If credentials are not fully initialized</exception>
         Task<string> QueryAuthenticatedUserName();
+
+        /// <summary>
+        /// Requests to refresh <see cref="AuthenticationTokens" /> based on an existing Refresh toekn
+        /// </summary>
+        /// <exception cref="InvalidOperationException">If <see cref="AuthenticationSchemeKind" /> of credentials is not <see cref="AuthenticationSchemeKind.LocalJwtBearer" /></exception>
+        Task RequestAuthenticationTokenBasedOnRefreshToken();
     }
 }

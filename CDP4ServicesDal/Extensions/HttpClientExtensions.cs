@@ -63,7 +63,7 @@ namespace CDP4ServicesDal.Extensions
                     break;
                 case AuthenticationSchemeKind.ExternalJwtBearer:
                 case AuthenticationSchemeKind.LocalJwtBearer:
-                    client.SetAuthorizationHeader(credentials.AuthenticationScheme!.Value, credentials.Token);
+                    client.SetAuthorizationHeader(credentials.AuthenticationScheme!.Value, credentials.Tokens.AccessToken);
                     break;
             }
         }

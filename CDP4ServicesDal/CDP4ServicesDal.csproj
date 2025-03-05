@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
     <Company>Starion Group S.A.</Company>
     <Title>CDP4ServicesDal Community Edition</Title>
-    <VersionPrefix>28.1.0</VersionPrefix>
+    <VersionPrefix>28.2.0</VersionPrefix>
     <Description>CDP4ServicesDal Dal Plugin</Description>
     <Copyright>Copyright © Starion Group S.A.</Copyright>
     <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
@@ -20,7 +20,9 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [ADD] Provides QueryAuthenticatedUserName functionality
+      [ADD] Provides Refesh Token features
+      [ADD] AutomaticRefreshTokenService that provides autonomous refresh action
+      [ADD] Dedicated service to support OpenID Connect communication
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <LangVersion>latest</LangVersion>
@@ -28,6 +30,8 @@
 
   <ItemGroup>
 	<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+	<PackageReference Include="Polly" Version="8.5.2" />
+	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.6.0" />
 	<PackageReference Include="System.Text.Json" Version="9.0.1" />
   </ItemGroup>
 

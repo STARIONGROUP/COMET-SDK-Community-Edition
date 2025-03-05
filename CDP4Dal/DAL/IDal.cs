@@ -33,6 +33,7 @@ namespace CDP4Dal.DAL
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
 
+    using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
     using CDP4DalCommon.Authentication;
@@ -315,5 +316,15 @@ namespace CDP4Dal.DAL
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>A <see cref="Task{TResult}"/> that contains the retrieved user shortname</returns>
         Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Requests new <see cref="AuthenticationTokens" /> based on the current refresh token
+        /// </summary>
+        /// <returns>An awaitabl <see cref="Task" /></returns>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <exception cref="InvalidOperationException">If the current <see cref="Dal.Credentials" /> does not meet following constraints : not null, with non-null <see cref="AuthenticationTokens" />
+        ///  containing a refresh token and where the <see cref="AuthenticationSchemeKind" /> is <see cref="AuthenticationSchemeKind.LocalJwtBearer" /></exception>
+        /// <exception cref="DalReadException">In case of non successful response from the CDP4 Data source</exception>
+        Task RequestAuthenticationTokenFromRefreshToken(CancellationToken cancellationToken);
     }
 }

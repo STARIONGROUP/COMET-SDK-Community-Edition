@@ -53,11 +53,11 @@ namespace CDP4Dal.DAL
         /// <param name="proxySettings">
         /// The <see cref="ProxySettings"/> used to encapsulate proxy server settings
         /// </param>
-        public Credentials(string username, string password, Uri uri, bool fullTrust = false, ProxySettings proxySettings = null): this(uri, fullTrust, proxySettings)
+        public Credentials(string username, string password, Uri uri, bool fullTrust = false, ProxySettings proxySettings = null) : this(uri, fullTrust, proxySettings)
         {
             this.ProvideUserCredentials(username, password, AuthenticationSchemeKind.Basic);
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Credentials"/> class
         /// </summary>
@@ -71,7 +71,7 @@ namespace CDP4Dal.DAL
             {
                 throw new ArgumentNullException(nameof(uri), "The uri may not be null");
             }
-            
+
             this.Uri = uri;
             this.FullTrust = fullTrust;
             this.ProxySettings = proxySettings;
@@ -105,7 +105,7 @@ namespace CDP4Dal.DAL
 
             if (authenticationSchemeKind != AuthenticationSchemeKind.Basic && authenticationSchemeKind != AuthenticationSchemeKind.LocalJwtBearer)
             {
-                throw new ArgumentException("The authentication scheme must be Basic or LocalJwtBearer", nameof(authenticationSchemeKind)); 
+                throw new ArgumentException("The authentication scheme must be Basic or LocalJwtBearer", nameof(authenticationSchemeKind));
             }
 
             this.UserName = username;
@@ -116,31 +116,36 @@ namespace CDP4Dal.DAL
         /// <summary>
         /// Provides User token, generated from the internal or from an external authentication provider
         /// </summary>
-        /// <param name="token">The generated token</param>
+        /// <param name="authenticationTokens">The generated tokens</param>
         /// <param name="authenticationSchemeKind">The <see cref="AuthenticationSchemeKind"/> that is used to connect to a data-store</param>
         /// <exception cref="ArgumentNullException">If the provided token is null or empty</exception>
         /// <exception cref="ArgumentException">If the <paramref name="authenticationSchemeKind"/> is not <see cref="AuthenticationSchemeKind.ExternalJwtBearer"/> or
         /// <see cref="AuthenticationSchemeKind.LocalJwtBearer"/></exception>
-        public void ProvideUserToken(string token, AuthenticationSchemeKind authenticationSchemeKind)
+        public void ProvideUserToken(AuthenticationTokens authenticationTokens, AuthenticationSchemeKind authenticationSchemeKind)
         {
-            if (string.IsNullOrEmpty(token))
+            if (authenticationTokens == null)
             {
-                throw new ArgumentNullException(nameof(token), "The token may not be empty or null");
+                throw new ArgumentNullException(nameof(authenticationTokens), "The authentication tokens may not be null");
+            }
+
+            if (string.IsNullOrEmpty(authenticationTokens.AccessToken))
+            {
+                throw new ArgumentException("The access-token may not be empty or null", nameof(authenticationTokens));
             }
 
             if (authenticationSchemeKind != AuthenticationSchemeKind.LocalJwtBearer && authenticationSchemeKind != AuthenticationSchemeKind.ExternalJwtBearer)
             {
-                throw new ArgumentException("The authentication scheme must be either LocalJwtBearer or ExternalJwtBearer", nameof(authenticationSchemeKind)); 
+                throw new ArgumentException("The authentication scheme must be either LocalJwtBearer or ExternalJwtBearer", nameof(authenticationSchemeKind));
             }
 
-            this.Token = token;
+            this.Tokens = authenticationTokens;
             this.AuthenticationScheme = authenticationSchemeKind;
         }
-        
+
         /// <summary>
-        /// Gets the 
+        /// Gets the access token
         /// </summary>
-        public string Token { get; private set; }
+        public AuthenticationTokens Tokens { get; private set; }
 
         /// <summary>
         /// Gets the username that is used to connect to a data-store
@@ -197,7 +202,7 @@ namespace CDP4Dal.DAL
                 return !string.IsNullOrEmpty(this.UserName) && !string.IsNullOrEmpty(this.Password);
             }
 
-            return !string.IsNullOrEmpty(this.Token);
+            return !string.IsNullOrEmpty(this.Tokens.AccessToken);
         }
     }
 }
