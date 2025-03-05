@@ -218,6 +218,7 @@ namespace CDP4ServicesDal
         public void Dispose()
         {
             this.cancellationTokenSource?.Cancel();
+            this.cancellationTokenSource?.Dispose();
             this.cancellationTokenSource = null;
         }
 
