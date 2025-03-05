@@ -890,7 +890,7 @@ namespace CDP4ServicesDal.Tests
                     await servicesDal.Login(username, password, cancellationSource.Token);
                     break;
                 case AuthenticationSchemeKind.ExternalJwtBearer:
-                    authenticationCredentials.ProvideUserToken(externalToken,availableScheme);
+                    authenticationCredentials.ProvideUserToken(new AuthenticationTokens(externalToken,""),availableScheme);
                     break;
             }
 
@@ -918,7 +918,7 @@ namespace CDP4ServicesDal.Tests
             var authenticationInformation = availableScheme switch
             {
                 AuthenticationSchemeKind.Basic or AuthenticationSchemeKind.LocalJwtBearer => new AuthenticationInformation(username, password),
-                AuthenticationSchemeKind.ExternalJwtBearer => new AuthenticationInformation(externalToken),
+                AuthenticationSchemeKind.ExternalJwtBearer => new AuthenticationInformation(new AuthenticationTokens(externalToken, "refresh")),
                 _ => throw new ArgumentOutOfRangeException(nameof(availableScheme))
             };
 

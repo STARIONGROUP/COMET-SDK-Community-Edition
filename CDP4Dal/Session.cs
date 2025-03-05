@@ -844,21 +844,26 @@ namespace CDP4Dal
 
             var supportedScheme = new AuthenticationSchemeResponse();
             this.Dal.Session = this;
-            
+
             try
             {
                 this.Dal.InitializeDalCredentials(this.Credentials);
                 supportedScheme = await this.Dal.RequestAvailableAuthenticationScheme(cancellationTokenSource.Token);
-            } 
+            }
             catch (OperationCanceledException)
             {
                 logger.Info("Request Authentication Scheme for {0} cancelled", this.DataSourceUri);
+            }
+            catch(Exception ex)
+            {
+                logger.Log(LogLevel.Error,$"Exception occured while querying available authentication scheme: {ex}");
+                throw;
             }
             finally
             {
                 this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
-            
+
             return supportedScheme;
         }
 
@@ -876,7 +881,15 @@ namespace CDP4Dal
                     this.Credentials.ProvideUserCredentials(authenticationInformation.UserName, authenticationInformation.Password, authenticationSchemeKind);
                     break;
                 case AuthenticationSchemeKind.LocalJwtBearer:
-                    await this.Login(authenticationInformation.UserName, authenticationInformation.Password);
+                    if (authenticationInformation.Token == null)
+                    {
+                        await this.Login(authenticationInformation.UserName, authenticationInformation.Password);
+                    }
+                    else
+                    {
+                        this.Credentials.ProvideUserToken(authenticationInformation.Token, authenticationSchemeKind);
+                    }
+
                     break;
                 case AuthenticationSchemeKind.ExternalJwtBearer:
                     this.Credentials.ProvideUserToken(authenticationInformation.Token, authenticationSchemeKind);
@@ -899,7 +912,7 @@ namespace CDP4Dal
                 throw new InvalidOperationException("Cannot refresh authentication information when credentials are not fully initialized");
             }
 
-            if (this.Credentials.AuthenticationScheme == AuthenticationSchemeKind.LocalJwtBearer)
+            if (this.Credentials.AuthenticationScheme == AuthenticationSchemeKind.LocalJwtBearer && this.Credentials.Tokens == null)
             {
                 await this.Login(this.Credentials.UserName, this.Credentials.Password);
             }
@@ -939,12 +952,53 @@ namespace CDP4Dal
             {
                 logger.Info("Request Authentication Scheme for {0} cancelled", this.DataSourceUri);
             }
+            catch(Exception ex)
+            {
+                logger.Log(LogLevel.Error,$"Exception occured while querying authenticated username: {ex}");
+                throw;
+            }
             finally
             {
                 this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
 
             return userName;
+        }
+
+        /// <summary>
+        /// Requests to refresh <see cref="AuthenticationTokens" /> based on an existing Refresh toekn
+        /// </summary>
+        /// <exception cref="InvalidOperationException">If <see cref="AuthenticationSchemeKind" /> of credentials is not <see cref="AuthenticationSchemeKind.LocalJwtBearer" /></exception>
+        public async Task RequestAuthenticationTokenBasedOnRefreshToken()
+        {
+            if (this.Credentials.AuthenticationScheme != AuthenticationSchemeKind.LocalJwtBearer)
+            {
+                throw new InvalidOperationException("Cannot refresh token with another scheme thant LocalJwtBearer");
+            }
+            
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenKey = Guid.NewGuid();
+            this.cancellationTokenSourceDictionary.TryAdd(cancellationTokenKey, cancellationTokenSource);
+            this.Dal.Session = this;
+            
+            try
+            {
+                this.Dal.InitializeDalCredentials(this.Credentials);
+                await this.Dal.RequestAuthenticationTokenFromRefreshToken(cancellationTokenSource.Token);
+            } 
+            catch (OperationCanceledException)
+            {
+                logger.Info("Request Authentication Token based on Refresh Token for {0} cancelled", this.DataSourceUri);
+            }
+            catch(Exception ex)
+            {
+                logger.Log(LogLevel.Error,$"Exception occured while refreshing token: {ex}");
+                throw;
+            }
+            finally
+            {
+                this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
+            }
         }
 
         /// <summary>
@@ -978,6 +1032,11 @@ namespace CDP4Dal
             catch (OperationCanceledException)
             {
                 logger.Info("Login request for {0} cancelled", this.DataSourceUri);
+            }
+            catch(Exception ex)
+            {
+                logger.Log(LogLevel.Error,$"Exception occured while loging in: {ex}");
+                throw;
             }
             finally
             {

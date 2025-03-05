@@ -24,6 +24,8 @@
 
 namespace CDP4Dal.DAL
 {
+    using CDP4DalCommon.Authentication;
+
     /// <summary>
     /// The <see cref="AuthenticationInformation"/> provides information that should be used to authenticate against a data-source
     /// </summary>
@@ -40,9 +42,9 @@ namespace CDP4Dal.DAL
         public string Password { get; }
 
         /// <summary>
-        /// Gets the token that should be used for authentication
+        /// Gets <see cref="AuthenticationTokens" /> that should be used for authentication
         /// </summary>
-        public string Token { get; }
+        public AuthenticationTokens Token { get; }
         
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationInformation"></see> class.
@@ -58,10 +60,10 @@ namespace CDP4Dal.DAL
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationInformation"></see> class.
         /// </summary>
-        /// <param name="token">The provided token</param>
-        public AuthenticationInformation(string token)
+        /// <param name="authenticationTokens">The provided <see cref="AuthenticationTokens" /></param>
+        public AuthenticationInformation(AuthenticationTokens authenticationTokens)
         {
-            this.Token = token;
+            this.Token = authenticationTokens;
         }
     }
 }

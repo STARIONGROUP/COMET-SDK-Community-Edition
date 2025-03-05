@@ -45,6 +45,7 @@ namespace CDP4JsonFileDal
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
+    using CDP4DalCommon.Authentication;
     using CDP4DalCommon.Tasks;
 
     using CDP4JsonFileDal.Json;
@@ -1066,6 +1067,19 @@ namespace CDP4JsonFileDal
         public override Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken)
         {
             throw new NotSupportedException("Cannot query authenticaticated username in this DAL");
+        }
+
+        /// <summary>
+        /// Requests new <see cref="AuthenticationTokens" /> based on the current refresh token
+        /// </summary>
+        /// <returns>An awaitabl <see cref="Task" /></returns>
+        /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
+        /// <exception cref="InvalidOperationException">If the current <see cref="Dal.Credentials" /> does not meet following constraints : not null, with non-null <see cref="AuthenticationTokens" />
+        ///  containing a refresh token and where the <see cref="AuthenticationSchemeKind" /> is <see cref="AuthenticationSchemeKind.LocalJwtBearer" /></exception>
+        /// <exception cref="DalReadException">In case of non successful response from the CDP4 Data source</exception>
+        public override Task RequestAuthenticationTokenFromRefreshToken(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Cannot request new authentication token from a refresh token in this DAL");
         }
 
         /// <summary>
