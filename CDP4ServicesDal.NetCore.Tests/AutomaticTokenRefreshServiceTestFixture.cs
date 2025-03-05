@@ -126,5 +126,33 @@ namespace CDP4ServicesDal.Tests
                 Assert.That(sw.ElapsedMilliseconds, Is.GreaterThan(16000));
             });
         }
+
+        [Test]
+        public async Task VerifyRefreshAuthenticationToken()
+        {
+            await Assert.ThatAsync(() => this.automaticTokenRefreshService.RefreshAuthenticationTokenAsync(), Throws.InvalidOperationException.With.Message.EqualTo("This service is not initialized."));
+            var authenticationSchemeResponse = new AuthenticationSchemeResponse();
+            
+            this.automaticTokenRefreshService.Initialize(this.session.Object, authenticationSchemeResponse);
+            await Assert.ThatAsync(() => this.automaticTokenRefreshService.RefreshAuthenticationTokenAsync(), Throws.InvalidOperationException.With.Message.EqualTo("Related credentials does not contains any tokens."));
+
+            this.session.Setup(x => x.RequestAuthenticationTokenBasedOnRefreshToken()).Returns(Task.CompletedTask);
+            
+            var authenticationTokens = new AuthenticationTokens("access", "refresh");
+            this.credentials.ProvideUserToken(authenticationTokens, AuthenticationSchemeKind.LocalJwtBearer);
+
+            await this.automaticTokenRefreshService.RefreshAuthenticationTokenAsync();
+            this.session.Verify(x => x.RequestAuthenticationTokenBasedOnRefreshToken(), Times.Once);
+            
+            this.credentials.ProvideUserToken(authenticationTokens, AuthenticationSchemeKind.ExternalJwtBearer);
+
+            var openIdAuthenticatioDto = new OpenIdAuthenticationDto("new acceess", "new refresh", 0, 0);
+            
+            this.openIdConnectService.Setup(x => x.RequestAuthenticationToken(authenticationTokens.RefreshToken, authenticationSchemeResponse, null, null))
+                .ReturnsAsync(openIdAuthenticatioDto);
+            
+            await this.automaticTokenRefreshService.RefreshAuthenticationTokenAsync();
+            Assert.That(this.credentials.Tokens, Is.EqualTo(openIdAuthenticatioDto));            
+        }
     }
 }
