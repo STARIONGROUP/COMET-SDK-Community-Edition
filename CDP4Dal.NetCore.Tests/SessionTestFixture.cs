@@ -27,6 +27,7 @@ namespace CDP4Dal.NetCore.Tests
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -836,6 +837,26 @@ namespace CDP4Dal.NetCore.Tests
             this.AssignActivePerson();
             
             await Assert.ThatAsync(() => this.session.QueryAuthenticatedUserName(), Is.EqualTo("John"));
+        }
+
+        [Test]
+        public async Task VerifyRequestAuthenticationTokenBasedOnRefreshToken()
+        {
+            await Assert.ThatAsync(() => this.session.RequestAuthenticationTokenBasedOnRefreshToken(), Throws.InvalidOperationException);
+            
+            var tokens = new AuthenticationTokens("access", "refreshToken");
+            this.session.Credentials.ProvideUserToken(tokens, AuthenticationSchemeKind.LocalJwtBearer);
+            this.mockedDal.Setup(x => x.RequestAuthenticationTokenFromRefreshToken(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+            
+            await this.session.RequestAuthenticationTokenBasedOnRefreshToken();
+            this.mockedDal.Verify(x => x.RequestAuthenticationTokenFromRefreshToken(It.IsAny<CancellationToken>()), Times.Once);
+            
+            this.mockedDal.Setup(x => x.RequestAuthenticationTokenFromRefreshToken(It.IsAny<CancellationToken>())).ThrowsAsync(new OperationCanceledException());
+
+            await Assert.ThatAsync(() => this.session.RequestAuthenticationTokenBasedOnRefreshToken(), Throws.Nothing);
+            this.mockedDal.Setup(x => x.RequestAuthenticationTokenFromRefreshToken(It.IsAny<CancellationToken>())).ThrowsAsync(new HttpRequestException());
+
+            await Assert.ThatAsync(() => this.session.RequestAuthenticationTokenBasedOnRefreshToken(), Throws.Exception.TypeOf<HttpRequestException>());
         }
         
         private void AssignActivePerson()
