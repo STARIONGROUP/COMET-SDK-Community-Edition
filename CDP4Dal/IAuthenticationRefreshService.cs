@@ -22,26 +22,24 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4ServicesDal
+namespace CDP4Dal
 {
     using System;
     using System.Threading.Tasks;
 
-    using CDP4Dal;
-
     using CDP4DalCommon.Authentication;
 
     /// <summary>
-    /// The <see cref="IAutomaticTokenRefreshService" /> provides automatic refresh of <see cref="AuthenticationTokens" />
+    /// The <see cref="IAuthenticationRefreshService" /> provides authentication information refresh
     /// capabilities
     /// </summary>
-    public interface IAutomaticTokenRefreshService: IDisposable
+    public interface IAuthenticationRefreshService: IDisposable
     {
         /// <summary>
-        /// Starts the service to wait before refreshing the token automatically
+        /// Starts the service to wait before refreshing authentication information automatically
         /// </summary>
         /// <returns>An awaitable <see cref="Task" /></returns>
-        public Task StartAsync();
+        Task StartAsync();
 
         /// <summary>
         /// Initialize this service properties
@@ -53,14 +51,14 @@ namespace CDP4ServicesDal
         void Initialize(ISession session, AuthenticationSchemeResponse authenticationSchemeResponse, string clientSecret = null);
 
         /// <summary>
-        /// Refreshes the authentication token based on a refresh token
+        /// Refreshes the authentication information
         /// </summary>
         /// <exception cref="InvalidOperationException">If the service has not been initialized</exception>
-        Task RefreshAuthenticationTokenAsync();
+        Task RefreshAuthenticationInformationAsync();
 
         /// <summary>
-        /// The <see cref="Func{TValue}"/> that provides notification that tokens has been refreshed
+        /// The <see cref="Func{TValue}"/> that provides notification that authentication information has been refreshed
         /// </summary>
-        event Func<Task> TokenRefreshed;
+        event Func<Task> AuthenticationRefreshed;
     }
 }

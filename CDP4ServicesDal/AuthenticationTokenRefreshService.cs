@@ -24,6 +24,10 @@
 
 namespace CDP4ServicesDal
 {
+#if NETFRAMEWORK
+    using System.ComponentModel.Composition;
+#endif
+    
     using System;
     using System.IdentityModel.Tokens.Jwt;
     using System.Threading;
@@ -33,24 +37,25 @@ namespace CDP4ServicesDal
 
     using CDP4DalCommon.Authentication;
 
-    using CDP4ServicesDal.ExternalAuthenticationProviderService;
-
     using NLog;
-    using NLog.Fluent;
 
     using Polly;
     using Polly.Retry;
 
     /// <summary>
-    /// The <see cref="IAutomaticTokenRefreshService" /> provides automatic refresh of <see cref="AuthenticationTokens" />
+    /// The <see cref="IAuthenticationRefreshService" /> provides automatic refresh of <see cref="AuthenticationToken" />
     /// capabilities
     /// </summary>
-    public class AutomaticTokenRefreshService : IAutomaticTokenRefreshService
+#if NETFRAMEWORK
+    [Export(typeof(IAuthenticationRefreshService))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+#endif
+    public class AuthenticationTokenRefreshService : IAuthenticationRefreshService
     {
         /// <summary>
-        /// Gets the <see cref="IOpenIdConnectService" /> used to interact with the external authentication provider
+        /// Gets the <see cref="IProvideExternalAuthenticationService" /> used to interact with the external authentication provider
         /// </summary>
-        private readonly IOpenIdConnectService openIdConnectService;
+        private readonly IProvideExternalAuthenticationService provideExternalAuthenticationService;
 
         /// <summary>
         /// Gets the <see cref="CancellationTokenSource" /> used to cancel delaying Task
@@ -82,11 +87,13 @@ namespace CDP4ServicesDal
         /// </summary>
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        /// <summary>Initializes a new instance of the <see cref="AutomaticTokenRefreshService" /> class.</summary>
-        /// <param name="openIdConnectService">The <see cref="IOpenIdConnectService" /> used to interact with the external authentication provider</param>
-        public AutomaticTokenRefreshService(IOpenIdConnectService openIdConnectService)
+        /// <summary>Initializes a new instance of the <see cref="AuthenticationTokenRefreshService" /> class.</summary>
+        /// <param name="provideExternalAuthenticationService">The <see cref="IProvideExternalAuthenticationService" /> used to interact with the external authentication provider</param>
+#if NETFRAMEWORK
+        [ImportingConstructor]
+        public AuthenticationTokenRefreshService([Import] IProvideExternalAuthenticationService provideExternalAuthenticationService)
         {
-            this.openIdConnectService = openIdConnectService;
+            this.provideExternalAuthenticationService = provideExternalAuthenticationService;
             
             this.retryPolicy = Policy.Handle<Exception>()
                 .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
@@ -95,11 +102,24 @@ namespace CDP4ServicesDal
                         Logger.Warn($"Retry {retryCount} after {timeSpan.TotalSeconds}s due to: {exception.Message}");
                     });
         }
+#else
+        public AuthenticationTokenRefreshService(IProvideExternalAuthenticationService provideExternalAuthenticationService)
+        {
+            this.provideExternalAuthenticationService = provideExternalAuthenticationService;
+            
+            this.retryPolicy = Policy.Handle<Exception>()
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    (exception, timeSpan, retryCount, _) =>
+                    {
+                        Logger.Warn($"Retry {retryCount} after {timeSpan.TotalSeconds}s due to: {exception.Message}");
+                    });
+        }
+#endif
 
         /// <summary>
-        /// The <see cref="Func{TValue}"/> that provides notification that tokens has been refreshed
+        /// The <see cref="Func{TValue}"/> that provides notification that token has been refreshed
         /// </summary>
-        public event Func<Task> TokenRefreshed;
+        public event Func<Task> AuthenticationRefreshed;
 
         /// <summary>
         /// Starts the service to wait before refreshing the token automatically
@@ -118,8 +138,8 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("This service has already been started.");
             }
             
-            if (this.relatedSession.Dal is not CdpServicesDal || (this.relatedSession.Credentials.AuthenticationScheme != AuthenticationSchemeKind.LocalJwtBearer 
-                                                                  && this.relatedSession.Credentials.AuthenticationScheme != AuthenticationSchemeKind.ExternalJwtBearer))
+            if (this.relatedSession.Credentials.AuthenticationScheme != AuthenticationSchemeKind.LocalJwtBearer 
+                                                                  && this.relatedSession.Credentials.AuthenticationScheme != AuthenticationSchemeKind.ExternalJwtBearer)
             {
                 return;
             }
@@ -135,7 +155,7 @@ namespace CDP4ServicesDal
                     break;
                 }
 
-                if (string.IsNullOrEmpty(this.relatedSession.Credentials.Tokens.RefreshToken))
+                if (string.IsNullOrEmpty(this.relatedSession.Credentials.Token.RefreshToken))
                 {
                     break;
                 }
@@ -151,13 +171,13 @@ namespace CDP4ServicesDal
                     break;
                 }
 
-                await this.retryPolicy.ExecuteAsync(this.RefreshAuthenticationTokenAsync);
+                await this.retryPolicy.ExecuteAsync(this.RefreshAuthenticationInformationAsync);
                 
                 await this.relatedSession.RefreshAuthenticationInformation();
 
-                if (this.TokenRefreshed != null)
+                if (this.AuthenticationRefreshed != null)
                 {
-                    await this.TokenRefreshed.Invoke();
+                    await this.AuthenticationRefreshed.Invoke();
                 }
             }
             
@@ -187,16 +207,16 @@ namespace CDP4ServicesDal
         /// Refreshes the authentication token based on a refresh token
         /// </summary>
         /// <exception cref="InvalidOperationException">If the service has not been initialized</exception>
-        public async Task RefreshAuthenticationTokenAsync()
+        public async Task RefreshAuthenticationInformationAsync()
         {
             if (this.relatedSession == null)
             {
                 throw new InvalidOperationException("This service is not initialized.");
             }
 
-            if (this.relatedSession.Credentials.Tokens == null)
+            if (this.relatedSession.Credentials.Token == null)
             {
-                throw new InvalidOperationException("Related credentials does not contains any tokens.");
+                throw new InvalidOperationException("Related credentials does not contains any token.");
             }
 
             if (this.relatedSession.Credentials.AuthenticationScheme == AuthenticationSchemeKind.LocalJwtBearer)
@@ -205,7 +225,7 @@ namespace CDP4ServicesDal
             }
             else
             {
-                var authenticationToken = await this.openIdConnectService.RequestAuthenticationToken(this.relatedSession.Credentials.Tokens.RefreshToken, this.lastAuthenticationSchemeResponse,
+                var authenticationToken = await this.provideExternalAuthenticationService.RequestAuthenticationToken(this.relatedSession.Credentials.Token.RefreshToken, this.lastAuthenticationSchemeResponse,
                     clientSecret: this.externalProviderClientSecret);
 
                 this.relatedSession.Credentials.ProvideUserToken(authenticationToken, AuthenticationSchemeKind.ExternalJwtBearer);
@@ -228,7 +248,7 @@ namespace CDP4ServicesDal
         /// <returns>The delay before time expiration</returns>
         private int ExtractDelayBeforeExpireTimeFromToken()
         {
-            var token = new JwtSecurityTokenHandler().ReadJwtToken(this.relatedSession.Credentials.Tokens.AccessToken);
+            var token = new JwtSecurityTokenHandler().ReadJwtToken(this.relatedSession.Credentials.Token.AccessToken);
             return (token.ValidTo - DateTime.UtcNow).Seconds;
         }
     }

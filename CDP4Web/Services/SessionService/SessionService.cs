@@ -46,6 +46,7 @@ namespace CDP4Web.Services.SessionService
     using CDP4DalCommon.Authentication;
 
     using CDP4ServicesDal;
+    using CDP4ServicesDal.ExternalAuthenticationProviderService;
 
     using CDP4Web.Enumerations;
     using CDP4Web.Extensions;
@@ -122,7 +123,7 @@ namespace CDP4Web.Services.SessionService
 
             try
             {
-                this.Session = new Session(new CdpServicesDal(), credentials, this.messageBus);
+                this.Session = new Session(new CdpServicesDal(new AuthenticationTokenRefreshService(new OpenIdConnectService())), credentials, this.messageBus);
                 await this.Session.Open();
                 this.logger.LogInformation("CDP4Comet Session opened against {Url} in {Time} [ms]", credentials.Uri, stopWatch.ElapsedMilliseconds);
             }
@@ -174,7 +175,7 @@ namespace CDP4Web.Services.SessionService
 
             try
             {
-                this.Session = new Session(new CdpServicesDal(), credentials, this.messageBus);
+                this.Session = new Session(new CdpServicesDal(new AuthenticationTokenRefreshService(new OpenIdConnectService())), credentials, this.messageBus);
                 var returnedResponse = await this.Session.QueryAvailableAuthenticationScheme();
                 return Result.Ok(returnedResponse);
             }

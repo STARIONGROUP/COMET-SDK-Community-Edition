@@ -912,7 +912,7 @@ namespace CDP4Dal
                 throw new InvalidOperationException("Cannot refresh authentication information when credentials are not fully initialized");
             }
 
-            if (this.Credentials.AuthenticationScheme == AuthenticationSchemeKind.LocalJwtBearer && this.Credentials.Tokens == null)
+            if (this.Credentials.AuthenticationScheme == AuthenticationSchemeKind.LocalJwtBearer && this.Credentials.Token == null)
             {
                 await this.Login(this.Credentials.UserName, this.Credentials.Password);
             }
@@ -966,7 +966,7 @@ namespace CDP4Dal
         }
 
         /// <summary>
-        /// Requests to refresh <see cref="AuthenticationTokens" /> based on an existing Refresh toekn
+        /// Requests to refresh <see cref="AuthenticationToken" /> based on an existing Refresh toekn
         /// </summary>
         /// <exception cref="InvalidOperationException">If <see cref="AuthenticationSchemeKind" /> of credentials is not <see cref="AuthenticationSchemeKind.LocalJwtBearer" /></exception>
         public async Task RequestAuthenticationTokenBasedOnRefreshToken()
