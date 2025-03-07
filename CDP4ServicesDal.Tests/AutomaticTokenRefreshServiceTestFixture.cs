@@ -81,7 +81,7 @@ namespace CDP4ServicesDal.Tests
             await this.authenticationTokensRefreshService.StartAsync();
             Assert.That(sw.ElapsedMilliseconds, Is.LessThan(200));
 
-            var cdpServicesDal = new Mock<CdpServicesDal>();
+            var cdpServicesDal = new Mock<IDal>();
             this.session.Setup(x => x.Dal).Returns(cdpServicesDal.Object);
 
             sw = Stopwatch.StartNew();
