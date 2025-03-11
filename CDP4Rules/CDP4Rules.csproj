@@ -4,7 +4,7 @@
     <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
     <Company>Starion Group S.A.</Company>
     <Title>CDP4Rules Community Edition</Title>
-    <VersionPrefix>28.2.0</VersionPrefix>
+    <VersionPrefix>28.3.0</VersionPrefix>
     <Description>CDP4 Class Library that provides Model Analysis and Rule Checking</Description>
     <Copyright>Copyright © Starion Group S.A.</Copyright>
     <Authors>Sam, Alex, Alexander, Yevhen, Nathanael</Authors>
@@ -20,7 +20,7 @@
     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageReleaseNotes>
-      [BUMP] Version to 28.2.0
+      [BUMP] Version to 28.3.0
     </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <LangVersion>latest</LangVersion>

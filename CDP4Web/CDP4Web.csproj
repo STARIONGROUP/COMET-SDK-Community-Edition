@@ -5,7 +5,7 @@
         <LangVersion>latest</LangVersion>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Web Community Edition</Title>
-        <VersionPrefix>28.2.0</VersionPrefix>
+        <VersionPrefix>28.3.0</VersionPrefix>
         <Description>CDP4Web Dedicated Sdk for CDPServicesDal</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
@@ -21,7 +21,7 @@
         <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
         <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
         <PackageReleaseNotes>
-            [BUMP] Version to 28.2.0
+            [BUMP] Version to 28.3.0
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>

@@ -437,7 +437,7 @@ namespace CDP4Dal
         Task<string> QueryAuthenticatedUserName();
 
         /// <summary>
-        /// Requests to refresh <see cref="AuthenticationTokens" /> based on an existing Refresh toekn
+        /// Requests to refresh <see cref="AuthenticationToken" /> based on an existing Refresh toekn
         /// </summary>
         /// <exception cref="InvalidOperationException">If <see cref="AuthenticationSchemeKind" /> of credentials is not <see cref="AuthenticationSchemeKind.LocalJwtBearer" /></exception>
         Task RequestAuthenticationTokenBasedOnRefreshToken();

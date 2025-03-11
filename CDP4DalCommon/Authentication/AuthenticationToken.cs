@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="OpenIdAuthenticationDto.cs" company="Starion Group S.A.">
+// <copyright file="AuthenticationToken.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
 // 
 //    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
@@ -22,38 +22,32 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4ServicesDal.ExternalAuthenticationProviderService
+namespace CDP4DalCommon.Authentication
 {
-    using CDP4DalCommon.Authentication;
-
     /// <summary>
-    /// The <see cref="OpenIdAuthenticationDto" /> provides data model structure for response of a successfull openid authentication result
+    /// The <see cref="AuthenticationToken" /> provides data structure for generated token, used for authentication
     /// </summary>
-    public class OpenIdAuthenticationDto : AuthenticationTokens
+    public class AuthenticationToken
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OpenIdAuthenticationDto" /> structure.
+        /// Initializes a new instance of the <see cref="AuthenticationToken" /> structure.
         /// </summary>
         /// <param name="accessToken">The generated access token</param>
         /// <param name="refreshToken">The generated refresh token</param>
-        /// <param name="expiresIn">The expires time of the access token, in seconds</param>
-        /// <param name="refreshExpiresIn">The expires time of the refresh token, in seconds</param>
-        public OpenIdAuthenticationDto(string accessToken, string refreshToken, int expiresIn, int refreshExpiresIn) : base(accessToken, refreshToken)
+        public AuthenticationToken(string accessToken, string refreshToken)
         {
             this.AccessToken = accessToken;
             this.RefreshToken = refreshToken;
-            this.ExpiresIn = expiresIn;
-            this.RefreshExpiresIn = refreshExpiresIn;
         }
 
         /// <summary>
-        /// The expires time of the <see cref="AuthenticationTokens.AccessToken" />, in seconds
+        /// Gets the generated access token
         /// </summary>
-        public int ExpiresIn { get; set; }
+        public string AccessToken { get; set; }
 
         /// <summary>
-        /// The expires time of the <see cref="AuthenticationTokens.RefreshToken" />, in seconds
+        /// Gets the generated refresh token
         /// </summary>
-        public int RefreshExpiresIn { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

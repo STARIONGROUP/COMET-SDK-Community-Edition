@@ -600,11 +600,11 @@ namespace CDP4Dal.DAL
         public abstract Task<string> QueryAuthenticatedUserName(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Requests new <see cref="AuthenticationTokens" /> based on the current refresh token
+        /// Requests new <see cref="AuthenticationToken" /> based on the current refresh token
         /// </summary>
         /// <returns>An awaitabl <see cref="Task" /></returns>
         /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
-        /// <exception cref="InvalidOperationException">If the current <see cref="Credentials" /> does not meet following constraints : not null, with non-null <see cref="AuthenticationTokens" />
+        /// <exception cref="InvalidOperationException">If the current <see cref="Credentials" /> does not meet following constraints : not null, with non-null <see cref="AuthenticationToken" />
         ///  containing a refresh token and where the <see cref="AuthenticationSchemeKind" /> is <see cref="AuthenticationSchemeKind.LocalJwtBearer" /></exception>
         /// <exception cref="DalReadException">In case of non successful response from the CDP4 Data source</exception>
         public abstract Task RequestAuthenticationTokenFromRefreshToken(CancellationToken cancellationToken);

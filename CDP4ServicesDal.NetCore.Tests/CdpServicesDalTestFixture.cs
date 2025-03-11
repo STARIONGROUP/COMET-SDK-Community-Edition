@@ -52,6 +52,8 @@ namespace CDP4ServicesDal.Tests
     using CDP4DalCommon.Authentication;
     using CDP4DalCommon.Tasks;
 
+    using Moq;
+
     using NUnit.Framework;
 
     using RichardSzalay.MockHttp;
@@ -78,14 +80,17 @@ namespace CDP4ServicesDal.Tests
         private ModelReferenceDataLibrary modelReferenceDataLibrary;
         private ICDPMessageBus messageBus;
         private JsonSerializerOptions jsonSerializerOptions;
+        
+        private Mock<IAuthenticationRefreshService> authenticationService;
 
         [SetUp]
         public void Setup()
         {
             this.cancelationTokenSource = new CancellationTokenSource();
-
+            this.authenticationService = new Mock<IAuthenticationRefreshService>();
+            
             this.credentials = new Credentials("admin", "pass", this.uri);
-            this.dal = new CdpServicesDal();
+            this.dal = new CdpServicesDal(this.authenticationService.Object);
             this.messageBus = new CDPMessageBus();
             this.session = new Session(this.dal, this.credentials, this.messageBus);
 
@@ -139,7 +144,7 @@ namespace CDP4ServicesDal.Tests
         [Test]
         public void VerifyThatCdpServicesDalCanBeConstructed()
         {
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
             Assert.That(dal, Is.Not.Null);
         }
 
@@ -152,7 +157,7 @@ namespace CDP4ServicesDal.Tests
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.UserName}:{credentials.Password}")));
             await httpClient.PostAsync(uriBuilder.Uri, null);
 
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
             var result = await dal.Open(this.credentials, new CancellationToken());
 
             var amountOfDtos = result.ToList().Count;
@@ -170,7 +175,7 @@ namespace CDP4ServicesDal.Tests
             await httpClient.PostAsync(uriBuilder.Uri, null);
 
             httpClient = new HttpClient();
-            var dal = new CdpServicesDal(httpClient);
+            var dal = new CdpServicesDal(httpClient,this.authenticationService.Object);
             var result = await dal.Open(this.credentials, new CancellationToken());
 
             var amountOfDtos = result.ToList().Count;
@@ -182,14 +187,14 @@ namespace CDP4ServicesDal.Tests
         public void Verify_That_When_constructed_with_null_httpclient_throws_exception()
         {
             HttpClient httpClient = null;
-            Assert.Throws<ArgumentNullException>(() => new CdpServicesDal(httpClient));
+            Assert.Throws<ArgumentNullException>(() => new CdpServicesDal(httpClient, this.authenticationService.Object));
         }
         
         [Test]
         [Category("WebServicesDependent")]
         public async Task VerifThatAClosedDalCannotBeClosedAgain()
         {
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
             await dal.Open(this.credentials, new CancellationToken());
 
             dal.Close();
@@ -200,7 +205,7 @@ namespace CDP4ServicesDal.Tests
         [Test]
         public void VerifyThatIfCredentialsAreNullExceptionIsThrown()
         {
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
 
             Assert.That(async () => await dal.Open(null, new CancellationToken()), Throws.TypeOf<ArgumentNullException>());
         }
@@ -222,7 +227,7 @@ namespace CDP4ServicesDal.Tests
             var organizationDto = new CDP4Common.DTO.Organization(organizationIid, 0);
             organizationDto.AddContainer(ClassKind.SiteDirectory, Guid.Parse("eb77f3e1-a0f3-412d-8ed6-b8ce881c0145"));
 
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
 
             Assert.That(async () => await dal.Read(organizationDto, new CancellationToken()), Throws.TypeOf<InvalidOperationException>());
         }
@@ -259,7 +264,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task VerifyThatReadReturnsCorrectDTO()
         {
-            this.dal = new CdpServicesDal();
+            this.dal = new CdpServicesDal(this.authenticationService.Object);
 
             var returned = (await this.dal.Open(this.credentials, this.cancelationTokenSource.Token)).ToList();
             Assert.That(returned, Is.Not.Null);
@@ -293,7 +298,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task IntegrationTest()
         {
-            this.dal = new CdpServicesDal();
+            this.dal = new CdpServicesDal(this.authenticationService.Object);
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
             var assembler = new Assembler(this.credentials.Uri, this.messageBus);
 
@@ -411,7 +416,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task VerifyThatReadIterationWorks()
         {
-            var dal = new CdpServicesDal { Session = this.session };
+            var dal = new CdpServicesDal(this.authenticationService.Object) { Session = this.session };
             var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
             var session = new Session(dal, credentials, this.messageBus);
 
@@ -440,7 +445,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task Verify_that_EngineeringModels_only_can_be_read()
         {
-            this.dal = new CdpServicesDal();
+            this.dal = new CdpServicesDal(this.authenticationService.Object);
 
             var creds = new Credentials("admin", "pass", new Uri("https://cdp4services-dev.cdp4.org/"), true);
 
@@ -460,7 +465,7 @@ namespace CDP4ServicesDal.Tests
         [Category("Performance")]
         public async Task AssemblerSynchronizePerformanceTest()
         {
-            this.dal = new CdpServicesDal();
+            this.dal = new CdpServicesDal(this.authenticationService.Object);
 
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
             var returnedlist = returned.ToList();
@@ -490,7 +495,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task VerifyThatFileCanBeUploaded()
         {
-            this.dal = new CdpServicesDal { Session = this.session };
+            this.dal = new CdpServicesDal(this.authenticationService.Object) { Session = this.session };
 
             var filename = @"TestData\testfile.pdf";
             var directory = TestContext.CurrentContext.TestDirectory;
@@ -555,7 +560,7 @@ namespace CDP4ServicesDal.Tests
         [Test]
         public void VerifyThatIsValidUriReturnsExpectedResult()
         {
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
 
             Assert.That(dal.IsValidUri("http://cdp4services-test.cdp4.org"), Is.True);
             Assert.That(dal.IsValidUri("https://cdp4services-test.cdp4.org"), Is.True);
@@ -567,7 +572,7 @@ namespace CDP4ServicesDal.Tests
         {
             var iterationDto = new CDP4Common.DTO.Iteration(Guid.NewGuid(), 0);
 
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
 
             Assert.That(async () => await dal.Read(iterationDto, new CancellationToken()), Throws.TypeOf<InvalidOperationException>());
         }
@@ -575,7 +580,7 @@ namespace CDP4ServicesDal.Tests
         [Test]
         public void VerifyThatWritingMultipleOperationContainersIsNotSupported()
         {
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
             this.SetDalToBeOpen(dal);
 
             var contextOne = $"/EngineeringModel/{Guid.NewGuid()}/iteration/{Guid.NewGuid()}";
@@ -594,7 +599,7 @@ namespace CDP4ServicesDal.Tests
         [Test]
         public async Task Vefify_that_when_OperationContainer_is_empty_an_empty_is_returned()
         {
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
             this.SetDalToBeOpen(dal);
 
             var context = $"/EngineeringModel/{Guid.NewGuid()}/iteration/{Guid.NewGuid()}";
@@ -610,7 +615,7 @@ namespace CDP4ServicesDal.Tests
             var uri = new Uri("https://cdp4services-test.cdp4.org");
             this.credentials = new Credentials("admin", "pass", uri);
 
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
             var result = await dal.Open(this.credentials, new CancellationToken());
 
             Assert.That(result, Is.Not.Null);
@@ -626,7 +631,7 @@ namespace CDP4ServicesDal.Tests
             var uri = new Uri("https://cdp4services-test.cdp4.org");
             this.credentials = new Credentials("admin", "pass", uri, false, proxySettings);
 
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
             var result = await dal.Open(this.credentials, new CancellationToken());
             
             Assert.That(result, Is.Not.Null);
@@ -639,7 +644,7 @@ namespace CDP4ServicesDal.Tests
             var uri = new Uri("https://cdp4services-test.cdp4.org");
             var credentials = new Credentials("admin", "pass", uri);
             
-            var dal = new CdpServicesDal();
+            var dal = new CdpServicesDal(this.authenticationService.Object);
             
 
             var result = await dal.Open(credentials, new CancellationToken());
@@ -662,7 +667,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task Verify_that_person_can_be_Posted()
         {
-            var cdpServicesDal = new CdpServicesDal();
+            var cdpServicesDal = new CdpServicesDal(this.authenticationService.Object);
             var dtos = await cdpServicesDal.Open(this.credentials, this.cancelationTokenSource.Token);
 
             var siteDirectory = (CDP4Common.DTO.SiteDirectory)dtos.Single(x => x.ClassKind == ClassKind.SiteDirectory);
@@ -698,7 +703,7 @@ namespace CDP4ServicesDal.Tests
             var httpClient = mockHttp.ToHttpClient();
             httpClient.BaseAddress = this.uri;
 
-            this.dal = new CdpServicesDal(httpClient);
+            this.dal = new CdpServicesDal(httpClient,this.authenticationService.Object);
             this.SetDalToBeOpen(this.dal);
             
             var cometTaskId = Guid.NewGuid();
@@ -747,7 +752,7 @@ namespace CDP4ServicesDal.Tests
             var httpClient = mockHttp.ToHttpClient();
             httpClient.BaseAddress = this.uri;
 
-            this.dal = new CdpServicesDal(httpClient);
+            this.dal = new CdpServicesDal(httpClient, this.authenticationService.Object);
             this.SetDalToBeOpen(this.dal);
             
             var requestHandler = mockHttp.When($"{CdpServicesDal.CometTaskRoute}");
@@ -797,7 +802,7 @@ namespace CDP4ServicesDal.Tests
             var httpClient = mockHttp.ToHttpClient();
             httpClient.BaseAddress = this.uri;
             var operationContainer = new OperationContainer($"/SiteDirectory/{Guid.NewGuid()}");
-            this.dal = new CdpServicesDal(httpClient);
+            this.dal = new CdpServicesDal(httpClient, this.authenticationService.Object);
 
             Assert.That(() => this.dal.Write(operationContainer, 1), Throws.InvalidOperationException);
             this.SetDalToBeOpen(this.dal);
@@ -872,7 +877,7 @@ namespace CDP4ServicesDal.Tests
         public async Task VerifyCanAuthenticateWithMultipleSchemeAtDalLevel()
         {
             var authenticationCredentials = new Credentials(new Uri("http://localhost:5000/"));
-            var servicesDal = new CdpServicesDal();
+            var servicesDal = new CdpServicesDal(this.authenticationService.Object);
             
             var cancellationSource = new CancellationTokenSource();
             servicesDal.InitializeDalCredentials(authenticationCredentials);
@@ -890,7 +895,7 @@ namespace CDP4ServicesDal.Tests
                     await servicesDal.Login(username, password, cancellationSource.Token);
                     break;
                 case AuthenticationSchemeKind.ExternalJwtBearer:
-                    authenticationCredentials.ProvideUserToken(new AuthenticationTokens(externalToken,""),availableScheme);
+                    authenticationCredentials.ProvideUserToken(new AuthenticationToken(externalToken,""),availableScheme);
                     break;
             }
 
@@ -907,7 +912,7 @@ namespace CDP4ServicesDal.Tests
         public async Task VerifyCanAuthenticateWithMultipleSchemeAtSessionLevel()
         {
             var authenticationCredentials = new Credentials(new Uri("http://localhost:5000/"));
-            var authenticationSession = new Session(new CdpServicesDal(), authenticationCredentials, this.messageBus);
+            var authenticationSession = new Session(new CdpServicesDal(this.authenticationService.Object), authenticationCredentials, this.messageBus);
 
             var availableScheme = (await authenticationSession.QueryAvailableAuthenticationScheme()).Schemes.Single();
 
@@ -918,7 +923,7 @@ namespace CDP4ServicesDal.Tests
             var authenticationInformation = availableScheme switch
             {
                 AuthenticationSchemeKind.Basic or AuthenticationSchemeKind.LocalJwtBearer => new AuthenticationInformation(username, password),
-                AuthenticationSchemeKind.ExternalJwtBearer => new AuthenticationInformation(new AuthenticationTokens(externalToken, "refresh")),
+                AuthenticationSchemeKind.ExternalJwtBearer => new AuthenticationInformation(new AuthenticationToken(externalToken, "refresh")),
                 _ => throw new ArgumentOutOfRangeException(nameof(availableScheme))
             };
 

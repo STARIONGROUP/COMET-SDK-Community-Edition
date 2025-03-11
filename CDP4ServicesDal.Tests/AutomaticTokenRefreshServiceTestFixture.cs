@@ -36,8 +36,6 @@ namespace CDP4ServicesDal.Tests
 
     using CDP4DalCommon.Authentication;
 
-    using CDP4ServicesDal.ExternalAuthenticationProviderService;
-
     using Moq;
 
     using NUnit.Framework;
@@ -47,8 +45,8 @@ namespace CDP4ServicesDal.Tests
     [TestFixture]
     public class AutomaticTokenRefreshServiceTestFixture
     {
-        private AutomaticTokenRefreshService automaticTokenRefreshService;
-        private Mock<IOpenIdConnectService> openIdConnectService;
+        private AuthenticationTokenRefreshService authenticationTokensRefreshService;
+        private Mock<IProvideExternalAuthenticationService> openIdConnectService;
         private Mock<ISession> session;
         private Credentials credentials;
         
@@ -60,14 +58,14 @@ namespace CDP4ServicesDal.Tests
             this.session = new Mock<ISession>();
             this.session.Setup(x => x.Credentials).Returns(this.credentials);
             
-            this.openIdConnectService = new Mock<IOpenIdConnectService>();
-            this.automaticTokenRefreshService = new AutomaticTokenRefreshService(this.openIdConnectService.Object);
+            this.openIdConnectService = new Mock<IProvideExternalAuthenticationService>();
+            this.authenticationTokensRefreshService = new AuthenticationTokenRefreshService(this.openIdConnectService.Object);
         }
 
         [Test]
         public async Task VerifyAutomaticRefreshServiceBehavior()
         {
-            await Assert.ThatAsync(() => this.automaticTokenRefreshService.StartAsync(), Throws.InvalidOperationException);
+            await Assert.ThatAsync(() => this.authenticationTokensRefreshService.StartAsync(), Throws.InvalidOperationException);
 
             var dal = new Mock<IDal>();
             this.session.Setup(x => x.Dal).Returns(dal.Object);
@@ -77,17 +75,17 @@ namespace CDP4ServicesDal.Tests
                     Schemes = [AuthenticationSchemeKind.Basic]
             };
             
-            this.automaticTokenRefreshService.Initialize(this.session.Object, authenticationSchemeResponse);
+            this.authenticationTokensRefreshService.Initialize(this.session.Object, authenticationSchemeResponse);
             
             var sw = Stopwatch.StartNew();
-            await this.automaticTokenRefreshService.StartAsync();
+            await this.authenticationTokensRefreshService.StartAsync();
             Assert.That(sw.ElapsedMilliseconds, Is.LessThan(200));
 
-            var cdpServicesDal = new Mock<CdpServicesDal>();
+            var cdpServicesDal = new Mock<IDal>();
             this.session.Setup(x => x.Dal).Returns(cdpServicesDal.Object);
 
             sw = Stopwatch.StartNew();
-            await this.automaticTokenRefreshService.StartAsync();
+            await this.authenticationTokensRefreshService.StartAsync();
             Assert.That(sw.ElapsedMilliseconds, Is.LessThan(200));
 
             var issuedAtTime = DateTimeOffset.UtcNow;
@@ -109,16 +107,16 @@ namespace CDP4ServicesDal.Tests
             );
             
             this.session.Setup(x=> x.RequestAuthenticationTokenBasedOnRefreshToken()).Returns(Task.CompletedTask);
-            this.credentials.ProvideUserToken(new AuthenticationTokens(jwtSecurityTokenHandler.WriteToken(jwtSecurityToken), ""), AuthenticationSchemeKind.LocalJwtBearer);
+            this.credentials.ProvideUserToken(new AuthenticationToken(jwtSecurityTokenHandler.WriteToken(jwtSecurityToken), ""), AuthenticationSchemeKind.LocalJwtBearer);
             
             sw = Stopwatch.StartNew();
-            await this.automaticTokenRefreshService.StartAsync();
+            await this.authenticationTokensRefreshService.StartAsync();
             Assert.That(sw.ElapsedMilliseconds, Is.LessThan(200));
 
-            this.credentials.ProvideUserToken(new AuthenticationTokens(jwtSecurityTokenHandler.WriteToken(jwtSecurityToken), "refresh"), AuthenticationSchemeKind.LocalJwtBearer);
+            this.credentials.ProvideUserToken(new AuthenticationToken(jwtSecurityTokenHandler.WriteToken(jwtSecurityToken), "refresh"), AuthenticationSchemeKind.LocalJwtBearer);
 
             sw = Stopwatch.StartNew();
-            await this.automaticTokenRefreshService.StartAsync();
+            await this.authenticationTokensRefreshService.StartAsync();
             
             Assert.Multiple(() =>
             {
@@ -126,33 +124,33 @@ namespace CDP4ServicesDal.Tests
                 Assert.That(sw.ElapsedMilliseconds, Is.GreaterThan(16000));
             });
         }
-        
+
         [Test]
         public async Task VerifyRefreshAuthenticationToken()
         {
-            await Assert.ThatAsync(() => this.automaticTokenRefreshService.RefreshAuthenticationTokenAsync(), Throws.InvalidOperationException.With.Message.EqualTo("This service is not initialized."));
+            await Assert.ThatAsync(() => this.authenticationTokensRefreshService.RefreshAuthenticationInformationAsync(), Throws.InvalidOperationException.With.Message.EqualTo("This service is not initialized."));
             var authenticationSchemeResponse = new AuthenticationSchemeResponse();
             
-            this.automaticTokenRefreshService.Initialize(this.session.Object, authenticationSchemeResponse);
-            await Assert.ThatAsync(() => this.automaticTokenRefreshService.RefreshAuthenticationTokenAsync(), Throws.InvalidOperationException.With.Message.EqualTo("Related credentials does not contains any tokens."));
+            this.authenticationTokensRefreshService.Initialize(this.session.Object, authenticationSchemeResponse);
+            await Assert.ThatAsync(() => this.authenticationTokensRefreshService.RefreshAuthenticationInformationAsync(), Throws.InvalidOperationException.With.Message.EqualTo("Related credentials does not contains any token."));
 
             this.session.Setup(x => x.RequestAuthenticationTokenBasedOnRefreshToken()).Returns(Task.CompletedTask);
             
-            var authenticationTokens = new AuthenticationTokens("access", "refresh");
+            var authenticationTokens = new AuthenticationToken("access", "refresh");
             this.credentials.ProvideUserToken(authenticationTokens, AuthenticationSchemeKind.LocalJwtBearer);
 
-            await this.automaticTokenRefreshService.RefreshAuthenticationTokenAsync();
+            await this.authenticationTokensRefreshService.RefreshAuthenticationInformationAsync();
             this.session.Verify(x => x.RequestAuthenticationTokenBasedOnRefreshToken(), Times.Once);
             
             this.credentials.ProvideUserToken(authenticationTokens, AuthenticationSchemeKind.ExternalJwtBearer);
 
-            var openIdAuthenticatioDto = new OpenIdAuthenticationDto("new acceess", "new refresh", 0, 0);
+            var openIdAuthenticatioDto = new AuthenticationToken("new acceess", "new refresh");
             
             this.openIdConnectService.Setup(x => x.RequestAuthenticationToken(authenticationTokens.RefreshToken, authenticationSchemeResponse, null, null))
                 .ReturnsAsync(openIdAuthenticatioDto);
             
-            await this.automaticTokenRefreshService.RefreshAuthenticationTokenAsync();
-            Assert.That(this.credentials.Tokens, Is.EqualTo(openIdAuthenticatioDto));            
+            await this.authenticationTokensRefreshService.RefreshAuthenticationInformationAsync();
+            Assert.That(this.credentials.Token, Is.EqualTo(openIdAuthenticatioDto));            
         }
     }
 }

@@ -37,7 +37,6 @@ namespace CDP4ServicesDal
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Text;
     using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
@@ -75,9 +74,10 @@ namespace CDP4ServicesDal
     /// </summary>
     [DalExport("COMET/CDP4 Services", "A COMET, or CDP4 Services Data Access Layer", "1.3.0", DalType.Web)]
 #if NETFRAMEWORK
+    [Export(typeof(CdpServicesDal))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
 #endif
-    public class CdpServicesDal : Dal
+    public class CdpServicesDal : Dal, ISupportAuthenticationRefresh
     {
         /// <summary>
         /// Gets the API route for the <see cref="CometTask" />
@@ -95,9 +95,9 @@ namespace CDP4ServicesDal
         private HttpClient httpClient;
 
         /// <summary>
-        /// The <see cref="JsonSerializerOptions" /> used to deserialize tokens
+        /// The <see cref="JsonSerializerOptions" /> used to deserialize token
         /// </summary>
-        private JsonSerializerOptions tokensOption = new JsonSerializerOptions()
+        private JsonSerializerOptions tokenOption = new JsonSerializerOptions()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
@@ -105,11 +105,23 @@ namespace CDP4ServicesDal
         /// <summary>
         /// Initializes a new instance of the <see cref="CdpServicesDal"/> class.
         /// </summary>
-        public CdpServicesDal()
+        /// <param name="authenticationRefreshService">The <see cref="IAuthenticationRefreshService" /></param>
+#if  NETFRAMEWORK
+        [ImportingConstructor]
+        public CdpServicesDal([Import]IAuthenticationRefreshService authenticationRefreshService)
         {
+            this.AuthenticationRefreshService = authenticationRefreshService;
             this.Cdp4JsonSerializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
             this.MessagePackSerializer = new MessagePackSerializer();
         }
+#else
+        public CdpServicesDal(IAuthenticationRefreshService authenticationRefreshService)
+                {
+            this.AuthenticationRefreshService = authenticationRefreshService;
+            this.Cdp4JsonSerializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.MessagePackSerializer = new MessagePackSerializer();
+        }
+#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CdpServicesDal"/> class.
@@ -117,7 +129,8 @@ namespace CDP4ServicesDal
         /// <param name="httpClient">
         /// The (injected) <see cref="HttpClient"/>
         /// </param>
-        public CdpServicesDal(HttpClient httpClient) : this()
+        /// <param name="authenticationRefreshService">The <see cref="IAuthenticationRefreshService" /></param>
+        public CdpServicesDal(HttpClient httpClient, IAuthenticationRefreshService authenticationRefreshService) : this(authenticationRefreshService)
         {
             if (httpClient == null)
             {
@@ -137,6 +150,11 @@ namespace CDP4ServicesDal
         /// </summary>
         public MessagePackSerializer MessagePackSerializer { get; private set; }
 
+        /// <summary>
+        /// Gets the associated <see cref="IAuthenticationRefreshService" />
+        /// </summary>
+        public IAuthenticationRefreshService AuthenticationRefreshService { get; }
+        
         /// <summary>
         /// Gets the value indicating whether this <see cref="IDal"/> is read only.
         /// </summary>
@@ -1077,7 +1095,7 @@ namespace CDP4ServicesDal
             var resultString = await httpResponseMessage.Content.ReadAsStringAsync();
 
             var deserializationWatch = Stopwatch.StartNew();
-            AuthenticationTokens returnedToken = null;
+            AuthenticationToken returnedToken = null;
 
             switch (this.QueryContentTypeKind(httpResponseMessage))
             {
@@ -1086,8 +1104,8 @@ namespace CDP4ServicesDal
 
                     // Required to be compatible with all versions of WebServices (that does not support refresh)
                     returnedToken = resultString.StartsWith("{") 
-                        ? System.Text.Json.JsonSerializer.Deserialize<AuthenticationTokens>(resultString, options:this.tokensOption)
-                        : new AuthenticationTokens(System.Text.Json.JsonSerializer.Deserialize<string>(resultString), string.Empty);
+                        ? System.Text.Json.JsonSerializer.Deserialize<AuthenticationToken>(resultString, options:this.tokenOption)
+                        : new AuthenticationToken(System.Text.Json.JsonSerializer.Deserialize<string>(resultString), string.Empty);
 
                     Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                     break;
@@ -1101,11 +1119,11 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
-        /// Requests new <see cref="AuthenticationTokens" /> based on the current refresh token
+        /// Requests new <see cref="AuthenticationToken" /> based on the current refresh token
         /// </summary>
         /// <returns>An awaitabl <see cref="Task" /></returns>
         /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
-        /// <exception cref="InvalidOperationException">If the current <see cref="Credentials" /> does not meet following constraints : not null, with non-null <see cref="AuthenticationTokens" />
+        /// <exception cref="InvalidOperationException">If the current <see cref="Credentials" /> does not meet following constraints : not null, with non-null <see cref="AuthenticationToken" />
         ///  containing a refresh token and where the <see cref="AuthenticationSchemeKind" /> is <see cref="AuthenticationSchemeKind.LocalJwtBearer" /></exception>
         /// <exception cref="DalReadException">In case of non successful response from the CDP4 Data source</exception>
         public override async Task RequestAuthenticationTokenFromRefreshToken(CancellationToken cancellationToken)
@@ -1115,7 +1133,7 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The Credentials may not be null");
             }
 
-            if (this.Credentials.Tokens == null)
+            if (this.Credentials.Token == null)
             {
                 throw new InvalidOperationException("The AuthenticationTokns may not be null");
             }
@@ -1125,7 +1143,7 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The AuthenticationScheme should be LocalJwtBearer to use this refresh action");
             }
 
-            if (string.IsNullOrEmpty(this.Credentials.Tokens.RefreshToken))
+            if (string.IsNullOrEmpty(this.Credentials.Token.RefreshToken))
             {
                 throw new InvalidOperationException("The refresh token must be set");
             }
@@ -1144,7 +1162,7 @@ namespace CDP4ServicesDal
             var requestsw = Stopwatch.StartNew();
 
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, resourcePath);
-            requestMessage.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(this.Credentials.Tokens.RefreshToken), System.Text.Encoding.UTF8, "application/json");
+            requestMessage.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(this.Credentials.Token.RefreshToken), System.Text.Encoding.UTF8, "application/json");
             requestMessage.Headers.Add(Headers.CDPToken, refreshQueryToken);
             using var httpResponseMessage = await temporaryClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
 
@@ -1164,13 +1182,13 @@ namespace CDP4ServicesDal
             using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync();
 
             var deserializationWatch = Stopwatch.StartNew();
-            AuthenticationTokens returnedToken = null;
+            AuthenticationToken returnedToken = null;
 
             switch (this.QueryContentTypeKind(httpResponseMessage))
             {
                 case ContentTypeKind.JSON:
                     Logger.Info("Deserializing JSON response");
-                    returnedToken = await System.Text.Json.JsonSerializer.DeserializeAsync<AuthenticationTokens>(resultStream, options:this.tokensOption, cancellationToken: cancellationToken);
+                    returnedToken = await System.Text.Json.JsonSerializer.DeserializeAsync<AuthenticationToken>(resultStream, options:this.tokenOption, cancellationToken: cancellationToken);
                     Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                     break;
                 case ContentTypeKind.MESSAGEPACK:

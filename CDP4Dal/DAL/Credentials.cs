@@ -116,21 +116,21 @@ namespace CDP4Dal.DAL
         /// <summary>
         /// Provides User token, generated from the internal or from an external authentication provider
         /// </summary>
-        /// <param name="authenticationTokens">The generated tokens</param>
+        /// <param name="authenticationToken">The generated token</param>
         /// <param name="authenticationSchemeKind">The <see cref="AuthenticationSchemeKind"/> that is used to connect to a data-store</param>
         /// <exception cref="ArgumentNullException">If the provided token is null or empty</exception>
         /// <exception cref="ArgumentException">If the <paramref name="authenticationSchemeKind"/> is not <see cref="AuthenticationSchemeKind.ExternalJwtBearer"/> or
         /// <see cref="AuthenticationSchemeKind.LocalJwtBearer"/></exception>
-        public void ProvideUserToken(AuthenticationTokens authenticationTokens, AuthenticationSchemeKind authenticationSchemeKind)
+        public void ProvideUserToken(AuthenticationToken authenticationToken, AuthenticationSchemeKind authenticationSchemeKind)
         {
-            if (authenticationTokens == null)
+            if (authenticationToken == null)
             {
-                throw new ArgumentNullException(nameof(authenticationTokens), "The authentication tokens may not be null");
+                throw new ArgumentNullException(nameof(authenticationToken), "The authentication token may not be null");
             }
 
-            if (string.IsNullOrEmpty(authenticationTokens.AccessToken))
+            if (string.IsNullOrEmpty(authenticationToken.AccessToken))
             {
-                throw new ArgumentException("The access-token may not be empty or null", nameof(authenticationTokens));
+                throw new ArgumentException("The access-token may not be empty or null", nameof(authenticationToken));
             }
 
             if (authenticationSchemeKind != AuthenticationSchemeKind.LocalJwtBearer && authenticationSchemeKind != AuthenticationSchemeKind.ExternalJwtBearer)
@@ -138,14 +138,14 @@ namespace CDP4Dal.DAL
                 throw new ArgumentException("The authentication scheme must be either LocalJwtBearer or ExternalJwtBearer", nameof(authenticationSchemeKind));
             }
 
-            this.Tokens = authenticationTokens;
+            this.Token = authenticationToken;
             this.AuthenticationScheme = authenticationSchemeKind;
         }
 
         /// <summary>
         /// Gets the access token
         /// </summary>
-        public AuthenticationTokens Tokens { get; private set; }
+        public AuthenticationToken Token { get; private set; }
 
         /// <summary>
         /// Gets the username that is used to connect to a data-store
@@ -202,7 +202,7 @@ namespace CDP4Dal.DAL
                 return !string.IsNullOrEmpty(this.UserName) && !string.IsNullOrEmpty(this.Password);
             }
 
-            return !string.IsNullOrEmpty(this.Tokens.AccessToken);
+            return !string.IsNullOrEmpty(this.Token.AccessToken);
         }
     }
 }
