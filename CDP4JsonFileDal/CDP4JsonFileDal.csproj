@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4JsonFileDal Community Edition</Title>
-        <VersionPrefix>28.3.2</VersionPrefix>
+        <VersionPrefix>29.0.0</VersionPrefix>
         <Description>CDP4 Json File Dal Plugin</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
@@ -22,8 +22,7 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [BUMP] Version to 28.3.2
-            [Add] SBOM
+          [Refactor] Newtonsoft to System.Text.Json
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>

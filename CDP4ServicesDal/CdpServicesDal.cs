@@ -36,6 +36,7 @@ namespace CDP4ServicesDal
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Text;
     using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
@@ -115,9 +116,9 @@ namespace CDP4ServicesDal
         }
 #else
         public CdpServicesDal(IAuthenticationRefreshService authenticationRefreshService)
-                {
+        {
             this.AuthenticationRefreshService = authenticationRefreshService;
-            this.Cdp4JsonSerializer = new Cdp4JsonSerializer(this.MetaDataProvider, this.DalVersion);
+            this.Cdp4DalJsonSerializer = new Cdp4DalJsonSerializer(this.MetaDataProvider, this.DalVersion, false);
             this.MessagePackSerializer = new MessagePackSerializer();
         }
 #endif
@@ -1296,8 +1297,7 @@ namespace CDP4ServicesDal
             result.DefaultRequestHeaders.Accept.Clear();
             result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/msgpack"));
-TODO: Check if this is necessary, because was added in json branch
-            result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}")));
+
             result.DefaultRequestHeaders.Add(Headers.AcceptCdpVersion, Headers.AcceptCdpVersionValue);
             result.DefaultRequestHeaders.Add("User-Agent", "CDP4 (ECSS-E-TM-10-25 Annex C.2) CDPServicesDal");
 
@@ -1623,7 +1623,7 @@ TODO: Check if this is necessary, because was added in json branch
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            var response = this.Cdp4JsonSerializer.Deserialize<AuthenticationSchemeResponse>(await httpResponseMessage.Content.ReadAsStreamAsync());
+            var response = this.Cdp4DalJsonSerializer.Deserialize<AuthenticationSchemeResponse>(await httpResponseMessage.Content.ReadAsStreamAsync());
 
             watch.Stop();
             Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);

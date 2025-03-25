@@ -4,7 +4,7 @@
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Common Community Edition</Title>
-        <VersionPrefix>28.3.2</VersionPrefix>
+        <VersionPrefix>29.0.0</VersionPrefix>
         <Description>CDP4 Services Messaging is a Class Library that contains clients and messages class that can be used for inter services communication</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Alex, Alexander, Nathanael, Antoine</Authors>
@@ -22,11 +22,7 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] Microsoft.Extensions.Configuration.Abstractions
-            [Update] Microsoft.Extensions.Configuration.Binder
-            [Update] Microsoft.Extensions.Hosting.Abstractions
-            [Update] Polly
-            [Add] SBOM
+          [Refactor] Newtonsoft to System.Text.Json
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>

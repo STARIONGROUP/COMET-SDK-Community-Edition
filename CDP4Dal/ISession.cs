@@ -40,7 +40,6 @@ namespace CDP4Dal
     using CDP4Dal.Permission;
 
     using CDP4DalCommon.Authentication;
-    using CDP4DalCommon.Tasks;
     using CDP4DalCommon.Protocol.Operations;
     using CDP4DalCommon.Protocol.Tasks;
 

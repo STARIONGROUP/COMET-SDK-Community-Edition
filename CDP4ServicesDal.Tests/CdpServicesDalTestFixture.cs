@@ -54,6 +54,8 @@ namespace CDP4ServicesDal.Tests
 
     using CDP4JsonSerializer;
 
+    using Moq;
+
     using NUnit.Framework;
 
     using RichardSzalay.MockHttp;
