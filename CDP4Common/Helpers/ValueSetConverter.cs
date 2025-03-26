@@ -81,21 +81,24 @@ namespace CDP4Common.Helpers
             {
                 var stringValue = value.ToString();
 
-                // try parse double in any culture - allow the user to still use "." as separator
-                if (double.TryParse(stringValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var doubleValue))
-                {
-                    return doubleValue.ToString(CultureInfo.InvariantCulture);
-                }
-
-                // convert the comma separator to dot
-                if (double.TryParse(stringValue, NumberStyles.Float, CultureInfo.CurrentCulture, out doubleValue))
-                {
-                    return doubleValue.ToString(CultureInfo.InvariantCulture);
-                }
-
                 if (bool.TryParse(stringValue, out var booleanValue))
                 {
                     return booleanValue ? "true" : "false";
+                }
+
+                if (parameterType is QuantityKind)
+                {
+                    // try parse double in any culture - allow the user to still use "." as separator
+                    if (double.TryParse(stringValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var doubleValue))
+                    {
+                        return doubleValue.ToString(CultureInfo.InvariantCulture);
+                    }
+
+                    // convert the comma separator to dot
+                    if (double.TryParse(stringValue, NumberStyles.Float, CultureInfo.CurrentCulture, out doubleValue))
+                    {
+                        return doubleValue.ToString(CultureInfo.InvariantCulture);
+                    }
                 }
 
                 return string.IsNullOrWhiteSpace(value.ToString()) ? "-" : value.ToString();
