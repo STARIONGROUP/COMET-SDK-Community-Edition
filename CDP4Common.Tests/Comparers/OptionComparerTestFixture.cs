@@ -1,7 +1,7 @@
 ﻿
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OptionComparerTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2024 Starion Group S.A.
+//    Copyright (c) 2015-2025 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
 //
