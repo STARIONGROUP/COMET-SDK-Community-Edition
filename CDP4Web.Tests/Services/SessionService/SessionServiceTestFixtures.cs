@@ -203,7 +203,7 @@ namespace CDP4Web.Tests.Services.SessionService
         [Category("WebServicesDependent")]
         public void VerifyOpenSession()
         {
-            const string publicServerUrl = "https://cdp4services-test.cdp4.org";
+            const string publicServerUrl = "https://cdp4services-public.cdp4.org";
 
             Assert.Multiple(() =>
             {

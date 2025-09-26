@@ -68,7 +68,7 @@ namespace CDP4ServicesDal.Tests
         private Credentials credentials;
         private ISession session;
 
-        private readonly Uri uri = new Uri("https://cdp4services-test.cdp4.org");
+        private readonly Uri uri = new Uri("https://cdp4services-public.cdp4.org");
         private CancellationTokenSource cancelationTokenSource;
 
         private SiteDirectory siteDirectory;
@@ -188,7 +188,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public void VerifyThatIfNotHttpOrHttpsExceptionIsThrown()
         {
-            var uri = new Uri("https://cdp4services-test.cdp4.org");
+            var uri = new Uri("https://cdp4services-public.cdp4.org");
             var invalidCredentials = new Credentials("John", "a password", uri);
 
             Assert.That(async () => await this.dal.Open(invalidCredentials, new CancellationToken()), Throws.TypeOf<DalReadException>());
@@ -463,7 +463,7 @@ namespace CDP4ServicesDal.Tests
             var files = new List<string> { filepath };
 
             var contentHash = "F73747371CFD9473C19A0A7F99BCAB008474C4CA";
-            var uri = new Uri("https://cdp4services-test.cdp4.org");
+            var uri = new Uri("https://cdp4services-public.cdp4.org");
             this.credentials = new Credentials("admin", "pass", uri);
 
             var returned = await this.dal.Open(this.credentials, this.cancelationTokenSource.Token);
@@ -572,7 +572,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task Verify_that_opens_returns_expected_result()
         {
-            var uri = new Uri("https://cdp4services-test.cdp4.org");
+            var uri = new Uri("https://cdp4services-public.cdp4.org");
             this.credentials = new Credentials("admin", "pass", uri);
 
             var dal = new CdpServicesDal(this.authenticationService.Object);
@@ -660,7 +660,7 @@ namespace CDP4ServicesDal.Tests
         {
             var proxySettings = new ProxySettings(new Uri("http://tinyproxy:8888"));
 
-            var uri = new Uri("https://cdp4services-test.cdp4.org");
+            var uri = new Uri("https://cdp4services-public.cdp4.org");
             this.credentials = new Credentials("admin", "pass", uri, false, proxySettings);
 
             var dal = new CdpServicesDal(this.authenticationService.Object);
@@ -673,7 +673,7 @@ namespace CDP4ServicesDal.Tests
         [Category("WebServicesDependent")]
         public async Task Verify_that_multiple_read_requests_can_be_made_in_parallel()
         {
-            var uri = new Uri("https://cdp4services-test.cdp4.org");
+            var uri = new Uri("https://cdp4services-public.cdp4.org");
             var credentials = new Credentials("admin", "pass", uri);
             var assembler = new Assembler(this.uri, this.messageBus);
 
