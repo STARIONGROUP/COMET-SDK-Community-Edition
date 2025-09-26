@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup Label="override transitive vulnerable dependency">
-        <PackageReference Include="System.Drawing.Common" Version="9.0.1" />
+        <PackageReference Include="System.Drawing.Common" Version="9.0.9" />
     </ItemGroup>
     
     <ItemGroup>
