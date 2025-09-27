@@ -119,6 +119,14 @@ jobs:
           echo "----- RELEASE_NOTES.md -----"
           cat RELEASE_NOTES.md
 
+      - name: add DevExpress nuget feed
+        env:
+          DEVEXPRESS_NUGET_KEY: ${{ secrets.DEVEXPRESS_NUGET_KEY }}
+        run: dotnet nuget add source https://nuget.devexpress.com/api -n DXFeed -u DevExpress -p $DEVEXPRESS_NUGET_KEY --store-password-in-clear-text
+
+      - name: Install dependencies
+        run: dotnet restore CDP4-SDK.sln
+
       - name: Pack
         run: dotnet pack -c Release -o ReleaseBuilds CDP4-SDK.sln
 
