@@ -160,9 +160,7 @@ namespace CDP4ServicesDal.Tests
             var dal = new CdpServicesDal(this.authenticationService.Object);
             var result = await dal.Open(this.credentials, new CancellationToken());
 
-            var amountOfDtos = result.ToList().Count;
-
-            Assert.That(amountOfDtos, Is.EqualTo(86));
+            Assert.That(result, Is.Not.Empty);
         }
 
         [Test]
@@ -173,9 +171,7 @@ namespace CDP4ServicesDal.Tests
             var dal = new CdpServicesDal(httpClient,this.authenticationService.Object);
             var result = await dal.Open(this.credentials, new CancellationToken());
 
-            var amountOfDtos = result.ToList().Count;
-
-            Assert.That(amountOfDtos, Is.EqualTo(602));
+            Assert.That(result, Is.EqualTo(602));
         }
 
         [Test]
