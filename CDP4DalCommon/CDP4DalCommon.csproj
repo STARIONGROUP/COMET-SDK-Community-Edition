@@ -5,12 +5,12 @@
       <Company>Starion Group S.A.</Company>
       <Language>latest</Language>
       <Title>CDP4DalCommon Community Edition</Title>
-      <VersionPrefix>28.3.1</VersionPrefix>
+      <VersionPrefix>28.3.2</VersionPrefix>
       <Description>CDP4 Common Class Library that contains common types for any CDP4 server and the CDP4Dal</Description>
       <Copyright>Copyright © Starion Group S.A.</Copyright>
       <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
       <PackageId>CDP4DalCommon-CE</PackageId>
-      <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+      <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
       <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
       <PublishRepositoryUrl>true</PublishRepositoryUrl>
       <PackageIcon>cdp4-icon.png</PackageIcon>
@@ -18,14 +18,18 @@
       <IncludeSymbols>true</IncludeSymbols>
       <SymbolPackageFormat>snupkg</SymbolPackageFormat>
       <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
-      <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
+      <PackageTags>CDP COMET ECSS-E-TM-10-25 MBSE</PackageTags>
       <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+      <GenerateSBOM>true</GenerateSBOM>
       <PackageReleaseNotes>
-        [BUMP] Version to 28.3.1
+          [BUMP] Version to 28.3.2
+          [Add] SBOM
       </PackageReleaseNotes>
       <PackageReadmeFile>README.md</PackageReadmeFile>
       <GenerateDocumentationFile>true</GenerateDocumentationFile>
       <LangVersion>latest</LangVersion>
+      <NeutralLanguage>en-US</NeutralLanguage>
+      <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
   </PropertyGroup>
     <ItemGroup>
         <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png">
@@ -39,5 +43,9 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
     </ItemGroup>
 </Project>

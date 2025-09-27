@@ -1,40 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-     <Company>Starion Group S.A.</Company>
-     <Title>CDP4Reporting Community Edition</Title>
-     <VersionPrefix>28.3.1</VersionPrefix>
-     <Description>CDP4 Reporting</Description>
-     <Copyright>Copyright © Starion Group S.A.</Copyright>
-     <Authors>Sam, Alex, Alexander</Authors>
-     <PackageId>CDP4Reporting-CE</PackageId>
-     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-     <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
-     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-     <PackageIcon>cdp4-icon.png</PackageIcon>
-     <IncludeSource>true</IncludeSource>
-     <IncludeSymbols>true</IncludeSymbols>
-      <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-     <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
-     <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
-     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
-     <PackageReleaseNotes>
-         [BUMP] Version to 28.3.1
-     </PackageReleaseNotes>
-     <LangVersion>latest</LangVersion>
-     <PackageReadmeFile>README.md</PackageReadmeFile>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <Company>Starion Group S.A.</Company>
+        <Title>CDP4Reporting Community Edition</Title>
+        <VersionPrefix>28.3.2</VersionPrefix>
+        <Description>CDP4 Reporting</Description>
+        <Copyright>Copyright © Starion Group S.A.</Copyright>
+        <Authors>Sam, Alex, Alexander</Authors>
+        <PackageId>CDP4Reporting-CE</PackageId>
+        <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+        <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageIcon>cdp4-icon.png</PackageIcon>
+        <IncludeSource>true</IncludeSource>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
+        <PackageTags>CDP COMET ECSS-E-TM-10-25 MBSE</PackageTags>
+        <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+        <GenerateSBOM>true</GenerateSBOM>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageReleaseNotes>
+            [Add] SBOM
+        </PackageReleaseNotes>
+        <LangVersion>latest</LangVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png" Pack="true" PackagePath="\" />
-    <None Include="..\README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\docs\cdp4-icon.png" Link="cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-    <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
-    <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+        <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
+        <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
+    </ItemGroup>
 
 </Project>

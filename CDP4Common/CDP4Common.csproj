@@ -1,61 +1,67 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
-    <Company>Starion Group S.A.</Company>
-    <Title>CDP4Common Community Edition</Title>
-    <VersionPrefix>28.3.1</VersionPrefix>
-    <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
-    <Copyright>Copyright © Starion Group S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
-    <PackageId>CDP4Common-CE</PackageId>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageIcon>cdp4-icon.png</PackageIcon>
-    <IncludeSource>true</IncludeSource>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
-    <PackageTags>CDP COMET ECSS-E-TM-10-25</PackageTags>
-    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
-    <PackageReleaseNotes>
-        [REFACTOR] ValueSetConverter.ToValueSetString for TextParameterTypes
-    </PackageReleaseNotes>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
+        <Company>Starion Group S.A.</Company>
+        <Title>CDP4Common Community Edition</Title>
+        <VersionPrefix>28.3.2</VersionPrefix>
+        <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
+        <Copyright>Copyright © Starion Group S.A.</Copyright>
+        <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
+        <PackageId>CDP4Common-CE</PackageId>
+        <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+        <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageIcon>cdp4-icon.png</PackageIcon>
+        <IncludeSource>true</IncludeSource>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
+        <PackageTags>CDP COMET ECSS-E-TM-10-25 MBSE</PackageTags>
+        <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+        <GenerateSBOM>true</GenerateSBOM>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+        <LangVersion>latest</LangVersion>
+        <PackageReleaseNotes>
+            [Update] NLog
+            [Add] SBOM
+        </PackageReleaseNotes>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Encryption\**" />
-    <EmbeddedResource Remove="Encryption\**" />
-    <None Remove="Encryption\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Encryption\**" />
+        <EmbeddedResource Remove="Encryption\**" />
+        <None Remove="Encryption\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+    </ItemGroup>
 
-  <PropertyGroup>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-  </PropertyGroup>
+    <PropertyGroup>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\docs\cdp4-icon.png" Pack="true" PackagePath="\" />
-    <None Include="..\README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\docs\cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <Reference Include="System.ComponentModel.Composition" />
-  </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+        <Reference Include="System.ComponentModel.Composition" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="NLog" Version="6.0.4" />
-    <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="System.ValueTuple" Version="4.6.1" />
-    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="NLog" Version="6.0.4" />
+        <PackageReference Include="SharpZipLib" Version="1.4.2" />
+        <PackageReference Include="System.ValueTuple" Version="4.6.1" />
+        <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
+    </ItemGroup>
 
     <ItemGroup Label="override transitive vulnerable dependency">
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />

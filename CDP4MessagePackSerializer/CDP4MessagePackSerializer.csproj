@@ -1,30 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-      <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
-      <Company>Starion Group S.A.</Company>
-      <Title>CDP4MessagePackSerializer Community Edition</Title>
-      <VersionPrefix>28.3.1</VersionPrefix>
-      <Description>CDP4 MessagePack Serialization Library</Description>
-      <Copyright>Copyright © Starion Group S.A.</Copyright>
-      <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar</Authors>
-      <PackageId>CDP4MessagePackSerializer-CE</PackageId>
-      <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-      <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
-      <PublishRepositoryUrl>true</PublishRepositoryUrl>
-      <PackageIcon>cdp4-icon.png</PackageIcon>
-      <IncludeSource>true</IncludeSource>
-      <IncludeSymbols>true</IncludeSymbols>
-      <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-      <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
-      <PackageTags>CDP COMET ECSS-E-TM-10-25 MessagePack</PackageTags>
-      <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
-      <PackageReleaseNotes>
-        [BUMP] Version to 28.3.1
-      </PackageReleaseNotes>
-      <PackageReadmeFile>README.md</PackageReadmeFile>
-      <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
+        <Company>Starion Group S.A.</Company>
+        <Title>CDP4MessagePackSerializer Community Edition</Title>
+        <VersionPrefix>28.3.2</VersionPrefix>
+        <Description>CDP4 MessagePack Serialization Library</Description>
+        <Copyright>Copyright © Starion Group S.A.</Copyright>
+        <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar</Authors>
+        <PackageId>CDP4MessagePackSerializer-CE</PackageId>
+        <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+        <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageIcon>cdp4-icon.png</PackageIcon>
+        <IncludeSource>true</IncludeSource>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
+        <PackageTags>CDP COMET ECSS-E-TM-10-25 MessagePack MBSE</PackageTags>
+        <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+        <GenerateSBOM>true</GenerateSBOM>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageReleaseNotes>
+            [Update] MessagePack
+            [Update] System.IO.Pipelines
+            [Add] SBOM
+        </PackageReleaseNotes>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <LangVersion>latest</LangVersion>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+    </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\docs\cdp4-icon.png" Pack="true" PackagePath="\" />
@@ -38,10 +44,11 @@
     <ItemGroup>
         <PackageReference Include="MessagePack" Version="3.1.4" />
         <PackageReference Include="System.IO.Pipelines" Version="9.0.9" />
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="AutoGenMessagePackFormatter\" />
+        <Folder Include="AutoGenMessagePackFormatter\" />
     </ItemGroup>
 
 </Project>

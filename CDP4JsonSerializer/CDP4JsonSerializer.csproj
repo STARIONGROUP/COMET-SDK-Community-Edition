@@ -1,57 +1,63 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
-    <Company>Starion Group S.A.</Company>
-    <Title>CDP4JsonSerializer Community Edition</Title>
-    <VersionPrefix>28.3.1</VersionPrefix>
-    <Description>CDP4 JSON Serialization Library</Description>
-    <Copyright>Copyright © Starion Group S.A.</Copyright>
-    <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
-    <PackageId>CDP4JsonSerializer-CE</PackageId>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageIcon>cdp4-icon.png</PackageIcon>
-    <IncludeSource>true</IncludeSource>
-    <IncludeSymbols>true</IncludeSymbols>
-      <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
-    <PackageTags>CDP COMET ECSS-E-TM-10-25 JSON</PackageTags>
-    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
-    <PackageReleaseNotes>
-      [BUMP] Version to 28.3.1
-    </PackageReleaseNotes>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
+        <Company>Starion Group S.A.</Company>
+        <Title>CDP4JsonSerializer Community Edition</Title>
+        <VersionPrefix>28.3.2</VersionPrefix>
+        <Description>CDP4 JSON Serialization Library</Description>
+        <Copyright>Copyright © Starion Group S.A.</Copyright>
+        <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
+        <PackageId>CDP4JsonSerializer-CE</PackageId>
+        <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+        <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageIcon>cdp4-icon.png</PackageIcon>
+        <IncludeSource>true</IncludeSource>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition.git</RepositoryUrl>
+        <PackageTags>CDP COMET ECSS-E-TM-10-25 JSON MBSE</PackageTags>
+        <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+        <GenerateSBOM>true</GenerateSBOM>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageReleaseNotes>
+            [Update] Newtonsoft.Json
+            [Add] SBOM
+        </PackageReleaseNotes>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <LangVersion>latest</LangVersion>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+    </ItemGroup>
 
-  <PropertyGroup>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-  </PropertyGroup>
+    <PropertyGroup>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\docs\cdp4-icon.png" Pack="true" PackagePath="\" />
-    <None Include="..\README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\docs\cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="AutoGenDtoDeserializer\" />
-    <Folder Include="AutoGenDtoSerializer\" />
-    <Folder Include="Helper\" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="AutoGenDtoDeserializer\" />
+        <Folder Include="AutoGenDtoSerializer\" />
+        <Folder Include="Helper\" />
+    </ItemGroup>
 
 </Project>
