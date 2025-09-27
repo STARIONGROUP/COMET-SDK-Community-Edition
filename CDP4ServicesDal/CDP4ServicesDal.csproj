@@ -28,8 +28,8 @@
 
   <ItemGroup>
 	<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-	<PackageReference Include="Polly" Version="8.5.2" />
-	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.6.0" />
+	<PackageReference Include="Polly" Version="8.6.4" />
+	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
 	<PackageReference Include="System.Text.Json" Version="9.0.9" />
   </ItemGroup>
 
