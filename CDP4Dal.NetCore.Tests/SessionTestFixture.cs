@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="SessionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2024 RHEA System S.A.
+// <copyright file="SessionTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2025 Starion Group S.A.
 // 
 //    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
@@ -385,7 +385,7 @@ namespace CDP4Dal.NetCore.Tests
             modelRdlDto.RequiredRdl = requiredPocoDto.Iid;
             siteDir.Person.Add(JohnDoe);
 
-            var credentials = new Credentials("admin", "pass", new Uri("http://www.rheagroup.com"));
+            var credentials = new Credentials("admin", "pass", new Uri("http://www.stariongroup.eu"));
             var session2 = new Session(this.mockedDal.Object, credentials, this.messageBus);
             session2.GetType().GetProperty("ActivePerson").SetValue(session2, JohnDoe, null);
 

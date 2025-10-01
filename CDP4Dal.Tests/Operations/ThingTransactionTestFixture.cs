@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="ThingTransactionTestFixture.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2024 RHEA System S.A.
+// <copyright file="ThingTransactionTestFixture.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2025 Starion Group S.A.
 // 
 //    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
@@ -52,7 +52,7 @@ namespace CDP4Dal.Tests
         private Iteration iteration;
 
         private ConcurrentDictionary<CacheKey, Lazy<Thing>> cache;
-        private Uri uri = new Uri("http://www.rheagroup.com");
+        private Uri uri = new Uri("http://www.stariongroup.eu");
 
         [SetUp]
         public void Setup()
