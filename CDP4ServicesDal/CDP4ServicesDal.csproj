@@ -30,11 +30,12 @@
     </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
-	<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-	<PackageReference Include="Polly" Version="8.6.4" />
-	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
-	<PackageReference Include="System.Text.Json" Version="9.0.9" />
+	  <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
+	  <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+	  <PackageReference Include="Polly" Version="8.6.4" />
+	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+	  <PackageReference Include="System.Text.Json" Version="9.0.9" />
   </ItemGroup>
 
     <PropertyGroup>
@@ -47,10 +48,6 @@
         <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
-    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
