@@ -1,26 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CopyOperationHandler.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+﻿// -------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="CopyOperationHandler.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2025 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4ServicesDal
 {
@@ -31,11 +31,12 @@ namespace CDP4ServicesDal
 
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Helpers;
 
     using CDP4Dal;
     using CDP4Dal.Operations;
     using CDP4Dal.Permission;
+
+    using CDP4DalCommon.Protocol.Operations;
 
     using Poco = CDP4Common.CommonData.Thing;
 
@@ -55,7 +56,7 @@ namespace CDP4ServicesDal
         private readonly ISession session;
 
         /// <summary>
-        /// A <see cref="Dictionary{Poco, Poco}"/> that map the original <see cref="Poco"/> to the copied version
+        /// A <see cref="Dictionary{Poco,Poco}"/> that map the original <see cref="Poco"/> to the copied version
         /// </summary>
         private Dictionary<Poco, Poco> copyThingMap;
 
@@ -95,6 +96,7 @@ namespace CDP4ServicesDal
             var operationsToAdd = new List<Operation>();
 
             var copyOperationCount = operationContainer.Operations.Count(x => x.OperationKind.IsCopyOperation());
+
             if (copyOperationCount > 1)
             {
                 // TODO: support this if needed
@@ -102,6 +104,7 @@ namespace CDP4ServicesDal
             }
 
             var copyOperation = operationContainer.Operations.SingleOrDefault(x => x.OperationKind.IsCopyOperation());
+
             if (copyOperation == null)
             {
                 return;
@@ -156,6 +159,7 @@ namespace CDP4ServicesDal
 
             // Add all contained objects
             this.copyableIds.AddRange(copyPermissionResult.CopyableThings.Select(c => c.Iid).ToList());
+
             if (this.copyableIds.Contains(originalPoco.Iid))
             {
                 var updatedIteration = copyPoco.GetContainerOfType<Iteration>();
@@ -164,6 +168,7 @@ namespace CDP4ServicesDal
 
                 // modify the references to point to the copy thing
                 this.ModifyReferences();
+
                 if (copyOperation.OperationKind.IsCopyChangeOwnerOperation())
                 {
                     this.ChangeOwner(updatedIteration);
@@ -209,6 +214,7 @@ namespace CDP4ServicesDal
             foreach (var containerList in poco.ContainerLists)
             {
                 var updatedContainerList = new List<Poco>();
+
                 foreach (Poco containedPoco in containerList)
                 {
                     if (!this.copyableIds.Contains(containedPoco.Iid))
@@ -311,6 +317,7 @@ namespace CDP4ServicesDal
         private void ModifyReferences(Parameter parameter)
         {
             parameter.StateDependence = null;
+
             if (parameter.Group == null)
             {
                 return;
@@ -319,6 +326,7 @@ namespace CDP4ServicesDal
             // if the group cannot be copied, set to null
             Poco groupCopy;
             this.copyThingMap.TryGetValue(parameter.Group, out groupCopy);
+
             parameter.Group = this.copyThingMap.TryGetValue(parameter.Group, out groupCopy)
                 ? (ParameterGroup)groupCopy
                 : null;
@@ -338,6 +346,7 @@ namespace CDP4ServicesDal
             // if the group cannot be copied, set to null
             Poco groupCopy;
             this.copyThingMap.TryGetValue(group.ContainingGroup, out groupCopy);
+
             group.ContainingGroup = this.copyThingMap.TryGetValue(group.ContainingGroup, out groupCopy)
                 ? (ParameterGroup)groupCopy
                 : null;
@@ -361,12 +370,14 @@ namespace CDP4ServicesDal
         private void ChangeOwner(Iteration iteration)
         {
             var activeDomain = this.session.OpenIterations.Single(x => x.Key.Iid == iteration.Iid).Value.Item1;
+
             if (activeDomain == null)
             {
                 throw new InvalidOperationException("The active domain is null. The copy operation cannot be performed.");
             }
 
             var ownedThings = this.copyThingMap.Values.OfType<IOwnedThing>().ToList();
+
             foreach (var ownedThing in ownedThings)
             {
                 // the owner of a subscription shall not be set to the active one

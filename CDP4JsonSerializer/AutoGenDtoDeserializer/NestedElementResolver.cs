@@ -1,27 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="NestedElementResolver.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elebiary, Jaime Bernar
-//
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
 //    This file is part of CDP4-COMET SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
+// 
 //    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
+// 
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -29,76 +28,119 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
     using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="NestedElementResolver"/> is to deserialize a JSON object to a <see cref="NestedElement"/>
+    /// The purpose of the <see cref="NestedElementResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.NestedElement"/>
     /// </summary>
     public static class NestedElementResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="NestedElement"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="NestedElement"/> to instantiate</returns>
-        public static CDP4Common.DTO.NestedElement FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.NestedElement"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.NestedElement"/> to instantiate</returns>
+        public static CDP4Common.DTO.NestedElement FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var nestedElement = new CDP4Common.DTO.NestedElement(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                nestedElement.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the NestedElementResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["elementUsage"].IsNullOrEmpty())
+            var nestedElement = new CDP4Common.DTO.NestedElement(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("elementUsage"u8, out var elementUsageProperty))
             {
-                nestedElement.ElementUsage.AddRange(jObject["elementUsage"].ToOrderedItemCollection());
+                nestedElement.ElementUsage.AddRange(elementUsageProperty.ToOrderedItemCollection());
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                nestedElement.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    nestedElement.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                nestedElement.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    nestedElement.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["isVolatile"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isVolatile"u8, out var isVolatileProperty))
             {
-                nestedElement.IsVolatile = jObject["isVolatile"].ToObject<bool>();
+                if(isVolatileProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale isVolatile property of the nestedElement {id} is null", nestedElement.Iid);
+                }
+                else
+                {
+                    nestedElement.IsVolatile = isVolatileProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                nestedElement.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale modifiedOn property of the nestedElement {id} is null", nestedElement.Iid);
+                }
+                else
+                {
+                    nestedElement.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["nestedParameter"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("nestedParameter"u8, out var nestedParameterProperty) && nestedParameterProperty.ValueKind != JsonValueKind.Null)
             {
-                nestedElement.NestedParameter.AddRange(jObject["nestedParameter"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in nestedParameterProperty.EnumerateArray())
+                {
+                    nestedElement.NestedParameter.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["rootElement"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("rootElement"u8, out var rootElementProperty))
             {
-                nestedElement.RootElement = jObject["rootElement"].ToObject<Guid>();
+                if(rootElementProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale rootElement property of the nestedElement {id} is null", nestedElement.Iid);
+                }
+                else
+                {
+                    nestedElement.RootElement = rootElementProperty.GetGuid();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                nestedElement.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale thingPreference property of the nestedElement {id} is null", nestedElement.Iid);
+                }
+                else
+                {
+                    nestedElement.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return nestedElement;

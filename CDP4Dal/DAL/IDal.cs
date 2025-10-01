@@ -1,26 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="IDal.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal.DAL
 {
@@ -36,8 +36,9 @@ namespace CDP4Dal.DAL
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
 
+    using CDP4DalCommon.Protocol.Operations;
+    using CDP4DalCommon.Protocol.Tasks;
     using CDP4DalCommon.Authentication;
-    using CDP4DalCommon.Tasks;
 
     using Thing = CDP4Common.DTO.Thing;
 
@@ -65,7 +66,7 @@ namespace CDP4Dal.DAL
         /// Gets the value indicating whether this <see cref="IDal"/> is read only
         /// </summary>
         bool IsReadOnly { get; }
-        
+
         /// <summary>
         /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s asynchronously.
         /// </summary>
@@ -93,7 +94,7 @@ namespace CDP4Dal.DAL
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
         Task<IEnumerable<Thing>> Write(OperationContainer operationContainer, IEnumerable<string> files = null);
-        
+
         /// <summary>
         /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously for a possible long running task.
         /// </summary>
@@ -278,7 +279,7 @@ namespace CDP4Dal.DAL
         /// <param name="categoriesId">A collection of <see cref="Category"/> <see cref="Guid"/>s</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>A <see cref="Task{T}" /> of type <see cref="IEnumerable{T}"/> of read <see cref="Thing" /></returns>
-        Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds, 
+        Task<IEnumerable<Thing>> CherryPick(Guid engineeringModelId, Guid iterationId, IEnumerable<ClassKind> classKinds,
             IEnumerable<Guid> categoriesId, CancellationToken cancellationToken);
 
         /// <summary>

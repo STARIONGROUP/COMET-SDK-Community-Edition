@@ -1,27 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="DiagramEdgeResolver.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elebiary, Jaime Bernar
-//
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
 //    This file is part of CDP4-COMET SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
+// 
 //    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
+// 
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -29,101 +28,171 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
     using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="DiagramEdgeResolver"/> is to deserialize a JSON object to a <see cref="DiagramEdge"/>
+    /// The purpose of the <see cref="DiagramEdgeResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.DiagramEdge"/>
     /// </summary>
     public static class DiagramEdgeResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="DiagramEdge"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="DiagramEdge"/> to instantiate</returns>
-        public static CDP4Common.DTO.DiagramEdge FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.DiagramEdge"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.DiagramEdge"/> to instantiate</returns>
+        public static CDP4Common.DTO.DiagramEdge FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var diagramEdge = new CDP4Common.DTO.DiagramEdge(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                diagramEdge.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the DiagramEdgeResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["bounds"].IsNullOrEmpty())
+            var diagramEdge = new CDP4Common.DTO.DiagramEdge(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("bounds"u8, out var boundsProperty) && boundsProperty.ValueKind != JsonValueKind.Null)
             {
-                diagramEdge.Bounds.AddRange(jObject["bounds"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in boundsProperty.EnumerateArray())
+                {
+                    diagramEdge.Bounds.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["depictedThing"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("depictedThing"u8, out var depictedThingProperty))
             {
-                diagramEdge.DepictedThing = jObject["depictedThing"].ToObject<Guid?>();
+                if(depictedThingProperty.ValueKind == JsonValueKind.Null)
+                {
+                    diagramEdge.DepictedThing = null;
+                }
+                else
+                {
+                    diagramEdge.DepictedThing = depictedThingProperty.GetGuid();
+                }
             }
 
-            if (!jObject["diagramElement"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("diagramElement"u8, out var diagramElementProperty) && diagramElementProperty.ValueKind != JsonValueKind.Null)
             {
-                diagramEdge.DiagramElement.AddRange(jObject["diagramElement"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in diagramElementProperty.EnumerateArray())
+                {
+                    diagramEdge.DiagramElement.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                diagramEdge.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    diagramEdge.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                diagramEdge.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    diagramEdge.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["localStyle"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("localStyle"u8, out var localStyleProperty) && localStyleProperty.ValueKind != JsonValueKind.Null)
             {
-                diagramEdge.LocalStyle.AddRange(jObject["localStyle"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in localStyleProperty.EnumerateArray())
+                {
+                    diagramEdge.LocalStyle.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                diagramEdge.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale modifiedOn property of the diagramEdge {id} is null", diagramEdge.Iid);
+                }
+                else
+                {
+                    diagramEdge.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                diagramEdge.Name = jObject["name"].ToObject<string>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale name property of the diagramEdge {id} is null", diagramEdge.Iid);
+                }
+                else
+                {
+                    diagramEdge.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["point"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("point"u8, out var pointProperty))
             {
-                diagramEdge.Point.AddRange(jObject["point"].ToOrderedItemCollection());
+                diagramEdge.Point.AddRange(pointProperty.ToOrderedItemCollection());
             }
 
-            if (!jObject["sharedStyle"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("sharedStyle"u8, out var sharedStyleProperty))
             {
-                diagramEdge.SharedStyle = jObject["sharedStyle"].ToObject<Guid?>();
+                if(sharedStyleProperty.ValueKind == JsonValueKind.Null)
+                {
+                    diagramEdge.SharedStyle = null;
+                }
+                else
+                {
+                    diagramEdge.SharedStyle = sharedStyleProperty.GetGuid();
+                }
             }
 
-            if (!jObject["source"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
             {
-                diagramEdge.Source = jObject["source"].ToObject<Guid>();
+                if(sourceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale source property of the diagramEdge {id} is null", diagramEdge.Iid);
+                }
+                else
+                {
+                    diagramEdge.Source = sourceProperty.GetGuid();
+                }
             }
 
-            if (!jObject["target"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
             {
-                diagramEdge.Target = jObject["target"].ToObject<Guid>();
+                if(targetProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale target property of the diagramEdge {id} is null", diagramEdge.Iid);
+                }
+                else
+                {
+                    diagramEdge.Target = targetProperty.GetGuid();
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                diagramEdge.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale thingPreference property of the diagramEdge {id} is null", diagramEdge.Iid);
+                }
+                else
+                {
+                    diagramEdge.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return diagramEdge;

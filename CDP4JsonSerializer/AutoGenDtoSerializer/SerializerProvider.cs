@@ -1,27 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="SerializerProvider.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
-//
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elebiary, Jaime Bernar
-//
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
 //    This file is part of CDP4-COMET SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
+// 
 //    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
+// 
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -31,13 +30,14 @@ namespace CDP4JsonSerializer
 {
     using System;
     using System.Collections.Generic;
-
+    using System.IO;
+    using System.Text;
+    using System.Text.Json;
+    
     using CDP4Common;
     using CDP4Common.DTO;
-
+    
     using CDP4JsonSerializer.Helper;
-
-    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// A static class that provides method to serialize a <see cref="Thing"/> or a <see cref="ClasslessDTO"/>
@@ -47,7 +47,7 @@ namespace CDP4JsonSerializer
         /// <summary>
         /// The map containing the Serializers
         /// </summary>
-        private static readonly Dictionary<string, IThingSerializer> SerializerMap = new Dictionary<string, IThingSerializer>
+        private static readonly Dictionary<string, IThingSerializer> SerializerMap = new()
         {
             { "ActionItem", new ActionItemSerializer() },
             { "ActualFiniteState", new ActualFiniteStateSerializer() },
@@ -198,42 +198,100 @@ namespace CDP4JsonSerializer
         };
 
         /// <summary>
-        /// Serialize a <see cref="Thing"/>
+        /// Serialize a <see cref="Thing"/> into an <see cref="Utf8JsonWriter" />
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/></param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public static JObject ToJsonObject(this Thing thing)
+        /// <param name="writer">The <see cref="Utf8JsonWriter" /></param>
+        /// <param name="requestedVersion">The <see cref="Version" /> that has been requested for the serialization</param>
+        public static void SerializeThing(this Thing thing, Utf8JsonWriter writer, Version requestedVersion)
         {
-            IThingSerializer serializer;
-            if(!SerializerMap.TryGetValue(thing.ClassKind.ToString(), out serializer))
+            if(!SerializerMap.TryGetValue(thing.ClassKind.ToString(), out var serializer))
             {
                 throw new NotSupportedException($"The {thing.ClassKind} class is not registered");
             }
-
-            return serializer.Serialize(thing);
+        
+            serializer.Serialize(thing, writer, requestedVersion);
         }
-
+        
         /// <summary>
-        /// Serialize a <see cref="ClasslessDTO"/>
+        /// Serialize a <see cref="ClasslessDTO"/> into an <see cref="Utf8JsonWriter" />
         /// </summary>
         /// <param name="classlessDto">The <see cref="ClasslessDTO"/></param>
-        /// <returns>The <see cref="JObject"/></returns>
-        public static JObject ToJsonObject(this ClasslessDTO classlessDto)
+        /// <param name="writer">The <see cref="Utf8JsonWriter" /></param>
+        /// <param name="requestedVersion">The <see cref="Version" /> that has been requested for the serialization</param>
+        public static void SerializeClasslessDto(this ClasslessDTO classlessDto, Utf8JsonWriter writer, Version requestedVersion)
         {
-            IThingSerializer serializer;
-            if(!SerializerMap.TryGetValue(classlessDto["ClassKind"].ToString(), out serializer))
+            if(!SerializerMap.TryGetValue(classlessDto["ClassKind"].ToString(), out var serializer))
             {
                 throw new NotSupportedException($"The {classlessDto["ClassKind"]} class is not registered");
             }
 
-            var jsonObject = new JObject();
+            writer.WriteStartObject();
+
             foreach (var keyValue in classlessDto)
             {
                 var key = Utils.LowercaseFirstLetter(keyValue.Key);
-                jsonObject.Add(key, serializer.PropertySerializerMap[key](keyValue.Value)); 
+                serializer.SerializeProperty(key, keyValue.Value, writer, requestedVersion); 
             }
 
-            return jsonObject;
+            writer.WriteEndObject();
+        }
+
+        /// <summary>
+        /// Serialize a <see cref="Thing"/> into an <see cref="Utf8JsonWriter" />
+        /// </summary>
+        /// <param name="thing">The <see cref="Thing"/></param>
+        /// <returns>A json representation of the <see cref="Thing"/></returns>
+        public static string ToJsonString(this Thing thing)
+        {
+            if(!SerializerMap.TryGetValue(thing.ClassKind.ToString(), out var serializer))
+            {
+                throw new NotSupportedException($"The {thing.ClassKind} class is not registered");
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new Utf8JsonWriter(stream))
+                {
+                    serializer.Serialize(thing, writer);
+                    writer.Flush();
+                    stream.Flush();
+                    return Encoding.UTF8.GetString(stream.ToArray());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Serialize a <see cref="ClasslessDTO"/> into an <see cref="Utf8JsonWriter" />
+        /// </summary>
+        /// <param name="classlessDto">The <see cref="ClasslessDTO"/></param>
+        /// <returns>A json representation of the <see cref="ClasslessDTO"/></returns>
+        public static string ToJsonString(this ClasslessDTO classlessDto)
+        {
+            if(!SerializerMap.TryGetValue(classlessDto["ClassKind"].ToString(), out var serializer))
+            {
+                throw new NotSupportedException($"The {classlessDto["ClassKind"]} class is not registered");
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new Utf8JsonWriter(stream))
+                {
+                    writer.WriteStartObject();
+
+                    foreach (var keyValue in classlessDto)
+                    {
+                        var key = Utils.LowercaseFirstLetter(keyValue.Key);
+                        serializer.SerializeProperty(key, keyValue.Value, writer);
+                    }
+
+                    writer.WriteEndObject();
+
+                    writer.Flush();
+                    stream.Flush();
+                    return Encoding.UTF8.GetString(stream.ToArray());
+                }
+            }
         }
     }
 }

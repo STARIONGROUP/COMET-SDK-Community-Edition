@@ -1,44 +1,42 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OperationModifier.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2019 Starion Group S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+﻿// -------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="OperationModifier.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2025 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4ServicesDal
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using CDP4Common.CommonData;
+
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.Types;
+
     using CDP4Dal;
     using CDP4Dal.Operations;
 
+    using CDP4DalCommon.Protocol.Operations;
+
     using ActualFiniteState = CDP4Common.DTO.ActualFiniteState;
-    using ElementUsage = CDP4Common.DTO.ElementUsage;
-    using ParameterOverride = CDP4Common.DTO.ParameterOverride;
-    using ParameterSubscription = CDP4Common.DTO.ParameterSubscription;
     using PossibleFiniteStateList = CDP4Common.DTO.PossibleFiniteStateList;
-    
+
     /// <summary>
     /// The purpose of the <see cref="OperationModifier"/> is to perform operations that
     /// are not performed directly by the server 
@@ -73,6 +71,7 @@ namespace CDP4ServicesDal
                 if (operation.OperationKind == OperationKind.Update)
                 {
                     var possibleStateList = operation.ModifiedThing as PossibleFiniteStateList;
+
                     if (possibleStateList != null)
                     {
                         operationsToAdd.AddRange(this.ModifyActualStateKindOnDefaultPossibleStateUpdate(possibleStateList));
@@ -95,6 +94,7 @@ namespace CDP4ServicesDal
         {
             var operations = new List<Operation>();
             var defaultStateId = possibleFiniteStateList.DefaultState;
+
             if (!defaultStateId.HasValue)
             {
                 return operations;
@@ -102,14 +102,15 @@ namespace CDP4ServicesDal
 
             // gets the actualList that uses the updated possible list
             var actualLists = this.session.Assembler.Cache.Select(x => x.Value)
-                            .Select(x => x.Value)
-                            .OfType<ActualFiniteStateList>()
-                            .Where(x => x.PossibleFiniteStateList.Select(pl => pl.Iid).Contains(possibleFiniteStateList.Iid))
-                            .ToList();
+                .Select(x => x.Value)
+                .OfType<ActualFiniteStateList>()
+                .Where(x => x.PossibleFiniteStateList.Select(pl => pl.Iid).Contains(possibleFiniteStateList.Iid))
+                .ToList();
 
             foreach (var actualFiniteStateList in actualLists)
             {
                 var possibleLists = actualFiniteStateList.PossibleFiniteStateList.Where(x => x.Iid != possibleFiniteStateList.Iid).ToList();
+
                 if (possibleLists.Any(x => x.DefaultState == null))
                 {
                     // one of the possible list has no default state

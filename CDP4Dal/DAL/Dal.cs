@@ -1,26 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="Dal.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
-//    This file is part of COMET-SDK Community Edition
-//
-//    The COMET-SDK Community Edition is free software; you can redistribute it and/or
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The COMET-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal.DAL
 {
@@ -36,16 +36,17 @@ namespace CDP4Dal.DAL
     using CDP4Common.DTO;
     using CDP4Common.Helpers;
     using CDP4Common.MetaInfo;
-    
-    using CDP4Dal.Operations;
+
     using CDP4Dal.Composition;
     using CDP4Dal.Exceptions;
+    using CDP4Dal.Operations;
 
+    using CDP4DalCommon.Protocol.Operations;
+    using CDP4DalCommon.Protocol.Tasks;
     using CDP4DalCommon.Authentication;
-    using CDP4DalCommon.Tasks;
 
     using NLog;
-    
+
     using Iteration = CDP4Common.DTO.Iteration;
     using Thing = CDP4Common.DTO.Thing;
 
@@ -218,7 +219,7 @@ namespace CDP4Dal.DAL
         /// The <see cref="CancellationToken"/>
         /// </param>
         /// <returns>an await-able <see cref="Task"/> that returns a <see cref="byte"/> array.</returns>
-        public abstract Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken) ;
+        public abstract Task<byte[]> ReadFile(Thing thing, CancellationToken cancellationToken);
 
         /// <summary>
         /// Creates the specified <see cref="Thing"/> on a data source
@@ -487,7 +488,7 @@ namespace CDP4Dal.DAL
             }
             catch (Exception ex)
             {
-                Logger.Warn(ex,"The Iteration identifier could not be exracted from {0}", uri);
+                Logger.Warn(ex, "The Iteration identifier could not be exracted from {0}", uri);
 
                 iterationId = Guid.Empty;
                 return false;

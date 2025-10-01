@@ -16,6 +16,7 @@ CDP4MessagePackSerializer | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Me
 CDP4Reporting | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Reporting-CE)
 CDP4Dal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Dal-CE)
 CDP4DalCommon | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4DalCommon-CE)
+CDP4DalJsonSerializer | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4DalJsonSerializer-CE)
 CDP4JsonFileDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4JsonFileDal-CE)
 CDP4ServicesDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4ServicesDal-CE)
 CDP4WspDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4WspDal-CE)
@@ -74,6 +75,10 @@ The CDP4Dal library is a library that provides the basis to implement ECSS-E-TM-
 ## CDP4DalCommon
 
 The CDP4DalCommon library provides common classes to support the ECSS-E-TM-10-25 and CDP4-COMET protocol.
+
+## CDP4DalJsonSerializer
+
+The CDP4DalJsonSerializer library provides JsonSerializer converter for common classes contained in CDP4DalCommon library.
 
 ## CDP4JsonFileDal
 

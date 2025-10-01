@@ -1,27 +1,26 @@
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="CategoryResolver.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, 
-//            Antoine Théate, Omar Elebiary, Jaime Bernar
-//
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
 //    This file is part of CDP4-COMET SDK Community Edition
-//    This is an auto-generated class. Any manual changes to this file will be overwritten!
-//
+// 
 //    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
+// 
 //    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-// --------------------------------------------------------------------------------------------------------------------
+// </copyright>
+// -------------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
@@ -29,101 +28,170 @@
 
 namespace CDP4JsonSerializer
 {
-    using System;
     using System.Collections.Generic;
+    using System.Text.Json;
 
-    using CDP4Common.CommonData;
-    using CDP4Common.DiagramData;
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.ReportingData;
-    using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
-    using Newtonsoft.Json.Linq;
+    using NLog;
 
     /// <summary>
-    /// The purpose of the <see cref="CategoryResolver"/> is to deserialize a JSON object to a <see cref="Category"/>
+    /// The purpose of the <see cref="CategoryResolver"/> is to deserialize a JSON object to a <see cref="CDP4Common.DTO.Category"/>
     /// </summary>
     public static class CategoryResolver
     {
         /// <summary>
-        /// Instantiate and deserialize the properties of a <paramref name="Category"/>
+        /// The NLog logger
         /// </summary>
-        /// <param name="jObject">The <see cref="JObject"/> containing the data</param>
-        /// <returns>The <see cref="Category"/> to instantiate</returns>
-        public static CDP4Common.DTO.Category FromJsonObject(JObject jObject)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Instantiate and deserialize the properties of a <see cref="CDP4Common.DTO.Category"/>
+        /// </summary>
+        /// <param name="jsonElement">The <see cref="JsonElement"/> containing the data</param>
+        /// <returns>The <see cref="CDP4Common.DTO.Category"/> to instantiate</returns>
+        public static CDP4Common.DTO.Category FromJsonObject(JsonElement jsonElement)
         {
-            var iid = jObject["iid"].ToObject<Guid>();
-            var revisionNumber = jObject["revisionNumber"].IsNullOrEmpty() ? 0 : jObject["revisionNumber"].ToObject<int>();
-            var category = new CDP4Common.DTO.Category(iid, revisionNumber);
-
-            if (!jObject["actor"].IsNullOrEmpty())
+            if (!jsonElement.TryGetProperty("iid"u8, out var iid))
             {
-                category.Actor = jObject["actor"].ToObject<Guid?>();
+                throw new DeSerializationException("the mandatory iid property is not available, the CategoryResolver cannot be used to deserialize this JsonElement");
+            }
+            
+            var revisionNumberValue = 0;
+
+            if (jsonElement.TryGetProperty("revisionNumber"u8, out var revisionNumber))
+            {
+                revisionNumberValue = revisionNumber.GetInt32();
             }
 
-            if (!jObject["alias"].IsNullOrEmpty())
+            var category = new CDP4Common.DTO.Category(iid.GetGuid(), revisionNumberValue);
+
+            if (jsonElement.TryGetProperty("alias"u8, out var aliasProperty) && aliasProperty.ValueKind != JsonValueKind.Null)
             {
-                category.Alias.AddRange(jObject["alias"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in aliasProperty.EnumerateArray())
+                {
+                    category.Alias.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["definition"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty) && definitionProperty.ValueKind != JsonValueKind.Null)
             {
-                category.Definition.AddRange(jObject["definition"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in definitionProperty.EnumerateArray())
+                {
+                    category.Definition.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedDomain"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedDomain"u8, out var excludedDomainProperty) && excludedDomainProperty.ValueKind != JsonValueKind.Null)
             {
-                category.ExcludedDomain.AddRange(jObject["excludedDomain"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedDomainProperty.EnumerateArray())
+                {
+                    category.ExcludedDomain.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["excludedPerson"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("excludedPerson"u8, out var excludedPersonProperty) && excludedPersonProperty.ValueKind != JsonValueKind.Null)
             {
-                category.ExcludedPerson.AddRange(jObject["excludedPerson"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in excludedPersonProperty.EnumerateArray())
+                {
+                    category.ExcludedPerson.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["hyperLink"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("hyperLink"u8, out var hyperLinkProperty) && hyperLinkProperty.ValueKind != JsonValueKind.Null)
             {
-                category.HyperLink.AddRange(jObject["hyperLink"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in hyperLinkProperty.EnumerateArray())
+                {
+                    category.HyperLink.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["isAbstract"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
             {
-                category.IsAbstract = jObject["isAbstract"].ToObject<bool>();
+                if(isAbstractProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale isAbstract property of the category {id} is null", category.Iid);
+                }
+                else
+                {
+                    category.IsAbstract = isAbstractProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["isDeprecated"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("isDeprecated"u8, out var isDeprecatedProperty))
             {
-                category.IsDeprecated = jObject["isDeprecated"].ToObject<bool>();
+                if(isDeprecatedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale isDeprecated property of the category {id} is null", category.Iid);
+                }
+                else
+                {
+                    category.IsDeprecated = isDeprecatedProperty.GetBoolean();
+                }
             }
 
-            if (!jObject["modifiedOn"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("modifiedOn"u8, out var modifiedOnProperty))
             {
-                category.ModifiedOn = jObject["modifiedOn"].ToObject<DateTime>();
+                if(modifiedOnProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale modifiedOn property of the category {id} is null", category.Iid);
+                }
+                else
+                {
+                    category.ModifiedOn = modifiedOnProperty.GetDateTime();
+                }
             }
 
-            if (!jObject["name"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
             {
-                category.Name = jObject["name"].ToObject<string>();
+                if(nameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale name property of the category {id} is null", category.Iid);
+                }
+                else
+                {
+                    category.Name = nameProperty.GetString();
+                }
             }
 
-            if (!jObject["permissibleClass"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("permissibleClass"u8, out var permissibleClassProperty) && permissibleClassProperty.ValueKind != JsonValueKind.Null)
             {
-                category.PermissibleClass.AddRange(jObject["permissibleClass"].ToObject<IEnumerable<ClassKind>>());
+                foreach(var element in permissibleClassProperty.EnumerateArray())
+                {
+                    category.PermissibleClass.Add(ClassKindDeserializer.Deserialize(element));
+                }
             }
 
-            if (!jObject["shortName"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
             {
-                category.ShortName = jObject["shortName"].ToObject<string>();
+                if(shortNameProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale shortName property of the category {id} is null", category.Iid);
+                }
+                else
+                {
+                    category.ShortName = shortNameProperty.GetString();
+                }
             }
 
-            if (!jObject["superCategory"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("superCategory"u8, out var superCategoryProperty) && superCategoryProperty.ValueKind != JsonValueKind.Null)
             {
-                category.SuperCategory.AddRange(jObject["superCategory"].ToObject<IEnumerable<Guid>>());
+                foreach(var element in superCategoryProperty.EnumerateArray())
+                {
+                    category.SuperCategory.Add(element.GetGuid());
+                }
             }
 
-            if (!jObject["thingPreference"].IsNullOrEmpty())
+            if (jsonElement.TryGetProperty("thingPreference"u8, out var thingPreferenceProperty))
             {
-                category.ThingPreference = jObject["thingPreference"].ToObject<string>();
+                if(thingPreferenceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    Logger.Trace("The non-nullabale thingPreference property of the category {id} is null", category.Iid);
+                }
+                else
+                {
+                    category.ThingPreference = thingPreferenceProperty.GetString();
+                }
             }
 
             return category;

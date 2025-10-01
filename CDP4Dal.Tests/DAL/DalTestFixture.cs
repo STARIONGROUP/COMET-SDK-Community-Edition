@@ -1,26 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="DalTestFixture.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2020 Starion Group S.A.
-//
-//    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
-//
-//    This file is part of CDP4-SDK Community Edition
-//
-//    The CDP4-SDK Community Edition is free software; you can redistribute it and/or
+//    Copyright (c) 2015-2025 Starion Group S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+// 
+//    This file is part of CDP4-COMET SDK Community Edition
+// 
+//    The CDP4-COMET SDK Community Edition is free software; you can redistribute it and/or
 //    modify it under the terms of the GNU Lesser General Public
 //    License as published by the Free Software Foundation; either
 //    version 3 of the License, or (at your option) any later version.
-//
-//    The CDP4-SDK Community Edition is distributed in the hope that it will be useful,
+// 
+//    The CDP4-COMET SDK Community Edition is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //    Lesser General Public License for more details.
-//
+// 
 //    You should have received a copy of the GNU Lesser General Public License
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal.Tests.DAL
 {
@@ -36,11 +36,11 @@ namespace CDP4Dal.Tests.DAL
     using CDP4Common.Helpers;
 
     using CDP4Dal.Composition;
+    using CDP4Dal.DAL;
     using CDP4Dal.Exceptions;
     using CDP4Dal.Operations;
-    using CDP4Dal.DAL;
 
-    using CDP4DalCommon.Tasks;
+    using CDP4DalCommon.Protocol.Tasks;
 
     using NUnit.Framework;
 
@@ -64,7 +64,7 @@ namespace CDP4Dal.Tests.DAL
         [Test]
         public void Verify_that_the_credentials_are_set_to_Null_when_closed()
         {
-            var dal = new TestDal(this.credentials);            
+            var dal = new TestDal(this.credentials);
             dal.CloseSession();
             Assert.That(dal.Credentials, Is.Null);
         }
@@ -140,6 +140,7 @@ namespace CDP4Dal.Tests.DAL
             var iteration = new Iteration();
             var elementDefinition = new ElementDefinition();
             var parameter = new Parameter();
+
             var list = new List<Thing>
             {
                 model,
@@ -206,7 +207,7 @@ namespace CDP4Dal.Tests.DAL
         public void Verify_That_QueryRequestContext_Returns_Expected_Result()
         {
             var testdal = new TestDal(this.credentials);
-            
+
             var elementDefinitionUri = new Uri("http://www.stariongroup.eu/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1/element/E9E8E386-B8BB-44F1-80B9-2C30761EE688");
             var elementDefinitionContext = testdal.QueryRequestContext(elementDefinitionUri);
             Assert.That("/EngineeringModel/00B1FD7E-BE0F-4512-A406-02FCBD63E06A/iteration/0111A76D-346D-4055-A78D-B8215B993DA1", Is.EqualTo(elementDefinitionContext));
@@ -216,7 +217,7 @@ namespace CDP4Dal.Tests.DAL
         public void Verify_that_for_a_decorated_dal_the_version_is_set()
         {
             var dal = new DecoratedDal();
-            Assert.That(dal.DalVersion,  Is.EqualTo(new Version(1,1,0)));
+            Assert.That(dal.DalVersion, Is.EqualTo(new Version(1, 1, 0)));
         }
 
         [Test]
@@ -238,7 +239,7 @@ namespace CDP4Dal.Tests.DAL
             var commonFileStore = new CDP4Common.EngineeringModelData.CommonFileStore(Guid.NewGuid(), null, null);
             engineeringModel.Iteration.Add(iteration);
             engineeringModel.CommonFileStore.Add(commonFileStore);
-            
+
             var context = TransactionContextResolver.ResolveContext(commonFileStore);
             var transaction = new ThingTransaction(context);
 
@@ -246,13 +247,13 @@ namespace CDP4Dal.Tests.DAL
 
             var file = new CDP4Common.EngineeringModelData.File(Guid.NewGuid(), null, null);
             var fileRevision = new CDP4Common.EngineeringModelData.FileRevision(Guid.NewGuid(), null, null);
-            
+
             transaction.Create(file, commonFileStoreClone);
             transaction.Create(fileRevision, file);
 
             var operationContainer = transaction.FinalizeTransaction();
 
-            var files = new List<string> {this.filePath};
+            var files = new List<string> { this.filePath };
 
             var testDal = new TestDal(this.credentials);
             Assert.Throws<InvalidOperationContainerException>(() => testDal.TestOperationContainerFileVerification(operationContainer, files));
@@ -277,7 +278,7 @@ namespace CDP4Dal.Tests.DAL
             var commonFileStore = new CDP4Common.EngineeringModelData.CommonFileStore(Guid.NewGuid(), null, null);
             engineeringModel.Iteration.Add(iteration);
             engineeringModel.CommonFileStore.Add(commonFileStore);
-            
+
             var context = TransactionContextResolver.ResolveContext(commonFileStore);
             var transaction = new ThingTransaction(context);
 
@@ -286,13 +287,13 @@ namespace CDP4Dal.Tests.DAL
             var file = new CDP4Common.EngineeringModelData.File(Guid.NewGuid(), null, null);
             var fileRevision = new CDP4Common.EngineeringModelData.FileRevision(Guid.NewGuid(), null, null);
             fileRevision.ContentHash = "1B686ADFA2CAE870A96E5885087337C032781BE6";
-            
+
             transaction.Create(file, commonFileStoreClone);
             transaction.Create(fileRevision, file);
 
             var operationContainer = transaction.FinalizeTransaction();
 
-            var files = new List<string> {this.filePath};
+            var files = new List<string> { this.filePath };
 
             var testDal = new TestDal(this.credentials);
 
@@ -300,10 +301,13 @@ namespace CDP4Dal.Tests.DAL
         }
     }
 
-    [CDPVersion("1.1.0")]    
+    [CDPVersion("1.1.0")]
     internal class TestDal : Dal
     {
-        public override bool IsReadOnly { get { return false; } }
+        public override bool IsReadOnly
+        {
+            get { return false; }
+        }
 
         public TestDal(Credentials credentials)
             : base()
@@ -410,7 +414,7 @@ namespace CDP4Dal.Tests.DAL
         {
             throw new System.NotImplementedException();
         }
-        
+
         public override IEnumerable<Thing> Delete<T>(T thing)
         {
             throw new System.NotImplementedException();
@@ -491,10 +495,11 @@ namespace CDP4Dal.Tests.DAL
         }
     }
 
-    [DalExportAttribute("decorateddal","a decorated dal","1.1.0",DalType.Web)]
+    [DalExportAttribute("decorateddal", "a decorated dal", "1.1.0", DalType.Web)]
     internal class DecoratedDal : Dal
     {
         public override bool IsReadOnly { get; }
+
         public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null)
         {
             throw new NotImplementedException();

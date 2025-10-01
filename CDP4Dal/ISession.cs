@@ -1,8 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISession.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2025 Starion Group S.A.
-//
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+﻿// -------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="ISession.cs" company="RHEA System S.A.">
+//    Copyright (c) 2015-2025 RHEA System S.A.
+// 
+//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -20,7 +20,7 @@
 //    along with this program; if not, write to the Free Software Foundation,
 //    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 namespace CDP4Dal
 {
@@ -34,14 +34,14 @@ namespace CDP4Dal
     using CDP4Common.ExceptionHandlerService;
     using CDP4Common.SiteDirectoryData;
 
-    using CDP4Dal.Operations;
     using CDP4Dal.DAL;
     using CDP4Dal.Events;
+    using CDP4Dal.Operations;
+    using CDP4Dal.Permission;
 
     using CDP4DalCommon.Authentication;
-    using CDP4DalCommon.Tasks;
-
-    using Permission;
+    using CDP4DalCommon.Protocol.Operations;
+    using CDP4DalCommon.Protocol.Tasks;
 
     /// <summary>
     /// The <see cref="ISession"/> interface encapsulates an <see cref="IDal"/> and
@@ -57,7 +57,7 @@ namespace CDP4Dal
         /// <summary>
         /// Gets the <see cref="Credentials"/> that are use to connect to the data source
         /// </summary>
-        Credentials Credentials { get;  }
+        Credentials Credentials { get; }
 
         /// <summary>
         /// Gets all the <see cref="Participant"/>s that the active person is linked with.
@@ -113,7 +113,7 @@ namespace CDP4Dal
         /// <summary>
         /// Gets the name of the session which is the concatentation of the data-source uri and the active person
         /// </summary>
-        string Name { get;  }
+        string Name { get; }
 
         /// <summary>
         /// Gets the list of <see cref="ReferenceDataLibrary"/> that are currently open in the running application.
@@ -123,7 +123,7 @@ namespace CDP4Dal
         /// <summary>
         /// Gets the list of <see cref="Iteration"/>s that are currently open with the active <see cref="DomainOfExpertise"/> and <see cref="Participant"/>
         /// </summary>
-        IReadOnlyDictionary<Iteration, Tuple<DomainOfExpertise,Participant> > OpenIterations { get; }
+        IReadOnlyDictionary<Iteration, Tuple<DomainOfExpertise, Participant>> OpenIterations { get; }
 
         /// <summary>
         /// Gets the <see cref="ICDPMessageBus"/> that handles messaging for this session
