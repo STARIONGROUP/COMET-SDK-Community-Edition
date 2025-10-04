@@ -1,6 +1,6 @@
 ﻿// -------------------------------------------------------------------------------------------------------------------------------
-// <copyright file="PostOperation.cs" company="RHEA System S.A.">
-//    Copyright (c) 2015-2025 RHEA System S.A.
+// <copyright file="PostOperation.cs" company="Starion Group S.A.">
+//    Copyright (c) 2015-2025 Starion Group S.A.
 // 
 //    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
 // 
