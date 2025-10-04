@@ -1,6 +1,6 @@
 ![CDP4-COMET](https://raw.githubusercontent.com/STARIONGROUP/COMET-SDK-Community-Edition/master/Comet_Logo.jpg)
 
-The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the CDP4-COMET to create an ECSS-E-TM-10-25A compliant implementation, both for the [Web Services](https://github.com/STARIONGROUP/COMET-WebServices-Community-Edition) and the [Desktop Application](https://github.com/STARIONGROUP/COMET-IME-Community-Edition). The libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
+The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C. The SDK contains multiple libraries that are each packaged as a nuget and avaialble from [nuget.org](https://www.nuget.org/packages?q=cdp4). The SDK is used in the CDP4-COMET to create an ECSS-E-TM-10-25A compliant implementation, for the [Web Services](https://github.com/STARIONGROUP/COMET-WebServices-Community-Edition), the [Desktop Application](https://github.com/STARIONGROUP/COMET-IME-Community-Edition) and the [Web-Application](https://github.com/STARIONGROUP/COMET-WEB-Community-Edition). The libraries are made avaiable in the Community Edition under the [GNU LGPL](https://www.gnu.org/licenses/lgpl-3.0.html):
 
 ## Nuget
 
@@ -16,10 +16,8 @@ CDP4MessagePackSerializer | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Me
 CDP4Reporting | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Reporting-CE)
 CDP4Dal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Dal-CE)
 CDP4DalCommon | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4DalCommon-CE)
-CDP4DalJsonSerializer | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4DalJsonSerializer-CE)
 CDP4JsonFileDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4JsonFileDal-CE)
 CDP4ServicesDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4ServicesDal-CE)
-CDP4WspDal | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4WspDal-CE)
 CDP4Web | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4Web-CE)
 CDP4ServicesMessaging | ![NuGet Badge](https://img.shields.io/nuget/v/CDP4ServicesMessaging-CE)
 
@@ -76,10 +74,6 @@ The CDP4Dal library is a library that provides the basis to implement ECSS-E-TM-
 
 The CDP4DalCommon library provides common classes to support the ECSS-E-TM-10-25 and CDP4-COMET protocol.
 
-## CDP4DalJsonSerializer
-
-The CDP4DalJsonSerializer library provides JsonSerializer converter for common classes contained in CDP4DalCommon library.
-
 ## CDP4JsonFileDal
 
 The CDP4JsonFileDal library is a C# library that provides an implementation of ECSS-E-TM-10-25A Annex C.3, the JSON Exchange File Format. This file format is a ZIP archive in which a number of files are stored that each contain one or more ECSS-E-TM-10-25 objects that are serialized in the form of a JSON array of JSON objects. The CDP4JsonFileDal library can be used to read from such a ZIP archive, and to create such a ZIP archive. The ZIP archive is typically used to exchange complete models between organizations.
@@ -87,10 +81,6 @@ The CDP4JsonFileDal library is a C# library that provides an implementation of E
 ## CDP4ServicesDal
 
 The CDP4ServicesDal library is a C# library that provides an implementation of ECSS-E-TM-10-25A Annex C.2, the JSON REST API, which includes concepts that are specific to CDP4-COMET. These CDP4-COMET specific items are pure extensions of ECSS-E-TM-10-25A. The CDP4ServicesDal library can only be used to communicate with a CDP4-COMET Services instance, dedicated HTTP headers are used to verify that the REST API is indeed a COMET Services instance.
-
-## CDP4WspDal
-
-The CDP4WspDal library is a C# library that provides an implementation of ECSS-E-TM-10-25A Annex C.2, the JSON REST API. The CDP4WspDal can be used to communicate with any ECSS-E-TM-10-25A Annex C.2 implementation, including the COMET Services.
 
 ## CDP4Web
 
@@ -103,6 +93,18 @@ The CDP4ServicesMessaging library is a C# library that provides abstractions ove
 # License
 
 The libraries contained in the COMET-SDK Community Edition are provided to the community under the GNU Lesser General Public License. Because we make the software available with the LGPL, it can be used in both open source and proprietary software without being required to release the source code of your own components.
+
+## Software Bill of Materials (SBOM)
+
+As part of our commitment to security and transparency, this project includes a Software Bill of Materials (SBOM) in the associated NuGet packages. The SBOM provides a detailed inventory of the components and dependencies included in the package, allowing you to track and verify the software components, their licenses, and versions.
+
+**Why SBOM?**
+
+- **Improved Transparency**: Gain insight into the open-source and third-party components included in this package.
+- **Security Assurance**: By providing an SBOM, we enable users to more easily track vulnerabilities associated with the included components.
+- **Compliance**: SBOMs help ensure compliance with licensing requirements and make it easier to audit the project's dependencies.
+
+You can find the SBOM in the NuGet package itself, which is automatically generated and embedded during the build process.
 
 # Contributions
 
