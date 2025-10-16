@@ -90,6 +90,47 @@ The CDP4Web library is a C# library that provides helpful classes that facilitat
 
 The CDP4ServicesMessaging library is a C# library that provides abstractions over Rabbit MQ to support AMQP messaging
 
+# Using the COMET SDK from Python
+
+The repository contains a small helper that shows how to consume the COMET SDK
+assemblies from an existing CPython environment by means of
+[`pythonnet`](https://pythonnet.github.io/). The helper can be found in
+`python/comet_session_wrapper.py` and demonstrates how to reproduce the C#
+session bootstrap code from Python:
+
+```python
+from pathlib import Path
+
+from comet_session_wrapper import CometSession, add_comet_references
+
+# Point pythonnet to the directories that contain the built COMET assemblies.
+add_comet_references([
+    Path("/path/to/COMET-SDK-Community-Edition/CDP4Dal/bin/Release/net6.0"),
+])
+
+session = CometSession(
+    url="https://cdp4services-public.cdp4.org",
+    username="some-user-name",
+    password="some-password",
+)
+session.connect()
+
+# ... use session.session (the underlying CDP4Dal.Session instance) ...
+
+session.disconnect()
+```
+
+To run the example:
+
+1. Build the SDK (`dotnet build -c Release`) so that the required `.dll` files
+   are available in the `bin` directories.
+2. Install `pythonnet` in your Python environment, for example with
+   `pip install pythonnet`.
+3. Update the `add_comet_references` call so that it points to the build output
+   directories on your machine.
+4. Instantiate :class:`CometSession` with your credentials and call
+   :py:meth:`CometSession.connect`.
+
 # License
 
 The libraries contained in the COMET-SDK Community Edition are provided to the community under the GNU Lesser General Public License. Because we make the software available with the LGPL, it can be used in both open source and proprietary software without being required to release the source code of your own components.
