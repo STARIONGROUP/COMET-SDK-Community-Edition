@@ -4,7 +4,7 @@
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Common Community Edition</Title>
-        <VersionPrefix>29.0.0</VersionPrefix>
+        <VersionPrefix>29.0.1</VersionPrefix>
         <Description>CDP4 Services Messaging is a Class Library that contains clients and messages class that can be used for inter services communication</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Alex, Alexander, Nathanael, Antoine</Authors>
@@ -22,7 +22,11 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-          [Refactor] Newtonsoft to System.Text.Json
+            [Update] to CDP4Dal version 29.0.1
+            [Update] to CDP4JsonSerializer version 29.0.1
+            [Update] to Microsoft.Extensions.Configuration.Abstractions version 9.0.10
+            [Update] to Microsoft.Extensions.Configuration.Binder version 9.0.10
+            [Update] to Microsoft.Extensions.Hosting.Abstractions version 9.0.10
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>
@@ -40,17 +44,22 @@
             <Pack>true</Pack>
         </None>
     </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
+        <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.10" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.10" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.10" />
         <PackageReference Include="Polly" Version="8.6.4" />
         <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
-        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
-        <PackageReference Include="System.Text.Json" Version="9.0.10" />
     </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
-        <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
+
+    <ItemGroup Label="build-only dependencies">
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
     </ItemGroup>
 </Project>

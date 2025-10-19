@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4ServicesDal Community Edition</Title>
-        <VersionPrefix>29.0.0</VersionPrefix>
+        <VersionPrefix>29.0.1</VersionPrefix>
         <Description>CDP4ServicesDal Dal Plugin</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
@@ -21,22 +21,15 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-          [Refactor] Newtonsoft to System.Text.Json
+            [Update] to CDP4JsonSerializer version 29.0.1
+            [Update] to CDP4MessagePackSerializer version 29.0.1
+            [Update] to CDP4Dal version 29.0.1
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>
         <NeutralLanguage>en-US</NeutralLanguage>
         <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
     </PropertyGroup>
-
-  <ItemGroup>
-	  <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
-	  <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-	  <PackageReference Include="Polly" Version="8.6.4" />
-	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
-	  <PackageReference Include="System.Text.Json" Version="9.0.10" />
-  </ItemGroup>
 
     <PropertyGroup>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
@@ -48,12 +41,16 @@
         <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
-
     <ItemGroup>
-        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
         <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
         <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
         <ProjectReference Include="..\CDP4MessagePackSerializer\CDP4MessagePackSerializer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+        <PackageReference Include="Polly" Version="8.6.4" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
@@ -64,6 +61,11 @@
 
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    </ItemGroup>
+
+    <ItemGroup Label="build-only dependencies">
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
     </ItemGroup>
 
 </Project>

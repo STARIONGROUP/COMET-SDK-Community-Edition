@@ -5,7 +5,7 @@
         <LangVersion>latest</LangVersion>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Web Community Edition</Title>
-        <VersionPrefix>29.0.0</VersionPrefix>
+        <VersionPrefix>29.0.1</VersionPrefix>
         <Description>CDP4Web Dedicated Sdk for CDPServicesDal</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
@@ -22,7 +22,7 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-          [Refactor] Newtonsoft to System.Text.Json
+            [Update] to CDP4ServicesDal version 29.0.1
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <NeutralLanguage>en-US</NeutralLanguage>
@@ -41,20 +41,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentResults" Version="4.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.10" />
-        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
-        <PackageReference Include="System.Text.Json" Version="9.0.10" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\CDP4ServicesDal\CDP4ServicesDal.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-            <_Parameter1>CDP4Web.Tests</_Parameter1>
-        </AssemblyAttribute>
+        <PackageReference Include="FluentResults" Version="4.0.0" />
+    </ItemGroup>
+
+    <ItemGroup Label="build-only dependencies">
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
     </ItemGroup>
 
 </Project>

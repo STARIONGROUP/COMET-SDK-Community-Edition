@@ -608,7 +608,6 @@ namespace CDP4JsonSerializer.Tests
                 }
             }
 
-            // code generated implementation about 40% performance improved compared to Newtonsoft generic implementation
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
 

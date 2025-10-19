@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4JsonFileDal Community Edition</Title>
-        <VersionPrefix>29.0.0</VersionPrefix>
+        <VersionPrefix>29.0.1</VersionPrefix>
         <Description>CDP4 Json File Dal Plugin</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
@@ -22,7 +22,8 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-          [Refactor] Newtonsoft to System.Text.Json
+            [Update] to CDP4Dal version 29.0.1
+            [Update] to CDP4JsonSerializer version 29.0.1
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>
@@ -41,19 +42,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
         <ProjectReference Include="..\CDP4JsonSerializer\CDP4JsonSerializer.csproj" />
         <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
-        <PackageReference Include="System.Text.Json" Version="9.0.10" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net48' ">
         <Reference Include="System.ComponentModel.Composition" />
     </ItemGroup>
 
+    <ItemGroup Label="build-only dependencies">
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.2" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+    </ItemGroup>
 </Project>

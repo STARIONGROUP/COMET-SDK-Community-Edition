@@ -10,7 +10,6 @@
     </PropertyGroup>
  
     <ItemGroup>
-        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
         <ProjectReference Include="..\CDP4Dal\CDP4Dal.csproj" />
         <Reference Include="System.ComponentModel.Composition" />
     </ItemGroup>

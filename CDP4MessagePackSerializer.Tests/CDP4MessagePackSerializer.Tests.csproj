@@ -35,6 +35,10 @@
       <ProjectReference Include="..\CDP4MessagePackSerializer\CDP4MessagePackSerializer.csproj" />
     </ItemGroup>
 
+    <ItemGroup Label="build-only dependencies">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+    </ItemGroup>
+
     <ItemGroup>
       <None Update="Data\bigmodel.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>

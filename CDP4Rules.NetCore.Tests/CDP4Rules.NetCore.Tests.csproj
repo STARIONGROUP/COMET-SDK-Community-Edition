@@ -11,7 +11,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CDP4Common\CDP4Common.csproj" />
         <ProjectReference Include="..\CDP4Rules\CDP4Rules.csproj" />
     </ItemGroup>
 

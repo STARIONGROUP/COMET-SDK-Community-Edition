@@ -59,9 +59,15 @@
         <Reference Include="Microsoft.CSharp" />
         <Reference Include="WindowsBase" />
     </ItemGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\CDP4Reporting\CDP4Reporting.csproj" />
     </ItemGroup>
+
+    <ItemGroup Label="build-only dependencies">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+    </ItemGroup>
+
     <ItemGroup>
         <None Update="Data\report.rep4">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
