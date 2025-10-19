@@ -40,7 +40,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"STARIONGROUP_CDP4-SDK-Community-Edition" /o:"stariongroup" /d:sonar.login="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
+          dotnet sonarscanner begin /k:"STARIONGROUP_CDP4-SDK-Community-Edition" /o:"stariongroup" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
 
       - name: Install dependencies
         run: dotnet restore CDP4-SDK.sln
@@ -54,4 +54,4 @@ jobs:
       - name: Sonarqube end
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
+        run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
