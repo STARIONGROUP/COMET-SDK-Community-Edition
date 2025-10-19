@@ -26,7 +26,7 @@ namespace CDP4Dal.Composition
 {
     /// <summary>
     /// The purpose of the <see cref="INameMetaData"/> interface is to define a Name property to be
-    /// used in conjunction with a custom <see cref="ExportAttribute"/>
+    /// used in conjunction with a custom <see cref="System.ComponentModel.Composition.ExportAttribute"/>
     /// </summary>
     public interface INameMetaData
     {

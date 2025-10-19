@@ -123,9 +123,9 @@ namespace CDP4Dal.Operations
         /// <summary>
         /// Creates a <see cref="Thing"/> deletion operation
         /// </summary>
-        /// <param name="thing">The clone of the <see cref="Thing"/> to delete</param>
+        /// <param name="clone">The clone of the <see cref="Thing"/> to delete</param>
         /// <param name="containerClone">The clone of the container (mandatory in dialogs)</param>
-        void Delete(Thing thing, Thing containerClone = null);
+        void Delete(Thing clone, Thing containerClone = null);
 
         /// <summary>
         /// Registers the provided clone of a <see cref="Thing"/> as a copy with its destination

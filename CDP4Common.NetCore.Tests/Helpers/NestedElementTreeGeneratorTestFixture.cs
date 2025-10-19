@@ -780,6 +780,8 @@ namespace CDP4Common.Tests.Helpers
 
             var nestedElements = this.nestedElementTreeGenerator.Generate(option, system_engineering, false).ToList();
 
+            Assert.That(nestedElements, Is.Not.Empty);
+
             foreach (var nestedElement in nestedElements)
             {
                 Console.WriteLine($"NE: - {nestedElement.ShortName}:{nestedElement.Name}");

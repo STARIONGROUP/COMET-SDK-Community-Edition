@@ -97,7 +97,7 @@ namespace CDP4Dal.DAL
         /// <summary>
         /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s asynchronously.
         /// </summary>
-        /// <param name="operationContainer">
+        /// <param name="operationContainers">
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
         /// <param name="files">
@@ -106,7 +106,7 @@ namespace CDP4Dal.DAL
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
-        public abstract Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null);
+        public abstract Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> files = null);
 
         /// <summary>
         /// Write all the <see cref="Operation"/>s from an <see cref="OperationContainer"/> asynchronously.
@@ -147,7 +147,7 @@ namespace CDP4Dal.DAL
         /// <param name="thing">
         /// An instance of <see cref="Thing"/> that needs to be read from the data-source
         /// </param>
-        /// <param name="token">
+        /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/>
         /// </param>
         /// <param name="attributes">
@@ -156,7 +156,7 @@ namespace CDP4Dal.DAL
         /// <returns>
         /// a list of <see cref="Thing"/> that are contained by the provided <see cref="Thing"/> including the <see cref="Thing"/> itself
         /// </returns>
-        public abstract Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken token, IQueryAttributes attributes = null) where T : Thing;
+        public abstract Task<IEnumerable<Thing>> Read<T>(T thing, CancellationToken cancellationToken, IQueryAttributes attributes = null) where T : Thing;
 
         /// <summary>
         /// Reads the data related to the provided <see cref="CDP4Common.DTO.Iteration"/> from the data-source

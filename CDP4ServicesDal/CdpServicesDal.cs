@@ -238,11 +238,13 @@ namespace CDP4ServicesDal
                             Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             break;
                         case ContentTypeKind.MESSAGEPACK:
-                            Logger.Info("Deserializing MESSAGEPACK response");
-                            var cts = new CancellationTokenSource();
-                            var things = await this.MessagePackSerializer.DeserializeAsync(resultStream, cts.Token);
-                            result.AddRange(things);
-                            Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            using (var cts = new CancellationTokenSource())
+                            {
+                                Logger.Info("Deserializing MESSAGEPACK response");
+                                var things = await this.MessagePackSerializer.DeserializeAsync(resultStream, cts.Token);
+                                result.AddRange(things);
+                                Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                            }
                             break;
                     }
 
