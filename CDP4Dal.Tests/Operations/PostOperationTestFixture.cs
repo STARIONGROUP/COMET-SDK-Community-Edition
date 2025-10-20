@@ -24,12 +24,6 @@
 
 namespace CDP4Dal.Tests
 {
-    using System.Collections.Generic;
-
-    using CDP4Common;
-    using CDP4Common.Dto;
-    using CDP4Common.DTO;
-
     using CDP4DalCommon.Protocol.Operations;
 
     using NUnit.Framework;

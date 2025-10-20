@@ -24,6 +24,8 @@
 
 namespace CDP4Common.Tests.Comparers
 {
+    using System.Collections.Generic;
+
     using CDP4Common.Comparers;
     using CDP4Common.Types;
 
@@ -75,6 +77,28 @@ namespace CDP4Common.Tests.Comparers
             Assert.That(this.booleanValueSetComparer.Compare(this.valueArrayLowerFalse, this.valueArrayFalse), Is.EqualTo(0));
             Assert.That(this.booleanValueSetComparer.Compare(this.valueArrayWrongTrue, this.valueArrayTrue) < 0, Is.True);
             Assert.That(this.booleanValueSetComparer.Compare(this.valueArrayWrongFalse, this.valueArrayFalse) < 0, Is.True);
+        }
+
+        [Test]
+        public void VerifyThatConversionToBooleanListSucceeds()
+        {
+            var valueArray = new ValueArray<string>(new[] { "true", "false", "True" });
+
+            var result = this.booleanValueSetComparer.TryConvertStringValueArrayToBooleanList(valueArray, out var booleanList);
+
+            Assert.That(result, Is.True);
+            Assert.That(booleanList, Is.EqualTo(new List<bool> { true, false, true }));
+        }
+
+        [Test]
+        public void VerifyThatConversionToBooleanListFailsForInvalidValues()
+        {
+            var valueArray = new ValueArray<string>(new[] { "true", "not-boolean" });
+
+            var result = this.booleanValueSetComparer.TryConvertStringValueArrayToBooleanList(valueArray, out var booleanList);
+
+            Assert.That(result, Is.False);
+            Assert.That(booleanList, Is.Empty);
         }
     }
 }

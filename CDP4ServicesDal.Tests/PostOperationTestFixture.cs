@@ -25,16 +25,14 @@
 namespace CDP4ServicesDal.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
 
-    using CDP4Common;
     using CDP4Common.CommonData;
-    using CDP4Common.Dto;
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
 
+    using CDP4Dal;
     using CDP4Dal.Operations;
 
     using CDP4DalCommon.Protocol.Operations;
@@ -42,6 +40,8 @@ namespace CDP4ServicesDal.Tests
     using CDP4JsonSerializer;
 
     using CDP4ServicesDal.Tests.Helper;
+
+    using Moq;
 
     using NUnit.Framework;
 
@@ -136,6 +136,61 @@ namespace CDP4ServicesDal.Tests
                 stream.Position = 0;
                 Assert.That(streamReader.ReadToEnd(), Is.EqualTo(expected));
             }
+        }
+
+        [Test]
+        public void Verify_that_null_modified_thing_throws()
+        {
+            var operation = new Operation(null, null, OperationKind.Create);
+            var postOperation = new CdpPostOperation(new MetaDataProvider(), Mock.Of<CDP4Dal.ISession>());
+
+            Assert.That(() => postOperation.ConstructFromOperation(operation), Throws.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
+        public void Verify_that_delete_operation_creates_classless_entry()
+        {
+            var thing = new CDP4Common.DTO.DomainOfExpertise(Guid.NewGuid(), 0);
+            var operation = new Operation(null, thing, OperationKind.Delete);
+            var postOperation = new CdpPostOperation(new MetaDataProvider(), Mock.Of<ISession>());
+
+            postOperation.ConstructFromOperation(operation);
+
+            Assert.That(postOperation.Delete, Has.Count.EqualTo(1));
+            Assert.That(postOperation.Delete[0]["ClassKind"], Is.EqualTo(thing.ClassKind));
+        }
+
+        [Test]
+        public void Verify_that_update_operation_adds_modified_values()
+        {
+            var iid = Guid.NewGuid();
+            var original = new CDP4Common.DTO.DomainOfExpertise(iid, 0)
+            {
+                Name = "Original"
+            };
+
+            var modified = new CDP4Common.DTO.DomainOfExpertise(iid, 0)
+            {
+                Name = "Updated"
+            };
+
+            var operation = new Operation(original, modified, OperationKind.Update);
+            var postOperation = new CdpPostOperation(new MetaDataProvider(), Mock.Of<ISession>());
+
+            postOperation.ConstructFromOperation(operation);
+
+            Assert.That(postOperation.Update, Has.Count.EqualTo(1));
+            Assert.That(postOperation.Update[0]["Name"], Is.EqualTo("Updated"));
+        }
+
+        [Test]
+        public void Verify_that_move_operation_is_not_supported()
+        {
+            var thing = new CDP4Common.DTO.DomainOfExpertise(Guid.NewGuid(), 0);
+            var operation = new Operation(thing, thing, OperationKind.Move);
+            var postOperation = new CdpPostOperation(new MetaDataProvider(), Mock.Of<ISession>());
+
+            Assert.That(() => postOperation.ConstructFromOperation(operation), Throws.TypeOf<NotImplementedException>());
         }
 
         private class TestPostOperation : PostOperation
