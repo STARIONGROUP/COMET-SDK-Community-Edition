@@ -152,6 +152,29 @@ namespace CDP4ServicesDal.Tests
         }
 
         [Test]
+        public void VerifyThatWriteThrowsWhenDalIsNotOpen()
+        {
+            var dal = new CdpServicesDal(this.authenticationService.Object);
+            var operationContainer = new OperationContainer($"/EngineeringModel/{Guid.NewGuid()}/iteration/{Guid.NewGuid()}");
+
+            Assert.That(async () => await dal.Write(operationContainer), Throws.TypeOf<InvalidOperationException>());
+        }
+
+        [Test]
+        public async Task VerifyThatWriteReturnsEmptyResultForEmptyContainer()
+        {
+            var credentials = new Credentials("user", "password", new Uri("https://example.com"), true);
+            var dal = new TestableCdpServicesDal(this.authenticationService.Object);
+            dal.SetCredentials(credentials);
+
+            var operationContainer = new OperationContainer($"/EngineeringModel/{Guid.NewGuid()}/iteration/{Guid.NewGuid()}");
+
+            var result = await dal.Write(operationContainer);
+
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
         [Category("WebServicesDependent")]
         public async Task VerifyThatOpenReturnsDTOs()
         {
@@ -992,6 +1015,19 @@ namespace CDP4ServicesDal.Tests
             response.Headers.Add(Headers.CDPCommon, "1.3.0");
             response.Content.Headers.Remove(Headers.ContentType);
             response.Content.Headers.Add(Headers.ContentType, $"{contentType};ecss-e-tm-10-25;version=1.0.0");
+        }
+
+        private class TestableCdpServicesDal : CdpServicesDal
+        {
+            public TestableCdpServicesDal(IAuthenticationRefreshService authenticationRefreshService)
+                : base(authenticationRefreshService)
+            {
+            }
+
+            public void SetCredentials(Credentials credentials)
+            {
+                this.Credentials = credentials;
+            }
         }
     }
 }
