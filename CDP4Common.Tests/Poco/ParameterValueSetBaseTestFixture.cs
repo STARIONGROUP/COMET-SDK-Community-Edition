@@ -57,6 +57,17 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
+        public void VerifyThatActualValueThrowsWhenSwitchIsUnsupported()
+        {
+            this.parameterValueSetBase.ValueSwitch = (ParameterSwitchKind)99;
+
+            Assert.That(() =>
+            {
+                var _ = this.parameterValueSetBase.ActualValue;
+            }, Throws.TypeOf<InvalidOperationException>().With.Message.EqualTo("Unknown ParameterKindSwitch: 99"));
+        }
+
+        [Test]
         public void TestGetOwner1()
         {
             var container = new Parameter();
@@ -84,7 +95,7 @@ namespace CDP4Common.Tests.Poco
         {
             Assert.Throws<ContainmentException>(() =>
             {
-                Console.WriteLine(this.parameterValueSetBase.Owner);    
+                Console.WriteLine(this.parameterValueSetBase.Owner);
             });
         }
     }

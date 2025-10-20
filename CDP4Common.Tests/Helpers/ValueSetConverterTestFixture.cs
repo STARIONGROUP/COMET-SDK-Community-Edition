@@ -25,6 +25,7 @@
 namespace CDP4Common.Tests.Helpers
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
 
     using CDP4Common.Helpers;
@@ -88,6 +89,55 @@ namespace CDP4Common.Tests.Helpers
             culture.NumberFormat.NumberGroupSeparator = ",";
 
             Assert.That(value.ToValueSetString(parameterType), Is.EqualTo(expectedValue2));
+        }
+
+        [Test]
+        public void VerifyThatEnumerationStringsAreConvertedToDefinitions()
+        {
+            var enumerationParameterType = new EnumerationParameterType
+            {
+                AllowMultiSelect = true
+            };
+
+            var value1 = new EnumerationValueDefinition { ShortName = "enumValue1" };
+            var value2 = new EnumerationValueDefinition { ShortName = "enumValue2" };
+            enumerationParameterType.ValueDefinition.Add(value1);
+            enumerationParameterType.ValueDefinition.Add(value2);
+
+            var result = ValueSetConverter.ToValueSetObject($"enumValue1{Constants.PaddedMultiEnumSeparator}enumValue2", enumerationParameterType);
+
+            var convertedValues = result as IList<EnumerationValueDefinition>;
+            Assert.That(convertedValues, Is.Not.Null);
+            Assert.That(convertedValues, Has.Count.EqualTo(2));
+            Assert.That(convertedValues, Does.Contain(value1));
+            Assert.That(convertedValues, Does.Contain(value2));
+        }
+
+        [Test]
+        public void VerifyThatBooleanStringsReturnNullableBoolean()
+        {
+            var parameterType = new BooleanParameterType();
+
+            var result = ValueSetConverter.ToValueSetObject("true", parameterType);
+
+            Assert.That(result, Is.EqualTo(true));
+        }
+
+        [Test]
+        public void VerifyThatDateStringsAreParsedUsingInvariantCulture()
+        {
+            var parameterType = new DateParameterType();
+
+            var result = ValueSetConverter.ToValueSetObject("2020-09-23", parameterType);
+
+            Assert.That(result, Is.EqualTo(new DateTime(2020, 9, 23)));
+        }
+
+        [Test]
+        public void VerifyThatDefaultObjectReturnsExpectedValues()
+        {
+            Assert.That(ValueSetConverter.DefaultObject(new SimpleQuantityKind()), Is.EqualTo("-"));
+            Assert.That(ValueSetConverter.DefaultObject(new BooleanParameterType()), Is.Null);
         }
 
         private static readonly object[] TryParseDoubleTestCases =

@@ -32,6 +32,7 @@ namespace CDP4Common.Tests.Poco
     using CDP4Common.Exceptions;
     using CDP4Common.EngineeringModelData;
     using CDP4Common.SiteDirectoryData;
+    using CDP4Common.Types;
 
     using NUnit.Framework;
 
@@ -157,6 +158,49 @@ namespace CDP4Common.Tests.Poco
             var elementDefinition = new ElementDefinition();
 
             Assert.That(() => elementDefinition.ModelCode(1), Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void VerifyThatCanBePublishedReflectsContainedItems()
+        {
+            var elementDefinition = new ElementDefinition();
+            Assert.That(elementDefinition.CanBePublished, Is.False);
+
+            var parameter = new Parameter();
+            var valueSet = new ParameterValueSet();
+            valueSet.ValueSwitch = ParameterSwitchKind.MANUAL;
+            valueSet.Manual = new ValueArray<string>(new[] { "value" });
+            valueSet.Published = new ValueArray<string>(new[] { "-" });
+            parameter.ValueSet.Add(valueSet);
+
+            elementDefinition.Parameter.Add(parameter);
+
+            Assert.That(elementDefinition.CanBePublished, Is.True);
+        }
+
+        [Test]
+        public void VerifyThatToBePublishedAggregatesContainedItems()
+        {
+            var elementDefinition = new ElementDefinition();
+            var parameter = new Parameter();
+            var valueSet = new ParameterValueSet();
+            valueSet.ValueSwitch = ParameterSwitchKind.MANUAL;
+            valueSet.Manual = new ValueArray<string>(new[] { "value" });
+            valueSet.Published = new ValueArray<string>(new[] { "-" });
+            parameter.ValueSet.Add(valueSet);
+            elementDefinition.Parameter.Add(parameter);
+
+            parameter.ToBePublished = true;
+            Assert.That(elementDefinition.ToBePublished, Is.True);
+
+            parameter.ToBePublished = false;
+            Assert.That(elementDefinition.ToBePublished, Is.False);
+
+            elementDefinition.ToBePublished = true;
+            Assert.That(parameter.ToBePublished, Is.True);
+
+            elementDefinition.ToBePublished = false;
+            Assert.That(parameter.ToBePublished, Is.False);
         }
 
         [Test]
