@@ -4,7 +4,7 @@ message: "If you use this software, please cite it as below."
 title: "CDP4-SDK"
 abstract: "The CDP4-COMET Software Development Kit is an C# SDK that that is compliant with ECSS-E-TM-10-25A Annex A and Annex C"
 version: "29.0.1"
-date-released: "2025-10-19"
+date-released: "2025-10-20"
 url: "https://github.com/STARIONGROUP/COMET-SDK-Community-Edition"
 
 authors:
@@ -60,4 +60,4 @@ preferred-citation:
       given-names: "MBSE Competence Area Developers"
   version: "29.0.1"
   url: "https://github.com/STARIONGROUP/COMET-SDK-Community-Edition"
-  date-released: "2025-10-19"
+  date-released: "2025-10-20"
