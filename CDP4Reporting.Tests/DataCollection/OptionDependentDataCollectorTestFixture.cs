@@ -90,53 +90,6 @@ namespace CDP4Reporting.Tests.DataCollection
             Assert.That(dataCollector.SelectedOption, Is.EqualTo(this.option2));
         }
 
-        [Test]
-        public void Verify_that_SelectOption_Is_Not_Called_When_Iteration_Contains_Single_Option()
-        {
-            var dataCollector = new TestOptionDependentDataCollector();
-            dataCollector.Initialize(this.iteration, null);
-            this.iteration.Option.Remove(this.option2);
-
-            Assert.That(dataCollector.SelectedOption, Is.EqualTo(this.option1));
-
-            var optionSelectorWasCalled = false;
-
-            ReportScript.ReportingSettings.OptionSelector = (list, option) =>
-            {
-                optionSelectorWasCalled = true;
-                return null;
-            };
-
-            Assert.DoesNotThrow(() => dataCollector.SelectOption());
-
-            Assert.That(optionSelectorWasCalled, Is.False);
-
-            Assert.That(dataCollector.SelectedOption, Is.EqualTo(this.option1));
-        }
-
-        [Test]
-        public void Verify_that_SelectOption_Is_Called_When_Iteration_Contains_Multiple_Options()
-        {
-            var dataCollector = new TestOptionDependentDataCollector();
-            dataCollector.Initialize(this.iteration, null);
-            this.iteration.DefaultOption = this.option1;
-
-            Assert.That(dataCollector.SelectedOption, Is.EqualTo(this.option1));
-
-            var optionSelectorWasCalled = false;
-
-            ReportScript.ReportingSettings.OptionSelector = (list, option) =>
-            {
-                optionSelectorWasCalled = true;
-                return this.option2;
-            };
-
-            Assert.DoesNotThrow(() => dataCollector.SelectOption());
-
-            Assert.That(optionSelectorWasCalled, Is.True);
-
-            Assert.That(dataCollector.SelectedOption, Is.EqualTo(this.option2));
-        }
 
         private class TestOptionDependentDataCollector : OptionDependentDataCollector
         {

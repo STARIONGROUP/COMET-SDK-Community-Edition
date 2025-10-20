@@ -109,6 +109,17 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
+        public void VerifyThatActualValueThrowsWhenSwitchIsUnsupported()
+        {
+            this.parameterSubscriptionValueSet.ValueSwitch = (ParameterSwitchKind)99;
+
+            Assert.That(() =>
+            {
+                var _ = this.parameterSubscriptionValueSet.ActualValue;
+            }, Throws.TypeOf<InvalidOperationException>().With.Message.EqualTo("Unknown ParameterKindSwitch"));
+        }
+
+        [Test]
         public void TestGetActualState()
         {
             Assert.That(ReferenceEquals(this.parameterValueSetBase.ActualState, this.parameterSubscriptionValueSet.ActualState), Is.True);
@@ -157,7 +168,7 @@ namespace CDP4Common.Tests.Poco
         [Test]
         public void VerifyThatParameterOverrideSubscriptionModelCodeReturnsExpectedResult()
         {
-            var parameterOverride = new ParameterOverride();            
+            var parameterOverride = new ParameterOverride();
             this.elementUsage.ParameterOverride.Add(parameterOverride);
 
             var parameterOverrideValueSet = new ParameterOverrideValueSet();
@@ -174,6 +185,14 @@ namespace CDP4Common.Tests.Poco
             parameterOverride.ParameterSubscription.Add(subscription);
 
             Assert.That(subscriptionValueSet.ModelCode(0), Is.EqualTo(@"Sat.battery_1.bool"));
+        }
+
+        [Test]
+        public void VerifyThatModelCodeThrowsWhenSubscribedValueSetIsUnknown()
+        {
+            var subscriptionValueSet = new ParameterSubscriptionValueSet();
+
+            Assert.That(() => subscriptionValueSet.ModelCode(0), Throws.TypeOf<NullReferenceException>());
         }
 
         [Test]
@@ -225,6 +244,52 @@ namespace CDP4Common.Tests.Poco
             var errors = parameterSubscriptionValueSet.ValidationErrors;
 
             Assert.That(errors.Count(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void VerifyThatSampledFunctionValidationRequiresMultiples()
+        {
+            var scalarType = new SimpleQuantityKind(Guid.NewGuid(), null, null);
+
+            var sampledFunctionParameterType = new SampledFunctionParameterType(Guid.NewGuid(), null, null);
+            sampledFunctionParameterType.IndependentParameterType.Add(new IndependentParameterTypeAssignment(Guid.NewGuid(), null, null)
+            {
+                ParameterType = scalarType
+            });
+            sampledFunctionParameterType.DependentParameterType.Add(new DependentParameterTypeAssignment(Guid.NewGuid(), null, null)
+            {
+                ParameterType = scalarType
+            });
+
+            var parameter = new Parameter(Guid.NewGuid(), null, null) { ParameterType = sampledFunctionParameterType };
+            var parameterValueSet = new ParameterValueSet(Guid.NewGuid(), null, null)
+            {
+                Published = new ValueArray<string>(new List<string> { "1" }),
+                Reference = new ValueArray<string>(new List<string> { "1" })
+            };
+
+            parameter.ValueSet.Add(parameterValueSet);
+
+            var subscription = new ParameterSubscription(Guid.NewGuid(), null, null);
+            parameter.ParameterSubscription.Add(subscription);
+
+            var subscriptionValueSet = new ParameterSubscriptionValueSet(Guid.NewGuid(), null, null)
+            {
+                SubscribedValueSet = parameterValueSet,
+                Manual = new ValueArray<string>(new List<string> { "1" })
+            };
+
+            subscription.ValueSet.Add(subscriptionValueSet);
+
+            subscriptionValueSet.ValidatePoco();
+            Assert.That(subscriptionValueSet.ValidationErrors.Count(), Is.EqualTo(3));
+
+            subscriptionValueSet.Manual = new ValueArray<string>(new List<string> { "1", "2" });
+            parameterValueSet.Published = new ValueArray<string>(new List<string> { "1", "2" });
+            parameterValueSet.Reference = new ValueArray<string>(new List<string> { "1", "2" });
+
+            subscriptionValueSet.ValidatePoco();
+            Assert.That(subscriptionValueSet.ValidationErrors, Is.Empty);
         }
 
         [Test]
