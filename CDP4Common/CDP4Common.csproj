@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Common Community Edition</Title>
-        <VersionPrefix>29.0.1</VersionPrefix>
+        <VersionPrefix>29.0.2</VersionPrefix>
         <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
@@ -26,7 +26,8 @@
         <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
         <LangVersion>latest</LangVersion>
         <PackageReleaseNotes>
-            [Update] to NLog version 6.0.5
+            [Update] to NLog version 6.0.6
+            [Update] to Microsoft.Sbom.Targets version 4.1.4
         </PackageReleaseNotes>
     </PropertyGroup>
 
@@ -44,6 +45,9 @@
     <ItemGroup>
         <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
         <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\COPYING" Pack="true" PackagePath="\" />
+        <None Include="..\COPYING.LESSER" Pack="true" PackagePath="\" />
+        <None Include="..\NOTICE" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net48'">

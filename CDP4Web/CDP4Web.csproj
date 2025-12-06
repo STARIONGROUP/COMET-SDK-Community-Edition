@@ -5,7 +5,7 @@
         <LangVersion>latest</LangVersion>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Web Community Edition</Title>
-        <VersionPrefix>29.0.1</VersionPrefix>
+        <VersionPrefix>29.0.2</VersionPrefix>
         <Description>CDP4Web Dedicated Sdk for CDPServicesDal</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
@@ -22,22 +22,25 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] to CDP4ServicesDal version 29.0.1
+            [Update] to CDP4ServicesDal version 29.0.2
+            [Update] to Microsoft.Sbom.Targets version 4.1.4
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <NeutralLanguage>en-US</NeutralLanguage>
         <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
+
     <ItemGroup>
-        <None Include="..\cdp4-icon.png" Link="cdp4-icon.png">
-            <PackagePath>\</PackagePath>
-            <Pack>true</Pack>
-        </None>
-        <None Include="..\README.md" Link="README.md">
-            <PackagePath>\</PackagePath>
-            <Pack>true</Pack>
-        </None>
+        <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\COPYING" Pack="true" PackagePath="\" />
+        <None Include="..\COPYING.LESSER" Pack="true" PackagePath="\" />
+        <None Include="..\NOTICE" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>

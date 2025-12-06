@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4ServicesDal Community Edition</Title>
-        <VersionPrefix>29.0.1</VersionPrefix>
+        <VersionPrefix>29.0.2</VersionPrefix>
         <Description>CDP4ServicesDal Dal Plugin</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
@@ -21,9 +21,12 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] to CDP4JsonSerializer version 29.0.1
-            [Update] to CDP4MessagePackSerializer version 29.0.1
-            [Update] to CDP4Dal version 29.0.1
+            [Update] to CDP4JsonSerializer version 29.0.2
+            [Update] to CDP4MessagePackSerializer version 29.0.2
+            [Update] to CDP4Dal version 29.0.2
+            [Update] to Microsoft.Sbom.Targets version 4.1.4
+            [Update] to Polly version 8.6.5
+            [Update] to System.IdentityModel.Tokens.Jwt version 8.15.0
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>
@@ -39,6 +42,9 @@
     <ItemGroup>
         <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
         <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\COPYING" Pack="true" PackagePath="\" />
+        <None Include="..\COPYING.LESSER" Pack="true" PackagePath="\" />
+        <None Include="..\NOTICE" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>

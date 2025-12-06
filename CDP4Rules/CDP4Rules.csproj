@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Rules Community Edition</Title>
-        <VersionPrefix>29.0.1</VersionPrefix>
+        <VersionPrefix>29.0.2</VersionPrefix>
         <Description>CDP4 Class Library that provides Model Analysis and Rule Checking</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Alex, Alexander, Yevhen, Nathanael</Authors>
@@ -21,7 +21,8 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] to CDP4Common version 29.0.1
+            [Update] to CDP4Common version 29.0.2
+            [Update] to Microsoft.Sbom.Targets version 4.1.4
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>
@@ -37,6 +38,9 @@
     <ItemGroup>
         <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
         <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\COPYING" Pack="true" PackagePath="\" />
+        <None Include="..\COPYING.LESSER" Pack="true" PackagePath="\" />
+        <None Include="..\NOTICE" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>

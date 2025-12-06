@@ -4,7 +4,7 @@
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Common Community Edition</Title>
-        <VersionPrefix>29.0.1</VersionPrefix>
+        <VersionPrefix>29.0.2</VersionPrefix>
         <Description>CDP4 Services Messaging is a Class Library that contains clients and messages class that can be used for inter services communication</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Alex, Alexander, Nathanael, Antoine</Authors>
@@ -22,11 +22,13 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] to CDP4Dal version 29.0.1
-            [Update] to CDP4JsonSerializer version 29.0.1
-            [Update] to Microsoft.Extensions.Configuration.Abstractions version 9.0.10
-            [Update] to Microsoft.Extensions.Configuration.Binder version 9.0.10
-            [Update] to Microsoft.Extensions.Hosting.Abstractions version 9.0.10
+            [Update] to CDP4Dal version 29.0.2
+            [Update] to CDP4JsonSerializer version 29.0.2
+            [Update] to Microsoft.Sbom.Targets version 4.1.4
+            [Update] to Microsoft.Extensions.Configuration.Abstractions version 10.0.0
+            [Update] to Microsoft.Extensions.Configuration.Binder version 10.0.0
+            [Update] to Microsoft.Extensions.Hosting.Abstractions version 10.0.0
+            [Update] to Polly version 8.6.5
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>
@@ -34,15 +36,17 @@
         <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
+
     <ItemGroup>
-        <None Include="..\cdp4-icon.png" Link="cdp4-icon.png">
-            <PackagePath>\</PackagePath>
-            <Pack>true</Pack>
-        </None>
-        <None Include="..\README.md" Link="README.md">
-            <PackagePath>\</PackagePath>
-            <Pack>true</Pack>
-        </None>
+        <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\COPYING" Pack="true" PackagePath="\" />
+        <None Include="..\COPYING.LESSER" Pack="true" PackagePath="\" />
+        <None Include="..\NOTICE" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,0 +1,30 @@
+CDP4-COMET-SDK
+Copyright (c) 2014-2025 Starion Group S.A.
+All rights reserved.
+
+This software is licensed under the GNU Lesser General Public License
+(version 3.0 or later). A copy of the GNU LGPL v3.0 is provided with the
+distribution in the file LICENSE.LESSER. The full text of the GNU
+General Public License v3.0 is included in LICENSE.
+
+This NOTICE file is provided in compliance with Section 4 of the LGPL.
+It does not modify the license terms and does not grant additional rights.
+
+The CDP4-COMET-SDK incorporates contributions from the open-source
+community. The complete corresponding source code for this library,
+including instructions to build the library from source, is available at:
+
+    https://github.com/STARIONGROUP/CDP4-COMET-SDK
+
+You may redistribute this library and/or modify it under the terms of the
+GNU Lesser General Public License as published by the Free Software
+Foundation. If you distribute a binary that uses this library, you must
+ensure that users are able to replace or modify the LGPL-covered parts of
+the library, as required by the license.
+
+Third-party components included in or used by this package are licensed
+under their respective open-source licenses.
+
+Trademarks:
+"CDP4-COMET" is a trademark of Starion Group S.A. Use of these
+marks does not imply endorsement by Starion Group S.A.
