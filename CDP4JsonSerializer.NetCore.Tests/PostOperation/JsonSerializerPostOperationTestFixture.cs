@@ -30,6 +30,7 @@ namespace CDP4JsonSerializer.NetCore.Tests.PostOperation
     using System.Linq;
     using System.Text;
 
+    using CDP4Common.CommonData;
     using CDP4Common.DTO;
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
@@ -101,6 +102,64 @@ namespace CDP4JsonSerializer.NetCore.Tests.PostOperation
             Assert.That(qkf_1.V, Is.Not.Null);
 
             Assert.That(qkf_1.M, Is.Null);
+        }
+
+        [Test]
+        public void Verify_that_create_constant_post_message_can_be_deserialized()
+        {
+            var postMessage = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "PostOperation/createConstantPostOperation.json"));
+            var byteArray = Encoding.UTF8.GetBytes(postMessage);
+            var stream = new MemoryStream(byteArray);
+
+            var cdp4JsonSerializer = new Cdp4DalJsonSerializer(this.metaDataProvider, this.supportedVersion, false);
+
+            var cdpPostOperation = cdp4JsonSerializer.Deserialize<PostOperation>(stream);
+
+            Assert.That(cdpPostOperation.Delete, Is.Empty);
+            Assert.That(cdpPostOperation.Copy, Is.Empty);
+
+            var constant = cdpPostOperation.Create.First() as Constant;
+
+            Assert.That(constant.Value[0], Is.EqualTo("word"));
+        }
+
+        [Test]
+        public void Verify_that_create_requirement_post_message_can_be_deserialized()
+        {
+            var postMessage = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "PostOperation/createRequirementPostOperation.json"));
+            var byteArray = Encoding.UTF8.GetBytes(postMessage);
+            var stream = new MemoryStream(byteArray);
+
+            var cdp4JsonSerializer = new Cdp4DalJsonSerializer(this.metaDataProvider, this.supportedVersion, false);
+
+            var cdpPostOperation = cdp4JsonSerializer.Deserialize<PostOperation>(stream);
+
+            Assert.That(cdpPostOperation.Delete, Is.Empty);
+            Assert.That(cdpPostOperation.Copy, Is.Empty);
+
+            var requirement = cdpPostOperation.Create.First(x => x.ClassKind == ClassKind.Requirement) as Requirement;
+
+            Assert.That(requirement.Group, Is.Null);
+            Assert.That(requirement.ParameterValue, Is.Empty);
+        }
+
+        [Test]
+        public void Verify_that_update_PostParameterOverrideValueSet_post_message_can_be_deserialized()
+        {
+            var postMessage = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "PostOperation/PostParameterOverrideValueSet.json"));
+            var byteArray = Encoding.UTF8.GetBytes(postMessage);
+            var stream = new MemoryStream(byteArray);
+
+            var cdp4JsonSerializer = new Cdp4DalJsonSerializer(this.metaDataProvider, this.supportedVersion, false);
+
+            var cdpPostOperation = cdp4JsonSerializer.Deserialize<PostOperation>(stream);
+
+            Assert.That(cdpPostOperation.Delete, Is.Empty);
+            Assert.That(cdpPostOperation.Copy, Is.Empty);
+
+            var parameterOverrideValueSet = cdpPostOperation.Update.First();
+
+            Assert.That(parameterOverrideValueSet, Is.Not.Null);
         }
     }
 }

@@ -37,11 +37,16 @@
     <ItemGroup>
         <Folder Include="Helper\" />
         <Folder Include="Deserializer\" />
-        <Folder Include="TestData\" />
     </ItemGroup>
 
     <ItemGroup>
         <None Update="PostOperation\CreateDerivedQuantityKindPostMessage.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="PostOperation\createRequirementPostOperation.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="PostOperation\PostParameterOverrideValueSet.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="PostOperation\ReOderFactorsOfDerivedQuantityKindPostMessage.json">
@@ -49,6 +54,9 @@
         </None>
         <None Update="TestData\bigmodel.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="PostOperation\createConstantPostOperation.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="TestData\jsonTestSample.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
