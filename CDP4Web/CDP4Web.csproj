@@ -5,7 +5,7 @@
         <LangVersion>latest</LangVersion>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Web Community Edition</Title>
-        <VersionPrefix>29.0.2</VersionPrefix>
+        <VersionPrefix>29.0.3</VersionPrefix>
         <Description>CDP4Web Dedicated Sdk for CDPServicesDal</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
@@ -22,8 +22,8 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] to CDP4ServicesDal version 29.0.2
-            [Update] to Microsoft.Sbom.Targets version 4.1.4
+            [Update] to CDP4ServicesDal version 29.0.3
+            [Update] to Microsoft.Sbom.Targets version 4.1.5
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <NeutralLanguage>en-US</NeutralLanguage>

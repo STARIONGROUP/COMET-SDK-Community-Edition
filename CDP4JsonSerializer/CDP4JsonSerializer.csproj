@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4JsonSerializer Community Edition</Title>
-        <VersionPrefix>29.0.2</VersionPrefix>
+        <VersionPrefix>29.0.3</VersionPrefix>
         <Description>CDP4 JSON Serialization Library</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
@@ -22,9 +22,9 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] to CDP4DalCommon version 29.0.2
-            [Update] System.Text.Json to version 10.0.0
-            [Update] to Microsoft.Sbom.Targets version 4.1.4
+            [Update] to CDP4DalCommon version 29.0.3
+            [Update] System.Text.Json to version 10.0.1
+            [Update] to Microsoft.Sbom.Targets version 4.1.5
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>

@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Dal Community Edition</Title>
-        <VersionPrefix>29.0.2</VersionPrefix>
+        <VersionPrefix>29.0.3</VersionPrefix>
         <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
@@ -22,8 +22,8 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] to CDP4DalCommon version 29.0.2
-            [Update] to Microsoft.Sbom.Targets version 4.1.4
+            [Update] to CDP4DalCommon version 29.0.3
+            [Update] to Microsoft.Sbom.Targets version 4.1.5
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>
