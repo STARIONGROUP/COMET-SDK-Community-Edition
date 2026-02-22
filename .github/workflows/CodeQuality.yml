@@ -26,6 +26,9 @@ jobs:
         uses: actions/setup-dotnet@v5.1.0
         with:
           dotnet-version: '10.0.x'
+          
+      - name: Install Mono (for .NET Framework tests)
+        run: sudo apt-get update && sudo apt-get install -y mono-complete
 
       - name: install dotnet-reportgenerator-globaltool
         run: dotnet tool install --global dotnet-reportgenerator-globaltool
