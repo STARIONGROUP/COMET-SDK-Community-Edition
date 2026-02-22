@@ -482,9 +482,7 @@ namespace CDP4ServicesDal.Tests
         {
             this.dal = new CdpServicesDal(this.authenticationService.Object) { Session = this.session };
 
-            var filename = @"TestData\testfile.pdf";
-            var directory = TestContext.CurrentContext.TestDirectory;
-            var filepath = Path.Combine(directory, filename);
+            var filepath = Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "testfile.pdf");
             var files = new List<string> { filepath };
 
             var contentHash = "F73747371CFD9473C19A0A7F99BCAB008474C4CA";
