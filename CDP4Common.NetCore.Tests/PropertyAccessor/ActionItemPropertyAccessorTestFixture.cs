@@ -262,8 +262,8 @@ namespace CDP4Common.NetCore.Tests.PropertyAccessor
 
             var newExcludedDomains = new List<DomainOfExpertise>()
             {
-                new (),
-                new ()
+                new DomainOfExpertise(),
+                new DomainOfExpertise()
             };
 
             actionItem.SetValue(excludedDomainName, newExcludedDomains);

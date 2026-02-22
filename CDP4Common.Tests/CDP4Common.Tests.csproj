@@ -35,4 +35,385 @@
     <ItemGroup Label="build-only dependencies">
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Attributes\CDPVersionTestFixture.cs">
+        <Link>Attributes\CDPVersionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Attributes\ContainerAttributeTestFixture.cs">
+        <Link>Attributes\ContainerAttributeTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Attributes\UmlInformationAttributeTestFixture.cs">
+        <Link>Attributes\UmlInformationAttributeTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\AutoGenEquatable\ActionItemEquatableTestFixture.cs">
+        <Link>AutoGenEquatable\ActionItemEquatableTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\AutoGenEquatable\ConstantEquatableTestFixture.cs">
+        <Link>AutoGenEquatable\ConstantEquatableTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\AutoGenEquatable\DefinitionItemEquatableTestFixture.cs">
+        <Link>AutoGenEquatable\DefinitionItemEquatableTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\AutoGenHelpers\DefaultPermissionProviderTestFixture.cs">
+        <Link>AutoGenHelpers\DefaultPermissionProviderTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\ClasslessDtoTestFixture.cs">
+        <Link>ClasslessDtoTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\ActualFiniteStateComparerTestFixture.cs">
+        <Link>Comparers\ActualFiniteStateComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\BooleanValueSetComparerTestFixture.cs">
+        <Link>Comparers\BooleanValueSetComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\DefinedThingComparerTestFixture.cs">
+        <Link>Comparers\DefinedThingComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\ElementDefinitionComparerTestFixture.cs">
+        <Link>Comparers\ElementDefinitionComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\ElementUsageComparerTestFixture.cs">
+        <Link>Comparers\ElementUsageComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\GuidComparerTestFixture.cs">
+        <Link>Comparers\GuidComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\OptionComparerTestFixture.cs">
+        <Link>Comparers\OptionComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\ParameterBaseComparerTestFixture.cs">
+        <Link>Comparers\ParameterBaseComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\ParameterGroupComparerTestFixture.cs">
+        <Link>Comparers\ParameterGroupComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\ParameterOverrideValueSetComparerTestFixture.cs">
+        <Link>Comparers\ParameterOverrideValueSetComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\ParameterSubscriptionValueSetComparerTestFixture.cs">
+        <Link>Comparers\ParameterSubscriptionValueSetComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\ParameterValueSetComparerTestFixture.cs">
+        <Link>Comparers\ParameterValueSetComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\QuantityKindValueSetComparerTestFixture.cs">
+        <Link>Comparers\QuantityKindValueSetComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Comparers\ShortNameThingComparerTestFixture.cs">
+        <Link>Comparers\ShortNameThingComparerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\DTO\ParameterBaseTestFixture.cs">
+        <Link>DTO\ParameterBaseTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\DTO\ThingTestFixture.cs">
+        <Link>DTO\ThingTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\ExceptionHandlerService\ExceptionHandlerServiceTestFixture.cs">
+        <Link>ExceptionHandlerService\ExceptionHandlerServiceTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\ExpressionNumber.cs">
+        <Link>ExpressionNumber.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Extensions\BooleanExpressionExtensionsTestFixture.cs">
+        <Link>Extensions\BooleanExpressionExtensionsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Extensions\CategorizableThingExtensionsTestFixture.cs">
+        <Link>Extensions\CategorizableThingExtensionsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Extensions\ElementBaseExtensionsTestFixture.cs">
+        <Link>Extensions\ElementBaseExtensionsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Extensions\EnumerationParameterTypeExtensionsTestFixture.cs">
+        <Link>Extensions\EnumerationParameterTypeExtensionsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Extensions\IEnumerableExtensionsTestFixture.cs">
+        <Link>Extensions\IEnumerableExtensionsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Extensions\ParametricConstraintExtensionsTestFixture.cs">
+        <Link>Extensions\ParametricConstraintExtensionsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Extensions\ThingConverterExtensionsTestFixture.cs">
+        <Link>Extensions\ThingConverterExtensionsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Helpers\NestedElementTreeGeneratorTestFixture.cs">
+        <Link>Helpers\NestedElementTreeGeneratorTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Helpers\PocoThingFactoryTestFixture.cs">
+        <Link>Helpers\PocoThingFactoryTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Helpers\PropertyDescriptorTestFixture.cs">
+        <Link>Helpers\PropertyDescriptorTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Helpers\TokenGeneratorTestFixture.cs">
+        <Link>Helpers\TokenGeneratorTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Helpers\TypeResolverTestFixture.cs">
+        <Link>Helpers\TypeResolverTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Helpers\ValueArrayUtilsTestFixture.cs">
+        <Link>Helpers\ValueArrayUtilsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Helpers\ValueSetConverterTestFixture.cs">
+        <Link>Helpers\ValueSetConverterTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\MetaInfo\MetadataProviderTestFixture.cs">
+        <Link>MetaInfo\MetadataProviderTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\MetaInfo\MetaInfoTestFixture.cs">
+        <Link>MetaInfo\MetaInfoTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ActualFiniteStateListTestFixture.cs">
+        <Link>Poco\ActualFiniteStateListTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ActualFiniteStateTestFixture.cs">
+        <Link>Poco\ActualFiniteStateTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\AndExpressionTestFixture.cs">
+        <Link>Poco\AndExpressionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ArrayParameterTypeTestFixture.cs">
+        <Link>Poco\ArrayParameterTypeTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\BinaryRelationshipRuleTestFixture.cs">
+        <Link>Poco\BinaryRelationshipRuleTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\BinaryRelationshipTestFixture.cs">
+        <Link>Poco\BinaryRelationshipTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\BooleanExpressionTestFixture.cs">
+        <Link>Poco\BooleanExpressionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\CategoryTestFixture.cs">
+        <Link>Poco\CategoryTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\CitationTestFixture.cs">
+        <Link>Poco\CitationTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\CompoundParameterTypeTestFixture.cs">
+        <Link>Poco\CompoundParameterTypeTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ConstantTestFixture.cs">
+        <Link>Poco\ConstantTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\DecompositionRuleTestFixture.cs">
+        <Link>Poco\DecompositionRuleTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\DefinedThingTestFixture.cs">
+        <Link>Poco\DefinedThingTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\DerivedQuantityKindTestFixture.cs">
+        <Link>Poco\DerivedQuantityKindTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\DomainOfExpertiseTestFixture.cs">
+        <Link>Poco\DomainOfExpertiseTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ElementDefinitionTestFixture.cs">
+        <Link>Poco\ElementDefinitionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ElementUsageTestFixture.cs">
+        <Link>Poco\ElementUsageTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\EngineeringModelTestFixture.cs">
+        <Link>Poco\EngineeringModelTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ExclusiveOrExpressionTestFixture.cs">
+        <Link>Poco\ExclusiveOrExpressionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\FileRevisionTestFixture.cs">
+        <Link>Poco\FileRevisionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\FileTestFixture.cs">
+        <Link>Poco\FileTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\FileTypeTestFixture.cs">
+        <Link>Poco\FileTypeTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\FolderTestFixture.cs">
+        <Link>Poco\FolderTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\GlossaryTestFixture.cs">
+        <Link>Poco\GlossaryTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\IdCorrespondenceTestFixture.cs">
+        <Link>Poco\IdCorrespondenceTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\IterationTestFixture.cs">
+        <Link>Poco\IterationTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\MultiRelationshipRuleTestFixture.cs">
+        <Link>Poco\MultiRelationshipRuleTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\NestedElementTestFixture.cs">
+        <Link>Poco\NestedElementTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\NestedParameterTestFixture.cs">
+        <Link>Poco\NestedParameterTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\NotExpressionTestFixture.cs">
+        <Link>Poco\NotExpressionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\NotThingTestFixture.cs">
+        <Link>Poco\NotThingTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\OptionTestFixture.cs">
+        <Link>Poco\OptionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\OrdinalScaleTestFixture.cs">
+        <Link>Poco\OrdinalScaleTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\OrExpressionTestFixture.cs">
+        <Link>Poco\OrExpressionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterBaseTestFixture.cs">
+        <Link>Poco\ParameterBaseTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterGroupTestFixture.cs">
+        <Link>Poco\ParameterGroupTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterizedCategoryRuleTestFixture.cs">
+        <Link>Poco\ParameterizedCategoryRuleTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterOverrideTestFixture.cs">
+        <Link>Poco\ParameterOverrideTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterOverrideValueSetTestFixture.cs">
+        <Link>Poco\ParameterOverrideValueSetTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterSubscriptionTestFixture.cs">
+        <Link>Poco\ParameterSubscriptionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterSubscriptionValueSetTestFixture.cs">
+        <Link>Poco\ParameterSubscriptionValueSetTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterTestFixture.cs">
+        <Link>Poco\ParameterTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterTypeComponentTestFixture.cs">
+        <Link>Poco\ParameterTypeComponentTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterTypeTestFixture.cs">
+        <Link>Poco\ParameterTypeTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterValueSetBaseTestFixture.cs">
+        <Link>Poco\ParameterValueSetBaseTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParameterValueSetTestFixture.cs">
+        <Link>Poco\ParameterValueSetTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParametricConstraintTestFixture.cs">
+        <Link>Poco\ParametricConstraintTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ParticipantRoleTestFixture.cs">
+        <Link>Poco\ParticipantRoleTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\PersonRoleTestFixture.cs">
+        <Link>Poco\PersonRoleTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\PersonTestFixture.cs">
+        <Link>Poco\PersonTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\PossibleFiniteStateListTestFixture.cs">
+        <Link>Poco\PossibleFiniteStateListTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\PossibleFiniteStateTestFixture.cs">
+        <Link>Poco\PossibleFiniteStateTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\PrefixedUnitTestFixture.cs">
+        <Link>Poco\PrefixedUnitTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\QuantityKindTestFixture.cs">
+        <Link>Poco\QuantityKindTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ReferenceDataLibraryTestFixture.cs">
+        <Link>Poco\ReferenceDataLibraryTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ReferencerRuleTestFixture.cs">
+        <Link>Poco\ReferencerRuleTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\ReferenceSourceTestFixture.cs">
+        <Link>Poco\ReferenceSourceTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\RequirementsContainerTestFixture.cs">
+        <Link>Poco\RequirementsContainerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\RequirementsGroupTestFixture.cs">
+        <Link>Poco\RequirementsGroupTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\RequirementTestFixture.cs">
+        <Link>Poco\RequirementTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\RuleVerificationTestFixture.cs">
+        <Link>Poco\RuleVerificationTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\SimpleParameterValueTestFixture.cs">
+        <Link>Poco\SimpleParameterValueTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\SimpleQuantityKindTestFixture.cs">
+        <Link>Poco\SimpleQuantityKindTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\SimpleUnitTestFixture.cs">
+        <Link>Poco\SimpleUnitTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\SiteDirectoryTestFixture.cs">
+        <Link>Poco\SiteDirectoryTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\UnitPrefixTestFixture.cs">
+        <Link>Poco\UnitPrefixTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Poco\UserRuleVerificationTestFixture.cs">
+        <Link>Poco\UserRuleVerificationTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\PropertyAccessor\ActionItemPropertyAccessorTestFixture.cs">
+        <Link>PropertyAccessor\ActionItemPropertyAccessorTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\PropertyAccessor\ArrayParameterTypePropertyAccessorTestFixture.cs">
+        <Link>PropertyAccessor\ArrayParameterTypePropertyAccessorTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\PropertyAccessor\CategoryPropertyAccssorTestFixture.cs">
+        <Link>PropertyAccessor\CategoryPropertyAccssorTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\PropertyAccessor\ConstantPropertyAccessorTestFixture.cs">
+        <Link>PropertyAccessor\ConstantPropertyAccessorTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\PropertyAccessor\SiteDirectoryPropertyAccessorTestFixture.cs">
+        <Link>PropertyAccessor\SiteDirectoryPropertyAccessorTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\RuleVerification\ParameterizedCategoryRuleTestFixture.cs">
+        <Link>RuleVerification\ParameterizedCategoryRuleTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\ThingExtensionTestFixture.cs">
+        <Link>ThingExtensionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\ThingTestFixture.cs">
+        <Link>ThingTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Types\CacheKeyTestFixture.cs">
+        <Link>Types\CacheKeyTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Types\ContainerListTestFixture.cs">
+        <Link>Types\ContainerListTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Types\OrderedItemListTestFixture.cs">
+        <Link>Types\OrderedItemListTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Types\OrderedItemTestFixture.cs">
+        <Link>Types\OrderedItemTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Types\ValueArrayParserTestFixture.cs">
+        <Link>Types\ValueArrayParserTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Types\ValueArrayTestFixture.cs">
+        <Link>Types\ValueArrayTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Validation\DtoValueValidatorTestFixture.cs">
+        <Link>Validation\DtoValueValidatorTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Validation\ValidationServiceTestFixture.cs">
+        <Link>Validation\ValidationServiceTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Common.NetCore.Tests\Validation\ValueValidatorTestFixture.cs">
+        <Link>Validation\ValueValidatorTestFixture.cs</Link>
+      </Compile>
+    </ItemGroup>
 </Project>

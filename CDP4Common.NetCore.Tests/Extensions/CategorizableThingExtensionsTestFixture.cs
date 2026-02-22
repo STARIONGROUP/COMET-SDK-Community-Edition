@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Tests.Extensions
+namespace CDP4Common.NetCore.Tests.Extensions
 {
     using System;
     using System.Collections.Concurrent;

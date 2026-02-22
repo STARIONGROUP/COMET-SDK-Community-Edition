@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserRuleVerificationTestFixture.cs" company="Starion Group S.A.">
+// <copyright file="GuidComparer.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou
@@ -22,23 +22,32 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Common.Tests.Poco
+namespace CDP4Common.Tests.Comparers
 {
-    using CDP4Common.EngineeringModelData;
-    using CDP4Common.SiteDirectoryData;
-
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using CDP4Common.Comparers;
     using NUnit.Framework;
 
     [TestFixture]
-    internal class UserRuleVerificationTestFixture
+    public class GuidComparerTestFixture
     {
         [Test]
-        public void TestGetDerivedName()
+        public void Verify_that_List_of_Guid_is_ordered()
         {
-            var userRuleVerif = new UserRuleVerification();
-            userRuleVerif.Rule = new DecompositionRule(){Name = "rule"};
+            var id_1 = Guid.Parse("622d8e0f-ed5e-4dde-92b8-97ff06e69110");
+            var id_2 = Guid.Parse("90e43d0c-edf8-4630-963b-90e6530ac9db");
+            var id_3 = Guid.Parse("47b3abc1-ce06-40ef-8ea6-466e7eaccccd");
 
-            Assert.That(userRuleVerif.Name, Is.EqualTo("rule"));
+            Assert.That(-1, Is.EqualTo(id_1.CompareTo(id_2)));
+
+            var ids = new List<Guid> { id_1, id_2, id_3 };
+            var ordered = new List<Guid> { id_3, id_1, id_2 };
+
+            var result = ids.OrderBy(x => x, new GuidComparer());
+
+            Assert.That(ordered, Is.EqualTo(result));
         }
     }
 }

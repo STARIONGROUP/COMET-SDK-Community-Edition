@@ -29,6 +29,7 @@ namespace CDP4Common.NetCore.Tests.Poco
 
     using CDP4Common.EngineeringModelData;
     using CDP4Common.NetCore.Tests;
+    using CDP4Common.Tests;
 
     using NUnit.Framework;
 

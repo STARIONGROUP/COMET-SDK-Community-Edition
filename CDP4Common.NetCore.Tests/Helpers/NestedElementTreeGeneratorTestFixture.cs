@@ -417,6 +417,20 @@ namespace CDP4Common.Tests.Helpers
         }
 
         [Test]
+        public void Verify_that_GetNestedParameters_Works_For_Specific_DomainOfExpertise_OptionB()
+        {
+            var option = this.iteration.Option.Single(x => x.ShortName == "OPT_B");
+
+            var NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise, false).ToList();
+
+            Assert.That(NestedParameters.Count, Is.EqualTo(5));
+
+            NestedParameters = this.nestedElementTreeGenerator.GetNestedParameters(option, this.domainOfExpertise_2, false).ToList();
+
+            Assert.That(NestedParameters.Count, Is.EqualTo(4));
+        }
+
+        [Test]
         public void Verify_that_GetNestedParameters_Works_For_All_DomainOfExpertises()
         {
             var option = this.iteration.Option.Single(x => x.ShortName == "OPT_A");

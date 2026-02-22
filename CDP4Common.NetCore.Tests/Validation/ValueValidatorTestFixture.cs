@@ -27,6 +27,7 @@ namespace CDP4Common.Tests.Validation
     using System;
     using System.Collections.Concurrent;
     using System.Globalization;
+    using System.Threading;
 
     using CDP4Common.CommonData;
     using CDP4Common.SiteDirectoryData;
@@ -52,7 +53,7 @@ namespace CDP4Common.Tests.Validation
         [SetUp]
         public void SetUp()
         {
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
             this.uri = new Uri("http://www.stariongroup.eu");
             this.cache = new ConcurrentDictionary<CDP4Common.Types.CacheKey, Lazy<Thing>>();
@@ -147,8 +148,7 @@ namespace CDP4Common.Tests.Validation
         public void VerifyThatBooleanValidatesWithFrenchCulture()
         {
             var testCulture = new CultureInfo("fr-FR");
-
-            CultureInfo.CurrentCulture = testCulture;
+            Thread.CurrentThread.CurrentCulture = testCulture;
 
             ValidationResult result;
 
@@ -370,8 +370,7 @@ namespace CDP4Common.Tests.Validation
         public void VerifyThatSimpleQuantityKindValidatesRealWithFrenchCulture()
         {
             var testCulture = new CultureInfo("fr-FR");
-
-            CultureInfo.CurrentCulture = testCulture;
+            Thread.CurrentThread.CurrentCulture = testCulture;
 
             ValidationResult result;
             this.ratioScale.NumberSet = NumberSetKind.REAL_NUMBER_SET;
