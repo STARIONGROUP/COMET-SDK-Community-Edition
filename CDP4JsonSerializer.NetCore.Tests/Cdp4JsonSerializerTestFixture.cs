@@ -93,7 +93,7 @@ namespace CDP4JsonSerializer.Tests
         [Test]
         public void Verify_that_deserialize_throws_exception()
         {
-            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/SiteDirectory.json"));
+            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "SiteDirectory.json"));
             var cdp4JsonSerializer = new Cdp4JsonSerializer();
 
             using var stream = StreamHelper.GenerateStreamFromString(response);

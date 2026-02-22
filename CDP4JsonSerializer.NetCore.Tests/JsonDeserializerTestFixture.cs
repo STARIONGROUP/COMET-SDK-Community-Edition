@@ -73,7 +73,7 @@ namespace CDP4JsonSerializer.Tests
         [Test]
         public void VerifyThatDeserealizerParsesSiteDirectoryResponse()
         {
-            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory,  "TestData/SiteDirectory.json"));
+            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "SiteDirectory.json"));
 
             using var stream = StreamHelper.GenerateStreamFromString(response);
 
@@ -84,7 +84,7 @@ namespace CDP4JsonSerializer.Tests
         [Test]
         public void VerifyDeserializeOrderedItemWorks()
         {
-            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/LOFT_EngineeringModel.json"));
+            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "LOFT_EngineeringModel.json"));
 
             using var stream = StreamHelper.GenerateStreamFromString(response);
 
@@ -97,7 +97,7 @@ namespace CDP4JsonSerializer.Tests
         [Test]
         public void VerifyThatOrderedItemIntWorks()
         {
-            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/LOFT_EngineeringModel.json"));
+            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "LOFT_EngineeringModel.json"));
 
             using var stream = StreamHelper.GenerateStreamFromString(response);
 
@@ -112,7 +112,7 @@ namespace CDP4JsonSerializer.Tests
         [Test]
         public void VerifyThatDeserializeValueArrayWorks()
         {
-            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/LOFT_EngineeringModel.json"));
+            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "LOFT_EngineeringModel.json"));
 
             using var stream = StreamHelper.GenerateStreamFromString(response);
 
@@ -125,7 +125,7 @@ namespace CDP4JsonSerializer.Tests
         [Test]
         public void VerifyThatDeserializeBigModelWorks()
         {
-            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/bigmodel.json"));
+            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "bigmodel.json"));
 
             using var stream = StreamHelper.GenerateStreamFromString(response);
 
@@ -156,7 +156,7 @@ namespace CDP4JsonSerializer.Tests
         [Test]
         public void VerifyThatDeserializeWorksOnAnyType()
         {
-            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/jsonTestSample.json")).Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
+            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "jsonTestSample.json")).Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
             IReadOnlyList<CDP4Common.DTO.Thing> result;
 
             using (var stream = StreamHelper.GenerateStreamFromString(response))

@@ -58,7 +58,7 @@ namespace CDP4JsonSerializer.Tests.PostOperation
         [Test]
         public void Verify_that_post_message_with_move_keys_can_be_deserialized()
         {
-            var postMessage = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "PostOperation/ReOderFactorsOfDerivedQuantityKindPostMessage.json"));
+            var postMessage = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "PostOperation", "ReOderFactorsOfDerivedQuantityKindPostMessage.json"));
             var byteArray = Encoding.UTF8.GetBytes(postMessage);
             var stream = new MemoryStream(byteArray);
 
@@ -84,7 +84,7 @@ namespace CDP4JsonSerializer.Tests.PostOperation
         [Test]
         public void Verify_that_post_message_can_be_deserialized()
         {
-            var postMessage = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "PostOperation/CreateDerivedQuantityKindPostMessage.json"));
+            var postMessage = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "PostOperation", "CreateDerivedQuantityKindPostMessage.json"));
             var byteArray = Encoding.UTF8.GetBytes(postMessage);
             var stream = new MemoryStream(byteArray);
 

@@ -55,7 +55,7 @@ namespace CDP4ServicesDal.Tests
         {
             this.uri = new Uri("http://www.stariongroup.eu");
 
-            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/SiteDiretoryExtentDeep.json"));
+            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "SiteDiretoryExtentDeep.json"));
 
             var metaDataProvider = new MetaDataProvider();
             var version = new Version(1, 0, 0);

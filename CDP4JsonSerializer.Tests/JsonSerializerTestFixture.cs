@@ -458,7 +458,7 @@ namespace CDP4JsonSerializer.Tests
         [Test]
         public void VerifyThatSerializeGiveSameInput()
         {
-            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/jsonTestSample.json")).Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
+            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "jsonTestSample.json")).Replace("\r", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
             IReadOnlyList<Dto.Thing> result;
 
             using (var stream = StreamHelper.GenerateStreamFromString(response))
@@ -590,7 +590,7 @@ namespace CDP4JsonSerializer.Tests
         [Category("Performance")]
         public void PerformanceTest()
         {
-            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/bigmodel.json"));
+            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "bigmodel.json"));
             IReadOnlyList<Dto.Thing> result;
 
             using (var stream = StreamHelper.GenerateStreamFromString(response))

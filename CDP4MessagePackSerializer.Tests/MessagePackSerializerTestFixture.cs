@@ -2,7 +2,7 @@
 // <copyright file="MessagePackSerializerTestFixture.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2025 Starion Group S.A.
 //
-//    Author: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elabiary
+//    Author: Sam GerenÃ©, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Thï¿½ate, Omar Elabiary
 //
 //    This file is part of COMET-SDK Community Edition
 //
@@ -26,6 +26,7 @@ namespace CDP4MessagePackSerializer.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.IO.Pipelines;
     using System.Linq;
@@ -36,10 +37,12 @@ namespace CDP4MessagePackSerializer.Tests
 
     using CDP4Common.Comparers;
     using CDP4Common.DTO;
+    using CDP4Common.DTO.Equatable;
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
 
     using CDP4MessagePackSerializer;
+    
     using CDP4JsonSerializer;
 
     using NUnit.Framework;
@@ -48,21 +51,14 @@ namespace CDP4MessagePackSerializer.Tests
     using ActualFiniteState = CDP4Common.DTO.ActualFiniteState;
     using ArrayParameterType = CDP4Common.DTO.ArrayParameterType;
     using Category = CDP4Common.DTO.Category;
+    using Citation = CDP4Common.DTO.Citation;
     using CompoundParameterType = CDP4Common.DTO.CompoundParameterType;
     using Constant = CDP4Common.DTO.Constant;
     using CyclicRatioScale = CDP4Common.DTO.CyclicRatioScale;
     using ElementDefinition = CDP4Common.DTO.ElementDefinition;
     using Parameter = CDP4Common.DTO.Parameter;
     using Thing = CDP4Common.DTO.Thing;
-    using System.Diagnostics;
-
-    using CDP4Common.CommonData;
-    using CDP4Common.DTO.Equatable;
-
-    using static System.Net.Mime.MediaTypeNames;
-
-    using Citation = CDP4Common.DTO.Citation;
-
+    
     /// <summary>
     /// Suite of tests for the <see cref="MessagePackSerializer"/> class
     /// </summary>
@@ -946,11 +942,12 @@ namespace CDP4MessagePackSerializer.Tests
             var metaDataProvider = new MetaDataProvider();
             var jsonSerializer = new Cdp4JsonSerializer(metaDataProvider, new Version(1, 2, 0));
 
-            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Data/{jsonFileName}.json"));
+            var response = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "Data", $"{jsonFileName}.json"));
 
             List<Thing> jsonThings;
 
             var sw = Stopwatch.StartNew();
+            
             using (var stream = GenerateStreamFromString(response))
             {
                 jsonThings = new List<Thing>(jsonSerializer.Deserialize(stream));

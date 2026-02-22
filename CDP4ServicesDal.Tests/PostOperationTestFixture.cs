@@ -62,7 +62,7 @@ namespace CDP4ServicesDal.Tests
         [Test]
         public void Verify_that_deserialization_of_Post_Operation_does_not_throw_an_exception()
         {
-            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData/PostOperation.json"));
+            var response = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "PostOperation.json"));
 
             using (var stream = StreamHelper.GenerateStreamFromString(response))
             {
