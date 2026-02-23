@@ -39,10 +39,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Data\bigmodel.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Data\SiteDirectoryData.json">
+      <None Update="Data/*.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
