@@ -1,0 +1,16 @@
+{
+  "name": "comet-sdk-dotnet10-net48",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit"
+      ]
+    }
+  },
+  "postCreateCommand": "dotnet --info && msbuild -version",
+  "remoteUser": "vscode"
+}
