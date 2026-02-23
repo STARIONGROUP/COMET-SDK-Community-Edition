@@ -219,11 +219,15 @@ namespace CDP4Common.Validation
                     result.Message = string.Empty;
                     return result;
                 }
+
+                result.ResultKind = ValidationResultKind.Invalid;
+                result.Message = $"{value} is not a valid Date, valid dates are specified in ISO 8601 YYYY-MM-DD";
+                return result;
             }
 
             try
             {
-                var dateValue = Convert.ToDateTime(value);
+                var dateValue = Convert.ToDateTime(value, CultureInfo.InvariantCulture);
                 if (dateValue.Hour == 0 && dateValue.Minute == 0 && dateValue.Second == 0 && dateValue.Millisecond == 0)
                 {
                     result.ResultKind = ValidationResultKind.Valid;
