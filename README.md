@@ -90,6 +90,22 @@ The CDP4Web library is a C# library that provides helpful classes that facilitat
 
 The CDP4ServicesMessaging library is a C# library that provides abstractions over Rabbit MQ to support AMQP messaging
 
+## Development environment (.NET 10 + .NET Framework 4.8)
+
+This repository includes a dev container definition in `.devcontainer/` to provide a consistent Codex-ready development environment for:
+
+- .NET 10 SDK (for `net10.0` projects and tests)
+- Mono + MSBuild toolchain (for `net48` project builds)
+
+To use it in a compatible development environment, open the repository in the dev container and run:
+
+```bash
+dotnet --info
+msbuild -version
+```
+
+The repository also includes a `global.json` pinned to the .NET 10 SDK line.
+
 # License
 
 The libraries contained in the COMET-SDK Community Edition are provided to the community under the GNU Lesser General Public License. Because we make the software available with the LGPL, it can be used in both open source and proprietary software without being required to release the source code of your own components.
