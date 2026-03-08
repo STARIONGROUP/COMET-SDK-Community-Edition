@@ -221,19 +221,22 @@ namespace CDP4Common.Validation
                 }
             }
 
-            try
+            if (stringValue == null)
             {
-                var dateValue = Convert.ToDateTime(value);
-                if (dateValue.Hour == 0 && dateValue.Minute == 0 && dateValue.Second == 0 && dateValue.Millisecond == 0)
+                try
                 {
-                    result.ResultKind = ValidationResultKind.Valid;
-                    result.Message = string.Empty;
-                    return result;
+                    var dateValue = Convert.ToDateTime(value);
+                    if (dateValue.Hour == 0 && dateValue.Minute == 0 && dateValue.Second == 0 && dateValue.Millisecond == 0)
+                    {
+                        result.ResultKind = ValidationResultKind.Valid;
+                        result.Message = string.Empty;
+                        return result;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.Trace(ex);
+                catch (Exception ex)
+                {
+                    Logger.Trace(ex);
+                }
             }
 
             result.ResultKind = ValidationResultKind.Invalid;

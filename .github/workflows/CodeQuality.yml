@@ -54,9 +54,7 @@ jobs:
         run: dotnet build CDP4-SDK.sln --no-restore /p:ContinuousIntegrationBuild=true
 
       - name: Test with the dotnet CLI
-        env:
-          EXCLUDED_CATEGORIES: "WebServicesDependent|CICDExclusion"
-        run: dotnet-coverage collect "dotnet test CDP4-SDK.sln --no-restore --no-build --verbosity normal --filter \"TestCategory!~${{ env.EXCLUDED_CATEGORIES }}\"" -f xml -o "coverage.xml"
+        run: dotnet-coverage collect "dotnet test CDP4-SDK.sln --no-restore --no-build --verbosity normal --filter \"(TestCategory!~WebServicesDependent) & (TestCategory!~CICDExclusion)\"" -f xml -o "coverage.xml"
         
       - name: Sonarqube end
         env:
