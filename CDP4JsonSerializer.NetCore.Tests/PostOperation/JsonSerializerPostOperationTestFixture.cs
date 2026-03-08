@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonSerializer.NetCore.Tests.PostOperation
+namespace CDP4JsonSerializer.Tests.PostOperation
 {
     using System;
     using System.Collections.Generic;

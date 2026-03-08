@@ -1,0 +1,29 @@
+﻿{
+  "_delete": [],
+  "_create": [
+    {
+      "iid": "8ef99572-3d39-44a4-9212-159bc82f2320",
+      "revisionNumber": 0,
+      "classKind": "Constant",
+      "name": "New Constant",
+      "shortName": "NewConstant",
+      "alias": [],
+      "definition": [],
+      "hyperLink": [],
+      "category": [],
+      "scale": null,
+      "value": "[\"word\"]",
+      "parameterType": "a21c15c4-3e1e-46b5-b109-5063dec1e254",
+      "isDeprecated": false
+    }
+  ],
+  "_update": [
+    {
+      "classKind": "SiteReferenceDataLibrary",
+      "iid": "c454c687-ba3e-44c4-86bc-44544b2c7880",
+      "constant": [
+        "8ef99572-3d39-44a4-9212-159bc82f2320"
+      ]
+    }
+  ]
+}
