@@ -34,16 +34,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="..\CDP4MessagePackSerializer.Tests\MessagePackSerializerTestFixture.cs">
-            <Link>MessagePackSerializerTestFixture.cs</Link>
-        </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="..\CDP4MessagePackSerializer.Tests\Data\bigmodel.json" Link="Data\bigmodel.json">
+        <None Update="Data\bigmodel.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Include="..\CDP4MessagePackSerializer.Tests\Data\SiteDirectoryData.json" Link="Data\SiteDirectoryData.json">
+        <None Update="Data\SiteDirectoryData.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
