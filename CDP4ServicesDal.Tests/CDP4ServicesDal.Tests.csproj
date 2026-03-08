@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net48</TargetFramework>
@@ -45,13 +45,43 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="TestData\PostOperation.json">
+        <Compile Include="..\CDP4ServicesDal.NetCore.Tests\AutomaticTokenRefreshServiceTestFixture.cs">
+            <Link>AutomaticTokenRefreshServiceTestFixture.cs</Link>
+        </Compile>
+        <Compile Include="..\CDP4ServicesDal.NetCore.Tests\CdpServicesDalTestFixture.cs">
+            <Link>CdpServicesDalTestFixture.cs</Link>
+        </Compile>
+        <Compile Include="..\CDP4ServicesDal.NetCore.Tests\CopyOperationHandlerTestFixture.cs">
+            <Link>CopyOperationHandlerTestFixture.cs</Link>
+        </Compile>
+        <Compile Include="..\CDP4ServicesDal.NetCore.Tests\OperationModifierTestFixture.cs">
+            <Link>OperationModifierTestFixture.cs</Link>
+        </Compile>
+        <Compile Include="..\CDP4ServicesDal.NetCore.Tests\PostOperationTestFixture.cs">
+            <Link>PostOperationTestFixture.cs</Link>
+        </Compile>
+        <Compile Include="..\CDP4ServicesDal.NetCore.Tests\ValueSetOperationCreatorTestFixture.cs">
+            <Link>ValueSetOperationCreatorTestFixture.cs</Link>
+        </Compile>
+        <Compile Include="..\CDP4ServicesDal.NetCore.Tests\Helper\StreamHelper.cs">
+            <Link>Helper\StreamHelper.cs</Link>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\CDP4ServicesDal.NetCore.Tests\TestData\Iteration.json" Link="TestData\Iteration.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="..\CDP4ServicesDal.NetCore.Tests\TestData\Organization.json" Link="TestData\Organization.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="..\CDP4ServicesDal.NetCore.Tests\TestData\PostOperation.json" Link="TestData\PostOperation.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="..\CDP4ServicesDal.NetCore.Tests\TestData\testfile.pdf" Link="TestData\testfile.pdf">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="TestData\SiteDiretoryExtentDeep.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="TestData\testfile.pdf">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>

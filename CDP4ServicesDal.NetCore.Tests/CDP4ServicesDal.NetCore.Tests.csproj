@@ -36,6 +36,12 @@
       </ItemGroup>
 
     <ItemGroup>
+        <None Update="TestData\Iteration.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\Organization.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Update="TestData\PostOperation.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
