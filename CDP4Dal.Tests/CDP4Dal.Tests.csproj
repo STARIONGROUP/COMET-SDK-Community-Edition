@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net48</TargetFramework>
@@ -46,6 +46,69 @@
         </None>
     </ItemGroup>
 
-
-  
+    <ItemGroup>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\AssemblerTestFixture.cs">
+        <Link>AssemblerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Composition\AvailableDalsTestFixture.cs">
+        <Link>Composition\AvailableDalsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Composition\DalExportAttributeTestFixture.cs">
+        <Link>Composition\DalExportAttributeTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\DAL\CredentialsTestFixture.cs">
+        <Link>DAL\CredentialsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\DAL\DalTestFixture.cs">
+        <Link>DAL\DalTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\DAL\ProxySettingsTestFixture.cs">
+        <Link>DAL\ProxySettingsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\DtoRouteResolverTestFixture.cs">
+        <Link>DtoRouteResolverTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Events\BeforeWriteEventArgsTestFixture.cs">
+        <Link>Events\BeforeWriteEventArgsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\MessageBusTestFixture.cs">
+        <Link>MessageBusTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Operations\OperationContainerTestFixture.cs">
+        <Link>Operations\OperationContainerTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Operations\OperationTestFixture.cs">
+        <Link>Operations\OperationTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Operations\PostOperationTestFixture.cs">
+        <Link>Operations\PostOperationTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Operations\ThingTransactionTestFixture.cs">
+        <Link>Operations\ThingTransactionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Operations\TransactionContextResolverTestFixture.cs">
+        <Link>Operations\TransactionContextResolverTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Operations\TransactionContextTestFixture.cs">
+        <Link>Operations\TransactionContextTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Permission\CopyPermissionHelperTestFixture.cs">
+        <Link>Permission\CopyPermissionHelperTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Permission\PermissionServiceTestFixture.cs">
+        <Link>Permission\PermissionServiceTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\SecureStringExtensionsTestFixture.cs">
+        <Link>SecureStringExtensionsTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\SessionTestFixture.cs">
+        <Link>SessionTestFixture.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\Utilities\GuardTestFixtures.cs">
+        <Link>Utilities\GuardTestFixtures.cs</Link>
+      </Compile>
+      <Compile Include="..\CDP4Dal.NetCore.Tests\UtilsTestFixture.cs">
+        <Link>UtilsTestFixture.cs</Link>
+      </Compile>
+    </ItemGroup>
 </Project>

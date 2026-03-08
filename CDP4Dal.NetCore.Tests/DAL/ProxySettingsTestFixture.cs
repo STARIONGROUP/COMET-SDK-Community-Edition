@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Dal.NetCore.Tests.DAL
+namespace CDP4Dal.Tests.DAL
 {
     using System;
     using CDP4Dal.DAL;

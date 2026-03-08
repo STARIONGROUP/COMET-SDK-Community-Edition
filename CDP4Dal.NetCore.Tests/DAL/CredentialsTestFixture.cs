@@ -28,6 +28,8 @@ namespace CDP4Dal.Tests.DAL
 
     using CDP4Dal.DAL;
 
+    using CDP4DalCommon.Authentication;
+
     using NUnit.Framework;
 
     /// <summary>
@@ -58,6 +60,85 @@ namespace CDP4Dal.Tests.DAL
             Assert.Throws<ArgumentNullException>(() => new Credentials("John", string.Empty, null));
 
             Assert.Throws<ArgumentNullException>(() => new Credentials("John", "a password", null));
+        }
+
+        [Test]
+        public void VerifyThatProvideUserCredentialsSetsExpectedValues()
+        {
+            var credentials = new Credentials(new Uri("http://example.com"));
+
+            credentials.ProvideUserCredentials("user", "password", AuthenticationSchemeKind.Basic);
+
+            Assert.That(credentials.UserName, Is.EqualTo("user"));
+            Assert.That(credentials.Password, Is.EqualTo("password"));
+            Assert.That(credentials.AuthenticationScheme, Is.EqualTo(AuthenticationSchemeKind.Basic));
+            Assert.That(credentials.IsFullyInitialized, Is.True);
+        }
+
+        [Test]
+        public void VerifyThatProvideUserCredentialsSupportsLocalJwt()
+        {
+            var credentials = new Credentials(new Uri("http://example.com"));
+
+            credentials.ProvideUserCredentials("user", "password", AuthenticationSchemeKind.LocalJwtBearer);
+
+            Assert.That(credentials.AuthenticationScheme, Is.EqualTo(AuthenticationSchemeKind.LocalJwtBearer));
+        }
+
+        [Test]
+        public void VerifyThatProvideUserCredentialsThrowsForUnsupportedScheme()
+        {
+            var credentials = new Credentials(new Uri("http://example.com"));
+
+            Assert.That(() => credentials.ProvideUserCredentials("user", "password", AuthenticationSchemeKind.ExternalJwtBearer),
+                Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void VerifyThatProvideUserTokenSetsExpectedValues()
+        {
+            var credentials = new Credentials(new Uri("http://example.com"));
+            var token = new AuthenticationToken("access", "refresh");
+
+            credentials.ProvideUserToken(token, AuthenticationSchemeKind.ExternalJwtBearer);
+
+            Assert.That(credentials.Token, Is.EqualTo(token));
+            Assert.That(credentials.AuthenticationScheme, Is.EqualTo(AuthenticationSchemeKind.ExternalJwtBearer));
+            Assert.That(credentials.IsFullyInitialized, Is.True);
+        }
+
+        [Test]
+        public void VerifyThatProvideUserTokenValidatesArguments()
+        {
+            var credentials = new Credentials(new Uri("http://example.com"));
+
+            Assert.That(() => credentials.ProvideUserToken(null, AuthenticationSchemeKind.ExternalJwtBearer),
+                Throws.TypeOf<ArgumentNullException>());
+
+            var token = new AuthenticationToken(string.Empty, string.Empty);
+
+            Assert.That(() => credentials.ProvideUserToken(token, AuthenticationSchemeKind.ExternalJwtBearer),
+                Throws.TypeOf<ArgumentException>());
+
+            var validToken = new AuthenticationToken("token", "refresh");
+
+            Assert.That(() => credentials.ProvideUserToken(validToken, AuthenticationSchemeKind.Basic),
+                Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void VerifyThatIsFullyInitializedRequiresAuthenticationInformation()
+        {
+            var credentials = new Credentials(new Uri("http://example.com"));
+
+            Assert.That(credentials.IsFullyInitialized, Is.False);
+
+            credentials.ProvideUserCredentials("user", "password", AuthenticationSchemeKind.Basic);
+            Assert.That(credentials.IsFullyInitialized, Is.True);
+
+            var tokenCredentials = new Credentials(new Uri("http://example.com"));
+            tokenCredentials.ProvideUserToken(new AuthenticationToken("access", "refresh"), AuthenticationSchemeKind.LocalJwtBearer);
+            Assert.That(tokenCredentials.IsFullyInitialized, Is.True);
         }
     }
 }

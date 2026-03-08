@@ -22,7 +22,7 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Dal.NetCore.Tests.Utilities
+namespace CDP4Dal.Tests.Utilities
 {
     using System;
     using System.Collections.Concurrent;
@@ -70,7 +70,7 @@ namespace CDP4Dal.NetCore.Tests.Utilities
 
             elementDefinition.Cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>
             {
-                [elementDefinition.CacheKey] = new(elementDefinition)
+                [elementDefinition.CacheKey] = new Lazy<Thing>(() => elementDefinition)
             };
 
             Assert.Multiple(() =>

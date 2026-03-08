@@ -26,14 +26,16 @@ namespace CDP4Dal.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
+
     using CDP4Common.CommonData;
     using CDP4Common.EngineeringModelData;
-    using CDP4Common.SiteDirectoryData;    
+    using CDP4Common.SiteDirectoryData;
     using CDP4Common.Types;
 
-    using Moq;
+    using CDP4Dal.Events;
 
     using NUnit.Framework;
     using Dto = CDP4Common.DTO;
@@ -510,6 +512,305 @@ namespace CDP4Dal.Tests
 
             Assert.That(orderedItemList.ToList()[1].K, Is.EqualTo(2));
             Assert.That(orderedItemList.ToList()[1].V, Is.EqualTo(simpleQuantityKind2.Iid));
+        }
+
+        [Test]
+        public async Task AssertThatAssemblerSynchronizationWorksFastEnough()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+
+            var domain = new Dto.DomainOfExpertise(Guid.NewGuid(), 1);
+            this.testInput.Add(domain);
+
+            for (var i = 0; i < 20000; i++)
+            {
+                this.testInput.Add(new Dto.ElementDefinition(Guid.NewGuid(), 1) {Owner = domain.Iid});
+            }
+
+            var sw = new Stopwatch();
+
+            sw.Reset();
+            sw.Start();
+
+            // 1st call of Synnchronize
+            await assembler.Synchronize(this.testInput);
+
+            sw.Stop();
+            var elapsed = sw.Elapsed;
+            await TestContext.Progress.WriteLineAsync($"First synchronize took {elapsed}");
+            // Modification of the input Dtos
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(this.testInput.Count, Is.EqualTo(assembler.Cache.Count));
+
+            sw.Reset();
+            sw.Start();
+
+            // 1st call of Synnchronize
+            await assembler.Synchronize(this.testInput);
+
+            sw.Stop();
+            elapsed = sw.Elapsed;
+            await TestContext.Progress.WriteLineAsync($"Second synchronize took {elapsed}");
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(this.testInput.Count, Is.EqualTo(assembler.Cache.Count));
+
+            sw.Reset();
+            sw.Start();
+
+            // 1st call of Synnchronize
+            await assembler.Synchronize(this.testInput);
+
+            sw.Stop();
+            elapsed = sw.Elapsed;
+            await TestContext.Progress.WriteLineAsync($"Third synchronize took {elapsed}");
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(this.testInput.Count, Is.EqualTo(assembler.Cache.Count));
+        }
+
+        [Test]
+        public async Task AssertThatRevisionsAreCachedCorrectly()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+
+            var parameterIid = Guid.NewGuid();
+            var parameterRevision1 = new Dto.Parameter(parameterIid, 1); //The Parameter's 1st Revision
+            var parameterRevision2 = new Dto.Parameter(parameterIid, 2); //The Parameter's 2nd Revision
+            var parameterRevision3 = new Dto.Parameter(parameterIid, 3); //The Parameter's 3rd Revision
+
+            var valueSet1 = new Dto.ParameterValueSet(Guid.NewGuid(), 1); //ValueSet that belongs to the parameter's 1st Revision
+            var valueSet2 = new Dto.ParameterValueSet(Guid.NewGuid(), 1); //ValueSet that belongs to the parameter's 2nd Revision
+            var valueSet3 = new Dto.ParameterValueSet(Guid.NewGuid(), 1); //ValueSet that belongs to the parameter's 3rd Revision
+
+            parameterRevision1.ValueSet.Add(valueSet1.Iid);
+            parameterRevision2.ValueSet.Add(valueSet2.Iid);
+            parameterRevision3.ValueSet.Add(valueSet3.Iid);
+
+            //******************************************************************************************************************
+            // 1st call of Synchronize for Revision 2, which is the currently active revision
+            //******************************************************************************************************************
+            await assembler.Synchronize(new List<Dto.Thing> { parameterRevision2, valueSet2 });
+
+            //Cache should not be empty
+            Assert.That(assembler.Cache, Is.Not.Empty);
+
+            //Cache should contain 2 items
+            Assert.That(2, Is.EqualTo(assembler.Cache.Count));
+
+            //Get the cached version of the parameter
+            var cachedParameter = assembler.Cache.First(x => x.Value.Value.Iid == parameterRevision2.Iid).Value.Value as Parameter;
+
+            //Revision number should be 2 now
+            Assert.That(parameterRevision2.RevisionNumber, Is.EqualTo(cachedParameter.RevisionNumber));
+
+            //Parameter should contain a ValueSet
+            Assert.That(1, Is.EqualTo(cachedParameter.ValueSet.Count));
+
+            //Parameter should contain the correct ValueSet
+            Assert.That(cachedParameter.ValueSet.First().Iid, Is.EqualTo(valueSet2.Iid));
+
+            //******************************************************************************************************************
+            // 2st call of Synchronize which introduces a newer revision: Revision nr. 3.
+            //******************************************************************************************************************
+            await assembler.Synchronize(new List<Dto.Thing> { parameterRevision3, valueSet3 });
+
+            //Cache should still contain 2 things, because parameterRevision2 is removed from cache together with valueSet2
+            //parameterRevision2 now is contained in the Revisions property of the cached version of the parameter
+            Assert.That(2, Is.EqualTo(assembler.Cache.Count));
+
+            cachedParameter = assembler.Cache.First(x => x.Value.Value.Iid == parameterRevision3.Iid).Value.Value as Parameter;
+
+            //Current cached parameter version is Revision 3
+            Assert.That(parameterRevision3.RevisionNumber, Is.EqualTo(cachedParameter.RevisionNumber));
+
+            //cached parameter should contain a ValueSet
+            Assert.That(1, Is.EqualTo(cachedParameter.ValueSet.Count));
+
+            //cached parameter should contain exactly 1 revision
+            Assert.That(1, Is.EqualTo(cachedParameter.Revisions.Count));
+
+            //cached parameter should contain the correct ValueSet
+            Assert.That(cachedParameter.ValueSet.First().Iid, Is.EqualTo(valueSet3.Iid));
+
+            //Revisions property of current cached item should contain the right revision number
+            Assert.That(cachedParameter.Revisions.First().Value.RevisionNumber, Is.EqualTo(parameterRevision2.RevisionNumber));
+
+            //******************************************************************************************************************
+            // 3rd call of Synchronize with older revision, that should be added as a revision to an existing cached poco
+            //******************************************************************************************************************
+            await assembler.Synchronize(new List<Dto.Thing> { parameterRevision1, valueSet1 });
+
+            //Cache should still contain 2 things, because parameterRevision1 is added to the Revisions property of the current cached parameter
+            Assert.That(2, Is.EqualTo(assembler.Cache.Count));
+
+            cachedParameter = assembler.Cache.First(x => x.Value.Value.Iid == parameterRevision1.Iid).Value.Value as Parameter;
+
+            //parameterRevision3 is still the current cached version
+            Assert.That(parameterRevision3.RevisionNumber, Is.EqualTo(cachedParameter.RevisionNumber));
+
+            //cached parameter should contain a ValueSet
+            Assert.That(1, Is.EqualTo(cachedParameter.ValueSet.Count));
+
+            //cached parameter should contain the correct ValueSet
+            Assert.That(cachedParameter.ValueSet.First().Iid, Is.EqualTo(valueSet3.Iid));
+
+            //cached parameter should contain exactly 2 revisions
+            Assert.That(2, Is.EqualTo(cachedParameter.Revisions.Count));
+
+            var revisionParameter1 = cachedParameter.Revisions.Single(x => x.Value.Iid == parameterRevision1.Iid && x.Value.RevisionNumber == parameterRevision1.RevisionNumber).Value as Parameter;
+            var revisionParameter2 = cachedParameter.Revisions.Single(x => x.Value.Iid == parameterRevision2.Iid && x.Value.RevisionNumber == parameterRevision2.RevisionNumber).Value as Parameter;
+
+            //Should be empty, because an older revision than the one currently in the cache was asked for
+            //In that case the ValueSet belonging to the Parameter doens't get cloned (because it is unknown at that moment)
+            Assert.That(0, Is.EqualTo(revisionParameter1.ValueSet.Count));
+
+            //Should be 1, because the ValueSet2 was cloned and added to the Parameter added to the Revisions property of the cached parameter
+            //when revision 3 was added to the cache
+            Assert.That(1, Is.EqualTo(revisionParameter2.ValueSet.Count));
+        }
+
+        [Test]
+        public async Task Verify_that_assembler_clear_empties_cache_and_sends_remove_messages()
+        {
+            var engineeringModelIid = Guid.NewGuid();
+            var engineeringModelSetupIid = Guid.NewGuid();
+            var iterationIid = Guid.NewGuid();
+            var iterationSetupIid = Guid.NewGuid();
+
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(EngineeringModel)).Subscribe(x =>
+            {
+                Assert.That(engineeringModelIid, Is.EqualTo(x.ChangedThing.Iid));
+            });
+
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(EngineeringModelSetup)).Subscribe(x =>
+            {
+                Assert.That(engineeringModelSetupIid, Is.EqualTo(x.ChangedThing.Iid));
+            });
+
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(Iteration)).Subscribe(x =>
+            {
+                Assert.That(iterationIid, Is.EqualTo(x.ChangedThing.Iid));
+            });
+
+            this.messageBus.Listen<ObjectChangedEvent>(typeof(IterationSetup)).Subscribe(x =>
+            {
+                Assert.That(iterationSetupIid, Is.EqualTo(x.ChangedThing.Iid));
+            });
+
+            var assembler = new Assembler(this.uri, this.messageBus);
+
+            var model = new EngineeringModel(engineeringModelIid, assembler.Cache, this.uri);
+            var iteration = new Iteration(iterationIid, assembler.Cache, this.uri);
+            model.Iteration.Add(iteration);
+
+            var sitedir = new SiteDirectory(Guid.NewGuid(), assembler.Cache, this.uri);
+            var modelsetup = new EngineeringModelSetup(engineeringModelSetupIid, assembler.Cache, this.uri) { EngineeringModelIid = model.Iid };
+            model.EngineeringModelSetup = modelsetup;
+            var iterationsetup = new IterationSetup(iterationSetupIid, assembler.Cache, this.uri) { IterationIid = iteration.Iid };
+            iteration.IterationSetup = iterationsetup;
+
+
+            sitedir.Model.Add(modelsetup);
+            modelsetup.IterationSetup.Add(iterationsetup);
+
+            assembler.Cache.TryAdd(new CacheKey(sitedir.Iid, null), new Lazy<Thing>(() => sitedir));
+            assembler.Cache.TryAdd(new CacheKey(modelsetup.Iid, null), new Lazy<Thing>(() => modelsetup));
+            assembler.Cache.TryAdd(new CacheKey(iterationsetup.Iid, null), new Lazy<Thing>(() => iterationsetup));
+            assembler.Cache.TryAdd(new CacheKey(model.Iid, null), new Lazy<Thing>(() => model));
+            assembler.Cache.TryAdd(new CacheKey(iteration.Iid, null), new Lazy<Thing>(() => iteration));
+
+            Assert.That(5, Is.EqualTo(assembler.Cache.Count));
+
+            await assembler.Clear();
+
+            Assert.That(0, Is.EqualTo(assembler.Cache.Count));
+        }
+
+        [Test]
+        public async Task AssertThatIterationIdsForCommonFileStoreRelatedDtosIsNull()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+            var iterationIid = Guid.NewGuid();
+            var commonFileStore = new Dto.CommonFileStore(Guid.NewGuid(), 1);
+            var folder = new Dto.Folder(Guid.NewGuid(), 1) { IterationContainerId = iterationIid };
+            var file = new Dto.File(Guid.NewGuid(), 1) { IterationContainerId = iterationIid };
+            var fileRevision = new Dto.FileRevision(Guid.NewGuid(), 1) { IterationContainerId = iterationIid, ContainingFolder = folder.Iid };
+
+            file.FileRevision.Add(fileRevision.Iid);
+            commonFileStore.File.Add(file.Iid);
+            commonFileStore.Folder.Add(folder.Iid);
+
+            var initialList = new List<Dto.Thing> { commonFileStore, folder, file, fileRevision };
+
+            // 1st call of Synchronize, uses incoming DTO's
+            await assembler.Synchronize(initialList);
+
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(4, Is.EqualTo(assembler.Cache.Count));
+
+            Assert.That(folder.IterationContainerId, Is.Null);
+            Assert.That(file.IterationContainerId, Is.Null);
+            Assert.That(fileRevision.IterationContainerId, Is.Null);
+
+            //Newly added FileRevision
+            var addedFileRevision = new Dto.FileRevision(Guid.NewGuid(), 2) { IterationContainerId = iterationIid, ContainingFolder = folder.Iid };
+            file.FileRevision.Add(addedFileRevision.Iid);
+            file.RevisionNumber = 2;
+            file.IterationContainerId = iterationIid;
+
+            var addFileRevisionList = new List<Dto.Thing> { file, addedFileRevision};
+
+            // 2nd call of Synchronize, uses Cache and incoming DTO's
+            await assembler.Synchronize(addFileRevisionList);
+
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(5, Is.EqualTo(assembler.Cache.Count));
+
+            Assert.That(file.IterationContainerId, Is.Null);
+            Assert.That(addedFileRevision.IterationContainerId, Is.Null);
+        }
+
+        [Test]
+        public async Task AssertThatIterationIdsForDomainFileStoreRelatedDtosStayFilled()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+            var iterationIid = Guid.NewGuid();
+            var domainFileStore = new Dto.DomainFileStore(Guid.NewGuid(), 1);
+            var folder = new Dto.Folder(Guid.NewGuid(), 1) { IterationContainerId = iterationIid };
+            var file = new Dto.File(Guid.NewGuid(), 1) { IterationContainerId = iterationIid };
+            var fileRevision = new Dto.FileRevision(Guid.NewGuid(), 1) { IterationContainerId = iterationIid, ContainingFolder = folder.Iid };
+
+            file.FileRevision.Add(fileRevision.Iid);
+            domainFileStore.File.Add(file.Iid);
+            domainFileStore.Folder.Add(folder.Iid);
+
+            var initialList = new List<Dto.Thing> { domainFileStore, folder, file, fileRevision };
+
+            // 1st call of Synchronize, uses incoming DTO's
+            await assembler.Synchronize(initialList);
+
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(4, Is.EqualTo(assembler.Cache.Count));
+
+            Assert.That(iterationIid, Is.EqualTo(folder.IterationContainerId));
+            Assert.That(iterationIid, Is.EqualTo(file.IterationContainerId));
+            Assert.That(iterationIid, Is.EqualTo(fileRevision.IterationContainerId));
+
+            //Newly added FileRevision
+            var addedFileRevision = new Dto.FileRevision(Guid.NewGuid(), 2) { IterationContainerId = iterationIid, ContainingFolder = folder.Iid };
+            file.FileRevision.Add(addedFileRevision.Iid);
+            file.RevisionNumber = 2;
+            file.IterationContainerId = iterationIid;
+
+            var addFileRevisionList = new List<Dto.Thing> { file, addedFileRevision };
+
+            // 2nd call of Synchronize, uses Cache and incoming DTO's
+            await assembler.Synchronize(addFileRevisionList);
+
+            Assert.That(assembler.Cache, Is.Not.Empty);
+            Assert.That(5, Is.EqualTo(assembler.Cache.Count));
+
+            Assert.That(iterationIid, Is.EqualTo(file.IterationContainerId));
+            Assert.That(iterationIid, Is.EqualTo(addedFileRevision.IterationContainerId));
         }
     }
 }

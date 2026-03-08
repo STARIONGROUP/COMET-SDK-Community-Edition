@@ -22,7 +22,7 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Dal.NetCore.Tests
+namespace CDP4Dal.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -736,11 +736,11 @@ namespace CDP4Dal.NetCore.Tests
 
             var returnedCometTasks = new List<CometTask>()
             {
-                new()
+                new CometTask()
                 {
                     Id = Guid.NewGuid()
                 },
-                new()
+                new CometTask()
                 {
                     Id = Guid.NewGuid()
                 },
@@ -847,6 +847,121 @@ namespace CDP4Dal.NetCore.Tests
             await Assert.ThatAsync(() => this.session.RequestAuthenticationTokenBasedOnRefreshToken(), Throws.Exception.TypeOf<HttpRequestException>());
         }
         
+        [Test]
+        [Category("WebServicesDependent")]
+        public void VerifyThatOpenCallMightBeCancelled()
+        {
+            var tasks = new List<Task>();
+            var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
+            var adminPerson = new CDP4Common.DTO.Person(Guid.NewGuid(), 22) { ShortName = "admin", GivenName = "admin", Password = "pass", IsActive = true };
+            this.sieSiteDirectoryDto.Person.Add(adminPerson.Iid);
+            this.dalOutputs.Add(adminPerson);
+
+            this.session = new Session(this.mockedDal.Object, credentials, this.messageBus);
+
+            for (var i = 0; i < 50; i++)
+            {
+                var timeout = i;
+
+                tasks.Add(Task.Run(async () =>
+                {
+                    Thread.Sleep(timeout);
+                    await this.session.Open();
+                }));
+            }
+
+            for (var i = 0; i < 50; i++)
+            {
+                var timeout = i;
+
+                tasks.Add(Task.Run(() =>
+                {
+                    Thread.Sleep(timeout);
+
+                    if (this.session.CanCancel())
+                    {
+                        this.session.Cancel();
+                    }
+                }));
+            }
+
+            Assert.DoesNotThrowAsync(async () => { await Task.WhenAll(tasks.ToArray()); });
+        }
+
+        [Test]
+        public void VerifyThatRefreshNotWorksWithoutActivePerson()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Refresh());
+        }
+
+        [Test]
+        public void VerifyThatReloadNotWorksWithoutActivePerson()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Reload());
+        }
+
+        [Test]
+        public void VerifyThatReadFileNotWorksWithoutActivePerson()
+        {
+            var fileRevision = new CDP4Common.EngineeringModelData.FileRevision
+            {
+                Iid = Guid.NewGuid(),
+                Name = "File"
+            };
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.ReadFile(fileRevision));
+        }
+
+        [Test]
+        public async Task VerifyThatReadRdlNotWorksWithoutActivePerson()
+        {
+            var siteDirectoryPoco = new CDP4Common.SiteDirectoryData.SiteDirectory(this.sieSiteDirectoryDto.Iid, this.session.Assembler.Cache, this.uri);
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
+            siteDirectoryPoco.Person.Add(johnDoe);
+
+            var rdlDto = new CDP4Common.DTO.SiteReferenceDataLibrary
+            {
+                Iid = Guid.NewGuid()
+            };
+
+            var rdlPoco = new CDP4Common.SiteDirectoryData.SiteReferenceDataLibrary
+            {
+                Iid = rdlDto.Iid,
+                Name = rdlDto.Name,
+                ShortName = rdlDto.ShortName,
+                Container = siteDirectoryPoco
+            };
+
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, null, null);
+            await this.session.Assembler.Synchronize(new List<Thing> { rdlDto });
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(rdlPoco));
+        }
+
+        [Test]
+        public void VerifyThatActivePersonParticipantsIsZeroIfNoIterationIsOpen()
+        {
+            Assert.That(0, Is.EqualTo(this.session.ActivePersonParticipants.Count()));
+        }
+
+        [Test]
+        public void VerifyThatSessionNameIsProperlyNamed()
+        {
+            var siteDirectoryPoco = new CDP4Common.SiteDirectoryData.SiteDirectory(this.sieSiteDirectoryDto.Iid, this.session.Assembler.Cache, this.uri);
+
+            var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri)
+            {
+                Surname = "Doe",
+                GivenName = "John"
+            };
+
+            siteDirectoryPoco.Person.Add(johnDoe);
+
+            this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, johnDoe, null);
+
+            Assert.That("http://www.stariongroup.eu/ - John Doe", Is.EqualTo(this.session.Name));
+        }
+
         private void AssignActivePerson()
         {
             var johnDoe = new Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
@@ -857,9 +972,9 @@ namespace CDP4Dal.NetCore.Tests
     [DalExport("test dal", "test dal description", "1.1.0", DalType.Web)]
     internal class TestDal : IDal
     {
-        public static Version SupportedVersion => new (1, 0, 0);
+        public static Version SupportedVersion => new Version(1, 0, 0);
 
-        public Version DalVersion => new(1, 1, 0);
+        public Version DalVersion => new Version(1, 1, 0);
         
         public IMetaDataProvider MetaDataProvider => new MetaDataProvider();
 

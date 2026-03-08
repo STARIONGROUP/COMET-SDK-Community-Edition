@@ -22,7 +22,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4Dal.NetCore.Tests
+namespace CDP4Dal.Tests
 {
     using System;
     using NUnit.Framework;
