@@ -30,6 +30,7 @@ namespace CDP4MessagePackSerializer.Tests
     using System.IO;
     using System.IO.Pipelines;
     using System.Linq;
+    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -983,6 +984,7 @@ namespace CDP4MessagePackSerializer.Tests
                 if (!areThingsEqual)
                 {
 	                Console.WriteLine($"{jsonThing.ClassKind}:{jsonThing.Iid}");
+	                DiagnosePropertyMismatch(jsonThing, messagePackThing);
                 }
 
 				Assert.That(areThingsEqual, Is.True);
@@ -998,6 +1000,62 @@ namespace CDP4MessagePackSerializer.Tests
         /// <returns>
         /// a <see cref="Stream"/> that contains the string
         /// </returns>
+        private static void DiagnosePropertyMismatch(Thing expected, Thing actual)
+        {
+            var type = expected.GetType();
+
+            foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                try
+                {
+                    var expectedValue = property.GetValue(expected);
+                    var actualValue = property.GetValue(actual);
+
+                    if (expectedValue == null && actualValue == null)
+                    {
+                        continue;
+                    }
+
+                    if (expectedValue == null || actualValue == null)
+                    {
+                        Console.WriteLine($"  MISMATCH {property.Name}: expected=[{expectedValue ?? "null"}] actual=[{actualValue ?? "null"}]");
+                        continue;
+                    }
+
+                    if (expectedValue is System.Collections.IEnumerable expectedEnum && !(expectedValue is string))
+                    {
+                        var expectedList = expectedEnum.Cast<object>().ToList();
+                        var actualList = ((System.Collections.IEnumerable)actualValue).Cast<object>().ToList();
+
+                        if (expectedList.Count != actualList.Count)
+                        {
+                            Console.WriteLine($"  MISMATCH {property.Name}: count expected={expectedList.Count} actual={actualList.Count}");
+                            continue;
+                        }
+
+                        for (var i = 0; i < expectedList.Count; i++)
+                        {
+                            if (!Equals(expectedList[i], actualList[i]))
+                            {
+                                Console.WriteLine($"  MISMATCH {property.Name}[{i}]: expected=[{expectedList[i]}] actual=[{actualList[i]}]");
+                            }
+                        }
+
+                        continue;
+                    }
+
+                    if (!expectedValue.Equals(actualValue))
+                    {
+                        Console.WriteLine($"  MISMATCH {property.Name}: expected=[{expectedValue}] actual=[{actualValue}]");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"  ERROR comparing {property.Name}: {ex.Message}");
+                }
+            }
+        }
+
         private static Stream GenerateStreamFromString(string s)
         {
             var stream = new MemoryStream();

@@ -97,3 +97,7 @@ DAL implementations use MEF (Managed Extensibility Framework) via `DalExportAttr
 - **development**: integration branch (current default working branch)
 - Feature branches are created from `development`
 - PRs target `development`, not `master`
+
+## Do's and Don'ts
+
+- do not use python in this repository
