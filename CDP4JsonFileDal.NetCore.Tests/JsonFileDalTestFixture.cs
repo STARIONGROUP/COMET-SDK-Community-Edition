@@ -22,7 +22,7 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------------------------------------
 
-namespace CDP4JsonFileDal.NetCore.Tests
+namespace CDP4JsonFileDal.Tests
 {
     using System;
     using System.Collections.Concurrent;
