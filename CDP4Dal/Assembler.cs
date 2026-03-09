@@ -48,7 +48,7 @@ namespace CDP4Dal
     /// <summary>
     /// The Assembler orchestrates the interaction with the IDAL and the related Cache
     /// </summary>
-    public class Assembler
+    public class Assembler : IDisposable
     {
         /// <summary>
         /// The <see cref="Uri"/> associated with this assembler
@@ -64,6 +64,11 @@ namespace CDP4Dal
         /// The current logger
         /// </summary>
         private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Cache for non-persistent composite property types per <see cref="Type"/>, to avoid repeated reflection calls
+        /// </summary>
+        private static readonly ConcurrentDictionary<Type, List<Type>> NonPersistentPropertyTypeCache = new ConcurrentDictionary<Type, List<Type>>();
 
         /// <summary>
         /// The lock object
@@ -110,6 +115,14 @@ namespace CDP4Dal
         public ConcurrentDictionary<CacheKey, Lazy<Thing>> Cache { get; private set; }
 
         /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            this.threadLock.Dispose();
+        }
+
+        /// <summary>
         /// Gets or sets the list of <see cref="CDP4Common.DTO.Thing"/> to update
         /// </summary>
         private List<CDP4Common.DTO.Thing> DtoThingToUpdate { get; set; }
@@ -143,7 +156,7 @@ namespace CDP4Dal
                 logger.Info("Start Synchronization of {0}", this.IDalUri);
 
                 var existentGuid =
-                    new Dictionary<CacheKey, int>(this.Cache.ToDictionary(x => x.Value.Value.CacheKey, y => y.Value.Value.RevisionNumber));
+                    this.Cache.ToDictionary(x => x.Value.Value.CacheKey, y => y.Value.Value.RevisionNumber);
 
                 this.CheckPartitionDependentContainmentContainerIds(dtoThings);
 
@@ -158,7 +171,8 @@ namespace CDP4Dal
 
                 // Add the unresolved thing to the things to resolved in case it is possible to fully resolve them with the current update
                 // an example would be Citation contained by SiteDirectory where its Source is contained by a Rdl that is not loaded yet
-                var unresolvedThingToUpdate = this.unresolvedDtos.Where(x => !this.DtoThingToUpdate.Select(y => y.Iid).Contains(x.Iid));
+                var dtoThingIids = new HashSet<Guid>(this.DtoThingToUpdate.Select(y => y.Iid));
+                var unresolvedThingToUpdate = this.unresolvedDtos.Where(x => !dtoThingIids.Contains(x.Iid));
                 this.DtoThingToUpdate.AddRange(unresolvedThingToUpdate);
                 this.unresolvedDtos.Clear();
 
@@ -288,8 +302,16 @@ namespace CDP4Dal
                 
                 if (this.siteDirectory == null)
                 {
-                    var keyvaluepair = this.Cache.Single(item => item.Value.Value.ClassKind == ClassKind.SiteDirectory);
-                    this.siteDirectory = (SiteDirectory)keyvaluepair.Value.Value;
+                    var keyvaluepair = this.Cache.FirstOrDefault(item => item.Value.Value.ClassKind == ClassKind.SiteDirectory);
+
+                    if (keyvaluepair.Value != null)
+                    {
+                        this.siteDirectory = (SiteDirectory)keyvaluepair.Value.Value;
+                    }
+                    else
+                    {
+                        logger.Warn("No SiteDirectory found in the cache after synchronization");
+                    }
                 }
 
                 logger.Info("Finish Synchronization of {0} in {1} [ms]", this.IDalUri, synchronizeStopWatch.ElapsedMilliseconds);
@@ -546,24 +568,20 @@ namespace CDP4Dal
             await this.threadLock.WaitAsync().ConfigureAwait(false);
             try
             {
-                Lazy<Thing> lazyIteration;
                 var cacheKey = new CacheKey(iterationSetup.IterationIid, null);
 
-                if (!this.Cache.TryGetValue(cacheKey, out lazyIteration))
+                if (!this.Cache.TryGetValue(cacheKey, out var lazyIteration))
                 {
-                    this.threadLock.Release();
                     return;
                 }
 
-                var iteration = lazyIteration.Value as Iteration;
-                if (iteration == null)
+                if (!(lazyIteration.Value is Iteration iteration))
                 {
-                    this.threadLock.Release();
                     return;
                 }
 
                 // Delete from the cache all things contained by the iteration without blocking the UI
-                await this.ClearFromCacheThingsContainedByIteration(iteration);
+                await this.ClearFromCacheThingsContainedByIteration(iteration).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -650,34 +668,37 @@ namespace CDP4Dal
         /// <returns>An <see cref="List{Type}"/> containing the type of <see cref="Thing"/>s that are not persistent in the <paramref name="thing"/></returns>
         private List<Type> ComputeNonPersistentPropertyType(Thing thing)
         {
-            var nonPersistentType = new List<Type>();
-
-            var propInfos = thing.GetType().GetProperties();
-            foreach (var propertyInfo in propInfos)
+            return NonPersistentPropertyTypeCache.GetOrAdd(thing.GetType(), type =>
             {
-                if(!propertyInfo.IsDefined(typeof(UmlInformationAttribute)))
+                var nonPersistentType = new List<Type>();
+
+                var propInfos = type.GetProperties();
+                foreach (var propertyInfo in propInfos)
                 {
-                    continue;
+                    if (!propertyInfo.IsDefined(typeof(UmlInformationAttribute)))
+                    {
+                        continue;
+                    }
+
+                    var metadata = propertyInfo.GetCustomAttribute<UmlInformationAttribute>();
+                    if (metadata.Aggregation == AggregationKind.Composite && !metadata.IsPersistent)
+                    {
+                        nonPersistentType.Add(propertyInfo.PropertyType.GetGenericArguments().Single());
+                    }
                 }
 
-                var metadata = propertyInfo.GetCustomAttribute<UmlInformationAttribute>();
-                if (metadata.Aggregation == AggregationKind.Composite && !metadata.IsPersistent)
-                {
-                    nonPersistentType.Add(propertyInfo.PropertyType.GetGenericArguments().Single());
-                }
-            }
-
-            return nonPersistentType;
+                return nonPersistentType;
+            });
         }
 
         /// <summary>
         /// Compute the contained <see cref="Guid"/> for a <see cref="Dto"/>
         /// </summary>
         /// <param name="dto">The <see cref="Dto"/> to compute</param>
-        /// <returns>An <see cref="List{Guid}"/> containing all the contained <see cref="Guid"/></returns>
-        private List<Guid> ComputeContainedGuid(Dto dto)
+        /// <returns>A <see cref="HashSet{Guid}"/> containing all the contained <see cref="Guid"/></returns>
+        private HashSet<Guid> ComputeContainedGuid(Dto dto)
         {
-            var containedGuid = new List<Guid>();
+            var containedGuid = new HashSet<Guid>();
             foreach (var container in dto.ContainerLists)
             {
                 foreach (var obj in container)

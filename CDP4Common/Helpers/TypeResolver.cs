@@ -25,6 +25,7 @@
 namespace CDP4Common.Helpers
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Linq;
     using System.Collections.Generic;
     using System.Reflection;
@@ -39,6 +40,11 @@ namespace CDP4Common.Helpers
     /// </summary>
     public static class TypeResolver
     {
+        /// <summary>
+        /// Cache for storing computed super type hierarchies, keyed by <see cref="Type"/>
+        /// </summary>
+        private static readonly ConcurrentDictionary<Type, Type[]> superTypeCache = new ConcurrentDictionary<Type, Type[]>();
+
         /// <summary>
         /// Gets all the derived types of the specified <see cref="Type"/> in the specified Assembly
         /// </summary>
@@ -77,23 +83,27 @@ namespace CDP4Common.Helpers
         /// <returns>The <see cref="IEnumerable{T}"/> of <see cref="Type"/>s that are super-types of the provided <see cref="Thing"/>.</returns>
         public static IEnumerable<Type> GetAllSuperTypes(Thing thing)
         {
-            var result = new List<Type>();
+            var concreteType = thing.GetType();
 
-            var typeOfThing = thing.GetType();
-            result.Add(typeOfThing);
-
-            while (true)
+            return superTypeCache.GetOrAdd(concreteType, type =>
             {
-                if (typeOfThing == typeof(Thing) || typeOfThing == null)
+                var result = new List<Type>();
+                var typeOfThing = type;
+                result.Add(typeOfThing);
+
+                while (true)
                 {
-                    break;
+                    if (typeOfThing == typeof(Thing) || typeOfThing == null)
+                    {
+                        break;
+                    }
+
+                    typeOfThing = typeOfThing.QueryBaseType();
+                    result.Add(typeOfThing);
                 }
 
-                typeOfThing = typeOfThing.QueryBaseType();
-                result.Add(typeOfThing);
-            }
-
-            return result;
+                return result.ToArray();
+            });
         }
 
         /// <summary>

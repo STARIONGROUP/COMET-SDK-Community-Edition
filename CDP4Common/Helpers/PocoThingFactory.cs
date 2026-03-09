@@ -230,12 +230,13 @@ namespace CDP4Common.Helpers
                 }
             }
 
-            // Get the first one if any whatever the iterationId might be
-            var firstKey = cache.Keys.FirstOrDefault(k => k.Thing == itemIid);
-
-            if (firstKey.Thing != Guid.Empty && firstKey.Iteration != null)
+            // Get the first one if any whatever the iterationId might be — linear scan fallback
+            foreach (var cacheKey in cache.Keys)
             {
-                return cache.Get<T>(firstKey);
+                if (cacheKey.Thing == itemIid && cacheKey.Iteration != null)
+                {
+                    return cache.Get<T>(cacheKey);
+                }
             }
 
             logger.Debug("The {0} was not found in the cache: {1}", typeof(T).Name, key.Thing);

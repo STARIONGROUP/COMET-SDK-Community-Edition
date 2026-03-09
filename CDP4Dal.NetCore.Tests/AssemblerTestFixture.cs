@@ -103,9 +103,9 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public void VerifyThatAssemblerThrowsNullReferenceExceptionWhenUriIsNull()
+        public void VerifyThatAssemblerThrowsArgumentNullExceptionWhenUriIsNull()
         {
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 var assembler = new Assembler(null, this.messageBus);
             });

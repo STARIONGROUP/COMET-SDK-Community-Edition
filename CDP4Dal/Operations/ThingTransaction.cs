@@ -26,6 +26,7 @@ namespace CDP4Dal.Operations
 {
     using System;
     using System.Collections;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -73,6 +74,11 @@ namespace CDP4Dal.Operations
         /// The current logger
         /// </summary>
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Cache for property infos per type to avoid repeated reflection calls
+        /// </summary>
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertyInfoCache = new ConcurrentDictionary<Type, PropertyInfo[]>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ThingTransaction"/> class
@@ -894,8 +900,9 @@ namespace CDP4Dal.Operations
                 }
 
                 var containerType = container.GetType();
+                var properties = PropertyInfoCache.GetOrAdd(containerType, t => t.GetProperties());
 
-                var matchingPropertyInfos = containerType.GetProperties().Where(x =>
+                var matchingPropertyInfos = properties.Where(x =>
                     x.PropertyType.QueryIsGenericType() &&
                     (x.PropertyType.GetGenericTypeDefinition() == typeof(ContainerList<>) ||
                      x.PropertyType.GetGenericTypeDefinition() == typeof(OrderedItemList<>)) &&

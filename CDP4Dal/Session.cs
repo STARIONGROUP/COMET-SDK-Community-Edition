@@ -367,7 +367,7 @@ namespace CDP4Dal
 
             try
             {
-                dtoThings = (await this.Dal.Open(this.Credentials, cancellationTokenSource.Token)).ToList();
+                dtoThings = (await this.Dal.Open(this.Credentials, cancellationTokenSource.Token).ConfigureAwait(false)).ToList();
             }
             catch (OperationCanceledException)
             {
@@ -386,7 +386,7 @@ namespace CDP4Dal
 
             this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.BeginUpdate));
 
-            await this.Assembler.Synchronize(dtoThings, activeMessageBus);
+            await this.Assembler.Synchronize(dtoThings, activeMessageBus).ConfigureAwait(false);
 
             this.ActivePerson = this.Assembler.Cache.Select(x => x.Value)
                 .Select(lazy => lazy.Value)
@@ -396,7 +396,7 @@ namespace CDP4Dal
             if (this.ActivePerson == null)
             {
                 // clear cache
-                await this.Assembler.Clear();
+                await this.Assembler.Clear().ConfigureAwait(false);
 
                 this.CDPMessageBus.SendMessage(new SessionEvent(this, SessionStatus.EndUpdate));
 
@@ -476,7 +476,7 @@ namespace CDP4Dal
             {
                 var iterationDto = (CDP4Common.DTO.Iteration)iteration.ToDto();
                 this.Dal.Session = this;
-                dtoThings = await this.Dal.Read(iterationDto, cancellationTokenSource.Token);
+                dtoThings = await this.Dal.Read(iterationDto, cancellationTokenSource.Token).ConfigureAwait(false);
                 cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }
             catch (OperationCanceledException)
@@ -501,7 +501,7 @@ namespace CDP4Dal
 
             try
             {
-                await this.Assembler.Synchronize(enumerable, activeMessageBus);
+                await this.Assembler.Synchronize(enumerable, activeMessageBus).ConfigureAwait(false);
 
                 this.AddIterationToOpenList(iteration.Iid, domain);
             }
@@ -530,7 +530,7 @@ namespace CDP4Dal
                 throw new InvalidOperationException("The ReferenceDataLibrary cannot be read when the ActivePerson is null; The Open method must be called prior to any of the Read methods");
             }
 
-            await this.Read((Thing)rdl);
+            await this.Read((Thing)rdl).ConfigureAwait(false);
             this.AddRdlToOpenList(rdl);
         }
 
@@ -572,7 +572,7 @@ namespace CDP4Dal
             {
                 var dtos = engineeringModels.Select(iid => new CDP4Common.DTO.EngineeringModel { Iid = iid }).ToList();
 
-                dtoThings = await this.Dal.Read(dtos, cancellationTokenSource.Token);
+                dtoThings = await this.Dal.Read(dtos, cancellationTokenSource.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -587,7 +587,7 @@ namespace CDP4Dal
             // proceed if no problem
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
 
-            await this.AfterReadOrWriteOrUpdate(enumerable);
+            await this.AfterReadOrWriteOrUpdate(enumerable).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -599,7 +599,7 @@ namespace CDP4Dal
         /// </returns>
         public async Task Read(Thing thing)
         {
-            await this.Read(thing, null);
+            await this.Read(thing, null).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -629,7 +629,7 @@ namespace CDP4Dal
 
             try
             {
-                dtoThings = await this.Dal.Read(dto, cancellationTokenSource.Token, queryAttributes);
+                dtoThings = await this.Dal.Read(dto, cancellationTokenSource.Token, queryAttributes).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -644,7 +644,7 @@ namespace CDP4Dal
             // proceed if no problem
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
 
-            await this.AfterReadOrWriteOrUpdate(enumerable);
+            await this.AfterReadOrWriteOrUpdate(enumerable).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -692,7 +692,7 @@ namespace CDP4Dal
                         tasks.Add(this.Dal.Read(thing.ToDto(), cancellationTokenSource.Token, queryAttributes));
                     }
 
-                    var newThings = (await Task.WhenAll(tasks.ToArray())).SelectMany(x => x).ToList();
+                    var newThings = (await Task.WhenAll(tasks.ToArray()).ConfigureAwait(false)).SelectMany(x => x).ToList();
 
                     foundThings.AddRange(newThings);
 
@@ -709,7 +709,7 @@ namespace CDP4Dal
                 this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenKey, out cancellationTokenSource);
             }
 
-            await this.AfterReadOrWriteOrUpdate(foundThings);
+            await this.AfterReadOrWriteOrUpdate(foundThings).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -734,7 +734,7 @@ namespace CDP4Dal
             try
             {
                 this.Dal.Session = this;
-                cometTask = await this.Dal.ReadCometTask(id, cancellationTokenSource.Token);
+                cometTask = await this.Dal.ReadCometTask(id, cancellationTokenSource.Token).ConfigureAwait(false);
                 this.cometTasks[cometTask.Id] = cometTask;
                 cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }
@@ -771,7 +771,7 @@ namespace CDP4Dal
             try
             {
                 this.Dal.Session = this;
-                readCometTasks.AddRange(await this.Dal.ReadCometTasks(cancellationTokenSource.Token));
+                readCometTasks.AddRange(await this.Dal.ReadCometTasks(cancellationTokenSource.Token).ConfigureAwait(false));
 
                 foreach (var cometTask in readCometTasks)
                 {
@@ -816,7 +816,7 @@ namespace CDP4Dal
 
             try
             {
-                fileContent = await this.Dal.ReadFile(dto, cancellationTokenSource.Token);
+                fileContent = await this.Dal.ReadFile(dto, cancellationTokenSource.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -849,7 +849,7 @@ namespace CDP4Dal
             try
             {
                 this.Dal.InitializeDalCredentials(this.Credentials);
-                supportedScheme = await this.Dal.RequestAvailableAuthenticationScheme(cancellationTokenSource.Token);
+                supportedScheme = await this.Dal.RequestAvailableAuthenticationScheme(cancellationTokenSource.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -884,7 +884,7 @@ namespace CDP4Dal
                 case AuthenticationSchemeKind.LocalJwtBearer:
                     if (authenticationInformation.Token == null)
                     {
-                        await this.Login(authenticationInformation.UserName, authenticationInformation.Password);
+                        await this.Login(authenticationInformation.UserName, authenticationInformation.Password).ConfigureAwait(false);
                     }
                     else
                     {
@@ -899,7 +899,7 @@ namespace CDP4Dal
                     throw new ArgumentOutOfRangeException(nameof(authenticationSchemeKind), authenticationSchemeKind, "Unknowned value");
             }
 
-            await this.Open(activeMessageBus);
+            await this.Open(activeMessageBus).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -915,7 +915,7 @@ namespace CDP4Dal
 
             if (this.Credentials.AuthenticationScheme == AuthenticationSchemeKind.LocalJwtBearer && this.Credentials.Token == null)
             {
-                await this.Login(this.Credentials.UserName, this.Credentials.Password);
+                await this.Login(this.Credentials.UserName, this.Credentials.Password).ConfigureAwait(false);
             }
 
             this.Dal.ApplyAuthenticationCredentials(this.Credentials);
@@ -947,7 +947,7 @@ namespace CDP4Dal
             try
             {
                 this.Dal.InitializeDalCredentials(this.Credentials);
-                userName = await this.Dal.QueryAuthenticatedUserName(cancellationTokenSource.Token);
+                userName = await this.Dal.QueryAuthenticatedUserName(cancellationTokenSource.Token).ConfigureAwait(false);
             } 
             catch (OperationCanceledException)
             {
@@ -985,7 +985,7 @@ namespace CDP4Dal
             try
             {
                 this.Dal.InitializeDalCredentials(this.Credentials);
-                await this.Dal.RequestAuthenticationTokenFromRefreshToken(cancellationTokenSource.Token);
+                await this.Dal.RequestAuthenticationTokenFromRefreshToken(cancellationTokenSource.Token).ConfigureAwait(false);
             } 
             catch (OperationCanceledException)
             {
@@ -1028,7 +1028,7 @@ namespace CDP4Dal
             
             try
             {
-                await this.Dal.Login(userName, password, cancellationTokenSource.Token);
+                await this.Dal.Login(userName, password, cancellationTokenSource.Token).ConfigureAwait(false);
             } 
             catch (OperationCanceledException)
             {
@@ -1067,7 +1067,7 @@ namespace CDP4Dal
 
             try
             {
-                await this.Assembler.Synchronize(things);
+                await this.Assembler.Synchronize(things).ConfigureAwait(false);
             }
             finally
             {
@@ -1093,11 +1093,11 @@ namespace CDP4Dal
 
             try
             {
-                var dtoThings = await this.Dal.Write(operationContainer, filesList);
+                var dtoThings = await this.Dal.Write(operationContainer, filesList).ConfigureAwait(false);
 
                 var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
 
-                await this.AfterReadOrWriteOrUpdate(enumerable);
+                await this.AfterReadOrWriteOrUpdate(enumerable).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -1145,7 +1145,7 @@ namespace CDP4Dal
 
             try
             {
-                var longRunningTaskResult = await this.Dal.Write(operationContainer, waitTime, filesList);
+                var longRunningTaskResult = await this.Dal.Write(operationContainer, waitTime, filesList).ConfigureAwait(false);
 
                 if (longRunningTaskResult.IsWaitTimeReached)
                 {
@@ -1154,7 +1154,7 @@ namespace CDP4Dal
                 }
 
                 var things = longRunningTaskResult.Things as IList<CDP4Common.DTO.Thing> ?? longRunningTaskResult.Things.ToList();
-                await this.AfterReadOrWriteOrUpdate(things);
+                await this.AfterReadOrWriteOrUpdate(things).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -1182,7 +1182,7 @@ namespace CDP4Dal
 
             foreach (var topContainer in this.GetSiteDirectoryAndActiveIterations())
             {
-                await this.Update(topContainer);
+                await this.Update(topContainer).ConfigureAwait(false);
             }
         }
 
@@ -1201,7 +1201,7 @@ namespace CDP4Dal
 
             foreach (var topContainer in this.GetSiteDirectoryAndActiveIterations())
             {
-                await this.Update(topContainer, false);
+                await this.Update(topContainer, false).ConfigureAwait(false);
             }
         }
 
@@ -1271,7 +1271,7 @@ namespace CDP4Dal
         {
             this.cometTasks.Clear();
             this.Dal.Close();
-            await this.Assembler.Clear();
+            await this.Assembler.Clear().ConfigureAwait(false);
 
             var sessionChange = new SessionEvent(this, SessionStatus.Closed);
             this.CDPMessageBus.SendMessage(sessionChange);
@@ -1290,7 +1290,7 @@ namespace CDP4Dal
         public async Task CloseRdl(SiteReferenceDataLibrary sRdl)
         {
             // add a delay for the loading panel to appear
-            await Task.Delay(10);
+            await Task.Delay(10).ConfigureAwait(false);
 
             if (!this.openReferenceDataLibraries.Contains(sRdl))
             {
@@ -1324,7 +1324,7 @@ namespace CDP4Dal
 
             try
             {
-                await Task.WhenAll(tasks);
+                await Task.WhenAll(tasks).ConfigureAwait(false);
             }
             finally
             {
@@ -1367,7 +1367,7 @@ namespace CDP4Dal
 
             try
             {
-                dtoThings = await this.Dal.Read(thing.ToDto(), cancellationTokenSource.Token, queryAttribute);
+                dtoThings = await this.Dal.Read(thing.ToDto(), cancellationTokenSource.Token, queryAttribute).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -1381,7 +1381,7 @@ namespace CDP4Dal
 
             var enumerable = dtoThings as IList<CDP4Common.DTO.Thing> ?? dtoThings.ToList();
 
-            await this.AfterReadOrWriteOrUpdate(enumerable);
+            await this.AfterReadOrWriteOrUpdate(enumerable).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1399,7 +1399,7 @@ namespace CDP4Dal
 
             try
             {
-                await this.Assembler.CloseRdl(modelRdl);
+                await this.Assembler.CloseRdl(modelRdl).ConfigureAwait(false);
             }
             finally
             {
@@ -1422,7 +1422,7 @@ namespace CDP4Dal
 
             try
             {
-                await this.Assembler.CloseIterationSetup(iterationSetup);
+                await this.Assembler.CloseIterationSetup(iterationSetup).ConfigureAwait(false);
 
                 var iterationToRemove = this.openIterations.Select(x => x.Key).SingleOrDefault(x => x.Iid == iterationSetup.IterationIid);
 
@@ -1455,7 +1455,7 @@ namespace CDP4Dal
 
             try
             {
-                cherryPickedThings = await this.Dal.CherryPick(engineeringModelId, iterationId, classKinds, categoriesId, cancellationTokenSource.Token);
+                cherryPickedThings = await this.Dal.CherryPick(engineeringModelId, iterationId, classKinds, categoriesId, cancellationTokenSource.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
