@@ -44,7 +44,7 @@ namespace CDP4Dal
         {
             if (thing == null)
             {
-                throw new NullReferenceException(message);
+                throw new ArgumentNullException(message);
             }
         }
     }
