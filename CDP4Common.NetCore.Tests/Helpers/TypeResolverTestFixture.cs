@@ -65,6 +65,31 @@ namespace CDP4Common.NetCore.Tests.Helpers
         }
 
         [Test]
+        public void Verify_that_GetAllSuperTypes_returns_consistent_results_on_repeated_calls()
+        {
+            var category = new Category();
+
+            var firstCall = TypeResolver.GetAllSuperTypes(category);
+            var secondCall = TypeResolver.GetAllSuperTypes(category);
+
+            Assert.That(ReferenceEquals(firstCall, secondCall), Is.True);
+        }
+
+        [Test]
+        public void Verify_that_GetAllSuperTypes_works_for_different_types()
+        {
+            var category = new Category();
+            var siteDirectory = new SiteDirectory();
+
+            var categorySuperTypes = TypeResolver.GetAllSuperTypes(category).ToList();
+            var siteDirectorySuperTypes = TypeResolver.GetAllSuperTypes(siteDirectory).ToList();
+
+            Assert.That(categorySuperTypes, Is.Not.EqualTo(siteDirectorySuperTypes));
+            Assert.That(categorySuperTypes, Does.Contain(typeof(Category)));
+            Assert.That(siteDirectorySuperTypes, Does.Contain(typeof(SiteDirectory)));
+        }
+
+        [Test]
         public void Verify_that_QueryBaseClassesAndInterfaces_returns_expected_result()
         {
             var type = typeof(SiteDirectory);

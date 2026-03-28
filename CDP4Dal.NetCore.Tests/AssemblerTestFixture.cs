@@ -770,6 +770,53 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
+        public void Verify_that_Assembler_implements_IDisposable_and_Dispose_does_not_throw()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+            Assert.That(assembler, Is.InstanceOf<IDisposable>());
+            Assert.DoesNotThrow(() => assembler.Dispose());
+        }
+
+        [Test]
+        public async Task Verify_that_Dispose_prevents_subsequent_Synchronize()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+            assembler.Dispose();
+
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await assembler.Synchronize(this.testInput));
+        }
+
+        [Test]
+        public async Task Verify_that_Synchronize_handles_missing_SiteDirectory_gracefully()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+
+            var nonSiteDirInput = new List<Dto.Thing>
+            {
+                new Dto.DomainFileStore(Guid.NewGuid(), 1)
+            };
+
+            Assert.DoesNotThrowAsync(async () => await assembler.Synchronize(nonSiteDirInput));
+        }
+
+        [Test]
+        public async Task Verify_that_CloseIterationSetup_releases_lock_correctly()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+            await assembler.Synchronize(this.testInput);
+
+            var iterationSetup = new IterationSetup(Guid.NewGuid(), assembler.Cache, this.uri)
+            {
+                IterationIid = Guid.NewGuid()
+            };
+
+            await assembler.CloseIterationSetup(iterationSetup);
+
+            // If the lock was released correctly, a subsequent Synchronize should succeed
+            Assert.DoesNotThrowAsync(async () => await assembler.Synchronize(this.testInput));
+        }
+
+        [Test]
         public async Task AssertThatIterationIdsForDomainFileStoreRelatedDtosStayFilled()
         {
             var assembler = new Assembler(this.uri, this.messageBus);

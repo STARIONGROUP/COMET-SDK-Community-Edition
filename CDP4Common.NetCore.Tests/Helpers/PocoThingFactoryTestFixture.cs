@@ -133,8 +133,33 @@ namespace CDP4Common.NetCore.Tests.Helpers
         {
             this.orderedItem3.K = 2;
 
-            Assert.That(() => this.possibleFiniteStateList.PossibleState.ResolveList(this.orderedItems, this.iteration.Iid, this.cache), 
+            Assert.That(() => this.possibleFiniteStateList.PossibleState.ResolveList(this.orderedItems, this.iteration.Iid, this.cache),
                 Throws.TypeOf<ModelErrorException>().With.Message.Contains("The key already exists"));
+        }
+
+        [Test]
+        public void Verify_that_Get_falls_back_to_linear_scan_when_iteration_id_mismatch()
+        {
+            var differentIterationId = Guid.NewGuid();
+            var guidList = new List<Guid> { this.possibleState1.Iid };
+            var result = new List<PossibleFiniteState>();
+
+            result.ResolveList(guidList, differentIterationId, this.cache);
+
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result[0].Iid, Is.EqualTo(this.possibleState1.Iid));
+        }
+
+        [Test]
+        public void Verify_that_Get_returns_null_when_thing_not_in_cache()
+        {
+            var nonExistentGuid = Guid.NewGuid();
+            var guidList = new List<Guid> { nonExistentGuid };
+            var result = new List<PossibleFiniteState>();
+
+            result.ResolveList(guidList, this.iteration.Iid, this.cache);
+
+            Assert.That(result, Is.Empty);
         }
     }
 }

@@ -86,5 +86,17 @@ namespace CDP4Dal.Tests
             Assert.Throws<ArgumentException>(() => StringExtensions.LowerCaseFirstLetter(null));
             Assert.Throws<ArgumentException>(() => StringExtensions.LowerCaseFirstLetter(string.Empty));
         }
+
+        [Test]
+        public void Verify_that_AssertNotNull_throws_ArgumentNullException_when_null()
+        {
+            Assert.Throws<ArgumentNullException>(() => Utils.AssertNotNull(null, "test message"));
+        }
+
+        [Test]
+        public void Verify_that_AssertNotNull_does_not_throw_when_not_null()
+        {
+            Assert.DoesNotThrow(() => Utils.AssertNotNull(new object(), "test message"));
+        }
     }
 }

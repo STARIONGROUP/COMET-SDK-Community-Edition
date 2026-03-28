@@ -1091,5 +1091,24 @@ namespace CDP4Dal.Tests
 
             Assert.Throws<ArgumentNullException>(() => new ThingTransaction(null, null, iterationClone));
         }
+
+        [Test]
+        public void Verify_that_UpdateContainer_works_consistently_with_multiple_things()
+        {
+            var iterationClone = this.iteration.Clone(false);
+            var transactionContext = TransactionContextResolver.ResolveContext(this.iteration);
+            var transaction = new ThingTransaction(transactionContext, iterationClone);
+
+            var ed1 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
+            var ed2 = new ElementDefinition(Guid.NewGuid(), this.cache, this.uri);
+
+            transaction.Create(ed1, iterationClone);
+            transaction.Create(ed2, iterationClone);
+
+            var addedThings = transaction.AddedThing;
+
+            Assert.That(addedThings, Does.Contain(ed1));
+            Assert.That(addedThings, Does.Contain(ed2));
+        }
     }
 }
