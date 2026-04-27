@@ -32,13 +32,13 @@ namespace CDP4Dal
     public static class Utils
     {
         /// <summary>
-        /// Asserts that the supplied <see cref="object"/> is not null and throws a <see cref="NullReferenceException"/> if it is.
+        /// Asserts that the supplied <see cref="object"/> is not null and throws an <see cref="ArgumentNullException"/> if it is.
         /// </summary>
         /// <param name="thing">
         /// The object which should not be null
         /// </param>
         /// <param name="message">
-        /// The error message that will be used as error message on the thrown <see cref="NullReferenceException"/>
+        /// The error message that will be used as error message on the thrown <see cref="ArgumentNullException"/>
         /// </param>
         public static void AssertNotNull(object thing, string message)
         {

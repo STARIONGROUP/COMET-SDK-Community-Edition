@@ -96,6 +96,11 @@ namespace CDP4Dal
         private readonly Dictionary<Guid, CometTask> cometTasks = new Dictionary<Guid, CometTask>();
 
         /// <summary>
+        /// Indicates whether <see cref="Dispose()"/> has been called
+        /// </summary>
+        private bool disposed;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Session"/> class.
         /// </summary>
         /// <param name="dal">
@@ -1599,6 +1604,42 @@ namespace CDP4Dal
 
             this.Dal.Session = this;
             return filesList;
+        }
+
+        /// <summary>
+        /// Releases the resources used by this <see cref="Session"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases the unmanaged resources used by this <see cref="Session"/> and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                foreach (var cancellationTokenSourceKey in this.cancellationTokenSourceDictionary.Keys)
+                {
+                    if (this.cancellationTokenSourceDictionary.TryRemove(cancellationTokenSourceKey, out var cancellationTokenSource))
+                    {
+                        cancellationTokenSource.Dispose();
+                    }
+                }
+
+                this.Assembler?.Dispose();
+            }
+
+            this.disposed = true;
         }
     }
 }

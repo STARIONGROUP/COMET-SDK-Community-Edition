@@ -962,6 +962,24 @@ namespace CDP4Dal.Tests
             Assert.That("http://www.stariongroup.eu/ - John Doe", Is.EqualTo(this.session.Name));
         }
 
+        [Test]
+        public void Verify_that_Session_implements_IDisposable_and_disposes_Assembler()
+        {
+            Assert.That(this.session, Is.InstanceOf<IDisposable>());
+
+            this.session.Dispose();
+
+            Assert.ThrowsAsync<ObjectDisposedException>(async () =>
+                await this.session.Assembler.Synchronize(new List<Thing>()));
+        }
+
+        [Test]
+        public void Verify_that_Session_Dispose_is_idempotent()
+        {
+            this.session.Dispose();
+            Assert.DoesNotThrow(() => this.session.Dispose());
+        }
+
         private void AssignActivePerson()
         {
             var johnDoe = new Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };

@@ -47,7 +47,7 @@ namespace CDP4Dal
     /// The <see cref="ISession"/> interface encapsulates an <see cref="IDal"/> and
     /// the associated <see cref="Assembler"/>
     /// </summary>
-    public interface ISession
+    public interface ISession : IDisposable
     {
         /// <summary>
         /// Executes just before data from an <see cref="OperationContainer"/> is written to the datastore.

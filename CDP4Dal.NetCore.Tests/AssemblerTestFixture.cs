@@ -778,12 +778,29 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public async Task Verify_that_Dispose_prevents_subsequent_Synchronize()
+        public void Verify_that_Dispose_is_idempotent()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+            assembler.Dispose();
+            Assert.DoesNotThrow(() => assembler.Dispose());
+        }
+
+        [Test]
+        public void Verify_that_Dispose_prevents_subsequent_Synchronize()
         {
             var assembler = new Assembler(this.uri, this.messageBus);
             assembler.Dispose();
 
             Assert.ThrowsAsync<ObjectDisposedException>(async () => await assembler.Synchronize(this.testInput));
+        }
+
+        [Test]
+        public void Verify_that_Dispose_prevents_subsequent_Clear()
+        {
+            var assembler = new Assembler(this.uri, this.messageBus);
+            assembler.Dispose();
+
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await assembler.Clear());
         }
 
         [Test]

@@ -91,6 +91,11 @@ namespace CDP4Dal
         private List<Dto> unresolvedDtos;
 
         /// <summary>
+        /// Indicates whether <see cref="Dispose()"/> has been called
+        /// </summary>
+        private bool disposed;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Assembler"/> class.
         /// </summary>
         /// <param name="uri">the <see cref="Uri"/> associated with this <see cref="Assembler"/></param>
@@ -99,9 +104,9 @@ namespace CDP4Dal
         /// </param>
         public Assembler(Uri uri, ICDPMessageBus messageBus)
         {
-            Utils.AssertNotNull(uri, "The Uri may not be mull");
+            Utils.AssertNotNull(uri, "The Uri may not be null");
 
-            Utils.AssertNotNull(messageBus, "The MessageBus may not be mull");
+            Utils.AssertNotNull(messageBus, "The MessageBus may not be null");
 
             this.Cache = new ConcurrentDictionary<CacheKey, Lazy<Thing>>();
             this.unresolvedDtos = new List<Dto>();
@@ -115,11 +120,42 @@ namespace CDP4Dal
         public ConcurrentDictionary<CacheKey, Lazy<Thing>> Cache { get; private set; }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// Releases the resources used by this <see cref="Assembler"/>.
         /// </summary>
         public void Dispose()
         {
-            this.threadLock.Dispose();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases the unmanaged resources used by this <see cref="Assembler"/> and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                this.threadLock.Dispose();
+            }
+
+            this.disposed = true;
+        }
+
+        /// <summary>
+        /// Throws an <see cref="ObjectDisposedException"/> if this <see cref="Assembler"/> has been disposed.
+        /// </summary>
+        private void ThrowIfDisposed()
+        {
+            if (this.disposed)
+            {
+                throw new ObjectDisposedException(nameof(Assembler));
+            }
         }
 
         /// <summary>
@@ -142,6 +178,8 @@ namespace CDP4Dal
         /// </returns>
         public async Task Synchronize(IEnumerable<CDP4Common.DTO.Thing> dtoThings, bool activeMessageBus = true)
         {
+            this.ThrowIfDisposed();
+
             if (dtoThings == null)
             {
                 throw new ArgumentNullException(nameof(dtoThings), $"The {nameof(dtoThings)} may not be null");
@@ -407,6 +445,8 @@ namespace CDP4Dal
         /// <returns>The <see cref="Task"/></returns>
         public async Task Clear()
         {
+            this.ThrowIfDisposed();
+
             await this.threadLock.WaitAsync().ConfigureAwait(false);
             try
             {
@@ -466,6 +506,8 @@ namespace CDP4Dal
         /// <returns>The async <see cref="Task"/></returns>
         public async Task CloseRdl(ReferenceDataLibrary rdl)
         {
+            this.ThrowIfDisposed();
+
             await this.threadLock.WaitAsync().ConfigureAwait(false);
             try
             {
@@ -565,6 +607,8 @@ namespace CDP4Dal
         /// </returns>
         public async Task CloseIterationSetup(IterationSetup iterationSetup)
         {
+            this.ThrowIfDisposed();
+
             await this.threadLock.WaitAsync().ConfigureAwait(false);
             try
             {
