@@ -47,7 +47,7 @@ namespace CDP4ServicesMessaging.Tests.Services
             this.ConnectionFactory = connectionFactory;
         }
 
-        public async Task<IModel> Connect()
+        public async Task<IChannel> Connect()
         {
             try
             {
@@ -64,7 +64,7 @@ namespace CDP4ServicesMessaging.Tests.Services
             return default;
         }
 
-        protected override void AfterChannelCreation()
+        protected override Task AfterChannelCreationAsync()
         {
             if (!this.failed && this.ThrowErrorOnRegisterListenersAndDeclareQueues)
             {
@@ -77,6 +77,8 @@ namespace CDP4ServicesMessaging.Tests.Services
 
                 throw new NotImplementedException();
             }
+
+            return Task.CompletedTask;
         }
     }
 }

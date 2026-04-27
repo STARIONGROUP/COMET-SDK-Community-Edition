@@ -37,6 +37,8 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
+    using RabbitMQ.Client.Events;
+
     /// <summary>
     /// The <see cref="ThingMessageConsumer"/> provides consumers for <see cref="ThingsChangedMessage"/>.
     /// </summary>
@@ -70,11 +72,12 @@ namespace CDP4ServicesMessaging.Services.ThingMessaging
         /// <return>A <see cref="Task"/> of <see cref="IDisposable"/></return>
         public async Task<IDisposable> AddListener(Action<ThingsChangedMessage> onReceive, CancellationToken cancellationToken = default)
         {
-            return await this.AddListener(nameof(ThingsChangedMessage), (_, m) =>
+            return await this.AddListener(nameof(ThingsChangedMessage), (AsyncEventHandler<BasicDeliverEventArgs>)((_, m) =>
             {
                 var thingsChangedMessage = this.Serializer.Deserialize<ThingsChangedMessage>(m.Body);
                 onReceive(thingsChangedMessage);
-            }, ExchangeType.Fanout, cancellationToken);
+                return Task.CompletedTask;
+            }), ExchangeType.Fanout, cancellationToken);
         }
     }
 }

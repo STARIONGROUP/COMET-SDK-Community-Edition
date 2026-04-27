@@ -41,8 +41,6 @@ namespace CDP4ServicesMessaging.Services.Messaging
     using RabbitMQ.Client;
     using RabbitMQ.Client.Events;
 
-    using IModel = RabbitMQ.Client.IModel;
-
     /// <summary>
     /// The <see cref="MessageClientService"/> is the main implementation for the RabbitMQ client
     /// </summary>
@@ -52,7 +50,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// The <see cref="IMessageSerializer"/>
         /// </summary>
         protected readonly IMessageSerializer Serializer;
-        
+
         /// <summary>
         /// Initializes a new <see cref="MessageClientBaseService"/>
         /// </summary>
@@ -76,9 +74,9 @@ namespace CDP4ServicesMessaging.Services.Messaging
         {
             var channel = await this.GetChannelAsync(cancellationToken);
 
-            return Observable.Create<TMessage>(observer =>
+            return Observable.Create<TMessage>(async observer =>
             {
-                var disposables = this.InitializeListener(observer, channel, queueName, exchangeType);
+                var disposables = await this.InitializeListenerAsync(observer, channel, queueName, exchangeType, cancellationToken);
 
                 return Disposable.Create(() => disposables.Dispose());
             });
@@ -92,30 +90,41 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// <param name="channel">The RabbitMQ channel.</param>
         /// <param name="queueName">The name of the queue to listen on.</param>
         /// <param name="exchangeType">The exchange type. Default is <see cref="ExchangeType.Default"/>.</param>
+        /// <param name="cancellationToken">Cancellation token for the asynchronous operation.</param>
         /// <returns>A disposable to clean up resources.</returns>
-        private IDisposable InitializeListener<TMessage>(IObserver<TMessage> observer, IModel channel, string queueName, ExchangeType exchangeType) where TMessage : class
+        private async Task<IDisposable> InitializeListenerAsync<TMessage>(IObserver<TMessage> observer, IChannel channel, string queueName, ExchangeType exchangeType, CancellationToken cancellationToken) where TMessage : class
         {
-            EventingBasicConsumer consumer = null;
+            AsyncEventingBasicConsumer consumer = null;
 
-            void ConsumerOnReceived(object _, BasicDeliverEventArgs m) =>
+            Task ConsumerOnReceivedAsync(object _, BasicDeliverEventArgs m)
+            {
                 observer.OnNext(this.Serializer.Deserialize<TMessage>(m.Body));
+                return Task.CompletedTask;
+            }
 
-            void ConsumerOnShutdown(object _, ShutdownEventArgs a) =>
+            Task ConsumerOnShutdownAsync(object _, ShutdownEventArgs a)
+            {
                 observer.OnError(new OperationCanceledException($"The channel has shutdown [Reply: {a.ReplyText}, AMQPcode: {a.ReplyCode}]"));
+                return Task.CompletedTask;
+            }
 
-            void ChannelOnCallbackException(object _, CallbackExceptionEventArgs m) =>
+            Task ChannelOnCallbackExceptionAsync(object _, CallbackExceptionEventArgs m)
+            {
                 observer.OnError(m.Exception);
+                return Task.CompletedTask;
+            }
 
             try
             {
-                channel.CallbackException += ChannelOnCallbackException;
+                channel.CallbackExceptionAsync += ChannelOnCallbackExceptionAsync;
 
-                consumer = new EventingBasicConsumer(channel);
+                consumer = new AsyncEventingBasicConsumer(channel);
 
-                consumer.Received += ConsumerOnReceived;
-                consumer.Shutdown += ConsumerOnShutdown;
+                consumer.ReceivedAsync += ConsumerOnReceivedAsync;
+                consumer.ShutdownAsync += ConsumerOnShutdownAsync;
 
-                channel.BasicConsume(this.EnsureQueueAndExchangeAreDeclared(queueName, channel, exchangeType), true, consumer);
+                var resolvedQueueName = await this.EnsureQueueAndExchangeAreDeclaredAsync(queueName, channel, exchangeType, cancellationToken: cancellationToken);
+                await channel.BasicConsumeAsync(resolvedQueueName, true, consumer, cancellationToken);
             }
             catch (Exception exception)
             {
@@ -124,41 +133,41 @@ namespace CDP4ServicesMessaging.Services.Messaging
 
             return Disposable.Create(() =>
             {
-                channel.CallbackException -= ChannelOnCallbackException; 
-                
+                channel.CallbackExceptionAsync -= ChannelOnCallbackExceptionAsync;
+
                 if (consumer == null)
                 {
                     return;
                 }
 
-                consumer.Received -= ConsumerOnReceived;
-                consumer.Shutdown -= ConsumerOnShutdown;
+                consumer.ReceivedAsync -= ConsumerOnReceivedAsync;
+                consumer.ShutdownAsync -= ConsumerOnShutdownAsync;
             });
         }
-        
+
         /// <summary>
         /// Adds a listener to the specified queue
         /// </summary>
         /// <param name="queueName">The <see cref="string"/> queue name</param>
-        /// <param name="onReceive">The <see cref="EventHandler"/></param>
+        /// <param name="onReceive">The <see cref="AsyncEventHandler{BasicDeliverEventArgs}"/></param>
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
         /// <return>A <see cref="Task"/> of <see cref="IDisposable"/></return>
-        public async Task<IDisposable> AddListener(string queueName, EventHandler<BasicDeliverEventArgs> onReceive, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default)
+        public async Task<IDisposable> AddListener(string queueName, AsyncEventHandler<BasicDeliverEventArgs> onReceive, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default)
         {
-            IModel channel = default;
-            EventingBasicConsumer consumer = default;
+            IChannel channel = default;
+            AsyncEventingBasicConsumer consumer = default;
 
             try
             {
                 channel = await this.GetChannelAsync(cancellationToken);
 
-                this.EnsureQueueAndExchangeAreDeclared(queueName, channel, exchangeType);
+                await this.EnsureQueueAndExchangeAreDeclaredAsync(queueName, channel, exchangeType, cancellationToken: cancellationToken);
 
-                consumer = new EventingBasicConsumer(channel);
-                consumer.Received += onReceive;
+                consumer = new AsyncEventingBasicConsumer(channel);
+                consumer.ReceivedAsync += onReceive;
 
-                channel.BasicConsume(queueName, true, consumer);
+                await channel.BasicConsumeAsync(queueName, true, consumer, cancellationToken);
             }
             catch (TimeoutException)
             {
@@ -172,7 +181,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
             {
                 if (consumer != null)
                 {
-                    consumer.Received -= onReceive;
+                    consumer.ReceivedAsync -= onReceive;
                 }
             }
 
@@ -229,6 +238,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// <param name="messageQueue">The <see cref="string"/> queue name on which to send to the <paramref name="messages"/></param>
         /// <param name="messages">The collection of <typeparamref name="TMessage"/> to push</param>
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
+        /// <param name="cancellationToken">A possible <see cref="CancellationToken"/></param>
         /// <returns>A <see cref="Task"/></returns>
         public async Task Push<TMessage>(string messageQueue, IEnumerable<TMessage> messages, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default)
         {
@@ -255,17 +265,22 @@ namespace CDP4ServicesMessaging.Services.Messaging
             try
             {
                 var channel = await this.GetChannelAsync(cancellationToken);
-                this.EnsureQueueAndExchangeAreDeclared(messageQueue, channel, exchangeType, true);
+                await this.EnsureQueueAndExchangeAreDeclaredAsync(messageQueue, channel, exchangeType, isPush: true, cancellationToken: cancellationToken);
 
-                var properties = channel.CreateBasicProperties();
-                properties.Type = typeof(TMessage).Name;
-                properties.DeliveryMode = 2;
-                properties.ContentType = "application/json";
+                var properties = new BasicProperties
+                {
+                    Type = typeof(TMessage).Name,
+                    DeliveryMode = DeliveryModes.Persistent,
+                    ContentType = "application/json"
+                };
 
-                channel.BasicPublish(exchange: exchangeType is ExchangeType.Fanout ? messageQueue : "",
+                await channel.BasicPublishAsync(
+                    exchange: exchangeType is ExchangeType.Fanout ? messageQueue : "",
                     routingKey: messageQueue,
+                    mandatory: false,
                     basicProperties: properties,
-                    body: this.Serializer.Serialize(message));
+                    body: this.Serializer.Serialize(message),
+                    cancellationToken: cancellationToken);
 
                 this.Logger.LogInformation("Message {MessageName} sent to {MessageQueue}", typeof(TMessage).Name, messageQueue);
             }
@@ -293,27 +308,29 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// Declares the message queue if not declared yet
         /// </summary>
         /// <param name="messageQueue">The queue identifier</param>
-        /// <param name="channel">The <see cref="IModel"/> channel on which to declare the queue</param>
+        /// <param name="channel">The <see cref="IChannel"/> on which to declare the queue</param>
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
         /// <param name="isPush">A value indicating whether the queue and exchange will be used for pushing messages</param>
+        /// <param name="cancellationToken">A possible <see cref="CancellationToken"/></param>
         /// <returns>The queue name</returns>
-        private string EnsureQueueAndExchangeAreDeclared(string messageQueue, IModel channel, ExchangeType exchangeType, bool isPush = false)
+        private async Task<string> EnsureQueueAndExchangeAreDeclaredAsync(string messageQueue, IChannel channel, ExchangeType exchangeType, bool isPush = false, CancellationToken cancellationToken = default)
         {
             if (exchangeType is ExchangeType.Fanout)
             {
-                channel.ExchangeDeclare(exchange: messageQueue, type: exchangeType.ToString().ToLower(), true);
+                await channel.ExchangeDeclareAsync(exchange: messageQueue, type: exchangeType.ToString().ToLower(), durable: true, autoDelete: false, arguments: null, cancellationToken: cancellationToken);
 
                 if (isPush)
                 {
                     return messageQueue;
                 }
 
-                var queueName = channel.QueueDeclare().QueueName;
-                channel.QueueBind(queueName, messageQueue, messageQueue);
+                var declareOk = await channel.QueueDeclareAsync(queue: string.Empty, durable: false, exclusive: true, autoDelete: true, arguments: null, cancellationToken: cancellationToken);
+                var queueName = declareOk.QueueName;
+                await channel.QueueBindAsync(queueName, messageQueue, messageQueue, arguments: null, cancellationToken: cancellationToken);
                 return queueName;
             }
 
-            channel.QueueDeclare(queue: messageQueue, durable: false, exclusive: false, autoDelete: false, arguments: null);
+            await channel.QueueDeclareAsync(queue: messageQueue, durable: false, exclusive: false, autoDelete: false, arguments: null, cancellationToken: cancellationToken);
             return messageQueue;
         }
     }

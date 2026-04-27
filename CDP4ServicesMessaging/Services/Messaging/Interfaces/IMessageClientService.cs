@@ -52,11 +52,11 @@ namespace CDP4ServicesMessaging.Services.Messaging.Interfaces
         /// Adds a listener to the specified queue
         /// </summary>
         /// <param name="queueName">The <see cref="string"/> queue name</param>
-        /// <param name="onReceive">The <see cref="EventHandler"/></param>
+        /// <param name="onReceive">The <see cref="AsyncEventHandler{BasicDeliverEventArgs}"/></param>
         /// <param name="exchangeType">The string exchange type It can be any value from <see cref="ExchangeType"/>, default value is <see cref="ExchangeType.Default"/></param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/></param>
         /// <return>A <see cref="Task"/> of <see cref="IDisposable"/></return>
-        Task<IDisposable> AddListener(string queueName, EventHandler<BasicDeliverEventArgs> onReceive, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default);
+        Task<IDisposable> AddListener(string queueName, AsyncEventHandler<BasicDeliverEventArgs> onReceive, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Pushes the specified <paramref name="message"/> in parallel, executing the operation in a fire-and-forget manner to the specified <paramref name="messageQueue"/>

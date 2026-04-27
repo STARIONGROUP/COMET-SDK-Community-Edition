@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingMessageProducerTestFixture.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2023 Starion Group S.A.
 //
@@ -24,6 +24,8 @@
 
 namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
 {
+    using System.Threading;
+
     using CDP4Common.DTO;
 
     using CDP4ServicesMessaging.Messages;
@@ -51,29 +53,26 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
         {
             this.Model.Setup(x => x.IsOpen).Returns(true);
 
-            this.Model.Setup(x => x.QueueDeclare(
-                    It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()))
-                .Returns(new QueueDeclareOk("", 1, 1));
-
-            var properties = new Mock<IBasicProperties>();
-            this.Model.Setup(x => x.CreateBasicProperties()).Returns(properties.Object);
+            this.Model.Setup(x => x.QueueDeclareAsync(
+                    It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new QueueDeclareOk("", 1, 1));
 
             var message = new ThingsChangedMessage()
             {
                 ChangedThings = { new ElementDefinition() { Name = nameof(ElementDefinition) }, new EngineeringModel(), new Parameter() { } },
                 ActorId = Guid.NewGuid(),
             };
-            
+
             await this.Service.Push(message);
             await this.Service.PushParallel(message);
 
             Assert.Multiple(() =>
             {
-                this.Model.Verify(x => x.BasicPublish(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(),It.IsAny<IBasicProperties>(), It.IsAny<ReadOnlyMemory<byte>>()),
+                this.Model.Verify(x => x.BasicPublishAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<BasicProperties>(), It.IsAny<ReadOnlyMemory<byte>>(), It.IsAny<CancellationToken>()),
                     Times.Exactly(2));
 
                 this.Serializer.Verify(x => x.Serialize(message), Times.Exactly(2));
-                this.Model.Verify(x => x.ExchangeDeclare("ThingsChangedMessage", "fanout", true, false, null), Times.Exactly(2));
+                this.Model.Verify(x => x.ExchangeDeclareAsync("ThingsChangedMessage", "fanout", true, false, null, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
             });
         }
     }
