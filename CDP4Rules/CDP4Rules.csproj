@@ -7,7 +7,6 @@
         <VersionPrefix>29.0.3</VersionPrefix>
         <Description>CDP4 Class Library that provides Model Analysis and Rule Checking</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
-        <Authors>Sam, Alex, Alexander, Yevhen, Nathanael</Authors>
         <PackageId>CDP4Rules-CE</PackageId>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

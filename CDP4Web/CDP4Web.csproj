@@ -8,7 +8,6 @@
         <VersionPrefix>29.0.3</VersionPrefix>
         <Description>CDP4Web Dedicated Sdk for CDPServicesDal</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
-        <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
         <PackageId>CDP4Web-CE</PackageId>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

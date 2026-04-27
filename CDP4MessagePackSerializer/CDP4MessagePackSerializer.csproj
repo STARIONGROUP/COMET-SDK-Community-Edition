@@ -7,7 +7,6 @@
         <VersionPrefix>29.0.3</VersionPrefix>
         <Description>CDP4 MessagePack Serialization Library</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
-        <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar</Authors>
         <PackageId>CDP4MessagePackSerializer-CE</PackageId>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
@@ -51,7 +50,7 @@
 
     <ItemGroup>
         <PackageReference Include="MessagePack" Version="3.1.4" />
-        <PackageReference Include="System.IO.Pipelines" Version="10.0.3" />
+        <PackageReference Include="System.IO.Pipelines" Version="10.0.7" />
     </ItemGroup>
 
     <ItemGroup Label="build-only dependencies">

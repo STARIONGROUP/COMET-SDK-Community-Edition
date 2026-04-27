@@ -7,7 +7,6 @@
         <VersionPrefix>29.0.3</VersionPrefix>
         <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
-        <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael, Ahmed</Authors>
         <PackageId>CDP4Dal-CE</PackageId>
         <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

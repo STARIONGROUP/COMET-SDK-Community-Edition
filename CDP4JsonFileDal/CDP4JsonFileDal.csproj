@@ -7,7 +7,6 @@
         <VersionPrefix>29.0.2</VersionPrefix>
         <Description>CDP4 Json File Dal Plugin</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
-        <Authors>Sam, Merlin, Alex, Naron, Alexander, Yevhen, Nathanael</Authors>
         <PackageId>CDP4JsonFileDal-CE</PackageId>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>

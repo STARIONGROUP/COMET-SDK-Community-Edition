@@ -8,7 +8,6 @@
       <VersionPrefix>29.0.3</VersionPrefix>
       <Description>CDP4 Common Class Library that contains common types for any CDP4 server and the CDP4Dal</Description>
       <Copyright>Copyright © Starion Group S.A.</Copyright>
-      <Authors>Sam, Alex, Alexander, Nathanael, Antoine, Omar, Jaime</Authors>
       <PackageId>CDP4DalCommon-CE</PackageId>
       <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
       <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>

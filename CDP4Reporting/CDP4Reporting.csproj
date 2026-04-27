@@ -7,7 +7,6 @@
         <VersionPrefix>29.0.3</VersionPrefix>
         <Description>CDP4 Reporting</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
-        <Authors>Sam, Alex, Alexander</Authors>
         <PackageId>CDP4Reporting-CE</PackageId>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
